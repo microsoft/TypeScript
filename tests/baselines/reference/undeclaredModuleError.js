@@ -17,15 +17,15 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 
 //// [undeclaredModuleError.js]
 define(["require", "exports", "fs"], function (require, exports, fs) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     function readdir(path, accept, callback) { }
-    function join() {
-        var paths = [];
+
+    function join() {var paths = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             paths[_i] = arguments[_i];
         }
     }
+
     function instrumentFile(covFileDir, covFileName, originalFilePath) {
         fs.readFile(originalFilePath, function () {
             readdir(covFileDir, function () {

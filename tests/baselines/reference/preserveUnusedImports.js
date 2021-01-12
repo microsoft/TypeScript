@@ -21,8 +21,7 @@ exports.__esModule = true;
 exports.__esModule = true;
 exports.B = void 0;
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 exports.B = B;
@@ -31,4 +30,5 @@ exports.B = B;
 exports.__esModule = true;
 require("./a");
 require("./b");
+
 var b;

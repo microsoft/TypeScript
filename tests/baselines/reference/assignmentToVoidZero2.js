@@ -27,6 +27,7 @@ var o = {};
 o.x = 1;
 o.y = void 0;
 o.x + o.y;
+
 function C() {
     this.p = 1;
     this.q = void 0;

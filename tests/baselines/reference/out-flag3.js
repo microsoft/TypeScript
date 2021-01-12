@@ -11,14 +11,13 @@ class B { }
 
 //// [c.js]
 // --out and --outFile error
+
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 //# sourceMappingURL=c.js.map

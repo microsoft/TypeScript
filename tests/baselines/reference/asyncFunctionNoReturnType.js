@@ -43,8 +43,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-(function () { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
+(function () { return __awaiter(_this, void 0, void 0, function () {return __generator(this, function (_a) {
         if (window)
             return [2 /*return*/];
         return [2 /*return*/];

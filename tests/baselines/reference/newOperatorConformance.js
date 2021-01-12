@@ -69,17 +69,17 @@ var C0 = /** @class */ (function () {
     return C0;
 }());
 var C1 = /** @class */ (function () {
-    function C1(n, s) {
-    }
+    function C1(n, s) {}
     return C1;
 }());
 var T = /** @class */ (function () {
-    function T(n) {
-    }
+    function T(n) {}
     return T;
 }());
 var anyCtor;
+
 var anyCtor1;
+
 var nestedCtor;
 // Construct expression with no parentheses for construct signature with 0 parameters
 var a = new C0;
@@ -97,11 +97,13 @@ function newFn1(s) {
     var p = new s;
     var p;
 }
+
 // Construct expression of type where apparent type has a construct signature with 1 arguments
 function newFn2(s) {
     var p = new s(32);
     var p;
 }
+
 // Construct expression of void returning function
 function fnVoid() { }
 var t = new fnVoid();

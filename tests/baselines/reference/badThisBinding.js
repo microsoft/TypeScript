@@ -14,6 +14,7 @@ class Greeter {
 } 
 
 //// [badThisBinding.js]
+
 var Greeter = /** @class */ (function () {
     function Greeter() {
         var _this = this;

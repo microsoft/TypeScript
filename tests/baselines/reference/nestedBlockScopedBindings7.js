@@ -14,6 +14,7 @@ var _loop_1 = function (x) {
 for (var x = void 0; false;) {
     _loop_1(x);
 }
+
 for (var y = void 0; false;) {
     y = 1;
 }

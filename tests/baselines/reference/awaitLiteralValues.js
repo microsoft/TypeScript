@@ -28,18 +28,23 @@ function awaitUndefined() {
 function awaitString() {
     yield 'literal';
 }
+
 function awaitNumber() {
     yield 1;
 }
+
 function awaitTrue() {
     yield true;
 }
+
 function awaitFalse() {
     yield false;
 }
+
 function awaitNull() {
     yield null;
 }
+
 function awaitUndefined() {
     yield undefined;
 }

@@ -11,3 +11,4 @@ exports.__esModule = true;
 var jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="react16.d.ts" />
 var a = jsx_runtime_1.jsx("div", { children: "text" }, void 0);
+

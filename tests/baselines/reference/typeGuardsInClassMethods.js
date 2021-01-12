@@ -81,6 +81,8 @@ var C1 = /** @class */ (function () {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     }
@@ -91,6 +93,8 @@ var C1 = /** @class */ (function () {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     };
@@ -101,6 +105,8 @@ var C1 = /** @class */ (function () {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     };
@@ -111,6 +117,8 @@ var C1 = /** @class */ (function () {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     };
@@ -121,6 +129,8 @@ var C1 = /** @class */ (function () {
         // variables in function declaration
         var var2;
         num = typeof var2 === "string" && var2.length; // string
+
+
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     };

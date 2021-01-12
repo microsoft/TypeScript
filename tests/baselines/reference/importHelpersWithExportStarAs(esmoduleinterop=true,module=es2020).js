@@ -12,7 +12,6 @@ declare module "tslib" {
 }
 
 //// [a.js]
-export class A {
-}
+export class A {}
 //// [b.js]
 export * as a from "./a";

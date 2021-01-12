@@ -15,12 +15,15 @@ function foo3(results: number[] | undefined) {
 
 //// [logicalAssignment8.js]
 "use strict";
+
 function foo1(results) {
     (results || (results = bar?.value ?? [])).push(100);
 }
+
 function foo2(results) {
     (results ?? (results = bar?.value ?? [])).push(100);
 }
+
 function foo3(results) {
     (results && (results = bar?.value ?? [])).push(100);
 }

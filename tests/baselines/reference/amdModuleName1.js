@@ -11,7 +11,7 @@ export = Foo;
 
 //// [amdModuleName1.js]
 define("NamedModule", ["require", "exports"], function (require, exports) {
-    "use strict";
+    "use strict";///<amd-module name='NamedModule'/>
     ///<amd-module name='NamedModule'/>
     var Foo = /** @class */ (function () {
         function Foo() {

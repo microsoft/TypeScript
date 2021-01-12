@@ -76,12 +76,12 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Control = /** @class */ (function () {
+})();var Control = /** @class */ (function () {
     function Control() {
     }
     return Control;
 }());
+
 var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
@@ -126,6 +126,7 @@ var Locations1 = /** @class */ (function () {
 }());
 var sc;
 var c;
+
 var b;
 sc = b;
 c = b;

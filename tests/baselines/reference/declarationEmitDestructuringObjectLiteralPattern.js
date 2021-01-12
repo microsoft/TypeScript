@@ -29,7 +29,9 @@ var _b = { x6: 5, y6: "hello" }, x6 = _b.x6, y6 = _b.y6;
 var a1 = { x7: 5, y7: "hello" }.x7;
 var b1 = { x8: 5, y8: "hello" }.y8;
 var _c = { x9: 5, y9: "hello" }, a2 = _c.x9, b2 = _c.y9;
+
 var _d = { a: 1, b: { a: "hello", b: { a: true } } }, x11 = _d.a, _e = _d.b, y11 = _e.a, z11 = _e.b.a;
+
 function f15() {
     var a4 = "hello";
     var b4 = 1;
@@ -38,8 +40,7 @@ function f15() {
 }
 var _f = f15(), a4 = _f.a4, b4 = _f.b4, c4 = _f.c4;
 var m;
-(function (m) {
-    var _a;
+(function (m) {var _a;
     _a = f15(), m.a4 = _a.a4, m.b4 = _a.b4, m.c4 = _a.c4;
 })(m || (m = {}));
 

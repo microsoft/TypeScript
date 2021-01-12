@@ -12,6 +12,7 @@ class B {
 
 //// [emitCapturingThisInTupleDestructuring2.js]
 var array1 = [1, 2];
+
 var B = /** @class */ (function () {
     function B() {
     }

@@ -52,14 +52,14 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
+})();var Base = /** @class */ (function () {
     function Base() {
         var x;
     }
     Base.prototype.foo = function () {
         return "base";
     };
+
     Base.prototype.bar = function () {
         return "basebar";
     };

@@ -99,6 +99,8 @@ exports.__esModule = true;
 exports.publicClassImplementingFromPrivateModuleInterface = exports.publicClassImplementingPrivateInterface = exports.publicClassImplementingPublicInterface = exports.publicModule = void 0;
 var publicModule;
 (function (publicModule) {
+
+
     var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }
@@ -141,6 +143,8 @@ var publicModule;
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
+
+
     var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }
@@ -175,6 +179,8 @@ var privateModule;
     }());
     privateModule.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
 })(privateModule || (privateModule = {}));
+
+
 var privateClassImplementingPublicInterface = /** @class */ (function () {
     function privateClassImplementingPublicInterface() {
     }
@@ -211,6 +217,8 @@ exports.publicClassImplementingFromPrivateModuleInterface = publicClassImplement
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.js]
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
+
+
     var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }

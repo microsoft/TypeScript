@@ -20,6 +20,7 @@ var a =
 
 //// [contextualTypeLogicalOr.js]
 // Repro from #18005
+
 var x = 123;
 var a = x && [1, 2, 3, 4] ||
     x && [1, 2, 3, 4] ||

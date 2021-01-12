@@ -5,8 +5,7 @@ function foo(...rest: number) { // error
 }
 
 //// [nonArrayRestArgs.js]
-function foo() {
-    var rest = [];
+function foo() {var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }

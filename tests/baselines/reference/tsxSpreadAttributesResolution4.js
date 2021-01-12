@@ -54,6 +54,8 @@ var __extends = (this && this.__extends) || (function () {
 var _this = this;
 exports.__esModule = true;
 var React = require("react");
+
+
 var Poisoned = /** @class */ (function (_super) {
     __extends(Poisoned, _super);
     function Poisoned() {
@@ -68,8 +70,10 @@ var obj = {
     x: "hello world",
     y: 2
 };
+
 // OK
 var p = <Poisoned {...obj}/>;
+
 var EmptyProp = /** @class */ (function (_super) {
     __extends(EmptyProp, _super);
     function EmptyProp() {

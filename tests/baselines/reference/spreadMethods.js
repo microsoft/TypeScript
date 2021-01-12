@@ -42,8 +42,7 @@ sso.g; // ok
 
 
 //// [spreadMethods.js]
-class K {
-    constructor() {
+class K {constructor() {
         this.p = 12;
     }
     m() { }
@@ -67,6 +66,7 @@ si.g; // ok
 ssi.p;
 ssi.m(); // ok
 ssi.g; // ok
+
 let o = { p: 12, m() { }, get g() { return 0; } };
 let so = { ...o };
 let sso = { ...o, ...o };

@@ -26,6 +26,7 @@ i2.tuple1 = [{}];
 
 
 //// [genericCallWithTupleType.js]
+
 var i1;
 var i2;
 // no error
@@ -40,6 +41,7 @@ i2.tuple1 = ["foo", 5];
 i2.tuple1 = ["foo", "bar"];
 i2.tuple1 = [5, "bar"];
 i2.tuple1 = [{}, {}];
+
 // error
 i1.tuple1 = [5, "foo"];
 i1.tuple1 = [{}, {}];

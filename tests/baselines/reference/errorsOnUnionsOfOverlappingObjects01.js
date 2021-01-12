@@ -52,13 +52,22 @@ addToZoo(manBeer);
 exports.__esModule = true;
 exports.x = void 0;
 ;
+
+
 exports.x = { a: '', b: '' };
+
 f(exports.x);
 f({ a: '', b: '' });
 g(exports.x);
 g({ a: '', b: '' });
 h(exports.x);
 h({ a: '', b: '' });
+
+
+
+
+
+
 addToZoo({ dog: "Barky McBarkface" });
 addToZoo({ man: "Manny", bear: "Coffee" });
 var manBeer = { man: "Manny", beer: "Coffee" };

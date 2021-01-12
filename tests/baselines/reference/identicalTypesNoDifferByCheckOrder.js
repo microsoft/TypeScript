@@ -37,16 +37,25 @@ const comp2: FunctionComponent1<SomePropsX> = null as any;
 needsComponentOfSomeProps2({ renderAs: comp2 });
 
 //// [identicalTypesNoDifferByCheckOrder.js]
-function needsComponentOfSomeProps3() {
-    var x = [];
+
+
+
+
+
+
+
+
+
+
+
+function needsComponentOfSomeProps3() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
 }
 var comp3 = null;
 needsComponentOfSomeProps3({ renderAs: comp3 });
-function needsComponentOfSomeProps2() {
-    var x = [];
+function needsComponentOfSomeProps2() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }

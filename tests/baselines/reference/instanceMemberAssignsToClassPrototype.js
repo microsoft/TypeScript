@@ -19,6 +19,7 @@ var C = /** @class */ (function () {
     C.prototype.foo = function () {
         C.prototype.foo = function () { };
     };
+
     C.prototype.bar = function (x) {
         C.prototype.bar = function () { }; // error
         C.prototype.bar = function (x) { return x; }; // ok

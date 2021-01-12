@@ -31,6 +31,10 @@ const test9 = new C();
 
 
 //// [tile1.js]
+
+
+
+
 var C = /** @class */ (function () {
     function C() {
     }

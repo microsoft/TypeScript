@@ -24,6 +24,7 @@ var catBag = new CatBag(catThing);
 "use strict";
 exports.__esModule = true;
 exports.CatBag = exports.Cat = void 0;
+
 var Cat = /** @class */ (function () {
     function Cat() {
     }

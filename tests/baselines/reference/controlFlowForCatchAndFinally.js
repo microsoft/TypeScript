@@ -79,16 +79,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 function test() {
-    return __awaiter(this, void 0, void 0, function () {
-        var browser, page;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    browser = undefined;
+    return __awaiter(this, void 0, void 0, function () {var browser, page;
+        return __generator(this, function (_a) {switch (_a.label) {case 0:browser = undefined;
                     page = undefined;
                     _a.label = 1;
-                case 1:
-                    _a.trys.push([1, , 5, 10]);
+                case 1:_a.trys.push([1, , 5, 10]);
                     return [4 /*yield*/, test1()];
                 case 2:
                     browser = _a.sent();
@@ -97,14 +92,12 @@ function test() {
                     page = _a.sent();
                     return [4 /*yield*/, page.content()];
                 case 4: return [2 /*return*/, _a.sent()];
-                case 5:
-                    if (!page) return [3 /*break*/, 7];
+                case 5:if (!page) return [3 /*break*/, 7];
                     return [4 /*yield*/, page.close()];
                 case 6:
                     _a.sent(); // ok
                     _a.label = 7;
-                case 7:
-                    if (!browser) return [3 /*break*/, 9];
+                case 7:if (!browser) return [3 /*break*/, 9];
                     return [4 /*yield*/, browser.close()];
                 case 8:
                     _a.sent(); // ok
@@ -115,22 +108,21 @@ function test() {
         });
     });
 }
+
 ;
 var Foo = /** @class */ (function () {
     function Foo() {
         this.abortController = undefined;
     }
     Foo.prototype.operation = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
+        return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {
                 if (this.abortController !== undefined) {
                     this.abortController.abort();
                     this.abortController = undefined;
                 }
                 try {
                     this.abortController = new Aborter();
-                }
-                catch (error) {
+                } catch (error) {
                     if (this.abortController !== undefined) {
                         this.abortController.abort(); // ok
                     }

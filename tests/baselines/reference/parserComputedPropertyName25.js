@@ -7,8 +7,7 @@ class C {
 
 //// [parserComputedPropertyName25.js]
 var _a;
-class C {
-    constructor() {
+class C {constructor() {
         // No ASI
         this[_a] = 0[e2] = 1;
     }

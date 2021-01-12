@@ -23,6 +23,7 @@ var enumdule;
     enumdule[enumdule["Blue"] = 1] = "Blue";
 })(enumdule || (enumdule = {}));
 (function (enumdule) {
+
     var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;

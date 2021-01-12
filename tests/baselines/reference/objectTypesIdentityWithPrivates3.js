@@ -41,6 +41,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -55,6 +56,8 @@ var C2 = /** @class */ (function (_super) {
 }(C1));
 var c1;
 c1; // Should succeed (private x originates in the same declaration)
+
+
 var C3 = /** @class */ (function () {
     function C3() {
     }

@@ -31,8 +31,7 @@ module B {
 
 //// [module.js]
 var A;
-(function (A) {
-    var Point;
+(function (A) {var Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));
@@ -48,8 +47,7 @@ var A;
 })(A || (A = {}));
 //// [simple.js]
 var B;
-(function (B) {
-    var Point;
+(function (B) {var Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));

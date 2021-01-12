@@ -16,8 +16,7 @@ class B {
 
 //// [privateNameFieldClassExpression.js]
 var _foo, _foo2;
-class B {
-    constructor() {
+class B {constructor() {
         var _a, _b;
         _foo.set(this, (_a = class {
                 constructor() {

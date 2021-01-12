@@ -10,12 +10,10 @@ async function foo() {
 
 //// [foo.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {
-            exports_1("default", "./foo");
+        execute: function () {exports_1("default", "./foo");
         }
     };
 });
@@ -29,8 +27,7 @@ System.register([], function (exports_1, context_1) {
             function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
-    };
-    var __moduleName = context_1 && context_1.id;
+    };var __moduleName = context_1 && context_1.id;
     function foo() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield context_1.import((yield context_1.import("./foo")).default);
@@ -38,7 +35,6 @@ System.register([], function (exports_1, context_1) {
     }
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

@@ -128,6 +128,12 @@ class FileService {
 //// [variableDeclaratorResolvedDuringContextualTyping.js]
 var WinJS;
 (function (WinJS) {
+
+
+
+
+
+
 })(WinJS || (WinJS = {}));
 var Errors;
 (function (Errors) {
@@ -138,6 +144,8 @@ var Errors;
     }());
     Errors.ConnectionError = ConnectionError;
 })(Errors || (Errors = {}));
+
+
 var FileService = /** @class */ (function () {
     function FileService() {
     }
@@ -154,6 +162,7 @@ var FileService = /** @class */ (function () {
                 stat: _this.jsonToStat(newFilePath, "someString"),
                 isNew: response.status === 201
             };
+
             return WinJS.TPromise.as(result);
         }, function (xhr) {
             return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));

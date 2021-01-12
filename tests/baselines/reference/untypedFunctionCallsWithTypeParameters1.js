@@ -64,8 +64,10 @@ var x = function () { return; };
 var r1 = x();
 var y = x;
 var r2 = y();
+
 var c;
 var r3 = c(); // should be an error
+
 var C = /** @class */ (function () {
     function C() {
         this.prototype = null;
@@ -77,6 +79,7 @@ var C = /** @class */ (function () {
 }());
 var c2;
 var r4 = c2(); // should be an error
+
 var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
@@ -86,9 +89,14 @@ var C2 = /** @class */ (function (_super) {
 }(Function)); // error
 var c3;
 var r5 = c3(); // error
+
 var z;
 var r6 = z(1); // error
+
+
 var c4;
 c4(1);
+
 var c5;
 c5(1); // error
+

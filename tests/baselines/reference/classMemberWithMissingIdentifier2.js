@@ -9,8 +9,4 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-{
-    [name, string];
-    VariableDeclaration;
-}
-;
+{[name, string];VariableDeclaration;};

@@ -8,3 +8,4 @@ declare class B {
 }
 
 //// [ambientGetters.js]
+

@@ -30,8 +30,7 @@ export var value2 = "v";
 
 //// [file3.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var value;
+    "use strict";var value;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -43,8 +42,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file4.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var value2;
+    "use strict";var value2;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -55,19 +53,16 @@ System.register([], function (exports_1, context_1) {
 });
 //// [file2.js]
 System.register(["./file3"], function (exports_1, context_1) {
-    "use strict";
-    var moduleCStar, file3_1, file3_2;
+    "use strict";var moduleCStar, file3_1, file3_2;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (moduleCStar_1) {
-                moduleCStar = moduleCStar_1;
+            function (moduleCStar_1) {moduleCStar = moduleCStar_1;
                 file3_1 = moduleCStar_1;
                 file3_2 = moduleCStar_1;
             }
         ],
-        execute: function () {
-            exports_1("moduleCStar", moduleCStar);
+        execute: function () {exports_1("moduleCStar", moduleCStar);
             exports_1("moduleC", file3_1["default"]);
             exports_1("value", file3_2.value);
         }
@@ -75,13 +70,11 @@ System.register(["./file3"], function (exports_1, context_1) {
 });
 //// [file1.js]
 System.register(["./file2"], function (exports_1, context_1) {
-    "use strict";
-    var moduleB;
+    "use strict";var moduleB;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (moduleB_1) {
-                moduleB = moduleB_1;
+            function (moduleB_1) {moduleB = moduleB_1;
             }
         ],
         execute: function () {

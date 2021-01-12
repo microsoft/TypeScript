@@ -34,10 +34,12 @@ var y2 = {
 
 //// [objectLiteralWidened.js]
 // object literal properties are widened to any
+
 var x1 = {
     foo: null,
     bar: undefined
 };
+
 var y1 = {
     foo: null,
     bar: {
@@ -52,6 +54,7 @@ var x2 = {
     foo: n,
     bar: u
 };
+
 var y2 = {
     foo: n,
     bar: {

@@ -34,16 +34,20 @@ class C1 {
             this.a = a || k;
         }
     }
+
     getA() {
         return this.a;
     }
+
     getB() {
         return this.b;
     }
+
     getC() {
         return this.c;
     }
 }
+
 class C2 extends C1 {
     doSomethingWithSuperProperties() {
         return `${this.a} ${this.b} ${this.c}`;

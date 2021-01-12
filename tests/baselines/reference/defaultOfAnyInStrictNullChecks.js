@@ -12,6 +12,7 @@ function foo() {
 
 //// [defaultOfAnyInStrictNullChecks.js]
 // Regression test for #8295
+
 function foo() {
     try {
     }

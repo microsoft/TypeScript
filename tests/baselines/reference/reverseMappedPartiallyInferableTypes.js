@@ -131,6 +131,8 @@ inferMappedReadonly({
 "use strict";
 // Repro from #30505
 exports.__esModule = true;
+
+
 var r = extend({
     props: {
         notResolved: {
@@ -151,12 +153,14 @@ r.explicit;
 r.notResolved;
 r.explicit.required;
 r.notResolved.required;
+
 // All properties have inferable types
 var obj1 = id({
     foo: {
         contents: ""
     }
 });
+
 // Some properties have inferable types
 var obj2 = id({
     foo: {
@@ -166,6 +170,7 @@ var obj2 = id({
         }
     }
 });
+
 // No properties have inferable types
 var obj3 = id({
     foo: {
@@ -174,12 +179,32 @@ var obj3 = id({
         }
     }
 });
+
+
+
+
+
+
+
+
 inferMapped1({
     key: [3, function (arg) { return arg.key > 5; }]
 });
+
+
+
+
+
+
 inferMapped2({
     key: [3, function (arg) { return arg.key > 5; }]
 });
+
+
+
+
+
+
 inferMappedReadonly({
     key: [3, function (arg) { return arg.key > 5; }]
 });

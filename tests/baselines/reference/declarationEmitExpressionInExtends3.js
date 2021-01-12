@@ -72,12 +72,18 @@ var LocalClass = /** @class */ (function () {
     }
     return LocalClass;
 }());
+
+
 function getLocalClass(c) {
     return LocalClass;
 }
+
 function getExportedClass(c) {
     return ExportedClass;
 }
+
+
+
 var MyClass = /** @class */ (function (_super) {
     __extends(MyClass, _super);
     function MyClass() {

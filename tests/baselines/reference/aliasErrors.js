@@ -40,12 +40,9 @@ var foo;
     }());
     foo.Provide = Provide;
     var bar;
-    (function (bar) {
-        var baz;
-        (function (baz) {
-            var boo = /** @class */ (function () {
-                function boo() {
-                }
+    (function (bar) {var baz;
+        (function (baz) {var boo = /** @class */ (function () {
+                function boo() {}
                 return boo;
             }());
             baz.boo = boo;
@@ -55,6 +52,7 @@ var foo;
 var provide = foo;
 var booz = foo.bar.baz;
 var beez = foo.bar;
+
 var m = no;
 var m2 = no.mod;
 5;
@@ -63,9 +61,11 @@ null;
 var r = undefined;
 var p = new provide.Provide();
 function use() {
+
     beez.baz.boo;
     var p1;
     var p2;
     var p3;
     var p22 = new provide.Provide();
 }
+

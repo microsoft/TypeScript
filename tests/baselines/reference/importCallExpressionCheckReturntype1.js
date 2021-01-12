@@ -19,15 +19,13 @@ let p3: Promise<any> = import("./defaultPath");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-class D {
-}
+class D {}
 exports.D = D;
 //// [defaultPath.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-class C {
-}
+class C {}
 exports.C = C;
 //// [1.js]
 "use strict";

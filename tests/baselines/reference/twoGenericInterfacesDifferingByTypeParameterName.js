@@ -63,3 +63,13 @@ module M3 {
 
 //// [twoGenericInterfacesDifferingByTypeParameterName.js]
 // type parameter names are relevant when choosing whether to merge interface declarations
+
+
+
+
+
+
+
+
+
+

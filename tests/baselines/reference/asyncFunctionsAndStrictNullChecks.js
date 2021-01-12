@@ -35,11 +35,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 function sample(promise) {
     return __awaiter(this, void 0, void 0, function* () {
         var number = yield promise;
     });
 }
+
+
+
 function sample2(x) {
     return __awaiter(this, void 0, void 0, function* () {
         let x1 = yield resolve1(x);

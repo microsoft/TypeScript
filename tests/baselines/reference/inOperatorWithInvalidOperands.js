@@ -49,8 +49,7 @@ var rc1 = {} in '';
 
 //// [inOperatorWithInvalidOperands.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 var E;
@@ -58,6 +57,7 @@ var E;
     E[E["a"] = 0] = "a";
 })(E || (E = {}));
 var x;
+
 // invalid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1;
@@ -94,5 +94,6 @@ var rb7 = x in false;
 var rb8 = x in '';
 var rb9 = x in null;
 var rb10 = x in undefined;
+
 // both operands are invalid
 var rc1 = {} in '';

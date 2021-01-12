@@ -31,6 +31,7 @@ function f2<T extends Date, U extends Date>() {
 //// [innerTypeParameterShadowingOuterOne.js]
 // inner type parameters shadow outer ones of the same name
 // no errors expected
+
 function f() {
     function g() {
         var x;
@@ -39,6 +40,7 @@ function f() {
     var x;
     x.getDate();
 }
+
 function f2() {
     function g() {
         var x;

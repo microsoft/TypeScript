@@ -14,8 +14,7 @@ class y extends x {}
 //// [foo1.js]
 "use strict";
 var x = /** @class */ (function () {
-    function x() {
-    }
+    function x() {}
     return x;
 }());
 module.exports = x;

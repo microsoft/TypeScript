@@ -2,4 +2,4 @@
 \ /*foo*/ ;
 
 //// [parserSkippedTokens5.js]
-;
+/*foo*/ ;

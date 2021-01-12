@@ -52,8 +52,7 @@ var M;
         var p = M_1.x;
     })(m1 || (m1 = {}));
 })(M || (M = {}));
-(function (M_2) {
-    var m2;
+(function (M_2) {var m2;
     (function (m2) {
         var M = /** @class */ (function () {
             function M() {
@@ -64,8 +63,7 @@ var M;
         var p2 = new M();
     })(m2 || (m2 = {}));
 })(M || (M = {}));
-(function (M_3) {
-    var m3;
+(function (M_3) {var m3;
     (function (m3) {
         function M() {
         }
@@ -73,17 +71,15 @@ var M;
         var p2 = M();
     })(m3 || (m3 = {}));
 })(M || (M = {}));
-(function (M) {
+(function (M) {// shouldnt be _M
     var m3;
     (function (m3) {
         var p = M.x;
         var p2;
     })(m3 || (m3 = {}));
 })(M || (M = {}));
-(function (M_4) {
-    var m4;
-    (function (m4) {
-        var M;
+(function (M_4) {var m4;
+    (function (m4) {var M;
         (function (M) {
             var p = M_4.x;
         })(M || (M = {}));

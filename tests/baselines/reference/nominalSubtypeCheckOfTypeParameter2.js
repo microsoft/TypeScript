@@ -23,3 +23,7 @@ interface A3<T> extends B<C<T>> {
 }
 
 //// [nominalSubtypeCheckOfTypeParameter2.js]
+
+
+
+

@@ -29,3 +29,11 @@ declare function i<T extends M.E>(x: T);
 //// [genericTypeReferenceWithoutTypeArgument3.js]
 // it is an error to use a generic type without type arguments
 // all of these are errors 
+
+
+
+
+
+
+
+

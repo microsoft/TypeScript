@@ -36,6 +36,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
+
 function filter(handler) {
     return function (target, propertyKey) {
         // ...

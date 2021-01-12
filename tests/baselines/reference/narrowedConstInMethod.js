@@ -29,6 +29,7 @@ function f() {
         };
     }
 }
+
 function f2() {
     var x = {};
     if (x !== null) {

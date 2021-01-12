@@ -42,45 +42,42 @@ new DCC2;
 
 //// [classAbstractMergedDeclaration.js]
 var CM = /** @class */ (function () {
-    function CM() {
-    }
+    function CM() {}
     return CM;
 }());
+
 var MC = /** @class */ (function () {
-    function MC() {
-    }
+    function MC() {}
     return MC;
 }());
 var CI = /** @class */ (function () {
-    function CI() {
-    }
+    function CI() {}
     return CI;
 }());
+
 var IC = /** @class */ (function () {
-    function IC() {
-    }
+    function IC() {}
     return IC;
 }());
 var CC1 = /** @class */ (function () {
-    function CC1() {
-    }
+    function CC1() {}
     return CC1;
 }());
 var CC1 = /** @class */ (function () {
-    function CC1() {
-    }
+    function CC1() {}
     return CC1;
 }());
 var CC2 = /** @class */ (function () {
-    function CC2() {
-    }
+    function CC2() {}
     return CC2;
 }());
 var CC2 = /** @class */ (function () {
-    function CC2() {
-    }
+    function CC2() {}
     return CC2;
 }());
+
+
+
 new CM;
 new MC;
 new CI;

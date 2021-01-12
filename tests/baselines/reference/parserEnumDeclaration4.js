@@ -4,6 +4,5 @@ enum void {
 
 //// [parserEnumDeclaration4.js]
 var ;
-(function () {
-})( || ( = {}));
+(function () {})( || ( = {}));
 void {};

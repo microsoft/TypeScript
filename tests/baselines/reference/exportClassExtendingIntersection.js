@@ -40,8 +40,7 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 exports.__esModule = true;
 exports.MyBaseClass = void 0;
 var MyBaseClass = /** @class */ (function () {
-    function MyBaseClass(value) {
-    }
+    function MyBaseClass(value) {}
     return MyBaseClass;
 }());
 exports.MyBaseClass = MyBaseClass;
@@ -64,6 +63,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.MyMixin = void 0;
+
 function MyMixin(base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
@@ -95,6 +95,7 @@ exports.__esModule = true;
 exports.MyExtendedClass = void 0;
 var BaseClass_1 = require("./BaseClass");
 var MixinClass_1 = require("./MixinClass");
+
 var MyExtendedClass = /** @class */ (function (_super) {
     __extends(MyExtendedClass, _super);
     function MyExtendedClass() {
@@ -108,7 +109,9 @@ exports.MyExtendedClass = MyExtendedClass;
 exports.__esModule = true;
 var FinalClass_1 = require("./FinalClass");
 var MixinClass_1 = require("./MixinClass");
+
 var myExtendedClass = new FinalClass_1.MyExtendedClass('string');
+
 var AnotherMixedClass = MixinClass_1.MyMixin(FinalClass_1.MyExtendedClass);
 
 

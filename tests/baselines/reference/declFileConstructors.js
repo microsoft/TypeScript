@@ -109,17 +109,16 @@ var SimpleConstructor = /** @class */ (function () {
 exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = /** @class */ (function () {
     /** This is comment for function signature*/
-    function ConstructorWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+    function ConstructorWithParameters(/** this is comment about a*/ a,
+        /** this is comment for b*/
+        b) {
         var d = a;
     }
     return ConstructorWithParameters;
 }());
 exports.ConstructorWithParameters = ConstructorWithParameters;
 var ConstructorWithRestParamters = /** @class */ (function () {
-    function ConstructorWithRestParamters(a) {
-        var rests = [];
+    function ConstructorWithRestParamters(a) {var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
@@ -156,8 +155,7 @@ var ConstructorWithOptionalParameterProperty = /** @class */ (function () {
 }());
 exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
 var ConstructorWithParameterInitializer = /** @class */ (function () {
-    function ConstructorWithParameterInitializer(x) {
-        if (x === void 0) { x = "hello"; }
+    function ConstructorWithParameterInitializer(x) {if (x === void 0) { x = "hello"; }
         this.x = x;
     }
     return ConstructorWithParameterInitializer;
@@ -172,16 +170,15 @@ var GlobalSimpleConstructor = /** @class */ (function () {
 }());
 var GlobalConstructorWithParameters = /** @class */ (function () {
     /** This is comment for function signature*/
-    function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+    function GlobalConstructorWithParameters(/** this is comment about a*/ a,
+        /** this is comment for b*/
+        b) {
         var d = a;
     }
     return GlobalConstructorWithParameters;
 }());
 var GlobalConstructorWithRestParamters = /** @class */ (function () {
-    function GlobalConstructorWithRestParamters(a) {
-        var rests = [];
+    function GlobalConstructorWithRestParamters(a) {var rests = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rests[_i - 1] = arguments[_i];
         }
@@ -213,8 +210,7 @@ var GlobalConstructorWithOptionalParameterProperty = /** @class */ (function () 
     return GlobalConstructorWithOptionalParameterProperty;
 }());
 var GlobalConstructorWithParameterInitializer = /** @class */ (function () {
-    function GlobalConstructorWithParameterInitializer(x) {
-        if (x === void 0) { x = "hello"; }
+    function GlobalConstructorWithParameterInitializer(x) {if (x === void 0) { x = "hello"; }
         this.x = x;
     }
     return GlobalConstructorWithParameterInitializer;

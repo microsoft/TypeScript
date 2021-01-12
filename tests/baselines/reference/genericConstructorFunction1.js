@@ -22,6 +22,8 @@ function f1(args) {
     v2(args);
     return new v2(args); // used to give error
 }
+
+
 ;
 function f2(args) {
     var v1;

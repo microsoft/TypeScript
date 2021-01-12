@@ -12,8 +12,7 @@ export = b;
 //// [declFileImportChainInExportAssignment.js]
 "use strict";
 var m;
-(function (m) {
-    var c;
+(function (m) {var c;
     (function (c_1) {
         var c = /** @class */ (function () {
             function c() {

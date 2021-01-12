@@ -51,8 +51,7 @@ var B;
 var A;
 (function (A) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     A.C = C;

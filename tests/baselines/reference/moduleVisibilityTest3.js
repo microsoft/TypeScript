@@ -29,6 +29,7 @@ module editor {
 //// [moduleVisibilityTest3.js]
 var _modes;
 (function (_modes) {
+
     var Mode = /** @class */ (function () {
         function Mode() {
         }
@@ -38,7 +39,9 @@ var _modes;
 //_modes. // produces an internal error - please implement in derived class
 var editor;
 (function (editor) {
+
     var i;
+
     // If you just use p1:modes, the compiler accepts it - should be an error
     var Bug = /** @class */ (function () {
         function Bug(p1, p2) {

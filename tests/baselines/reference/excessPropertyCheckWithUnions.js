@@ -175,9 +175,11 @@ var amb;
 amb = { tag: "A", x: "hi" };
 amb = { tag: "A", y: 12 };
 amb = { tag: "A", x: "hi", y: 12 };
+
 // correctly error on excess property 'extra', even when ambiguous
 amb = { tag: "A", x: "hi", extra: 12 };
 amb = { tag: "A", y: 12, extra: 12 };
+
 // assignability errors still work.
 // But note that the error for `z: true` is the fallback one of reporting on
 // the last constituent since assignability error reporting can't find a single best discriminant either.
@@ -203,19 +205,48 @@ var abac = {
         c: "c"
     }
 };
+
+
+
+
+
+
 var obj = {
     tag: 'button',
     type: 'submit',
+
     // should have error here
     href: 'foo'
 };
+
+
 ;
+
+
+
+
 var dataSpecification = {
     foo: "asdfsadffsd"
 };
+
 // Repro from #34611
 var obj1 = { a: 'abc' }; // Error
 var obj2 = { a: 5, c: 'abc' }; // Error
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function F1(_arg) { }
 F1({
     props: {
@@ -223,6 +254,7 @@ F1({
         prop2: prop2
     }
 });
+
 function F2(_props) { }
 F2({
     prop1: prop1,

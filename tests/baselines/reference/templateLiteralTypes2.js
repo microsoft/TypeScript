@@ -111,9 +111,11 @@ function ft1(s, n, u, t) {
     var d3 = "abc" + u;
     var d4 = "abc" + t;
 }
+
 function ft2(s) {
     return "abc" + s;
 }
+
 function ft10(s) {
     var c1 = "abc" + s; // Widening type `abc${string}`
     var v1 = c1; // Type string
@@ -124,6 +126,7 @@ function ft10(s) {
     var c4 = c1; // Type `abc${string}`
     var v4 = c4; // Type `abc${string}`
 }
+
 function ft11(s, cond) {
     var c1 = cond ? "foo" + s : "bar" + s; // widening `foo${string}` | widening `bar${string}`
     var c2 = c1; // `foo${string}` | `bar${string}`
@@ -136,6 +139,7 @@ function ft11(s, cond) {
     var v4 = c4; // string
     var v5 = c5; // `foo${string}` | `bar${string}` | `baz${string}`
 }
+
 function ft12(s) {
     var c1 = "foo" + s;
     var v1 = c1;
@@ -148,12 +152,17 @@ function ft12(s) {
     var c5 = "foo" + s;
     var v5 = c5;
 }
+
+
 function ft13(s, cond) {
     var x1 = widening("foo" + s);
     var x2 = widening(cond ? 'a' : "foo" + s);
     var y1 = nonWidening("foo" + s);
     var y2 = nonWidening(cond ? 'a' : "foo" + s);
 }
+
+
+
 function ft14(t) {
     var x1 = t;
     var x2 = t;
@@ -161,16 +170,28 @@ function ft14(t) {
     var x4 = t;
     var x6 = t;
 }
+
+
 var t1 = takesLiteral("foo.bar.baz"); // "baz"
 var id2 = "foo.bar.baz";
 var t2 = takesLiteral(id2); // "baz"
+
 var t3 = takesLiteral("foo.bar." + someString); // string
+
 var id4 = "foo.bar." + someString;
 var t4 = takesLiteral(id4); // string
+
 var t5 = takesLiteral("foo.bar." + someUnion); // "abc" | "def" | "ghi"
+
+
+
 // Repro from #41732
 var pixelValue = 22;
+
+
+
 var pixelString = "22px";
+
 var pixelStringWithTemplate = pixelValue + "px";
 
 

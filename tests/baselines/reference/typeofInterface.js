@@ -11,5 +11,7 @@ var j: typeof k.foo = { a: "hello" };
 
 //// [typeofInterface.js]
 var I;
+
+
 var k;
 var j = { a: "hello" };

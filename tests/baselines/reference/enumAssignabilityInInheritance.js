@@ -115,9 +115,12 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
+
+
 var r = foo(E.A); // E
 var r2 = foo(1); // number
 var r3 = foo(null); // any
+
 var r4 = foo2(E.A);
 var r4 = foo3(E.A);
 var r4 = foo4(E.A);
@@ -126,14 +129,12 @@ var r4 = foo6(E.A);
 var r4 = foo7(E.A);
 var r4 = foo8(E.A);
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var r4 = foo9(E.A);
 var A2 = /** @class */ (function () {
-    function A2() {
-    }
+    function A2() {}
     return A2;
 }());
 var r4 = foo10(E.A);
@@ -144,14 +145,14 @@ var E2;
     E2[E2["A"] = 0] = "A";
 })(E2 || (E2 = {}));
 var r4 = foo13(E.A);
+
 function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
 var r4 = foo14(E.A);
 var CC = /** @class */ (function () {
-    function CC() {
-    }
+    function CC() {}
     return CC;
 }());
 (function (CC) {

@@ -36,10 +36,12 @@ var o = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 var o1 = { x: ["string", 1], y: { c: true, d: "world", e: 3 } };
 foo(o1); // Not error since x has contextual type of tuple namely [string, number]
 foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
+
 var array = ["string", 1, true];
 var tuple = ["string", 1, true];
 baz(tuple);
 baz(["string", 1, true]);
+
 baz(array); // Error
 baz(__spreadArray(["string", 1, true], array)); // Error
 foo(o); // Error because x has an array type namely (string|number)[]

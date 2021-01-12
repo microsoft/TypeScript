@@ -15,8 +15,7 @@ abstract class B {
 //// [privateNamesIncompatibleModifiers.js]
 "use strict";
 var _foo, _bar, _baz, _qux;
-class A {
-    constructor() {
+class A {constructor() {
         _foo.set(this, 3); // Error
         _bar.set(this, 3); // Error
         _baz.set(this, 3); // Error

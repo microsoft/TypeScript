@@ -35,6 +35,9 @@ var d = baz(d, d, g);      // Should be number[] | string[]
 // and T is a function type with exactly one non - generic call signature and no other members, then any inferences
 // made for type parameters referenced by the parameters of T's call signature are fixed, and e's type is changed
 // to a function type with e's call signature instantiated in the context of T's call signature (section 3.8.5).
+
+
+
 var a;
 var a = bar(1, 1, g); // Should be number
 var a = baz(1, 1, g); // Should be number

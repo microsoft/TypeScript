@@ -67,33 +67,49 @@ function intersection2<T>(thing: T & (0 | 1 | 2)) {
 
 
 //// [inDoesNotOperateOnPrimitiveTypes.js]
-var validHasKey = function (thing, key) {
+var validHasKey = function (
+thing,
+    key
+) {
     return key in thing; // Ok
 };
-var alsoValidHasKey = function (thing, key) {
+
+var alsoValidHasKey = function (
+thing,
+    key
+) {
     return key in thing; // Ok (as T may be instantiated with a valid type)
 };
-function invalidHasKey(thing, key) {
+
+function invalidHasKey(
+thing,
+    key
+) {
     return key in thing; // Error (because all possible instantiations are errors)
 }
+
 function union1(thing) {
     "key" in thing; // Error (because all possible instantiations are errors)
 }
+
 function union2(thing) {
     "key" in thing; // Error (because narrowing is possible)
     if (typeof thing === "object") {
         "key" in thing; // Ok
     }
 }
+
 function union3(thing) {
     "key" in thing; // Error (because narrowing is possible)
     if (typeof thing !== "string" && typeof thing !== "number") {
         "key" in thing; // Ok (because further narrowing is impossible)
     }
 }
+
 function union4(thing) {
     "key" in thing; // Ok (because narrowing is impossible)
 }
+
 function union5(p) {
     // For consistency, this should probably not be an error, because useful
     // narrowing is impossible. However, this is exceptionally strange input,
@@ -108,9 +124,11 @@ function union5(p) {
         "key" in p;
     }
 }
+
 function intersection1(thing) {
     "key" in thing; // Error (because all possible instantiations are errors)
 }
+
 function intersection2(thing) {
     "key" in thing; // Error (because all possible instantations are errors)
 }

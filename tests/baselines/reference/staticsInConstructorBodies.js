@@ -8,8 +8,7 @@ class C {
 
 //// [staticsInConstructorBodies.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     C.m1 = function () { }; // ERROR
     C.p1 = 0; // ERROR
     return C;

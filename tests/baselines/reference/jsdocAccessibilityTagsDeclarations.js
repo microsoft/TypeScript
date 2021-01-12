@@ -53,6 +53,7 @@ class Protected {
     /** @protected */
     set p(value) { this.c = value; }
 }
+
 class Private {
     /** @private */
     constructor(c) {
@@ -68,6 +69,7 @@ class Private {
     /** @private */
     set p(value) { this.c = value; }
 }
+
 // https://github.com/microsoft/TypeScript/issues/38401
 class C {
     constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {

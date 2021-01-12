@@ -54,6 +54,19 @@ interface NextFunction {
 // small repro from #11875
 var use;
 use(function (req, res) { });
+
 // larger repro from #11875
 var app;
 app.use(function (err, req, res, next) { return; });
+
+
+
+
+
+
+
+
+
+
+
+

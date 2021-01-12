@@ -132,7 +132,12 @@ function f7() {
 exports.__esModule = true;
 exports.fn = exports.isSome = exports.none = void 0;
 var cond;
+
+
+
+
 exports.none = { none: '' };
+
 function isSome(value) {
     return 'some' in value;
 }
@@ -140,6 +145,7 @@ exports.isSome = isSome;
 function someFrom(some) {
     return { some: some };
 }
+
 function fn(makeSome) {
     var result = exports.none;
     result; // None
@@ -160,6 +166,7 @@ function foo1() {
     }
     x;
 }
+
 function foo2() {
     var x = 0;
     x; // number
@@ -175,6 +182,7 @@ function foo2() {
     }
     x;
 }
+
 // Type guards as assertions
 function f1() {
     var x = undefined;
@@ -184,6 +192,7 @@ function f1() {
     }
     x; // string | number | undefined
 }
+
 function f2() {
     var x = undefined;
     x; // undefined
@@ -192,6 +201,7 @@ function f2() {
     }
     x; // string | undefined
 }
+
 function f3() {
     var x = undefined;
     x; // undefined
@@ -200,6 +210,7 @@ function f3() {
     }
     x; // string | number (guard as assertion)
 }
+
 function f4() {
     var x = undefined;
     x; // undefined
@@ -208,6 +219,7 @@ function f4() {
     }
     x; // undefined
 }
+
 function f5(x) {
     if (typeof x === "string" && typeof x === "number") {
         x; // number (guard as assertion)
@@ -217,6 +229,7 @@ function f5(x) {
     }
     x; // string | number
 }
+
 function f6() {
     var x;
     x.slice();
@@ -233,6 +246,7 @@ function f6() {
     x = "";
     x.slice();
 }
+
 function f7() {
     var x;
     x.slice();

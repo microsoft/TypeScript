@@ -37,6 +37,9 @@ exports.q = {
 "use strict";
 exports.__esModule = true;
 var items_1 = require("./items");
+
+
 function nFoo(x) { }
 nFoo(items_1.q); // for comparison
+
 nFoo(items_1["default"]);

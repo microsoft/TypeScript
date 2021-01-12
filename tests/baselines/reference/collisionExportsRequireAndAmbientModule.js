@@ -96,8 +96,7 @@ module m4 {
 
 //// [collisionExportsRequireAndAmbientModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.foo2 = exports.foo = void 0;
     function foo() {
         return null;

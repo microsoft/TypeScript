@@ -28,6 +28,7 @@ var lambda5 = function temp() { return null; };
 var lambda6 = function () { return null; };
 var lambda7 = function temp() { return undefined; };
 var lambda8 = function () { return undefined; };
+
 // this shouldn't be an error
 var lambda9 = function () { return 5; };
 var lambda10 = function temp1() { return 5; };

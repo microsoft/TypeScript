@@ -12,4 +12,5 @@ function recursive() {
     var x = function (subkey) { return recursive(); };
     return x;
 }
+
 var result = recursive()(1);

@@ -53,7 +53,9 @@ z: typeof M.n;
 //// [typeofOperatorWithBooleanType.js]
 // typeof  operator on boolean type
 var BOOLEAN;
+
 function foo() { return true; }
+
 var A = /** @class */ (function () {
     function A() {
     }
@@ -64,18 +66,23 @@ var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // boolean type var
 var ResultIsString1 = typeof BOOLEAN;
+
 // boolean type literal
 var ResultIsString2 = typeof true;
 var ResultIsString3 = typeof { x: true, y: false };
+
 // boolean type expressions
 var ResultIsString4 = typeof objA.a;
 var ResultIsString5 = typeof M.n;
 var ResultIsString6 = typeof foo();
 var ResultIsString7 = typeof A.foo();
+
 // multiple typeof  operator
 var ResultIsString8 = typeof typeof BOOLEAN;
+
 // miss assignment operators
 typeof true;
 typeof BOOLEAN;

@@ -45,6 +45,7 @@ var X = /** @class */ (function () {
     X.now = function () {
         return {};
     };
+
     X.prototype.why = function () {
     };
     return X;

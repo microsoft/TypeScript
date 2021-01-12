@@ -139,8 +139,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/file1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = 30;
 });
@@ -152,8 +151,7 @@ export declare const c = 30;
 
 //// [/user/username/projects/myproject/src/file2.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = 30;
 });
@@ -246,8 +244,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/src/file3.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.y = void 0;
     exports.y = 10;
 });

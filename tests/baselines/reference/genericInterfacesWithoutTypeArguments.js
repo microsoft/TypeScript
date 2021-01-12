@@ -7,8 +7,7 @@ var c: C<I>;
 
 //// [genericInterfacesWithoutTypeArguments.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var i;

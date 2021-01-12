@@ -42,6 +42,7 @@ __exportStar(require("./file"), exports);
 //// [augment.js]
 "use strict";
 exports.__esModule = true;
+
 f.x;
 f.self;
 f.self.x;

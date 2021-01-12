@@ -13,6 +13,7 @@ class C2<T> {
 
 //// [classWithOptionalParameter.js]
 // classes do not permit optional parameters, these are errors
+
 var C = /** @class */ (function () {
     function C() {
     }

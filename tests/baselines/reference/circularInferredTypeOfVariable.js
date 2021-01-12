@@ -29,14 +29,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 (() => __awaiter(this, void 0, void 0, function* () {
     function foo(p) {
         return [];
     }
+
     function bar(p) {
         return [];
     }
+
     let a1 = [];
+
     while (true) {
         let a2 = foo(a1);
         a1 = yield bar(a2);

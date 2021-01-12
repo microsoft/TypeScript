@@ -34,9 +34,12 @@ var _a = { prop: "foo" }, _b = named, prop = _a[_b];
 void prop;
 var numIndexed = null;
 var strIndexed = null;
+
 var numed = 6;
+
 var symed = Symbol();
 var symed2 = Symbol();
+
 var _c = numIndexed, _d = named, prop2 = _c[_d];
 void prop2;
 var _e = numIndexed, _f = numed, prop3 = _e[_f];

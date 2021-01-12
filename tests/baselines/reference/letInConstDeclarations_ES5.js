@@ -9,6 +9,7 @@ const x = 50, let = 5;
 //// [letInConstDeclarations_ES5.js]
 // All use of let in const declaration should be an error
 var x = 50, let = 5;
+
 {
     var x_1 = 10, let_1 = 20;
 }

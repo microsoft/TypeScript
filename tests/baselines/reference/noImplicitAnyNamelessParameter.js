@@ -8,8 +8,7 @@ declare var z: { m(boolean, C, object, undefined): void }
 
 //// [noImplicitAnyNamelessParameter.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 // note: null and void do not parse correctly without a preceding parameter name

@@ -87,3 +87,26 @@ interface I18 extends Base {
 
 //// [subtypingWithCallSignaturesWithOptionalParameters.js]
 // call signatures in derived types must have the same or fewer optional parameters as the base type
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -34,8 +34,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var FancyError = /** @class */ (function (_super) {
+})();var FancyError = /** @class */ (function (_super) {
     __extends(FancyError, _super);
     function FancyError(status) {
         return _super.call(this, "error with status " + status) || this;
@@ -48,6 +47,7 @@ module.exports = {
 //// [index.js]
 // issue arises here on compilation
 var errors = require("./errors");
+
 module.exports = {
     errors: errors
 };

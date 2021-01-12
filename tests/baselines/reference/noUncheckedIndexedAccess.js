@@ -121,6 +121,7 @@ var StringEnum1;
     StringEnum1["A"] = "Alpha";
     StringEnum1["B"] = "Beta";
 })(StringEnum1 || (StringEnum1 = {}));
+
 // All of these should be errors
 var e1 = strMap["foo"];
 var e2 = strMap.bar;
@@ -136,6 +137,7 @@ var e11 = strMap[StringEnum1.A];
 var e12 = strMap[NumericEnum1.A];
 var e13 = strMap[NumericEnum2.A];
 var e14 = strMap[null];
+
 // Should be OK
 var ok1 = strMap["foo"];
 var ok2 = strMap.bar;
@@ -144,12 +146,14 @@ strMap["baz"] = undefined;
 strMap.qua = undefined;
 strMap[0] = undefined;
 strMap[null] = undefined;
+
 // All of these should be ok
 var num_ok1 = numMap[0];
 var num_ok2 = numMap[0];
 var num_ok3 = numMap[0];
 var num_ok4 = numMap[NumericEnum1.A];
 var num_ok5 = numMap[NumericEnum2.A];
+
 // Generics
 function generic1(arg) {
     // Should error
@@ -163,6 +167,7 @@ function generic3(arg) {
     // Should error
     return strMap[arg];
 }
+
 obj1["x"];
 var y = "y";
 obj1[y];
@@ -172,13 +177,17 @@ var z = "z";
 obj1[z];
 // Should error
 var f1 = strMapUnion["foo"];
+
 var e15 = symbolMap[s]; // Should OK
 symbolMap[s] = undefined; // Should error
 var variadicOk1 = nonEmptyStringArray[0]; // Should OK
 var variadicError1 = nonEmptyStringArray[1]; // Should error
+
+
 var fn1 = function (key) { return myRecord1[key]; }; // Should OK
 var fn2 = function (key) { return myRecord2[key]; }; // Should OK
 var fn3 = function (key) {
     myRecord2[key] = undefined; // Should error
     var v = myRecord2[key]; // Should error
 };
+

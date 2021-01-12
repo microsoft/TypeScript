@@ -63,6 +63,7 @@ module Interface {
 //// [genericClassWithObjectTypeArgsAndConstraints.js]
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -109,11 +110,13 @@ var Class;
 })(Class || (Class = {}));
 var Interface;
 (function (Interface) {
+
     var c1 = new X();
     var d1 = new X();
     var g;
     var r = g.foo(c1, d1);
     var r2 = g.foo(c1, c1);
+
     var g2;
     var r = g2.foo2(c1, d1);
     var r2 = g2.foo2(c1, c1);

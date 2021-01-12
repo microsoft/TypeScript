@@ -21,4 +21,6 @@ var a: {
 }
 
 //// [identicalCallSignatures.js]
+
+
 var a;

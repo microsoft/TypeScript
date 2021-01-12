@@ -6,6 +6,7 @@ var a: any;
 
 //// [emptyAssignmentPatterns03_ES5iterable.js]
 var a;
+
 (a);
 (a);
 

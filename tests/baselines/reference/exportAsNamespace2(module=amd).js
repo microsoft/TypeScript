@@ -17,8 +17,7 @@ foo.ns.b;
 
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -44,8 +43,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 define(["require", "exports", "./0"], function (require, exports, ns) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.ns = void 0;
     exports.ns = __importStar(ns);
     ns.a;
@@ -72,8 +70,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 define(["require", "exports", "./1"], function (require, exports, foo) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     foo = __importStar(foo);
     foo.ns.a;
     foo.ns.b;

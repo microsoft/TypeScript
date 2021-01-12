@@ -35,15 +35,18 @@ export let h1: D = new D;
 
 //// [exportNonInitializedVariablesAMD.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.h1 = exports.g1 = exports.f1 = exports.e1 = exports.d1 = exports.c1 = exports.b1 = exports.a1 = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
     var ;
     let;
     var ;
+
+
+
+
+
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var B;
@@ -60,8 +63,7 @@ define(["require", "exports"], function (require, exports) {
     exports.c1 = 'a';
     exports.d1 = 1;
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
     exports.e1 = new D;

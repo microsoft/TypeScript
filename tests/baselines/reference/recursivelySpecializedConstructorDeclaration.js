@@ -46,13 +46,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var MsPortal;
-(function (MsPortal) {
-    var Controls;
-    (function (Controls) {
-        var Base;
-        (function (Base) {
-            var ItemList;
+(function (MsPortal) {var Controls;
+    (function (Controls) {var Base;
+        (function (Base) {var ItemList;
             (function (ItemList) {
+
+
                 var ItemValue = /** @class */ (function () {
                     function ItemValue(value) {
                     }

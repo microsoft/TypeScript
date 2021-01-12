@@ -17,8 +17,7 @@ foo.ns.b;
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var a, b;
+    "use strict";var a, b;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -30,12 +29,10 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register(["./0"], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (ns_1) {
-                exports_1("ns", ns_1);
+            function (ns_1) {exports_1("ns", ns_1);
             }
         ],
         execute: function () {
@@ -46,13 +43,11 @@ System.register(["./0"], function (exports_1, context_1) {
 });
 //// [2.js]
 System.register(["./1"], function (exports_1, context_1) {
-    "use strict";
-    var foo;
+    "use strict";var foo;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (foo_1) {
-                foo = foo_1;
+            function (foo_1) {foo = foo_1;
             }
         ],
         execute: function () {

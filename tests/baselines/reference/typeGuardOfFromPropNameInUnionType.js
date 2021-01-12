@@ -108,111 +108,102 @@ function f(i: Indexed) {
 
 //// [typeGuardOfFromPropNameInUnionType.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 function namedClasses(x) {
     if ("a" in x) {
         x.a = "1";
-    }
-    else {
+    } else {
         x.b = 1;
     }
 }
+
 function multipleClasses(x) {
     if ("a" in x) {
         var y = x.a;
-    }
-    else {
+    } else {
         var z = x.b;
     }
 }
+
 function anonymousClasses(x) {
     if ("a" in x) {
         var y = x.a;
-    }
-    else {
+    } else {
         var z = x.b;
     }
 }
+
 var AWithOptionalProp = /** @class */ (function () {
-    function AWithOptionalProp() {
-    }
+    function AWithOptionalProp() {}
     return AWithOptionalProp;
 }());
 var BWithOptionalProp = /** @class */ (function () {
-    function BWithOptionalProp() {
-    }
+    function BWithOptionalProp() {}
     return BWithOptionalProp;
 }());
 function positiveTestClassesWithOptionalProperties(x) {
     if ("a" in x) {
         x.a = "1";
-    }
-    else {
+    } else {
         var y = x instanceof AWithOptionalProp
             ? x.a
             : x.b;
     }
 }
+
 function inParenthesizedExpression(x) {
     if ("a" in (x)) {
         var y = x.a;
-    }
-    else {
+    } else {
         var z = x.b;
     }
 }
+
 var ClassWithUnionProp = /** @class */ (function () {
-    function ClassWithUnionProp() {
-    }
+    function ClassWithUnionProp() {}
     return ClassWithUnionProp;
 }());
 function inProperty(x) {
     if ("a" in x.prop) {
         var y = x.prop.a;
-    }
-    else {
+    } else {
         var z = x.prop.b;
     }
 }
+
 var NestedClassWithProp = /** @class */ (function () {
-    function NestedClassWithProp() {
-    }
+    function NestedClassWithProp() {}
     return NestedClassWithProp;
 }());
 function innestedProperty(x) {
     if ("a" in x.outer.prop) {
         var y = x.outer.prop.a;
-    }
-    else {
+    } else {
         var z = x.outer.prop.b;
     }
 }
+
 var InMemberOfClass = /** @class */ (function () {
     function InMemberOfClass() {
     }
     InMemberOfClass.prototype.inThis = function () {
         if ("a" in this.prop) {
             var y = this.prop.a;
-        }
-        else {
+        } else {
             var z = this.prop.b;
         }
     };
@@ -225,12 +216,12 @@ var SelfAssert = /** @class */ (function () {
     SelfAssert.prototype.inThis = function () {
         if ("a" in this) {
             var y = this.a;
-        }
-        else {
+        } else {
         }
     };
     return SelfAssert;
 }());
+
 function f(i) {
     if ("a" in i) {
         return i.a;

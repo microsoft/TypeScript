@@ -13,17 +13,14 @@ export module TopLevelModule2 {
 
 //// [systemModuleNonTopLevelModuleMembers.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
+    "use strict";var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     var __moduleName = context_1 && context_1.id;
     function TopLevelFunction() { }
     exports_1("TopLevelFunction", TopLevelFunction);
     return {
         setters: [],
         execute: function () {
-            TopLevelClass = /** @class */ (function () {
-                function TopLevelClass() {
-                }
+            TopLevelClass = /** @class */ (function () {function TopLevelClass() {}
                 return TopLevelClass;
             }());
             exports_1("TopLevelClass", TopLevelClass);
@@ -37,8 +34,7 @@ System.register([], function (exports_1, context_1) {
             exports_1("TopLevelEnum", TopLevelEnum);
             (function (TopLevelModule2) {
                 var NonTopLevelClass = /** @class */ (function () {
-                    function NonTopLevelClass() {
-                    }
+                    function NonTopLevelClass() {}
                     return NonTopLevelClass;
                 }());
                 TopLevelModule2.NonTopLevelClass = NonTopLevelClass;

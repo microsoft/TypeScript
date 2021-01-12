@@ -41,17 +41,12 @@ export class D {
 }
 
 //// [0.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = exports.B = void 0;
     class B {
         print() { return "I am B"; }
@@ -61,37 +56,26 @@ export class D {
     exports.foo = foo;
 });
 //// [1.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.backup = void 0;
     function backup() { return "backup"; }
     exports.backup = backup;
 });
 //// [2.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";Object.defineProperty(exports, "__esModule", { value: true });
     exports.D = void 0;
-    class C {
-        constructor() {
+    class C {constructor() {
             this.myModule = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
         }
         method() {
@@ -105,8 +89,8 @@ export class D {
             });
         }
     }
-    class D {
-        constructor() {
+
+    class D {constructor() {
             this.myModule = __syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
         }
         method() {

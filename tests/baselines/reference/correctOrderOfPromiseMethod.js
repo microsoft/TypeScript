@@ -67,14 +67,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
+
 function countEverything() {
-    return __awaiter(this, void 0, void 0, function () {
-        var providerA, providerB, _a, resultA, resultB, dataA, dataB;
+    return __awaiter(this, void 0, void 0, function () {var providerA, providerB, _a, resultA, resultB, dataA, dataB;
         var _this = this;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    providerA = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return __generator(this, function (_b) {switch (_b.label) {case 0:providerA = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
                         return [2 /*return*/, []];
                     }); }); };
                     providerB = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -84,8 +82,7 @@ function countEverything() {
                             providerA(),
                             providerB(),
                         ])];
-                case 1:
-                    _a = _b.sent(), resultA = _a[0], resultB = _a[1];
+                case 1:_a = _b.sent(), resultA = _a[0], resultB = _a[1];
                     dataA = resultA;
                     dataB = resultB;
                     if (dataA && dataB) {
@@ -96,5 +93,6 @@ function countEverything() {
         });
     });
 }
+
 // #31179
 var expected = Promise.all(undefined);

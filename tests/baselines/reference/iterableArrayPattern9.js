@@ -17,10 +17,8 @@ class FooIterator {
 
 //// [iterableArrayPattern9.js]
 function fun([a, b] = new FooIterator) { }
-class Bar {
-}
-class Foo extends Bar {
-}
+class Bar {}
+class Foo extends Bar {}
 class FooIterator {
     next() {
         return {
@@ -28,6 +26,7 @@ class FooIterator {
             done: false
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }

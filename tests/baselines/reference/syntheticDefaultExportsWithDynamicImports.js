@@ -8,8 +8,7 @@ export = packageExport;
 import("package").then(({default: foo}) => foo(42));
 
 //// [index.js]
-System.register([], function (exports_1, context_1) {
-    var __moduleName = context_1 && context_1.id;
+System.register([], function (exports_1, context_1) {var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {

@@ -10,19 +10,16 @@ export var x = new defaultBinding();
 
 //// [server.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     var a = /** @class */ (function () {
-        function a() {
-        }
+        function a() {}
         return a;
     }());
     exports.default = a;
 });
 //// [client.js]
 define(["require", "exports", "server"], function (require, exports, server_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x = new server_1.default();
 });

@@ -87,9 +87,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 // in call type arguments
@@ -101,6 +101,9 @@ var testClass1 = /** @class */ (function () {
 }());
 var tc1 = new testClass1();
 tc1.method(); // error: could not find symbol V
+
+
+
 // in constructor type arguments
 var testClass2 = /** @class */ (function () {
     function testClass2() {
@@ -108,6 +111,9 @@ var testClass2 = /** @class */ (function () {
     return testClass2;
 }());
 var tc2 = new testClass2(); // error: could not find symbol V
+
+
+
 // in method return type annotation
 var testClass3 = /** @class */ (function () {
     function testClass3() {
@@ -124,22 +130,33 @@ var testClass3 = /** @class */ (function () {
 }());
 // in function return type annotation
 function testFunction1() { return null; } // error: could not find symbol V
+
+
+
 // in paramter types
 function testFunction2(p) { } // error: could not find symbol V
+
+
+
 // in var type annotation
 var f; // error: could not find symbol V
+
+
+
 // in constraints
 var testClass4 = /** @class */ (function () {
-    function testClass4() {
-    }
+    function testClass4() {}
     return testClass4;
 }()); // error: could not find symbol V
+
 var testClass6 = /** @class */ (function () {
     function testClass6() {
     }
     testClass6.prototype.method = function () { }; // error: could not find symbol V
     return testClass6;
 }());
+
+
 // in extends clause
 var testClass7 = /** @class */ (function (_super) {
     __extends(testClass7, _super);
@@ -150,7 +167,7 @@ var testClass7 = /** @class */ (function (_super) {
 }(Foo)); // error: could not find symbol V
 // in implements clause
 var testClass8 = /** @class */ (function () {
-    function testClass8() {
-    }
+    function testClass8() {}
     return testClass8;
 }()); // error: could not find symbol V
+

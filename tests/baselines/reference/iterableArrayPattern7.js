@@ -18,10 +18,8 @@ var a: Bar, b: string[];
 [a, b] = new FooIterator;
 
 //// [iterableArrayPattern7.js]
-class Bar {
-}
-class Foo extends Bar {
-}
+class Bar {}
+class Foo extends Bar {}
 class FooIterator {
     next() {
         return {
@@ -29,6 +27,7 @@ class FooIterator {
             done: false
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }

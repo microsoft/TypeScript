@@ -18,6 +18,7 @@ class A {
 class A {
     constructor() { }
 }
+
 /**
  * @extends {A}
  */

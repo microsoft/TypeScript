@@ -35,6 +35,8 @@ export class B extends A {
 "use strict";
 exports.__esModule = true;
 exports.A = void 0;
+
+
 var A = /** @class */ (function () {
     function A() {
     }
@@ -79,6 +81,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 exports.B = void 0;
 var class_1 = require("./class");
+
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {

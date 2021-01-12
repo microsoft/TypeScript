@@ -47,14 +47,11 @@ exports.__esModule = true;
 var A;
 (function (A) {
     var B = /** @class */ (function () {
-        function B(b) {
-        }
+        function B(b) {}
         return B;
     }());
     A.B = B;
-    (function (B) {
-        B.b = 0;
-    })(B = A.B || (A.B = {}));
+    (function (B) {B.b = 0;})(B = A.B || (A.B = {}));
 })(A || (A = {}));
 exports["default"] = A.B;
 //// [b.js]
@@ -70,7 +67,9 @@ var X = foobar_1["default"].X;
 var foobarx_1 = require("foobarx");
 var x = X;
 var x2 = foobarx_1["default"];
+
 var a_1 = require("./a");
 var b = new a_1["default"](a_1["default"].b);
+
 var b_1 = require("./b");
 b_1["default"] + 1;

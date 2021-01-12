@@ -44,12 +44,15 @@ var Observable;
 "use strict";
 exports.__esModule = true;
 var observable_1 = require("./observable");
+
 observable_1.Observable.prototype.map = function () { };
+
 //// [main.js]
 "use strict";
 exports.__esModule = true;
 var observable_1 = require("./observable");
 require("./map");
+
 var x;
 var y = x.map(function (x) { return x + 1; });
 var z1 = observable_1.Observable.someValue.toFixed();

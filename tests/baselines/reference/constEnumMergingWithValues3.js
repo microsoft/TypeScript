@@ -8,8 +8,7 @@ export = foo
 
 //// [m1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var foo;
+    "use strict";var foo;
     (function (foo) {
         foo[foo["A"] = 0] = "A";
     })(foo || (foo = {}));

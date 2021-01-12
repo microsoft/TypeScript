@@ -91,15 +91,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
+
+
 var Portal;
-(function (Portal) {
-    var Controls;
-    (function (Controls) {
-        var Validators;
+(function (Portal) {var Controls;
+    (function (Controls) {var Validators;
         (function (Validators) {
+
             var Validator = /** @class */ (function () {
-                function Validator(message) {
-                }
+                function Validator(message) {}
                 Validator.prototype.destroy = function () { };
                 Validator.prototype._validate = function (value) { return 0; };
                 return Validator;
@@ -109,13 +111,11 @@ var Portal;
     })(Controls = Portal.Controls || (Portal.Controls = {}));
 })(Portal || (Portal = {}));
 var PortalFx;
-(function (PortalFx) {
-    var ViewModels;
-    (function (ViewModels) {
-        var Controls;
-        (function (Controls) {
-            var Validators;
+(function (PortalFx) {var ViewModels;
+    (function (ViewModels) {var Controls;
+        (function (Controls) {var Validators;
             (function (Validators) {
+
                 var Validator = /** @class */ (function (_super) {
                     __extends(Validator, _super);
                     function Validator(message) {
@@ -128,6 +128,8 @@ var PortalFx;
         })(Controls = ViewModels.Controls || (ViewModels.Controls = {}));
     })(ViewModels = PortalFx.ViewModels || (PortalFx.ViewModels = {}));
 })(PortalFx || (PortalFx = {}));
+
+
 var ViewModel = /** @class */ (function () {
     function ViewModel() {
         this.validators = ko.observableArray();

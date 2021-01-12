@@ -15,3 +15,4 @@ var Color;
     Color[Color["Green"] = 1] = "Green";
     Color[Color["Blue"] = 2] = "Blue";
 })(Color || (Color = {}));
+

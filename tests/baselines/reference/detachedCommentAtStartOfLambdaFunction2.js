@@ -25,8 +25,7 @@ var TestFile = /** @class */ (function () {
             for (var _i = 0; _i < arguments.length; _i++) {
                 x[_i] = arguments[_i];
             }
-            return message + _this.name;
-        };
+            return message + _this.name;};
     };
     return TestFile;
 }());

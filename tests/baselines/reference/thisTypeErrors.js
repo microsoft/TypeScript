@@ -60,10 +60,13 @@ class C3 {
 var x1;
 var x2;
 var x3;
+
 function f1(x) {
     var y;
     return this;
 }
+
+
 var C1 = /** @class */ (function () {
     function C1() {
     }

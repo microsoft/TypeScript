@@ -8,6 +8,7 @@ class C {
 }
 
 //// [decoratorOnClassMethodOverload1.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

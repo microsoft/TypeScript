@@ -27,6 +27,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 function f() {
     var d1 = new derived();
     var d2 = new derived(4);

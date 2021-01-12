@@ -217,18 +217,15 @@ var _loop_10 = function (y) {
 for (var y = 0; y < 1; ++y) {
     _loop_10(y);
 }
-var _loop_init_1 = function () {
-    var y = (use(function () { return y; }), 0);
+var _loop_init_1 = function () {var y = (use(function () { return y; }), 0);
     out_y_1 = y;
 };
 var out_y_1;
 _loop_init_1();
 for (var y = out_y_1; y < 1; ++y) {
 }
-var _loop_11 = function (y) {
-    if (inc_1)
-        ++y;
-    else
+var _loop_11 = function (y) {if (inc_1)
+        ++y; else
         inc_1 = true;
     if (!(use(function () { return y; }), y < 1))
         return "break";
@@ -239,24 +236,19 @@ for (var y = 0;;) {
     if (state_1 === "break")
         break;
 }
-var _loop_12 = function (y) {
-    if (inc_2)
-        use(function () { return y; }), ++y;
-    else
+var _loop_12 = function (y) {if (inc_2)
+        use(function () { return y; }), ++y; else
         inc_2 = true;
 };
 var inc_2 = false;
 for (var y = 0; y < 1;) {
     _loop_12(y);
 }
-var _loop_init_2 = function () {
-    var y = (use(function () { return y; }), 0);
+var _loop_init_2 = function () {var y = (use(function () { return y; }), 0);
     out_y_2 = y;
 };
-var _loop_13 = function (y) {
-    if (inc_3)
-        use(function () { return y; }), ++y;
-    else
+var _loop_13 = function (y) {if (inc_3)
+        use(function () { return y; }), ++y; else
         inc_3 = true;
     if (!(use(function () { return y; }), y < 1))
         return out_y_2 = y, "break";
@@ -264,8 +256,7 @@ var _loop_13 = function (y) {
 };
 var out_y_2, inc_3 = false;
 _loop_init_2();
-for (var y = out_y_2;;) {
-    var state_2 = _loop_13(y);
+for (var y = out_y_2;;) {var state_2 = _loop_13(y);
     if (state_2 === "break")
         break;
 }
@@ -347,6 +338,7 @@ var _loop_23 = function (y) {
 for (var y = 0; y < 1;) {
     _loop_23(y);
 }
+
 var _loop_24 = function (sx) {
     (function () { return sobj[sx]; });
 };

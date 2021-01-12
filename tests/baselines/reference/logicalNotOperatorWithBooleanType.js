@@ -41,7 +41,9 @@ var ResultIsBoolean = !!BOOLEAN;
 //// [logicalNotOperatorWithBooleanType.js]
 // ! operator on boolean type
 var BOOLEAN;
+
 function foo() { return true; }
+
 var A = /** @class */ (function () {
     function A() {
     }
@@ -52,18 +54,23 @@ var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // boolean type var
 var ResultIsBoolean1 = !BOOLEAN;
+
 // boolean type literal
 var ResultIsBoolean2 = !true;
 var ResultIsBoolean3 = !{ x: true, y: false };
+
 // boolean type expressions
 var ResultIsBoolean4 = !objA.a;
 var ResultIsBoolean5 = !M.n;
 var ResultIsBoolean6 = !foo();
 var ResultIsBoolean7 = !A.foo();
+
 // multiple ! operators
 var ResultIsBoolean = !!BOOLEAN;
+
 // miss assignment operators
 !true;
 !BOOLEAN;

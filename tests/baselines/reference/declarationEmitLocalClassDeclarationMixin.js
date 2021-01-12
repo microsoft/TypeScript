@@ -49,6 +49,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.FilteredThing = exports.Mixed = exports.Unmixed = void 0;
+
 function mixin(Base) {
     var PrivateMixed = /** @class */ (function (_super) {
         __extends(PrivateMixed, _super);
@@ -61,6 +62,7 @@ function mixin(Base) {
     }(Base));
     return PrivateMixed;
 }
+
 var Unmixed = /** @class */ (function () {
     function Unmixed() {
         this.foo = 1;
@@ -69,6 +71,7 @@ var Unmixed = /** @class */ (function () {
 }());
 exports.Unmixed = Unmixed;
 exports.Mixed = mixin(Unmixed);
+
 function Filter(ctor) {
     var FilterMixin = /** @class */ (function (_super) {
         __extends(FilterMixin, _super);
@@ -82,6 +85,7 @@ function Filter(ctor) {
     }(ctor));
     return FilterMixin;
 }
+
 var FilteredThing = /** @class */ (function (_super) {
     __extends(FilteredThing, _super);
     function FilteredThing() {

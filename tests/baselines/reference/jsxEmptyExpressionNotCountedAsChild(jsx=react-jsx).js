@@ -21,7 +21,11 @@ const element = (
 "use strict";
 exports.__esModule = true;
 var jsx_runtime_1 = require("react/jsx-runtime");
+
 function Wrapper(props) {
     return jsx_runtime_1.jsx("div", { children: props.children }, void 0);
 }
-var element = (jsx_runtime_1.jsx(Wrapper, { children: jsx_runtime_1.jsx("div", { children: "Hello" }, void 0) }, void 0));
+
+var element = (
+    jsx_runtime_1.jsx(Wrapper, { children: jsx_runtime_1.jsx("div", { children: "Hello" }, void 0) }, void 0)
+);

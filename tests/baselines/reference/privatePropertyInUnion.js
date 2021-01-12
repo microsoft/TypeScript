@@ -22,3 +22,4 @@ var SyncableObject = /** @class */ (function () {
     }
     return SyncableObject;
 }());
+

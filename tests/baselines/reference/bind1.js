@@ -9,8 +9,7 @@ module M {
 var M;
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }()); // this should be an unresolved symbol I error
     M.C = C;

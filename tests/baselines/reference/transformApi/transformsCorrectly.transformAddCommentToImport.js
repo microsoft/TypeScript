@@ -17,8 +17,7 @@ Object.defineProperty(exports, "Value", { enumerable: true, get: function () { r
 /*comment*/
 var somewhere_2 = require("somewhere");
 /*comment*/
-Object.defineProperty(exports, "X", { enumerable: true, get: function () { return somewhere_2.X; } });
-/*comment*/
+Object.defineProperty(exports, "X", { enumerable: true, get: function () { return somewhere_2.X; } });/*comment*/
 Object.defineProperty(exports, "Y", { enumerable: true, get: function () { return somewhere_2.Y; } });
 /*comment*/
 __exportStar(require("somewhere"), exports);

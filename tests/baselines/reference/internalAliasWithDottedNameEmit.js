@@ -9,10 +9,8 @@ module a.e.f {
 
 //// [internalAliasWithDottedNameEmit.js]
 var a;
-(function (a) {
-    var b;
-    (function (b) {
-        var c;
+(function (a) {var b;
+    (function (b) {var c;
         (function (c) {
         })(c = b.c || (b.c = {}));
     })(b = a.b || (a.b = {}));

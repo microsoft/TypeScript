@@ -62,6 +62,7 @@ var A = /** @class */ (function () {
     };
     A.prototype.bar = function (a) {
     };
+
     A.prototype.baz = function () {
         var _loop_2 = function (x) {
             var a = function () { return x; };

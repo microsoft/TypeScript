@@ -42,16 +42,26 @@ abc.inNone;
 
 
 //// [unionPropertyExistence.js]
+
+
+
+
+
+
 var ab;
 var abc;
+
 x.nope();
 bFoo.onlyInB;
 x.length; // Ok
 bFoo.length;
+
 ab.onlyInB;
+
 ab.notInC; // Ok
 abc.notInC;
 ab.notInB;
 abc.notInB;
+
 abc.inAll; // Ok
 abc.inNone;

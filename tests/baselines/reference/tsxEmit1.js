@@ -54,6 +54,7 @@ var selfClosed4 = <div x="1" y='0'/>;
 var selfClosed5 = <div x={0} y='0'/>;
 var selfClosed6 = <div x={"1"} y='0'/>;
 var selfClosed7 = <div x={p} y='p'/>;
+
 var openClosed1 = <div></div>;
 var openClosed2 = <div n='m'>foo</div>;
 var openClosed3 = <div n='m'>{p}</div>;
@@ -67,6 +68,7 @@ var SomeClass = /** @class */ (function () {
         var rewrites1 = <div>{function () { return _this; }}</div>;
         var rewrites2 = <div>{__spreadArray(__spreadArray([p], p), [p])}</div>;
         var rewrites3 = <div>{{ p: p }}</div>;
+
         var rewrites4 = <div a={function () { return _this; }}></div>;
         var rewrites5 = <div a={__spreadArray(__spreadArray([p], p), [p])}></div>;
         var rewrites6 = <div a={{ p: p }}></div>;

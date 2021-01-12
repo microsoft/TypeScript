@@ -9,6 +9,7 @@ let e: "foo" | "bar" = d;
 
 
 //// [stringLiteralTypesAndLogicalOrExpressions01.js]
+
 var a = "foo";
 var b = a || "foo";
 var c = b;

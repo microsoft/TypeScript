@@ -23,9 +23,11 @@ function other<T extends Date>(arg: T) {
 
 //// [genericCallWithObjectTypeArgsAndIndexers.js]
 // Type inference infers from indexers in target type, no errors expected
+
 function foo(x) {
     return x;
 }
+
 var a;
 var r = foo(a);
 function other(arg) {

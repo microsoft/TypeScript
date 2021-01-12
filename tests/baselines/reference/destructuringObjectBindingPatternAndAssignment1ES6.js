@@ -69,11 +69,13 @@ var { b2: { b21 } = { b21: "string" } } = { b2: { b21: "world" } };
 var { 1: b3 } = { 1: "string" };
 var { b4 = 1 } = { b4: 100000 };
 var { b5: { b52 } } = { b5: { b52 } };
+
 function foo() {
     return {
         1: true
     };
 }
+
 function bar() {
     return {
         2: true
@@ -81,6 +83,7 @@ function bar() {
 }
 var { 1: c0 } = foo();
 var { 1: c1 } = bar();
+
 function foo1() {
     return {
         "prop1": 2

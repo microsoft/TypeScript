@@ -34,9 +34,11 @@ var robotB = { name: "trimmer", skill: "trimming" };
 var a, nameA = robotA.name;
 var b, nameB = robotB.name, skillB = robotB.skill;
 var c, _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
+
 var nameA = robotA.name, a = hello;
 var nameB = robotB.name, skillB = robotB.skill, b = " hello";
 var _b = { name: "Edger", skill: "cutting edges" }, nameC = _b.name, skillC = _b.skill, c = hello;
+
 var a = hello, nameA = robotA.name, a1 = "hello";
 var b = hello, nameB = robotB.name, skillB = robotB.skill, b1 = "hello";
 var c = hello, _c = { name: "Edger", skill: "cutting edges" }, nameC = _c.name, skillC = _c.skill, c1 = hello;

@@ -50,6 +50,10 @@ function getFoo3(): Foo {
 }
 
 //// [contextuallyTypedClassExpressionMethodDeclaration02.js]
+
+
+
+
 function getFoo1() {
     return /** @class */ (function () {
         function class_1() {
@@ -63,6 +67,7 @@ function getFoo1() {
         return class_1;
     }());
 }
+
 function getFoo2() {
     return /** @class */ (function () {
         function class_2() {
@@ -76,6 +81,7 @@ function getFoo2() {
         return class_2;
     }());
 }
+
 function getFoo3() {
     return /** @class */ (function () {
         function class_3() {

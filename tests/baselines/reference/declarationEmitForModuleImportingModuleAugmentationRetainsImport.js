@@ -25,9 +25,9 @@ child1(ParentThing.prototype);
 exports.__esModule = true;
 exports.ParentThing = void 0;
 var child1_1 = require("./child1"); // this import should still exist in some form in the output, since it augments this module
+
 var ParentThing = /** @class */ (function () {
-    function ParentThing() {
-    }
+    function ParentThing() {}
     return ParentThing;
 }());
 exports.ParentThing = ParentThing;
@@ -36,6 +36,7 @@ child1_1.child1(ParentThing.prototype);
 "use strict";
 exports.__esModule = true;
 exports.child1 = void 0;
+
 function child1(prototype) {
     prototype.add = function (a, b) { return a + b; };
 }

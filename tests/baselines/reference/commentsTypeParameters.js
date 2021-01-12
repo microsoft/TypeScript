@@ -23,6 +23,7 @@ var C = /** @class */ (function () {
     };
     C.staticmethod = function (a) {
     };
+
     C.prototype.privatemethod = function (a) {
     };
     C.privatestaticmethod = function (a) {

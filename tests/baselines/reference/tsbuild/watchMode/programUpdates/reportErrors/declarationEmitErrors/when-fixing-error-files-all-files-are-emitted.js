@@ -139,8 +139,7 @@ export declare var myClassWithError: {
 exports.__esModule = true;
 exports.myClass = void 0;
 var myClass = /** @class */ (function () {
-    function myClass() {
-    }
+    function myClass() {}
     return myClass;
 }());
 exports.myClass = myClass;

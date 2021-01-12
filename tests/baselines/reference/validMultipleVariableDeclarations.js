@@ -41,6 +41,7 @@ var a: typeof a;
 
 //// [validMultipleVariableDeclarations.js]
 // all expected to be valid
+
 var x;
 var x = 2;
 if (true) {
@@ -52,6 +53,7 @@ var x = undefined;
 function declSpace() {
     var x = 'this is a string';
 }
+
 var p;
 var p = { x: 1, y: 2 };
 var p = { x: 0, y: undefined };
@@ -59,12 +61,14 @@ var p = { x: 1, y: undefined };
 var p = { x: 1, y: 2 };
 var p = { x: 0, y: undefined };
 var p;
+
 var fn = function (s) { return 42; };
 var fn = function (s) { return 3; };
 var fn;
 var fn;
 var fn = null;
 var fn;
+
 var a;
 var a = ['a', 'b'];
 var a = [];

@@ -6,8 +6,7 @@ function * f() {
 //// [sourceMapValidationVarInDownLevelGenerator.js]
 function f() {
     var x, y;
-    return __generator(this, function (_a) {
-        x = 1;
+    return __generator(this, function (_a) {x = 1;
         return [2 /*return*/];
     });
 }

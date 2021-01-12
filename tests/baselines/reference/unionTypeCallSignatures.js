@@ -79,6 +79,7 @@ strOrNum = unionWithRestParameter4("hello", "world");
 var numOrDate;
 var strOrBoolean;
 var strOrNum;
+
 // If each type in U has call signatures and the sets of call signatures are identical ignoring return types, 
 // U has the same set of call signatures, but with return types that are unions of the return types of the respective call signatures from each type in U.
 var unionOfDifferentReturnType;

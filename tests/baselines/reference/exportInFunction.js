@@ -5,5 +5,4 @@ function f() {
 
 //// [exportInFunction.js]
 function f() {
-    export = 0;
-}
+    export = 0;}

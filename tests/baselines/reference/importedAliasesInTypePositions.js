@@ -20,16 +20,12 @@ export module ImportingModule {
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.elaborate = void 0;
     var elaborate;
-    (function (elaborate) {
-        var nested;
-        (function (nested) {
-            var mod;
-            (function (mod) {
-                var name;
+    (function (elaborate) {var nested;
+        (function (nested) {var mod;
+            (function (mod) {var name;
                 (function (name) {
                     var ReferredTo = /** @class */ (function () {
                         function ReferredTo() {
@@ -46,8 +42,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.ImportingModule = void 0;
     var ImportingModule;
     (function (ImportingModule) {

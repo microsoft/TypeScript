@@ -7,12 +7,10 @@ import "test"
 
 //// [outputfile.js]
 define("test", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 define("app/main", ["require", "exports", "test"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 
 

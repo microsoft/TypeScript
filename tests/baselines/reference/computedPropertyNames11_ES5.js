@@ -21,7 +21,8 @@ var _a;
 var s;
 var n;
 var a;
-var v = (_a = {},
+var v = (
+_a = {},
     Object.defineProperty(_a, s, {
         get: function () { return 0; },
         enumerable: false,
@@ -77,4 +78,5 @@ var v = (_a = {},
         enumerable: false,
         configurable: true
     }),
-    _a);
+    _a
+);

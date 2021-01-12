@@ -226,31 +226,25 @@ var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         return exporter.createExportedWidget1();
     };
     publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
-        return exporter.createExportedWidget1();
-        ;
+        return exporter.createExportedWidget1();;
     };
     publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
-        return exporter.createExportedWidget1();
-        ;
+        return exporter.createExportedWidget1();;
     };
     publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
-        return exporter.createExportedWidget1();
-        ;
+        return exporter.createExportedWidget1();;
     };
     publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget3();
     };
     publicClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
-        return exporter.createExportedWidget3();
-        ;
+        return exporter.createExportedWidget3();;
     };
     publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
-        return exporter.createExportedWidget3();
-        ;
+        return exporter.createExportedWidget3();;
     };
     publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
-        return exporter.createExportedWidget3();
-        ;
+        return exporter.createExportedWidget3();;
     };
     return publicClassWithWithPrivateParmeterTypes;
 }());
@@ -262,31 +256,25 @@ var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         return exporter.createExportedWidget1();
     };
     privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod = function () {
-        return exporter.createExportedWidget1();
-        ;
+        return exporter.createExportedWidget1();;
     };
     privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
-        return exporter.createExportedWidget1();
-        ;
+        return exporter.createExportedWidget1();;
     };
     privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
-        return exporter.createExportedWidget1();
-        ;
+        return exporter.createExportedWidget1();;
     };
     privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget3();
     };
     privateClassWithWithPrivateParmeterTypes.myPrivateStaticMethod1 = function () {
-        return exporter.createExportedWidget3();
-        ;
+        return exporter.createExportedWidget3();;
     };
     privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
-        return exporter.createExportedWidget3();
-        ;
+        return exporter.createExportedWidget3();;
     };
     privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
-        return exporter.createExportedWidget3();
-        ;
+        return exporter.createExportedWidget3();;
     };
     return privateClassWithWithPrivateParmeterTypes;
 }());

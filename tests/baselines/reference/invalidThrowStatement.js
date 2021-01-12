@@ -6,4 +6,5 @@ export throw null;
 
 //// [invalidThrowStatement.js]
 throw ;
+
 throw null;

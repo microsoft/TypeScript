@@ -60,53 +60,54 @@ function removeNothing(y = cond ? true : undefined) {
 
 
 //// [defaultParameterAddsUndefinedWithStrictNullChecks.js]
-function f(addUndefined1, addUndefined2) {
-    if (addUndefined1 === void 0) { addUndefined1 = "J"; }
+function f(addUndefined1, addUndefined2) {if (addUndefined1 === void 0) { addUndefined1 = "J"; }
     return addUndefined1.length + (addUndefined2 || 0);
 }
-function g(addUndefined, addDefined) {
-    if (addUndefined === void 0) { addUndefined = "J"; }
+function g(addUndefined, addDefined) {if (addUndefined === void 0) { addUndefined = "J"; }
     return addUndefined.length + addDefined;
 }
 var total = f() + f('a', 1) + f('b') + f(undefined, 2);
 total = g('c', 3) + g(undefined, 4);
-function foo1(x, b) {
-    if (x === void 0) { x = "string"; }
+function foo1(x, b) {if (x === void 0) { x = "string"; }
     x.length;
 }
-function foo2(x, b) {
-    if (x === void 0) { x = "string"; }
+
+function foo2(x, b) {if (x === void 0) { x = "string"; }
     x.length; // ok, should be string
 }
-function foo3(x, b) {
-    if (x === void 0) { x = "string"; }
+
+function foo3(x, b) {if (x === void 0) { x = "string"; }
     x.length; // ok, should be string
     x = undefined;
 }
-function foo4(x, b) {
-    if (x === void 0) { x = undefined; }
+
+function foo4(x, b) {if (x === void 0) { x = undefined; }
     x; // should be string | undefined
     x = undefined;
 }
-function allowsNull(val) {
-    if (val === void 0) { val = ""; }
+
+
+function allowsNull(val) {if (val === void 0) { val = ""; }
     val = null;
     val = 'string and null are both ok';
 }
 allowsNull(null); // still allows passing null
+
+
+
+
 // .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
 foo1(undefined, 1);
 foo2(undefined, 1);
 foo3(undefined, 1);
 foo4(undefined, 1);
-function removeUndefinedButNotFalse(x) {
-    if (x === void 0) { x = true; }
+function removeUndefinedButNotFalse(x) {if (x === void 0) { x = true; }
     if (x === false) {
         return x;
     }
 }
-function removeNothing(y) {
-    if (y === void 0) { y = cond ? true : undefined; }
+
+function removeNothing(y) {if (y === void 0) { y = cond ? true : undefined; }
     if (y !== undefined) {
         if (y === false) {
             return y;

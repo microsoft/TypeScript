@@ -42,6 +42,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
 var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);
     function MyComponent() {
@@ -55,6 +57,7 @@ var MyComponent = /** @class */ (function (_super) {
 }(React.Component));
 // Stateless Component As Props
 React.createElement(MyComponent, { AnyComponent: function () { return React.createElement("button", null, "test"); } });
+
 // Component Class as Props
 var MyButtonComponent = /** @class */ (function (_super) {
     __extends(MyButtonComponent, _super);
@@ -64,3 +67,4 @@ var MyButtonComponent = /** @class */ (function (_super) {
     return MyButtonComponent;
 }(React.Component));
 React.createElement(MyComponent, { AnyComponent: MyButtonComponent });
+

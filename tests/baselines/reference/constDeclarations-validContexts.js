@@ -129,28 +129,36 @@ if (true) {
 else {
     const c2 = 0;
 }
+
 while (true) {
     const c3 = 0;
 }
+
 do {
     const c4 = 0;
 } while (true);
+
 var obj;
 with (obj) {
     const c5 = 0;
 }
+
 for (var i = 0; i < 10; i++) {
     const c6 = 0;
 }
+
 for (var i2 in {}) {
     const c7 = 0;
 }
+
 if (true) {
     label: const c8 = 0;
 }
+
 while (false) {
     label2: label3: label4: const c9 = 0;
 }
+
 // Try/catch/finally
 try {
     const c10 = 0;
@@ -161,6 +169,7 @@ catch (e) {
 finally {
     const c12 = 0;
 }
+
 // Switch
 switch (0) {
     case 0:
@@ -170,6 +179,7 @@ switch (0) {
         const c14 = 0;
         break;
 }
+
 // blocks
 {
     const c15 = 0;
@@ -178,15 +188,19 @@ switch (0) {
         label17: const c17 = 0;
     }
 }
+
 // global
 const c18 = 0;
+
 // functions
 function F() {
     const c19 = 0;
 }
+
 var F2 = () => {
     const c20 = 0;
 };
+
 var F3 = function () {
     const c21 = 0;
 };
@@ -194,6 +208,7 @@ var F3 = function () {
 var m;
 (function (m) {
     const c22 = 0;
+
     {
         const c23 = 0;
     }
@@ -203,17 +218,21 @@ class C {
     constructor() {
         const c24 = 0;
     }
+
     method() {
         const c25 = 0;
     }
+
     get v() {
         const c26 = 0;
         return c26;
     }
+
     set v(value) {
         const c27 = value;
     }
 }
+
 // object literals
 var o = {
     f() {

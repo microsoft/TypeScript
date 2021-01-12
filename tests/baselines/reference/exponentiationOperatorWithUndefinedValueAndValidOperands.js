@@ -30,6 +30,7 @@ var E;
 })(E || (E = {}));
 var a;
 var b;
+
 // operator *
 var rk1 = Math.pow(undefined, a);
 var rk2 = Math.pow(undefined, b);

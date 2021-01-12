@@ -20,19 +20,18 @@ bar(new B);
 
 
 //// [assignmentNonObjectTypeConstraints.js]
+
 function foo(x) {
     var y = x; // Ok
 }
 foo(5);
 foo(0 /* A */);
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 function bar(x) {

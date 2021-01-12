@@ -6,4 +6,7 @@ b /* parameter b */,
 ) { }
 
 //// [commentOnParameter3.js]
-function commentedParameters(a /* parameter a */, b /* parameter b */) { }
+function commentedParameters(
+a /* parameter a */,
+    b /* parameter b */
+) { }

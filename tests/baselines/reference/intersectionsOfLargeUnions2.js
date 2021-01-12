@@ -41,6 +41,7 @@ export function assertNodeProperty<
 // Repro from #24233
 exports.__esModule = true;
 exports.assertNodeProperty = exports.assertNodeTagName = exports.assertIsElement = void 0;
+
 function assertIsElement(node) {
     var nodeType = node === null ? null : node.nodeType;
     return nodeType === 1;

@@ -24,6 +24,7 @@ function bar(a, aa) {
 function foo(a, aa) {
     console.log(a + aa);
 }
+
 /**
  * @param {number} \u{0061}
  * @param {number} a\u{0061}

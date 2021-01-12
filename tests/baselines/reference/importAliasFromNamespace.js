@@ -23,8 +23,7 @@ namespace SomeOther.Thing {
 
 //// [internal.js]
 var My;
-(function (My) {
-    var Internal;
+(function (My) {var Internal;
     (function (Internal) {
         function getThing() { }
         Internal.getThing = getThing;
@@ -33,8 +32,7 @@ var My;
 //// [usage.js]
 /// <reference path="./internal.ts" />
 var SomeOther;
-(function (SomeOther) {
-    var Thing;
+(function (SomeOther) {var Thing;
     (function (Thing) {
         var Internal = My.Internal;
         var Foo = /** @class */ (function () {

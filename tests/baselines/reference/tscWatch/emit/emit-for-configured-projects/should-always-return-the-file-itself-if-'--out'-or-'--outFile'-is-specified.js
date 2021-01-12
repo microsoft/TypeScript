@@ -81,8 +81,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/out.js]
 System.register("moduleFile1", [], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     function Foo() { }
     exports_1("Foo", Foo);
     return {
@@ -93,8 +92,7 @@ System.register("moduleFile1", [], function (exports_1, context_1) {
     };
 });
 System.register("file1Consumer1", [], function (exports_2, context_2) {
-    "use strict";
-    var y;
+    "use strict";var y;
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [],
@@ -104,8 +102,7 @@ System.register("file1Consumer1", [], function (exports_2, context_2) {
     };
 });
 System.register("file1Consumer2", [], function (exports_3, context_3) {
-    "use strict";
-    var z;
+    "use strict";var z;
     var __moduleName = context_3 && context_3.id;
     return {
         setters: [],
@@ -115,8 +112,7 @@ System.register("file1Consumer2", [], function (exports_3, context_3) {
     };
 });
 System.register("moduleFile2", [], function (exports_4, context_4) {
-    "use strict";
-    var Foo4;
+    "use strict";var Foo4;
     var __moduleName = context_4 && context_4.id;
     return {
         setters: [],
@@ -184,8 +180,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/out.js]
 System.register("moduleFile1", [], function (exports_1, context_1) {
-    "use strict";
-    var T;
+    "use strict";var T;
     var __moduleName = context_1 && context_1.id;
     function Foo() { }
     exports_1("Foo", Foo);
@@ -197,8 +192,7 @@ System.register("moduleFile1", [], function (exports_1, context_1) {
     };
 });
 System.register("file1Consumer1", [], function (exports_2, context_2) {
-    "use strict";
-    var y;
+    "use strict";var y;
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [],
@@ -208,8 +202,7 @@ System.register("file1Consumer1", [], function (exports_2, context_2) {
     };
 });
 System.register("file1Consumer2", [], function (exports_3, context_3) {
-    "use strict";
-    var z;
+    "use strict";var z;
     var __moduleName = context_3 && context_3.id;
     return {
         setters: [],
@@ -219,8 +212,7 @@ System.register("file1Consumer2", [], function (exports_3, context_3) {
     };
 });
 System.register("moduleFile2", [], function (exports_4, context_4) {
-    "use strict";
-    var Foo4;
+    "use strict";var Foo4;
     var __moduleName = context_4 && context_4.id;
     return {
         setters: [],

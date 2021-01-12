@@ -40,8 +40,7 @@ const { a, b, c } = import.meta.wellKnownProperty;
 
 //// [example.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
@@ -49,10 +48,13 @@ System.register([], function (exports_1, context_1) {
             (async () => {
                 const response = await fetch(new URL("../hamsters.jpg", context_1.meta.url).toString());
                 const blob = await response.blob();
+
                 const size = context_1.meta.scriptElement.dataset.size || 300;
+
                 const image = new Image();
                 image.src = URL.createObjectURL(blob);
                 image.width = image.height = size;
+
                 document.body.appendChild(image);
             })();
         }
@@ -60,8 +62,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [moduleLookingFile01.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var x, y, z;
+    "use strict";var x, y, z;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -74,8 +75,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [scriptLookingFile01.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var globalA, globalB, globalC;
+    "use strict";var globalA, globalB, globalC;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -88,8 +88,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [assignmentTargets.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var foo, _a, a, b, c;
+    "use strict";var foo, _a, a, b, c;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

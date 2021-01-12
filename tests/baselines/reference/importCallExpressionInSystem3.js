@@ -15,8 +15,7 @@ foo();
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var B;
+    "use strict";var B;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -29,11 +28,9 @@ System.register([], function (exports_1, context_1) {
     };
 });
 //// [2.js]
-System.register([], function (exports_1, context_1) {
-    var __moduleName = context_1 && context_1.id;
+System.register([], function (exports_1, context_1) {var __moduleName = context_1 && context_1.id;
     async function foo() {
-        class C extends (await context_1.import("./0")).B {
-        }
+        class C extends (await context_1.import("./0")).B {}
         var c = new C();
         c.print();
     }

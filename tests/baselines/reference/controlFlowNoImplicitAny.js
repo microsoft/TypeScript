@@ -128,6 +128,7 @@ function f10() {
 }
 
 //// [controlFlowNoImplicitAny.js]
+
 // CFA for 'let' with no type annotation and initializer
 function f1() {
     var x;
@@ -139,6 +140,7 @@ function f1() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'let' with no type annotation and 'undefined' initializer
 function f2() {
     var x = undefined;
@@ -150,6 +152,7 @@ function f2() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'let' with no type annotation and 'null' initializer
 function f3() {
     var x = null;
@@ -161,6 +164,7 @@ function f3() {
     }
     var y = x; // string | number | null
 }
+
 // No CFA for 'let' with with type annotation
 function f4() {
     var x;
@@ -172,6 +176,7 @@ function f4() {
     }
     var y = x; // any
 }
+
 // CFA for 'var' with no type annotation and initializer
 function f5() {
     var x;
@@ -183,6 +188,7 @@ function f5() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'var' with no type annotation and 'undefined' initializer
 function f6() {
     var x = undefined;
@@ -194,6 +200,7 @@ function f6() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'var' with no type annotation and 'null' initializer
 function f7() {
     var x = null;
@@ -205,6 +212,7 @@ function f7() {
     }
     var y = x; // string | number | null
 }
+
 // No CFA for 'var' with with type annotation
 function f8() {
     var x;
@@ -216,6 +224,7 @@ function f8() {
     }
     var y = x; // any
 }
+
 // No CFA for captured outer variables
 function f9() {
     var x;
@@ -230,6 +239,7 @@ function f9() {
         var z = x; // any
     }
 }
+
 // No CFA for captured outer variables
 function f10() {
     var x;

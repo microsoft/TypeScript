@@ -2,5 +2,4 @@
 a\u
 
 //// [invalidUnicodeEscapeSequance3.js]
-a;
-u;
+a;u;

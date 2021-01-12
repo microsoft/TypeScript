@@ -8,7 +8,5 @@ import a = M;
 // error since module is instantiated
 var a;
 var M;
-(function (M) {
-    M.x = 1;
-})(M || (M = {}));
+(function (M) {M.x = 1;})(M || (M = {}));
 var a = M;

@@ -16,6 +16,7 @@ var b5 = [z, x, y];
 var b6 = [z, y, x];
 
 //// [bestCommonTypeWithOptionalProperties.js]
+
 var x;
 var y;
 var z;

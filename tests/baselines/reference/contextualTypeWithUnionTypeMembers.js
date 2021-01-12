@@ -120,6 +120,7 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
     }];
 
 //// [contextualTypeWithUnionTypeMembers.js]
+
 // Let S be the set of types in U that has a property P.
 // If S is not empty, U has a property P of a union type of the types of P from each type in S.
 var i1;
@@ -130,6 +131,7 @@ var i1Ori2 = {
     commonPropertyType: "hello",
     commonMethodType: function (a) { return a; },
     commonMethodWithTypeParameter: function (a) { return a; },
+
     methodOnlyInI1: function (a) { return a; },
     propertyOnlyInI1: "Hello"
 };
@@ -137,6 +139,7 @@ var i1Ori2 = {
     commonPropertyType: "hello",
     commonMethodType: function (a) { return a; },
     commonMethodWithTypeParameter: function (a) { return a; },
+
     methodOnlyInI2: function (a) { return a; },
     propertyOnlyInI2: "Hello"
 };
@@ -149,10 +152,12 @@ var i1Ori2 = {
     methodOnlyInI2: function (a) { return a; },
     propertyOnlyInI2: "Hello"
 };
+
 var arrayI1OrI2 = [i1, i2, {
         commonPropertyType: "hello",
         commonMethodType: function (a) { return a; },
         commonMethodWithTypeParameter: function (a) { return a; },
+
         methodOnlyInI1: function (a) { return a; },
         propertyOnlyInI1: "Hello"
     },
@@ -160,6 +165,7 @@ var arrayI1OrI2 = [i1, i2, {
         commonPropertyType: "hello",
         commonMethodType: function (a) { return a; },
         commonMethodWithTypeParameter: function (a) { return a; },
+
         methodOnlyInI2: function (a) { return a; },
         propertyOnlyInI2: "Hello"
     }, {
@@ -171,6 +177,7 @@ var arrayI1OrI2 = [i1, i2, {
         methodOnlyInI2: function (a) { return a; },
         propertyOnlyInI2: "Hello"
     }];
+
 var i11;
 var i21;
 var i11Ori21 = i11;

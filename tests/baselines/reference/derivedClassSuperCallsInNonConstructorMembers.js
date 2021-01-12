@@ -48,6 +48,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
     function Base() {
     }
@@ -65,30 +66,27 @@ b();
 {
     _this = _super.call(this) || this;
 }
-get;
-C();
+get;C();
 {
     _this = _super.call(this) || this;
     return 1;
 }
-set;
-C(v);
+set;C(v);
 {
     _this = _super.call(this) || this;
 }
+
 a: _this = _super.call(this) || this;
 b();
 {
     _this = _super.call(this) || this;
 }
-get;
-C();
+get;C();
 {
     _this = _super.call(this) || this;
     return 1;
 }
-set;
-C(v);
+set;C(v);
 {
     _this = _super.call(this) || this;
 }

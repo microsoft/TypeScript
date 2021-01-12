@@ -125,38 +125,36 @@ function getObject(id: string | number) {
 // Repro from #12319
 exports.__esModule = true;
 function md5(string) {
+
     function FF(a, b, c, d, x, s, ac) {
         return 0;
-    }
-    ;
+    };
+
     function GG(a, b, c, d, x, s, ac) {
         return 0;
-    }
-    ;
+    };
+
     function HH(a, b, c, d, x, s, ac) {
         return 0;
-    }
-    ;
+    };
+
     function II(a, b, c, d, x, s, ac) {
         return 0;
-    }
-    ;
+    };
+
     var x = Array();
     var k, AA, BB, CC, DD, a, b, c, d;
     var S11 = 7, S12 = 12, S13 = 17, S14 = 22;
     var S21 = 5, S22 = 9, S23 = 14, S24 = 20;
     var S31 = 4, S32 = 11, S33 = 16, S34 = 23;
     var S41 = 6, S42 = 10, S43 = 15, S44 = 21;
+
     x = [1];
-    a = 0x67452301;
-    b = 0xEFCDAB89;
-    c = 0x98BADCFE;
-    d = 0x10325476;
+
+    a = 0x67452301;b = 0xEFCDAB89;c = 0x98BADCFE;d = 0x10325476;
+
     for (k = 0; k < x.length; k += 16) {
-        AA = a;
-        BB = b;
-        CC = c;
-        DD = d;
+        AA = a;BB = b;CC = c;DD = d;
         a = FF(a, b, c, d, x[k + 0], S11, 0xD76AA478);
         d = FF(d, a, b, c, x[k + 1], S12, 0xE8C7B756);
         c = FF(c, d, a, b, x[k + 2], S13, 0x242070DB);
@@ -224,6 +222,7 @@ function md5(string) {
     }
 }
 exports["default"] = md5;
+
 function getObject(id) {
     return {};
 }

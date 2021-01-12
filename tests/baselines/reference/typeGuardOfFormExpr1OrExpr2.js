@@ -54,8 +54,7 @@ var strOrNum;
 var strOrNumOrBool;
 var numOrBool;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var c;

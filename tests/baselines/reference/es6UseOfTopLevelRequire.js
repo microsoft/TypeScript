@@ -25,5 +25,6 @@ export default exports;
 //// [a.js]
 import require from "./b";
 require("arg");
+
 import exports from "./c";
 var x = exports + 2;

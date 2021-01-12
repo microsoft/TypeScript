@@ -203,6 +203,7 @@ if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
 
 
 //// [typeGuardsWithInstanceOfByConstructorSignature.js]
+
 var obj1;
 if (obj1 instanceof A) { // narrowed to A.
     obj1.foo;
@@ -213,6 +214,7 @@ if (obj2 instanceof A) {
     obj2.foo;
     obj2.bar;
 }
+
 var obj3;
 if (obj3 instanceof B) { // narrowed to B<number>.
     obj3.foo = 1;
@@ -225,6 +227,7 @@ if (obj4 instanceof B) {
     obj4.foo = 1;
     obj4.bar = "str";
 }
+
 var obj5;
 if (obj5 instanceof C) { // narrowed to C1|C2.
     obj5.foo;
@@ -238,6 +241,7 @@ if (obj6 instanceof C) {
     obj6.bar1;
     obj6.bar2;
 }
+
 var obj7;
 if (obj7 instanceof D) { // narrowed to D.
     obj7.foo;
@@ -248,6 +252,7 @@ if (obj8 instanceof D) {
     obj8.foo;
     obj8.bar;
 }
+
 var obj9;
 if (obj9 instanceof E) { // narrowed to E1 | E2
     obj9.foo;
@@ -260,6 +265,7 @@ if (obj10 instanceof E) {
     obj10.bar1;
     obj10.bar2;
 }
+
 var obj11;
 if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
     obj11.foo;
@@ -270,6 +276,7 @@ if (obj12 instanceof F) {
     obj12.foo;
     obj12.bar;
 }
+
 var obj13;
 if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
     obj13.foo1;
@@ -280,6 +287,7 @@ if (obj14 instanceof G) {
     obj14.foo1;
     obj14.foo2;
 }
+
 var obj15;
 if (obj15 instanceof H) { // narrowed to H.
     obj15.foo;

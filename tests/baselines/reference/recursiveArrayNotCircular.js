@@ -47,6 +47,7 @@ var ActionType;
 function assertNever(a) {
     throw new Error("Unreachable!");
 }
+
 function reducer(action) {
     switch (action.type) {
         case ActionType.Bar:

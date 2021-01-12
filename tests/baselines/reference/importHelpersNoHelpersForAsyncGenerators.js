@@ -17,10 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
 var tslib_1 = require("tslib");
 function f() {
-    return tslib_1.__asyncGenerator(this, arguments, function f_1() {
-        return tslib_1.__generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, tslib_1.__await(1)];
+    return tslib_1.__asyncGenerator(this, arguments, function f_1() {return tslib_1.__generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, tslib_1.__await(1)];
                 case 1:
                     _a.sent();
                     return [4 /*yield*/, tslib_1.__await(2)];

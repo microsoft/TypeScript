@@ -25,11 +25,13 @@ example(42, (foo, bar) => ({
 //// [typeInferenceCacheInvalidation.js]
 "use strict";
 // Repro from #32230
+
 example(42, function (foo, bar) { return ({
     t: function () {
         var s = bar;
     }
 }); }, '42');
+
 example(42, function (foo, bar) { return ({
     t: function () {
         var s = bar;

@@ -49,6 +49,7 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
+
 function C() {
     return 0;
 }

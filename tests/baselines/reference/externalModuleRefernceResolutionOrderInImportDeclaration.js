@@ -18,6 +18,7 @@ file1.bar();
 
 
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file2.js]
+
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file1.js]
 "use strict";
 exports.__esModule = true;

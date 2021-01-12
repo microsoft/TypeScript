@@ -48,8 +48,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var C = /** @class */ (function () {
+})();var C = /** @class */ (function () {
     function C(value) {
         this.cProp = 10;
         return {
@@ -64,8 +63,7 @@ var C = /** @class */ (function () {
 }());
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
-    function D(a) {
-        if (a === void 0) { a = 100; }
+    function D(a) {if (a === void 0) { a = 100; }
         var _this = _super.call(this, a) || this;
         _this.dProp = function () { return _this; };
         if (Math.random() < 0.5) {
@@ -76,6 +74,7 @@ var D = /** @class */ (function (_super) {
                 foo: function () { return "You win!!!!!"; }
             };
         }
+
         else
             return null;
     }

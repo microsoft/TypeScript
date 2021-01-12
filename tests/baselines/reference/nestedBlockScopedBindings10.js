@@ -16,6 +16,7 @@ switch (1) {
     var x = void 0;
     x = 1;
 }
+
 switch (1) {
     case 1:
         var y = void 0;

@@ -40,10 +40,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
-    function Base() {
-    }
+})();var Base = /** @class */ (function () {
+    function Base() {}
     Base.prototype.foo = function () { };
     return Base;
 }());
@@ -71,12 +69,15 @@ var Derived3 = /** @class */ (function (_super) {
     Derived3.prototype.biz = function () { };
     return Derived3;
 }(Base));
+
 var d2;
+
 // these are ok
 var htmlElement = d2.createElement("yo");
 var htmlCanvasElement = d2.createElement("canvas");
 var htmlDivElement = d2.createElement("div");
 var htmlSpanElement = d2.createElement("span");
+
 // these are errors
 var htmlElement2 = d2.createElement("yo");
 var htmlCanvasElement2 = d2.createElement("canvas");

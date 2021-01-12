@@ -21,8 +21,7 @@
     var _loop_1 = function (i) {
         (function () {
             var _a;
-            return _a = [i + 1], i = _a[0], _a;
-        })();
+            return _a = [i + 1], i = _a[0], _a;})();
         out_i_1 = i;
     };
     var out_i_1;
@@ -31,13 +30,13 @@
         i = out_i_1;
     }
 })();
+
 (function () {
     "use strict";
     var _loop_2 = function (i) {
         (function () {
             var _a;
-            return (_a = { a: i + 1 }, i = _a.a, _a);
-        })();
+            return (_a = { a: i + 1 }, i = _a.a, _a);})();
         out_i_2 = i;
     };
     var out_i_2;

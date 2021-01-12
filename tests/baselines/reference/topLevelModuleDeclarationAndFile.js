@@ -17,6 +17,7 @@ var z2 = foo.y() + 10; // Should resolve
 
 
 //// [foo_1.js]
+
 //// [foo_2.js]
 "use strict";
 exports.__esModule = true;

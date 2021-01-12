@@ -28,6 +28,7 @@ function foo(t) {
     var c;
     var d;
     var e;
+
     var r1a1 = Math.pow(a, t);
     var r2a1 = Math.pow(t, a);
     var r1b1 = Math.pow(b, t);

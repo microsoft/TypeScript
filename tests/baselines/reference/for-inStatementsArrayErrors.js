@@ -20,6 +20,7 @@ for (var j in a ) {
 
 //// [for-inStatementsArrayErrors.js]
 var a;
+
 for (var x in a) {
     var a1 = a[x + 1];
     var a2 = a[x - 1];
@@ -27,6 +28,7 @@ for (var x in a) {
     }
     var a3 = x.unknownProperty;
 }
+
 var i;
 for (var i in a) {
 }

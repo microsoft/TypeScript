@@ -8,5 +8,7 @@ var match: { [index: number]: string; }
 
 //// [nestedIndexer.js]
 function then(x) {
+
     var match;
+
 }

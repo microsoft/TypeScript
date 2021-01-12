@@ -90,6 +90,7 @@ class FooComponent {
 __decorate([
     Input
 ], FooComponent.prototype, "foo", void 0);
+
 class Person {
 }
 __decorate([
@@ -103,6 +104,9 @@ class MultiplyByTwo {
 __decorate([
     tracked('args')
 ], MultiplyByTwo.prototype, "multiplied", null);
+
+
+
 let A = class A {
     bar() { }
 };

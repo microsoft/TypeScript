@@ -20,8 +20,7 @@ export module X {
 exports.__esModule = true;
 exports.X = void 0;
 var X;
-(function (X) {
-    var Y;
+(function (X) {var Y;
     (function (Y_1) {
         var A = /** @class */ (function () {
             function A(Y) {
@@ -31,8 +30,7 @@ var X;
         }());
     })(Y = X.Y || (X.Y = {}));
 })(X = exports.X || (exports.X = {}));
-(function (X) {
-    var Y;
+(function (X) {var Y;
     (function (Y) {
         var B = /** @class */ (function () {
             function B() {

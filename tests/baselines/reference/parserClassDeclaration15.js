@@ -6,7 +6,6 @@ class C {
 
 //// [parserClassDeclaration15.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());

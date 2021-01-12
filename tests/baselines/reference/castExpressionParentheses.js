@@ -51,6 +51,7 @@ new (<any>A());
 
 
 //// [castExpressionParentheses.js]
+
 // parentheses should be omitted
 // literals
 ({ a: 0 });
@@ -79,6 +80,8 @@ a().x;
 1.0.foo;
 12e+34.foo;
 0xff.foo;
+
+
 // should keep the parentheses in emit
 (1.0);
 (new A).foo;
@@ -88,7 +91,10 @@ new (A());
 (function () { })();
 (function foo() { })();
 (-A).x;
+
 // nested cast, should keep one pair of parenthese
 (-A).x;
+
 // nested parenthesized expression, should keep one pair of parenthese
 (A);
+

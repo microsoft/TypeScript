@@ -35,8 +35,7 @@ var Point = /** @class */ (function () {
     Point.Origin = ""; //expected duplicate identifier error
 })(Point || (Point = {}));
 var A;
-(function (A) {
-    var Point = /** @class */ (function () {
+(function (A) {var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;

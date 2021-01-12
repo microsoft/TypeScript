@@ -34,10 +34,8 @@ function f1() {
     var _loop_1 = function (x, y) {
         var a = function () { return x++ + y++; };
         if (x == 1)
-            return out_x_1 = x, out_y_1 = y, "break";
-        else if (y == 2)
-            y = 5;
-        else
+            return out_x_1 = x, out_y_1 = y, "break"; else if (y == 2)
+            y = 5; else
             return { value: void 0 };
         out_x_1 = x;
         out_y_1 = y;
@@ -53,14 +51,13 @@ function f1() {
             break;
     }
 }
+
 function f2() {
     var _loop_2 = function (x, y) {
         var a = function () { return x++ + y++; };
         if (x == 1)
-            return out_x_2 = x, out_y_2 = y, "break";
-        else if (y == 2)
-            y = 5;
-        else
+            return out_x_2 = x, out_y_2 = y, "break"; else if (y == 2)
+            y = 5; else
             return { value: void 0 };
         out_x_2 = x;
         out_y_2 = y;
@@ -76,3 +73,8 @@ function f2() {
             break;
     }
 }
+
+
+
+
+

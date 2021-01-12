@@ -26,3 +26,6 @@ module Generic {
 }
 
 //// [interfaceThatIndirectlyInheritsFromItself.js]
+
+
+

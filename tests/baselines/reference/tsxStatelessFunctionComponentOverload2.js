@@ -34,20 +34,24 @@ const c10 = <OneThing {...obj2} yy1="boo" />;
 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
+
     var obj = {
         yy: 10,
         yy1: "hello"
     };
+
     var obj1 = {
         yy: true
     };
+
     var obj2 = {
         yy: 500,
         "ignore-prop": "hello"
     };
+
     var defaultObj;
+
     // OK
     var c1 = <OneThing />;
     var c2 = <OneThing {...obj}/>;

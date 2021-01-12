@@ -30,8 +30,7 @@ class B extends A {
         }); // error
     }
 }
-class C {
-    constructor() {
+class C {constructor() {
         Object.defineProperty(this, "_secret", {
             enumerable: true,
             configurable: true,

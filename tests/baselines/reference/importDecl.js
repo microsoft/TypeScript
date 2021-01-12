@@ -162,9 +162,11 @@ var m1;
 var glo_m4 = require("./importDecl_require1");
 exports.useGlo_m4_d4 = glo_m4.d;
 exports.useGlo_m4_f4 = glo_m4.foo();
+
 //Emit even when used just in function type
 var fncOnly_m4 = require("./importDecl_require2");
 exports.useFncOnly_m4_f4 = fncOnly_m4.foo();
+
 // only used privately no need to emit
 var private_m4 = require("./importDecl_require3");
 var usePrivate_m4_m1;
@@ -176,6 +178,7 @@ var usePrivate_m4_m1;
 // Do not emit unused import
 var m5 = require("./importDecl_require4");
 exports.d = m5.foo2();
+
 // Do not emit multiple used import statements
 var multiImport_m4 = require("./importDecl_require"); // Emit used
 exports.useMultiImport_m4_x4 = multiImport_m4.x;

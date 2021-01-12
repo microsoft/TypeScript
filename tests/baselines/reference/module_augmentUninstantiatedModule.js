@@ -10,3 +10,4 @@ declare module "bar" {
 }
 
 //// [module_augmentUninstantiatedModule.js]
+

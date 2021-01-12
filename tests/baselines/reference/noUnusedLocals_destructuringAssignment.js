@@ -26,6 +26,7 @@ var C = /** @class */ (function () {
         (x = this.x);
         return x;
     };
+
     C.prototype.f = function () {
         var f;
         (f = this.f);

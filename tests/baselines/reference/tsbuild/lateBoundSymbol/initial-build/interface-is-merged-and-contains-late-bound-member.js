@@ -67,6 +67,7 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 var sym = Symbol();
+
 var x = 10;
 
 
@@ -157,6 +158,7 @@ exitCode:: ExitStatus.Success
 "use strict";
 exports.__esModule = true;
 var sym = Symbol();
+
 
 
 //// [/src/tsconfig.tsbuildinfo]

@@ -25,6 +25,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 myReactLib.createElement("foo", { data: true });
 myReactLib.createElement(Bar, { x: x });
 myReactLib.createElement("x-component", null);

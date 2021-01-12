@@ -16,8 +16,7 @@ var r: string = s.foo;
 exports.__esModule = true;
 exports.Super = void 0;
 var Super = /** @class */ (function () {
-    function Super() {
-    }
+    function Super() {}
     return Super;
 }());
 exports.Super = Super;

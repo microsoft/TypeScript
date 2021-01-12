@@ -43,12 +43,14 @@ var C = /** @class */ (function () {
     return C;
 }());
 var r = (new C()).f();
+
 var i;
 var r2 = i.foo.toString();
 var r2b = i.foo['toString']();
 var a;
 var r3 = a().toString();
 var r3b = a()['toString']();
+
 var b = {
     foo: function (x) {
         var a = x['toString'](); // should be string

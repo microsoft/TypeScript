@@ -60,8 +60,11 @@ var m;
 })(m || (m = {}));
 // Object literal with everything
 var x;
+
+
 // Function type
 var y;
+
 // constructor type
 var z;
 

@@ -14,6 +14,9 @@ let l = <T>() => { };
 
 //// [unusedTypeParametersCheckedByNoUnusedParameters.js]
 function f() { }
+
+
+
 ;
 var C = /** @class */ (function () {
     function C() {

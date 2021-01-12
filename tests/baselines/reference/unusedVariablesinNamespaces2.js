@@ -15,6 +15,7 @@ var Validation;
 (function (Validation) {
     var lettersRegexp = /^[A-Za-z]+$/;
     var numberRegexp = /^[0-9]+$/;
+
     var LettersOnlyValidator = /** @class */ (function () {
         function LettersOnlyValidator() {
         }

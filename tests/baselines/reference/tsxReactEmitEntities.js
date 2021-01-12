@@ -23,11 +23,13 @@ declare var React: any;
 <div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;
 
 //// [file.js]
+
 React.createElement("div", null, "Dot goes here: \u00B7 &notAnEntity; ");
 React.createElement("div", null, "Be careful of \"-ed strings!");
 React.createElement("div", null, "{{braces}}");
 // Escapes do nothing
 React.createElement("div", null, "\\n");
+
 // Also works in string literal attributes
 React.createElement("div", { attr: "{\u2026}\\" });
 // Does not happen for a string literal that happens to be inside an attribute (and escapes then work)

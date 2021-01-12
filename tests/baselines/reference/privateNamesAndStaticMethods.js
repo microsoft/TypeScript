@@ -53,6 +53,7 @@ class A {
         this.#_quux = val;
     }
 }
+
 class B extends A {
     static #foo(a) { }
     constructor() {

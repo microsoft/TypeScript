@@ -12,3 +12,4 @@ function foo() {
     return new d();
 }
 exports.foo = foo;
+

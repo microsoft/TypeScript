@@ -61,9 +61,11 @@ exports.texts = [];
 /**
  @ts-ignore */
 exports.texts.push(100);
+
 /**
  @ts-expect-error */
 exports.texts.push(100);
+
 /**
  @ts-expect-error */
 exports.texts.push("100");
@@ -72,15 +74,12 @@ exports.texts.push("100");
 exports.__esModule = true;
 exports.MyComponent = void 0;
 var React = require("react");
+
 function MyComponent(props) {
     return React.createElement("div", null);
 }
 exports.MyComponent = MyComponent;
-var x = (React.createElement("div", null,
-    React.createElement(MyComponent, { foo: 100 }),
-    React.createElement(MyComponent, { foo: 100 }),
-    React.createElement(MyComponent, { foo: 100 }),
-    React.createElement(MyComponent, { foo: 100 }),
-    React.createElement(MyComponent, { foo: 100 }),
-    React.createElement(MyComponent, { foo: 100 }),
-    React.createElement(MyComponent, { foo: "hooray" })));
+var x = (
+    React.createElement("div", null, React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: "hooray" })
+    )
+);

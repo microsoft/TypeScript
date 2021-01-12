@@ -13,11 +13,5 @@ declare module JSX {
 
 //// [file.jsx]
 // Invalid names
-<test1 />;
-32;
-data = { 32:  } /  > ;
-<test2 /> - data;
-{
-    32;
-}
-/>;;
+<test1 />;32;data = { 32:  } /  > ;
+<test2 /> - data;{32;}/>;;

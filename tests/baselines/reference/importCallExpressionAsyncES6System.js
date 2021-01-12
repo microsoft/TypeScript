@@ -39,8 +39,7 @@ System.register([], function (exports_1, context_1) {
             function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
-    };
-    var cl1, obj, cl2, l;
+    };var cl1, obj, cl2, l;
     var __moduleName = context_1 && context_1.id;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -64,8 +63,7 @@ System.register([], function (exports_1, context_1) {
                     const req = yield context_1.import('./test'); // THREE
                 })
             });
-            cl2 = class cl2 {
-                constructor() {
+            cl2 = class cl2 {constructor() {
                     this.p = {
                         m: () => __awaiter(this, void 0, void 0, function* () {
                             const req = yield context_1.import('./test'); // FOUR

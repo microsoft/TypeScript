@@ -94,8 +94,7 @@ loop: for (var x = 1, y = 2; x < y; ++x, --y) {
     var state_2 = _loop_3(x, y);
     x = out_x_3;
     y = out_y_3;
-    switch (state_2) {
-        case "break-loop": break loop;
+    switch (state_2) {case "break-loop": break loop;
     }
 }
 var _loop_4 = function (x, y) {
@@ -114,7 +113,6 @@ loop: for (var x = 1, y = 2; x < y; ++x, --y) {
     var state_3 = _loop_4(x, y);
     x = out_x_4;
     y = out_y_4;
-    switch (state_3) {
-        case "continue-loop": continue loop;
+    switch (state_3) {case "continue-loop": continue loop;
     }
 }

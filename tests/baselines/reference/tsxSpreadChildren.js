@@ -27,6 +27,7 @@ let x: TodoListProps;
 
 
 //// [tsxSpreadChildren.jsx]
+
 function Todo(prop) {
     return <div>{prop.key.toString() + prop.todo}</div>;
 }

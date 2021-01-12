@@ -8,8 +8,7 @@ class Foo {
 
 
 //// [classIndexer5.js]
-class Foo {
-    constructor() {
+class Foo {constructor() {
         this.#b = false;
     }
     #a;

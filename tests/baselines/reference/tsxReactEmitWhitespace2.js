@@ -17,16 +17,19 @@ declare var React: any;
 
 
 //// [file.js]
+
 // Emit ' word' in the last string
 React.createElement("div", null,
     "word ",
     React.createElement("code", null, "code"),
-    " word");
+    " word"
+);
 // Same here
-React.createElement("div", null,
-    React.createElement("code", null, "code"),
-    " word");
+React.createElement("div", null, React.createElement("code", null, "code"),
+    " word"
+);
 // And here
-React.createElement("div", null,
-    React.createElement("code", null),
-    " word");
+React.createElement("div", null, React.createElement("code", null),
+    " word"
+);
+

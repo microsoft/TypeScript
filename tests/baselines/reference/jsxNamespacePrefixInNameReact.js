@@ -43,11 +43,13 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 var justElement1 = React.createElement("a:element", null);
 var justElement2 = React.createElement("a:element", null);
 var justElement3 = React.createElement("a:element", { attr: "value" });
 var justElement4 = React.createElement("a:element", null, "text");
 var justElement5 = React.createElement("a:element", { attr: "value" }, "text");
+
 var tooManySeparators1 = React.createElement("a:ele", { ment: true });
 var tooManySeparators2 = React.createElement("a:ele", { ment: true }), ment;
  > ;
@@ -60,12 +62,15 @@ var tooManySeparators5 = React.createElement("a:ele", { ment: true, attr: "value
 var justAttribute1 = React.createElement("element", { "a:attr": "value" });
 var justAttribute2 = React.createElement("element", { "a:attr": "value" });
 var justAttribute3 = React.createElement("element", { "a:attr": "value" }, "text");
+
 var both1 = React.createElement("a:element", { "a:attr": "value" });
 var both2 = React.createElement("a:element", { "k:attr": "value" });
 var both3 = React.createElement("a:element", { "a:attr": "value" }, "text");
+
 var endOfIdent1 = React.createElement("a", { attr: "value" });
 var endOfIdent2 = React.createElement("a", __assign({ attr: true }, "value"));
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
 var beginOfIdent2 = React.createElement("a", { attr: "value" });
+
 var upcaseComponent1 = React.createElement("ns:Upcase", null); // Parsed as intrinsic
 var upcaseComponent2 = React.createElement("Upcase:element", null); // Parsed as instrinsic

@@ -19,6 +19,7 @@ var A = /** @class */ (function () {
         _field.set(this, 123);
     }
     A.prototype. = function () { };
+
     A. = function () { };
     Object.defineProperty(A.prototype, "", {
         get: function () { return ""; },

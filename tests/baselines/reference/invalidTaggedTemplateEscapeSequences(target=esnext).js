@@ -34,6 +34,7 @@ const b = tag `123 ${100}`;
 const x = tag `\u{hello} ${100} \xtraordinary ${200} wonderful ${300} \uworld`;
 const y = `\u{hello} ${100} \xtraordinary ${200} wonderful ${300} \uworld`; // should error with NoSubstitutionTemplate
 const z = tag `\u{hello} \xtraordinary wonderful \uworld`; // should work with Tagged NoSubstitutionTemplate
+
 const a1 = tag `${100}\0`; // \0
 const a2 = tag `${100}\00`; // \\00
 const a3 = tag `${100}\u`; // \\u

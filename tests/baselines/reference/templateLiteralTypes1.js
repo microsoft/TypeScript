@@ -243,28 +243,144 @@ let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 var createScopedActionType = function (scope) { return function (type) { return scope + "/" + type; }; };
 var createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
 var MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Assignability
 function test(name) {
     var s1 = name;
     var s2 = name;
 }
+
 function fa1(x, y, z) {
     y = x;
     z = x; // Error
 }
+
 function fa2(x, y) {
     x = y;
     y = x; // Error
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var p1 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a');
 var p2 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a.b');
 var p3 = getProp({ a: { b: { c: 42, d: 'hello' } } }, 'a.b.d');
+
+
+
+
+
+
+
+
 var obj = { a: { b: { c: 42, d: 'hello' } } };
 getPropValue(obj, 'a'); // { b: {c: number, d: string } }
 getPropValue(obj, 'a.b'); // {c: number, d: string }
 getPropValue(obj, 'a.b.d'); // string
 getPropValue(obj, 'a.b.x'); // unknown
 getPropValue(obj, s); // unknown
+
 var obj2 = {
     name: 'John',
     age: 42,
@@ -273,6 +389,7 @@ var obj2 = {
         { make: 'Trabant', age: 35 }
     ]
 };
+
 var make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
 
 

@@ -66,8 +66,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
         to[j] = from[i];
     return to;
-};
-function f1() {
+};function f1() {
     var b = true;
     var obj = { b: b };
     // Desired: OK
@@ -76,20 +75,24 @@ function f1() {
     // 3.1 minus widening propagation: error
     obj.b = false;
 }
+
 function f2() {
     var el = null;
     var arr = null;
     var elOrA = null;
+
     // Desired/actual: All OK
     var a1 = el;
     var a2 = arr;
     var a3 = [el];
     var a4 = Array.isArray(elOrA) ? elOrA : [elOrA];
+
     // Desired: OK
     // 3.0: Error
     // 3.1: OK
     var a5 = __spreadArray([], Array.isArray(elOrA) ? elOrA : [elOrA]);
 }
+
 function f3() {
     var x = 'x';
     var x2 = x;
@@ -101,6 +104,7 @@ function f3() {
     var x3 = x;
     x3 = 'y';
 }
+
 function f4() {
     var x = true;
     var x1 = x;
@@ -110,6 +114,7 @@ function f4() {
     // 3.1 minus widening propagation: error
     x1 = false;
 }
+
 function f5() {
     var arr = ['x'];
     arr = ['y'];

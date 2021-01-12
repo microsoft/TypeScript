@@ -264,6 +264,7 @@ var StaticName_Anonymous = /** @class */ (function () {
     }
     return class_1;
 }());
+
 var StaticNameFn_Anonymous = /** @class */ (function () {
     function StaticNameFn_Anonymous() {
     }
@@ -271,12 +272,14 @@ var StaticNameFn_Anonymous = /** @class */ (function () {
     StaticNameFn_Anonymous.prototype.name = function () { }; // ok
     return StaticNameFn_Anonymous;
 }());
+
 // length
 var StaticLength_Anonymous = /** @class */ (function () {
     function class_2() {
     }
     return class_2;
 }());
+
 var StaticLengthFn_Anonymous = /** @class */ (function () {
     function StaticLengthFn_Anonymous() {
     }
@@ -284,12 +287,14 @@ var StaticLengthFn_Anonymous = /** @class */ (function () {
     StaticLengthFn_Anonymous.prototype.length = function () { }; // ok
     return StaticLengthFn_Anonymous;
 }());
+
 // prototype
 var StaticPrototype_Anonymous = /** @class */ (function () {
     function class_3() {
     }
     return class_3;
 }());
+
 var StaticPrototypeFn_Anonymous = /** @class */ (function () {
     function StaticPrototypeFn_Anonymous() {
     }
@@ -297,12 +302,14 @@ var StaticPrototypeFn_Anonymous = /** @class */ (function () {
     StaticPrototypeFn_Anonymous.prototype.prototype = function () { }; // ok
     return StaticPrototypeFn_Anonymous;
 }());
+
 // caller
 var StaticCaller_Anonymous = /** @class */ (function () {
     function class_4() {
     }
     return class_4;
 }());
+
 var StaticCallerFn_Anonymous = /** @class */ (function () {
     function StaticCallerFn_Anonymous() {
     }
@@ -310,12 +317,14 @@ var StaticCallerFn_Anonymous = /** @class */ (function () {
     StaticCallerFn_Anonymous.prototype.caller = function () { }; // ok
     return StaticCallerFn_Anonymous;
 }());
+
 // arguments
 var StaticArguments_Anonymous = /** @class */ (function () {
     function class_5() {
     }
     return class_5;
 }());
+
 var StaticArgumentsFn_Anonymous = /** @class */ (function () {
     function StaticArgumentsFn_Anonymous() {
     }

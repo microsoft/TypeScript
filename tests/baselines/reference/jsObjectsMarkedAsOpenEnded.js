@@ -49,8 +49,11 @@ var C = /** @class */ (function () {
 var obj = {
     property: {}
 };
+
 obj.property.a = 0;
+
 var arr = [{}];
+
 function getObj() {
     return {};
 }

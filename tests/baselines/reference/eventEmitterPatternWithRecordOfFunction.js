@@ -13,3 +13,8 @@ interface B<M extends EventMap> extends A {
 
 //// [eventEmitterPatternWithRecordOfFunction.js]
 "use strict";
+
+
+
+
+

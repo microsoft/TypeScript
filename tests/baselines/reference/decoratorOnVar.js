@@ -5,4 +5,5 @@ declare function dec<T>(target: T): T;
 var x: number;
 
 //// [decoratorOnVar.js]
+
 var x;

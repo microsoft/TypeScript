@@ -5,8 +5,7 @@ enum X { MyVal }
 
 //// [enumGenericTypeClash.js]
 var X = /** @class */ (function () {
-    function X() {
-    }
+    function X() {}
     return X;
 }());
 (function (X) {

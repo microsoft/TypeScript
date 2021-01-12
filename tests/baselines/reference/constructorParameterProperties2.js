@@ -34,8 +34,7 @@ var r4 = f.y; // error
 
 //// [constructorParameterProperties2.js]
 var C = /** @class */ (function () {
-    function C(y) {
-    } // ok
+    function C(y) {} // ok
     return C;
 }());
 var c;

@@ -25,8 +25,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // GH#34952
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     Base.prototype.method = function () { };
     return Base;
 }());

@@ -12,8 +12,7 @@ class C {
 "use strict";
 var _a;
 const x = 1;
-class C {
-    constructor() {
+class C {constructor() {
         Object.defineProperty(this, _a, {
             enumerable: true,
             configurable: true,

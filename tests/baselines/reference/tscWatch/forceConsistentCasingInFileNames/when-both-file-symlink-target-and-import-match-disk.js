@@ -108,8 +108,7 @@ exports.b = 2;
 exports.__esModule = true;
 var XY_1 = require("./XY");
 var link_1 = require("./link");
-XY_1.a;
-link_1.b;
+XY_1.a;link_1.b;
 
 
 

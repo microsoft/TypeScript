@@ -221,6 +221,7 @@ function f10(x) {
     -x; // Error
     +x; // Error
 }
+
 // No property accesses, element accesses, or function calls
 function f11(x) {
     x.foo; // Error
@@ -228,6 +229,8 @@ function f11(x) {
     x(); // Error
     new x(); // Error
 }
+
+
 function f20(x) {
     if (typeof x === "string" || typeof x === "number") {
         x; // string | number
@@ -239,6 +242,11 @@ function f20(x) {
         x; // Function
     }
 }
+
+
+
+
+
 // Anything is assignable to unknown
 function f21(pAny, pNever, pT) {
     var x;
@@ -251,6 +259,7 @@ function f21(pAny, pNever, pT) {
     x = pNever;
     x = pT;
 }
+
 // unknown assignable only to itself and any
 function f22(x) {
     var v1 = x;
@@ -261,10 +270,12 @@ function f22(x) {
     var v6 = x; // Error
     var v7 = x; // Error
 }
+
 // Type parameter 'T extends unknown' not related to object
 function f23(x) {
     var y = x; // Error
 }
+
 // Anything fresh but primitive assignable to { [x: string]: unknown }
 function f24(x) {
     x = {};
@@ -272,11 +283,13 @@ function f24(x) {
     x = [1, 2, 3]; // Error
     x = 123; // Error
 }
+
 // Locals of type unknown always considered initialized
 function f25() {
     var x;
     var y = x;
 }
+
 // Spread of unknown causes result to be unknown
 function f26(x, y, z) {
     var o1 = __assign({ a: 42 }, x); // { a: number }
@@ -284,13 +297,16 @@ function f26(x, y, z) {
     var o3 = __assign(__assign(__assign({ a: 42 }, x), y), z); // any
     var o4 = __assign({ a: 42 }, z); // any
 }
+
 // Functions with unknown return type don't need return expressions
 function f27() {
 }
+
 // Rest type cannot be created from unknown
 function f28(x) {
     var a = __rest(x, []); // Error
 }
+
 // Class properties of type unknown don't need definite assignment
 var C1 = /** @class */ (function () {
     function C1() {
@@ -302,6 +318,11 @@ function f30(t, u) {
     var x = t;
     var y = u;
 }
+
+
+
+
+
 function oops(arg) {
     return arg; // Error
 }

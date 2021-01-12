@@ -27,9 +27,11 @@ var v2 = map(xs, singleton);    // Error if not number[][]
 function map(items, f) {
     return items.map(f);
 }
+
 function identity(x) {
     return x;
 }
+
 function singleton(x) {
     return [x];
 }

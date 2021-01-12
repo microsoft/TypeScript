@@ -4,7 +4,6 @@ class bar {}
 
 //// [classOverloadForFunction2.js]
 var bar = /** @class */ (function () {
-    function bar() {
-    }
+    function bar() {}
     return bar;
 }());

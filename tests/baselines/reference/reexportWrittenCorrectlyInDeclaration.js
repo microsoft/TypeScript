@@ -24,8 +24,7 @@ exports.__esModule = true;
 exports.ThingA = void 0;
 // https://github.com/Microsoft/TypeScript/issues/8612
 var ThingA = /** @class */ (function () {
-    function ThingA() {
-    }
+    function ThingA() {}
     return ThingA;
 }());
 exports.ThingA = ThingA;
@@ -34,8 +33,7 @@ exports.ThingA = ThingA;
 exports.__esModule = true;
 exports.ThingB = void 0;
 var ThingB = /** @class */ (function () {
-    function ThingB() {
-    }
+    function ThingB() {}
     return ThingB;
 }());
 exports.ThingB = ThingB;

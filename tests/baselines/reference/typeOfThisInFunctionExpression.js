@@ -47,18 +47,22 @@ module M {
 
 //// [typeOfThisInFunctionExpression.js]
 // type of 'this' in FunctionExpression is Any
+
 function fn() {
     var p = this;
     var p;
 }
+
 var t = function () {
     var p = this;
     var p;
 };
+
 var t2 = function f() {
     var x = this;
     var x;
 };
+
 var C = /** @class */ (function () {
     function C() {
         this.x = function () {
@@ -78,12 +82,15 @@ var M;
         var p = this;
         var p;
     }
+
     var t = function () {
         var p = this;
         var p;
     };
+
     var t2 = function f() {
         var x = this;
         var x;
     };
+
 })(M || (M = {}));

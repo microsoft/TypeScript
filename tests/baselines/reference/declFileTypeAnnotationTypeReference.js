@@ -89,6 +89,7 @@ function foo5() {
 function foo6() {
     return new g();
 }
+
 // Qualified name with type arguments
 function foo7() {
     return new m.g();

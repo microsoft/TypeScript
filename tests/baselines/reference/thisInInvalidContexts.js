@@ -72,8 +72,7 @@ var ErrClass1 = /** @class */ (function () {
     return ErrClass1;
 }());
 var BaseErrClass = /** @class */ (function () {
-    function BaseErrClass(t) {
-    }
+    function BaseErrClass(t) {}
     return BaseErrClass;
 }());
 var ClassWithNoInitializer = /** @class */ (function (_super) {
@@ -105,6 +104,7 @@ var M;
 //'this' as a type argument
 function genericFunc(x) { }
 genericFunc(undefined); // Should be an error
+
 var ErrClass3 = /** @class */ (function (_super) {
     __extends(ErrClass3, _super);
     function ErrClass3() {

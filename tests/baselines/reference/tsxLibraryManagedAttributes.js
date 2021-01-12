@@ -142,6 +142,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
+
+
+
 var Component = /** @class */ (function (_super) {
     __extends(Component, _super);
     function Component() {
@@ -191,6 +196,7 @@ var JustDefaultProps = /** @class */ (function (_super) {
 var k = <JustDefaultProps foo={12}/>;
 var l = <JustDefaultProps foo={12} bar="ok"/>; // error, no prop named bar
 var m = <JustDefaultProps foo="no"/>; // error, wrong type
+
 var BothWithSpecifiedGeneric = /** @class */ (function (_super) {
     __extends(BothWithSpecifiedGeneric, _super);
     function BothWithSpecifiedGeneric() {

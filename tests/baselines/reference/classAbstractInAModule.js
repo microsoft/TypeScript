@@ -26,8 +26,7 @@ var __extends = (this && this.__extends) || (function () {
 var M;
 (function (M) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     M.A = A;

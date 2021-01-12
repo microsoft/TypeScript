@@ -72,13 +72,13 @@ var B = /** @class */ (function (_super) {
     }
     // async method with only call/get on 'super' does not require a binding
     B.prototype.simple = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var a, b;
+        return __awaiter(this, void 0, void 0, function () {var a, b;
             return __generator(this, function (_a) {
                 // call with property access
                 _super.prototype.x.call(this);
                 // call additional property.
                 _super.prototype.y.call(this);
+
                 // call with element access
                 _super.prototype["x"].call(this);
                 a = _super.prototype.x;
@@ -87,24 +87,27 @@ var B = /** @class */ (function (_super) {
             });
         });
     };
+
     // async method with assignment/destructuring on 'super' requires a binding
     B.prototype.advanced = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var f, a, b;
-            return __generator(this, function (_a) {
-                f = function () { };
+        return __awaiter(this, void 0, void 0, function () {var f, a, b;
+            return __generator(this, function (_a) {f = function () { };
                 // call with property access
                 _super.prototype.x.call(this);
+
                 // call with element access
                 _super.prototype["x"].call(this);
                 a = _super.prototype.x;
                 b = _super.prototype["x"];
                 // property access (assign)
                 _super.prototype.x = f;
+
                 // element access (assign)
                 _super.prototype["x"] = f;
+
                 // destructuring assign with property access
                 (_super.prototype.x = { f: f }.f);
+
                 // destructuring assign with element access
                 (_super.prototype["x"] = { f: f }.f);
                 return [2 /*return*/];

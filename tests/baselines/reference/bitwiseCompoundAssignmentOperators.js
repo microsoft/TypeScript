@@ -43,6 +43,7 @@ a ^= b;
 a = true;
 b ^= a;
 b = 1;
+
 var c = false;
 var d = 2;
 c &= c;
@@ -52,6 +53,7 @@ d = 2;
 c &= d;
 c = false;
 d &= c;
+
 var e = true;
 var f = 0;
 e |= e;

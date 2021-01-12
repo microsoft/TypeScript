@@ -9,6 +9,7 @@ class C implements I {
 }
 
 //// [overloadOnConstInBaseWithBadImplementationInDerived.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

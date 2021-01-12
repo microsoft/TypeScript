@@ -14,6 +14,7 @@ var p3 = import(["path1", "path2"]);
 var p4 = import(()=>"PathToModule");
 
 //// [importCallExpressionSpecifierNotStringTypeError.js]
+
 // Error specifier is not assignable to string
 Promise.resolve().then(() => require(getSpecifier()));
 var p1 = Promise.resolve().then(() => require(getSpecifier()));

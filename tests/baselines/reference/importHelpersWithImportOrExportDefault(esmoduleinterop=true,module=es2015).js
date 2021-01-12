@@ -15,8 +15,7 @@ declare module "tslib" {
 }
 
 //// [a.js]
-export default class {
-}
+export default class {}
 //// [b.js]
 export { default } from "./a";
 export { default as a } from "./a";

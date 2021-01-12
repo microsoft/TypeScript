@@ -44,6 +44,7 @@ var o = {
         return this.d.length;
     }
 };
+
 var mutuallyRecursive = {
     a: 100,
     start: function () {

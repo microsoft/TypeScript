@@ -32,4 +32,5 @@ function foo(x) {
         b.print();
     });
 }
+
 foo(Promise.resolve().then(() => require("./0")));

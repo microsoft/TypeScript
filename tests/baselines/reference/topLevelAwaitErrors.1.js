@@ -45,27 +45,26 @@ class C7 {
 
 
 //// [topLevelAwaitErrors.1.js]
+
 // reparse call as invalid await should error
 await (1, );
 await , string > (1);
+
 // reparse tagged template as invalid await should error
 await , string > ``;
 // reparse class extends clause should fail
 class C extends string {
 }
 // await in class decorators should fail
-let C1 = class C1 {
-};
+let C1 = class C1 {};
 C1 = __decorate([
     (await )
 ], C1);
-let C2 = class C2 {
-};
+let C2 = class C2 {};
 C2 = __decorate([
     (x)
 ], C2);
-let C3 = class C3 {
-};
+let C3 = class C3 {};
 C3 = __decorate([
 ], C3);
 // await in member decorators should fail

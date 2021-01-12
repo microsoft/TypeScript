@@ -33,6 +33,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.makeP = void 0;
 var React = require("react");
+
 function makeP(Ctor) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
@@ -40,9 +41,12 @@ function makeP(Ctor) {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         class_1.prototype.render = function () {
-            return (<Ctor {...this.props}/>);
+            return (
+                <Ctor {...this.props}/>
+            );
         };
         return class_1;
     }(React.PureComponent));
 }
 exports.makeP = makeP;
+

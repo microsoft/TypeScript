@@ -56,20 +56,23 @@ async function asyncFunc() {
 const asyncArrowFunc = async () => {
     await 0;
 };
+
 async function asyncIIFE() {
     await 0;
     await (async function () {
         await 1;
     })();
+
     await (async function asyncNamedFunc() {
         await 1;
     })();
+
     await (async () => {
         await 1;
     })();
 }
-class AsyncClass {
-    constructor() {
+
+class AsyncClass {constructor() {
         this.asyncPropFunc = async function () {
             await 2;
         };

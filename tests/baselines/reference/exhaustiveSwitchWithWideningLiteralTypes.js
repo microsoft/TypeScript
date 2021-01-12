@@ -18,6 +18,7 @@ function f(value: A | B): number {
 
 //// [exhaustiveSwitchWithWideningLiteralTypes.js]
 // Repro from #12529
+
 var A = /** @class */ (function () {
     function A() {
         this.kind = "A"; // (property) A.kind: "A"

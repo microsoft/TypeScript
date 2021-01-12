@@ -57,15 +57,10 @@ b.b(1);
 
 //// [callSignatureWithOptionalParameterAndInitializer.js]
 // Optional parameters cannot also have initializer expressions, these are all errors
-function foo(x) {
-    if (x === void 0) { x = 1; }
-}
-var f = function foo(x) {
-    if (x === void 0) { x = 1; }
-};
-var f2 = function (x, y) {
-    if (y === void 0) { y = 1; }
-};
+
+function foo(x) {if (x === void 0) { x = 1; }}
+var f = function foo(x) {if (x === void 0) { x = 1; }};
+var f2 = function (x, y) {if (y === void 0) { y = 1; }};
 foo(1);
 foo();
 f(1);
@@ -75,14 +70,13 @@ f2(1, 2);
 var C = /** @class */ (function () {
     function C() {
     }
-    C.prototype.foo = function (x) {
-        if (x === void 0) { x = 1; }
-    };
+    C.prototype.foo = function (x) {if (x === void 0) { x = 1; }};
     return C;
 }());
 var c;
 c.foo();
 c.foo(1);
+
 var i;
 i();
 i(1);
@@ -94,15 +88,9 @@ a(1);
 a.foo();
 a.foo(1);
 var b = {
-    foo: function (x) {
-        if (x === void 0) { x = 1; }
-    },
-    a: function foo(x, y) {
-        if (y === void 0) { y = ''; }
-    },
-    b: function (x) {
-        if (x === void 0) { x = ''; }
-    }
+    foo: function (x) {if (x === void 0) { x = 1; }},
+    a: function foo(x, y) {if (y === void 0) { y = ''; }},
+    b: function (x) {if (x === void 0) { x = ''; }}
 };
 b.foo();
 b.foo(1);

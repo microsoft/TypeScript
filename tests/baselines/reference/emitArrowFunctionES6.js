@@ -28,6 +28,7 @@ var f4 = (x, y, z = 10) => { };
 function foo(func) { }
 foo(() => true);
 foo(() => { return false; });
+
 // Binding patterns in arrow functions
 var p1 = ([a]) => { };
 var p2 = ([...a]) => { };

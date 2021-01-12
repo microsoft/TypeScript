@@ -27,8 +27,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var I = /** @class */ (function () {
+})();var I = /** @class */ (function () {
     function I() {
     }
     return I;
@@ -42,5 +41,6 @@ var I2 = /** @class */ (function (_super) {
 }(I));
 var i;
 var r = i[1]; // error: numeric indexer returns the type of the string indexer
+
 var i2;
 var r2 = i2[1]; // error: numeric indexer returns the type of the string indexere

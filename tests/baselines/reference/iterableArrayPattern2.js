@@ -22,8 +22,10 @@ class SymbolIterator {
             done: false
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }
 }
+
 var [a, ...b] = new SymbolIterator;

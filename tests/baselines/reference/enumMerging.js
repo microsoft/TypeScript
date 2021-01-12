@@ -70,8 +70,7 @@ module M6 {
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
 var M1;
-(function (M1) {
-    var EImpl1;
+(function (M1) {var EImpl1;
     (function (EImpl1) {
         EImpl1[EImpl1["A"] = 0] = "A";
         EImpl1[EImpl1["B"] = 1] = "B";
@@ -97,8 +96,7 @@ var M1;
 })(M1 || (M1 = {}));
 // Enum with only computed members across 2 declarations with the same root module 
 var M2;
-(function (M2) {
-    var EComp2;
+(function (M2) {var EComp2;
     (function (EComp2) {
         EComp2[EComp2["A"] = 'foo'.length] = "A";
         EComp2[EComp2["B"] = 'foo'.length] = "B";
@@ -113,8 +111,7 @@ var M2;
 })(M2 || (M2 = {}));
 // Enum with initializer in only one of two declarations with constant members with the same root module
 var M3;
-(function (M3) {
-    var EInit;
+(function (M3) {var EInit;
     (function (EInit) {
         EInit[EInit["A"] = 0] = "A";
         EInit[EInit["B"] = 1] = "B";
@@ -127,8 +124,7 @@ var M3;
 })(M3 || (M3 = {}));
 // Enums with same name but different root module
 var M4;
-(function (M4) {
-    var Color;
+(function (M4) {var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
@@ -136,8 +132,7 @@ var M4;
     })(Color = M4.Color || (M4.Color = {}));
 })(M4 || (M4 = {}));
 var M5;
-(function (M5) {
-    var Color;
+(function (M5) {var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
@@ -145,10 +140,8 @@ var M5;
     })(Color = M5.Color || (M5.Color = {}));
 })(M5 || (M5 = {}));
 var M6;
-(function (M6) {
-    var A;
-    (function (A) {
-        var Color;
+(function (M6) {var A;
+    (function (A) {var Color;
         (function (Color) {
             Color[Color["Red"] = 0] = "Red";
             Color[Color["Green"] = 1] = "Green";
@@ -156,10 +149,8 @@ var M6;
         })(Color = A.Color || (A.Color = {}));
     })(A = M6.A || (M6.A = {}));
 })(M6 || (M6 = {}));
-(function (M6) {
-    var A;
-    (function (A) {
-        var Color;
+(function (M6) {var A;
+    (function (A) {var Color;
         (function (Color) {
             Color[Color["Yellow"] = 1] = "Yellow";
         })(Color = A.Color || (A.Color = {}));

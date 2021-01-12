@@ -37,8 +37,7 @@ var Super = /** @class */ (function () {
      * @param {string} firstArg
      * @param {string} secondArg
      */
-    function Super(firstArg, secondArg) {
-    }
+    function Super(firstArg, secondArg) {}
     return Super;
 }());
 exports.Super = Super;

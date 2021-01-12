@@ -48,6 +48,7 @@ var rc2 = x in (c2 || c3);
 
 //// [inOperatorWithValidOperands.js]
 var x;
+
 // valid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1;
@@ -69,12 +70,16 @@ var rb2 = x in {};
 function foo(t) {
     var rb3 = x in t;
 }
+
 function unionCase(t) {
     var rb4 = x in t;
 }
+
 function unionCase2(t) {
     var rb5 = x in t;
 }
+
+
 var c1;
 var c2;
 var c3;

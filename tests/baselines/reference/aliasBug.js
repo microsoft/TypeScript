@@ -29,12 +29,9 @@ var foo;
     }());
     foo.Provide = Provide;
     var bar;
-    (function (bar) {
-        var baz;
-        (function (baz) {
-            var boo = /** @class */ (function () {
-                function boo() {
-                }
+    (function (bar) {var baz;
+        (function (baz) {var boo = /** @class */ (function () {
+                function boo() {}
                 return boo;
             }());
             baz.boo = boo;

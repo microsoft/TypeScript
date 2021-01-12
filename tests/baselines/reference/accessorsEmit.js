@@ -17,8 +17,7 @@ class Test2 {
 
 //// [accessorsEmit.js]
 var Result = /** @class */ (function () {
-    function Result() {
-    }
+    function Result() {}
     return Result;
 }());
 var Test = /** @class */ (function () {

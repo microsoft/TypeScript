@@ -10,13 +10,11 @@ export = async function() {
 
 //// [something.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    return 42;
+    "use strict";return 42;
 });
 //// [index.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    return async function () {
+    "use strict";return async function () {
         const something = await new Promise((resolve_1, reject_1) => { require(["./something"], resolve_1, reject_1); });
     };
 });

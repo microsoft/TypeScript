@@ -2,8 +2,7 @@
 exports.__esModule = true;
 exports.outer = void 0;
 var outer;
-(function (outer) {
-    var inner;
+(function (outer) {var inner;
     (function (inner) {
         var local = 1;
         inner.a = local;

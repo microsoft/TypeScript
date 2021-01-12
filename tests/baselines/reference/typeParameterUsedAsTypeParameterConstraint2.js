@@ -59,6 +59,7 @@ var f4 = <U extends T, T>(x: T, y: U) => {
 //// [typeParameterUsedAsTypeParameterConstraint2.js]
 // Type parameters are in scope in their own and other type parameter lists
 // Nested local functions
+
 function foo(x, y) {
     function bar() {
         function baz(a, b) {
@@ -67,6 +68,7 @@ function foo(x, y) {
         }
     }
 }
+
 function foo2(x, y) {
     function bar() {
         function baz(a, b) {
@@ -75,6 +77,7 @@ function foo2(x, y) {
         }
     }
 }
+
 var f = function (x, y) {
     function bar() {
         var g = function (a, b) {
@@ -83,6 +86,7 @@ var f = function (x, y) {
         };
     }
 };
+
 var f2 = function (x, y) {
     function bar() {
         var g = function baz(a, b) {
@@ -91,6 +95,7 @@ var f2 = function (x, y) {
         };
     }
 };
+
 var f3 = function (x, y) {
     function bar() {
         var g = function (a, b) {
@@ -99,6 +104,7 @@ var f3 = function (x, y) {
         };
     }
 };
+
 var f4 = function (x, y) {
     function bar() {
         var g = function (a, b) {

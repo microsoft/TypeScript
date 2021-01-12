@@ -11,3 +11,4 @@ interface Derived extends Base {
 }
 
 //// [derivedInterfaceDoesNotHideBaseSignatures.js]
+

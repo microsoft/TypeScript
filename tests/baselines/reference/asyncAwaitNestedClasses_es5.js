@@ -33,10 +33,7 @@ var A = /** @class */ (function () {
             function C() {
             }
             C.func = function () {
-                return __awaiter(this, void 0, void 0, function () {
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
-                            case 0: return [4 /*yield*/, _a.func2()];
+                return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_b) {switch (_b.label) {case 0: return [4 /*yield*/, _a.func2()];
                             case 1:
                                 _b.sent();
                                 return [2 /*return*/];

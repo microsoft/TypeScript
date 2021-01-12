@@ -2,5 +2,4 @@
 foo ++ ++;
 
 //// [parserPostfixUnaryExpression1.js]
-foo++;
-++;
+foo++;++;

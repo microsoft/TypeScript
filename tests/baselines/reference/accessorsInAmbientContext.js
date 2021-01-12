@@ -18,3 +18,4 @@ declare class C {
 }
 
 //// [accessorsInAmbientContext.js]
+

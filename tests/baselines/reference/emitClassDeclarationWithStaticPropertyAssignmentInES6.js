@@ -13,8 +13,7 @@ class D {
 class C {
 }
 C.z = "Foo";
-class D {
-    constructor() {
+class D {constructor() {
         this.x = 20000;
     }
 }

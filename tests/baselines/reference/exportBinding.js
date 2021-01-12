@@ -26,8 +26,7 @@ var x = 'x';
 exports.x = x;
 exports.xx = x;
 var Y = /** @class */ (function () {
-    function Y() {
-    }
+    function Y() {}
     return Y;
 }());
 exports.Z = Y;

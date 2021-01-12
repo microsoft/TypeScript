@@ -29,6 +29,7 @@ class parser {
 }
 
 //// [arrayconcat.js]
+
 var parser = /** @class */ (function () {
     function parser() {
     }
@@ -36,13 +37,12 @@ var parser = /** @class */ (function () {
         this.options = this.options.sort(function (a, b) {
             var aName = a.name.toLowerCase();
             var bName = b.name.toLowerCase();
+
             if (aName > bName) {
                 return 1;
-            }
-            else if (aName < bName) {
+            } else if (aName < bName) {
                 return -1;
-            }
-            else {
+            } else {
                 return 0;
             }
         });

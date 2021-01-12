@@ -11,12 +11,9 @@ var g3: () => Iterable<Foo> = function* () {
 }
 
 //// [generatorTypeCheck25.js]
-class Foo {
-}
-class Bar extends Foo {
-}
-class Baz {
-}
+class Foo {}
+class Bar extends Foo {}
+class Baz {}
 var g3 = function* () {
     yield;
     yield new Bar;

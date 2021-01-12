@@ -37,6 +37,28 @@ let check3: test3 = "y";
 "use strict";
 // the type printback for every `test` below should be "y"
 var check = "y";
+
+
+
+
+
+
+
+
+
 var check1 = "y";
+
+
+
+
+
+
+
+
 var check2 = "y";
+
+
+
+
+
 var check3 = "y";

@@ -6,6 +6,5 @@ function foo():any { if (true) return ""; else return 0;}
 
 //// [functionOverloads12.js]
 function foo() { if (true)
-    return "";
-else
+    return ""; else
     return 0; }

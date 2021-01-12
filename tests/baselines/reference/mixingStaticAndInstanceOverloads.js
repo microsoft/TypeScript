@@ -64,6 +64,10 @@ var C5 = /** @class */ (function () {
     function C5() {
     }
     C5.prototype.foo5 = function (a) { };
+
+
+
+
     C5.foo5 = function (a) { };
     return C5;
 }());

@@ -12,8 +12,7 @@ var c2 = new C<number> // error, type params are actually part of the arg list s
 
 //// [genericConstructExpressionWithoutArgs.js]
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var b = new B; // no error

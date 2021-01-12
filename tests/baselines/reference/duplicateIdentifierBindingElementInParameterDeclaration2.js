@@ -40,6 +40,4 @@ function f5(_a, _b, _c) {
 function f6(_a) {
     var f = _a[0], f = _a.slice(1);
 }
-function f7(a, func) {
-    if (func === void 0) { func = function (a) { return 1; }; }
-} // not error
+function f7(a, func) {if (func === void 0) { func = function (a) { return 1; }; }} // not error

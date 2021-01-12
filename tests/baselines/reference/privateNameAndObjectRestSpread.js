@@ -30,8 +30,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var _prop;
-class C {
-    constructor() {
+class C {constructor() {
         _prop.set(this, 1);
     }
     method(other) {

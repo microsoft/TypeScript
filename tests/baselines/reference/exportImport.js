@@ -16,8 +16,7 @@ export function w(): e.w { // Should be OK
 
 //// [w1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var Widget1 = /** @class */ (function () {
+    "use strict";var Widget1 = /** @class */ (function () {
         function Widget1() {
             this.name = 'one';
         }
@@ -27,14 +26,12 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [exporter.js]
 define(["require", "exports", "./w1"], function (require, exports, w) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.w = w;
 });
 //// [consumer.js]
 define(["require", "exports", "./exporter"], function (require, exports, e) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.w = void 0;
     function w() {
         return new e.w();

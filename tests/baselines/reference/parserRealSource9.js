@@ -238,8 +238,10 @@ var TypeScript;
             }
             return extendsList;
         };
+
         Binder.prototype.resolveBases = function (scope, type) {
             type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
+
             var i = 0, len = type.extendsList.length;
             var derivedIsClass = type.isClassInstance();
             for (; i < len; i++) {
@@ -257,7 +259,9 @@ var TypeScript;
                     }
                 }
             }
+
             type.implementsList = this.resolveBaseTypeLinks(type.implementsTypeLinks, scope);
+
             if (type.implementsList) {
                 for (i = 0, len = type.implementsList.length; i < len; i++) {
                     var iface = type.implementsList[i];
@@ -269,6 +273,7 @@ var TypeScript;
                 }
             }
         };
+
         Binder.prototype.resolveSignatureGroup = function (signatureGroup, scope, instanceType) {
             var supplyVar = !(signatureGroup.hasImplementation);
             for (var i = 0, len = signatureGroup.signatures.length; i < len; i++) {
@@ -294,6 +299,7 @@ var TypeScript;
                 }
             }
         };
+
         Binder.prototype.bindType = function (scope, type, instanceType) {
             if (instanceType) {
                 this.bindType(scope, instanceType, null);
@@ -344,6 +350,7 @@ var TypeScript;
                 this.bindType(scope, type.elementType, null);
             }
         };
+
         Binder.prototype.bindSymbol = function (scope, symbol) {
             if (!symbol.bound) {
                 var prevLocationInfo = this.checker.locationInfo;
@@ -352,6 +359,7 @@ var TypeScript;
                 }
                 switch (symbol.kind()) {
                     case SymbolKind.Type:
+
                         if (symbol.flags & SymbolFlags.Bound) {
                             break;
                         }
@@ -371,6 +379,7 @@ var TypeScript;
                         }
                         if (typeSymbol.type && typeSymbol.type != this.checker.gloModType) {
                             this.bindType(scope, typeSymbol.type, typeSymbol.instanceType);
+
                             // bind expansions on the parent type symbol
                             if (typeSymbol.type.isModuleType()) {
                                 for (var i = 0; i < typeSymbol.expansions.length; i++) {
@@ -390,8 +399,10 @@ var TypeScript;
             }
             symbol.bound = true;
         };
+
         Binder.prototype.bind = function (scope, table) {
-            table.map(function (key, sym, binder) {
+            table.map(
+            function (key, sym, binder) {
                 binder.bindSymbol(scope, sym);
             }, this);
         };

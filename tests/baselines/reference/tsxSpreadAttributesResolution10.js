@@ -42,6 +42,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
 var Opt = /** @class */ (function (_super) {
     __extends(Opt, _super);
     function Opt() {
@@ -56,6 +58,7 @@ var obj = {};
 var obj1 = {
     x: 2
 };
+
 // Error
 var y = <Opt {...obj} x={3}/>;
 var y1 = <Opt {...obj1} x="Hi"/>;

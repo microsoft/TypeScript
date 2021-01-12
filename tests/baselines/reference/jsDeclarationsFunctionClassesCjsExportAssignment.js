@@ -87,6 +87,7 @@ module.exports = Timer;
  * @typedef {import("./hook")} Hook
  * @typedef {import("./hook").HookHandler} HookHandler
  */
+
 /**
  * Input type definition
  *
@@ -119,8 +120,7 @@ Context.prototype = {
      * @param {HookHandler=} handle
      * @returns {State}
      */
-    construct: function (input, handle) {
-        if (handle === void 0) { handle = function () { return void 0; }; }
+    construct: function (input, handle) {if (handle === void 0) { handle = function () { return void 0; }; }
         return input;
     }
 };

@@ -42,8 +42,7 @@ export class D {
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var B;
+    "use strict";var B;
     var __moduleName = context_1 && context_1.id;
     function foo() { return "foo"; }
     exports_1("foo", foo);
@@ -59,26 +58,22 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     function backup() { return "backup"; }
     exports_1("backup", backup);
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [2.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var C, D;
+    "use strict";var C, D;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            C = class C {
-                constructor() {
+            C = class C {constructor() {
                     this.myModule = context_1.import("./0");
                 }
                 method() {
@@ -92,8 +87,7 @@ System.register([], function (exports_1, context_1) {
                     });
                 }
             };
-            D = class D {
-                constructor() {
+            D = class D {constructor() {
                     this.myModule = context_1.import("./0");
                 }
                 method() {

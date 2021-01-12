@@ -750,8 +750,7 @@ exports.__esModule = true;
 exports.someClass2 = exports.newFileConst = void 0;
 exports.newFileConst = 30;
 var someClass2 = /** @class */ (function () {
-    function someClass2() {
-    }
+    function someClass2() {}
     return someClass2;
 }());
 exports.someClass2 = someClass2;

@@ -5,4 +5,7 @@ var
   , c
 
 //// [parserVariableStatement4.js]
-var a, b, c;
+var 
+a,
+    b,
+    c;

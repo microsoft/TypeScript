@@ -3,5 +3,4 @@ function foo(param:number[]){}; foo([1]);
 
 //// [contextualTyping31.js]
 function foo(param) { }
-;
-foo([1]);
+;foo([1]);

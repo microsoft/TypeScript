@@ -42,8 +42,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var let = 10;
+})();var let = 10;
+
 function foo() {
     "use strict";
     var public = 10;
@@ -55,6 +55,7 @@ function foo() {
     function baz() { }
     function barn(cb) { }
     barn(function (private, public, package) { });
+
     var myClass = /** @class */ (function (_super) {
         __extends(package, _super);
         function package_1() {
@@ -62,7 +63,9 @@ function foo() {
         }
         return package_1;
     }(public));
+
     var b;
+
     function foo(x) { }
     function foo1(x) { }
     function foo2(x) { }
@@ -70,3 +73,4 @@ function foo() {
     ublic();
     static();
 }
+

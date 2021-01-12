@@ -54,10 +54,13 @@ compile(process.argv.slice(2), {
  */
 exports.__esModule = true;
 exports.compile = void 0;
+
 var ts = require("typescript");
+
 function compile(fileNames, options) {
     var program = ts.createProgram(fileNames, options);
     var emitResult = program.emit();
+
     var allDiagnostics = ts.getPreEmitDiagnostics(program);
     allDiagnostics.forEach(function (diagnostic) {
         var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');

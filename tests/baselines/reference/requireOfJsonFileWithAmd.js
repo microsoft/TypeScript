@@ -17,9 +17,9 @@ if (x) {
 
 //// [out/file1.js]
 define(["require", "exports", "./b", "./b.json"], function (require, exports, b1, b2) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var x = b1.a;
+
     if (x) {
         var b = b2.b;
         x = (b1.b === b);

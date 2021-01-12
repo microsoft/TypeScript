@@ -34,6 +34,7 @@ class Test2<T extends A> {
 }
 
 //// [strictNullNotNullIndexTypeNoLib.js]
+
 var Test = /** @class */ (function () {
     function Test() {
     }
@@ -42,6 +43,7 @@ var Test = /** @class */ (function () {
     };
     return Test;
 }());
+
 var FooClass = /** @class */ (function () {
     function FooClass() {
     }

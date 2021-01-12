@@ -60,11 +60,13 @@ let f10 = async () => p;
 let f11 = async () => mp;
 let f12 = async () => mp;
 let f13 = async () => p;
+
 let o = {
     async m1() { },
     async m2() { },
     async m3() { }
 };
+
 class C {
     async m1() { }
     async m2() { }

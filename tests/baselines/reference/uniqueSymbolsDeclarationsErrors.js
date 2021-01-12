@@ -63,6 +63,7 @@ export class ClassWithPrivateNamedAccessors {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassWithPrivateNamedAccessors = exports.ClassWithPrivateNamedMethods = exports.ClassWithPrivateNamedProperties = exports.funcInferredReturnType = exports.classExpression = exports.obj = void 0;
+
 // not allowed when emitting declarations
 exports.obj = {
     method1(p) {
@@ -72,6 +73,7 @@ exports.obj = {
         return p;
     }
 };
+
 const classExpression = class {
     method1(p) {
         return p;
@@ -81,10 +83,21 @@ const classExpression = class {
     }
 };
 exports.classExpression = classExpression;
+
 function funcInferredReturnType(obj) {
     return obj;
 }
 exports.funcInferredReturnType = funcInferredReturnType;
+
+
+
+
+
+
+
+
+
+
 class ClassWithPrivateNamedProperties {
 }
 exports.ClassWithPrivateNamedProperties = ClassWithPrivateNamedProperties;

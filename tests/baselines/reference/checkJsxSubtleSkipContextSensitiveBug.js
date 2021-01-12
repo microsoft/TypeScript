@@ -80,6 +80,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
+
+
+
 var AsyncLoader = /** @class */ (function (_super) {
     __extends(AsyncLoader, _super);
     function AsyncLoader() {
@@ -89,10 +92,10 @@ var AsyncLoader = /** @class */ (function (_super) {
     return AsyncLoader;
 }(React.Component));
 function load() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {
             return [2 /*return*/, { success: true }];
         });
     });
 }
+
 var loader = React.createElement(AsyncLoader, { prop1: load, prop2: function (result) { return result; } });

@@ -41,6 +41,7 @@ var c11 = /** @class */ (function () {
     };
     return c11;
 }());
+
 // class then class - covered
 // class then enum 
 var c33 = /** @class */ (function () {

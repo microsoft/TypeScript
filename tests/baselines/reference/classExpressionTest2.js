@@ -24,6 +24,7 @@ function M() {
         };
         return C;
     }());
+
     var v = new m();
     return v.f();
 }

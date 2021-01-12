@@ -11,8 +11,7 @@ export module c {
 
 //// [internalAliasVarInsideLocalModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.c = exports.a = void 0;
     var a;
     (function (a) {

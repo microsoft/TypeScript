@@ -47,6 +47,7 @@ var bin1 = 26;
 var bin2 = 26;
 var bin3 = 9.671406556917009e+24;
 var bin4 = Infinity;
+
 var obj1 = {
     26: "Hello",
     a: bin1,
@@ -54,6 +55,7 @@ var obj1 = {
     b: 26,
     Infinity: true,
 };
+
 var obj2 = {
     26: "World",
     a: bin2,
@@ -61,6 +63,7 @@ var obj2 = {
     b: 26,
     9.671406556917009e+24: false,
 };
+
 obj1[26]; // string
 obj1[26]; // string
 obj1["26"]; // string

@@ -11,8 +11,7 @@ c.toString(); // used to be an error
 
 //// [objectMembersOnTypes.js]
 var AAA = /** @class */ (function () {
-    function AAA() {
-    }
+    function AAA() {}
     return AAA;
 }());
 var x;

@@ -18,8 +18,7 @@ export module c {
 exports.__esModule = true;
 exports.c = exports.a = void 0;
 var a;
-(function (a) {
-    var weekend;
+(function (a) {var weekend;
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
         weekend[weekend["Saturday"] = 1] = "Saturday";

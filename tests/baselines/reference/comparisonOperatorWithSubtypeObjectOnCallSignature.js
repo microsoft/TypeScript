@@ -274,8 +274,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
+})();var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
@@ -289,24 +288,34 @@ var Derived = /** @class */ (function (_super) {
 }(Base));
 var a1;
 var b1;
+
 var a2;
 var b2;
+
 var a3;
 var b3;
+
 var a4;
 var b4;
+
 var a5;
 var b5;
+
 var a6;
 var b6;
+
 var a7;
 var b7;
+
 var a8;
 var b8;
+
 var a9;
 var b9;
+
 var a10;
 var b10;
+
 var a11;
 var b11;
 //var a12: { fn<T, U extends T>(t: T, u: U): T[] };

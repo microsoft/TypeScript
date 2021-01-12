@@ -56,9 +56,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
 function Greet(x) {
     return <div>Hello, {x}</div>;
 }
+
 var BigGreeter = /** @class */ (function (_super) {
     __extends(BigGreeter, _super);
     function BigGreeter() {
@@ -75,15 +77,20 @@ var a = <Greet />;
 var b = <Greet key="k"/>;
 // Error - not allowed to specify 'ref' on SFCs
 var c = <Greet ref="myRef"/>;
+
+
 // OK - ref is valid for classes
 var d = <BigGreeter ref={function (x) { return x.greeting.substr(10); }}/>;
 // Error ('subtr' not on string)
 var e = <BigGreeter ref={function (x) { return x.greeting.subtr(10); }}/>;
 // Error (ref callback is contextually typed)
 var f = <BigGreeter ref={function (x) { return x.notARealProperty; }}/>;
+
 // OK - key is always valid
 var g = <BigGreeter key={100}/>;
+
 // OK - contextually typed intrinsic ref callback parameter
 var h = <div ref={function (x) { return x.innerText; }}/>;
 // Error - property not on ontextually typed intrinsic ref callback parameter
 var i = <div ref={function (x) { return x.propertyNotOnHtmlDivElement; }}/>;
+

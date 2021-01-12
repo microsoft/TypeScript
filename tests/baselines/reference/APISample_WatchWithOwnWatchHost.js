@@ -69,11 +69,14 @@ watchMain();
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+
 var ts = require("typescript");
+
 function watchMain() {
     // get list of files and compiler options somehow
     var files = [];
     var options = {};
+
     var host = {
         rootFiles: files,
         options: options,
@@ -91,6 +94,7 @@ function watchMain() {
         watchDirectory: ts.sys.watchDirectory,
         createProgram: ts.createAbstractBuilder
     };
+
     // You can technically override any given hook on the host, though you probably don't need to.
     // Note that we're assuming `origCreateProgram` and `origPostProgramCreate` doesn't use `this` at all.
     var origCreateProgram = host.createProgram;
@@ -99,6 +103,7 @@ function watchMain() {
         return origCreateProgram(rootNames, options, host, oldProgram);
     };
     var origPostProgramCreate = host.afterProgramCreate;
+
     host.afterProgramCreate = function (program) {
         console.log("** We finished making the program! **");
         origPostProgramCreate(program);

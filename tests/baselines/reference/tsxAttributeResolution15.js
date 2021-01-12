@@ -35,6 +35,7 @@ var __extends = (this && this.__extends) || (function () {
 var _this = this;
 exports.__esModule = true;
 var React = require("react");
+
 var BigGreeter = /** @class */ (function (_super) {
     __extends(BigGreeter, _super);
     function BigGreeter() {
@@ -47,6 +48,7 @@ var BigGreeter = /** @class */ (function (_super) {
 }(React.Component));
 // Error
 var a = <BigGreeter prop1="hello"/>;
+
 // OK
 var b = <BigGreeter ref={function (input) { _this.textInput = input; }}/>;
 var c = <BigGreeter data-extra="hi"/>;

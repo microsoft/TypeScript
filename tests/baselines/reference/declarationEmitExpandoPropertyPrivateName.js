@@ -21,6 +21,7 @@ exports.f = f;
 exports.__esModule = true;
 exports.q = void 0;
 var a_1 = require("./a");
+
 function q() { }
 exports.q = q;
 q.val = a_1.f();

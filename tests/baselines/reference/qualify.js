@@ -69,8 +69,7 @@ var M;
         N.n = 1;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
-(function (M) {
-    var N;
+(function (M) {var N;
     (function (N) {
         var y = M.m;
         var x = N.n + y;
@@ -84,8 +83,7 @@ var T;
     })(U = T.U || (T.U = {}));
 })(T || (T = {}));
 var Peer;
-(function (Peer) {
-    var U2;
+(function (Peer) {var U2;
     (function (U2) {
         var z = 3;
     })(U2 = Peer.U2 || (Peer.U2 = {}));
@@ -102,5 +100,7 @@ var Everest;
         var v6 = v1;
     })(K2 = Everest.K2 || (Everest.K2 = {}));
 })(Everest || (Everest = {}));
+
 var y;
 var x = y;
+

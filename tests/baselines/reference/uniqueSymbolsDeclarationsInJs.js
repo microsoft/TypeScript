@@ -27,7 +27,7 @@ class C {
 
 //// [uniqueSymbolsDeclarationsInJs-out.js]
 // classes
-class C {
+class C {// classes
     constructor() {
         /**
          * @readonly

@@ -61,8 +61,7 @@ var e2;
 var x = 0 /* a */;
 var y = 0 /* x */;
 export var m1;
-(function (m1) {
-    let e3;
+(function (m1) {let e3;
     (function (e3) {
         e3[e3["a"] = 0] = "a";
         e3[e3["b"] = 1] = "b";
@@ -80,8 +79,7 @@ export var m1;
     var y2 = 0 /* x */;
 })(m1 || (m1 = {}));
 var m2;
-(function (m2) {
-    let e5;
+(function (m2) {let e5;
     (function (e5) {
         e5[e5["a"] = 0] = "a";
         e5[e5["b"] = 1] = "b";

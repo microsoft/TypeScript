@@ -45,6 +45,9 @@ module Generics {
 
 //// [assignmentCompatWithNumericIndexer2.js]
 // Derived type indexer must be subtype of base type indexer
+
+
+
 var a;
 var b;
 a = b;
@@ -54,6 +57,8 @@ a = b2;
 b2 = a; // error
 var Generics;
 (function (Generics) {
+
+
     function foo() {
         var a;
         var b;

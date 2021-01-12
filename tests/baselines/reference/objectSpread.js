@@ -154,10 +154,10 @@ var __assign = (this && this.__assign) || function () {
         return t;
     };
     return __assign.apply(this, arguments);
-};
-var o = { a: 1, b: 'no' };
+};var o = { a: 1, b: 'no' };
 var o2 = { b: 'yes', c: true };
 var swap = { a: 'yes', b: -1 };
+
 var addAfter = __assign(__assign({}, o), { c: false });
 var addBefore = __assign({ c: false }, o);
 var override = __assign(__assign({}, o), { b: 'override' });
@@ -173,6 +173,8 @@ var getter = __assign(__assign({}, op), { c: 7 });
 getter.a = 12;
 // functions result in { }
 var spreadFunc = __assign({}, (function () { }));
+
+
 function from16326(header, authToken) {
     return __assign(__assign(__assign({}, this.header), header), authToken && { authToken: authToken });
 }
@@ -195,9 +197,11 @@ function conditionalSpreadString(st) {
     var o2 = __assign({}, st && { x: st });
     return o;
 }
+
 // any results in any
 var anything;
 var spreadAny = __assign({}, anything);
+
 // methods are not enumerable
 var C = /** @class */ (function () {
     function C() {
@@ -208,18 +212,25 @@ var C = /** @class */ (function () {
 }());
 var c = new C();
 var spreadC = __assign({}, c);
+
 // own methods are enumerable
 var cplus = __assign(__assign({}, c), { plus: function () { return this.p + 1; } });
 cplus.plus();
 // new field's type conflicting with existing field is OK
 var changeTypeAfter = __assign(__assign({}, o), { a: 'wrong type?' });
 var changeTypeBoth = __assign(__assign({}, o), swap);
+
 // optional
-function container(definiteBoolean, definiteString, optionalString, optionalNumber) {
+function container(
+definiteBoolean,
+    definiteString,
+    optionalString,
+    optionalNumber) {
     var _a, _b;
     var optionalUnionStops = __assign(__assign(__assign({}, definiteBoolean), definiteString), optionalNumber);
     var optionalUnionDuplicates = __assign(__assign(__assign(__assign({}, definiteBoolean), definiteString), optionalString), optionalNumber);
     var allOptional = __assign(__assign({}, optionalString), optionalNumber);
+
     // computed property
     var computedFirst = __assign(__assign((_a = {}, _a['before everything'] = 12, _a), o), { b: 'yes' });
     var computedAfter = __assign(__assign({}, o), (_b = { b: 'yeah' }, _b['at the end'] = 14, _b));
@@ -229,14 +240,17 @@ var a = 12;
 var shortCutted = __assign(__assign({}, o), { a: a });
 // non primitive
 var spreadNonPrimitive = __assign({}, {});
+
 // generic spreads
 function f(t, u) {
     return __assign(__assign(__assign({}, t), u), { id: 'id' });
 }
+
 var exclusive = f({ a: 1, b: 'yes' }, { c: 'no', d: false });
 var overlap = f({ a: 1 }, { a: 2, b: 'extra' });
 var overlapConflict = f({ a: 1 }, { a: 'mismatch' });
 var overwriteId = f({ a: 1, id: true }, { c: 1, d: 'no' });
+
 function genericSpread(t, u, v, w, obj) {
     var x01 = __assign({}, t);
     var x02 = __assign(__assign({}, t), t);

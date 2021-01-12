@@ -8,6 +8,7 @@ async function func(): Promise<void> {
 }
 
 //// [awaitClassExpression_es2017.js]
+
 async function func() {
     class D extends (await p) {
     }

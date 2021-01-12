@@ -31,11 +31,17 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var react_1 = require("react");
+
+
+
+
+
 var Info = function (props) {
     return props.status === "hidden"
         ? react_1["default"].createElement("noscript", null)
-        : react_1["default"].createElement("div", null, props.content);
-};
+        : react_1["default"].createElement("div", null, props.content);};
+
 var a = react_1["default"].createElement(Info, { status: "hidden" });
 var b = react_1["default"].createElement(Info, { status: "visible", content: "hello world" });
+
 var c = react_1["default"].createElement(Info, __assign({}, infoProps));

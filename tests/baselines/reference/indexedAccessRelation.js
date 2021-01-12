@@ -44,9 +44,9 @@ var Component = /** @class */ (function () {
     Component.prototype.setState = function (state) { };
     return Component;
 }());
+
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 var Comp = /** @class */ (function (_super) {

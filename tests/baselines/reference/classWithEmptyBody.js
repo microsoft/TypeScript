@@ -31,6 +31,7 @@ var o = c;
 c = 1;
 c = { foo: '' };
 c = function () { };
+
 var D = /** @class */ (function () {
     function D() {
         return 1;

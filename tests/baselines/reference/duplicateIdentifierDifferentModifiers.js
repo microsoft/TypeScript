@@ -23,12 +23,14 @@ interface C {
 
 
 //// [duplicateIdentifierDifferentModifiers.js]
+
 // OK
 var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
+
 // Not OK
 var C = /** @class */ (function () {
     function C() {

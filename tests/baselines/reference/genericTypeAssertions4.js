@@ -40,8 +40,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () { return ""; };
@@ -66,6 +65,7 @@ var C = /** @class */ (function (_super) {
 var a;
 var b;
 var c;
+
 function foo2(x) {
     var y = x;
     y = a; // error: cannot convert A to T

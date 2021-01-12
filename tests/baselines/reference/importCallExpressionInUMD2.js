@@ -17,17 +17,12 @@ function foo(x: Promise<any>) {
 foo(import("./0"));
 
 //// [0.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
@@ -35,17 +30,13 @@ foo(import("./0"));
     exports.B = B;
 });
 //// [2.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";// We use Promise<any> for now as there is no way to specify shape of module object
     // We use Promise<any> for now as there is no way to specify shape of module object
     function foo(x) {
         x.then(value => {
@@ -53,5 +44,6 @@ foo(import("./0"));
             b.print();
         });
     }
+
     foo(__syncRequire ? Promise.resolve().then(() => require("./0")) : new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }));
 });

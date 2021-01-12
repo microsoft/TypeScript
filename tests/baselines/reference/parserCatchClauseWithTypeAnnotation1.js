@@ -6,6 +6,5 @@ try {
 
 //// [parserCatchClauseWithTypeAnnotation1.js]
 try {
-}
-catch (e) {
+} catch (e) {
 }

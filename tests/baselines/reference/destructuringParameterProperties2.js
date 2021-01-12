@@ -41,9 +41,11 @@ var C1 = /** @class */ (function () {
     C1.prototype.getA = function () {
         return this.a;
     };
+
     C1.prototype.getB = function () {
         return this.b;
     };
+
     C1.prototype.getC = function () {
         return this.c;
     };

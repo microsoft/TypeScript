@@ -7,6 +7,7 @@ function Generate<T>(func: Generator<T>): T {
 
 
 //// [recursiveGenericMethodCall.js]
+
 function Generate(func) {
     return Generate(func);
 }

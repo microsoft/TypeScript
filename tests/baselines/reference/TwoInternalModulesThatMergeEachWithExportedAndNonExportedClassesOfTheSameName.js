@@ -64,10 +64,8 @@ var A;
 var p;
 var p;
 var X;
-(function (X) {
-    var Y;
-    (function (Y) {
-        var Z;
+(function (X) {var Y;
+    (function (Y) {var Z;
         (function (Z) {
             var Line = /** @class */ (function () {
                 function Line() {
@@ -78,10 +76,8 @@ var X;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
-(function (X) {
-    var Y;
-    (function (Y) {
-        var Z;
+(function (X) {var Y;
+    (function (Y) {var Z;
         (function (Z) {
             var Line = /** @class */ (function () {
                 function Line() {
@@ -94,3 +90,4 @@ var X;
 // ensure merges as expected
 var l;
 var l;
+

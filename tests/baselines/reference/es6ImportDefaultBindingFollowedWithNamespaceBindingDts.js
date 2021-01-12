@@ -12,8 +12,7 @@ export var x = new nameSpaceBinding.a();
 exports.__esModule = true;
 exports.a = void 0;
 var a = /** @class */ (function () {
-    function a() {
-    }
+    function a() {}
     return a;
 }());
 exports.a = a;

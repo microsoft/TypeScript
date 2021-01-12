@@ -13,6 +13,7 @@ function testComponent(props) {
 exports.__esModule = true;
 // not _actually_ making react available in this test to regression test #22948
 var React = require("react");
+
 var Test123 = function () { return <div />; };
 function testComponent(props) {
     return <Test123 {...props}/>;

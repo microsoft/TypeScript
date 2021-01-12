@@ -64,25 +64,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // https://github.com/Microsoft/TypeScript/issues/11177
 var Bluebird = require("bluebird");
 function a() {
-    return __awaiter(this, void 0, Bluebird, function () {
-        var b, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    b = function b() {
-                        return __awaiter(this, void 0, Bluebird, function () {
-                            var error_2;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        _a.trys.push([0, 2, , 3]);
+    return __awaiter(this, void 0, Bluebird, function () {var b, error_1;
+        return __generator(this, function (_a) {switch (_a.label) {case 0:_a.trys.push([0, 2, , 3]);
+                    b = function b() {return __awaiter(this, void 0, Bluebird, function () {var error_2;
+                            return __generator(this, function (_a) {switch (_a.label) {case 0:_a.trys.push([0, 2, , 3]);
                                         return [4 /*yield*/, Bluebird.resolve()];
                                     case 1:
                                         _a.sent(); // -- remove this and it compiles
                                         return [3 /*break*/, 3];
-                                    case 2:
-                                        error_2 = _a.sent();
+                                    case 2:error_2 = _a.sent();
                                         return [3 /*break*/, 3];
                                     case 3: return [2 /*return*/];
                                 }
@@ -93,8 +83,7 @@ function a() {
                 case 1:
                     _a.sent(); // -- or remove this and it compiles
                     return [3 /*break*/, 3];
-                case 2:
-                    error_1 = _a.sent();
+                case 2:error_1 = _a.sent();
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

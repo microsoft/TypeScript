@@ -39,4 +39,5 @@ async function compute(promise) {
     }
     return j.foo();
 }
+
 compute(Promise.resolve().then(() => require("./0")));

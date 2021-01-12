@@ -37,8 +37,7 @@ new multiM.d();
 
 //// [commentsMultiModuleMultiFile_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.multiM = void 0;
     /** this is multi declare module*/
     var multiM;
@@ -73,8 +72,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.multiM = void 0;
     /** this is multi module 3 comment*/
     var multiM;

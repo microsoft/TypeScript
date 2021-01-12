@@ -91,15 +91,11 @@ var C = /** @class */ (function () {
         var loadAsync = Promise.resolve().then(function () { return require("./0"); });
         this.myModule.then(function (Zero) {
             console.log(Zero.foo());
-        }, function (err) { return __awaiter(_this, void 0, void 0, function () {
-            var one;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
+        }, function (err) { return __awaiter(_this, void 0, void 0, function () {var one;
+            return __generator(this, function (_a) {switch (_a.label) {case 0:
                         console.log(err);
                         return [4 /*yield*/, Promise.resolve().then(function () { return require("./1"); })];
-                    case 1:
-                        one = _a.sent();
+                    case 1:one = _a.sent();
                         console.log(one.backup());
                         return [2 /*return*/];
                 }

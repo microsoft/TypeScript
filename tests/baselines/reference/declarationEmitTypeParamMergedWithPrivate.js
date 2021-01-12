@@ -14,6 +14,7 @@ export class Test {
     get T() {
         throw "";
     }
+
     test() {
         return null;
     }

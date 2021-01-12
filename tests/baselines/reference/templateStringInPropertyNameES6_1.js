@@ -4,5 +4,4 @@ var x = {
 }
 
 //// [templateStringInPropertyNameES6_1.js]
-var x = {} `a`;
-321;
+var x = {} `a`;321;

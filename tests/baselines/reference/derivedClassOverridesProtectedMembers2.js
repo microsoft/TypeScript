@@ -78,12 +78,11 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var x;
+})();var x;
 var y;
+
 var Base = /** @class */ (function () {
-    function Base(a) {
-    }
+    function Base(a) {}
     Base.prototype.b = function (a) { };
     Object.defineProperty(Base.prototype, "c", {
         get: function () { return x; },

@@ -25,6 +25,7 @@ var t0;
 var t1;
 var t2;
 var arr;
+
 var len0 = t0.length;
 var len1 = t1.length;
 var len2 = t2.length;

@@ -33,8 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-class X {
+};class X {
     /**
       * Cancels the request, sending a cancellation to the other party
       * @param {Object} error __auto_generated__
@@ -46,6 +45,7 @@ class X {
         return __awaiter(this, void 0, void 0, function* () { });
     }
 }
+
 class Y {
     /**
       * Cancels the request, sending a cancellation to the other party

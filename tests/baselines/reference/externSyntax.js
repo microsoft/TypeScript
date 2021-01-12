@@ -15,3 +15,6 @@ declare module M {
 
 
 //// [externSyntax.js]
+
+
+

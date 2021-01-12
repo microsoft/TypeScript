@@ -11,6 +11,8 @@ f<number>(); // wrong number of arguments (#25683)
 
 
 //// [overloadsAndTypeArgumentArityErrors.js]
+
 Callbacks('s'); // wrong number of type arguments
 new Callbacks('s'); // wrong number of type arguments
+
 f(); // wrong number of arguments (#25683)

@@ -30,6 +30,7 @@ interface Stuff {
   }
 
 //// [errorOnUnionVsObjectShouldDeeplyDisambiguate.js]
+
 function foo() {
     return {
         a: function () { return [123]; },

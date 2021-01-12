@@ -10,12 +10,10 @@ async function foo() {
 
 //// [foo.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {
-            exports_1("default", "./foo");
+        execute: function () {exports_1("default", "./foo");
         }
     };
 });
@@ -56,13 +54,9 @@ System.register([], function (exports_1, context_1) {
             } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
             if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
         }
-    };
-    var __moduleName = context_1 && context_1.id;
+    };var __moduleName = context_1 && context_1.id;
     function foo() {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, context_1.import("./foo")];
+        return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, context_1.import("./foo")];
                     case 1: return [4 /*yield*/, context_1.import((_a.sent()).default)];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
@@ -71,7 +65,6 @@ System.register([], function (exports_1, context_1) {
     }
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

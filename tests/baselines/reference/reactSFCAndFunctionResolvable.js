@@ -30,10 +30,14 @@ const RandomComponent: React.SFC = () => {
 /// <reference path="react16.d.ts" />
 exports.__esModule = true;
 var React = require("react");
+
+
+
 var RandomComponent = function () {
     var Component = condition1
         ? Radio
         : Checkbox;
+
     var OtherComponent = condition2
         ? OtherRadio
         : Checkbox;

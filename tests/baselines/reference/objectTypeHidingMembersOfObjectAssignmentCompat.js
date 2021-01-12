@@ -22,6 +22,7 @@ o = a; // error
 a = o; // ok
 
 //// [objectTypeHidingMembersOfObjectAssignmentCompat.js]
+
 var i;
 var o;
 o = i; // error

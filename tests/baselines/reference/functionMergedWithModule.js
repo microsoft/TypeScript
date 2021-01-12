@@ -18,16 +18,14 @@ module foo.Baz {
 function foo(title) {
     var x = 10;
 }
-(function (foo) {
-    var Bar;
+(function (foo) {var Bar;
     (function (Bar) {
         function f() {
         }
         Bar.f = f;
     })(Bar = foo.Bar || (foo.Bar = {}));
 })(foo || (foo = {}));
-(function (foo) {
-    var Baz;
+(function (foo) {var Baz;
     (function (Baz) {
         function g() {
             foo.Bar.f();

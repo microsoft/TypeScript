@@ -9,3 +9,4 @@ declare class Buffer implements IBuffer {
 
 
 //// [declareClassInterfaceImplementation.js]
+

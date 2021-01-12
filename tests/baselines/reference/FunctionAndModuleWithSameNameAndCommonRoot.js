@@ -53,8 +53,7 @@ var A;
 })(A || (A = {}));
 //// [module.js]
 var A;
-(function (A) {
-    var Point;
+(function (A) {var Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));
@@ -68,6 +67,7 @@ var cl = A.Point.Origin; // not expected to be an error.
 //// [simple.js]
 var B;
 (function (B) {
+
     function Point() {
         return { x: 0, y: 0 };
     }

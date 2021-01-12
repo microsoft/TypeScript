@@ -11,8 +11,8 @@ console.log(getX(new A));
 
 //// [privateNameComputedPropertyName2.js]
 let getX;
-class A {
-    constructor() {
+
+class A {constructor() {
         this.#x = 100;
     }
     #x;

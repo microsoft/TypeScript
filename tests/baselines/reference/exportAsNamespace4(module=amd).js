@@ -23,8 +23,7 @@ foo1.b;
 
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -50,8 +49,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 define(["require", "exports", "./0"], function (require, exports, _0_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports["default"] = void 0;
     exports["default"] = __importStar(_0_1);
 });
@@ -76,8 +74,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 define(["require", "exports", "./0"], function (require, exports, ns) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     ns = __importStar(ns);
     exports["default"] = ns;
 });
@@ -86,12 +83,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 define(["require", "exports", "./1", "./11"], function (require, exports, _1_1, _11_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     _1_1 = __importDefault(_1_1);
     _11_1 = __importDefault(_11_1);
     _1_1["default"].a;
     _11_1["default"].a;
+
     _1_1["default"].b;
     _11_1["default"].b;
 });

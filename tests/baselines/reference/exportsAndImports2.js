@@ -30,8 +30,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 exports.__esModule = true;
 exports.x = exports.y = void 0;
 var t1_1 = require("./t1");
-__createBinding(exports, t1_1, "x", "y");
-__createBinding(exports, t1_1, "y", "x");
+__createBinding(exports, t1_1, "x", "y");__createBinding(exports, t1_1, "y", "x");
 //// [t3.js]
 "use strict";
 exports.__esModule = true;

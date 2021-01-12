@@ -34,9 +34,9 @@ module.exports = Conn;
 "use strict";
 exports.__esModule = true;
 exports.Wrap = void 0;
+
 var Wrap = /** @class */ (function () {
-    function Wrap(c) {
-        if (c === void 0) { c = x; }
+    function Wrap(c) {if (c === void 0) { c = x; }
         this.connItem = c.item;
     }
     return Wrap;

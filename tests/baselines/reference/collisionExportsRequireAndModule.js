@@ -93,8 +93,7 @@ module m4 {
 
 //// [collisionExportsRequireAndModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.foo2 = exports.exports = exports.foo = exports.require = void 0;
     var require;
     (function (require) {
@@ -123,8 +122,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.foo2 = foo2;
     var m1;
-    (function (m1) {
-        var require;
+    (function (m1) {var require;
         (function (require) {
             var C = /** @class */ (function () {
                 function C() {
@@ -144,8 +142,7 @@ define(["require", "exports"], function (require, exports) {
         })(exports || (exports = {}));
     })(m1 || (m1 = {}));
     var m2;
-    (function (m2) {
-        var require;
+    (function (m2) {var require;
         (function (require) {
             var C = /** @class */ (function () {
                 function C() {
@@ -185,8 +182,7 @@ var exports;
     exports.C = C;
 })(exports || (exports = {}));
 var m3;
-(function (m3) {
-    var require;
+(function (m3) {var require;
     (function (require) {
         var C = /** @class */ (function () {
             function C() {
@@ -206,8 +202,7 @@ var m3;
     })(exports || (exports = {}));
 })(m3 || (m3 = {}));
 var m4;
-(function (m4) {
-    var require;
+(function (m4) {var require;
     (function (require) {
         var C = /** @class */ (function () {
             function C() {

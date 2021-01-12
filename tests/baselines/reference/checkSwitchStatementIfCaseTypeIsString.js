@@ -12,6 +12,7 @@ class A {
 }
 
 //// [checkSwitchStatementIfCaseTypeIsString.js]
+
 var A = /** @class */ (function () {
     function A() {
     }

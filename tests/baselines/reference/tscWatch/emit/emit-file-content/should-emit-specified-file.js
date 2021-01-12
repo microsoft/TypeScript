@@ -83,15 +83,13 @@ exports.Foo = Foo;
 "use strict";
 exports.__esModule = true;
 exports.y = void 0;
-var f1_1 = require("./f1");
-exports.y = f1_1.Foo();
+var f1_1 = require("./f1");exports.y = f1_1.Foo();
 
 
 //// [/a/b/f3.js]
 "use strict";
 exports.__esModule = true;
-var f2_1 = require("./f2");
-var x = f2_1.y;
+var f2_1 = require("./f2");var x = f2_1.y;
 
 
 

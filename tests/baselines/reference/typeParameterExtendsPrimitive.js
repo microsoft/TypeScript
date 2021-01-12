@@ -36,10 +36,13 @@ function f() {
         _a);
     return t + t;
 }
+
+
 function g(i) {
     var n = i.x;
     return i.x * 2;
 }
+
 // #17069
 function h(array, prop) {
     var result = 0;

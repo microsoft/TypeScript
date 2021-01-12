@@ -68,11 +68,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var f1 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/];
+};var f1 = function () {
+    return __asyncGenerator(this, arguments, function () {return __generator(this, function (_a) {return [2 /*return*/];
         });
     });
 };
@@ -115,16 +112,11 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var f2 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        var x;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __await(void 0)];
+};var f2 = function () {
+    return __asyncGenerator(this, arguments, function () {var x;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, __await(void 0)];
                 case 1: return [4 /*yield*/, _a.sent()];
-                case 2:
-                    x = _a.sent();
+                case 2:x = _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -169,16 +161,11 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var f3 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        var x;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __await(1)];
+};var f3 = function () {
+    return __asyncGenerator(this, arguments, function () {var x;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, __await(1)];
                 case 1: return [4 /*yield*/, _a.sent()];
-                case 2:
-                    x = _a.sent();
+                case 2:x = _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -246,16 +233,11 @@ var __values = (this && this.__values) || function(o) {
         }
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-var f4 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        var x;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues([1])))];
+};var f4 = function () {
+    return __asyncGenerator(this, arguments, function () {var x;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues([1])))];
                 case 1: return [4 /*yield*/, __await.apply(void 0, [_a.sent()])];
-                case 2:
-                    x = _a.sent();
+                case 2:x = _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -323,15 +305,9 @@ var __values = (this && this.__values) || function(o) {
         }
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
-var f5 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        var x;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, __await(1)];
+};var f5 = function () {
+    return __asyncGenerator(this, arguments, function () {var x;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, __await(1)];
                             case 1: return [4 /*yield*/, _a.sent()];
                             case 2:
                                 _a.sent();
@@ -339,8 +315,7 @@ var f5 = function () {
                         }
                     }); }); })())))];
                 case 1: return [4 /*yield*/, __await.apply(void 0, [_a.sent()])];
-                case 2:
-                    x = _a.sent();
+                case 2:x = _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -385,15 +360,10 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var f6 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        var x;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __await(1)];
-                case 1:
-                    x = _a.sent();
+};var f6 = function () {
+    return __asyncGenerator(this, arguments, function () {var x;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, __await(1)];
+                case 1:x = _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -438,12 +408,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-var f7 = function () {
-    return __asyncGenerator(this, arguments, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __await(1)];
+};var f7 = function () {
+    return __asyncGenerator(this, arguments, function () {return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, __await(1)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

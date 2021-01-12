@@ -7,4 +7,5 @@ while (true);
 //// [breakInIterationOrSwitchStatement2.js]
 do {
     break;
-} while (true);
+}
+while (true);

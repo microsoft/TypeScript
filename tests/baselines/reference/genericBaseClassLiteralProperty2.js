@@ -30,10 +30,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var CollectionItem2 = /** @class */ (function () {
-    function CollectionItem2() {
-    }
+})();var CollectionItem2 = /** @class */ (function () {
+    function CollectionItem2() {}
     return CollectionItem2;
 }());
 var BaseCollection2 = /** @class */ (function () {

@@ -33,6 +33,7 @@ class Sub extends Base {
         this.field = 0;
     }
 }
+
 class Test extends Base {
     // @ts-ignore
     constructor(p) {

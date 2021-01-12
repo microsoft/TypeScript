@@ -98,8 +98,7 @@ var __extends = (this && this.__extends) || (function () {
 var Y;
 (function (Y) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var BB = /** @class */ (function (_super) {
@@ -113,10 +112,10 @@ var Y;
 var Y2;
 (function (Y2) {
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
@@ -126,19 +125,16 @@ var Y2;
     }(AA));
 })(Y2 || (Y2 = {}));
 var Y3;
-(function (Y3) {
-    var Module;
+(function (Y3) {var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
 })(Y3 || (Y3 = {}));
 var Y4;
-(function (Y4) {
-    var Color;
+(function (Y4) {var Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -147,8 +143,7 @@ var Y4;
 var YY;
 (function (YY) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var BB = /** @class */ (function (_super) {
@@ -162,10 +157,10 @@ var YY;
 var YY2;
 (function (YY2) {
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
@@ -175,19 +170,16 @@ var YY2;
     }(AA));
 })(YY2 || (YY2 = {}));
 var YY3;
-(function (YY3) {
-    var Module;
+(function (YY3) {var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
 })(YY3 || (YY3 = {}));
 var YY4;
-(function (YY4) {
-    var Color;
+(function (YY4) {var Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -196,8 +188,7 @@ var YY4;
 var YYY;
 (function (YYY) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var BB = /** @class */ (function (_super) {
@@ -211,10 +202,10 @@ var YYY;
 var YYY2;
 (function (YYY2) {
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
@@ -224,19 +215,16 @@ var YYY2;
     }(AA));
 })(YYY2 || (YYY2 = {}));
 var YYY3;
-(function (YYY3) {
-    var Module;
+(function (YYY3) {var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
 })(YYY3 || (YYY3 = {}));
 var YYY4;
-(function (YYY4) {
-    var Color;
+(function (YYY4) {var Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";

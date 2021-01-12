@@ -22,8 +22,7 @@ export var x6 = new defaultBinding6();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a = /** @class */ (function () {
-    function a() {
-    }
+    function a() {}
     return a;
 }());
 exports.default = a;

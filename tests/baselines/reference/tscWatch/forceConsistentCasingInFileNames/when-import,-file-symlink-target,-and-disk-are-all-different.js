@@ -116,8 +116,7 @@ exports.b = 2;
 exports.__esModule = true;
 var yX_1 = require("./yX");
 var link_1 = require("./link");
-yX_1.a;
-link_1.b;
+yX_1.a;link_1.b;
 
 
 

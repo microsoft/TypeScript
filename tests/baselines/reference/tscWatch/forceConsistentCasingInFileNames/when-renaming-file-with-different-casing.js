@@ -69,8 +69,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.logger = void 0;
 var logger = /** @class */ (function () {
-    function logger() {
-    }
+    function logger() {}
     return logger;
 }());
 exports.logger = logger;

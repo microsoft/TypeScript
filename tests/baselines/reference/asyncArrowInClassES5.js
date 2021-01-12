@@ -14,8 +14,7 @@ var _this = this;
 var Test = /** @class */ (function () {
     function Test() {
     }
-    Test.member = function (x) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    Test.member = function (x) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); }); };
     return Test;
 }());

@@ -22,10 +22,8 @@ export var x: c.b.m2.c1;
 
 //// [declFileExportImportChain2_a.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var m1;
-    (function (m1) {
-        var m2;
+    "use strict";var m1;
+    (function (m1) {var m2;
         (function (m2) {
             var c1 = /** @class */ (function () {
                 function c1() {
@@ -39,19 +37,16 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [declFileExportImportChain2_b.js]
 define(["require", "exports", "declFileExportImportChain2_a"], function (require, exports, a) {
-    "use strict";
-    return a;
+    "use strict";return a;
 });
 //// [declFileExportImportChain2_c.js]
 define(["require", "exports", "declFileExportImportChain2_b"], function (require, exports, b) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.b = b;
 });
 //// [declFileExportImportChain2_d.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
 });
 

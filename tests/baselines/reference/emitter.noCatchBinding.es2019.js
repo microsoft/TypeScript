@@ -10,14 +10,9 @@ function f() {
 
 //// [emitter.noCatchBinding.es2019.js]
 function f() {
-    try { }
-    catch { }
-    try { }
-    catch {
-        try { }
-        catch { }
+    try { } catch { }
+    try { } catch {
+        try { } catch { }
     }
-    try { }
-    catch { }
-    finally { }
+    try { } catch { } finally { }
 }

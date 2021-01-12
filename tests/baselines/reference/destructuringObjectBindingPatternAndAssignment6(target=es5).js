@@ -11,6 +11,7 @@ console.log(aVal, bVal);
 //// [destructuringObjectBindingPatternAndAssignment6.js]
 var a = "a";
 var b = "b";
+
 var _a = (function () {
     var _a;
     return _a = {}, _a[a] = 1, _a[b] = 1, _a;

@@ -11,6 +11,8 @@ class C1 implements i4 {
 
 
 //// [interfaceImplementation7.js]
+
+
 var C1 = /** @class */ (function () {
     function C1() {
     }

@@ -27,9 +27,11 @@ var r7 = foo(arg5); // string
 
 //// [genericCallWithConstructorTypedArguments5.js]
 // Generic call with parameter of object type with member of function type of n args passed object whose associated member is call signature with n+1 args
+
 function foo(arg) {
     return new arg.cb(null);
 }
+
 var arg;
 var r = foo(arg); // {}
 // more args not allowed

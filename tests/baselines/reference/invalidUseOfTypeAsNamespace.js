@@ -6,3 +6,4 @@ declare let y: OhNo.hello;
 
 
 //// [invalidUseOfTypeAsNamespace.js]
+

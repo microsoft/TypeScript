@@ -36,6 +36,7 @@ if (objWithValMaybeNull.val !== null)
     addOne(objWithValMaybeNull.val);
 if (objWithValMaybeNull.val !== myNull)
     addOne(objWithValMaybeNull.val);
+
 if (objWithValMaybeNull.val === null)
     addOne(objWithValMaybeNull.val); // Error
 if (objWithValMaybeNull.val === myNull)

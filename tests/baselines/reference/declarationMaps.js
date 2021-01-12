@@ -20,6 +20,7 @@ export = m2;
 
 //// [declarationMaps.js]
 "use strict";
+
 var m2;
 module.exports = m2;
 

@@ -110,8 +110,7 @@ exports.writeLog = writeLog;
 
 
 //// [/src/project/src/noChangeFileWithEmitSpecificError.js]
-function someFunc(arguments) {
-    var rest = [];
+function someFunc(arguments) {var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }

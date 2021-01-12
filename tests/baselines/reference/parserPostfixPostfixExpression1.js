@@ -2,5 +2,4 @@
 a++ ++;
 
 //// [parserPostfixPostfixExpression1.js]
-a++;
-++;
+a++;++;

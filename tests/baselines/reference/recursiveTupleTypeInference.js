@@ -28,7 +28,9 @@ foo(gK);
 "use strict";
 // Repro from #37475
 exports.__esModule = true;
+
 var gK = { b: ["number", "null"] };
+
 function foo(g) {
     return {};
 }

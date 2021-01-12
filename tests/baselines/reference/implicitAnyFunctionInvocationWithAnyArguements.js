@@ -53,6 +53,7 @@ function testFuncLiteral(funcLit) { }
 testFunctionExprC2(function (v1, v2) { return 1; });
 testObjLiteral(objL);
 testFuncLiteral(funcL);
+
 var k = temp1(null);
 var result = temp1(arg0);
 var result1 = temp1(anyArray);

@@ -20,6 +20,7 @@ var _jsxFileName = "tests/cases/compiler/index.tsx";
 function Bar() {
     return jsx_dev_runtime_1.jsxDEV("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 9 }, this);
 }
+
 function Foo() {
     return jsx_dev_runtime_1.jsxDEV(Bar, {}, void 0, false, { fileName: _jsxFileName, lineNumber: 10, columnNumber: 9 }, this);
 }

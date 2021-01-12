@@ -120,19 +120,21 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
+
 var Sample;
-(function (Sample) {
-    var Actions;
-    (function (Actions) {
-        var Thing;
-        (function (Thing_1) {
-            var Find;
+(function (Sample) {var Actions;
+    (function (Actions) {var Thing;
+        (function (Thing_1) {var Find;
             (function (Find) {
                 var StartFindAction = /** @class */ (function () {
                     function StartFindAction() {
                     }
                     StartFindAction.prototype.getId = function () { return "yo"; };
+
                     StartFindAction.prototype.run = function (Thing) {
+
                         return true;
                     };
                     return StartFindAction;
@@ -142,10 +144,8 @@ var Sample;
         })(Thing = Actions.Thing || (Actions.Thing = {}));
     })(Actions = Sample.Actions || (Sample.Actions = {}));
 })(Sample || (Sample = {}));
-(function (Sample) {
-    var Thing;
-    (function (Thing) {
-        var Widgets;
+(function (Sample) {var Thing;
+    (function (Thing) {var Widgets;
         (function (Widgets) {
             var FindWidget = /** @class */ (function () {
                 function FindWidget(codeThing) {
@@ -154,12 +154,18 @@ var Sample;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
-                FindWidget.prototype.gar = function (runner) { if (true) {
-                    return runner(this);
-                } };
+                FindWidget.prototype.gar = function (runner) { if (true) {return runner(this);} };
+
+
+
+
+
+
+
                 FindWidget.prototype.getDomNode = function () {
                     return domNode;
                 };
+
                 FindWidget.prototype.destroy = function () {
                 };
                 return FindWidget;
@@ -169,18 +175,16 @@ var Sample;
     })(Thing = Sample.Thing || (Sample.Thing = {}));
 })(Sample || (Sample = {}));
 var AbstractMode = /** @class */ (function () {
-    function AbstractMode() {
-    }
+    function AbstractMode() {}
     AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
 }());
-(function (Sample) {
-    var Thing;
-    (function (Thing) {
-        var Languages;
-        (function (Languages) {
-            var PlainText;
+
+(function (Sample) {var Thing;
+    (function (Thing) {var Languages;
+        (function (Languages) {var PlainText;
             (function (PlainText) {
+
                 var State = /** @class */ (function () {
                     function State(mode) {
                         this.mode = mode;
@@ -188,9 +192,11 @@ var AbstractMode = /** @class */ (function () {
                     State.prototype.clone = function () {
                         return this;
                     };
+
                     State.prototype.equals = function (other) {
                         return this === other;
                     };
+
                     State.prototype.getMode = function () { return mode; };
                     return State;
                 }());

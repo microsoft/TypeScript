@@ -13,6 +13,7 @@ var c: C = i;
 //// [symbolProperty10.js]
 class C {
 }
+
 var i;
 i = new C;
 var c = i;

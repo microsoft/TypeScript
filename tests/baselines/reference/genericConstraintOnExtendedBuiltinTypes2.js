@@ -41,9 +41,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var EndGate;
-(function (EndGate) {
-    var Tweening;
+(function (EndGate) {var Tweening;
     (function (Tweening) {
         var Tween = /** @class */ (function () {
             function Tween(from) {
@@ -54,8 +54,7 @@ var EndGate;
         Tweening.Tween = Tween;
     })(Tweening = EndGate.Tweening || (EndGate.Tweening = {}));
 })(EndGate || (EndGate = {}));
-(function (EndGate) {
-    var Tweening;
+(function (EndGate) {var Tweening;
     (function (Tweening) {
         var NumberTween = /** @class */ (function (_super) {
             __extends(NumberTween, _super);

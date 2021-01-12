@@ -17,11 +17,9 @@ distinguish(3.14159265);
 function distinguish(thing) {
     if (thing instanceof Object) {
         console.log("Aha!! It's a Date in " + thing.getFullYear());
-    }
-    else if (typeof thing === 'string') {
+    } else if (typeof thing === 'string') {
         console.log("Aha!! It's a string of length " + thing.length);
-    }
-    else {
+    } else {
         console.log("Aha!! It's the number " + thing.toPrecision(3));
     }
 }

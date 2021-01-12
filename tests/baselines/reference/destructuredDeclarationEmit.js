@@ -47,6 +47,7 @@ exports.sec = sec;
 var getFoo = function () { return ({
     foo: 'foo'
 }); };
+
 var foo2 = getFoo().foo;
 exports.foo2 = foo2;
 

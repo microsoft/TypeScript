@@ -41,8 +41,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 var X = /** @class */ (function () {
-    function X() {
-    }
+    function X() {}
     return X;
 }());
 ;
@@ -72,6 +71,7 @@ var result1 = true ? a : b;
 var result2 = true ? a : b;
 var result3 = true ? a : b;
 var result31 = true ? a : b;
+
 var result4 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
 var result5 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };
 var result6 = true ? function (m) { return m.propertyX1; } : function (n) { return n.propertyX2; };

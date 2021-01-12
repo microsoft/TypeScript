@@ -33,8 +33,7 @@ var e: number = <foo.E1>0;
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.E1 = exports.C1 = void 0;
     var C1 = /** @class */ (function () {
         function C1() {
@@ -44,6 +43,7 @@ define(["require", "exports"], function (require, exports) {
         return C1;
     }());
     exports.C1 = C1;
+
     var E1;
     (function (E1) {
         E1[E1["A"] = 0] = "A";
@@ -53,8 +53,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var i;
     var x = {};
     var y = false;

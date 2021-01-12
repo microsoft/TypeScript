@@ -16,6 +16,7 @@ class StringFoo3 implements IFoo<string> {
 }
 
 //// [genericSpecializations1.js]
+
 var IntFooBad = /** @class */ (function () {
     function IntFooBad() {
     }

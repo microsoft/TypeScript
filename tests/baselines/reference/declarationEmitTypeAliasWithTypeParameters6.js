@@ -10,6 +10,7 @@ function foo() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters6.js]
+
 function foo() {
     return {};
 }

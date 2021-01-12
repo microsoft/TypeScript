@@ -33,14 +33,12 @@ var __extends = (this && this.__extends) || (function () {
 var M;
 (function (M) {
     var C1 = /** @class */ (function () {
-        function C1() {
-        }
+        function C1() {}
         return C1;
     }());
     M.C1 = C1;
     var C2 = /** @class */ (function () {
-        function C2() {
-        }
+        function C2() {}
         return C2;
     }());
     M.C2 = C2;

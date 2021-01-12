@@ -9,8 +9,7 @@ a = b; // Not ok - return types of "f" are different
 
 //// [generics4.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var a;

@@ -134,8 +134,7 @@ var NoBase = /** @class */ (function () {
     return NoBase;
 }());
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {

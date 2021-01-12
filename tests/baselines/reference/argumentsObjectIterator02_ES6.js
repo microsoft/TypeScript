@@ -14,9 +14,11 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 //// [argumentsObjectIterator02_ES6.js]
 function doubleAndReturnAsArray(x, y, z) {
     let blah = arguments[Symbol.iterator];
+
     let result = [];
     for (let arg of blah()) {
         result.push(arg + arg);
     }
     return result;
 }
+

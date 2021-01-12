@@ -9,8 +9,7 @@ var t = new M.ClassA[];
 var M;
 (function (M) {
     var ClassA = /** @class */ (function () {
-        function ClassA() {
-        }
+        function ClassA() {}
         return ClassA;
     }());
 })(M || (M = {}));

@@ -662,7 +662,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/logic/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;AAErB,SAAgB,MAAM,KAAK,CAAC;AAA5B,wBAA4B"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC;;AAErB,SAAgB,MAAM,KAAK,CAAC;AAA5B,wBAA4B"}
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
@@ -675,6 +675,7 @@ function getSecondsInDay() {
 exports.getSecondsInDay = getSecondsInDay;
 var mod = require("../core/anotherModule");
 exports.m = mod;
+
 function someFn() { }
 exports.someFn = someFn;
 //# sourceMappingURL=index.js.map

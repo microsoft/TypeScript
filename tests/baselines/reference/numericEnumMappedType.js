@@ -46,12 +46,18 @@ var E1;
     E1[E1["TWO"] = 1] = "TWO";
     E1[E1["THREE"] = 2] = "THREE";
 })(E1 || (E1 = {}));
+
+
+
+
 var b1 = {};
 var b2 = {};
+
 var e1 = E1.ONE;
 var e2 = E2.ONE;
 b1[1] = "a";
 b1[e1] = "b";
+
 b2[1] = "a";
 b2[e2] = "b";
 var N1;

@@ -22,7 +22,10 @@ s2 = s1;
 
 
 //// [recursiveGenericUnionType1.js]
+
+
 var x;
+
 var s1;
 var s2;
 s1 = s2;

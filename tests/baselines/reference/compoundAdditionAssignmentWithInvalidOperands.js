@@ -47,6 +47,7 @@ var E;
     E[E["b"] = 1] = "b";
 })(E || (E = {}));
 var a;
+
 var x1;
 x1 += a;
 x1 += true;

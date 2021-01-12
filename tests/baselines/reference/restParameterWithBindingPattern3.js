@@ -20,37 +20,31 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-function a() {
-    var _a = [];
+};function a() {var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _a[_i] = arguments[_i];
     }
-    var _b = _a[0], a = _b === void 0 ? 1 : _b, _c = _a[1], b = _c === void 0 ? true : _c;
-}
-function b() {
-    var _a = [];
+    var _b = _a[0], a = _b === void 0 ? 1 : _b, _c = _a[1], b = _c === void 0 ? true : _c;}
+
+function b() {var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _a[_i] = arguments[_i];
     }
-    var _b = _a.slice(0), foo = _b === void 0 ? [] : _b;
-}
-function c() {
-    var _a = [];
+    var _b = _a.slice(0), foo = _b === void 0 ? [] : _b;}
+
+function c() {var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _a[_i] = arguments[_i];
     }
-    var a = _a[0], length = _a.length, d = _a[3];
-}
-function d() {
-    var _a = [];
+    var a = _a[0], length = _a.length, d = _a[3];}
+
+function d() {var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _a[_i] = arguments[_i];
     }
-    var a = _a[0], d = _a[3];
-}
-function e() {
-    var _a = [];
+    var a = _a[0], d = _a[3];}
+
+function e() {var _a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _a[_i] = arguments[_i];
     }

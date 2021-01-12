@@ -26,33 +26,27 @@ async function fn19() { await thenable; } // error
 
 //// [asyncFunctionDeclaration15_es5.js]
 function fn1() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 } // valid: Promise<void>
 function fn2() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 } // error
 function fn3() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 } // error
 function fn4() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 } // error
 function fn5() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 } // error
 function fn6() {
-    return __awaiter(this, void 0, Thenable, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, Thenable, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 } // error
 function fn7() {
@@ -91,9 +85,7 @@ function fn13() {
     }); });
 } // error
 function fn14() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, 1];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, 1];
             case 1:
                 _a.sent();
                 return [2 /*return*/];
@@ -101,9 +93,7 @@ function fn14() {
     }); });
 } // valid: Promise<void>
 function fn15() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, null];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, null];
             case 1:
                 _a.sent();
                 return [2 /*return*/];
@@ -111,9 +101,7 @@ function fn15() {
     }); });
 } // valid: Promise<void>
 function fn16() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, undefined];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, undefined];
             case 1:
                 _a.sent();
                 return [2 /*return*/];
@@ -121,9 +109,7 @@ function fn16() {
     }); });
 } // valid: Promise<void>
 function fn17() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, a];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, a];
             case 1:
                 _a.sent();
                 return [2 /*return*/];
@@ -131,9 +117,7 @@ function fn17() {
     }); });
 } // valid: Promise<void>
 function fn18() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, obj];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, obj];
             case 1:
                 _a.sent();
                 return [2 /*return*/];
@@ -141,9 +125,7 @@ function fn18() {
     }); });
 } // valid: Promise<void>
 function fn19() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, thenable];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, thenable];
             case 1:
                 _a.sent();
                 return [2 /*return*/];

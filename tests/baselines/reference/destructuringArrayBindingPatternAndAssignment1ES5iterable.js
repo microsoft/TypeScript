@@ -91,12 +91,14 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
+
 // In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
 // An expression of type S is considered assignable to an assignment target V if one of the following is true
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or
 var _a = __read(undefined, 2), a0 = _a[0], a1 = _a[1];
 var _b = __read(undefined, 2), _c = _b[0], a2 = _c === void 0 ? false : _c, _d = _b[1], a3 = _d === void 0 ? 1 : _d;
+
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
 //        where N is the numeric index of E in the array assignment pattern, or
@@ -119,3 +121,4 @@ var _x = __read([1, 2, 3, 4], 4), c9 = _x[3];
 var _y = __read([1, 2, 3, 4, "hello"]), c10 = _y.slice(3);
 var _z = __read([1, 2, "string"]), c11 = _z[0], c12 = _z[1], c13 = _z.slice(2);
 var _0 = __read([1, 2, "string"], 3), c14 = _0[0], c15 = _0[1], c16 = _0[2];
+

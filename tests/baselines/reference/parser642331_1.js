@@ -9,7 +9,6 @@ class test {
 //// [parser642331_1.js]
 "use strict";
 var test = /** @class */ (function () {
-    function test(static) {
-    }
+    function test(static) {}
     return test;
 }());

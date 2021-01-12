@@ -13,6 +13,5 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-function foo(x) {
-    if (x === void 0) { x = new A(123); }
+function foo(x) {if (x === void 0) { x = new A(123); }
 }

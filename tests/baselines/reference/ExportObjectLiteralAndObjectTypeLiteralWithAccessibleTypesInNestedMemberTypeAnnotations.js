@@ -14,6 +14,7 @@ module A {
 //// [ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.js]
 var A;
 (function (A) {
+
     var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;

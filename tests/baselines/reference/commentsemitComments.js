@@ -93,6 +93,7 @@ var myVariable = 10;
 /** function comments*/
 function foo(/** parameter comment*/ p) {
 }
+
 /** variable with function type comment*/
 var fooVar;
 foo(50);
@@ -128,6 +129,7 @@ var c = /** @class */ (function () {
 }());
 /**instance comment*/
 var i = new c();
+
 /**interface instance comments*/
 var i1_i;
 /** this is module comment*/

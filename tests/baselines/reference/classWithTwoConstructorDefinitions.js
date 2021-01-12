@@ -11,12 +11,10 @@ class D<T> {
 
 //// [classWithTwoConstructorDefinitions.js]
 var C = /** @class */ (function () {
-    function C() {
-    } // error
+    function C() {} // error
     return C;
 }());
 var D = /** @class */ (function () {
-    function D(x) {
-    } // error
+    function D(x) {} // error
     return D;
 }());

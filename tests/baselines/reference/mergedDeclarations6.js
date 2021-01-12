@@ -24,8 +24,7 @@ export class B extends A {
 
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.A = void 0;
     var A = /** @class */ (function () {
         function A() {
@@ -54,9 +53,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define(["require", "exports", "./a"], function (require, exports, a_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.B = void 0;
+
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {

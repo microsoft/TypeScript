@@ -47,12 +47,14 @@ BOOLEAN, BOOLEAN;
 NUMBER, BOOLEAN;
 STRING, BOOLEAN;
 OBJECT, BOOLEAN;
+
 //Return type is boolean
 var resultIsBoolean1 = (ANY, BOOLEAN);
 var resultIsBoolean2 = (BOOLEAN, BOOLEAN);
 var resultIsBoolean3 = (NUMBER, BOOLEAN);
 var resultIsBoolean4 = (STRING, BOOLEAN);
 var resultIsBoolean5 = (OBJECT, BOOLEAN);
+
 //Literal and expression
 null, BOOLEAN;
 ANY = undefined, BOOLEAN;
@@ -60,6 +62,7 @@ ANY = undefined, BOOLEAN;
 ++NUMBER, true;
 [1, 2, 3], !BOOLEAN;
 OBJECT = [1, 2, 3], BOOLEAN = false;
+
 var resultIsBoolean6 = (null, BOOLEAN);
 var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
 var resultIsBoolean8 = (1, true);

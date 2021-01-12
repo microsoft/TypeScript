@@ -38,14 +38,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define("Configurable", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.Configurable = void 0;
     function Configurable(base) {
         return /** @class */ (function (_super) {
             __extends(class_1, _super);
-            function class_1() {
-                var args = [];
+            function class_1() {var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
@@ -57,12 +55,10 @@ define("Configurable", ["require", "exports"], function (require, exports) {
     exports.Configurable = Configurable;
 });
 define("Class", ["require", "exports", "Configurable"], function (require, exports, Configurable_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.ActualClass = exports.HiddenClass = void 0;
     var HiddenClass = /** @class */ (function () {
-        function HiddenClass() {
-        }
+        function HiddenClass() {}
         return HiddenClass;
     }());
     exports.HiddenClass = HiddenClass;

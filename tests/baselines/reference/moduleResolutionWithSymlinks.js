@@ -46,8 +46,7 @@ tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
 exports.__esModule = true;
 exports.MyClass = void 0;
 var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
+    function MyClass() {}
     return MyClass;
 }());
 exports.MyClass = MyClass;

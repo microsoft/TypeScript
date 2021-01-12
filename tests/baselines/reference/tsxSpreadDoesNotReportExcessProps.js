@@ -44,6 +44,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
+
 var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);
     function MyComponent() {

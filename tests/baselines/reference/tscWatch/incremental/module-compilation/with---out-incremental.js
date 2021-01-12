@@ -46,14 +46,12 @@ exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/out.js]
 define("file1", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
     exports.x = 10;
 });
 define("file2", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.y = void 0;
     exports.y = 20;
 });
@@ -71,7 +69,7 @@ define("file2", ["require", "exports"], function (require, exports) {
       "sections": [
         {
           "pos": 0,
-          "end": 334,
+          "end": 324,
           "kind": "text"
         }
       ]
@@ -84,16 +82,14 @@ define("file2", ["require", "exports"], function (require, exports) {
 ======================================================================
 File:: /users/username/projects/project/out.js
 ----------------------------------------------------------------------
-text: (0-334)
+text: (0-324)
 define("file1", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
     exports.x = 10;
 });
 define("file2", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.y = void 0;
     exports.y = 20;
 });

@@ -16,13 +16,11 @@ let B: typeof types.B;
 exports.__esModule = true;
 exports.B = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 exports.B = B;

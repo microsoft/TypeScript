@@ -37,8 +37,7 @@ else {
 
 //// [typeGuardOfFormTypeOfNotEqualHasNoEffect.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 ;
@@ -53,18 +52,21 @@ if (typeof strOrNum != "string") {
 else {
     var r1 = strOrNum; // string | number
 }
+
 if (typeof strOrBool != "boolean") {
     var r2 = strOrBool; // string | boolean
 }
 else {
     var r2 = strOrBool; // string | boolean
 }
+
 if (typeof numOrBool != "number") {
     var r3 = numOrBool; // number | boolean
 }
 else {
     var r3 = numOrBool; // number | boolean
 }
+
 if (typeof strOrC != "Object") {
     var r4 = strOrC; // string | C
 }

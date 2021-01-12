@@ -7,5 +7,6 @@ const x = (a: any[]) => (
 
 //// [parenthesizedArrowExpressionASI.js]
 var x = function (a) { return (
-// comment
-undefined); };
+    // comment
+    undefined
+); };

@@ -106,6 +106,7 @@ function f10() {
 
 //// [out.js]
 var cond = true;
+
 // CFA for 'let' and no initializer
 function f1() {
     var x;
@@ -117,6 +118,7 @@ function f1() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'let' and 'undefined' initializer
 function f2() {
     var x = undefined;
@@ -128,6 +130,7 @@ function f2() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'let' and 'null' initializer
 function f3() {
     var x = null;
@@ -139,6 +142,7 @@ function f3() {
     }
     var y = x; // string | number | null
 }
+
 // CFA for 'var' with no initializer
 function f5() {
     var x;
@@ -150,6 +154,7 @@ function f5() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'var' with 'undefined' initializer
 function f6() {
     var x = undefined;
@@ -161,6 +166,7 @@ function f6() {
     }
     var y = x; // string | number | undefined
 }
+
 // CFA for 'var' with 'null' initializer
 function f7() {
     var x = null;
@@ -172,6 +178,7 @@ function f7() {
     }
     var y = x; // string | number | null
 }
+
 // No CFA for captured outer variables
 function f9() {
     var x;
@@ -186,6 +193,7 @@ function f9() {
         var z = x; // any
     }
 }
+
 // No CFA for captured outer variables
 function f10() {
     var x;

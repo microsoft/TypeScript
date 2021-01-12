@@ -3,4 +3,6 @@ declare var ng: ng.IAngularStatic;declare module ng {   export interface IMod
 
 //// [module_augmentUninstantiatedModule2.js]
 "use strict";
+
 module.exports = ng;
+

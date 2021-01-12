@@ -21,8 +21,7 @@ var _a, _b, _c;
 var s;
 var n;
 var a;
-class C {
-    constructor() {
+class C {constructor() {
         this[_a] = n;
         this[_b] = 2;
         this[`hello bye`] = 0;

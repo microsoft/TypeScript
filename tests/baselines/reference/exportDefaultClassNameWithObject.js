@@ -6,8 +6,7 @@ export default class Object {}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Object = /** @class */ (function () {
-    function Object() {
-    }
+    function Object() {}
     return Object;
 }());
 exports.default = Object;

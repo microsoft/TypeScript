@@ -10,8 +10,7 @@ n([4], 'foo');
 
 
 //// [restArgAssignmentCompat.js]
-function f() {
-    var x = [];
+function f() {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }

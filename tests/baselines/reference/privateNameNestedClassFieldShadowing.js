@@ -27,8 +27,7 @@ class Base {
     constructor() {
         var _x_1;
         _x.set(this, void 0);
-        class Derived {
-            constructor() {
+        class Derived {constructor() {
                 _x_1.set(this, void 0);
             }
             testBase(x) {

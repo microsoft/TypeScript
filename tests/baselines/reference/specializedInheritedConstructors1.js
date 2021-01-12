@@ -33,14 +33,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var View = /** @class */ (function () {
-    function View(options) {
-    }
+    function View(options) {}
     return View;
 }());
 var Model = /** @class */ (function () {
-    function Model() {
-    }
+    function Model() {}
     return Model;
 }());
 var MyView = /** @class */ (function (_super) {

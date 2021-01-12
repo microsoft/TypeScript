@@ -42,9 +42,14 @@ var Kind;
     Kind[Kind["A"] = 0] = "A";
     Kind[Kind["B"] = 1] = "B";
 })(Kind || (Kind = {}));
+
+
+
+
 function isBoth(x) {
     return true;
 }
+
 var foo = undefined;
 if (isBoth(foo)) {
     switch (foo.kind) {

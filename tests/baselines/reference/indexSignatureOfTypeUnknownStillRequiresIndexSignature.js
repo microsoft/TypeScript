@@ -16,4 +16,5 @@ var stooges = [
     { name: "larry", age: 50 },
     { name: "curly", age: 60 }
 ];
+
 f(stooges); // Should throw

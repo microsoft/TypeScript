@@ -55,6 +55,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 var ae;
+
 var b = undefined;
 var c = undefined;
 var d = undefined;
@@ -74,6 +75,7 @@ var n = undefined;
 var o = undefined;
 var p = undefined;
 var q = undefined;
+
 function foo(x, y, z) {
     x = undefined;
     y = undefined;

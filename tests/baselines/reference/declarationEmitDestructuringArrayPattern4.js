@@ -14,6 +14,7 @@ var a5 = [1, 2, 3].slice(0);
 var _a = [1, 2, 3], x14 = _a[0], a6 = _a.slice(1);
 var _b = [1, 2, 3], x15 = _b[0], y15 = _b[1], a7 = _b.slice(2);
 var _c = [1, 2, 3], x16 = _c[0], y16 = _c[1], z16 = _c[2], a8 = _c.slice(3);
+
 var a9 = [1, "hello", true].slice(0);
 var _d = [1, "hello", true], x17 = _d[0], a10 = _d.slice(1);
 var _e = [1, "hello", true], x18 = _e[0], y18 = _e[1], a12 = _e.slice(2);

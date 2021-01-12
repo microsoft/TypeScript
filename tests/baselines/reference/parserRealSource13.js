@@ -151,14 +151,15 @@ module TypeScript.AstWalkerWithDetailCallback {
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
 var TypeScript;
-(function (TypeScript) {
-    var AstWalkerWithDetailCallback;
+(function (TypeScript) {var AstWalkerWithDetailCallback;
     (function (AstWalkerWithDetailCallback) {
+
         function walk(script, callback) {
             var pre = function (cur, parent) {
                 walker.options.goChildren = AstWalkerCallback(true, cur, callback);
                 return cur;
             };
+
             var post = function (cur, parent) {
                 AstWalkerCallback(false, cur, callback);
                 return cur;
@@ -174,9 +175,11 @@ var TypeScript;
             if (callback[callbackString]) {
                 return callback[callbackString](pre, ast);
             }
+
             if (callback.DefaultCallback) {
                 return callback.DefaultCallback(pre, ast);
             }
+
             return true;
         }
     })(AstWalkerWithDetailCallback = TypeScript.AstWalkerWithDetailCallback || (TypeScript.AstWalkerWithDetailCallback = {}));

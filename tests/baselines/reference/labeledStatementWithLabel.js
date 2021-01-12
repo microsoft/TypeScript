@@ -50,32 +50,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-};
-label: function fn() { }
-label: function gen() { return __generator(this, function (_a) {
-    return [2 /*return*/];
+};label: function fn() { }
+label: function gen() { return __generator(this, function (_a) {return [2 /*return*/];
 }); }
 label: function gen1() {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
     }); });
 }
 label: {
     var E;
-    (function (E) {
-    })(E || (E = {}));
+    (function (E) {})(E || (E = {}));
 }
 label: ;
 label: {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
 }
 label: var a = 1;
 label: var b = 1;
 label: var c = 1;
+
 label: ;
 label: ;
 label: 

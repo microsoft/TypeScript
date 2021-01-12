@@ -25,7 +25,9 @@ export const createClient = <
 "use strict";
 exports.__esModule = true;
 exports.createClient = void 0;
-var createClient = function (clientDef) {
+var createClient = function (
+clientDef
+) {
     return null;
 };
 exports.createClient = createClient;

@@ -30,8 +30,7 @@ var __extends = (this && this.__extends) || (function () {
 var M;
 (function (M) {
     var N = /** @class */ (function () {
-        function N() {
-        }
+        function N() {}
         return N;
     }());
     M.N = N;

@@ -49,6 +49,7 @@ function a0() {
         x = x + 2;
     }
 }
+
 function a1() {
     var _loop_1 = function (x) {
         x = x + 1;
@@ -64,6 +65,7 @@ function a1() {
         x = x + 2;
     }
 }
+
 function a2() {
     for (var x = void 0; x < 1;) {
         x = x + 1;
@@ -79,6 +81,8 @@ function a2() {
         x = out_x_2;
     }
 }
+
+
 function a3() {
     var _loop_3 = function (x) {
         x = x + 1;

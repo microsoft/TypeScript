@@ -10,6 +10,7 @@ const bar = {
 "use strict";
 var a = 'ff';
 var foo = { a: a };
+
 var bar = {
     a: function () { }
 };

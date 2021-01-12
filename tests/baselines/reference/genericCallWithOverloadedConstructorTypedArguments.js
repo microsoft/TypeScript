@@ -54,6 +54,7 @@ module GenericParameter {
 var NonGenericParameter;
 (function (NonGenericParameter) {
     var a;
+
     function foo4(cb) {
         return new cb(null);
     }
@@ -66,6 +67,7 @@ var GenericParameter;
     function foo5(cb) {
         return cb;
     }
+
     var a;
     var r5 = foo5(a); // new{} => string; new(x:number) => {}
     var b;

@@ -18,13 +18,13 @@ const b = <Button></Button>
 
 //// [tsxAttributesHasInferrableIndex.js]
 "use strict";
-function createElement(name, attributes) {
-    var contents = [];
+function createElement(name, attributes) {var contents = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         contents[_i - 2] = arguments[_i];
     }
     return name;
 }
+
 function Button(attributes, contents) {
     return '';
 }

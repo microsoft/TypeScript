@@ -17,9 +17,9 @@ var r2 = r('');
 
 //// [wrappedAndRecursiveConstraints3.js]
 // no errors expected
+
 var C = /** @class */ (function () {
-    function C(x) {
-    }
+    function C(x) {}
     C.prototype.foo = function (x) {
         function bar(x) {
             return x;
@@ -30,6 +30,5 @@ var C = /** @class */ (function () {
 }());
 var c = new C({ length: 2 });
 var r = c.foo({ length: 3, charAt: function (x) {
-        '';
-    } });
+        '';} });
 var r2 = r('');

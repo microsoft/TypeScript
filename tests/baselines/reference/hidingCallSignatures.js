@@ -26,6 +26,10 @@ var e: E;
 e(""); // {}
 
 //// [hidingCallSignatures.js]
+
+
+
+
 var d;
 d(""); // number
 new d(""); // should be string

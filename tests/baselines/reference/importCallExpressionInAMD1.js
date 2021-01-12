@@ -18,16 +18,14 @@ function foo() {
 
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
     function foo() { return "foo"; }
     exports.foo = foo;
 });
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.p2 = void 0;
     new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
     var p1 = new Promise((resolve_2, reject_2) => { require(["./0"], resolve_2, reject_2); });
@@ -35,6 +33,7 @@ define(["require", "exports"], function (require, exports) {
         return zero.foo();
     });
     exports.p2 = new Promise((resolve_3, reject_3) => { require(["./0"], resolve_3, reject_3); });
+
     function foo() {
         const p2 = new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
     }

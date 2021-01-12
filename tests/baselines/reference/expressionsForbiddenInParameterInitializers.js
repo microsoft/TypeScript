@@ -48,29 +48,22 @@ exports.__esModule = true;
 exports.foo2 = exports.foo = void 0;
 function foo(_a) {
     var _b = _a.foo, foo = _b === void 0 ? yield Promise.resolve().then(function () { return require("./bar"); }) : _b;
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_c) {
-            return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_c) {return [2 /*return*/];
         });
     });
 }
 exports.foo = foo;
 function foo2(_a) {
     var _b, foo, _c;
-    return __generator(this, function (_d) {
-        switch (_d.label) {
-            case 0:
-                _b = _a.foo;
+    return __generator(this, function (_d) {switch (_d.label) {case 0:_b = _a.foo;
                 if (!(_b === void 0)) return [3 /*break*/, 2];
                 return [4 /*yield*/, "a"];
             case 1:
                 _c = _d.sent();
                 return [3 /*break*/, 3];
-            case 2:
-                _c = _b;
+            case 2:_c = _b;
                 _d.label = 3;
-            case 3:
-                foo = _c;
+            case 3:foo = _c;
                 return [2 /*return*/];
         }
     });

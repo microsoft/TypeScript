@@ -77,22 +77,31 @@ var E;
 ;
 function f(p1, p2) {
     var t;
+
     var i;
     var k;
+
     var mapped_generic;
     var mapped;
+
     var union_generic;
     var union_primitive;
+
     var intersection_generic;
     var intersection_primitive;
+
     var num;
     var str;
     var literal_string;
     var literal_number;
+
     var u;
     var n;
     var a;
+
+
     var e;
+
     var o1 = __assign({}, p1); // OK, generic type paramterre
     var o2 = __assign({}, p2); // OK
     var o3 = __assign({}, t); // OK, generic type paramter
@@ -100,16 +109,23 @@ function f(p1, p2) {
     var o5 = __assign({}, k); // Error, index
     var o6 = __assign({}, mapped_generic); // OK, generic mapped object type
     var o7 = __assign({}, mapped); // OK, non-generic mapped type
+
     var o8 = __assign({}, union_generic); // OK, union with generic type parameter
     var o9 = __assign({}, union_primitive); // Error, union with generic type parameter
+
     var o10 = __assign({}, intersection_generic); // OK, intersection with generic type parameter
     var o11 = __assign({}, intersection_primitive); // Error, intersection with generic type parameter
+
     var o12 = __assign({}, num); // Error
     var o13 = __assign({}, str); // Error
+
     var o14 = __assign({}, u); // error, undefined-only not allowed
     var o15 = __assign({}, n); // error, null-only not allowed
+
     var o16 = __assign({}, a); // OK
+
     var o17 = __assign({}, literal_string); // Error
     var o18 = __assign({}, literal_number); // Error
+
     var o19 = __assign({}, e); // Error, enum
 }

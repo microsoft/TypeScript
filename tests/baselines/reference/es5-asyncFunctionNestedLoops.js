@@ -14,12 +14,9 @@ async function nestedLoops() {
 }
 
 //// [es5-asyncFunctionNestedLoops.js]
+
 function nestedLoops() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!x) return [3 /*break*/, 2];
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {switch (_a.label) {case 0:if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();

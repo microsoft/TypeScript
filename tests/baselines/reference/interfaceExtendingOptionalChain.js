@@ -10,8 +10,7 @@ interface C1 extends Foo?.Bar {}
 var Foo;
 (function (Foo) {
     var Bar = /** @class */ (function () {
-        function Bar() {
-        }
+        function Bar() {}
         return Bar;
     }());
     Foo.Bar = Bar;

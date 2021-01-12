@@ -8,9 +8,9 @@ const A: {new(): A} = class {}
 
 
 //// [classExpressionAssignment.js]
+
 // This is invalid
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());

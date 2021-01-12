@@ -14,11 +14,9 @@ async function conditional2() {
 }
 
 //// [es5-asyncFunctionConditionals.js]
+
 function conditional0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, x];
                 case 1:
                     a = (_a.sent()) ? y : z;
                     return [2 /*return*/];
@@ -26,13 +24,10 @@ function conditional0() {
         });
     });
 }
+
 function conditional1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    if (!x) return [3 /*break*/, 2];
+    return __awaiter(this, void 0, void 0, function () {var _a;
+        return __generator(this, function (_b) {switch (_b.label) {case 0:if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a = _b.sent();
@@ -47,13 +42,10 @@ function conditional1() {
         });
     });
 }
+
 function conditional2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    if (!x) return [3 /*break*/, 1];
+    return __awaiter(this, void 0, void 0, function () {var _a;
+        return __generator(this, function (_b) {switch (_b.label) {case 0:if (!x) return [3 /*break*/, 1];
                     _a = y;
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, z];

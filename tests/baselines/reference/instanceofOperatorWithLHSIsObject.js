@@ -17,12 +17,12 @@ var r4 = d instanceof x1;
 
 //// [instanceofOperatorWithLHSIsObject.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var x1;
 var x2;
+
 var a;
 var b;
 var c;

@@ -15,8 +15,7 @@ class Src implements NS.Dep { }
 
 //// [index.js]
 var Src = /** @class */ (function () {
-    function Src() {
-    }
+    function Src() {}
     return Src;
 }());
 

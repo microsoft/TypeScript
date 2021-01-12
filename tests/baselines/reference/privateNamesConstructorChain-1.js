@@ -22,8 +22,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _foo, _bar, _foo_1, _bar_1;
-class Parent {
-    constructor() {
+class Parent {constructor() {
         _foo.set(this, 3);
     }
     accessChildProps() {
@@ -34,6 +33,7 @@ class Parent {
 _foo = new WeakMap(), _bar = new WeakMap();
 _bar.set(Parent, 5);
 class Child extends Parent {
+
     constructor() {
         super(...arguments);
         _foo_1.set(this, "foo"); // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)

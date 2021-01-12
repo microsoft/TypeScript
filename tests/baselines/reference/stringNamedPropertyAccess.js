@@ -36,6 +36,7 @@ var i;
 var r2 = i["a b"];
 var a;
 var r3 = a["a b"];
+
 var b = {
     "a b": 1
 };

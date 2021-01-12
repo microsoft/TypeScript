@@ -154,8 +154,7 @@ module m2 {
 
 //// [privacyGloImport.js]
 var m1;
-(function (m1) {
-    var m1_M1_public;
+(function (m1) {var m1_M1_public;
     (function (m1_M1_public) {
         var c1 = /** @class */ (function () {
             function c1() {
@@ -252,6 +251,8 @@ var glo_M1_public;
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
 })(glo_M1_public || (glo_M1_public = {}));
+
+
 var m2;
 (function (m2) {
     //import m3 = require("use_glo_M1_public");

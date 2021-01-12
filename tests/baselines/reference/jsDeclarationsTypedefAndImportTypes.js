@@ -38,6 +38,7 @@ module.exports = {
 /**
  * @typedef {string | number} Whatever
  */
+
 var Conn = /** @class */ (function () {
     function Conn() {
         this.item = 3;
@@ -50,6 +51,7 @@ module.exports = Conn;
 /**
  * @typedef {import("./conn")} Conn
  */
+
 var Wrap = /** @class */ (function () {
     /**
      * @param {Conn} c

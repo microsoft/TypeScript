@@ -42,6 +42,12 @@ delete b.b
 
 //// [deleteExpressionMustBeOptional.js]
 "use strict";
+
+
+
+
+
+
 delete f.a;
 delete f.b;
 delete f.c;
@@ -52,7 +58,9 @@ delete f.g;
 delete f.h;
 delete f.i;
 delete f.j;
+
 delete a.a;
 delete a.b;
+
 delete b.a;
 delete b.b;

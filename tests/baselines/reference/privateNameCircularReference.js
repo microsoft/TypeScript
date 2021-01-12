@@ -15,8 +15,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _foo, _bar;
-class A {
-    constructor() {
+class A {constructor() {
         _foo.set(this, __classPrivateFieldGet(this, _bar));
         _bar.set(this, __classPrivateFieldGet(this, _foo));
         this["#baz"] = this["#baz"]; // Error (should *not* be private name error)

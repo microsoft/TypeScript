@@ -24,6 +24,7 @@ class C {
 //// [thisBinding.js]
 var M;
 (function (M) {
+
     var C = /** @class */ (function () {
         function C() {
             this.x = 0;

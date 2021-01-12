@@ -22,17 +22,17 @@ class Z implements I {
 
 //// [genericImplements.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 ;
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 ;
+
+
 // OK
 var X = /** @class */ (function () {
     function X() {

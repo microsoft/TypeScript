@@ -23,8 +23,7 @@ foo1.b;
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var a, b;
+    "use strict";var a, b;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -36,51 +35,43 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register(["./0"], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (_0_1_1) {
-                exports_1("default", _0_1_1);
+            function (_0_1_1) {exports_1("default", _0_1_1);
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });
 //// [11.js]
 System.register(["./0"], function (exports_1, context_1) {
-    "use strict";
-    var ns;
+    "use strict";var ns;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (ns_1) {
-                ns = ns_1;
+            function (ns_1) {ns = ns_1;
             }
         ],
-        execute: function () {
-            exports_1("default", ns);
+        execute: function () {exports_1("default", ns);
         }
     };
 });
 //// [2.js]
 System.register(["./1", "./11"], function (exports_1, context_1) {
-    "use strict";
-    var _1_1, _11_1;
+    "use strict";var _1_1, _11_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (_1_1_1) {
-                _1_1 = _1_1_1;
+            function (_1_1_1) {_1_1 = _1_1_1;
             },
-            function (_11_1_1) {
-                _11_1 = _11_1_1;
+            function (_11_1_1) {_11_1 = _11_1_1;
             }
         ],
         execute: function () {
             _1_1["default"].a;
             _11_1["default"].a;
+
             _1_1["default"].b;
             _11_1["default"].b;
         }

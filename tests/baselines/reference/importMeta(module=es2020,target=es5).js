@@ -76,20 +76,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
-(function () { return __awaiter(void 0, void 0, void 0, function () {
-    var response, blob, size, image;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, fetch(new URL("../hamsters.jpg", import.meta.url).toString())];
-            case 1:
-                response = _a.sent();
+(function () { return __awaiter(void 0, void 0, void 0, function () {var response, blob, size, image;
+    return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, fetch(new URL("../hamsters.jpg", import.meta.url).toString())];
+            case 1:response = _a.sent();
                 return [4 /*yield*/, response.blob()];
-            case 2:
-                blob = _a.sent();
+            case 2:blob = _a.sent();
                 size = import.meta.scriptElement.dataset.size || 300;
                 image = new Image();
                 image.src = URL.createObjectURL(blob);
                 image.width = image.height = size;
+
                 document.body.appendChild(image);
                 return [2 /*return*/];
         }
@@ -108,4 +104,5 @@ export {};
 //// [assignmentTargets.js]
 export var foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = foo;
+
 var _a = import.meta.wellKnownProperty, a = _a.a, b = _a.b, c = _a.c;

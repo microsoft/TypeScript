@@ -8,13 +8,11 @@ export module outerModule.InnerModule {
 
 //// [commentsDottedModuleName.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.outerModule = void 0;
     /** this is multi declare module*/
     var outerModule;
-    (function (outerModule) {
-        var InnerModule;
+    (function (outerModule) {var InnerModule;
         (function (InnerModule) {
             /// class b comment
             var b = /** @class */ (function () {

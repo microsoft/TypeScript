@@ -14,6 +14,7 @@ x = ec.getPosition();
 
 
 //// [externModuleClobber.js]
+
 var x;
 var ec = new EM.EC();
 x = ec.getPosition();

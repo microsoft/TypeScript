@@ -14,16 +14,14 @@ var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.
 
 //// [genericOfACloduleType1.js]
 var G = /** @class */ (function () {
-    function G() {
-    }
+    function G() {}
     G.prototype.bar = function (x) { return x; };
     return G;
 }());
 var M;
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         C.prototype.foo = function () { };
         return C;
     }());

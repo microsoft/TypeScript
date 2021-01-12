@@ -13,6 +13,7 @@ switch (foo) {
 }
 
 //// [stringLiteralMatchedInSwitch01.js]
+
 var foo;
 switch (foo) {
     case "a":

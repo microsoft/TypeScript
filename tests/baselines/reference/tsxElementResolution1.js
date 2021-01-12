@@ -15,5 +15,6 @@ declare module JSX {
 //// [file.jsx]
 // OK
 <div />;
+
 // Fail
 <span />;

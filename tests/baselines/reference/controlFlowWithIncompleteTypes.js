@@ -29,6 +29,8 @@ function foo2() {
 
 //// [controlFlowWithIncompleteTypes.js]
 // Repro from #11000
+
+
 function foo1() {
     var x = 0;
     while (cond) {
@@ -40,6 +42,7 @@ function foo1() {
         }
     }
 }
+
 function foo2() {
     var x = 0;
     while (cond) {

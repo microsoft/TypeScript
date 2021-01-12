@@ -7,10 +7,8 @@
 (function (b) {
     var _a;
     if (b === void 0) { b = (_a = /** @class */ (function () {
-            function class_1() {
-            }
+            function class_1() {}
             return class_1;
         }()),
         _a.x = 1,
-        _a); }
-})();
+        _a); }})();

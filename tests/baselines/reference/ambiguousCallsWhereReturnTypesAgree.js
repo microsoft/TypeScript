@@ -34,6 +34,9 @@ var TestClass = /** @class */ (function () {
     }
     TestClass.prototype.bar = function (x) {
     };
+
+
+
     TestClass.prototype.foo = function (x) {
         this.bar(x); // should not error
     };
@@ -45,6 +48,9 @@ var TestClass2 = /** @class */ (function () {
     TestClass2.prototype.bar = function (x) {
         return 0;
     };
+
+
+
     TestClass2.prototype.foo = function (x) {
         return this.bar(x); // should not error
     };

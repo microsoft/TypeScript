@@ -17,6 +17,7 @@ function foo1() {
         E[E["A"] = 0] = "A";
     })(E || (E = {}));
 }
+
 function foo2() {
     return 0 /* A */;
 }

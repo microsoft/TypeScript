@@ -16,4 +16,5 @@ var foo2: {
 
 //// [callSignatureFunctionOverload.js]
 var foo;
+
 var foo2;

@@ -18,8 +18,7 @@ foo(import("./0"));
 
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     class B {
         print() { return "I am B"; }
@@ -28,7 +27,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [2.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
+    "use strict";// We use Promise<any> for now as there is no way to specify shape of module object
     // We use Promise<any> for now as there is no way to specify shape of module object
     function foo(x) {
         x.then(value => {
@@ -36,5 +35,6 @@ define(["require", "exports"], function (require, exports) {
             b.print();
         });
     }
+
     foo(new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); }));
 });

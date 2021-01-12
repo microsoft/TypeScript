@@ -30,12 +30,17 @@ class A {
     }
     foo() { }
 }
+
 class B {
+
     constructor(x, z = "hello", ...args) {
         this.x = "hello";
         this.y = 10;
     }
+
     baz(z, v) {
         return this._bar;
     }
 }
+
+

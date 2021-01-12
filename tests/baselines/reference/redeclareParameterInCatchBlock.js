@@ -34,27 +34,26 @@ try {
 
 //// [redeclareParameterInCatchBlock.js]
 try {
-}
-catch (e) {
+} catch (e) {
     const e = null;
 }
+
 try {
-}
-catch (e) {
+} catch (e) {
     let e;
 }
+
 try {
-}
-catch ([a, b]) {
+} catch ([a, b]) {
     const [c, b] = [0, 1];
 }
+
 try {
+} catch ({ a: x, b: x }) {
 }
-catch ({ a: x, b: x }) {
-}
+
 try {
-}
-catch (e) {
+} catch (e) {
     function test() {
         let e;
     }

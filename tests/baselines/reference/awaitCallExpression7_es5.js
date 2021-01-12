@@ -15,17 +15,13 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression7_es5.js]
 function func() {
-    return __awaiter(this, void 0, void 0, function () {
-        var b, _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
+    return __awaiter(this, void 0, void 0, function () {var b, _a, _b, _c;
+        return __generator(this, function (_d) {switch (_d.label) {case 0:
                     before();
                     _b = (_a = o).fn;
                     _c = [a];
                     return [4 /*yield*/, p];
-                case 1:
-                    b = _b.apply(_a, _c.concat([_d.sent(), a]));
+                case 1:b = _b.apply(_a, _c.concat([_d.sent(), a]));
                     after();
                     return [2 /*return*/];
             }

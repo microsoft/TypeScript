@@ -69,6 +69,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -108,12 +109,16 @@ var a = M;
 var b;
 var b = new C();
 var b = new C2();
+
 var f = F;
 var f = function (x) { return ''; };
+
 var arr;
 var arr = [1, 2, 3, 4];
 var arr = [new C(), new C2(), new D()];
+
 var arr2 = [new D()];
 var arr2 = new Array();
+
 var m;
 var m = M.A;

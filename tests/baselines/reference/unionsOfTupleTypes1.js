@@ -95,5 +95,10 @@ function f1(t1, t2, t3, t4, x) {
     t3[1] = 42;
     t4[1] = 42;
 }
+
+
+
+
 var ex = ["hi"];
+
 var x = ex[0], y = ex[1];

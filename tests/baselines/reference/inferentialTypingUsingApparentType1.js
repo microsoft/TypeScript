@@ -9,4 +9,5 @@ foo(x => x.length);
 function foo(x) {
     return undefined;
 }
+
 foo(function (x) { return x.length; });

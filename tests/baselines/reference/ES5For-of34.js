@@ -27,12 +27,7 @@ try {
         foo().x = _c.value;
         var p = foo().x;
     }
-}
-catch (e_1_1) { e_1 = { error: e_1_1 }; }
-finally {
-    try {
-        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
-    }
-    finally { if (e_1) throw e_1.error; }
+} catch (e_1_1) { e_1 = { error: e_1_1 }; } finally {try {if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+    } finally { if (e_1) throw e_1.error; }
 }
 //# sourceMappingURL=ES5For-of34.js.map

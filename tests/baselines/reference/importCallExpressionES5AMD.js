@@ -30,26 +30,27 @@ export class D {
 
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
     function foo() { return "foo"; }
     exports.foo = foo;
 });
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.D = exports.p2 = void 0;
     new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
     var p1 = new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); });
     p1.then(function (zero) {
         return zero.foo();
     });
+
     exports.p2 = new Promise(function (resolve_3, reject_3) { require(["./0"], resolve_3, reject_3); });
+
     function foo() {
         var p2 = new Promise(function (resolve_4, reject_4) { require(["./0"], resolve_4, reject_4); });
     }
+
     var C = /** @class */ (function () {
         function C() {
         }

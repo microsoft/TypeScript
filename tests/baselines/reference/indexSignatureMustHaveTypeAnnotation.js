@@ -16,6 +16,7 @@ class C2 {
 }
 
 //// [indexSignatureMustHaveTypeAnnotation.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

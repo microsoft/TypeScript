@@ -140,8 +140,7 @@ var qq: any;
 // Initializers
 var varInit = varInit; // any
 var pInit;
-function fn(pInit) {
-    if (pInit === void 0) { pInit = pInit; }
+function fn(pInit) {if (pInit === void 0) { pInit = pInit; }
     var pInit;
 }
 var InitClass = /** @class */ (function () {
@@ -160,6 +159,7 @@ function fnReturn1() {
 }
 var a;
 var a = fnReturn1();
+
 function fnReturn2() {
     return fnReturn2;
 }
@@ -201,13 +201,15 @@ function fnCall() {
 }
 var fnCallResult = fnCall();
 var fnCallResult;
+
 // Call argument
 function fnArg1(x, y) {
     var x;
     fnArg1(fnArg1, 0);
 }
-function overload1() { return undefined; }
-;
+
+function overload1() { return undefined; };
+
 function fnArg2() {
     return overload1(fnArg2);
 }
@@ -233,6 +235,8 @@ function fn5() {
     return new a(fn5);
 }
 var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
+
+
 // Property access
 var propAcc1 = {
     m: propAcc1.m
@@ -263,4 +267,5 @@ var C3 = /** @class */ (function () {
 }());
 var qq = C3.q;
 var qq;
+
 // Parentheses - tested a bunch above

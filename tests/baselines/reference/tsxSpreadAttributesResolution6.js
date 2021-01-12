@@ -36,6 +36,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
+
+
 var TextComponent = /** @class */ (function (_super) {
     __extends(TextComponent, _super);
     function TextComponent() {
@@ -48,6 +52,7 @@ var TextComponent = /** @class */ (function (_super) {
 }(React.Component));
 // Error
 var x = <TextComponent editable={true}/>;
+
 var textProps = {
     editable: false
 };

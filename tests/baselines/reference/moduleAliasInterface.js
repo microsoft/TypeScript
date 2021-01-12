@@ -58,6 +58,7 @@ module B1 {
 //// [moduleAliasInterface.js]
 var _modes;
 (function (_modes) {
+
     var Mode = /** @class */ (function () {
         function Mode() {
         }
@@ -68,11 +69,12 @@ var _modes;
 // _modes. // produces an internal error - please implement in derived class
 var editor;
 (function (editor) {
+
     var i;
+
     // If you just use p1:modes, the compiler accepts it - should be an error
     var Bug = /** @class */ (function () {
-        function Bug(p1, p2) {
-        } // should be an error on p2 - it's not exported
+        function Bug(p1, p2) {} // should be an error on p2 - it's not exported
         Bug.prototype.foo = function (p1) {
         };
         return Bug;
@@ -81,38 +83,36 @@ var editor;
 var modesOuter = _modes;
 var editor2;
 (function (editor2) {
+
     var i;
+
     var Bug = /** @class */ (function () {
-        function Bug(p1, p2) {
-        } // no error here, since modesOuter is declared externally
+        function Bug(p1, p2) {} // no error here, since modesOuter is declared externally
         return Bug;
     }());
     var Foo;
-    (function (Foo) {
-        var Bar = /** @class */ (function () {
-            function Bar() {
-            }
+    (function (Foo) {var Bar = /** @class */ (function () {
+            function Bar() {}
             return Bar;
         }());
         Foo.Bar = Bar;
     })(Foo || (Foo = {}));
     var Bug2 = /** @class */ (function () {
-        function Bug2(p1, p2) {
-        }
+        function Bug2(p1, p2) {}
         return Bug2;
     }());
 })(editor2 || (editor2 = {}));
 var A1;
 (function (A1) {
     var A1C1 = /** @class */ (function () {
-        function A1C1() {
-        }
+        function A1C1() {}
         return A1C1;
     }());
     A1.A1C1 = A1C1;
 })(A1 || (A1 = {}));
 var B1;
 (function (B1) {
+
     var i;
     var c;
 })(B1 || (B1 = {}));

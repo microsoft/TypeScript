@@ -15,4 +15,5 @@ var y;
 y = x;
 var a = Object.create("");
 var c = Object.create(1);
+
 var w = new Object();

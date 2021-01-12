@@ -24,10 +24,12 @@ var greeter = /** @class */ (function () {
         var y = 10;
         y++;
     };
+
     greeter.prototype.function2 = function () {
         var y = 10;
         y++;
     };
+
     greeter.prototype.function3 = function () {
         var y = 10;
         y++;

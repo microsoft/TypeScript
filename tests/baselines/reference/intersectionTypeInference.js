@@ -40,6 +40,8 @@ function extend(obj1, obj2) {
 var x = extend({ a: "hello" }, { b: 42 });
 var s = x.a;
 var n = x.b;
+
+
 function foo(obj) {
     return undefined;
 }

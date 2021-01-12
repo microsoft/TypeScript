@@ -40,15 +40,12 @@ export {II as II1};
 
 //// [f1.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var A;
+    "use strict";var A;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            A = /** @class */ (function () {
-                function A() {
-                }
+            A = /** @class */ (function () {function A() {}
                 return A;
             }());
             exports_1("A", A);
@@ -57,19 +54,18 @@ System.register([], function (exports_1, context_1) {
 });
 //// [f2.js]
 System.register(["f1"], function (exports_1, context_1) {
-    "use strict";
-    var x, N, IX, f1_1;
+    "use strict";var x, N, IX, f1_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (f1_1_1) {
-                f1_1 = f1_1_1;
+            function (f1_1_1) {f1_1 = f1_1_1;
             }
         ],
         execute: function () {
             x = 1;
             exports_1("x", x);
             exports_1("x1", x);
+
             (function (N) {
                 N.x = 1;
             })(N || (N = {}));

@@ -96,12 +96,15 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 exports.C2 = C2;
+
+
 // merged with a namespace, multiple overloads
 var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
+
 // static methods, multiple overloads
 var C4 = /** @class */ (function () {
     function C4() {
@@ -120,12 +123,14 @@ var C6 = /** @class */ (function () {
     }
     return C6;
 }());
+
 // merged with namespace, static methods, multiple overloads
 var C7 = /** @class */ (function () {
     function C7() {
     }
     return C7;
 }());
+
 // merged with namespace, static methods, duplicate declarations
 var C8 = /** @class */ (function () {
     function C8() {

@@ -24,7 +24,9 @@ export const createService = <T>(
 "use strict";
 exports.__esModule = true;
 exports.createService = void 0;
-var createService = function (ServiceCtr) {
+var createService = function (
+ServiceCtr
+) {
     Object.keys(ServiceCtr).forEach(function (key) {
         var method = (ServiceCtr)[key];
         var __$daemonMode = method.__$daemonMode, __$action = method.__$action, id = method.id;

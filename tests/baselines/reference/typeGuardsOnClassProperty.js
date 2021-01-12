@@ -40,6 +40,7 @@ var D = /** @class */ (function () {
         var data = this.data;
         return typeof data === "string" ? data : data.join(" ");
     };
+
     D.prototype.getData1 = function () {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
     };

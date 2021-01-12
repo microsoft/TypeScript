@@ -24,6 +24,11 @@ foo.push({
 });
 
 //// [partialDiscriminatedUnionMemberHasGoodError.js]
+
+
+
+
+
 var foo = [];
 foo.push({
     types: [{

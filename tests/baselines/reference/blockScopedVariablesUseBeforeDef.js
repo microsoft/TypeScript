@@ -109,14 +109,17 @@ function foo0() {
     var a = x;
     var x;
 }
+
 function foo1() {
     var a = function () { return x; };
     var x;
 }
+
 function foo2() {
     var a = function () { return x; };
     var x;
 }
+
 function foo3() {
     var X = /** @class */ (function () {
         function X() {
@@ -126,6 +129,7 @@ function foo3() {
     }());
     var x;
 }
+
 function foo4() {
     var y = /** @class */ (function () {
         function y() {
@@ -135,16 +139,19 @@ function foo4() {
     }());
     var x;
 }
+
 function foo5() {
     var x = function () { return y; };
     var y = function () { return x; };
 }
+
 function foo6() {
     function f() {
         return x;
     }
     var x;
 }
+
 function foo7() {
     var A = /** @class */ (function () {
         function A() {
@@ -154,6 +161,7 @@ function foo7() {
     }());
     var x;
 }
+
 function foo8() {
     var y = /** @class */ (function () {
         function class_1() {
@@ -163,6 +171,7 @@ function foo8() {
     }());
     var x;
 }
+
 function foo9() {
     var _a;
     var y = (_a = /** @class */ (function () {
@@ -174,6 +183,7 @@ function foo9() {
         _a);
     var x;
 }
+
 function foo10() {
     var A = /** @class */ (function () {
         function A() {
@@ -183,6 +193,7 @@ function foo10() {
     }());
     var x;
 }
+
 function foo11() {
     function f() {
         var _a;
@@ -196,6 +207,7 @@ function foo11() {
     }
     var x;
 }
+
 function foo12() {
     function f() {
         var y = /** @class */ (function () {
@@ -207,12 +219,14 @@ function foo12() {
     }
     var x;
 }
+
 function foo13() {
     var a = {
         get a() { return x; }
     };
     var x;
 }
+
 function foo14() {
     var a = {
         a: x

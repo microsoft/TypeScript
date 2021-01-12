@@ -9,13 +9,9 @@ function a(
 var x       =
 
 //// [parserSkippedTokens16.js]
-foo();
-Bar;
-{ }
-function Foo() { }
-{ }
-4 + ;
-5;
+foo();Bar;{ }
+function Foo() { }{ }
+4 + ;5;
 var M;
 (function (M) {
     function a(T) { }

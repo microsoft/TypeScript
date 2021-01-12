@@ -29,6 +29,7 @@ var Validation;
     function function3() {
         function1();
     }
+
     function function4() {
     }
     Validation.a = function3;

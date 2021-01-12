@@ -11,7 +11,7 @@ Foo(() =>
 //// [lambdaASIEmit.js]
 function Foo(x) {
 }
+
 Foo(function () {
     // do something
-    return 127;
-});
+    return 127;});

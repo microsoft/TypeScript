@@ -55,9 +55,7 @@ var C3 = /** @class */ (function (_super) {
     return C3;
 }(x)); // error
 var M;
-(function (M) {
-    M.x = 1;
-})(M || (M = {}));
+(function (M) {M.x = 1;})(M || (M = {}));
 var C4 = /** @class */ (function (_super) {
     __extends(C4, _super);
     function C4() {

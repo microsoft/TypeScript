@@ -18,6 +18,7 @@ module A {
 //// [ExportFunctionWithInaccessibleTypesInReturnTypeAnnotation.js]
 var A;
 (function (A) {
+
     var Point = /** @class */ (function () {
         function Point() {
         }

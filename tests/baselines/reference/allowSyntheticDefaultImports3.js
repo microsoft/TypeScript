@@ -12,14 +12,12 @@ export class Foo {
 
 //// [b.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var Foo;
+    "use strict";var Foo;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            Foo = /** @class */ (function () {
-                function Foo() {
+            Foo = /** @class */ (function () {function Foo() {
                 }
                 return Foo;
             }());
@@ -29,13 +27,11 @@ System.register([], function (exports_1, context_1) {
 });
 //// [a.js]
 System.register(["./b"], function (exports_1, context_1) {
-    "use strict";
-    var b_1, x;
+    "use strict";var b_1, x;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (b_1_1) {
-                b_1 = b_1_1;
+            function (b_1_1) {b_1 = b_1_1;
             }
         ],
         execute: function () {

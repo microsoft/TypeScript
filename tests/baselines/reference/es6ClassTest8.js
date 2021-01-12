@@ -42,6 +42,7 @@ class Camera {
 
 //// [es6ClassTest8.js]
 function f1(x) { return x; }
+
 var C = /** @class */ (function () {
     function C() {
         var bar = (function () {
@@ -52,7 +53,9 @@ var C = /** @class */ (function () {
     return C;
 }());
 var Vector = /** @class */ (function () {
-    function Vector(x, y, z) {
+    function Vector(x,
+        y,
+        z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -61,6 +64,12 @@ var Vector = /** @class */ (function () {
     Vector.minus = function (v1, v2) { return null; };
     Vector.times = function (v1, v2) { return null; };
     Vector.cross = function (v1, v2) { return null; };
+
+
+
+
+
+
     Vector.dot = function (v1, v2) { return null; };
     return Vector;
 }());

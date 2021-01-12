@@ -60,8 +60,7 @@ var M;
         E.f = f;
     })(E = M.E || (M.E = {}));
 })(M || (M = {}));
-(function (M) {
-    var P;
+(function (M) {var P;
     (function (P) {
         var C = /** @class */ (function () {
             function C() {

@@ -157,23 +157,29 @@ class NoQuickInfoClass {
 /// This is simple /// comments
 function simple() {
 }
+
 simple();
+
 /// multiLine /// Comments
 /// This is example of multiline /// comments
 /// Another multiLine
 function multiLine() {
 }
 multiLine();
+
 /** this is eg of single line jsdoc style comment */
 function jsDocSingleLine() {
 }
 jsDocSingleLine();
+
+
 /** this is multiple line jsdoc stule comment
 *New line1
 *New Line2*/
 function jsDocMultiLine() {
 }
 jsDocMultiLine();
+
 /** this is multiple line jsdoc stule comment
 *New line1
 *New Line2*/
@@ -182,27 +188,33 @@ jsDocMultiLine();
 function jsDocMultiLineMerge() {
 }
 jsDocMultiLineMerge();
+
+
 /// Triple slash comment
 /** jsdoc comment */
 function jsDocMixedComments1() {
 }
 jsDocMixedComments1();
+
 /// Triple slash comment
 /** jsdoc comment */ /*** another jsDocComment*/
 function jsDocMixedComments2() {
 }
 jsDocMixedComments2();
+
 /** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 function jsDocMixedComments3() {
 }
 jsDocMixedComments3();
+
 /** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
 /// Triple slash comment 2
 function jsDocMixedComments4() {
 }
 jsDocMixedComments4();
+
 /// Triple slash comment 1
 /** jsdoc comment */ /*** another jsDocComment*/
 /// Triple slash comment
@@ -210,6 +222,7 @@ jsDocMixedComments4();
 function jsDocMixedComments5() {
 }
 jsDocMixedComments5();
+
 /*** another jsDocComment*/
 /// Triple slash comment 1
 /// Triple slash comment
@@ -218,14 +231,17 @@ jsDocMixedComments5();
 function jsDocMixedComments6() {
 }
 jsDocMixedComments6();
+
 // This shoulnot be help comment
 function noHelpComment1() {
 }
 noHelpComment1();
+
 /* This shoulnot be help comment */
 function noHelpComment2() {
 }
 noHelpComment2();
+
 function noHelpComment3() {
 }
 noHelpComment3();
@@ -282,6 +298,7 @@ function divide(a, b) {
 function jsDocParamTest(/** this is inline comment for a */ a, /** this is inline comment for b*/ b, c, d) {
     return a + b + c + d;
 }
+
 /**/
 var NoQuickInfoClass = /** @class */ (function () {
     function NoQuickInfoClass() {

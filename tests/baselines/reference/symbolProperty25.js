@@ -10,6 +10,7 @@ class C implements I {
 }
 
 //// [symbolProperty25.js]
+
 class C {
     [Symbol.toStringTag]() {
         return "";

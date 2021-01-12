@@ -53,17 +53,21 @@ function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue
 function foo1(results) {
     (results || (results = [])).push(100);
 }
+
 function foo2(results) {
     (results ?? (results = [])).push(100);
 }
+
 function foo3(results) {
     results || (results = []);
     results.push(100);
 }
+
 function foo4(results) {
     results ?? (results = []);
     results.push(100);
 }
+
 function doSomethingWithAlias(thing, defaultValue) {
     if (v === 1) {
         if (thing && (thing = thing.original)) {

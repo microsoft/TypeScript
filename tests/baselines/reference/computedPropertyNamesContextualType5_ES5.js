@@ -11,6 +11,7 @@ var o: I = {
 
 //// [computedPropertyNamesContextualType5_ES5.js]
 var _a;
+
 var o = (_a = {},
     _a[+"foo"] = "",
     _a[+"bar"] = 0,

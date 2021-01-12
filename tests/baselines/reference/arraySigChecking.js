@@ -33,8 +33,11 @@ isEmpty(['a']);
 
 
 //// [arraySigChecking.js]
+
 var myVar;
 var strArray = [myVar.voidFn()];
+
+
 var myArray;
 myArray = [[1, 2]];
 function isEmpty(l) {

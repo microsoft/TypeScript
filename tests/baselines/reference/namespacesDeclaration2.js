@@ -23,6 +23,7 @@ var M;
 (function (M) {
     function F() { }
 })(M || (M = {}));
+
 var foge;
 var foo;
 var x;

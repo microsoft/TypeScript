@@ -17,6 +17,7 @@ var _loop_1 = function () {
 for (; false;) {
     _loop_1();
 }
+
 for (; false;) {
     var y = void 0;
     y = 1;

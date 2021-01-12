@@ -83,6 +83,7 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 var len = bigIntArray.length;
 bigIntArray.length = 10;
 var arrayBufferLike = bigIntArray;
+
 // Test BigUint64Array
 var bigUintArray = new BigUint64Array();
 bigUintArray = new BigUint64Array(10);
@@ -106,6 +107,7 @@ bigintVal = dataView.getBigInt64(1);
 bigintVal = dataView.getBigInt64(1, true);
 bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
+
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
 new Intl.NumberFormat("fr").format(bigintVal);

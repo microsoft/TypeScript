@@ -60,8 +60,8 @@ exports.obj = {
         const req = yield Promise.resolve().then(() => require('./test')); // THREE
     })
 };
-class cl2 {
-    constructor() {
+
+class cl2 {constructor() {
         this.p = {
             m: () => __awaiter(this, void 0, void 0, function* () {
                 const req = yield Promise.resolve().then(() => require('./test')); // FOUR

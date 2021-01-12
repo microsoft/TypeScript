@@ -4,8 +4,7 @@ var m = M;
 
 //// [structuralTypeInDeclareFileForModule.js]
 var M;
-(function (M) {
-})(M || (M = {}));
+(function (M) {})(M || (M = {}));
 var m = M;
 
 

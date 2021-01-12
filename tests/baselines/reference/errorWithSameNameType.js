@@ -37,4 +37,5 @@ var a;
 var b;
 if (a === b) {
 }
+
 a = b;

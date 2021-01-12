@@ -70,12 +70,16 @@ var __extends = (this && this.__extends) || (function () {
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1(t) { }
 function fn2(t) { }
+
 fn1(fn2(4)); // Error
+
 var a;
 var s;
+
 // Type assertion of non - unary expression
 var a = "" + 4;
 var s = "" + 4;
+
 var SomeBase = /** @class */ (function () {
     function SomeBase() {
     }
@@ -100,12 +104,15 @@ var someOther = new SomeOther();
 someBase = someDerived;
 someBase = someBase;
 someBase = someOther; // Error
+
 someDerived = someDerived;
 someDerived = someBase;
 someDerived = someOther; // Error
+
 someOther = someDerived; // Error
 someOther = someBase; // Error
 someOther = someOther;
+
 // Type assertion cannot be a type-predicate type
 var numOrStr;
 var str;
@@ -116,6 +123,5 @@ if (is)
 }
 if ((numOrStr === undefined))
     is;
-string;
-{ // Error
+string;{ // Error
 }

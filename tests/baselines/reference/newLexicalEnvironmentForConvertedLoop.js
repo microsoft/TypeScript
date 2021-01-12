@@ -16,11 +16,12 @@ function foo(set: any) {
 function baz(x) {
     return [[x, x]];
 }
+
 function foo(set) {
-    var _loop_1 = function (value, i) {
-        var _c;
+    var _loop_1 = function (value, i) {var _c;
         var bar = [];
         (function () { return bar; });
+
         (_c = set.values).push.apply(_c, []);
     };
     for (var _i = 0, _a = baz(set.values); _i < _a.length; _i++) {

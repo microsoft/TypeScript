@@ -116,6 +116,7 @@ var Foo = /** @class */ (function () {
             return function (x) { return _this_1; }; // New scope.  So should inject new _this capture
         };
     };
+
     Foo.prototype.x1 = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner(_this) {
@@ -142,10 +143,13 @@ var Foo1 = /** @class */ (function () {
     }
     return Foo1;
 }());
+
 function f1(_this) {
     var _this_1 = this;
     (function (x) { console.log(_this_1.x); });
 }
+
+
 var Foo3 = /** @class */ (function () {
     function Foo3(_this) {
         var _this_1 = this;
@@ -163,7 +167,10 @@ var Foo3 = /** @class */ (function () {
     };
     return Foo3;
 }());
+
 function f3(_this) {
     var _this_1 = this;
     (function (x) { console.log(_this_1.x); });
 }
+
+

@@ -29,3 +29,4 @@ interface IDictionary<TKey, TValue> {
 }
 
 //// [genericSpecializationToTypeLiteral1.js]
+

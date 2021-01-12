@@ -58,4 +58,5 @@ var C = /** @class */ (function (_super) {
     return C;
 }(B));
 var x = new C();
+
 var y = x.method(); // usage flags `method` in `B` as circular and marks `y` as the error-any type

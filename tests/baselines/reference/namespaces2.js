@@ -9,12 +9,10 @@ var c: A.B.C = new A.B.C();
 
 //// [namespaces2.js]
 var A;
-(function (A) {
-    var B;
+(function (A) {var B;
     (function (B) {
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             return C;
         }());
         B.C = C;

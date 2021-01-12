@@ -17,6 +17,7 @@ function foo<T>(arr: T[], depth: number) {
 
 //// [arrayFakeFlatNoCrashInferenceDeclarations.js]
 "use strict";
+
 function foo(arr, depth) {
     return flat(arr, depth);
 }

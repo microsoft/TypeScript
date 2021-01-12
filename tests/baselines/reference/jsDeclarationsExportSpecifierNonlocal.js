@@ -12,14 +12,12 @@ export { Thing, OtherThing as default } from "./source";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OtherThing = exports.Thing = void 0;
 var Thing = /** @class */ (function () {
-    function Thing() {
-    }
+    function Thing() {}
     return Thing;
 }());
 exports.Thing = Thing;
 var OtherThing = /** @class */ (function () {
-    function OtherThing() {
-    }
+    function OtherThing() {}
     return OtherThing;
 }());
 exports.OtherThing = OtherThing;
@@ -28,8 +26,7 @@ exports.OtherThing = OtherThing;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = exports.Thing = void 0;
 var source_1 = require("./source");
-Object.defineProperty(exports, "Thing", { enumerable: true, get: function () { return source_1.Thing; } });
-Object.defineProperty(exports, "default", { enumerable: true, get: function () { return source_1.OtherThing; } });
+Object.defineProperty(exports, "Thing", { enumerable: true, get: function () { return source_1.Thing; } });Object.defineProperty(exports, "default", { enumerable: true, get: function () { return source_1.OtherThing; } });
 
 
 //// [source.d.ts]

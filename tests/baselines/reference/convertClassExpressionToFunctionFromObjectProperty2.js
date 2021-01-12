@@ -242,394 +242,317 @@
 //// [convertClassExpressionToFunctionFromObjectProperty2.js]
 ({
     x: /** @class */ (function () {
-        function x() {
-        }
+        function x() {}
         return x;
     }()),
     y: /** @class */ (function () {
-        function y() {
-        }
+        function y() {}
         return y;
     }()),
+
     // keywords
     break: /** @class */ (function () {
-        function break_1() {
-        }
+        function break_1() {}
         return break_1;
     }()),
     case: /** @class */ (function () {
-        function case_1() {
-        }
+        function case_1() {}
         return case_1;
     }()),
     catch: /** @class */ (function () {
-        function catch_1() {
-        }
+        function catch_1() {}
         return catch_1;
     }()),
     class: /** @class */ (function () {
-        function class_1() {
-        }
+        function class_1() {}
         return class_1;
     }()),
     const: /** @class */ (function () {
-        function const_1() {
-        }
+        function const_1() {}
         return const_1;
     }()),
     continue: /** @class */ (function () {
-        function continue_1() {
-        }
+        function continue_1() {}
         return continue_1;
     }()),
     debugger: /** @class */ (function () {
-        function debugger_1() {
-        }
+        function debugger_1() {}
         return debugger_1;
     }()),
     default: /** @class */ (function () {
-        function default_1() {
-        }
+        function default_1() {}
         return default_1;
     }()),
     delete: /** @class */ (function () {
-        function delete_1() {
-        }
+        function delete_1() {}
         return delete_1;
     }()),
     do: /** @class */ (function () {
-        function do_1() {
-        }
+        function do_1() {}
         return do_1;
     }()),
     else: /** @class */ (function () {
-        function else_1() {
-        }
+        function else_1() {}
         return else_1;
     }()),
     enum: /** @class */ (function () {
-        function enum_1() {
-        }
+        function enum_1() {}
         return enum_1;
     }()),
     export: /** @class */ (function () {
-        function export_1() {
-        }
+        function export_1() {}
         return export_1;
     }()),
     extends: /** @class */ (function () {
-        function extends_1() {
-        }
+        function extends_1() {}
         return extends_1;
     }()),
     false: /** @class */ (function () {
-        function false_1() {
-        }
+        function false_1() {}
         return false_1;
     }()),
     finally: /** @class */ (function () {
-        function finally_1() {
-        }
+        function finally_1() {}
         return finally_1;
     }()),
     for: /** @class */ (function () {
-        function for_1() {
-        }
+        function for_1() {}
         return for_1;
     }()),
     function: /** @class */ (function () {
-        function function_1() {
-        }
+        function function_1() {}
         return function_1;
     }()),
     if: /** @class */ (function () {
-        function if_1() {
-        }
+        function if_1() {}
         return if_1;
     }()),
     import: /** @class */ (function () {
-        function import_1() {
-        }
+        function import_1() {}
         return import_1;
     }()),
     in: /** @class */ (function () {
-        function in_1() {
-        }
+        function in_1() {}
         return in_1;
     }()),
     instanceof: /** @class */ (function () {
-        function instanceof_1() {
-        }
+        function instanceof_1() {}
         return instanceof_1;
     }()),
     new: /** @class */ (function () {
-        function new_1() {
-        }
+        function new_1() {}
         return new_1;
     }()),
     null: /** @class */ (function () {
-        function null_1() {
-        }
+        function null_1() {}
         return null_1;
     }()),
     return: /** @class */ (function () {
-        function return_1() {
-        }
+        function return_1() {}
         return return_1;
     }()),
     super: /** @class */ (function () {
-        function super_1() {
-        }
+        function super_1() {}
         return super_1;
     }()),
     switch: /** @class */ (function () {
-        function switch_1() {
-        }
+        function switch_1() {}
         return switch_1;
     }()),
     this: /** @class */ (function () {
-        function this_1() {
-        }
+        function this_1() {}
         return this_1;
     }()),
     throw: /** @class */ (function () {
-        function throw_1() {
-        }
+        function throw_1() {}
         return throw_1;
     }()),
     true: /** @class */ (function () {
-        function true_1() {
-        }
+        function true_1() {}
         return true_1;
     }()),
     try: /** @class */ (function () {
-        function try_1() {
-        }
+        function try_1() {}
         return try_1;
     }()),
     typeof: /** @class */ (function () {
-        function typeof_1() {
-        }
+        function typeof_1() {}
         return typeof_1;
     }()),
     var: /** @class */ (function () {
-        function var_1() {
-        }
+        function var_1() {}
         return var_1;
     }()),
     void: /** @class */ (function () {
-        function void_1() {
-        }
+        function void_1() {}
         return void_1;
     }()),
     while: /** @class */ (function () {
-        function while_1() {
-        }
+        function while_1() {}
         return while_1;
     }()),
     with: /** @class */ (function () {
-        function with_1() {
-        }
+        function with_1() {}
         return with_1;
     }()),
     implements: /** @class */ (function () {
-        function implements_1() {
-        }
+        function implements_1() {}
         return implements_1;
     }()),
     interface: /** @class */ (function () {
-        function interface_1() {
-        }
+        function interface_1() {}
         return interface_1;
     }()),
     let: /** @class */ (function () {
-        function let_1() {
-        }
+        function let_1() {}
         return let_1;
     }()),
     package: /** @class */ (function () {
-        function package_1() {
-        }
+        function package_1() {}
         return package_1;
     }()),
     private: /** @class */ (function () {
-        function private_1() {
-        }
+        function private_1() {}
         return private_1;
     }()),
     protected: /** @class */ (function () {
-        function protected_1() {
-        }
+        function protected_1() {}
         return protected_1;
     }()),
     public: /** @class */ (function () {
-        function public_1() {
-        }
+        function public_1() {}
         return public_1;
     }()),
     static: /** @class */ (function () {
-        function static_1() {
-        }
+        function static_1() {}
         return static_1;
     }()),
     yield: /** @class */ (function () {
-        function yield_1() {
-        }
+        function yield_1() {}
         return yield_1;
     }()),
     abstract: /** @class */ (function () {
-        function abstract() {
-        }
+        function abstract() {}
         return abstract;
     }()),
     as: /** @class */ (function () {
-        function as() {
-        }
+        function as() {}
         return as;
     }()),
     asserts: /** @class */ (function () {
-        function asserts() {
-        }
+        function asserts() {}
         return asserts;
     }()),
     any: /** @class */ (function () {
-        function any() {
-        }
+        function any() {}
         return any;
     }()),
     async: /** @class */ (function () {
-        function async() {
-        }
+        function async() {}
         return async;
     }()),
     await: /** @class */ (function () {
-        function await() {
-        }
+        function await() {}
         return await;
     }()),
     boolean: /** @class */ (function () {
-        function boolean() {
-        }
+        function boolean() {}
         return boolean;
     }()),
     constructor: /** @class */ (function () {
-        function constructor() {
-        }
+        function constructor() {}
         return constructor;
     }()),
     declare: /** @class */ (function () {
-        function declare() {
-        }
+        function declare() {}
         return declare;
     }()),
     get: /** @class */ (function () {
-        function get() {
-        }
+        function get() {}
         return get;
     }()),
     infer: /** @class */ (function () {
-        function infer() {
-        }
+        function infer() {}
         return infer;
     }()),
     is: /** @class */ (function () {
-        function is() {
-        }
+        function is() {}
         return is;
     }()),
     keyof: /** @class */ (function () {
-        function keyof() {
-        }
+        function keyof() {}
         return keyof;
     }()),
     module: /** @class */ (function () {
-        function module() {
-        }
+        function module() {}
         return module;
     }()),
     namespace: /** @class */ (function () {
-        function namespace() {
-        }
+        function namespace() {}
         return namespace;
     }()),
     never: /** @class */ (function () {
-        function never() {
-        }
+        function never() {}
         return never;
     }()),
     readonly: /** @class */ (function () {
-        function readonly() {
-        }
+        function readonly() {}
         return readonly;
     }()),
     require: /** @class */ (function () {
-        function require() {
-        }
+        function require() {}
         return require;
     }()),
     number: /** @class */ (function () {
-        function number() {
-        }
+        function number() {}
         return number;
     }()),
     object: /** @class */ (function () {
-        function object() {
-        }
+        function object() {}
         return object;
     }()),
     set: /** @class */ (function () {
-        function set() {
-        }
+        function set() {}
         return set;
     }()),
     string: /** @class */ (function () {
-        function string() {
-        }
+        function string() {}
         return string;
     }()),
     symbol: /** @class */ (function () {
-        function symbol() {
-        }
+        function symbol() {}
         return symbol;
     }()),
     type: /** @class */ (function () {
-        function type() {
-        }
+        function type() {}
         return type;
     }()),
     undefined: /** @class */ (function () {
-        function undefined() {
-        }
+        function undefined() {}
         return undefined;
     }()),
     unique: /** @class */ (function () {
-        function unique() {
-        }
+        function unique() {}
         return unique;
     }()),
     unknown: /** @class */ (function () {
-        function unknown() {
-        }
+        function unknown() {}
         return unknown;
     }()),
     from: /** @class */ (function () {
-        function from() {
-        }
+        function from() {}
         return from;
     }()),
     global: /** @class */ (function () {
-        function global() {
-        }
+        function global() {}
         return global;
     }()),
     bigint: /** @class */ (function () {
-        function bigint() {
-        }
+        function bigint() {}
         return bigint;
     }()),
     of: /** @class */ (function () {
-        function of() {
-        }
+        function of() {}
         return of;
     }())
 });

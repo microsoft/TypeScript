@@ -60,12 +60,14 @@ var d;
 var d;
 var e;
 var e;
+
 var f;
 var f;
 var f2;
 var f2;
 var f3;
 var f3;
+
 // None of these declarations should have any errors!
 // Truly recursive types
 var g;
@@ -93,6 +95,7 @@ var hy1;
 var hy1 = hy1[0].x;
 var hy2;
 var hy2 = hy2.x[0];
+
 // This one should be an error because the first type argument is not contained inside a type literal
 var hy3;
 var hy3;

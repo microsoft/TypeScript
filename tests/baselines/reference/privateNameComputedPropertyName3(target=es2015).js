@@ -40,21 +40,23 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _name;
 class Foo {
+
     constructor(name) {
         _name.set(this, void 0);
         __classPrivateFieldSet(this, _name, name);
     }
+
     getValue(x) {
         var _y;
         const obj = this;
-        class Bar {
-            constructor() {
+        class Bar {constructor() {
                 _y.set(this, 100);
             }
             [(_y = new WeakMap(), __classPrivateFieldGet(obj, _name))]() {
                 return x + __classPrivateFieldGet(this, _y);
             }
         }
+
         return new Bar()[__classPrivateFieldGet(obj, _name)]();
     }
 }

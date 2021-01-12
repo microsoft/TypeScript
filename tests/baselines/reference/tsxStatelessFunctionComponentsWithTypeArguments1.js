@@ -32,20 +32,26 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} 
 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
+
     // OK
     function Baz(key1, value) {
         var a0 = <ComponentWithTwoAttributes key1={key1} value={value}/>;
         var a1 = <ComponentWithTwoAttributes {...{ key1: key1, value: value }} key="Component"/>;
     }
+
+
     // OK
     function createLink(func) {
         var o = <Link func={func}/>;
     }
+
     function createLink1(func) {
         var o = <Link func={func}/>;
     }
+
+
+
     // OK
     var i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={function (val) { }}/>;
 });

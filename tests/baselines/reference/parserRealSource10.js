@@ -475,8 +475,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 ///<reference path='typescript.ts' />
 var TypeScript;
-(function (TypeScript) {
-    var TokenID;
+(function (TypeScript) {var TokenID;
     (function (TokenID) {
         // Keywords
         TokenID[TokenID["Any"] = 0] = "Any";
@@ -643,7 +642,10 @@ var TypeScript;
         Reservation[Reservation["TypeScriptAndJSFutureStrict"] = 12] = "TypeScriptAndJSFutureStrict";
     })(Reservation = TypeScript.Reservation || (TypeScript.Reservation = {}));
     var TokenInfo = /** @class */ (function () {
-        function TokenInfo(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers) {
+        function TokenInfo(tokenId, reservation,
+            binopPrecedence, binopNodeType,
+            unopPrecedence, unopNodeType,
+            text, ers) {
             this.tokenId = tokenId;
             this.reservation = reservation;
             this.binopPrecedence = binopPrecedence;
@@ -656,7 +658,9 @@ var TypeScript;
         return TokenInfo;
     }());
     TypeScript.TokenInfo = TokenInfo;
-    function setTokenInfo(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers) {
+    function setTokenInfo(tokenId, reservation, binopPrecedence,
+        binopNodeType, unopPrecedence, unopNodeType,
+        text, ers) {
         if (tokenId !== undefined) {
             TypeScript.tokenTable[tokenId] = new TokenInfo(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers);
             if (binopNodeType != NodeType.None) {
@@ -722,10 +726,12 @@ var TypeScript;
     setTokenInfo(TokenID.With, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.With, "with", ErrorRecoverySet.Stmt);
     setTokenInfo(TokenID.While, Reservation.TypeScriptAndJS, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "while", ErrorRecoverySet.While);
     setTokenInfo(TokenID.Yield, Reservation.JavascriptFutureStrict, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "yield", ErrorRecoverySet.None);
+
     setTokenInfo(TokenID.Identifier, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "identifier", ErrorRecoverySet.ID);
     setTokenInfo(TokenID.NumberLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "numberLiteral", ErrorRecoverySet.Literal);
     setTokenInfo(TokenID.RegularExpressionLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "regex", ErrorRecoverySet.RegExp);
     setTokenInfo(TokenID.StringLiteral, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "qstring", ErrorRecoverySet.Literal);
+
     // Non-operator non-identifier tokens
     setTokenInfo(TokenID.Semicolon, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ";", ErrorRecoverySet.SColon); // ;
     setTokenInfo(TokenID.CloseParen, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, ")", ErrorRecoverySet.RParen); // )
@@ -733,12 +739,15 @@ var TypeScript;
     setTokenInfo(TokenID.OpenBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "{", ErrorRecoverySet.LCurly); // {
     setTokenInfo(TokenID.CloseBrace, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "}", ErrorRecoverySet.RCurly); // }
     setTokenInfo(TokenID.DotDotDot, Reservation.None, OperatorPrecedence.None, NodeType.None, OperatorPrecedence.None, NodeType.None, "...", ErrorRecoverySet.None); // ...
+
+
     // Operator non-identifier tokens
     setTokenInfo(TokenID.Comma, Reservation.None, OperatorPrecedence.Comma, NodeType.Comma, OperatorPrecedence.None, NodeType.None, ",", ErrorRecoverySet.Comma); // ,
     setTokenInfo(TokenID.Equals, Reservation.None, OperatorPrecedence.Assignment, NodeType.Asg, OperatorPrecedence.None, NodeType.None, "=", ErrorRecoverySet.Asg); // =
     setTokenInfo(TokenID.PlusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAdd, OperatorPrecedence.None, NodeType.None, "+=", ErrorRecoverySet.BinOp); // +=
     setTokenInfo(TokenID.MinusEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgSub, OperatorPrecedence.None, NodeType.None, "-=", ErrorRecoverySet.BinOp); // -=
     setTokenInfo(TokenID.AsteriskEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMul, OperatorPrecedence.None, NodeType.None, "*=", ErrorRecoverySet.BinOp); // *=
+
     setTokenInfo(TokenID.SlashEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgDiv, OperatorPrecedence.None, NodeType.None, "/=", ErrorRecoverySet.BinOp); // /=
     setTokenInfo(TokenID.PercentEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgMod, OperatorPrecedence.None, NodeType.None, "%=", ErrorRecoverySet.BinOp); // %=
     setTokenInfo(TokenID.AmpersandEquals, Reservation.None, OperatorPrecedence.Assignment, NodeType.AsgAnd, OperatorPrecedence.None, NodeType.None, "&=", ErrorRecoverySet.BinOp); // &=
@@ -809,12 +818,15 @@ var TypeScript;
         Token.prototype.toString = function () {
             return "token: " + this.tokenId + " " + this.getText() + " (" + TokenID._map[this.tokenId] + ")";
         };
+
         Token.prototype.print = function (line, outfile) {
             outfile.WriteLine(this.toString() + ",on line" + line);
         };
+
         Token.prototype.getText = function () {
             return TypeScript.tokenTable[this.tokenId].text;
         };
+
         Token.prototype.classification = function () {
             if (this.tokenId <= TokenID.LimKeyword) {
                 return TokenClass.Keyword;
@@ -828,6 +840,7 @@ var TypeScript;
                     }
                 }
             }
+
             return TokenClass.Punctuation;
         };
         return Token;
@@ -844,6 +857,7 @@ var TypeScript;
         NumberLiteralToken.prototype.getText = function () {
             return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
         };
+
         NumberLiteralToken.prototype.classification = function () {
             return TokenClass.Literal;
         };
@@ -860,6 +874,7 @@ var TypeScript;
         StringLiteralToken.prototype.getText = function () {
             return this.value;
         };
+
         StringLiteralToken.prototype.classification = function () {
             return TokenClass.Literal;
         };
@@ -893,6 +908,7 @@ var TypeScript;
         WhitespaceToken.prototype.getText = function () {
             return this.value;
         };
+
         WhitespaceToken.prototype.classification = function () {
             return TokenClass.Whitespace;
         };
@@ -913,6 +929,7 @@ var TypeScript;
         CommentToken.prototype.getText = function () {
             return this.value;
         };
+
         CommentToken.prototype.classification = function () {
             return TokenClass.Comment;
         };
@@ -929,6 +946,7 @@ var TypeScript;
         RegularExpressionLiteralToken.prototype.getText = function () {
             return this.regex.toString();
         };
+
         RegularExpressionLiteralToken.prototype.classification = function () {
             return TokenClass.Literal;
         };

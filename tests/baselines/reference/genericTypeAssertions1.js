@@ -6,8 +6,7 @@ var r2: A<number> = <A<A<number>>>foo; // error
 
 //// [genericTypeAssertions1.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     A.prototype.foo = function (x) { };
     return A;
 }());

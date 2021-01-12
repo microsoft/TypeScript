@@ -15,6 +15,7 @@ var r = c.x(''); // string
 
 //// [accessorsAreNotContextuallyTyped.js]
 // accessors are not contextually typed
+
 var C = /** @class */ (function () {
     function C() {
     }

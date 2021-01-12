@@ -151,7 +151,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _f, _g, _h, _i, _d, _e, _f_1, _b, _b_1, _b_2, _d_1, _b_3;
-class C1 {
+class C1 {// Properties with non-undefined types require initialization
     constructor() {
         _f.set(this, void 0); //Error
         _g.set(this, void 0);
@@ -160,12 +160,13 @@ class C1 {
     }
 }
 _f = new WeakMap(), _g = new WeakMap(), _h = new WeakMap(), _i = new WeakMap();
+
 // No strict initialization checks for static members
 class C3 {
 }
+
 // Initializer satisfies strict initialization check
-class C4 {
-    constructor() {
+class C4 {constructor() {
         this.a = 0;
         this.b = 0;
         this.c = "abc";
@@ -212,9 +213,11 @@ _b_2 = new WeakMap();
 // Properties with string literal names aren't checked
 class C8 {
 }
+
 // No strict initialization checks for abstract members
 class C9 {
 }
+
 // Properties with non-undefined types must be assigned before they can be accessed
 // within their constructor
 class C10 {
@@ -229,6 +232,7 @@ class C10 {
     }
 }
 _d_1 = new WeakMap();
+
 class C11 {
     constructor() {
         _b_3.set(this, void 0);

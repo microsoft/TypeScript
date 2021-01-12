@@ -23,6 +23,7 @@ let c1 = Foo["C"].toString();
 
 
 //// [constEnumToStringWithComments.js]
+
 var x0 = 100 /* X */.toString();
 var x1 = 100 /* "X" */.toString();
 var y0 = 0.5 /* Y */.toString();

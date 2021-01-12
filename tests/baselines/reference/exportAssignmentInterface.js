@@ -16,13 +16,12 @@ var n: number = i.p1;
 
 //// [exportAssignmentInterface_A.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 //// [exportAssignmentInterface_B.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var i;
+
     var n = i.p1;
 });

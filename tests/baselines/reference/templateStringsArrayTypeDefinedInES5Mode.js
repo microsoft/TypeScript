@@ -13,8 +13,7 @@ f `abcdef${ 1234 }${ 5678 }ghijkl`;
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
-};
-var TemplateStringsArray = /** @class */ (function () {
+};var TemplateStringsArray = /** @class */ (function () {
     function TemplateStringsArray() {
     }
     return TemplateStringsArray;

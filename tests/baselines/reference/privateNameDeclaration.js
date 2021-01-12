@@ -12,8 +12,7 @@ class A {
 
 //// [privateNameDeclaration.js]
 var _foo, _bar;
-class A {
-    constructor() {
+class A {constructor() {
         _foo.set(this, void 0);
         _bar.set(this, 6);
         this.qux = 6;

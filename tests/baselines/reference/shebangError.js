@@ -4,5 +4,4 @@ var foo = 'Shebang is only allowed on the first line';
 
 //// [shebangError.js]
 var foo = 'Shebang is only allowed on the first line';
-!/usr/bin / env;
-node;
+!/usr/bin / env;node;

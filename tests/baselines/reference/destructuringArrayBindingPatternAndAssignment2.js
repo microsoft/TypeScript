@@ -44,10 +44,15 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 //      S is the type Any, or
 var _a = [], a0 = _a[0][0], a1 = _a[1][0][0]; // Error
 var a2 = undefined[0][0], a3 = undefined[1][0][0]; // Error
+
+
+
+
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
 //        where N is the numeric index of E in the array assignment pattern, or
 var _b = [1, 2, "string"], b0 = _b[0], b1 = _b[1], b2 = _b[2]; // Error
+
 function bar() {
     return [1, 2, 3];
 }
@@ -57,6 +62,8 @@ var _c = bar(), _d = _c[0], b3 = _d === void 0 ? "string" : _d, b4 = _c[1], b5 =
 var temp = [1, 2, 3];
 var _e = __spreadArray([], temp), c0 = _e[0], c1 = _e[1]; // Error
 var _f = __spreadArray([], temp), c2 = _f[0], c3 = _f[1]; // Error
+
+
 function foo(idx) {
     return {
         2: true

@@ -22,9 +22,12 @@ var y: Foo[] = [{a: ''}]
 const a = {
     y: () => "b"
 };
+
+
 function foo1() {
     return () => ({ a: '' });
 }
+
 function foo3() {
     return [{ a: '' }];
 }

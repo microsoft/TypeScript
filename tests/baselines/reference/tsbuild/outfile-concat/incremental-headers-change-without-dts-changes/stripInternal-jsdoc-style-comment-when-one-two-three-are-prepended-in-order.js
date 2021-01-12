@@ -864,20 +864,20 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 110,
+          "end": 114,
           "kind": "prepend",
           "data": "../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 110,
+              "end": 114,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 110,
-          "end": 3163,
+          "pos": 114,
+          "end": 3037,
           "kind": "text"
         }
       ]
@@ -942,10 +942,12 @@ sourceFile:../second/second_part2.ts
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-prepend: (0-110):: ../first/bin/first-output.js texts:: 1
+prepend: (0-114):: ../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-110)
+text: (0-114)
+
 var s = "Hello, world";
+
 console.log(s);
 console.log(f());
 function f() {
@@ -953,17 +955,17 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3163)
+text: (114-3037)
 var N;
 (function (N) {
     function f() {
         console.log('testing');
     }
+
     f();
 })(N || (N = {}));
 var normalC = (function () {
-    function normalC() {
-    }
+    function normalC() {}
     normalC.prototype.method = function () { };
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
@@ -976,29 +978,23 @@ var normalC = (function () {
 var normalN;
 (function (normalN) {
     var C = (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     normalN.C = C;
     function foo() { }
     normalN.foo = foo;
     var someNamespace;
-    (function (someNamespace) {
-        var C = (function () {
-            function C() {
-            }
+    (function (someNamespace) {var C = (function () {
+            function C() {}
             return C;
         }());
         someNamespace.C = C;
     })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
     var someOther;
-    (function (someOther) {
-        var something;
-        (function (something) {
-            var someClass = (function () {
-                function someClass() {
-                }
+    (function (someOther) {var something;
+        (function (something) {var someClass = (function () {
+                function someClass() {}
                 return someClass;
             }());
             something.someClass = someClass;
@@ -1014,33 +1010,28 @@ var normalN;
     })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
 })(normalN || (normalN = {}));
 var internalC = (function () {
-    function internalC() {
-    }
+    function internalC() {}
     return internalC;
 }());
 function internalfoo() { }
 var internalNamespace;
-(function (internalNamespace) {
-    var someClass = (function () {
-        function someClass() {
-        }
+(function (internalNamespace) {var someClass = (function () {
+        function someClass() {}
         return someClass;
     }());
     internalNamespace.someClass = someClass;
 })(internalNamespace || (internalNamespace = {}));
 var internalOther;
-(function (internalOther) {
-    var something;
-    (function (something) {
-        var someClass = (function () {
-            function someClass() {
-            }
+(function (internalOther) {var something;
+    (function (something) {var someClass = (function () {
+            function someClass() {}
             return someClass;
         }());
         something.someClass = someClass;
     })(something = internalOther.something || (internalOther.something = {}));
 })(internalOther || (internalOther = {}));
 var internalImport = internalNamespace.someClass;
+
 var internalConst = 10;
 var internalEnum;
 (function (internalEnum) {
@@ -1294,6 +1285,7 @@ sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 emittedFile:/src/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
+>>>
 >>>var s = "Hello, world";
 1 >
 2 >^^^^
@@ -1311,13 +1303,14 @@ sourceFile:../first_PART1.ts
 4 >      = 
 5 >        "Hello, world"
 6 >                      ;
-1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(5, 7) + SourceIndex(0)
-3 >Emitted(1, 6) Source(5, 8) + SourceIndex(0)
-4 >Emitted(1, 9) Source(5, 11) + SourceIndex(0)
-5 >Emitted(1, 23) Source(5, 25) + SourceIndex(0)
-6 >Emitted(1, 24) Source(5, 26) + SourceIndex(0)
+1 >Emitted(2, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(5, 7) + SourceIndex(0)
+3 >Emitted(2, 6) Source(5, 8) + SourceIndex(0)
+4 >Emitted(2, 9) Source(5, 11) + SourceIndex(0)
+5 >Emitted(2, 23) Source(5, 25) + SourceIndex(0)
+6 >Emitted(2, 24) Source(5, 26) + SourceIndex(0)
 ---
+>>>
 >>>console.log(s);
 1 >
 2 >^^^^^^^
@@ -1342,14 +1335,14 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(2, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(2, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(2, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(2, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(2, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(2, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(2, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(2, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(4, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(4, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(4, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(4, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(4, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(4, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(4, 16) Source(11, 16) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -1374,15 +1367,15 @@ sourceFile:../first_part2.ts
 7 >             ()
 8 >               )
 9 >                ;
-1->Emitted(3, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(3, 8) Source(1, 8) + SourceIndex(1)
-3 >Emitted(3, 9) Source(1, 9) + SourceIndex(1)
-4 >Emitted(3, 12) Source(1, 12) + SourceIndex(1)
-5 >Emitted(3, 13) Source(1, 13) + SourceIndex(1)
-6 >Emitted(3, 14) Source(1, 14) + SourceIndex(1)
-7 >Emitted(3, 16) Source(1, 16) + SourceIndex(1)
-8 >Emitted(3, 17) Source(1, 17) + SourceIndex(1)
-9 >Emitted(3, 18) Source(1, 18) + SourceIndex(1)
+1->Emitted(5, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(5, 8) Source(1, 8) + SourceIndex(1)
+3 >Emitted(5, 9) Source(1, 9) + SourceIndex(1)
+4 >Emitted(5, 12) Source(1, 12) + SourceIndex(1)
+5 >Emitted(5, 13) Source(1, 13) + SourceIndex(1)
+6 >Emitted(5, 14) Source(1, 14) + SourceIndex(1)
+7 >Emitted(5, 16) Source(1, 16) + SourceIndex(1)
+8 >Emitted(5, 17) Source(1, 17) + SourceIndex(1)
+9 >Emitted(5, 18) Source(1, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -1396,9 +1389,9 @@ sourceFile:../first_part3.ts
 1 >
 2 >function 
 3 >         f
-1 >Emitted(4, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(4, 10) Source(1, 10) + SourceIndex(2)
-3 >Emitted(4, 11) Source(1, 11) + SourceIndex(2)
+1 >Emitted(6, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(6, 10) Source(1, 10) + SourceIndex(2)
+3 >Emitted(6, 11) Source(1, 11) + SourceIndex(2)
 ---
 >>>    return "JS does hoists";
 1->^^^^
@@ -1410,10 +1403,10 @@ sourceFile:../first_part3.ts
 2 >    return 
 3 >           "JS does hoists"
 4 >                           ;
-1->Emitted(5, 5) Source(2, 5) + SourceIndex(2)
-2 >Emitted(5, 12) Source(2, 12) + SourceIndex(2)
-3 >Emitted(5, 28) Source(2, 28) + SourceIndex(2)
-4 >Emitted(5, 29) Source(2, 29) + SourceIndex(2)
+1->Emitted(7, 5) Source(2, 5) + SourceIndex(2)
+2 >Emitted(7, 12) Source(2, 12) + SourceIndex(2)
+3 >Emitted(7, 28) Source(2, 28) + SourceIndex(2)
+4 >Emitted(7, 29) Source(2, 29) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -1422,8 +1415,8 @@ sourceFile:../first_part3.ts
 1 >
   >
 2 >}
-1 >Emitted(6, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(6, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(8, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(8, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
@@ -1440,7 +1433,7 @@ sourceFile:../first_part3.ts
       "sections": [
         {
           "pos": 0,
-          "end": 110,
+          "end": 114,
           "kind": "text"
         }
       ]
@@ -1462,8 +1455,10 @@ sourceFile:../first_part3.ts
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-110)
+text: (0-114)
+
 var s = "Hello, world";
+
 console.log(s);
 console.log(f());
 function f() {
@@ -1820,20 +1815,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3163,
+          "end": 3037,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3163,
+              "end": 3037,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3163,
-          "end": 3199,
+          "pos": 3037,
+          "end": 3073,
           "kind": "text"
         }
       ]
@@ -1868,10 +1863,12 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3163):: ../../../2/second-output.js texts:: 1
+prepend: (0-3037):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3163)
+text: (0-3037)
+
 var s = "Hello, world";
+
 console.log(s);
 console.log(f());
 function f() {
@@ -1882,11 +1879,11 @@ var N;
     function f() {
         console.log('testing');
     }
+
     f();
 })(N || (N = {}));
 var normalC = (function () {
-    function normalC() {
-    }
+    function normalC() {}
     normalC.prototype.method = function () { };
     Object.defineProperty(normalC.prototype, "c", {
         get: function () { return 10; },
@@ -1899,29 +1896,23 @@ var normalC = (function () {
 var normalN;
 (function (normalN) {
     var C = (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     normalN.C = C;
     function foo() { }
     normalN.foo = foo;
     var someNamespace;
-    (function (someNamespace) {
-        var C = (function () {
-            function C() {
-            }
+    (function (someNamespace) {var C = (function () {
+            function C() {}
             return C;
         }());
         someNamespace.C = C;
     })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
     var someOther;
-    (function (someOther) {
-        var something;
-        (function (something) {
-            var someClass = (function () {
-                function someClass() {
-                }
+    (function (someOther) {var something;
+        (function (something) {var someClass = (function () {
+                function someClass() {}
                 return someClass;
             }());
             something.someClass = someClass;
@@ -1937,33 +1928,28 @@ var normalN;
     })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
 })(normalN || (normalN = {}));
 var internalC = (function () {
-    function internalC() {
-    }
+    function internalC() {}
     return internalC;
 }());
 function internalfoo() { }
 var internalNamespace;
-(function (internalNamespace) {
-    var someClass = (function () {
-        function someClass() {
-        }
+(function (internalNamespace) {var someClass = (function () {
+        function someClass() {}
         return someClass;
     }());
     internalNamespace.someClass = someClass;
 })(internalNamespace || (internalNamespace = {}));
 var internalOther;
-(function (internalOther) {
-    var something;
-    (function (something) {
-        var someClass = (function () {
-            function someClass() {
-            }
+(function (internalOther) {var something;
+    (function (something) {var someClass = (function () {
+            function someClass() {}
             return someClass;
         }());
         something.someClass = someClass;
     })(something = internalOther.something || (internalOther.something = {}));
 })(internalOther || (internalOther = {}));
 var internalImport = internalNamespace.someClass;
+
 var internalConst = 10;
 var internalEnum;
 (function (internalEnum) {
@@ -1981,7 +1967,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3163-3199)
+text: (3037-3073)
 var c = new C();
 c.doSomething();
 

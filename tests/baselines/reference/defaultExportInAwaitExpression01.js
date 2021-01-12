@@ -13,17 +13,12 @@ import x from './a';
 
 
 //// [a.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     const x = new Promise((resolve, reject) => { resolve({}); });
     exports.default = x;
 });
@@ -37,18 +32,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./a"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports", "./a"], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     const a_1 = require("./a");
+
     (function () {
         return __awaiter(this, void 0, void 0, function* () {
             const value = yield a_1.default;

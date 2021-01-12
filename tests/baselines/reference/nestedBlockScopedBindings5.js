@@ -89,6 +89,7 @@ function a0() {
         x = x + 2;
     }
 }
+
 function a1() {
     var _loop_1 = function (x) {
         x = x + 1;
@@ -101,6 +102,7 @@ function a1() {
         x = x + 2;
     }
 }
+
 function a2() {
     for (var x in []) {
         x = x + 1;
@@ -116,6 +118,8 @@ function a2() {
         x = out_x_1;
     }
 }
+
+
 function a3() {
     var _loop_3 = function (x) {
         x = x + 1;
@@ -140,7 +144,9 @@ function a3() {
             (function () { return x_1; });
             break;
     }
+
 }
+
 function a4() {
     for (var x in []) {
         x = x + 1;
@@ -154,7 +160,9 @@ function a4() {
             (function () { return x_2; });
             break;
     }
+
 }
+
 function a5() {
     var y;
     for (var x in []) {
@@ -175,4 +183,5 @@ function a5() {
             var x = void 0;
             break;
     }
+
 }

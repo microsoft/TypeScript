@@ -19,8 +19,10 @@ var obj = {};
 function incr() {
     return ++count;
 }
+
 const oobj = {
     obj
 };
+
 obj[incr()] ??= incr();
 oobj["obj"][incr()] ??= incr();

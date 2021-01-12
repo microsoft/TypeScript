@@ -50,8 +50,7 @@ var D = /** @class */ (function () {
 export { D };
 export { D as D2 };
 var E = /** @class */ (function () {
-    function E() {
-    }
+    function E() {}
     return E;
 }());
 export { E };

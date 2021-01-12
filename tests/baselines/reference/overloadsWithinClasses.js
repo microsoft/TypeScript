@@ -28,6 +28,7 @@ var foo = /** @class */ (function () {
     function foo() {
     }
     foo.fnOverload = function () { };
+
     foo.fnOverload = function (foo) { }; // error
     return foo;
 }());

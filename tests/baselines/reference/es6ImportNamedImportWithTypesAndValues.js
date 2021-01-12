@@ -42,6 +42,7 @@ exports.C2 = C2;
 exports.__esModule = true;
 exports.cVal = void 0;
 var server_1 = require("./server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+
 exports.cVal = new server_1.C();
 
 

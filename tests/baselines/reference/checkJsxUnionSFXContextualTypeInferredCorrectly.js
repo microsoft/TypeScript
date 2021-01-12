@@ -47,13 +47,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.HereIsTheError = exports.ComponentWithUnion = void 0;
 var react_1 = __importDefault(require("react"));
+
+
+
 function ComponentWithUnion(props) {
     return react_1["default"].createElement("h1", null);
 }
 exports.ComponentWithUnion = ComponentWithUnion;
 // Usage with React tsx
 function HereIsTheError() {
-    return (react_1["default"].createElement(ComponentWithUnion, { multi: false, value: 's', onChange: function (val) { return console.log(val); } }));
+    return (
+        react_1["default"].createElement(ComponentWithUnion, { multi: false, value: 's', onChange: function (val) { return console.log(val); } })
+    );
 }
 exports.HereIsTheError = HereIsTheError;
 // Usage with pure TypeScript

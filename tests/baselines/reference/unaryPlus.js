@@ -22,6 +22,7 @@ var E;
 })(E || (E = {}));
 ;
 var c = +E.some;
+
 // also allowed, used to be errors
 var x = +"3"; //should be valid
 var y = -"3"; // should be valid

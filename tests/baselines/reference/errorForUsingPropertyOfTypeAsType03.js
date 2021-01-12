@@ -28,8 +28,7 @@ namespace Test1 {
 
 //// [errorForUsingPropertyOfTypeAsType03.js]
 var Test1;
-(function (Test1) {
-    var Color;
+(function (Test1) {var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
@@ -38,12 +37,15 @@ var Test1;
     var a1;
     var a2;
     var a3;
+
     //let b1: (typeof Color).Red.toString;
     //let b2: (typeof Color).Red["toString"];
     var b3;
+
     var c1;
     var c2;
     var c3;
+
     var d1;
     var d2;
     var d3;

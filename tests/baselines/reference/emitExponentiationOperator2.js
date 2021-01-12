@@ -69,33 +69,40 @@ Math.pow(temp--, 3);
 Math.pow(temp++, 3);
 Math.pow(temp--, -temp);
 Math.pow(temp++, +temp);
+
 temp-- + Math.pow(temp, 3);
 temp-- - Math.pow(temp, 3);
 temp-- * Math.pow(temp, 3);
 temp-- / Math.pow(temp, 3);
 temp-- % Math.pow(temp, 3);
+
 --temp + Math.pow(2, 3);
 --temp - Math.pow(2, 3);
 --temp * Math.pow(2, 3);
 --temp / Math.pow(2, 3);
 --temp % Math.pow(2, 3);
+
 ++temp + Math.pow(2, 3);
 ++temp - Math.pow(2, 3);
 ++temp * Math.pow(2, 3);
 ++temp / Math.pow(2, 3);
+
 Math.pow(3, ++temp);
 Math.pow(3, --temp);
 Math.pow(3, temp++);
 Math.pow(3, temp--);
+
 Math.pow(3, Math.pow(++temp, 2));
 Math.pow(3, Math.pow(--temp, 2));
 Math.pow(3, Math.pow(temp++, 2));
 Math.pow(3, Math.pow(temp--, 2));
+
 Math.pow(3, ++temp) + 2;
 Math.pow(3, ++temp) - 2;
 Math.pow(3, ++temp) * 2;
 Math.pow(3, ++temp) / 2;
 Math.pow(3, ++temp) % 2;
+
 Math.pow(3, --temp) + 2;
 Math.pow(3, --temp) - 2;
 Math.pow(3, --temp) * 2;

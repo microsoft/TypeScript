@@ -42,6 +42,7 @@ function f02(_a) {
 function f03(_a) {
     var _b = _a === void 0 ? [1, 'foo'] : _a, x = _b[0], y = _b[1];
 }
+
 function f10(_a) {
     var _b = _a[0], x = _b === void 0 ? 0 : _b, y = _a[1];
 }
@@ -54,6 +55,7 @@ function f12(_a) {
 function f13(_a) {
     var _b = _a === void 0 ? [1, 'foo'] : _a, _c = _b[0], x = _c === void 0 ? 0 : _c, y = _b[1];
 }
+
 function f20(_a) {
     var _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 'bar' : _c;
 }
@@ -66,6 +68,8 @@ function f22(_a) {
 function f23(_a) {
     var _b = _a === void 0 ? [1, 'foo'] : _a, _c = _b[0], x = _c === void 0 ? 0 : _c, _d = _b[1], y = _d === void 0 ? 'bar' : _d;
 }
+
+
 function f30(_a) {
     var _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 'bar' : _c;
 }
@@ -78,6 +82,7 @@ function f32(_a) {
 function f33(_a) {
     var _b = _a === void 0 ? [nx, sx] : _a, _c = _b[0], x = _c === void 0 ? 0 : _c, _d = _b[1], y = _d === void 0 ? 'bar' : _d;
 }
+
 function f40(_a) {
     var _b = _a[0], x = _b === void 0 ? 0 : _b, _c = _a[1], y = _c === void 0 ? 'bar' : _c;
 }

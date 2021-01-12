@@ -50,6 +50,7 @@ function createObjNoCrash() {
 
 //// [noImplicitThisBigThis.js]
 // https://github.com/microsoft/TypeScript/issues/29902
+
 function createObj() {
     return {
         func1: function () {
@@ -63,6 +64,7 @@ function createObj() {
         }
     };
 }
+
 function createObjNoCrash() {
     return {
         func1: function () {

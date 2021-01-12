@@ -5,8 +5,7 @@ export function* foo() {
 
 //// [generatorES6InAMDModule.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
     function* foo() {
         yield;

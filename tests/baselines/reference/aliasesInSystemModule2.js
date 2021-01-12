@@ -16,13 +16,11 @@ module M {
 
 //// [aliasesInSystemModule2.js]
 System.register(["foo"], function (exports_1, context_1) {
-    "use strict";
-    var foo_1, cls, cls2, x, y, z, M;
+    "use strict";var foo_1, cls, cls2, x, y, z, M;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (foo_1_1) {
-                foo_1 = foo_1_1;
+            function (foo_1_1) {foo_1 = foo_1_1;
             }
         ],
         execute: function () {

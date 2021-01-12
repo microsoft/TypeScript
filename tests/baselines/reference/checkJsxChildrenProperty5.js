@@ -49,6 +49,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
+
 var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
@@ -62,8 +64,10 @@ var Button = /** @class */ (function (_super) {
 function Comp(p) {
     return <div>{p.b}</div>;
 }
+
 // Error: no children specified
 var k = <Comp a={10} b="hi"/>;
+
 // Error: JSX.element is not the same as JSX.ElementClass
 var k1 = <Comp a={10} b="hi">
         <Button />

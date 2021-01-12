@@ -9,5 +9,6 @@ nodes.map(n => n.name);
 
 
 //// [typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.js]
+
 var nodes;
 nodes.map(function (n) { return n.name; });

@@ -69,8 +69,7 @@ declare class c6NoError {
 //// [collisionRestParameterClassConstructor.js]
 // Constructors
 var c1 = /** @class */ (function () {
-    function c1(_i) {
-        var restParameters = [];
+    function c1(_i) {var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
@@ -85,8 +84,7 @@ var c1NoError = /** @class */ (function () {
     return c1NoError;
 }());
 var c2 = /** @class */ (function () {
-    function c2() {
-        var restParameters = [];
+    function c2() {var restParameters = [];
         for (var _a = 0; _a < arguments.length; _a++) {
             restParameters[_a] = arguments[_a];
         }
@@ -101,8 +99,7 @@ var c2NoError = /** @class */ (function () {
     return c2NoError;
 }());
 var c3 = /** @class */ (function () {
-    function c3(_i) {
-        var restParameters = [];
+    function c3(_i) {var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
@@ -118,9 +115,9 @@ var c3NoError = /** @class */ (function () {
     }
     return c3NoError;
 }());
+
 var c5 = /** @class */ (function () {
-    function c5(_i) {
-        var rest = [];
+    function c5(_i) {var rest = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             rest[_a - 1] = arguments[_a];
         }
@@ -134,3 +131,4 @@ var c5NoError = /** @class */ (function () {
     }
     return c5NoError;
 }());
+

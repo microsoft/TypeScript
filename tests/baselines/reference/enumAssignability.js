@@ -66,6 +66,7 @@ var F;
 })(F || (F = {}));
 var e = E.A;
 var f = F.B;
+
 e = f;
 f = e;
 e = 1; // ok
@@ -75,6 +76,7 @@ x = f; // ok
 var Others;
 (function (Others) {
     var a = e; // ok
+
     var C = /** @class */ (function () {
         function C() {
         }
@@ -82,6 +84,7 @@ var Others;
     }());
     var ac;
     var ai;
+
     var b = e; // ok
     var c = e;
     var d = e;
@@ -100,6 +103,7 @@ var Others;
     var o = e;
     var p = e;
     var q = e;
+
     function foo(x, y, z) {
         x = e;
         y = e;

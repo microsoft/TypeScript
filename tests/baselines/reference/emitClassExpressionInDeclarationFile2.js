@@ -59,6 +59,7 @@ exports.noPrivates = (_a = /** @class */ (function () {
     }()),
     _a.ps = -1,
     _a);
+
 // altered repro from #15066 to add private property
 var FooItem = /** @class */ (function () {
     function FooItem() {

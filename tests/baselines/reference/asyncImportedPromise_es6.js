@@ -13,8 +13,7 @@ class Test {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
-class Task extends Promise {
-}
+class Task extends Promise {}
 exports.Task = Task;
 //// [test.js]
 "use strict";

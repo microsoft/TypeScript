@@ -35,8 +35,7 @@ var Point = /** @class */ (function () {
     var Origin = ""; // not an error, since not exported
 })(Point || (Point = {}));
 var A;
-(function (A) {
-    var Point = /** @class */ (function () {
+(function (A) {var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;

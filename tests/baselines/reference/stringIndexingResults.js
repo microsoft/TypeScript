@@ -46,6 +46,7 @@ var c;
 var r1 = c['y'];
 var r2 = c['a'];
 var r3 = c[1];
+
 var i;
 var r4 = i['y'];
 var r5 = i['a'];

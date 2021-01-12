@@ -23,20 +23,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-label: function fn() { }
+};label: function fn() { }
 label: function* gen() { }
 label: function gen1() {
     return __awaiter(this, void 0, void 0, function* () { });
 }
 label: {
     var E;
-    (function (E) {
-    })(E || (E = {}));
+    (function (E) {})(E || (E = {}));
 }
 label: ;
-label: class C {
-}
+label: class C {}
 label: var a = 1;
 label: let b = 1;
 label: const c = 1;

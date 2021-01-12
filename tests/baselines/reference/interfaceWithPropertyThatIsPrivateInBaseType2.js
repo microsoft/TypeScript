@@ -22,6 +22,7 @@ var Base = /** @class */ (function () {
     Base.prototype.x = function () { };
     return Base;
 }());
+
 var Base2 = /** @class */ (function () {
     function Base2() {
     }

@@ -36,11 +36,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var X;
-(function (X) {
-    var Y;
-    (function (Y) {
-        var base;
+(function (X) {var Y;
+    (function (Y) {var base;
         (function (base) {
+
             var W = /** @class */ (function (_super) {
                 __extends(W, _super);
                 function W() {
@@ -52,13 +51,11 @@ var X;
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
-(function (X) {
-    var Y;
-    (function (Y) {
-        var base;
-        (function (base) {
-            var Z;
+(function (X) {var Y;
+    (function (Y) {var base;
+        (function (base) {var Z;
             (function (Z) {
+
                 var W = /** @class */ (function (_super) {
                     __extends(W, _super);
                     function W() {

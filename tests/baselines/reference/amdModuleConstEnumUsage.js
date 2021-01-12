@@ -16,8 +16,7 @@ export class User {
 
 //// [cc.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.CharCode = void 0;
     var CharCode;
     (function (CharCode) {
@@ -27,8 +26,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [file.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.User = void 0;
     var User = /** @class */ (function () {
         function User() {

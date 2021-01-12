@@ -55,6 +55,7 @@ var narrowToLiterals = function (str) {
     }
 };
 exports.narrowToLiterals = narrowToLiterals;
+
 var narrowToString = function (str, someOtherStr) {
     switch (str) {
         case 'abc': {
@@ -70,6 +71,7 @@ var narrowToString = function (str, someOtherStr) {
     }
 };
 exports.narrowToString = narrowToString;
+
 var narrowToStringOrNumber = function (str, someNumber) {
     switch (str) {
         case 'abc': {

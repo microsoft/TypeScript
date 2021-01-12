@@ -38,18 +38,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";Object.defineProperty(exports, "__esModule", { value: true });
     exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -70,8 +65,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
             const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }); // THREE
         })
     };
-    class cl2 {
-        constructor() {
+
+    class cl2 {constructor() {
             this.p = {
                 m: () => __awaiter(this, void 0, void 0, function* () {
                     const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_4, reject_4) => { require(['./test'], resolve_4, reject_4); }); // FOUR

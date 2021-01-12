@@ -19,17 +19,15 @@ try { } catch (e) {
 
 //// [duplicateIdentifierInCatchBlock.js]
 var v;
-try { }
-catch (e) {
+try { } catch (e) {
     function v() { }
 }
+
 function w() { }
-try { }
-catch (e) {
+try { } catch (e) {
     var w;
 }
-try { }
-catch (e) {
+try { } catch (e) {
     var x;
     function x() { } // error
     function e() { } // error

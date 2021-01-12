@@ -46,12 +46,13 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var x = 5;
+})();var x = 5;
 var r = /yo/;
 r.source;
+
 x.toBAZ();
 x.toString();
+
 var n = 0;
 var N;
 n = N; // should not work, as 'number' has a different brand
@@ -64,8 +65,7 @@ var s = "yo";
 var b = true;
 var n3 = 5 || {};
 var baz = /** @class */ (function () {
-    function baz() {
-    }
+    function baz() {}
     baz.prototype.bar = function () { };
     ;
     return baz;

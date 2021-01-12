@@ -16,8 +16,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var C = /** @class */ (function () {
-    function C(public, p) {
-    }
+    function C(public, p) {}
     C = __decorate([
         __param(1, dec)
     ], C);

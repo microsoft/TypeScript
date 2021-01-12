@@ -16,11 +16,9 @@ var Foo = /** @class */ (function () {
     Foo.prototype.f1 = function () {
         if (a.b) {
         }
-        f2();
-        {
+        f2();{
         }
-        f3();
-        {
+        f3();{
         }
     };
     return Foo;

@@ -31,8 +31,7 @@ let b = a.foo().n;
 exports.__esModule = true;
 exports.A = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 exports.A = A;
@@ -55,6 +54,7 @@ f1_1.A.prototype.foo = function () { return undefined; };
 "use strict";
 exports.__esModule = true;
 require("./f3");
+
 var a;
 var b = a.foo().n;
 

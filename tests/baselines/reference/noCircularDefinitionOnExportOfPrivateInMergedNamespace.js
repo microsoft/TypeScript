@@ -10,8 +10,7 @@ declare namespace Foo {
 "use strict";
 var cat = 12;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 module.exports = Foo;

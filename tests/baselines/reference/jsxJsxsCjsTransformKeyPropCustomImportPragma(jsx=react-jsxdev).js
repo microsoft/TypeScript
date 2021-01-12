@@ -42,6 +42,7 @@ var _jsxFileName = "tests/cases/conformance/jsx/jsxs/preact.tsx";
 var props = { answer: 42 };
 var a = jsx_dev_runtime_1.jsxDEV("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
 var b = preact_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
+
 //// [react.js]
 "use strict";
 var __assign = (this && this.__assign) || function () {
@@ -65,3 +66,4 @@ require("./preact");
 var props2 = { answer: 42 };
 var a2 = jsx_dev_runtime_1.jsxDEV("div", __assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 11 }, this);
 var b2 = react_1.createElement("div", __assign({}, props2, { key: "bar" }), "text");
+

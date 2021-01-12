@@ -22,6 +22,7 @@ class Cons<T> implements IList<T>{
 }
 
 //// [typeInferenceReturnTypeCallback.js]
+
 var Nil = /** @class */ (function () {
     function Nil() {
     }
@@ -38,6 +39,7 @@ var Cons = /** @class */ (function () {
             return new Cons();
         });
     };
+
     Cons.prototype.foldRight = function (z, f) {
         return null;
     };

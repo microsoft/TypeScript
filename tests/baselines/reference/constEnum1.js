@@ -20,6 +20,7 @@ const enum E {
 // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
 
 
+
 //// [constEnum1.d.ts]
 declare const enum E {
     a = 10,

@@ -21,15 +21,12 @@ module M.N {
 
 //// [dottedModuleName.js]
 var M;
-(function (M) {
-    var N;
+(function (M) {var N;
     (function (N) {
         2 * x;
         var X;
-        (function (X) {
-            var Y;
-            (function (Y) {
-                var Z;
+        (function (X) {var Y;
+            (function (Y) {var Z;
                 (function (Z) {
                     Z.v2 = f(Z.v);
                 })(Z = Y.Z || (Y.Z = {}));
@@ -37,14 +34,10 @@ var M;
         })(X = N.X || (N.X = {}));
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
-(function (M) {
-    var N;
-    (function (N) {
-        var X;
-        (function (X) {
-            var Y;
-            (function (Y) {
-                var Z;
+(function (M) {var N;
+    (function (N) {var X;
+        (function (X) {var Y;
+            (function (Y) {var Z;
                 (function (Z) {
                     Z.v = N.f(10);
                 })(Z = Y.Z || (Y.Z = {}));

@@ -42,8 +42,7 @@ export class D {
 
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = exports.B = void 0;
     class B {
         print() { return "I am B"; }
@@ -54,19 +53,16 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.backup = void 0;
     function backup() { return "backup"; }
     exports.backup = backup;
 });
 //// [2.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.D = void 0;
-    class C {
-        constructor() {
+    class C {constructor() {
             this.myModule = new Promise((resolve_1, reject_1) => { require(["./0"], resolve_1, reject_1); });
         }
         method() {
@@ -80,8 +76,8 @@ define(["require", "exports"], function (require, exports) {
             });
         }
     }
-    class D {
-        constructor() {
+
+    class D {constructor() {
             this.myModule = new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
         }
         method() {

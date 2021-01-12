@@ -87,8 +87,7 @@ else {
 
 //// [typeGuardOfFormTypeOfNumber.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 ;

@@ -11,8 +11,7 @@ void def;
 "use strict";
 exports.__esModule = true;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     C.x = 0;
     return C;
 }());

@@ -37,8 +37,7 @@ module.exports = "sausages";
 //// [foo3.js]
 "use strict";
 module.exports = /** @class */ (function () {
-    function Foo3() {
-    }
+    function Foo3() {}
     return Foo3;
 }());
 //// [foo4.js]
@@ -56,3 +55,4 @@ module.exports = Date || String;
 //// [foo8.js]
 "use strict";
 module.exports = null;
+

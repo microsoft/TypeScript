@@ -30,6 +30,7 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
+
 var Bar = /** @class */ (function () {
     function Bar() {
     }

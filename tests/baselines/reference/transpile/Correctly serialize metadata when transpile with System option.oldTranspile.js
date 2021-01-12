@@ -8,13 +8,11 @@ System.register(["angular2/core"], function (exports_1, context_1) {
     };
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var ng, MyClass1;
+    };var ng, MyClass1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (ng_1) {
-                ng = ng_1;
+            function (ng_1) {ng = ng_1;
             }
         ],
         execute: function () {

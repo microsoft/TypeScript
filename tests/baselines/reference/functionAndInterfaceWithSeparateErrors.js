@@ -9,3 +9,4 @@ interface Foo {
 
 //// [functionAndInterfaceWithSeparateErrors.js]
 function Foo(n) { }
+

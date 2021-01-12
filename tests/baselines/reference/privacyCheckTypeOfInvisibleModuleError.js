@@ -10,8 +10,7 @@ module Outer {
 
 //// [privacyCheckTypeOfInvisibleModuleError.js]
 var Outer;
-(function (Outer) {
-    var Inner;
+(function (Outer) {var Inner;
     (function (Inner) {
     })(Inner || (Inner = {}));
 })(Outer || (Outer = {}));

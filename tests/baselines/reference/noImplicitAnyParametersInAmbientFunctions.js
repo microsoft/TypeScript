@@ -44,3 +44,16 @@ declare var d_f13: (...r) => string;
 declare var d_f14: (x, ...r) => string;
 
 //// [noImplicitAnyParametersInAmbientFunctions.js]
+
+
+
+
+
+
+
+
+
+
+
+
+

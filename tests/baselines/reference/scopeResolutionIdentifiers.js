@@ -40,6 +40,7 @@ module M3 {
 
 //// [scopeResolutionIdentifiers.js]
 // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
+
 var s;
 var M1;
 (function (M1) {
@@ -57,6 +58,7 @@ function fn() {
     var n = s;
     var n;
 }
+
 var C = /** @class */ (function () {
     function C() {
         this.n = this.s;

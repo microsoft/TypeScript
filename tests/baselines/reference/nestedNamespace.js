@@ -17,8 +17,7 @@ exports.types = void 0;
 var types;
 (function (types) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     types.A = A;

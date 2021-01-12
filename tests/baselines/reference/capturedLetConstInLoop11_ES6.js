@@ -18,6 +18,7 @@ for (;;) {
     let x = 1;
     () => x;
 }
+
 function foo() {
     for (;;) {
         const a = 0;

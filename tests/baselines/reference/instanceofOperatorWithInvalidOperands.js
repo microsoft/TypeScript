@@ -54,6 +54,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var x;
+
 // invalid left operand
 // the left operand is required to be of type Any, an object type, or a type parameter type
 var a1;
@@ -88,5 +89,6 @@ var rb7 = x instanceof '';
 var rb8 = x instanceof o1;
 var rb9 = x instanceof o2;
 var rb10 = x instanceof o3;
+
 // both operands are invalid
 var rc1 = '' instanceof {};

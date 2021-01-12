@@ -14,6 +14,7 @@ function f(p) {
     var g = null;
     return g;
 }
+
 function g(x) {
     var y = null;
     return y;

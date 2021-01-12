@@ -23,6 +23,7 @@ var c = /** @class */ (function () {
 function bar() {
 }
 /// <reference path="c.js"/>
+/// <reference path="c.js"/>
 function foo() {
 }
 

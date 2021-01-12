@@ -14,10 +14,13 @@ function useBoth<T>(T: T) {
 
 //// [noUnusedLocals_typeParameterMergedWithParameter.js]
 function useNone(T) { }
+
 function useParam(T) {
     return T;
 }
+
 function useTypeParam(T) { }
+
 function useBoth(T) {
     return T;
 }

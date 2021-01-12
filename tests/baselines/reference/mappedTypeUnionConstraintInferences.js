@@ -27,6 +27,7 @@ function doSomething_Actual(a) {
     return x;
 }
 exports.doSomething_Actual = doSomething_Actual;
+
 exports.a = doSomething_Actual({ prop: "test" });
 exports.a = {}; // should be fine, equivalent to below
 exports.b = doSomething_Expected({ prop: "test" });

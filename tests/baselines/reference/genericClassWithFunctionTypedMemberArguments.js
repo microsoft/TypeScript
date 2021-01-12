@@ -81,6 +81,7 @@ var ImmediatelyFix;
     var r = c.foo(function (x) { return ''; }); // {}
     var r2 = c.foo(function (x) { return ''; }); // string 
     var r3 = c.foo(function (x) { return ''; }); // {}
+
     var C2 = /** @class */ (function () {
         function C2() {
         }
@@ -107,6 +108,7 @@ var WithCandidates;
     var r4 = c.foo2(1, function (a) { return ''; }); // string, contextual signature instantiation is applied to generic functions
     var r5 = c.foo2(1, function (a) { return ''; }); // string
     var r6 = c.foo2('', function (a) { return 1; }); // number
+
     var C2 = /** @class */ (function () {
         function C2() {
         }
@@ -127,9 +129,11 @@ var WithCandidates;
         return C3;
     }());
     var c3;
+
     function other(t, u) {
         var r10 = c.foo2(1, function (x) { return ''; }); // error
         var r10 = c.foo2(1, function (x) { return ''; }); // string
+
         var r11 = c3.foo3(1, function (x) { return ''; }, ''); // error
         var r11b = c3.foo3(1, function (x) { return ''; }, 1); // error
         var r12 = c3.foo3(1, function (a) { return ''; }, 1); // error

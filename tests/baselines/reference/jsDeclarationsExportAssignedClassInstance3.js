@@ -17,6 +17,7 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 module.exports = new Foo();
+
 module.exports.additional = 20;
 
 

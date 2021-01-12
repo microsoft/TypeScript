@@ -17,14 +17,12 @@ new Foo3();
 exports.__esModule = true;
 exports.Bar = void 0;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 exports["default"] = Foo;
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());
 exports.Bar = Bar;

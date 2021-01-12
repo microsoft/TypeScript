@@ -16,6 +16,7 @@ export const obj = {
 "use strict";
 exports.__esModule = true;
 exports.obj = void 0;
+
 exports.obj = {
     m: function () {
         var dis = this;

@@ -20,6 +20,8 @@ var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.f = function () { };
+
+
     A.prototype.m1 = function (a) {
     };
     return A;
@@ -28,6 +30,8 @@ var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.f = function () { };
+
+
     B.prototype.m1 = function (a) {
     };
     return B;

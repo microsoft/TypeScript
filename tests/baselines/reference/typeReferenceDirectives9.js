@@ -53,6 +53,7 @@ exports.__esModule = true;
 exports.bar = exports.foo = exports.cls = void 0;
 var main_1 = require("./main");
 require("./mod1");
+
 exports.cls = main_1.Cls;
 exports.foo = new main_1.Cls().foo();
 exports.bar = main_1.Cls.bar();

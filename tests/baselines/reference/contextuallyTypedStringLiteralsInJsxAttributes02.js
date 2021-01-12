@@ -39,14 +39,17 @@ const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" |
 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.NoOverload1 = exports.NoOverload = exports.MainButton = void 0;
+
+
+
     function MainButton(props) {
         var linkProps = props;
         if (linkProps.goTo) {
             return this._buildMainLink(props);
         }
+
         return this._buildMainButton(props);
     }
     exports.MainButton = MainButton;
@@ -54,9 +57,11 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var b2 = <MainButton onClick={function (k) { console.log(k); }} extra/>; // k has type "left" | "right"
     var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
     var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
+
     function NoOverload(buttonProps) { return undefined; }
     exports.NoOverload = NoOverload;
     var c1 = <NoOverload {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type any
+
     function NoOverload1(linkProps) { return undefined; }
     exports.NoOverload1 = NoOverload1;
     var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"

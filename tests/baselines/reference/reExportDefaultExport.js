@@ -21,6 +21,7 @@ function f() {
 }
 exports.default = f;
 exports.f = f;
+
 //// [m2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

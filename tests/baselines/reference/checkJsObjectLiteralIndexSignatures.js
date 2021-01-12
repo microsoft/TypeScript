@@ -17,6 +17,7 @@ stringIndex[s].toFixed();
 var _a, _b;
 var n = Math.random();
 var s = "" + n;
+
 var numericIndex = (_a = {}, _a[n] = 1, _a);
 numericIndex[n].toFixed();
 var stringIndex = (_b = {}, _b[s] = 1, _b);

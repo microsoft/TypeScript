@@ -21,4 +21,6 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 var f;
+
 var x = new new new (f(__makeTemplateObject(["abc", "def"], ["abc", "def"]), 0).member)("hello")(42) === true;
+

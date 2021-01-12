@@ -137,7 +137,6 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.t3 = exports.t1 = void 0;
 /// <reference path="./file2.ts" />
-exports.t1 = 10;
-exports.t3 = 10;
+exports.t1 = 10;exports.t3 = 10;
 
 

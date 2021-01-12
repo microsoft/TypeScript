@@ -68,15 +68,13 @@ var __extends = (this && this.__extends) || (function () {
 var NonGeneric;
 (function (NonGeneric) {
     var C = /** @class */ (function () {
-        function C(x) {
-        }
+        function C(x) {}
         return C;
     }());
     var c = new C(); // error
     var c2 = new C(''); // ok
     var C2 = /** @class */ (function () {
-        function C2(x) {
-        }
+        function C2(x) {}
         return C2;
     }());
     var c3 = new C2(); // error
@@ -96,15 +94,13 @@ var NonGeneric;
 var Generics;
 (function (Generics) {
     var C = /** @class */ (function () {
-        function C(x) {
-        }
+        function C(x) {}
         return C;
     }());
     var c = new C(); // error
     var c2 = new C(''); // ok
     var C2 = /** @class */ (function () {
-        function C2(x) {
-        }
+        function C2(x) {}
         return C2;
     }());
     var c3 = new C2(); // error

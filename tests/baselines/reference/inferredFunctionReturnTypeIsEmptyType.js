@@ -17,5 +17,4 @@ function foo() {
     else {
         return "42";
     }
-}
-;
+};

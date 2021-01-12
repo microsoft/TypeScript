@@ -104,6 +104,7 @@ var __extends = (this && this.__extends) || (function () {
 var _a;
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
+
 // this
 var C = /** @class */ (function () {
     function C() {
@@ -120,18 +121,20 @@ var C = /** @class */ (function () {
 function foo() {
     this = Math.pow(this, value);
 }
+
 this = Math.pow(this, value);
 // identifiers: module, class, enum, function
 var M;
-(function (M) {
-})(M || (M = {}));
+(function (M) {})(M || (M = {}));
 M = Math.pow(M, value);
+
 C = Math.pow(C, value);
 var E;
-(function (E) {
-})(E || (E = {}));
+(function (E) {})(E || (E = {}));
 E = Math.pow(E, value);
+
 foo = Math.pow(foo, value);
+
 // literals
 null = Math.pow(null, value);
 true = Math.pow(true, value);
@@ -140,12 +143,10 @@ false = Math.pow(false, value);
 '' = Math.pow('', value);
 /d+/ = Math.pow(/d+/, value);
 // object literals
-{
-    a: 0;
-}
-value;
+{a: 0;}value;
 // array literals
 _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
+
 // super
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
@@ -159,6 +160,7 @@ var Derived = /** @class */ (function (_super) {
         var _a;
         (_a = _super.prototype). = Math.pow(_a., value);
     };
+
     Derived.sfoo = function () {
         var _a;
         (_a = _super). = Math.pow(_a., value);
@@ -166,12 +168,12 @@ var Derived = /** @class */ (function (_super) {
     return Derived;
 }(C));
 // function expression
-function bar1() { }
-value;
+function bar1() { }value;
 (function () { });
 value;
 // function calls
 foo() = Math.pow(foo(), value);
+
 // parentheses, the containted expression is value
 (this) = Math.pow((this), value);
 (M) = Math.pow((M), value);

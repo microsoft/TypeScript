@@ -18,8 +18,7 @@ export var d = new c.b.c();
 exports.__esModule = true;
 exports.d = exports.c = exports.a = void 0;
 var a;
-(function (a) {
-    var b;
+(function (a) {var b;
     (function (b) {
         var c = /** @class */ (function () {
             function c() {

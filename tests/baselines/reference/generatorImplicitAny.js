@@ -49,6 +49,7 @@ function* g4() {
         ; // ok, results are unused
     void (yield); // ok, results are unused
 }
+
 function* g5() {
     f(yield); // error: implicit any
 }

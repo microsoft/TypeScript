@@ -28,6 +28,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.ignoreExtraVariables = void 0;
 var IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
+
+
 //This is exported
 function ignoreExtraVariables(ctor) {
     var _a, _b;

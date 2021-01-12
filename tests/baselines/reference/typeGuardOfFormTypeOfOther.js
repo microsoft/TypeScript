@@ -83,8 +83,7 @@ else {
 
 //// [typeGuardOfFormTypeOfOther.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 ;
@@ -100,6 +99,7 @@ var numOrC;
 var boolOrC;
 var emptyObj;
 var c;
+
 // A type guard of the form typeof x === s, 
 // where s is a string literal with any value but 'string', 'number' or 'boolean',
 //  - when true, removes the primitive types string, number, and boolean from the type of x, or
@@ -128,12 +128,14 @@ if (typeof strOrC === "Object") { // comparison is OK with cast
 else {
     var r5 = strOrC; // error: no narrowing to string
 }
+
 if (typeof strOrNumOrBool === "Object") {
     var q1 = strOrNumOrBool; // {}
 }
 else {
     var q2 = strOrNumOrBool; // string | number | boolean
 }
+
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
 //  - when false, narrows the type of x by typeof x === s when true.
@@ -155,6 +157,7 @@ if (typeof boolOrC !== "Object") {
 else {
     c = boolOrC; // C
 }
+
 if (typeof strOrNumOrBool !== "Object") {
     var q1 = strOrNumOrBool; // string | number | boolean
 }

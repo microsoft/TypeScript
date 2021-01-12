@@ -32,8 +32,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var B = /** @class */ (function () {
+})();var B = /** @class */ (function () {
     function B() {
     }
     return B;
@@ -48,6 +47,7 @@ var C = /** @class */ (function (_super) {
 var v2;
 var y = v2.x; // should be 'string'
 var u = v2.a; // should be 'string'
+
 var z = v2.b;
 
 

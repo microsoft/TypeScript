@@ -13,8 +13,7 @@ var x = d.p;
 
 //// [exportAssignmentClass_A.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var C = /** @class */ (function () {
+    "use strict";var C = /** @class */ (function () {
         function C() {
             this.p = 0;
         }
@@ -24,8 +23,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [exportAssignmentClass_B.js]
 define(["require", "exports", "exportAssignmentClass_A"], function (require, exports, D) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var d = new D();
     var x = d.p;
 });

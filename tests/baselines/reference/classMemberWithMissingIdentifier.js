@@ -9,5 +9,4 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-{ }
-;
+{ };

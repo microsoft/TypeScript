@@ -13,8 +13,7 @@ var a2Gb = makeArrayG<any>(1, "");
 var a2Gc = makeArrayG<any[]>(1, ""); // error
 
 //// [genericRestArgs.js]
-function makeArrayG() {
-    var items = [];
+function makeArrayG() {var items = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         items[_i] = arguments[_i];
     }
@@ -24,6 +23,7 @@ var a1Ga = makeArrayG(1, ""); // no error
 var a1Gb = makeArrayG(1, "");
 var a1Gc = makeArrayG(1, "");
 var a1Gd = makeArrayG(1, ""); // error
+
 function makeArrayGOpt(item1, item2, item3) {
     return [item1, item2, item3];
 }

@@ -15,6 +15,7 @@ var r5 = x instanceof null;
 var r6 = x instanceof undefined;
 
 //// [instanceofOperatorWithRHSIsSubtypeOfFunction.js]
+
 var x;
 var f1;
 var f2;

@@ -35,3 +35,4 @@ var mod_1 = require("mod");
 React.createElement(Foo, { handler: mod_1["default"] });
 // Should see mod_1['default'] in emit here
 React.createElement(Foo, __assign({}, mod_1["default"]));
+

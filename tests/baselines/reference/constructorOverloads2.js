@@ -40,8 +40,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var FooBase = /** @class */ (function () {
+})();var FooBase = /** @class */ (function () {
     function FooBase(x) {
     }
     FooBase.prototype.bar1 = function () { };
@@ -59,4 +58,5 @@ var f1 = new Foo("hey");
 var f2 = new Foo(0);
 var f3 = new Foo(f1);
 var f4 = new Foo([f1, f2, f3]);
+
 f1.bar1();

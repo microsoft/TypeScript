@@ -13,13 +13,11 @@ x.a;
 
 //// [declFileExportAssignmentOfGenericInterface_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 //// [declFileExportAssignmentOfGenericInterface_1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
     exports.x.a;
 });

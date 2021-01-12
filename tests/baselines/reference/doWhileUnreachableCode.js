@@ -22,5 +22,6 @@ function test() {
         var x = 1;
         return false;
     }());
+
     return foo;
 }

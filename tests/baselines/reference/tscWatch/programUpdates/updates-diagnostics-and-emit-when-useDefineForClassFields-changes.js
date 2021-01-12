@@ -62,15 +62,12 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a.js]
-class C {
-    get prop() { return 1; }
-}
+class C {get prop() { return 1; }}
 class D extends C {
     constructor() {
         super(...arguments);
         this.prop = 1;
-    }
-}
+    }}
 
 
 
@@ -122,9 +119,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a.js]
-class C {
-    get prop() { return 1; }
-}
+class C {get prop() { return 1; }}
 class D extends C {
     constructor() {
         super(...arguments);
@@ -134,7 +129,6 @@ class D extends C {
             writable: true,
             value: 1
         });
-    }
-}
+    }}
 
 

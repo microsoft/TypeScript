@@ -69,13 +69,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
 function fn() {
-    return __awaiter(this, void 0, void 0, function () {
-        var req;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // ONE
-                case 1:
-                    req = _a.sent() // ONE
+    return __awaiter(this, void 0, void 0, function () {var req;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // ONE
+                case 1:req = _a.sent() // ONE
                     ;
                     return [2 /*return*/];
             }
@@ -87,13 +83,9 @@ var cl1 = /** @class */ (function () {
     function cl1() {
     }
     cl1.prototype.m = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var req;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // TWO
-                    case 1:
-                        req = _a.sent() // TWO
+        return __awaiter(this, void 0, void 0, function () {var req;
+            return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // TWO
+                    case 1:req = _a.sent() // TWO
                         ;
                         return [2 /*return*/];
                 }
@@ -104,30 +96,23 @@ var cl1 = /** @class */ (function () {
 }());
 exports.cl1 = cl1;
 exports.obj = {
-    m: function () { return __awaiter(void 0, void 0, void 0, function () {
-        var req;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // THREE
-                case 1:
-                    req = _a.sent() // THREE
+    m: function () { return __awaiter(void 0, void 0, void 0, function () {var req;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // THREE
+                case 1:req = _a.sent() // THREE
                     ;
                     return [2 /*return*/];
             }
         });
     }); }
 };
+
 var cl2 = /** @class */ (function () {
     function cl2() {
         var _this = this;
         this.p = {
-            m: function () { return __awaiter(_this, void 0, void 0, function () {
-                var req;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FOUR
-                        case 1:
-                            req = _a.sent() // FOUR
+            m: function () { return __awaiter(_this, void 0, void 0, function () {var req;
+                return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FOUR
+                        case 1:req = _a.sent() // FOUR
                             ;
                             return [2 /*return*/];
                     }
@@ -138,13 +123,9 @@ var cl2 = /** @class */ (function () {
     return cl2;
 }());
 exports.cl2 = cl2;
-var l = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var req;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FIVE
-            case 1:
-                req = _a.sent() // FIVE
+var l = function () { return __awaiter(void 0, void 0, void 0, function () {var req;
+    return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FIVE
+            case 1:req = _a.sent() // FIVE
                 ;
                 return [2 /*return*/];
         }

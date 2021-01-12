@@ -60,6 +60,7 @@ Date.prototype.toLocaleString();
 Date.prototype.toLocaleDateString();
 Date.prototype.toLocaleTimeString();
 Date.prototype.valueOf();
+
 Date.prototype.getTime();
 Date.prototype.getFullYear();
 Date.prototype.getUTCFullYear();
@@ -78,6 +79,7 @@ Date.prototype.getUTCSeconds();
 Date.prototype.getMilliseconds();
 Date.prototype.getUTCMilliseconds();
 Date.prototype.getTimezoneOffset();
+
 Date.prototype.setTime(0);
 Date.prototype.setMilliseconds(0);
 Date.prototype.setUTCMilliseconds(0);
@@ -93,6 +95,7 @@ Date.prototype.setMonth(0);
 Date.prototype.setUTCMonth(0);
 Date.prototype.setFullYear(0);
 Date.prototype.setUTCFullYear(0);
+
 Date.prototype.toUTCString();
 Date.prototype.toISOString();
 Date.prototype.toJSON(null);

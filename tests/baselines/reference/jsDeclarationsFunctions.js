@@ -70,10 +70,10 @@ b.cat = "cat";
 function c() { }
 exports.c = c;
 c.Cls = /** @class */ (function () {
-    function Cls() {
-    }
+    function Cls() {}
     return Cls;
 }());
+
 /**
  * @param {number} a
  * @param {number} b
@@ -98,6 +98,7 @@ function f(a) {
 }
 exports.f = f;
 f.self = f;
+
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b

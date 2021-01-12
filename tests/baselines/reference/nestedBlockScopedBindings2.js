@@ -137,6 +137,7 @@ function a0() {
         var x = 1;
     }
 }
+
 function a1() {
     {
         var x = void 0;
@@ -146,6 +147,7 @@ function a1() {
         (function () { return x_2; });
     }
 }
+
 function a2() {
     {
         var x_3 = 1;
@@ -156,6 +158,8 @@ function a2() {
         (function () { return x_4; });
     }
 }
+
+
 function a3() {
     {
         var x_5 = 1;
@@ -168,6 +172,8 @@ function a3() {
             break;
     }
 }
+
+
 function a4() {
     {
         var x = void 0;
@@ -179,6 +185,8 @@ function a4() {
             break;
     }
 }
+
+
 function a5() {
     {
         var x_8;
@@ -190,6 +198,7 @@ function a5() {
             break;
     }
 }
+
 function a6() {
     switch (1) {
         case 1:
@@ -202,6 +211,7 @@ function a6() {
             break;
     }
 }
+
 function a7() {
     switch (1) {
         case 1:
@@ -215,6 +225,7 @@ function a7() {
             break;
     }
 }
+
 function a8() {
     switch (1) {
         case 1:
@@ -228,6 +239,7 @@ function a8() {
             break;
     }
 }
+
 function a9() {
     switch (1) {
         case 1:

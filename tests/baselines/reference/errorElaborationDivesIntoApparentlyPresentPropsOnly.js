@@ -16,9 +16,11 @@ function baz<T extends { a: string }>(x: T) {
 function foo(x) {
     x = { a: "abc", b: 20, c: 30 };
 }
+
 function bar(x) {
     x = { a: 20 };
 }
+
 function baz(x) {
     x = { a: "not ok" };
 }

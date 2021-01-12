@@ -20,6 +20,7 @@ class Foo{
 function delegate(instance, method, data) {
     return function () { };
 }
+
 var Foo = /** @class */ (function () {
     function Foo() {
     }

@@ -188,6 +188,7 @@ foo(arr);
 
 
 //// [controlFlowArrays.js]
+
 function f1() {
     var x = [];
     x[0] = 5;
@@ -195,6 +196,7 @@ function f1() {
     x[2] = true;
     return x; // (string | number | boolean)[]
 }
+
 function f2() {
     var x = [];
     x.push(5);
@@ -202,12 +204,14 @@ function f2() {
     x.push(true);
     return x; // (string | number | boolean)[]
 }
+
 function f3() {
     var x;
     x = [];
     x.push(5, "hello");
     return x; // (string | number)[]
 }
+
 function f4() {
     var x = [];
     if (cond()) {
@@ -218,6 +222,7 @@ function f4() {
     }
     return x; // (string | number)[]
 }
+
 function f5() {
     var x;
     if (cond()) {
@@ -230,6 +235,7 @@ function f5() {
     }
     return x; // (string | number)[]
 }
+
 function f6() {
     var x;
     if (cond()) {
@@ -241,6 +247,7 @@ function f6() {
     }
     return x; // number | string[]
 }
+
 function f7() {
     var x = null;
     if (cond()) {
@@ -251,6 +258,7 @@ function f7() {
     }
     return x; // string[] | null
 }
+
 function f8() {
     var x = [];
     x.push(5);
@@ -262,6 +270,7 @@ function f8() {
     x.push(true);
     return x; // (string | number | boolean)[]
 }
+
 function f9() {
     var x = [];
     if (cond()) {
@@ -273,6 +282,7 @@ function f9() {
         return x; // string[]
     }
 }
+
 function f10() {
     var x = [];
     if (cond()) {
@@ -290,6 +300,7 @@ function f10() {
     x.push(99);
     return x; // (string | number | boolean)[]
 }
+
 function f11() {
     var x = [];
     if (x.length === 0) { // x.length ok on implicit any[]
@@ -297,6 +308,7 @@ function f11() {
     }
     return x;
 }
+
 function f12() {
     var x;
     x = [];
@@ -319,6 +331,7 @@ function f14() {
     x.push(true);
     return x; // (string | number | boolean)[]
 }
+
 function f15() {
     var x = [];
     while (cond()) {
@@ -327,6 +340,7 @@ function f15() {
     }
     return x; // string[]
 }
+
 function f16() {
     var x;
     var y;
@@ -335,6 +349,7 @@ function f16() {
     ((x))[3] = { a: 1 };
     return x; // (string | number | boolean | { a: number })[]
 }
+
 function f17() {
     var x = [];
     x.unshift(5);
@@ -342,6 +357,7 @@ function f17() {
     x.unshift(true);
     return x; // (string | number | boolean)[]
 }
+
 function f18() {
     var x = [];
     x.push(5);
@@ -349,6 +365,8 @@ function f18() {
     x[2] = true;
     return x; // (string | number | boolean)[]
 }
+
+
 var arr = [];
 arr.push({ val: 1, bar: 2 });
 foo(arr);

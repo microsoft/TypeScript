@@ -111,12 +111,15 @@ for ({name, skills: { primary, secondary } } of [{ name: "mower", skills: { prim
 
 //// [sourceMapValidationDestructuringForOfObjectBindingPattern2.js]
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
+
+
 var robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 var multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
 function getRobots() {
     return robots;
 }
+
 function getMultiRobots() {
     return multiRobots;
 }
@@ -142,8 +145,7 @@ for (var _5 = 0, _6 = getMultiRobots(); _5 < _6.length; _5++) {
     _b = _6[_5].skills, primaryA = _b.primary, secondaryA = _b.secondary;
     console.log(primaryA);
 }
-for (var _7 = 0, _8 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _7 < _8.length; _7++) {
+for (var _7 = 0, _8 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } }, { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _7 < _8.length; _7++) {
     _c = _8[_7].skills, primaryA = _c.primary, secondaryA = _c.secondary;
     console.log(primaryA);
 }
@@ -167,8 +169,7 @@ for (var _15 = 0, _16 = getMultiRobots(); _15 < _16.length; _15++) {
     _e = _16[_15].skills, primary = _e.primary, secondary = _e.secondary;
     console.log(primaryA);
 }
-for (var _17 = 0, _18 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _17 < _18.length; _17++) {
+for (var _17 = 0, _18 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } }, { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _17 < _18.length; _17++) {
     _f = _18[_17].skills, primary = _f.primary, secondary = _f.secondary;
     console.log(primaryA);
 }
@@ -192,8 +193,7 @@ for (var _25 = 0, _26 = getMultiRobots(); _25 < _26.length; _25++) {
     _m = _26[_25], nameA = _m.name, _o = _m.skills, primaryA = _o.primary, secondaryA = _o.secondary;
     console.log(nameA);
 }
-for (var _27 = 0, _28 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _27 < _28.length; _27++) {
+for (var _27 = 0, _28 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } }, { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _27 < _28.length; _27++) {
     _p = _28[_27], nameA = _p.name, _q = _p.skills, primaryA = _q.primary, secondaryA = _q.secondary;
     console.log(nameA);
 }
@@ -217,8 +217,7 @@ for (var _35 = 0, _36 = getMultiRobots(); _35 < _36.length; _35++) {
     _w = _36[_35], name = _w.name, _x = _w.skills, primary = _x.primary, secondary = _x.secondary;
     console.log(nameA);
 }
-for (var _37 = 0, _38 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _37 < _38.length; _37++) {
+for (var _37 = 0, _38 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } }, { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _37 < _38.length; _37++) {
     _y = _38[_37], name = _y.name, _z = _y.skills, primary = _z.primary, secondary = _z.secondary;
     console.log(nameA);
 }

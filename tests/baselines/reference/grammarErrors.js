@@ -26,8 +26,7 @@ exports.__esModule = true;
 var ns;
 (function (ns) {
     var Foo = /** @class */ (function () {
-        function Foo() {
-        }
+        function Foo() {}
         return Foo;
     }());
     ns.Foo = Foo;

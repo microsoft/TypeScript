@@ -97,8 +97,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -115,6 +114,8 @@ var C = /** @class */ (function (_super) {
     }
     return C;
 }(A));
+
+
 var a;
 var b;
 // Basic
@@ -131,6 +132,7 @@ var union;
 if (isA(union)) {
     union.propA;
 }
+
 if (isC_multipleParams(a, 0)) {
     a.propC;
 }
@@ -146,10 +148,13 @@ var D = /** @class */ (function () {
 }());
 // Arrow function
 var f1 = function (p1) { return false; };
+
+
 // Function expressions
 f2(function (p1) {
     return true;
 });
+
 acceptingBoolean(isA(a));
 acceptingTypeGuardFunction(isA);
 // Binary expressions

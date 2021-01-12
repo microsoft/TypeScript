@@ -7,4 +7,5 @@ while (true);
 //// [parser_continueInIterationStatement2.js]
 do {
     continue;
-} while (true);
+}
+while (true);

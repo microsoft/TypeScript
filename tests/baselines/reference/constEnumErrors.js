@@ -49,6 +49,7 @@ var E;
 (function (E) {
     var x = 1;
 })(E || (E = {}));
+
 var y0 = E2[1];
 var name = "A";
 var y1 = E2[name];

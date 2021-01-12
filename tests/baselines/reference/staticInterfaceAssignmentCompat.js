@@ -21,4 +21,5 @@ var Shape = /** @class */ (function () {
     };
     return Shape;
 }());
+
 var x = Shape;

@@ -74,8 +74,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var RoyalGuard = /** @class */ (function () {
+})();var RoyalGuard = /** @class */ (function () {
     function RoyalGuard() {
     }
     RoyalGuard.prototype.isLeader = function () {
@@ -109,11 +108,13 @@ var b = new LeadGuard();
 // Mismatched guards shouldn't be assignable
 b.isFollower = b.isLeader;
 b.isLeader = b.isFollower;
+
 a.isFollower = a.isLeader;
 a.isLeader = a.isFollower;
 function invalidGuard(c) {
     return false;
 }
+
 var c;
 if (invalidGuard(c)) {
     c;

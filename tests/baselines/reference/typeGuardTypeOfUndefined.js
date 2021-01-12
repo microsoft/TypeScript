@@ -200,6 +200,7 @@ function test1(a) {
         a;
     }
 }
+
 function test2(a) {
     if (typeof a === "undefined") {
         if (typeof a === "boolean") {
@@ -213,6 +214,7 @@ function test2(a) {
         a;
     }
 }
+
 function test3(a) {
     if (typeof a === "undefined" || typeof a === "boolean") {
         a;
@@ -221,6 +223,7 @@ function test3(a) {
         a;
     }
 }
+
 function test4(a) {
     if (typeof a !== "undefined" && typeof a === "boolean") {
         a;
@@ -229,6 +232,7 @@ function test4(a) {
         a;
     }
 }
+
 function test5(a) {
     if (typeof a !== "undefined") {
         if (typeof a === "boolean") {
@@ -242,6 +246,7 @@ function test5(a) {
         a;
     }
 }
+
 function test6(a) {
     if (typeof a === "undefined") {
         if (typeof a === "boolean") {
@@ -255,6 +260,7 @@ function test6(a) {
         a;
     }
 }
+
 function test7(a) {
     if (typeof a === "undefined" || typeof a === "boolean") {
         a;
@@ -263,6 +269,7 @@ function test7(a) {
         a;
     }
 }
+
 function test8(a) {
     if (typeof a !== "undefined" && typeof a === "boolean") {
         a;
@@ -271,6 +278,7 @@ function test8(a) {
         a;
     }
 }
+
 function test9(a) {
     if (typeof a !== "undefined") {
         if (typeof a === "boolean") {
@@ -284,6 +292,7 @@ function test9(a) {
         a;
     }
 }
+
 function test10(a) {
     if (typeof a === "undefined") {
         if (typeof a === "boolean") {
@@ -297,6 +306,7 @@ function test10(a) {
         a;
     }
 }
+
 function test11(a) {
     if (typeof a === "undefined" || typeof a === "boolean") {
         a;
@@ -305,6 +315,7 @@ function test11(a) {
         a;
     }
 }
+
 function test12(a) {
     if (typeof a !== "undefined" && typeof a === "boolean") {
         a;
@@ -313,6 +324,7 @@ function test12(a) {
         a;
     }
 }
+
 function test13(a) {
     if (typeof a !== "undefined") {
         if (typeof a === "boolean") {
@@ -326,6 +338,7 @@ function test13(a) {
         a;
     }
 }
+
 function test14(a) {
     if (typeof a === "undefined") {
         if (typeof a === "boolean") {
@@ -339,6 +352,7 @@ function test14(a) {
         a;
     }
 }
+
 function test15(a) {
     if (typeof a === "undefined" || typeof a === "boolean") {
         a;
@@ -347,6 +361,7 @@ function test15(a) {
         a;
     }
 }
+
 function test16(a) {
     if (typeof a !== "undefined" && typeof a === "boolean") {
         a;

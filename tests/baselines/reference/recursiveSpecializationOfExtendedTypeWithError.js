@@ -7,3 +7,4 @@ interface HTMLSelectElement {
 
 
 //// [recursiveSpecializationOfExtendedTypeWithError.js]
+

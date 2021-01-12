@@ -7,8 +7,7 @@ import "test"
 
 //// [main.js]
 define(["require", "exports", "test"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 
 

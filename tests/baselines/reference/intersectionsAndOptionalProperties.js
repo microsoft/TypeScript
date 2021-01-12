@@ -31,11 +31,15 @@ const xx: [number, ...number[]] = yy;
 "use strict";
 x = y; // Error
 x = z; // Error
+
+
+
 function foo(v) {
     var x;
     x = v; // Error
     x.field = v.field; // Error
 }
+
 // Repro from #38348
 var yy = [1];
 var xx = yy;

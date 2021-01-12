@@ -6,6 +6,7 @@ export default f;
 
 //// [es6ExportDefaultIdentifier.js]
 export function f() { }
+
 export default f;
 
 

@@ -46,9 +46,11 @@ var r4 = i.toString();
 var r5 = i['toString']();
 var r6 = i.bar;
 var r7 = i['bar'];
+
 var a = {
     foo: ''
 };
+
 var r8 = a.toString();
 var r9 = a['toString']();
 var r10 = a.foo;

@@ -9,4 +9,5 @@ obj[Symbol.for];
 var obj = {
     [Symbol.for]: 0
 };
+
 obj[Symbol.for];

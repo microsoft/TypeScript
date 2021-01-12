@@ -8,6 +8,8 @@ function foo() {
 
 //// [debugger.js]
 debugger;
+
 function foo() {
     debugger;
+
 }

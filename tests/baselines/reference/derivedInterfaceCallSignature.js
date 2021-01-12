@@ -28,5 +28,7 @@ var area: D3SvgArea;
 area.interpolate('two')('one');
 
 //// [derivedInterfaceCallSignature.js]
+
+
 var area;
 area.interpolate('two')('one');

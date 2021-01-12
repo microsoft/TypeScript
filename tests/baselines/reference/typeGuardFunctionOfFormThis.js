@@ -156,8 +156,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var RoyalGuard = /** @class */ (function () {
+})();var RoyalGuard = /** @class */ (function () {
     function RoyalGuard() {
     }
     RoyalGuard.prototype.isLeader = function () {
@@ -193,6 +192,7 @@ if (a.isLeader()) {
 else if (a.isFollower()) {
     a.follow();
 }
+
 var b;
 if (b.isLeader()) {
     b.lead();
@@ -254,6 +254,9 @@ if (guard.isElite()) {
 else if (guard.isMedic()) {
     guard.heal();
 }
+
+
+
 var crate;
 if (crate.isSundries()) {
     crate.contents.broken = true;
@@ -261,6 +264,7 @@ if (crate.isSundries()) {
 else if (crate.isSupplies()) {
     crate.contents.spoiled = true;
 }
+
 // Matching guards should be assignable
 a.isFollower = b.isFollower;
 a.isLeader = b.isLeader;
@@ -292,6 +296,7 @@ var MimicFollower = /** @class */ (function (_super) {
 var mimic = new MimicGuard();
 a.isLeader = mimic.isLeader;
 a.isFollower = mimic.isFollower;
+
 if (mimic.isFollower()) {
     mimic.follow();
     mimic.isFollower = a.isFollower;

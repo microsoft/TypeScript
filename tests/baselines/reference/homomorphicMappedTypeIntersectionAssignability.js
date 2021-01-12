@@ -10,7 +10,10 @@ function f<TType>(
 
 //// [homomorphicMappedTypeIntersectionAssignability.js]
 "use strict";
-function f(a, b, c) {
+function f(
+a,
+    b,
+    c) {
     c = a; // Works
     b = a; // Should also work
 }

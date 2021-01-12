@@ -70,6 +70,7 @@ var Test1 = /** @class */ (function () {
     }
     Test1.prototype.initializeInternal = function () {
     };
+
     Test1.prototype.test = function () {
         var x = new Test1();
         x.initializeInternal();

@@ -33,8 +33,7 @@ var Main = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             names[_i] = arguments[_i];
         }
-        var _loop_1 = function (name_1) {
-            var _b;
+        var _loop_1 = function (name_1) {var _b;
             this_1.bar((_b = {},
                 _b[name_1 + ".a"] = function () { _this.foo(name_1); },
                 _b));
@@ -45,7 +44,9 @@ var Main = /** @class */ (function () {
             _loop_1(name_1);
         }
     };
+
     Main.prototype.bar = function (a) { };
+
     Main.prototype.foo = function (name) { };
     return Main;
 }());

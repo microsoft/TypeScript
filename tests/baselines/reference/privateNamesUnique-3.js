@@ -22,13 +22,15 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _foo, _foo_1, _foo_2;
-class A {
-    constructor() {
+class A {constructor() {
         _foo_1.set(this, 1);
         // because static and instance private names
         // share the same lexical scope
         // https://tc39.es/proposal-class-fields/#prod-ClassBody
     }
+
+
+
 }
 _foo = new WeakMap(), _foo_1 = new WeakMap();
 _foo_1.set(A, true); // error (duplicate)

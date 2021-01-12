@@ -6,8 +6,7 @@ function f() {
 //// [anonymousClassExpression1.js]
 function f() {
     return typeof /** @class */ (function () {
-        function class_1() {
-        }
+        function class_1() {}
         return class_1;
     }()) === "function";
 }

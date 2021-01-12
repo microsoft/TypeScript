@@ -45,6 +45,7 @@ var r = /\\\\/;
 //typeof numeric literal is Number
 //typeof string literal is String
 //typeof regex literal is Regex
+
 var nu = null / null;
 var u = undefined / undefined;
 var b;

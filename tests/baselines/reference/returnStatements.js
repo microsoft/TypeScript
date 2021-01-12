@@ -49,6 +49,7 @@ function fn5() { return true; }
 function fn6() { return new Date(12); }
 function fn7() { return null; }
 function fn8() { return; } // OK, eq. to 'return undefined'
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -63,6 +64,7 @@ var D = /** @class */ (function (_super) {
     return D;
 }(C));
 function fn10() { return { id: 12 }; }
+
 function fn11() { return new C(); }
 function fn12() { return new D(); }
 function fn13() { return null; }

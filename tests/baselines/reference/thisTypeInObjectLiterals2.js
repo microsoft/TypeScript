@@ -267,6 +267,17 @@ var obj1 = {
         this.b = value;
     }
 };
+
+
+
+
+
+
+
+
+
+
+
 var p1 = {
     x: 10,
     y: 20,
@@ -278,6 +289,7 @@ var p1 = {
         }
     }
 };
+
 var p2 = {
     x: 10,
     y: 20,
@@ -289,6 +301,7 @@ var p2 = {
         }
     }
 };
+
 var p3 = {
     x: 10,
     y: 20,
@@ -300,6 +313,7 @@ var p3 = {
         }
     }
 };
+
 var p4 = {
     x: 10,
     y: 20,
@@ -311,6 +325,8 @@ var p4 = {
         }
     }
 };
+
+
 f1({
     x: 10,
     y: 20,
@@ -322,6 +338,8 @@ f1({
         }
     }
 });
+
+
 f2({
     x: 10,
     y: 20,
@@ -333,6 +351,16 @@ f2({
         }
     }
 });
+
+
+
+
+
+
+
+
+
+
 var x1 = makeObject({
     data: { x: 0, y: 0 },
     methods: {
@@ -342,6 +370,16 @@ var x1 = makeObject({
         }
     }
 });
+
+
+
+
+
+
+
+
+
+
 var x2 = makeObject2({
     data: { x: 0, y: 0 },
     methods: {
@@ -351,6 +389,21 @@ var x2 = makeObject2({
         }
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var p10 = defineProp(p1, "foo", { value: 42 });
 p10.foo = p10.foo + 1;
 var p11 = defineProp(p1, "bar", {
@@ -377,6 +430,7 @@ var p12 = defineProps(p1, {
 });
 p12.foo = p12.foo + 1;
 p12.bar = p12.bar + 1;
+
 var vue = new Vue({
     data: function () { return ({ x: 1, y: 2 }); },
     methods: {

@@ -18,3 +18,6 @@ declare const y: [{ qux: { #quux: 3 } }];
 
 
 //// [privateNameAndPropertySignature.js]
+
+
+

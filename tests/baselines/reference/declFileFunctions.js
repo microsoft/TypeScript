@@ -85,14 +85,13 @@ function foo() {
 }
 exports.foo = foo;
 /** This is comment for function signature*/
-function fooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function fooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
 exports.fooWithParameters = fooWithParameters;
-function fooWithRestParameters(a) {
-    var rests = [];
+function fooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }
@@ -119,8 +118,7 @@ function fooWithTypeTypePredicateAndGeneric(a) {
     return true;
 }
 exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
-function fooWithTypeTypePredicateAndRestParam(a) {
-    var rest = [];
+function fooWithTypeTypePredicateAndRestParam(a) {var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
@@ -131,18 +129,18 @@ exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestPa
 function nonExportedFoo() {
 }
 /** This is comment for function signature*/
-function nonExportedFooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function nonExportedFooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
-function nonExportedFooWithRestParameters(a) {
-    var rests = [];
+function nonExportedFooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }
     return a + rests.join("");
 }
+
 function nonExportedFooWithOverloads(a) {
     return a;
 }
@@ -151,13 +149,12 @@ function nonExportedFooWithOverloads(a) {
 function globalfoo() {
 }
 /** This is comment for function signature*/
-function globalfooWithParameters(/** this is comment about a*/ a, 
-/** this is comment for b*/
-b) {
+function globalfooWithParameters(/** this is comment about a*/ a,
+    /** this is comment for b*/
+    b) {
     var d = a;
 }
-function globalfooWithRestParameters(a) {
-    var rests = [];
+function globalfooWithRestParameters(a) {var rests = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rests[_i - 1] = arguments[_i];
     }

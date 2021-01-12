@@ -19,6 +19,7 @@ else {
 
 //// [typeGuardInClass.js]
 var x;
+
 if (typeof x === "string") {
     var n = /** @class */ (function () {
         function class_1() {

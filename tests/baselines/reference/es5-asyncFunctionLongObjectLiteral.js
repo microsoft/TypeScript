@@ -66,63 +66,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
-var fooShort = function () { return __awaiter(_this, void 0, void 0, function () {
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = {};
+var fooShort = function () { return __awaiter(_this, void 0, void 0, function () {var _a;
+    return __generator(this, function (_b) {switch (_b.label) {case 0:_a = {};
                 return [4 /*yield*/, Promise.resolve(0)];
-            case 1:
-                _a.a = _b.sent();
+            case 1:_a.a = _b.sent();
                 return [4 /*yield*/, Promise.resolve(1)];
-            case 2:
-                _a.b = _b.sent();
+            case 2:_a.b = _b.sent();
                 return [4 /*yield*/, Promise.resolve(2)];
-            case 3:
-                _a.c = _b.sent();
+            case 3:_a.c = _b.sent();
                 return [4 /*yield*/, Promise.resolve(3)];
-            case 4:
-                _a.d = _b.sent();
+            case 4:_a.d = _b.sent();
                 return [4 /*yield*/, Promise.resolve(4)];
             case 5: return [2 /*return*/, (_a.e = _b.sent(),
                     _a)];
         }
     });
 }); };
-var fooLong = function () { return __awaiter(_this, void 0, void 0, function () {
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = {};
+
+var fooLong = function () { return __awaiter(_this, void 0, void 0, function () {var _a;
+    return __generator(this, function (_b) {switch (_b.label) {case 0:_a = {};
                 return [4 /*yield*/, Promise.resolve(0)];
-            case 1:
-                _a.a = _b.sent();
+            case 1:_a.a = _b.sent();
                 return [4 /*yield*/, Promise.resolve(1)];
-            case 2:
-                _a.b = _b.sent();
+            case 2:_a.b = _b.sent();
                 return [4 /*yield*/, Promise.resolve(2)];
-            case 3:
-                _a.c = _b.sent();
+            case 3:_a.c = _b.sent();
                 return [4 /*yield*/, Promise.resolve(3)];
-            case 4:
-                _a.d = _b.sent();
+            case 4:_a.d = _b.sent();
                 return [4 /*yield*/, Promise.resolve(4)];
-            case 5:
-                _a.e = _b.sent();
+            case 5:_a.e = _b.sent();
                 return [4 /*yield*/, Promise.resolve(5)];
-            case 6:
-                _a.f = _b.sent();
+            case 6:_a.f = _b.sent();
                 return [4 /*yield*/, Promise.resolve(6)];
-            case 7:
-                _a.g = _b.sent();
+            case 7:_a.g = _b.sent();
                 return [4 /*yield*/, Promise.resolve(7)];
-            case 8:
-                _a.h = _b.sent();
+            case 8:_a.h = _b.sent();
                 return [4 /*yield*/, Promise.resolve(8)];
-            case 9:
-                _a.i = _b.sent();
+            case 9:_a.i = _b.sent();
                 return [4 /*yield*/, Promise.resolve(9)];
             case 10: return [2 /*return*/, (_a.j = _b.sent(),
                     _a)];

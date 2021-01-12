@@ -31,6 +31,7 @@ export function flatten<T extends number|TypedArray>(arr: T) {
 "use strict";
 exports.__esModule = true;
 exports.flatten = exports.isTypedArray = exports.foo = void 0;
+
 function foo(arr) {
     var zz = arr[1]; // Error
 }

@@ -19,6 +19,8 @@ interface indexErrors {
 }
 
 //// [indexSignatureTypeCheck.js]
+
+
 var ps = null;
 var index = "hello";
 ps[index] = 12;

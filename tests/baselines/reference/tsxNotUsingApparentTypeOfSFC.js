@@ -53,6 +53,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
+
 function test(wrappedProps) {
     var MySFC = function (props) {
         return react_1["default"].createElement(react_1["default"].Fragment, null, "hello");
@@ -69,6 +70,7 @@ function test(wrappedProps) {
     }(react_1["default"].Component));
     var x = react_1["default"].createElement(MySFC, null); // should error
     var y = react_1["default"].createElement(MyComponent, null); // should error
+
     var z = react_1["default"].createElement(MySFC, __assign({}, wrappedProps)); // should work
     var q = react_1["default"].createElement(MyComponent, __assign({}, wrappedProps)); // should work
 }

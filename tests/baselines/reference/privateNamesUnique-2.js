@@ -24,8 +24,7 @@ a.copy(b); // error
 
 //// [b.js]
 var _x;
-export class Foo {
-    constructor() {
+export class Foo {constructor() {
         _x.set(this, void 0);
     }
 }
@@ -38,8 +37,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _x;
-export class Foo {
-    constructor() {
+export class Foo {constructor() {
         _x.set(this, void 0);
     }
     copy(other) {
@@ -50,6 +48,7 @@ _x = new WeakMap();
 //// [main.js]
 import { Foo as A } from "./a";
 import { Foo as B } from "./b";
+
 const a = new A();
 const b = new B();
 a.copy(b); // error

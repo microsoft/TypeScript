@@ -127,24 +127,28 @@ function f1(a, b, c, d) {
     a = c;
     a = d;
 }
+
 function f2(a, b, c, d) {
     b = a;
     b = b;
     b = c;
     b = d;
 }
+
 function f3(a, b, c, d) {
     c = a;
     c = b;
     c = c;
     c = d;
 }
+
 function f4(a, b, c, d) {
     d = a;
     d = b;
     d = c;
     d = d;
 }
+
 function f5(a, b, c, d) {
     a = "" /* Unknown */;
     a = "yes" /* Yes */;
@@ -159,6 +163,7 @@ function f5(a, b, c, d) {
     d = "yes" /* Yes */;
     d = "no" /* No */;
 }
+
 function f6(a, b, c, d) {
     a === "" /* Unknown */;
     a === "yes" /* Yes */;
@@ -173,6 +178,7 @@ function f6(a, b, c, d) {
     d === "yes" /* Yes */;
     d === "no" /* No */;
 }
+
 function f7(a, b, c, d) {
     a === a;
     a === b;
@@ -191,6 +197,7 @@ function f7(a, b, c, d) {
     d === c;
     d === d;
 }
+
 function f10(x) {
     switch (x) {
         case "" /* Unknown */: return x;
@@ -199,6 +206,7 @@ function f10(x) {
     }
     return x;
 }
+
 function f11(x) {
     switch (x) {
         case "" /* Unknown */: return x;
@@ -207,6 +215,7 @@ function f11(x) {
     }
     return x;
 }
+
 function f12(x) {
     switch (x) {
         case "" /* Unknown */: return x;
@@ -215,6 +224,7 @@ function f12(x) {
     }
     return x;
 }
+
 function f13(x) {
     switch (x) {
         case "" /* Unknown */: return x;

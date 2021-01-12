@@ -41,6 +41,7 @@ var _loop_1 = function () {
 for (; false;) {
     _loop_1();
 }
+
 for (; false;) {
     {
         var y = void 0;
@@ -58,6 +59,7 @@ var _loop_2 = function () {
 for (; false;) {
     _loop_2();
 }
+
 for (; false;) {
     switch (1) {
         case 1:

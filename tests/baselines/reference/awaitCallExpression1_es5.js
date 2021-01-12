@@ -15,8 +15,7 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression1_es5.js]
 function func() {
-    return __awaiter(this, void 0, void 0, function () {
-        var b;
+    return __awaiter(this, void 0, void 0, function () {var b;
         return __generator(this, function (_a) {
             before();
             b = fn(a, a, a);

@@ -91,6 +91,7 @@ var y = true;
 }
 use(y);
 use(z6);
+
 var z = false;
 var z5 = 1;
 {

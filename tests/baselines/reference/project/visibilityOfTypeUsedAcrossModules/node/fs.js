@@ -7,9 +7,11 @@ var RM = /** @class */ (function () {
     RM.prototype.getName = function () {
         return 'rm';
     };
+
     RM.prototype.getDescription = function () {
         return "\t\t\tDelete file";
     };
+
     RM.prototype.run = function (configuration) {
         var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
     };

@@ -40,10 +40,13 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 // destructuring in variable declarations
 let foo = "bar";
 let { [foo]: bar } = { bar: "bar" };
+
 let { ["bar"]: bar2 } = { bar: "bar" };
 let { [11]: bar2_1 } = { 11: "bar" };
+
 let foo2 = () => "bar";
 let { [foo2()]: bar3 } = { bar: "bar" };
+
 let [{ [foo]: bar4 }] = [{ bar: "bar" }];
 let [{ [foo2()]: bar5 }] = [{ bar: "bar" }];
 function f1({ ["bar"]: x }) { }
@@ -54,11 +57,16 @@ function f5([{ [foo2()]: x }]) { }
 // report errors on type errors in computed properties used in destructuring
 let [{ [foo()]: bar6 }] = [{ bar: "bar" }];
 let [{ [foo.toExponential()]: bar7 }] = [{ bar: "bar" }];
+
 // destructuring assignment
 ({ [foo]: bar } = { bar: "bar" });
+
 ({ ["bar"]: bar2 } = { bar: "bar" });
+
 ({ [foo2()]: bar3 } = { bar: "bar" });
+
 [{ [foo]: bar4 }] = [{ bar: "bar" }];
 [{ [foo2()]: bar5 }] = [{ bar: "bar" }];
+
 [{ [foo()]: bar4 }] = [{ bar: "bar" }];
 [{ [(1 + {})]: bar4 }] = [{ bar: "bar" }];

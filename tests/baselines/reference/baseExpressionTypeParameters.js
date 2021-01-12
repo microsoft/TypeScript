@@ -30,6 +30,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 function base() {
     var Base = /** @class */ (function () {
         function Base() {
@@ -38,6 +39,7 @@ function base() {
     }());
     return Base;
 }
+
 var Gen = /** @class */ (function (_super) {
     __extends(Gen, _super);
     function Gen() {

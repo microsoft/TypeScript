@@ -15,7 +15,6 @@ if (isFoo(value)) {
 var value;
 if (isFoo(value)) {
     doThis(value);
-}
-else {
+} else {
     doThat(value);
 }

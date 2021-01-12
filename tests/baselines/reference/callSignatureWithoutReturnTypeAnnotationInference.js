@@ -127,10 +127,12 @@ function foo(x) {
     return 1;
 }
 var r = foo(1);
+
 function foo2(x) {
     return foo(x);
 }
 var r2 = foo2(1);
+
 function foo3() {
     return foo3();
 }
@@ -139,15 +141,16 @@ function foo4(x) {
     return x;
 }
 var r4 = foo4(1);
+
 function foo5(x) {
     if (true) {
         return 1;
-    }
-    else {
+    } else {
         return 2;
     }
 }
 var r5 = foo5(1);
+
 function foo6(x) {
     try {
     }
@@ -159,6 +162,7 @@ function foo6(x) {
     }
 }
 var r6 = foo6(1);
+
 function foo7(x) {
     return typeof x;
 }
@@ -187,8 +191,7 @@ var M;
 (function (M) {
     M.x = 1;
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     M.C = C;
@@ -202,17 +205,15 @@ function foo12() {
     return i2;
 }
 var r12 = foo12();
+
 function m1() { return 1; }
-(function (m1) {
-    m1.y = 2;
-})(m1 || (m1 = {}));
+(function (m1) {m1.y = 2;})(m1 || (m1 = {}));
 function foo13() {
     return m1;
 }
 var r13 = foo13();
 var c1 = /** @class */ (function () {
-    function c1(x) {
-    }
+    function c1(x) {}
     return c1;
 }());
 (function (c1) {
@@ -226,9 +227,7 @@ var e1;
 (function (e1) {
     e1[e1["A"] = 0] = "A";
 })(e1 || (e1 = {}));
-(function (e1) {
-    e1.y = 1;
-})(e1 || (e1 = {}));
+(function (e1) {e1.y = 1;})(e1 || (e1 = {}));
 function foo15() {
     return e1;
 }

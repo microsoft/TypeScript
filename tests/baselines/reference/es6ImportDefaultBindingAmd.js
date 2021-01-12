@@ -12,15 +12,13 @@ import defaultBinding2 from "es6ImportDefaultBindingAmd_0"; // elide this import
 
 //// [es6ImportDefaultBindingAmd_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     var a = 10;
     exports.default = a;
 });
 //// [es6ImportDefaultBindingAmd_1.js]
 define(["require", "exports", "es6ImportDefaultBindingAmd_0"], function (require, exports, es6ImportDefaultBindingAmd_0_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     var x = es6ImportDefaultBindingAmd_0_1.default;
 });
 

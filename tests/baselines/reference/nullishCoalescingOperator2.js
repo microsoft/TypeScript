@@ -22,6 +22,8 @@ const aa9 = a9 ?? 'whatever'
 
 //// [nullishCoalescingOperator2.js]
 "use strict";
+
+
 var aa1 = a1 !== null && a1 !== void 0 ? a1 : 'whatever';
 var aa2 = a2 !== null && a2 !== void 0 ? a2 : 'whatever';
 var aa3 = a3 !== null && a3 !== void 0 ? a3 : 'whatever';

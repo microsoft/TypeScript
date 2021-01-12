@@ -24,6 +24,7 @@ class B extends A {
 class A {
     constructor() { }
 }
+
 /**
  * @extends {A}
  * @constructor

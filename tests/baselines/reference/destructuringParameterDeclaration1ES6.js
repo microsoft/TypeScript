@@ -112,15 +112,17 @@ function a3({ j, k, l: { m, n }, q: [a, b, c] }) { }
 function a4({ x, a }) { }
 a1([1, 2, [["world"]]]);
 a1([1, 2, [["world"]], 3]);
+
+
 // If the declaration includes an initializer expression (which is permitted only
 // when the parameter list occurs in conjunction with a function body),
 // the parameter type is the widened form (section 3.11) of the type of the initializer expression.
-function b1(z = [undefined, null]) { }
-;
+function b1(z = [undefined, null]) { };
 function b2(z = null, o = { x: 0, y: undefined }) { }
 function b3({ z: { x, y: { j } } } = { z: { x: "hi", y: { j: 1 } } }) { }
 function b6([a, z, y] = [undefined, null, undefined]) { }
 function b7([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
+
 b1([1, 2, 3]); // z is widen to the type any[]
 b2("string", { x: 200, y: "string" });
 b2("string", { x: 200, y: true });
@@ -135,21 +137,28 @@ function c2({ z = 10 }) { }
 function c3({ b } = { b: "hello" }) { }
 function c5([a, b, [[c]]]) { }
 function c6([a, b, [[c = 1]]]) { }
+
 c0({ z: { x: 1, y: { j: "world" } } }); // Implied type is { z: {x: any, y: {j: any}} }
 c0({ z: { x: "string", y: { j: true } } }); // Implied type is { z: {x: any, y: {j: any}} }
+
 c1(); // Implied type is {z:number}?
 c1({ z: 1 }); // Implied type is {z:number}? 
+
 c2({}); // Implied type is {z?: number}
 c2({ z: 1 }); // Implied type is {z?: number}
+
 c3({ b: 1 }); // Implied type is { b: number|string }.
+
 c5([1, 2, [["string"]]]); // Implied type is is [any, any, [[any]]]
 c5([1, 2, [["string"]], false, true]); // Implied type is is [any, any, [[any]]]
+
 class C2 {
     constructor() { }
     d3() { }
     d4() { }
     e0([a, b, c]) { }
 }
+
 class C3 {
     d3([a, b, c]) { }
     d4({ x, y, z }) { }
@@ -157,6 +166,11 @@ class C3 {
 }
 function d5({ x, y } = { x: 1, y: 2 }) { }
 d5(); // Parameter is optional as its declaration included an initializer
+
+
+
+
+
 // Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
 // as such annotations would conflict with the already established meaning of colons in object literals.
 // Type annotations must instead be written on the top- level parameter declaration

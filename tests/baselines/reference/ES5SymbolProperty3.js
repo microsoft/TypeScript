@@ -9,6 +9,7 @@ class C {
 
 //// [ES5SymbolProperty3.js]
 var Symbol;
+
 var C = /** @class */ (function () {
     function C() {
     }

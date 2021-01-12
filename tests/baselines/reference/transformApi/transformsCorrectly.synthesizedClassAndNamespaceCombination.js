@@ -1,5 +1,3 @@
-class Foo {
-}
-(function (Foo) {
-    ;
+class Foo {}
+(function (Foo) {;
 })(Foo || (Foo = {}));

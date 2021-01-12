@@ -57,6 +57,7 @@ var thisGetsTheFalseError = new ClassA(new ConcreteClass(), {
         }
     ]; }
 });
+
 var thisIsOk = new ClassA(new ConcreteClass(), {
     values: function (o) { return [
         {

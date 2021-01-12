@@ -36,6 +36,7 @@ function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
 
 //// [keyofAndForIn.js]
 // Repro from #12513
+
 function f1(obj, k) {
     var b = k in obj;
     var k1;
@@ -46,6 +47,7 @@ function f1(obj, k) {
         var x2 = obj[k2];
     }
 }
+
 function f2(obj, k) {
     var b = k in obj;
     var k1;
@@ -56,6 +58,7 @@ function f2(obj, k) {
         var x2 = obj[k2];
     }
 }
+
 function f3(obj, k) {
     var b = k in obj;
     var k1;

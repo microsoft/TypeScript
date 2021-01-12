@@ -10,22 +10,18 @@ console.log(A + B + C + D + E + F)
 
 //// [deduplicateImportsInSystem.js]
 System.register(["f1", "f2", "f3"], function (exports_1, context_1) {
-    "use strict";
-    var f1_1, f2_1, f3_1, f2_2, f2_3, f1_2;
+    "use strict";var f1_1, f2_1, f3_1, f2_2, f2_3, f1_2;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (f1_1_1) {
-                f1_1 = f1_1_1;
+            function (f1_1_1) {f1_1 = f1_1_1;
                 f1_2 = f1_1_1;
             },
-            function (f2_1_1) {
-                f2_1 = f2_1_1;
+            function (f2_1_1) {f2_1 = f2_1_1;
                 f2_2 = f2_1_1;
                 f2_3 = f2_1_1;
             },
-            function (f3_1_1) {
-                f3_1 = f3_1_1;
+            function (f3_1_1) {f3_1 = f3_1_1;
             }
         ],
         execute: function () {

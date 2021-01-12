@@ -15,8 +15,7 @@ declare module "tslib" {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-class A {
-}
+class A {}
 exports.A = A;
 //// [b.js]
 "use strict";

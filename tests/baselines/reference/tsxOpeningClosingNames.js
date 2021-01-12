@@ -11,4 +11,5 @@ declare module A.B.C {
 
 
 //// [file.jsx]
+
 <A.B.C.D>foo</A.B.C.D>;

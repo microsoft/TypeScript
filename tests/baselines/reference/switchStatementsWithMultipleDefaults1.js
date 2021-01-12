@@ -14,6 +14,7 @@
 
 //// [switchStatementsWithMultipleDefaults1.js]
 var x = 10;
+
 switch (x) {
     case 1:
     case 2:

@@ -27,6 +27,7 @@ i = c;
 
 //// [classWithOnlyPublicMembersEquivalentToInterface.js]
 // no errors expected
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -39,6 +40,7 @@ var C = /** @class */ (function () {
     });
     return C;
 }());
+
 var c;
 var i;
 c = i;

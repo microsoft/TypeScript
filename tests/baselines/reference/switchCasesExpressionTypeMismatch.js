@@ -21,8 +21,7 @@ switch (s) {
 
 //// [switchCasesExpressionTypeMismatch.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 switch (0) {

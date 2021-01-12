@@ -117,8 +117,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var SomeBase = /** @class */ (function () {
+})();var SomeBase = /** @class */ (function () {
     function SomeBase() {
     }
     return SomeBase;
@@ -151,6 +150,7 @@ var s;
 // No candidate overloads found
 new fn1({}); // Error
 var fn2;
+
 var d = new fn2(0, undefined);
 var d;
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
@@ -164,13 +164,18 @@ var s = new fn3(3);
 var s = new fn3('', 3, '');
 var n = new fn3(5, 5, 5);
 var n;
+
 // Generic overloads with differing arity called with type arguments matching each overload type parameter count
 var s = new fn3(4);
 var s = new fn3('', '', '');
 var n = new fn3('', '', 3);
+
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 new fn3(); // Error
+
+
 var fn4;
+
 new fn4('', 3);
 new fn4(3, ''); // Error
 new fn4('', 3); // Error

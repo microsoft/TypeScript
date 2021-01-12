@@ -8,5 +8,6 @@ var fra4: (v:any)=>void = function() { return function() { return function(v) {r
 //// [targetTypeCalls.js]
 var fra1 = function () { return function (v) { return v; }; }(); // should work
 var fra2 = function () { return function () { return 0; }; }(); // should work
+
 var fra3 = function () { return function () { return function (v) { return v; }; }(); }(); // should work
 var fra4 = function () { return function () { return function (v) { return v; }; }(); }(); // should work

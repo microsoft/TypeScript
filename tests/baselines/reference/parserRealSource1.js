@@ -159,8 +159,7 @@ module TypeScript {
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
 var TypeScript;
-(function (TypeScript) {
-    var CompilerDiagnostics;
+(function (TypeScript) {var CompilerDiagnostics;
     (function (CompilerDiagnostics) {
         CompilerDiagnostics.debug = false;
         CompilerDiagnostics.diagnosticWriter = null;
@@ -186,6 +185,7 @@ var TypeScript;
         }
         CompilerDiagnostics.assert = assert;
     })(CompilerDiagnostics = TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
+
     var NullLogger = /** @class */ (function () {
         function NullLogger() {
         }

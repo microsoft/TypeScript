@@ -61,6 +61,7 @@ a.foo(1, 2, 3);
 
 //// [callSignaturesWithOptionalParameters2.js]
 // Optional parameters should be valid in all the below casts
+
 function foo(x) { }
 foo(1);
 foo();
@@ -71,14 +72,19 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x) { };
+
+
+
     C.prototype.foo2 = function (x, y) { };
     return C;
 }());
 var c;
 c.foo();
 c.foo(1);
+
 c.foo2(1);
 c.foo2(1, 2);
+
 var i;
 i();
 i(1);

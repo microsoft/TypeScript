@@ -19,9 +19,9 @@ module TypeScript {
 
 //// [moduleMemberWithoutTypeAnnotation2.js]
 var TypeScript;
-(function (TypeScript) {
-    var CompilerDiagnostics;
+(function (TypeScript) {var CompilerDiagnostics;
     (function (CompilerDiagnostics) {
+
         CompilerDiagnostics.diagnosticWriter = null;
         function Alert(output) {
             if (CompilerDiagnostics.diagnosticWriter) {

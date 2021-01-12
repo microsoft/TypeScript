@@ -21,16 +21,14 @@ export declare const AConstructor: typeof A; // Ok
 //// [a.js]
 "use strict";
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 module.exports = A;
 //// [b.js]
 "use strict";
 var SomeClass = /** @class */ (function () {
-    function SomeClass() {
-    }
+    function SomeClass() {}
     return SomeClass;
 }());
 module.exports = SomeClass;

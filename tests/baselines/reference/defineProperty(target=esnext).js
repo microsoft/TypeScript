@@ -31,8 +31,7 @@ class A {
     a = this.y;
     b;
     c;
-    ["computed"] = 13;
-    [x] = 14;
+    ["computed"] = 13;[x] = 14;
     m() { }
     constructor(y) {
         this.y = y;

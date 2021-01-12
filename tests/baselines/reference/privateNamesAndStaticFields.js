@@ -55,5 +55,4 @@ class B extends A {
 _foo_1 = new WeakMap();
 // We currently filter out static private identifier fields in `getUnmatchedProperties`.
 // We will need a more robust solution when we support static fields
-const willErrorSomeDay = class {
-}; // OK for now
+const willErrorSomeDay = class {}; // OK for now

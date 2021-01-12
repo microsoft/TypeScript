@@ -101,30 +101,35 @@ function f8(x: 0 | 2 | 4) {
 }
 
 //// [numericLiteralTypes3.js]
+
 function f1(a, b, c, d) {
     a = a;
     a = b;
     a = c;
     a = d;
 }
+
 function f2(a, b, c, d) {
     b = a;
     b = b;
     b = c;
     b = d;
 }
+
 function f3(a, b, c, d) {
     c = a;
     c = b;
     c = c;
     c = d;
 }
+
 function f4(a, b, c, d) {
     d = a;
     d = b;
     d = c;
     d = d;
 }
+
 function f5(a, b, c, d) {
     a = 0;
     a = 1;
@@ -143,6 +148,7 @@ function f5(a, b, c, d) {
     d = 2;
     d = 3;
 }
+
 function f6(a, b, c, d) {
     a === 0;
     a === 1;
@@ -161,6 +167,7 @@ function f6(a, b, c, d) {
     d === 2;
     d === 3;
 }
+
 function f7(a, b, c, d) {
     a === a;
     a === b;
@@ -179,6 +186,7 @@ function f7(a, b, c, d) {
     d === c;
     d === d;
 }
+
 function f8(x) {
     switch (x) {
         case 0: return;

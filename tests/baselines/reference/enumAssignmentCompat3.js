@@ -91,8 +91,7 @@ merged2 = abc; // ok
 
 //// [enumAssignmentCompat3.js]
 var First;
-(function (First) {
-    var E;
+(function (First) {var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -100,8 +99,7 @@ var First;
     })(E = First.E || (First.E = {}));
 })(First || (First = {}));
 var Abc;
-(function (Abc) {
-    var E;
+(function (Abc) {var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -115,8 +113,7 @@ var Abc;
     })(Nope = Abc.Nope || (Abc.Nope = {}));
 })(Abc || (Abc = {}));
 var Abcd;
-(function (Abcd) {
-    var E;
+(function (Abcd) {var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -125,16 +122,14 @@ var Abcd;
     })(E = Abcd.E || (Abcd.E = {}));
 })(Abcd || (Abcd = {}));
 var Ab;
-(function (Ab) {
-    var E;
+(function (Ab) {var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
     })(E = Ab.E || (Ab.E = {}));
 })(Ab || (Ab = {}));
 var Cd;
-(function (Cd) {
-    var E;
+(function (Cd) {var E;
     (function (E) {
         E[E["c"] = 0] = "c";
         E[E["d"] = 1] = "d";
@@ -144,8 +139,7 @@ var Decl;
 (function (Decl) {
 })(Decl || (Decl = {}));
 var Merged;
-(function (Merged) {
-    var E;
+(function (Merged) {var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -156,8 +150,7 @@ var Merged;
     })(E = Merged.E || (Merged.E = {}));
 })(Merged || (Merged = {}));
 var Merged2;
-(function (Merged2) {
-    var E;
+(function (Merged2) {var E;
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
@@ -189,10 +182,13 @@ secondAb = abc; // missing 'c'
 secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
 decl = abc; // ok
+
+
 // const is only assignable to itself
 k = k;
 abc = k; // error
 k = abc;
+
 // merged enums compare all their members
 abc = merged; // missing 'd'
 merged = abc; // ok

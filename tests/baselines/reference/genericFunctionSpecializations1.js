@@ -7,4 +7,5 @@ function foo4<T extends String>(test: T) { }
 
 //// [genericFunctionSpecializations1.js]
 function foo3(test) { }
+
 function foo4(test) { }

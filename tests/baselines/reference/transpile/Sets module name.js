@@ -1,5 +1,4 @@
-System.register("NamedModule", [], function (exports_1, context_1) {
-    var x;
+System.register("NamedModule", [], function (exports_1, context_1) {var x;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

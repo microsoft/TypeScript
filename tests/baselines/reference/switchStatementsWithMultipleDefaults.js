@@ -32,6 +32,7 @@ switch (x) {
 
 //// [switchStatementsWithMultipleDefaults.js]
 var x = 10;
+
 switch (x) {
     case 1:
     case 2:
@@ -42,6 +43,7 @@ switch (x) {
     case 3:
         x *= x;
 }
+
 switch (x) {
     default: // No issues.
         break;
@@ -54,9 +56,9 @@ switch (x) {
                 x /= x;
             default: // Error, third 'default' clause
             default: // Error, fourth 'default' clause.
+
             // Errors on fifth-seventh
             default: return;
-            default:
-            default:
+            default:default:
         }
 }

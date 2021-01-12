@@ -26,8 +26,7 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     return value;
 };
 var _x;
-class C {
-    constructor() {
+class C {constructor() {
         _x.set(this, void 0);
     }
     static test() {
@@ -38,3 +37,4 @@ class C {
     }
 }
 _x = new WeakMap();
+

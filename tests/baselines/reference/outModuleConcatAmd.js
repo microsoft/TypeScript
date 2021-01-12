@@ -24,19 +24,16 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define("ref/a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     exports.A = A;
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     var B = /** @class */ (function (_super) {
         __extends(B, _super);

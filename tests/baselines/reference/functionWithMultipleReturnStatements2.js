@@ -94,25 +94,25 @@ function f12() {
 //// [functionWithMultipleReturnStatements2.js]
 // return type of a function with multiple returns is the BCT of each return statement
 // no errors expected here
+
 function f1() {
     if (true) {
         return 1;
-    }
-    else {
+    } else {
         return null;
     }
 }
+
 function f2() {
     if (true) {
         return 1;
-    }
-    else if (false) {
+    } else if (false) {
         return null;
-    }
-    else {
+    } else {
         return 2;
     }
 }
+
 function f4() {
     try {
         return 1;
@@ -124,6 +124,7 @@ function f4() {
         return 1;
     }
 }
+
 function f5() {
     return 1;
     return new Object();
@@ -131,11 +132,11 @@ function f5() {
 function f6(x) {
     if (true) {
         return x;
-    }
-    else {
+    } else {
         return null;
     }
 }
+
 //function f7<T extends U, U>(x: T, y: U) {
 //    if (true) {
 //        return x;
@@ -149,17 +150,16 @@ var b;
 function f9() {
     if (true) {
         return a;
-    }
-    else {
+    } else {
         return b;
     }
 }
+
 // returns typeof b
 function f10() {
     if (true) {
         return b;
-    }
-    else {
+    } else {
         return a;
     }
 }
@@ -167,17 +167,16 @@ function f10() {
 function f11() {
     if (true) {
         return function (x) { };
-    }
-    else {
+    } else {
         return function (x) { };
     }
 }
+
 // returns Object => void
 function f12() {
     if (true) {
         return function (x) { };
-    }
-    else {
+    } else {
         return function (x) { };
     }
 }

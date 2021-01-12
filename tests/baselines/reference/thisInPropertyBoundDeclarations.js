@@ -87,8 +87,7 @@ var A = /** @class */ (function () {
         this.prop1 = function () {
             this;
         };
-        this.prop2 = function () {
-            var _this = this;
+        this.prop2 = function () {var _this = this;
             function inner() {
                 this;
             }

@@ -10,6 +10,7 @@ class Bug implements I {
 
 
 //// [implementInterfaceAnyMemberWithVoid.js]
+
 var Bug = /** @class */ (function () {
     function Bug() {
     }

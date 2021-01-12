@@ -66,17 +66,12 @@ System.register([], function (exports_1, context_1) {
             } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
             if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
         }
-    };
-    var cl1, obj, cl2, l;
+    };var cl1, obj, cl2, l;
     var __moduleName = context_1 && context_1.id;
     function fn() {
-        return __awaiter(this, void 0, void 0, function () {
-            var req;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, context_1["import"]('./test')]; // ONE
-                    case 1:
-                        req = _a.sent() // ONE
+        return __awaiter(this, void 0, void 0, function () {var req;
+            return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, context_1["import"]('./test')]; // ONE
+                    case 1:req = _a.sent() // ONE
                         ;
                         return [2 /*return*/];
                 }
@@ -87,17 +82,12 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            cl1 = /** @class */ (function () {
-                function cl1() {
+            cl1 = /** @class */ (function () {function cl1() {
                 }
                 cl1.prototype.m = function () {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var req;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0: return [4 /*yield*/, context_1["import"]('./test')]; // TWO
-                                case 1:
-                                    req = _a.sent() // TWO
+                    return __awaiter(this, void 0, void 0, function () {var req;
+                        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, context_1["import"]('./test')]; // TWO
+                                case 1:req = _a.sent() // TWO
                                     ;
                                     return [2 /*return*/];
                             }
@@ -108,30 +98,21 @@ System.register([], function (exports_1, context_1) {
             }());
             exports_1("cl1", cl1);
             exports_1("obj", obj = {
-                m: function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var req;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, context_1["import"]('./test')]; // THREE
-                            case 1:
-                                req = _a.sent() // THREE
+                m: function () { return __awaiter(void 0, void 0, void 0, function () {var req;
+                    return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, context_1["import"]('./test')]; // THREE
+                            case 1:req = _a.sent() // THREE
                                 ;
                                 return [2 /*return*/];
                         }
                     });
                 }); }
             });
-            cl2 = /** @class */ (function () {
-                function cl2() {
+            cl2 = /** @class */ (function () {function cl2() {
                     var _this = this;
                     this.p = {
-                        m: function () { return __awaiter(_this, void 0, void 0, function () {
-                            var req;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, context_1["import"]('./test')]; // FOUR
-                                    case 1:
-                                        req = _a.sent() // FOUR
+                        m: function () { return __awaiter(_this, void 0, void 0, function () {var req;
+                            return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, context_1["import"]('./test')]; // FOUR
+                                    case 1:req = _a.sent() // FOUR
                                         ;
                                         return [2 /*return*/];
                                 }
@@ -142,13 +123,9 @@ System.register([], function (exports_1, context_1) {
                 return cl2;
             }());
             exports_1("cl2", cl2);
-            exports_1("l", l = function () { return __awaiter(void 0, void 0, void 0, function () {
-                var req;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, context_1["import"]('./test')]; // FIVE
-                        case 1:
-                            req = _a.sent() // FIVE
+            exports_1("l", l = function () { return __awaiter(void 0, void 0, void 0, function () {var req;
+                return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, context_1["import"]('./test')]; // FIVE
+                        case 1:req = _a.sent() // FIVE
                             ;
                             return [2 /*return*/];
                     }

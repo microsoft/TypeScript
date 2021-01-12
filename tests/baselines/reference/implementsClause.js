@@ -25,12 +25,10 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());

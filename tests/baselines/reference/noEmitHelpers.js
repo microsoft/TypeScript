@@ -5,8 +5,7 @@ class B extends A { }
 
 //// [noEmitHelpers.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function (_super) {

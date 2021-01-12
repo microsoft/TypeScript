@@ -20,8 +20,10 @@ class SymbolIterator {
             value: Symbol()
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }
 }
+
 var array = [...new SymbolIterator];

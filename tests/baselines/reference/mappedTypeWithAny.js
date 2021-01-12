@@ -27,6 +27,17 @@ for (let id in z) {
 
 //// [mappedTypeWithAny.js]
 "use strict";
+
+
+
+
+
+
+
+
+
+
+
 for (var id in z) {
     var data = z[id];
     var x = data.notAValue; // Error

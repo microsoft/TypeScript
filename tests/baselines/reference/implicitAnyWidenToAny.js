@@ -50,6 +50,7 @@ var array2 = [];
 var array3 = [null, undefined];
 var array4 = [null, undefined];
 var array5 = [null, undefined];
+
 var objLit;
 function anyReturnFunc() { }
 var obj0 = new objLit(1);

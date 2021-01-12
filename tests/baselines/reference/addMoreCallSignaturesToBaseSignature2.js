@@ -11,5 +11,7 @@ var a: Bar;
 var kitty = a(1);
 
 //// [addMoreCallSignaturesToBaseSignature2.js]
+
+
 var a;
 var kitty = a(1);

@@ -169,9 +169,9 @@ function ft3(x, y, z) {
     y = x; // Error
     z = x; // Error
 }
+
 // Inference
-function pipe() {
-    var args = [];
+function pipe() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
@@ -179,27 +179,29 @@ function pipe() {
     var values = args.slice(0, -1);
     callback.apply(void 0, values);
 }
+
 pipe("foo", 123, true, function (a, b, c) {
     a; // string
     b; // number
     c; // boolean
 });
-pipe("foo", 123, true, function () {
-    var x = [];
+
+pipe("foo", 123, true, function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
     x; // [string, number, boolean]
 });
-pipe.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {
-        var x = [];
+
+
+pipe.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
         x; // string[]
     }]));
-pipe.apply(void 0, __spreadArray(__spreadArray([1], sa), [2, function () {
-        var x = [];
+
+pipe.apply(void 0, __spreadArray(__spreadArray([1], sa), [2, function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
@@ -207,8 +209,10 @@ pipe.apply(void 0, __spreadArray(__spreadArray([1], sa), [2, function () {
         var qq = x[x.length - 1];
         var ww = x[0];
     }]));
+
 pipe(1, 2, 3, 4); // Error
 pipe.apply(void 0, sa); // Error
+
 fn1([]); // Error
 fn1([1]); // Error
 fn1([1, 'abc']); // [number, string]
@@ -217,6 +221,7 @@ fn2([]); // Error
 fn2([1]); // Error
 fn2([1, 'abc']); // [number, string]
 fn2([1, 'abc', true]); // [number, boolean]
+
 var a1 = foo('blah1', 1);
 var b1 = foo('blah1', 'blah2', 1);
 var c1 = foo(1); // Error

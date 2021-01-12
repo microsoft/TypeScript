@@ -35,6 +35,7 @@ var x1 = <div><span></div>;
 </>;
 //// [Error2.jsx]
 var x2 = <div></span>;
+
 //// [Error3.jsx]
 var x3 = <div>;
 

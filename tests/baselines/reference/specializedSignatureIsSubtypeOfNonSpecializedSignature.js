@@ -84,7 +84,9 @@ var a3: {
 //// [specializedSignatureIsSubtypeOfNonSpecializedSignature.js]
 // Specialized signatures must be a subtype of a non-specialized signature
 // All the below should not be errors
+
 function foo(x) { }
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -103,6 +105,11 @@ var C3 = /** @class */ (function () {
     C3.prototype.foo = function (x) { };
     return C3;
 }());
+
+
+
 var a;
+
 var a2;
+
 var a3;

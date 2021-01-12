@@ -27,11 +27,11 @@ const enum bar {
 //// [strictModeReservedWord2.js]
 "use strict";
 var package;
-(function (package) {
-})(package || (package = {}));
+(function (package) {})(package || (package = {}));
 var foo;
 (function (foo) {
     foo[foo["public"] = 0] = "public";
     foo[foo["private"] = 1] = "private";
     foo[foo["pacakge"] = 2] = "pacakge";
 })(foo || (foo = {}));
+

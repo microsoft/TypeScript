@@ -11,6 +11,7 @@ class A {
 
 //// [privateNamesAndDecorators.js]
 var _foo;
+
 var A = /** @class */ (function () {
     function A() {
         _foo.set(this, 1);

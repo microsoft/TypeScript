@@ -9,8 +9,7 @@ class C {
 }
 
 //// [computedPropertyNames23_ES5.js]
-var C = /** @class */ (function () {
-    var _a;
+var C = /** @class */ (function () {var _a;
     function C() {
     }
     C.prototype.bar = function () {

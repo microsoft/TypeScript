@@ -15,8 +15,7 @@ module.exports.Strings = Strings;
 
 //// [bar.js]
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());
 module.exports = Bar;
@@ -35,8 +34,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Bar = require("./bar");
+})();var Bar = require("./bar");
 var Strings = {
     a: "A",
     b: "B"

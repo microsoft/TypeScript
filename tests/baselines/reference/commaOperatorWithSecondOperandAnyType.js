@@ -49,6 +49,7 @@ BOOLEAN, ANY;
 NUMBER, ANY;
 STRING, ANY;
 OBJECT, ANY;
+
 //Return type is any
 var resultIsAny1 = (ANY, ANY);
 var resultIsAny2 = (BOOLEAN, ANY);
@@ -63,6 +64,7 @@ var x;
 "string".charAt(0), [null, 1];
 true, x("any");
 !BOOLEAN, x.doSomeThing();
+
 var resultIsAny6 = (1, ANY);
 var resultIsAny7 = (++NUMBER, ANY);
 var resultIsAny8 = ("string", null);

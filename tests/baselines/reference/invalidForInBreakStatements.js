@@ -42,6 +42,7 @@ for (var x in {}) {
 // All errors
 // naked break not allowed
 break;
+
 // non-existent label
 ONE: for (var x in {})
     break TWO;
@@ -56,13 +57,16 @@ THREE: for (var x in {}) {
         break THREE;
     };
 }
+
 // break forward
 for (var x in {}) {
     break FIVE;
     FIVE: for (var x in {}) { }
 }
+
 // label on non-loop statement
 NINE: var y = 12;
+
 for (var x in {}) {
     break NINE;
 }

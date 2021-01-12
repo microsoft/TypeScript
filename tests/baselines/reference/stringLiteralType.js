@@ -8,5 +8,6 @@ function f(x: any) {
 
 //// [stringLiteralType.js]
 var x;
+
 function f(x) {
 }

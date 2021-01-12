@@ -192,6 +192,14 @@ var C = /** @class */ (function () {
             this.inSetter = "string";
         }
     };
+
+
+
+
+
+
+
+
     C.method = function () {
         var _this = this;
         if (Math.random()) {
@@ -245,12 +253,15 @@ var stringOrNumberOrUndefined = c.inSetter;
 var stringOrNumberOrUndefined = c.inPropertyDeclaration;
 var stringOrNumberOrUndefined = c.inNestedArrowFunction;
 var stringOrNumberOrBoolean;
+
 var number;
 var number = c.inMultiple;
 var stringOrBooleanOrUndefined;
 var stringOrBooleanOrUndefined = c.inMultipleMethods;
 var any;
 var any = c.inMethodNullable;
+
+
 var stringOrNumberOrUndefined = C.inStaticMethod;
 var stringOrNumberOrUndefined = C.inStaticGetter;
 var stringOrNumberOrUndefined = C.inStaticSetter;

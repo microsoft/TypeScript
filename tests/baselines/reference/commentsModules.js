@@ -144,8 +144,7 @@ m1.fooExport();
 var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
 var m2;
-(function (m2) {
-    var m3;
+(function (m2) {var m3;
     (function (m3) {
         /** Exported class comment*/
         var c = /** @class */ (function () {
@@ -159,10 +158,8 @@ var m2;
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
 var m3;
-(function (m3) {
-    var m4;
-    (function (m4) {
-        var m5;
+(function (m3) {var m4;
+    (function (m4) {var m5;
         (function (m5) {
             /** Exported class comment*/
             var c = /** @class */ (function () {
@@ -177,12 +174,9 @@ var m3;
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
 var m4;
-(function (m4) {
-    var m5;
-    (function (m5) {
-        var m6;
-        (function (m6) {
-            var m7;
+(function (m4) {var m5;
+    (function (m5) {var m6;
+        (function (m6) {var m7;
             (function (m7) {
                 /** Exported class comment*/
                 var c = /** @class */ (function () {
@@ -198,10 +192,8 @@ var m4;
 new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/
 var m5;
-(function (m5) {
-    var m6;
-    (function (m6) {
-        var m7;
+(function (m5) {var m6;
+    (function (m6) {var m7;
         (function (m7) {
             /** module m8 comment*/
             var m8;
@@ -219,10 +211,8 @@ var m5;
 })(m5 || (m5 = {}));
 new m5.m6.m7.m8.c();
 var m6;
-(function (m6) {
-    var m7;
-    (function (m7) {
-        var m8;
+(function (m6) {var m7;
+    (function (m7) {var m8;
         (function (m8) {
             /** Exported class comment*/
             var c = /** @class */ (function () {
@@ -236,8 +226,7 @@ var m6;
 })(m6 || (m6 = {}));
 new m6.m7.m8.c();
 var m7;
-(function (m7) {
-    var m8;
+(function (m7) {var m8;
     (function (m8) {
         /** module m9 comment*/
         var m9;

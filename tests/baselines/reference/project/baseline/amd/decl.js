@@ -1,6 +1,5 @@
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.point = void 0;
     ;
     function point(x, y) {

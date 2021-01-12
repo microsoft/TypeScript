@@ -19,13 +19,11 @@ module M {
 var M;
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     var E = /** @class */ (function () {
-        function E() {
-        }
+        function E() {}
         return E;
     }());
     M.E = E;

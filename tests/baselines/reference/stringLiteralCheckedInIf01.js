@@ -15,6 +15,7 @@ function f(foo: T) {
 }
 
 //// [stringLiteralCheckedInIf01.js]
+
 function f(foo) {
     if (foo === "a") {
         return foo;

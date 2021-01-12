@@ -41,6 +41,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
+
 function myHigherOrderComponent(Inner) {
     return /** @class */ (function (_super) {
         __extends(OuterComponent, _super);

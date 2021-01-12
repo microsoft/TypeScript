@@ -38,6 +38,7 @@ var A = /** @class */ (function () {
         if (Math.random() > 0.5) {
             return '';
         }
+
         // it does error here as expected
     };
     return A;
@@ -50,6 +51,7 @@ var B = /** @class */ (function () {
             if (Math.random() > 0.5) {
                 return '';
             }
+
             // it should error here because it returns undefined
         },
         enumerable: false,
@@ -65,6 +67,7 @@ var C = /** @class */ (function () {
             if (Math.random() > 0.5) {
                 return 0;
             }
+
             // it should error here because it returns undefined
         },
         set: function (value) {

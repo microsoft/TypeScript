@@ -76,7 +76,9 @@ const at8: [1] = at7;
 //// [readonlyTupleAndArrayElaboration.js]
 // @strict
 // #Repro from #30839
+
 var point = [3, 4];
+
 function distanceFromOrigin(_a) {
     var x = _a[0], y = _a[1];
     return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -89,33 +91,48 @@ arryFn2(b);
 arryFn2(c);
 var t1 = [1];
 var t2 = t1;
+
 var t3 = [1];
 var t4 = t3;
+
 var t5 = [1];
 var t6 = t5;
+
 var t7 = [1];
 var t8 = t7;
+
 var a1 = [1];
 var a2 = a1;
+
 var a3 = [1];
 var a4 = a3;
+
 var a5 = [1];
 var a6 = a5;
+
 var a7 = [1];
 var a8 = a7;
+
 var ta1 = [1];
 var ta2 = ta1;
+
 var ta3 = [1];
 var ta4 = ta3;
+
 var ta5 = [1];
 var ta6 = ta5;
+
 var ta7 = [1];
 var ta8 = ta7;
+
 var at1 = [1];
 var at2 = at1;
+
 var at3 = [1];
 var at4 = at3;
+
 var at5 = [1];
 var at6 = at5;
+
 var at7 = [1];
 var at8 = at7;

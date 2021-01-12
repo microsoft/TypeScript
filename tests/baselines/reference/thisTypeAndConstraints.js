@@ -37,6 +37,7 @@ function f(x) {
     }
     x = x.self();
 }
+
 var B = /** @class */ (function () {
     function B() {
     }

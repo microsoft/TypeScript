@@ -20,6 +20,7 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 var TestObject = /** @class */ (function () {
     function TestObject() {
         this.a = '';
@@ -30,5 +31,6 @@ var TestObject = /** @class */ (function () {
 }());
 function Test(props) { return React.createElement(React.Fragment, null); }
 var model = new TestObject();
+
 var el1 = React.createElement(Test, { model: model, foo: "c" });
 var el2 = React.createElement(Test, { model: model, foo: "c" });

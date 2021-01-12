@@ -54,6 +54,7 @@ exports.Foo4 = exports.Foo3 = exports.Foo2 = exports.Foo = void 0;
 const events_1 = require("events");
 const nestNamespaceModule_1 = require("nestNamespaceModule");
 const renameModule_1 = require("renameModule");
+
 class Foo extends events_1.EventEmitter {
 }
 exports.Foo = Foo;

@@ -20,8 +20,10 @@ var obj = {
     b: "foo",
     c: "foo"
 };
+
 var x1 = 1;
 var x2 = 1;
+
 var _a = { a: "foo" }.a, a = _a === void 0 ? "foo" : _a;
 var _b = { b: "bar" }.b, b = _b === void 0 ? "foo" : _b;
 var _c = { c: "bar" }.c, c = _c === void 0 ? "foo" : _c;

@@ -27,10 +27,12 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
+
 var a;
 var b = {
     foo: null
 };
+
 // These should all be of type 'any'
 var r1 = (new C()).foo;
 var r2 = null.foo;

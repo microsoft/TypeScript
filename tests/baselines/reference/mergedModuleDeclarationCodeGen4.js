@@ -18,24 +18,18 @@ module superContain {
 
 //// [mergedModuleDeclarationCodeGen4.js]
 var superContain;
-(function (superContain) {
-    var contain;
-    (function (contain_1) {
-        var my;
-        (function (my) {
-            var buz;
-            (function (buz) {
-                var data;
+(function (superContain) {var contain;
+    (function (contain_1) {var my;
+        (function (my) {var buz;
+            (function (buz) {var data;
                 (function (data) {
                     function foo() { }
                     data.foo = foo;
                 })(data = buz.data || (buz.data = {}));
             })(buz = my.buz || (my.buz = {}));
         })(my = contain_1.my || (contain_1.my = {}));
-        (function (my_1) {
-            var buz;
-            (function (buz_1) {
-                var data;
+        (function (my_1) {var buz;
+            (function (buz_1) {var data;
                 (function (data_1) {
                     function bar(contain, my, buz, data) {
                         data_1.foo();

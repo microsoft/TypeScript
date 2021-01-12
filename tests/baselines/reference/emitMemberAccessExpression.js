@@ -28,10 +28,8 @@ module Microsoft.PeopleAtWork.Model {
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 var Microsoft;
-(function (Microsoft) {
-    var PeopleAtWork;
-    (function (PeopleAtWork) {
-        var Model;
+(function (Microsoft) {var PeopleAtWork;
+    (function (PeopleAtWork) {var Model;
         (function (Model) {
             var _Person = /** @class */ (function () {
                 function _Person() {
@@ -52,10 +50,8 @@ var Microsoft;
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
 var Microsoft;
-(function (Microsoft) {
-    var PeopleAtWork;
-    (function (PeopleAtWork) {
-        var Model;
+(function (Microsoft) {var PeopleAtWork;
+    (function (PeopleAtWork) {var Model;
         (function (Model) {
             var KnockoutExtentions = /** @class */ (function () {
                 function KnockoutExtentions() {

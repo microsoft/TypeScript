@@ -12,8 +12,7 @@ module M {
 
 //// [classAndVariableWithSameName.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }()); // error
 var C = ''; // error

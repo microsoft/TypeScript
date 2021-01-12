@@ -13,8 +13,7 @@ x,y,a1,b1,d1;
 
 //// [systemModule16.js]
 System.register(["foo", "bar"], function (exports_1, context_1) {
-    "use strict";
-    var x, y, foo_1;
+    "use strict";var x, y, foo_1;
     var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "x": true,
@@ -23,22 +22,18 @@ System.register(["foo", "bar"], function (exports_1, context_1) {
         "b2": true,
         "d2": true
     };
-    function exportStar_1(m) {
-        var exports = {};
-        for (var n in m) {
-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+    function exportStar_1(m) {var exports = {};
+        for (var n in m) {if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
         exports_1(exports);
     }
     return {
         setters: [
-            function (x_1) {
-                x = x_1;
+            function (x_1) {x = x_1;
                 exportStar_1(x_1);
                 foo_1 = x_1;
             },
-            function (y_1) {
-                y = y_1;
+            function (y_1) {y = y_1;
                 exportStar_1(y_1);
                 exports_1({
                     "a2": y_1["a2"],
@@ -47,8 +42,7 @@ System.register(["foo", "bar"], function (exports_1, context_1) {
                 });
             }
         ],
-        execute: function () {
-            exports_1("x", x);
+        execute: function () {exports_1("x", x);
             exports_1("y", y);
             x, y, foo_1.a1, foo_1.b1, foo_1.c1;
         }

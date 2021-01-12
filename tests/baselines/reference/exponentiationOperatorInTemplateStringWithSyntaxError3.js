@@ -38,12 +38,14 @@ Math.pow(-t1++, t2) - t1 + " world";
 Math.pow(!t1, Math.pow(t2, --t1)) + " world";
 Math.pow(typeof t1, Math.pow(t2, t1)) + " world";
 1 + Math.pow(typeof t1, Math.pow(t2, t1)) + " world";
+
 "" + (Math.pow(-t1, t2) - t1) + (Math.pow(-t1, t2) - t1) + " world";
 "" + (Math.pow(-++t1, t2) - t1) + (Math.pow(-++t1, t2) - t1) + " world";
 "" + (Math.pow(-t1++, t2) - t1) + (Math.pow(-t1++, t2) - t1) + " world";
 "" + Math.pow(!t1, Math.pow(t2, --t1)) + Math.pow(!t1, Math.pow(t2, --t1)) + " world";
 "" + Math.pow(typeof t1, Math.pow(t2, t1)) + Math.pow(typeof t1, Math.pow(t2, t1)) + " world";
 "" + (1 + Math.pow(typeof t1, Math.pow(t2, t1))) + (1 + Math.pow(typeof t1, Math.pow(t2, t1))) + " world";
+
 Math.pow(-t1, t2) - t1 + " hello world " + (Math.pow(-t1, t2) - t1) + " !!";
 Math.pow(-++t1, t2) - t1 + " hello world " + (Math.pow(-++t1, t2) - t1) + " !!";
 Math.pow(-t1++, t2) - t1 + " hello world " + (Math.pow(-t1++, t2) - t1) + " !!";

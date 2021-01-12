@@ -41,6 +41,7 @@ for(;;) {
 // All errors
 // naked break not allowed
 break;
+
 // non-existent label
 ONE: for (;;)
     break TWO;
@@ -55,6 +56,7 @@ THREE: for (;;) {
         break THREE;
     };
 }
+
 // break forward
 for (;;) {
     break FIVE;
@@ -62,6 +64,7 @@ for (;;) {
 }
 // label on non-loop statement
 NINE: var y = 12;
+
 for (;;) {
     break NINE;
 }

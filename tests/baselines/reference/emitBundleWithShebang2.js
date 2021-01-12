@@ -28,8 +28,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var Doo = /** @class */ (function () {
-    function Doo() {
-    }
+    function Doo() {}
     return Doo;
 }());
 var Scooby = /** @class */ (function (_super) {
@@ -40,8 +39,7 @@ var Scooby = /** @class */ (function (_super) {
     return Scooby;
 }(Doo));
 var Dood = /** @class */ (function () {
-    function Dood() {
-    }
+    function Dood() {}
     return Dood;
 }());
 var Scoobyd = /** @class */ (function (_super) {

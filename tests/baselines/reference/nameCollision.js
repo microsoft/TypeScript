@@ -82,10 +82,8 @@ var X;
     })(Y = X_1.Y || (X_1.Y = {}));
 })(X || (X = {}));
 var Y;
-(function (Y_2) {
-    var Y;
-    (function (Y_3) {
-        var Y;
+(function (Y_2) {var Y;
+    (function (Y_3) {var Y;
         (function (Y) {
             Y[Y["Red"] = 0] = "Red";
             Y[Y["Blue"] = 1] = "Blue";

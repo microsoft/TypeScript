@@ -35,16 +35,13 @@ export let h1: D = new D;
 
 //// [exportNonInitializedVariablesSystem.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var a, b, c, d, A, e, f, B, C, a1, b1, c1, d1, D, e1, f1, g1, h1;
+    "use strict";var a, b, c, d, A, e, f, B, C, a1, b1, c1, d1, D, e1, f1, g1, h1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
             let;
-            A = /** @class */ (function () {
-                function A() {
-                }
+            A = /** @class */ (function () {function A() {}
                 return A;
             }());
             (function (B) {
@@ -58,9 +55,7 @@ System.register([], function (exports_1, context_1) {
             exports_1("b1", b1 = 1);
             exports_1("c1", c1 = 'a');
             exports_1("d1", d1 = 1);
-            D = /** @class */ (function () {
-                function D() {
-                }
+            D = /** @class */ (function () {function D() {}
                 return D;
             }());
             exports_1("e1", e1 = new D);

@@ -37,8 +37,7 @@ module Foo.Bar {
 
 //// [sourceMapSample.js]
 var Foo;
-(function (Foo) {
-    var Bar;
+(function (Foo) {var Bar;
     (function (Bar) {
         "use strict";
         var Greeter = /** @class */ (function () {
@@ -55,8 +54,7 @@ var Foo;
         }
         var greeter = new Greeter("Hello, world!");
         var str = greeter.greet();
-        function foo2(greeting) {
-            var restGreetings = [];
+        function foo2(greeting) {var restGreetings = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 restGreetings[_i - 1] = arguments[_i];
             }
@@ -65,6 +63,7 @@ var Foo;
             for (var i = 0; i < restGreetings.length; i++) {
                 greeters.push(new Greeter(restGreetings[i]));
             }
+
             return greeters;
         }
         var b = foo2("Hello", "World", "!");

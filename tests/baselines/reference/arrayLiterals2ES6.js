@@ -60,6 +60,7 @@ var d9 = [[...temp1], ...["hello"]];
 //      Elisionopt   SpreadElement
 //      ElementList, Elisionopt   AssignmentExpression
 //      ElementList, Elisionopt   SpreadElement
+
 // SpreadElement:
 //      ...   AssignmentExpression
 var a0 = [, , 2, 3, 4];
@@ -82,12 +83,17 @@ var b1 = [[1, 2, 3], ["hello", "string"]];
 //       the resulting type is a tuple type constructed from the types of the element expressions.
 var [c0, c1] = [1, 2]; // tuple type [number, number]
 var [c2, c3] = [1, 2, true]; // tuple type [number, number, boolean]
+
+
+
+
 // The resulting type an array literal expression is determined as follows:
 //      - the resulting type is an array type with an element type that is the union of the types of the
 //        non - spread element expressions and the numeric index signature types of the spread element expressions
 var temp = ["s", "t", "r"];
 var temp1 = [1, 2, 3];
 var temp2 = [[1, 2, 3], ["hello", "string"]];
+
 var d0 = [1, true, ...temp,]; // has type (string|number|boolean)[]
 var d1 = [...temp]; // has type string[]
 var d2 = [...temp1];

@@ -106,9 +106,10 @@ module mglo5 {
 
 //// [complicatedPrivacy.js]
 var m1;
-(function (m1) {
-    var m2;
+(function (m1) {var m2;
     (function (m2) {
+
+
         function f1(c1) {
         }
         m2.f1 = f1;
@@ -151,12 +152,14 @@ var m1;
     (function (m3) {
         function f2(f1) {
         }
+
     })(m3 || (m3 = {}));
     var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
+
     var C5 = /** @class */ (function () {
         function C5() {
         }
@@ -170,9 +173,9 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 var m2;
-(function (m2) {
-    var m3;
+(function (m2) {var m3;
     (function (m3) {
+
         var c_pr = /** @class */ (function () {
             function c_pr() {
             }
@@ -190,8 +193,7 @@ var m2;
                 return C;
             }());
             var m5;
-            (function (m5) {
-                var m6;
+            (function (m5) {var m6;
                 (function (m6) {
                     function f1() {
                         return new C();

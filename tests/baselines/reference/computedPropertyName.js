@@ -52,8 +52,8 @@ const o = {
 };
 class C {
 }
-class D {
-    constructor() {
+
+class D {constructor() {
         this[_a] = 0; // Error
     }
 }
@@ -63,6 +63,8 @@ class E {
 }
 class F {
 }
+
 class G {
 }
+
 export {};

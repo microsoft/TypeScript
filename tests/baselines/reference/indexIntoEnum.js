@@ -8,9 +8,7 @@ module M {
 
 //// [indexIntoEnum.js]
 var M;
-(function (M) {
-    var E;
-    (function (E) {
-    })(E || (E = {}));
+(function (M) {var E;
+    (function (E) {})(E || (E = {}));
     var x = E[0];
 })(M || (M = {}));

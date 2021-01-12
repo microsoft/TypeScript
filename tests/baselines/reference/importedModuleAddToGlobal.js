@@ -20,8 +20,7 @@ module C {
 var B;
 (function (B_1) {
     var B = /** @class */ (function () {
-        function B() {
-        }
+        function B() {}
         return B;
     }());
     B_1.B = B;

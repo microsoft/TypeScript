@@ -69,8 +69,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     return A;
@@ -82,6 +81,7 @@ var B = /** @class */ (function (_super) {
     }
     return B;
 }(A));
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -93,6 +93,7 @@ var r1 = c.valueOf();
 var r1b = c.data;
 var r1c = r1b['hm']; // should be 'Object'
 var r1d = c['hm']; // should be 'any'
+
 var i;
 var r2 = i.valueOf();
 var r2b = i.data;
@@ -102,9 +103,11 @@ var a = {
     valueOf: function () { },
     data: new B()
 };
+
 var r3 = a.valueOf();
 var r3b = a.data;
 var r3c = r3b['hm']; // should be 'Object'
 var r3d = i['hm'];
 var b;
+
 var r4 = b.valueOf();

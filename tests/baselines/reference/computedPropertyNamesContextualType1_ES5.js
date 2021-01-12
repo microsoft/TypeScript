@@ -11,6 +11,7 @@ var o: I = {
 
 //// [computedPropertyNamesContextualType1_ES5.js]
 var _a;
+
 var o = (_a = {},
     _a["" + 0] = function (y) { return y.length; },
     _a["" + 1] = function (y) { return y.length; },

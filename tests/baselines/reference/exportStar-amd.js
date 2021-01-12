@@ -30,16 +30,14 @@ foo;
 
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.y = exports.x = void 0;
     exports.x = 1;
     exports.y = 2;
 });
 //// [t2.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo = void 0;
     exports.default = "hello";
     function foo() { }
@@ -47,8 +45,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [t3.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.z = exports.y = exports.x = void 0;
     var x = "x";
     exports.x = x;
@@ -69,16 +66,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 define(["require", "exports", "./t1", "./t2", "./t3"], function (require, exports, t1_1, t2_1, t3_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     __exportStar(t1_1, exports);
     __exportStar(t2_1, exports);
     __exportStar(t3_1, exports);
 });
 //// [main.js]
 define(["require", "exports", "./t4"], function (require, exports, t4_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     t4_1.default;
     t4_1.x;
     t4_1.y;

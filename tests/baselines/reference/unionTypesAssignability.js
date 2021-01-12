@@ -88,11 +88,9 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var unionNumberString;
+})();var unionNumberString;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function (_super) {
@@ -112,6 +110,7 @@ var E = /** @class */ (function (_super) {
     return E;
 }(C));
 var unionDE;
+
 var num;
 var str;
 var c;
@@ -133,6 +132,8 @@ num = unionNumberString; // error string is not assignable to number
 str = num;
 str = str;
 str = unionNumberString; // error since number is not assignable to string
+
+
 // A type T is assignable to a union type U if T is assignable to any type in U
 d = c;
 e = c;
@@ -155,9 +156,11 @@ anyVar = unionDE;
 anyVar = unionNumberString;
 unionDE = anyVar;
 unionNumberString = anyVar;
+
 // null
 unionDE = null;
 unionNumberString = null;
+
 // undefined
 unionDE = undefined;
 unionNumberString = undefined;

@@ -536,22 +536,28 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
+
     var AstWalkOptions = /** @class */ (function () {
         function AstWalkOptions() {
             this.goChildren = true;
             this.goNextSibling = true;
             this.reverseSiblings = false; // visit siblings in reverse execution order
         }
-        AstWalkOptions.prototype.stopWalk = function (stop) {
-            if (stop === void 0) { stop = true; }
+        AstWalkOptions.prototype.stopWalk = function (stop) {if (stop === void 0) { stop = true; }
             this.goChildren = !stop;
             this.goNextSibling = !stop;
         };
         return AstWalkOptions;
     }());
     TypeScript.AstWalkOptions = AstWalkOptions;
+
+
     var AstWalker = /** @class */ (function () {
-        function AstWalker(childrenWalkers, pre, post, options, state) {
+        function AstWalker(childrenWalkers,
+            pre,
+            post,
+            options,
+            state) {
             this.childrenWalkers = childrenWalkers;
             this.pre = pre;
             this.post = post;
@@ -595,15 +601,19 @@ var TypeScript;
         AstWalkerFactory.prototype.walk = function (ast, pre, post, options, state) {
             return this.getWalker(pre, post, options, state).walk(ast, null);
         };
+
         AstWalkerFactory.prototype.getWalker = function (pre, post, options, state) {
             return this.getSlowWalker(pre, post, options, state);
         };
+
         AstWalkerFactory.prototype.getSlowWalker = function (pre, post, options, state) {
             if (!options) {
                 options = new AstWalkOptions();
             }
+
             return new AstWalker(this.childrenWalkers, pre, post, options, state);
         };
+
         AstWalkerFactory.prototype.initChildrenWalkers = function () {
             this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
@@ -723,6 +733,7 @@ var TypeScript;
     }());
     TypeScript.AstWalkerFactory = AstWalkerFactory;
     var globalAstWalkerFactory;
+
     function getAstWalkerFactory() {
         if (!globalAstWalkerFactory) {
             globalAstWalkerFactory = new AstWalkerFactory();
@@ -771,8 +782,7 @@ var TypeScript;
                 if ((preAst.operand1) && (walker.options.goNextSibling)) {
                     preAst.operand1 = walker.walk(preAst.operand1, preAst);
                 }
-            }
-            else {
+            } else {
                 if (preAst.operand1) {
                     preAst.operand1 = walker.walk(preAst.operand1, preAst);
                 }
@@ -849,12 +859,15 @@ var TypeScript;
             if (preAst.init) {
                 preAst.init = walker.walk(preAst.init, preAst);
             }
+
             if (preAst.cond && walker.options.goNextSibling) {
                 preAst.cond = walker.walk(preAst.cond, preAst);
             }
+
             if (preAst.incr && walker.options.goNextSibling) {
                 preAst.incr = walker.walk(preAst.incr, preAst);
             }
+
             if (preAst.body && walker.options.goNextSibling) {
                 preAst.body = walker.walk(preAst.body, preAst);
             }
@@ -928,6 +941,7 @@ var TypeScript;
             if (preAst.tryNode) {
                 preAst.tryNode = walker.walk(preAst.tryNode, preAst);
             }
+
             if ((preAst.catchNode) && walker.options.goNextSibling) {
                 preAst.catchNode = walker.walk(preAst.catchNode, preAst);
             }
@@ -962,6 +976,7 @@ var TypeScript;
             if (walker.options.goNextSibling && preAst.members) {
                 preAst.members = walker.walk(preAst.members, preAst);
             }
+
         }
         ChildrenWalkers.walkRecordChildren = walkRecordChildren;
         function walkNamedTypeChildren(preAst, parent, walker) {
@@ -973,6 +988,7 @@ var TypeScript;
             if (walker.options.goNextSibling && preAst.extendsList) {
                 preAst.extendsList = walker.walk(preAst.extendsList, preAst);
             }
+
             if (walker.options.goNextSibling && preAst.implementsList) {
                 preAst.implementsList = walker.walk(preAst.implementsList, preAst);
             }
@@ -990,6 +1006,7 @@ var TypeScript;
             if (walker.options.goNextSibling && preAst.extendsList) {
                 preAst.extendsList = walker.walk(preAst.extendsList, preAst);
             }
+
             if (walker.options.goNextSibling && preAst.implementsList) {
                 preAst.implementsList = walker.walk(preAst.implementsList, preAst);
             }
@@ -1012,6 +1029,7 @@ var TypeScript;
             if (preAst.expr) {
                 preAst.expr = walker.walk(preAst.expr, preAst);
             }
+
             if (preAst.body && walker.options.goNextSibling) {
                 preAst.body = walker.walk(preAst.body, preAst);
             }

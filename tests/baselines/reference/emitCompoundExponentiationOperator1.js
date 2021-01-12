@@ -22,6 +22,7 @@ comp **= comp ** (5 % 2);
 
 //// [emitCompoundExponentiationOperator1.js]
 var comp;
+
 comp = Math.pow(comp, 1);
 comp = Math.pow(comp, Math.pow(comp, comp));
 comp = Math.pow(comp, Math.pow(comp, Math.pow(comp, 2)));

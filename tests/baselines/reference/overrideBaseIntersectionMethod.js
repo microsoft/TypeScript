@@ -59,6 +59,7 @@ var WithLocation = function (Base) { return /** @class */ (function (_super) {
     };
     return class_1;
 }(Base)); };
+
 var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;

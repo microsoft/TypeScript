@@ -11,8 +11,7 @@ module Salt {
 var Salt;
 (function (Salt) {
     var Pepper = /** @class */ (function () {
-        function Pepper() {
-        }
+        function Pepper() {}
         return Pepper;
     }());
     Salt.Pepper = Pepper;

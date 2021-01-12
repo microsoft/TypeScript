@@ -44,6 +44,7 @@ function f(b) {
                 Foo.x = function () {
                     new Foo();
                 };
+
                 Foo.prototype.m = function () {
                     new Foo();
                 };
@@ -60,6 +61,7 @@ function f(b) {
             Foo.x = function () {
                 new Foo();
             };
+
             Foo.prototype.m = function () {
                 new Foo();
             };

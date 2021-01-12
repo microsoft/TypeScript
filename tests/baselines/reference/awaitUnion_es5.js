@@ -14,25 +14,17 @@ async function f() {
 
 //// [awaitUnion_es5.js]
 function f() {
-    return __awaiter(this, void 0, void 0, function () {
-        var await_a, await_b, await_c, await_d, await_e;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, a];
-                case 1:
-                    await_a = _a.sent();
+    return __awaiter(this, void 0, void 0, function () {var await_a, await_b, await_c, await_d, await_e;
+        return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, a];
+                case 1:await_a = _a.sent();
                     return [4 /*yield*/, b];
-                case 2:
-                    await_b = _a.sent();
+                case 2:await_b = _a.sent();
                     return [4 /*yield*/, c];
-                case 3:
-                    await_c = _a.sent();
+                case 3:await_c = _a.sent();
                     return [4 /*yield*/, d];
-                case 4:
-                    await_d = _a.sent();
+                case 4:await_d = _a.sent();
                     return [4 /*yield*/, e];
-                case 5:
-                    await_e = _a.sent();
+                case 5:await_e = _a.sent();
                     return [2 /*return*/];
             }
         });

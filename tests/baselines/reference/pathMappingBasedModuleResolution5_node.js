@@ -47,6 +47,7 @@ var file1_1 = require("folder2/file1");
 var file2_1 = require("folder3/file2");
 var file3_1 = require("components/file3");
 var file4_1 = require("file4");
+
 use(file1_1.x.toExponential());
 use(file2_1.y.toExponential());
 use(file3_1.z.toExponential());

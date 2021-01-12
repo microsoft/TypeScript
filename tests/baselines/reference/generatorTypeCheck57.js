@@ -7,8 +7,7 @@ function* g() {
 
 //// [generatorTypeCheck57.js]
 function* g() {
-    class C {
-        constructor() {
+    class C {constructor() {
             this.x = yield 0;
         }
     }

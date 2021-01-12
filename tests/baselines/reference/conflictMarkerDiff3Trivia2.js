@@ -23,6 +23,14 @@ var C = /** @class */ (function () {
     C.prototype.foo = function () {
         a();
     };
+
+
+
+
+
+
+
+
     C.prototype.bar = function () { };
     return C;
 }());

@@ -59,7 +59,9 @@ new /** @class */ (function () {
     }
     return class_1;
 }());
+
 var o = { "constructor": function () { } };
+
 var F = /** @class */ (function () {
     function F() {
         console.log(this);

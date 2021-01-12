@@ -27,8 +27,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var BaseClass = /** @class */ (function () {
+})();var BaseClass = /** @class */ (function () {
     function BaseClass() {
     }
     return BaseClass;
@@ -39,6 +38,7 @@ var SubClass = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     SubClass.prototype.Error = function () {
+
         var x = this._getValue1();
         var y = this._getValue2();
     };

@@ -20,18 +20,15 @@ let a: x.A; // should not work
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var x = 1;
+    "use strict";var x = 1;
     return x;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports", "./file2"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var a; // should not work
 });

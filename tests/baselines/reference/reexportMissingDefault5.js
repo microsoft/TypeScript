@@ -10,12 +10,10 @@ export { default as Foo } from "./b";
 
 //// [a.js]
 System.register(["./b"], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (b_1_1) {
-                exports_1({
+            function (b_1_1) {exports_1({
                     "b": b_1_1["b"]
                 });
                 exports_1({
@@ -23,7 +21,6 @@ System.register(["./b"], function (exports_1, context_1) {
                 });
             }
         ],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

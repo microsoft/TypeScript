@@ -14,15 +14,13 @@ var n: number = modM.x;
 
 //// [exportAssignmentInternalModule_A.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var M;
+    "use strict";var M;
     (function (M) {
     })(M || (M = {}));
     return M;
 });
 //// [exportAssignmentInternalModule_B.js]
 define(["require", "exports", "exportAssignmentInternalModule_A"], function (require, exports, modM) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var n = modM.x;
 });

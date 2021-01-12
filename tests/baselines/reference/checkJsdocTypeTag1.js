@@ -45,11 +45,14 @@ var props = {};
 // @ts-check
 /** @type {String} */
 var S = "hello world";
+
 /** @type {number} */
 var n = 10;
+
 /** @type {*} */
 var anyT = 2;
 anyT = "hello";
+
 /** @type {?} */
 var anyT1 = 2;
 anyT1 = "hi";
@@ -65,10 +68,12 @@ x1(0);
 /** @type {function (number): number} */
 var x2 = function (a) { return a + 1; };
 x2(0);
+
 /**
  * @type {object}
  */
 var props = {};
+
 /**
  * @type {Object}
  */

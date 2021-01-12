@@ -29,6 +29,7 @@ x4(0);
 // @ts-check
 /** @type {String} */
 var S = true;
+
 /** @type {number} */
 var n = "hello";
 /** @type {function (number)} */

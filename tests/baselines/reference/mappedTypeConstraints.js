@@ -51,21 +51,33 @@ var __rest = (this && this.__rest) || function (s, e) {
 function f0(obj) {
     obj.b;
 }
+
 function f1(obj) {
     obj.b;
 }
+
 function f2(obj) {
     obj.b;
 }
+
 function f3(obj) {
     obj.a;
     obj.b;
     obj.c;
 }
+
 function f4(obj) {
     obj.a;
     obj.c;
 }
+
+
+
+
+
+
+
+
 var modifier = function (targetProps) {
     var bar = targetProps.bar, rest = __rest(targetProps, ["bar"]);
     rest.foo;

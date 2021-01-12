@@ -17,8 +17,7 @@ var x: A.B = null;
 
 //// [interMixingModulesInterfaces3.js]
 var A;
-(function (A) {
-    var B;
+(function (A) {var B;
     (function (B) {
         function createB() {
             return null;

@@ -26,13 +26,11 @@ if (isNonBlank2(value)) {
 var value;
 if (isNonBlank(value)) {
     doThis(value);
-}
-else {
+} else {
     doThat(value);
 }
 if (isNonBlank2(value)) {
     doThis2(value);
-}
-else {
+} else {
     doThat2(value);
 }

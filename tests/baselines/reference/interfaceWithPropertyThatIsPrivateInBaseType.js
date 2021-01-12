@@ -21,6 +21,7 @@ var Base = /** @class */ (function () {
     }
     return Base;
 }());
+
 var Base2 = /** @class */ (function () {
     function Base2() {
     }

@@ -5,7 +5,6 @@ class C {
 
 //// [restParamModifier.js]
 var C = /** @class */ (function () {
-    function C(rest) {
-    }
+    function C(rest) {}
     return C;
 }());

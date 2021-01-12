@@ -5,7 +5,6 @@ class Bar<T> implements Foo { }
 
 //// [genericTypeUsedWithoutTypeArguments1.js]
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());

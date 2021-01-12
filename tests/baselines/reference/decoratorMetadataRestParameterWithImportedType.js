@@ -84,22 +84,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClassA = void 0;
 var aux_1 = require("./aux");
 var aux1_1 = require("./aux1");
+
 function annotation() {
     return function (target) { };
 }
+
 function annotation1() {
     return function (target) { };
 }
 var ClassA = /** @class */ (function () {
-    function ClassA() {
-        var init = [];
+    function ClassA() {var init = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             init[_i] = arguments[_i];
         }
         this.array = init;
     }
-    ClassA.prototype.foo = function () {
-        var args = [];
+    ClassA.prototype.foo = function () {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }

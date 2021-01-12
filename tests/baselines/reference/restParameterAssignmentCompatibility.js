@@ -30,8 +30,7 @@ t1 = s; // Similar to above, but optionality does not matter here.
 var T = /** @class */ (function () {
     function T() {
     }
-    T.prototype.m = function () {
-        var p3 = [];
+    T.prototype.m = function () {var p3 = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             p3[_i] = arguments[_i];
         }

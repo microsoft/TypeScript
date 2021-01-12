@@ -148,13 +148,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var a = [1, '']; // {}[]
 var b = [1, null]; // number[]
 var c = [1, '', null]; // {}[]
 var d = [{}, 1]; // {}[]
 var e = [{}, Object]; // {}[]
+
 var f = [[], [1]]; // number[][]
 var g = [[1], ['']]; // {}[]
+
 var h = [{ foo: 1, bar: '' }, { foo: 2 }]; // {foo: number}[]
 var i = [{ foo: 1, bar: '' }, { foo: '' }]; // {}[]
 var j = [function () { return 1; }, function () { return ''; }]; // {}[]
@@ -162,9 +165,9 @@ var k = [function () { return 1; }, function () { return 1; }]; // { (): number 
 var l = [function () { return 1; }, function () { return null; }]; // { (): any }[]
 var m = [function () { return 1; }, function () { return ''; }, function () { return null; }]; // { (): any }[]
 var n = [[function () { return 1; }], [function () { return ''; }]]; // {}[]
+
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
@@ -212,6 +215,7 @@ function foo(t, u) {
     var e = [function () { return t; }, function () { return u; }]; // {}[]
     var f = [function () { return t; }, function () { return u; }, function () { return null; }]; // { (): any }[]
 }
+
 function foo2(t, u) {
     var a = [t, t]; // T[]
     var b = [t, null]; // T[]
@@ -224,6 +228,7 @@ function foo2(t, u) {
     var i = [u, base]; // Base[]
     var j = [u, derived]; // Derived[]
 }
+
 function foo3(t, u) {
     var a = [t, t]; // T[]
     var b = [t, null]; // T[]
@@ -236,6 +241,7 @@ function foo3(t, u) {
     var i = [u, base]; // Base[]
     var j = [u, derived]; // Derived[]
 }
+
 function foo4(t, u) {
     var a = [t, t]; // T[]
     var b = [t, null]; // T[]
@@ -249,6 +255,7 @@ function foo4(t, u) {
     var j = [u, derived]; // Derived[]
     var k = [t, u];
 }
+
 //function foo3<T extends U, U extends Derived>(t: T, u: U) {
 //    var a = [t, t]; // T[]
 //    var b = [t, null]; // T[]

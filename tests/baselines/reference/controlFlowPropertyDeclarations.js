@@ -154,14 +154,17 @@ export class StyleParser {
 exports.__esModule = true;
 exports.StyleParser = exports.HTMLtoJSX = void 0;
 var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
+
 // Populate property map with ReactJS's attribute and property mappings
 // TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
 for (var propname in HTMLDOMPropertyConfig.Properties) {
     if (!HTMLDOMPropertyConfig.Properties.hasOwnProperty(propname)) {
         continue;
     }
+
     var mapFrom = HTMLDOMPropertyConfig.DOMAttributeNames[propname] || propname.toLowerCase();
 }
+
 /**
  * Repeats a string a certain number of times.
  * Also: the future is bright and consists of native string repetition:
@@ -175,9 +178,7 @@ function repeatString(string, times) {
     if (times === 1) {
         return string;
     }
-    if (times < 0) {
-        throw new Error();
-    }
+    if (times < 0) {throw new Error();}
     var repeated = '';
     while (times) {
         if (times & 1) {
@@ -189,6 +190,7 @@ function repeatString(string, times) {
     }
     return repeated;
 }
+
 /**
  * Determine if the string ends with the specified substring.
  *
@@ -199,6 +201,7 @@ function repeatString(string, times) {
 function endsWith(haystack, needle) {
     return haystack.slice(-needle.length) === needle;
 }
+
 /**
  * Trim the specified substring off the string. If the string does not end
  * with the specified substring, this is a no-op.
@@ -212,6 +215,7 @@ function trimEnd(haystack, needle) {
         ? haystack.slice(0, -needle.length)
         : haystack;
 }
+
 /**
  * Convert a hyphenated string to camelCase.
  */
@@ -220,12 +224,14 @@ function hyphenToCamelCase(string) {
         return chr.toUpperCase();
     });
 }
+
 /**
  * Determines if the specified string consists entirely of whitespace.
  */
 function isEmpty(string) {
     return !/[^\s]/.test(string);
 }
+
 /**
  * Determines if the CSS value can be converted from a
  * 'px' suffixed string to a numeric value
@@ -251,7 +257,9 @@ var HTMLtoJSX = /** @class */ (function () {
                 // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.
                 return;
             }
+
             var text = '';
+
             if (_this._inPreTag) {
                 // If this text is contained within a <pre>, we need to ensure the JSX
                 // whitespace coalescing rules don't eat the whitespace. This means
@@ -261,8 +269,7 @@ var HTMLtoJSX = /** @class */ (function () {
                     .replace(/( {2,}|\n|\t|\{|\})/g, function (whitespace) {
                     return '{' + JSON.stringify(whitespace) + '}';
                 });
-            }
-            else {
+            } else {
                 // If there's a newline in the text, adjust the indent level
                 if (text.indexOf('\n') > -1) {
                 }

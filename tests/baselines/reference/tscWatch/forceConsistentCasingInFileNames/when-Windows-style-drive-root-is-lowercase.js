@@ -93,8 +93,7 @@ exports.b = 2;
 exports.__esModule = true;
 var a_1 = require("C://project/a");
 var a_2 = require("c://project/a");
-a_1.a;
-a_2.b;
+a_1.a;a_2.b;
 
 
 

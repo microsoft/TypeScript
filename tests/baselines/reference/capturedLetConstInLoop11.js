@@ -21,6 +21,7 @@ var _loop_1 = function () {
 for (;;) {
     _loop_1();
 }
+
 function foo() {
     var _loop_2 = function () {
         var a = 0;

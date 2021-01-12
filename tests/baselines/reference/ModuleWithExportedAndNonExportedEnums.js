@@ -13,8 +13,7 @@ var b = A.Day.Monday;
 
 //// [ModuleWithExportedAndNonExportedEnums.js]
 var A;
-(function (A) {
-    var Color;
+(function (A) {var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Blue"] = 1] = "Blue";

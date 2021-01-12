@@ -57,7 +57,9 @@ foo2({x: 'abc'});
 function foo(opts) {
     opts.x;
 }
+
 foo({ x: 'abc' });
+
 /**
  * @typedef {Object} AnotherOpts
  * @property anotherX {string}
@@ -68,7 +70,9 @@ foo({ x: 'abc' });
 function foo1(opts) {
     opts.anotherX;
 }
+
 foo1({ anotherX: "world" });
+
 /**
  * @typedef {object} Opts1
  * @property {string} x

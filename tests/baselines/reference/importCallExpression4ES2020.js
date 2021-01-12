@@ -31,12 +31,12 @@ class C {
 export class B {
     print() { return "I am B"; }
 }
+
 export function foo() { return "foo"; }
 //// [1.js]
 export function backup() { return "backup"; }
 //// [2.js]
-class C {
-    constructor() {
+class C {constructor() {
         this.myModule = import("./0");
     }
     method() {

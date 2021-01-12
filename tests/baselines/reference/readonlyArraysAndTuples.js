@@ -53,6 +53,7 @@ function f1(ma, ra, mt, rt) {
     rt = ra; // Error
     rt = mt;
 }
+
 v[0] = 1; // Error
 v[1] = 1; // Error
 v[2] = 1; // Error

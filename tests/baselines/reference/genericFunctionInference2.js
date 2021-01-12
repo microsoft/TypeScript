@@ -33,12 +33,22 @@ enhancer4.onChange(null);
 
 //// [genericFunctionInference2.js]
 // Repro from #30685
+
+
+
 var myReducer1 = combineReducers({
     combined: combineReducers({ foo: foo })
 });
+
 var myReducer2 = combineReducers({
     combined: combineReducers({ foo: foo })
 });
+
+
+
+
+
+
 var enhancer4 = withH(function (props) { return ({
     onChange: function (props) { return function (e) { }; },
     onSubmit: function (props) { return function (e) { }; }

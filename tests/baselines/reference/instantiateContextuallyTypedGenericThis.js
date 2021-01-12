@@ -13,6 +13,7 @@ $.each(lines, function(dit) {
 
 
 //// [instantiateContextuallyTypedGenericThis.js]
+
 var $;
 var lines;
 $.each(lines, function (dit) {

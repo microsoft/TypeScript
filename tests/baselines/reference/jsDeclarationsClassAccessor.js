@@ -40,6 +40,7 @@ export class Argument extends Base {
 //// [base.js]
 export class Base {
     constructor() { }
+
     toJSON() {
         const json = { type: undefined, name: undefined, inheritance: undefined };
         return json;
@@ -54,9 +55,11 @@ export class Argument extends Base {
     static parse(tokeniser) {
         return;
     }
+
     get type() {
         return "argument";
     }
+
     /**
      * @param {*} defs
      */

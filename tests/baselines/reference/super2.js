@@ -73,6 +73,7 @@ var Base5 = /** @class */ (function () {
     Base5.prototype.x = function () {
         return "BaseX";
     };
+
     Base5.prototype.y = function () {
         return "BaseY";
     };

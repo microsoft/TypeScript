@@ -69,29 +69,35 @@ module okay {
 var missingArrowsWithCurly;
 (function (missingArrowsWithCurly) {
     var a = function () { };
+
     var b = function () { };
+
     var c = function (x) { };
+
     var d = function (x, y) { };
+
     var e = function (x, y) { };
 })(missingArrowsWithCurly || (missingArrowsWithCurly = {}));
 var missingCurliesWithArrow;
-(function (missingCurliesWithArrow) {
-    var withStatement;
+(function (missingCurliesWithArrow) {var withStatement;
     (function (withStatement) {
         var a = function () { var k = 10; };
+
         var b = function () { var k = 10; };
+
         var c = function (x) { var k = 10; };
+
         var d = function (x, y) { var k = 10; };
+
         var e = function (x, y) { var k = 10; };
+
         var f = function () { var k = 10; };
     })(withStatement || (withStatement = {}));
     var withoutStatement;
     (function (withoutStatement) {
-        var a = function () { return ; };
-    })(withoutStatement || (withoutStatement = {}));
+        var a = function () { return ; };})(withoutStatement || (withoutStatement = {}));
     ;
-    var b = function () { return ; };
-})(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
+    var b = function () { return ; };})(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
 var c = function (x) { return ; };
 ;
 var d = function (x, y) { return ; };
@@ -105,13 +111,18 @@ var ce_nEst_pas_une_arrow_function;
     var b = function () { return ; };
     var c = (x);
     var d = function (x, y) { return ; };
+
     var e = function (x, y) { return ; };
 })(ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {}));
 var okay;
 (function (okay) {
     var a = function () { };
+
     var b = function () { };
+
     var c = function (x) { };
+
     var d = function (x, y) { };
+
     var e = function (x, y) { };
 })(okay || (okay = {}));

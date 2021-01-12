@@ -139,8 +139,7 @@ var __extends = (this && this.__extends) || (function () {
 var Errors;
 (function (Errors) {
     var Base = /** @class */ (function () {
-        function Base() {
-        }
+        function Base() {}
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
@@ -164,9 +163,19 @@ var Errors;
         }
         return OtherDerived;
     }(Base));
+
+
+
+
+
+
+
+
+
     var r1 = foo2(function (x) { return null; }); // any
     var r1a = [function (x) { return ['']; }, function (x) { return null; }];
     var r1b = [function (x) { return null; }, function (x) { return ['']; }];
+
     var r2arg = function (x) { return function (r) { return null; }; };
     var r2arg2 = function (x) { return function (r) { return null; }; };
     var r2 = foo7(r2arg); // any
@@ -177,20 +186,16 @@ var Errors;
     var r3 = foo8(r3arg); // any
     var r3a = [r3arg2, r3arg];
     var r3b = [r3arg, r3arg2];
-    var r4arg = function () {
-        var x = [];
+    var r4arg = function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
-        return null;
-    };
-    var r4arg2 = function () {
-        var x = [];
+        return null;};
+    var r4arg2 = function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
-        return null;
-    };
+        return null;};
     var r4 = foo10(r4arg); // any
     var r4a = [r4arg2, r4arg];
     var r4b = [r4arg, r4arg2];

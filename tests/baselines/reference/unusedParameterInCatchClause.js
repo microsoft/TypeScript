@@ -5,6 +5,5 @@ function f1() {
 
 //// [unusedParameterInCatchClause.js]
 function f1() {
-    try { }
-    catch (ex) { }
+    try { } catch (ex) { }
 }

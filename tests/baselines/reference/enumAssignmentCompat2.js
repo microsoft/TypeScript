@@ -46,12 +46,14 @@ var W;
 })(W || (W = {}));
 (function (W) {
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
     W.D = D;
 })(W || (W = {}));
+
+
+
 var x = W;
 var y = W;
 var z = W; // error

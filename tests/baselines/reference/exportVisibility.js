@@ -20,6 +20,7 @@ var Foo = /** @class */ (function () {
 }());
 exports.Foo = Foo;
 exports.foo = new Foo();
+
 function test(foo) {
     return true;
 }

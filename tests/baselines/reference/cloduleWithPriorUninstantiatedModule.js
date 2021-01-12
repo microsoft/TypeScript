@@ -16,6 +16,7 @@ module Moclodule {
 }
 
 //// [cloduleWithPriorUninstantiatedModule.js]
+
 var Moclodule = /** @class */ (function () {
     function Moclodule() {
     }

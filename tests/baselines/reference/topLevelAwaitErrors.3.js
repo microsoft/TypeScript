@@ -6,6 +6,7 @@ var {await} = {await:1};
 
 
 //// [topLevelAwaitErrors.3.js]
+
 // reparse binding pattern as await should fail
 var { await } = { await: 1 };
 export {};

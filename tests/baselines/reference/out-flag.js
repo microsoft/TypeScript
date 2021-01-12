@@ -26,6 +26,7 @@ var MyClass = /** @class */ (function () {
     MyClass.prototype.Count = function () {
         return 42;
     };
+
     MyClass.prototype.SetCount = function (value) {
         //
     };

@@ -22,6 +22,10 @@ export function getBazB(baz: Baz) {
 "use strict";
 exports.__esModule = true;
 exports.getBazB = exports.getBarC = void 0;
+
+
+
+
 function getBarC(bar) {
     return bar.c;
 }
@@ -30,6 +34,7 @@ function getBazB(baz) {
     return baz.b;
 }
 exports.getBazB = getBazB;
+
 
 
 //// [omitTypeTestErrors01.d.ts]

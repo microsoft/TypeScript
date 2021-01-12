@@ -16,15 +16,13 @@ module M{
 var M;
 (function (M) {
     var A = /** @class */ (function () {
-        function A(val) {
-        }
+        function A(val) {}
         return A;
     }());
 })(M || (M = {}));
 (function (M) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var a = new A();

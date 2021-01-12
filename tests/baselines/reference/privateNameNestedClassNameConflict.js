@@ -15,8 +15,7 @@ class A {
     constructor() {
         var _foo_1;
         _foo.set(this, void 0);
-        class A {
-            constructor() {
+        class A {constructor() {
                 _foo_1.set(this, void 0);
             }
         }

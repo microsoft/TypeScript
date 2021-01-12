@@ -134,8 +134,7 @@ var E08;
 })(E08 || (E08 = {}));
 // Examples of numeric enum types with only constant members
 var E10;
-(function (E10) {
-})(E10 || (E10 = {}));
+(function (E10) {})(E10 || (E10 = {}));
 var E11;
 (function (E11) {
     E11[E11["A"] = 0] = "A";

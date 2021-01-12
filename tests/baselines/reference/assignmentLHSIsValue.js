@@ -88,6 +88,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // expected error for all the LHS of assignments
 var value;
+
 // this
 var C = /** @class */ (function () {
     function C() {
@@ -98,18 +99,20 @@ var C = /** @class */ (function () {
     return C;
 }());
 function foo() { this = value; }
+
 this = value;
 // identifiers: module, class, enum, function
 var M;
-(function (M) {
-})(M || (M = {}));
+(function (M) {})(M || (M = {}));
 M = value;
+
 C = value;
 var E;
-(function (E) {
-})(E || (E = {}));
+(function (E) {})(E || (E = {}));
 E = value;
+
 foo = value;
+
 // literals
 null = value;
 true = value;
@@ -117,13 +120,12 @@ false = value;
 0 = value;
 '' = value;
 /d+/ = value;
+
 // object literals
-{
-    a: 0;
-}
-value;
+{a: 0;}value;
 // array literals
 '' = value[0], '' = value[1];
+
 // super
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
@@ -133,16 +135,18 @@ var Derived = /** @class */ (function (_super) {
         return _this;
     }
     Derived.prototype.foo = function () { _super.prototype. = value; };
+
     Derived.sfoo = function () { _super. = value; };
     return Derived;
 }(C));
 // function expression
-function bar() { }
-value;
+function bar() { }value;
 (function () { });
 value;
+
 // function calls
 foo() = value;
+
 // parentheses, the containted expression is value
 (this) = value;
 (M) = value;

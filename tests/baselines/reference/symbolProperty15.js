@@ -15,8 +15,9 @@ var i: I;
 bar(i);
 
 //// [symbolProperty15.js]
-class C {
-}
+class C {}
+
+
 foo(new C);
 var i;
 bar(i);

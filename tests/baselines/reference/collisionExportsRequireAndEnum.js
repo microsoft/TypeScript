@@ -62,8 +62,7 @@ module m4 {
 
 //// [collisionExportsRequireAndEnum_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.exports = exports.require = void 0;
     var require;
     (function (require) {
@@ -76,8 +75,7 @@ define(["require", "exports"], function (require, exports) {
         exports[exports["_thisVal2"] = 1] = "_thisVal2";
     })(exports = exports.exports || (exports.exports = {}));
     var m1;
-    (function (m1) {
-        var require;
+    (function (m1) {var require;
         (function (require) {
             require[require["_thisVal1"] = 0] = "_thisVal1";
             require[require["_thisVal2"] = 1] = "_thisVal2";
@@ -89,8 +87,7 @@ define(["require", "exports"], function (require, exports) {
         })(exports || (exports = {}));
     })(m1 || (m1 = {}));
     var m2;
-    (function (m2) {
-        var require;
+    (function (m2) {var require;
         (function (require) {
             require[require["_thisVal1"] = 0] = "_thisVal1";
             require[require["_thisVal2"] = 1] = "_thisVal2";
@@ -114,8 +111,7 @@ var exports;
     exports[exports["_thisVal2"] = 1] = "_thisVal2";
 })(exports || (exports = {}));
 var m3;
-(function (m3) {
-    var require;
+(function (m3) {var require;
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
         require[require["_thisVal2"] = 1] = "_thisVal2";
@@ -127,8 +123,7 @@ var m3;
     })(exports || (exports = {}));
 })(m3 || (m3 = {}));
 var m4;
-(function (m4) {
-    var require;
+(function (m4) {var require;
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
         require[require["_thisVal2"] = 1] = "_thisVal2";

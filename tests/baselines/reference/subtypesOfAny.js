@@ -135,16 +135,37 @@ interface I20 {
 
 //// [subtypesOfAny.js]
 // every type is a subtype of any, no errors expected
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
+
 var A2 = /** @class */ (function () {
-    function A2() {
-    }
+    function A2() {}
     return A2;
 }());
+
+
+
+
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -153,11 +174,18 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
+
+
 var c = /** @class */ (function () {
-    function c() {
-    }
+    function c() {}
     return c;
 }());
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
+
+
+
+
+
+

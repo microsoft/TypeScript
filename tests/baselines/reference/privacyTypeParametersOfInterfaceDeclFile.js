@@ -216,6 +216,14 @@ var publicClassT = /** @class */ (function () {
     return publicClassT;
 }());
 exports.publicClassT = publicClassT;
+
+
+
+
+
+
+
+
 var publicModule;
 (function (publicModule) {
     var privateClassInPublicModule = /** @class */ (function () {
@@ -240,6 +248,13 @@ var publicModule;
         return publicClassInPublicModuleT;
     }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
+
+
+
+
+
+
+
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
@@ -265,6 +280,11 @@ var privateModule;
         return publicClassInPrivateModuleT;
     }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
+
+
+
+
+
 })(privateModule || (privateModule = {}));
 
 

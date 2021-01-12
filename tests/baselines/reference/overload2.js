@@ -18,17 +18,15 @@ function foo1(x: number) {
 
 //// [overload2.js]
 var A;
-(function (A) {
-})(A || (A = {}));
+(function (A) {})(A || (A = {}));
 var B;
-(function (B) {
-})(B || (B = {}));
+(function (B) {})(B || (B = {}));
 // should be ok
 function foo(x) {
 }
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 // should be ok

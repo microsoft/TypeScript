@@ -1,3 +1,2 @@
-a;
-b;
+a;b;
 //# sourceMappingURL=file.js.map

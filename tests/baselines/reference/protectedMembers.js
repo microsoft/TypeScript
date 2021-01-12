@@ -179,11 +179,13 @@ c1.x;
 c1.f();
 C1.sx;
 C1.sf();
+
 // All of these should be errors
 c2.x;
 c2.f();
 C2.sx;
 C2.sf();
+
 // All of these should be ok
 c3.x;
 c3.f();
@@ -222,6 +224,7 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(C));
+
 var CC = /** @class */ (function () {
     function CC() {
     }

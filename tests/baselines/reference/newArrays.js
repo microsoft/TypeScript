@@ -16,8 +16,7 @@ module M {
 var M;
 (function (M) {
     var Foo = /** @class */ (function () {
-        function Foo() {
-        }
+        function Foo() {}
         return Foo;
     }());
     var Gar = /** @class */ (function () {

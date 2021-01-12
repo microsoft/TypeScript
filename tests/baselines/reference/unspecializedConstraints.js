@@ -171,6 +171,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var ts;
 (function (ts) {
+
+
     var Symbol = /** @class */ (function () {
         function Symbol() {
         }
@@ -309,9 +311,11 @@ var ts;
             return undefined;
         return map[key];
     }
+
     function hasProperty(map, key) {
         return hasOwnProperty.call(map, key);
     }
+
     function arrayContains(a, item) {
         var len = a.length;
         for (var i = 0; i < len; i++) {
@@ -320,6 +324,7 @@ var ts;
         }
         return false;
     }
+
     function arrayEquals(a, b) {
         var len = a.length;
         if (b.length !== len)
@@ -330,6 +335,7 @@ var ts;
         }
         return true;
     }
+
     function setEquals(a, b) {
         var len = a.length;
         if (b.length !== len)

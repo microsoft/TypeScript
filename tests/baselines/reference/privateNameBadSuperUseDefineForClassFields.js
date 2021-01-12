@@ -10,9 +10,7 @@ class A extends B {
 
 
 //// [privateNameBadSuperUseDefineForClassFields.js]
-class B {
-}
-;
+class B {};
 class A extends B {
     #x;
     constructor() {

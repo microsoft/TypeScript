@@ -28,4 +28,6 @@ let foo: Foo = a.foo;
 "use strict";
 exports.__esModule = true;
 var a = require("a");
+
+
 var foo = a.foo;

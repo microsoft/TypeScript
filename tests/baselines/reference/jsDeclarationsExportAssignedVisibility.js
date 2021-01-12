@@ -26,6 +26,7 @@ module.exports = /** @class */ (function () {
 }());
 //// [index.js]
 var Obj = require("./obj");
+
 var Container = /** @class */ (function () {
     function Container() {
         this.usage = new Obj();

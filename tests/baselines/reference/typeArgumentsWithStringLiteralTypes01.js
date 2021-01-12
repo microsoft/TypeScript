@@ -112,14 +112,16 @@ namespace n3 {
 }
 
 //// [typeArgumentsWithStringLiteralTypes01.js]
+
 function fun1(x, y) {
     return randBool() ? x : y;
 }
+
 function fun2(x, y) {
     return randBool() ? x : y;
 }
-function fun3() {
-    var args = [];
+
+function fun3() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
@@ -141,12 +143,14 @@ var n1;
     n1.c = takeReturnString(n1.c);
     n1.d = takeReturnString(n1.d);
     n1.e = takeReturnString(n1.e);
+
     // Passing these as arguments should cause an error.
     n1.a = takeReturnHello(n1.a);
     n1.b = takeReturnHello(n1.b);
     n1.c = takeReturnHello(n1.c);
     n1.d = takeReturnHello(n1.d);
     n1.e = takeReturnHello(n1.e);
+
     // Passing these as arguments should cause an error.
     n1.a = takeReturnHelloWorld(n1.a);
     n1.b = takeReturnHelloWorld(n1.b);
@@ -169,12 +173,14 @@ var n2;
     n2.c = takeReturnString(n2.c);
     n2.d = takeReturnString(n2.d);
     n2.e = takeReturnString(n2.e);
+
     // Should be valid
     n2.a = takeReturnHello(n2.a);
     n2.b = takeReturnHello(n2.b);
     n2.c = takeReturnHello(n2.c);
     n2.d = takeReturnHello(n2.d);
     n2.e = takeReturnHello(n2.e);
+
     // Assignment from the returned value should cause an error.
     n2.a = takeReturnHelloWorld(n2.a);
     n2.b = takeReturnHelloWorld(n2.b);
@@ -197,12 +203,14 @@ var n3;
     n3.c = takeReturnString(n3.c);
     n3.d = takeReturnString(n3.d);
     n3.e = takeReturnString(n3.e);
+
     // Passing these as arguments should cause an error.
     n3.a = takeReturnHello(n3.a);
     n3.b = takeReturnHello(n3.b);
     n3.c = takeReturnHello(n3.c);
     n3.d = takeReturnHello(n3.d);
     n3.e = takeReturnHello(n3.e);
+
     // Both should be valid.
     n3.a = takeReturnHelloWorld(n3.a);
     n3.b = takeReturnHelloWorld(n3.b);

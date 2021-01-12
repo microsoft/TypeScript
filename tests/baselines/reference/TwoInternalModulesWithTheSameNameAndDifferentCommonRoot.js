@@ -32,8 +32,7 @@ module otherRoot {
 
 //// [part1.js]
 var Root;
-(function (Root) {
-    var A;
+(function (Root) {var A;
     (function (A) {
         var Utils;
         (function (Utils) {
@@ -46,8 +45,7 @@ var Root;
 })(Root || (Root = {}));
 //// [part2.js]
 var otherRoot;
-(function (otherRoot) {
-    var A;
+(function (otherRoot) {var A;
     (function (A) {
         // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };

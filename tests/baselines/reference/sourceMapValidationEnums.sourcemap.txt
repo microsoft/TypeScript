@@ -216,7 +216,7 @@ sourceFile:sourceMapValidationEnums.ts
 1 >
 2 >^^^^
 3 >    ^^
-4 >      ^^^^^^^^^^^->
+4 >      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >enum 
@@ -226,42 +226,39 @@ sourceFile:sourceMapValidationEnums.ts
 2 >Emitted(14, 5) Source(12, 6) + SourceIndex(0)
 3 >Emitted(14, 7) Source(13, 2) + SourceIndex(0)
 ---
->>>(function (e3) {
+>>>(function (e3) {})(e3 || (e3 = {}));
 1->
 2 >^^^^^^^^^^^
 3 >           ^^
-4 >             ^^^^^^^^->
+4 >             ^^^
+5 >                ^
+6 >                 ^^
+7 >                   ^^
+8 >                     ^^^^^
+9 >                          ^^
+10>                            ^^^^^^^^
+11>                                    ^^^^^^^^^^^^^^^->
 1->
 2 >enum 
 3 >           e3
+4 >              {
+  >             
+5 >                }
+6 >                 
+7 >                   e3
+8 >                     
+9 >                          e3
+10>                             {
+  >                            }
 1->Emitted(15, 1) Source(12, 1) + SourceIndex(0)
 2 >Emitted(15, 12) Source(12, 6) + SourceIndex(0)
 3 >Emitted(15, 14) Source(12, 8) + SourceIndex(0)
----
->>>})(e3 || (e3 = {}));
-1->
-2 >^
-3 > ^^
-4 >   ^^
-5 >     ^^^^^
-6 >          ^^
-7 >            ^^^^^^^^
-8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1-> {
-  >
-2 >}
-3 > 
-4 >   e3
-5 >     
-6 >          e3
-7 >             {
-  >            }
-1->Emitted(16, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(16, 2) Source(13, 2) + SourceIndex(0)
-3 >Emitted(16, 4) Source(12, 6) + SourceIndex(0)
-4 >Emitted(16, 6) Source(12, 8) + SourceIndex(0)
-5 >Emitted(16, 11) Source(12, 6) + SourceIndex(0)
-6 >Emitted(16, 13) Source(12, 8) + SourceIndex(0)
-7 >Emitted(16, 21) Source(13, 2) + SourceIndex(0)
+4 >Emitted(15, 17) Source(13, 1) + SourceIndex(0)
+5 >Emitted(15, 18) Source(13, 2) + SourceIndex(0)
+6 >Emitted(15, 20) Source(12, 6) + SourceIndex(0)
+7 >Emitted(15, 22) Source(12, 8) + SourceIndex(0)
+8 >Emitted(15, 27) Source(12, 6) + SourceIndex(0)
+9 >Emitted(15, 29) Source(12, 8) + SourceIndex(0)
+10>Emitted(15, 37) Source(13, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationEnums.js.map

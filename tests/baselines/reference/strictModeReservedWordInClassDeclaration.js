@@ -44,6 +44,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Foo = /** @class */ (function () {
     function Foo(private, public, static) {
         private = public = static;
@@ -59,27 +60,24 @@ var C = /** @class */ (function () {
         function let() { }
         var z = function let() { };
     };
+
     C.prototype.pulbic = function () { }; // No Error;
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 var E = /** @class */ (function () {
-    function E() {
-    }
+    function E() {}
     return E;
 }());
 var F = /** @class */ (function () {
-    function F() {
-    }
+    function F() {}
     return F;
 }());
 var F1 = /** @class */ (function () {
-    function F1() {
-    }
+    function F1() {}
     return F1;
 }());
 var G = /** @class */ (function (_super) {

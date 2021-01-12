@@ -10,8 +10,7 @@ import * as a from "a";
 
 //// [a.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var a;
+    "use strict";var a;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -22,11 +21,9 @@ System.register([], function (exports_1, context_1) {
 });
 //// [b.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

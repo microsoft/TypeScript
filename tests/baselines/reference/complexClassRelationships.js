@@ -127,8 +127,7 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var GenericType = /** @class */ (function () {
-    function GenericType(parent) {
-    }
+    function GenericType(parent) {}
     return GenericType;
 }());
 var FooBase = /** @class */ (function () {

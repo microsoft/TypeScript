@@ -33,16 +33,20 @@ parrot({
 
 //// [typeInferenceWithExcessProperties.js]
 // Repro from #17041
+
+
 function parrot(obj) {
     return obj;
 }
 parrot({
     name: "TypeScript"
 });
+
 parrot({
     name: "TypeScript",
     age: 5
 });
+
 parrot({
     name: "TypeScript",
     age: function () { }

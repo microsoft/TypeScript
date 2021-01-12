@@ -24,6 +24,7 @@ acceptsSomeType(someType);
 acceptsSomeType(someTypeNotFound);
 
 //// [typeUsedAsValueError.js]
+
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
@@ -31,6 +32,7 @@ var SomeClass = /** @class */ (function () {
 }());
 function acceptsSomeType(a) {
 }
+
 var one = Interface;
 var two = InterfaceNotFound;
 var three = TypeAliasForSomeClass;

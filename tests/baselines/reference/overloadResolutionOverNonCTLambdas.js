@@ -32,13 +32,11 @@ var Bugs;
         return A;
     }());
     // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
-    function bug2(message) {
-        var args = [];
+    function bug2(message) {var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        var result = message.replace(/\{(\d+)\}/g, function (match) {
-            var rest = [];
+        var result = message.replace(/\{(\d+)\}/g, function (match) {var rest = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 rest[_i - 1] = arguments[_i];
             }
@@ -51,6 +49,7 @@ var Bugs;
     }
 })(Bugs || (Bugs = {}));
 function bug3(f) { return f("s"); }
+
 function fprime(x) { return x; }
 bug3(fprime);
 bug3(function (x) { return x; });

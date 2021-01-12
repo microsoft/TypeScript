@@ -42,12 +42,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-};
-function foo() {
-    return __asyncGenerator(this, arguments, function foo_1() {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, __await("foo")];
+};function foo() {
+    return __asyncGenerator(this, arguments, function foo_1() {return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, __await("foo")];
                 case 1: return [4 /*yield*/, _a.sent()];
                 case 2: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
                 case 3:

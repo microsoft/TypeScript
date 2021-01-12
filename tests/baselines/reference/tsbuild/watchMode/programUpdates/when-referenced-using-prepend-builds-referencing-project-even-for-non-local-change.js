@@ -128,8 +128,7 @@ declare function foo(): number;
 
 //// [/user/username/projects/sample1/logic/index.js]
 function foo() { return 10; }
-function bar() { return foo() + 1; }
-;
+function bar() { return foo() + 1; };
 
 
 //// [/user/username/projects/sample1/logic/index.d.ts]
@@ -161,7 +160,7 @@ declare function bar(): number;
         },
         {
           "pos": 30,
-          "end": 69,
+          "end": 68,
           "kind": "text"
         }
       ]
@@ -202,9 +201,8 @@ text: (0-30)
 function foo() { return 10; }
 
 ----------------------------------------------------------------------
-text: (30-69)
-function bar() { return foo() + 1; }
-;
+text: (30-68)
+function bar() { return foo() + 1; };
 
 ======================================================================
 ======================================================================
@@ -365,8 +363,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/logic/index.js]
 function foo() { return 10; }
 function myFunc() { return 10; }
-function bar() { return foo() + 1; }
-;
+function bar() { return foo() + 1; };
 
 
 //// [/user/username/projects/sample1/logic/index.d.ts]
@@ -399,7 +396,7 @@ declare function bar(): number;
         },
         {
           "pos": 63,
-          "end": 102,
+          "end": 101,
           "kind": "text"
         }
       ]
@@ -441,9 +438,8 @@ function foo() { return 10; }
 function myFunc() { return 10; }
 
 ----------------------------------------------------------------------
-text: (63-102)
-function bar() { return foo() + 1; }
-;
+text: (63-101)
+function bar() { return foo() + 1; };
 
 ======================================================================
 ======================================================================
@@ -591,8 +587,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/logic/index.js]
 function foo() { return 10; }
 function myFunc() { return 100; }
-function bar() { return foo() + 1; }
-;
+function bar() { return foo() + 1; };
 
 
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
@@ -620,7 +615,7 @@ function bar() { return foo() + 1; }
         },
         {
           "pos": 64,
-          "end": 103,
+          "end": 102,
           "kind": "text"
         }
       ]
@@ -662,9 +657,8 @@ function foo() { return 10; }
 function myFunc() { return 100; }
 
 ----------------------------------------------------------------------
-text: (64-103)
-function bar() { return foo() + 1; }
-;
+text: (64-102)
+function bar() { return foo() + 1; };
 
 ======================================================================
 ======================================================================

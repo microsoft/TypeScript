@@ -43,6 +43,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
+
+
 // good
 all.apply(void 0, ns);
 weird.apply(void 0, ns);
@@ -50,9 +52,12 @@ weird.apply(void 0, mixed);
 weird.apply(void 0, tuple);
 prefix.apply(void 0, __spreadArray(["a"], ns));
 rest.apply(void 0, __spreadArray(["d"], ns));
+
+
 // extra arguments
 normal.apply(void 0, __spreadArray(["g"], ns));
 thunk.apply(void 0, ns);
+
 // bad
 all.apply(void 0, mixed);
 all.apply(void 0, tuple);

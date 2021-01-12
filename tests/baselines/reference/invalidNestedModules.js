@@ -31,10 +31,8 @@ module M2 {
 
 //// [invalidNestedModules.js]
 var A;
-(function (A) {
-    var B;
-    (function (B) {
-        var C;
+(function (A) {var B;
+    (function (B) {var C;
         (function (C) {
             var Point = /** @class */ (function () {
                 function Point() {
@@ -45,8 +43,7 @@ var A;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-(function (A) {
-    var B;
+(function (A) {var B;
     (function (B) {
         var C = /** @class */ (function () {
             function C() {
@@ -57,8 +54,7 @@ var A;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
 var M2;
-(function (M2) {
-    var X;
+(function (M2) {var X;
     (function (X) {
         var Point = /** @class */ (function () {
             function Point() {
@@ -68,8 +64,7 @@ var M2;
         X.Point = Point;
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
-(function (M2) {
-    var X;
+(function (M2) {var X;
     (function (X) {
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));

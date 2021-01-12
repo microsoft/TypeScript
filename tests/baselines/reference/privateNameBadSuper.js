@@ -10,9 +10,7 @@ class A extends B {
 
 //// [privateNameBadSuper.js]
 var _x;
-class B {
-}
-;
+class B {};
 class A extends B {
     constructor() {
         void 0; // Error: 'super' call must  come first

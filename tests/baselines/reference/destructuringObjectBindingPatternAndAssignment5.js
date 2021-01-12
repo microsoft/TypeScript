@@ -17,8 +17,7 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-function a() {
+};function a() {
     var _a;
     var x;
     var y;

@@ -14,6 +14,9 @@ let l = <_T, U>() => { };
 
 //// [unusedTypeParametersWithUnderscore.js]
 function f() { }
+
+
+
 ;
 var C = /** @class */ (function () {
     function C() {

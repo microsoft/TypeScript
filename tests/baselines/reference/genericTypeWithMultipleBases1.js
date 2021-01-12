@@ -22,6 +22,9 @@ x.m2();
 //// [genericTypeWithMultipleBases1.js]
 "use strict";
 exports.__esModule = true;
+
+
+
 var x;
 x.p1;
 x.m1();

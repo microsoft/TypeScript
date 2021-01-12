@@ -31,8 +31,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.ListItem = exports.CollectionItem = exports.List = exports.Collection = void 0;
     var Collection = /** @class */ (function () {
         function Collection() {
@@ -50,8 +49,7 @@ define(["require", "exports"], function (require, exports) {
     }(Collection));
     exports.List = List;
     var CollectionItem = /** @class */ (function () {
-        function CollectionItem() {
-        }
+        function CollectionItem() {}
         return CollectionItem;
     }());
     exports.CollectionItem = CollectionItem;

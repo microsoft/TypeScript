@@ -32,9 +32,12 @@ module M
 //// [moduleScopingBug.js]
 var M;
 (function (M) {
+
     var outer;
     function f() {
+
         var inner = outer; // Ok
+
     }
     var C = /** @class */ (function () {
         function C() {

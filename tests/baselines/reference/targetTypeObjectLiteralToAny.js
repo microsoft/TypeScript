@@ -18,3 +18,4 @@ function suggest() {
         result.push({ text: keyword, type: "keyword" }); // this should not cause a crash - push should be typed to any
     });
 }
+

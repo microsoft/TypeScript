@@ -13,14 +13,12 @@ B.hasOwnProperty('foo');
 
 //// [staticInstanceResolution2.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 A.hasOwnProperty('foo');
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 B.hasOwnProperty('foo');

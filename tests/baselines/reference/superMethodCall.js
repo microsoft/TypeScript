@@ -27,11 +27,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 class Base {
     method() { }
 }
+
 class Derived extends Base {
     method() {
         var _a;
         return (_a = super.method) === null || _a === void 0 ? void 0 : _a.call(this);
     }
+
     asyncMethod() {
         const _super = Object.create(null, {
             method: { get: () => super.method }

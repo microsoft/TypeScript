@@ -29,11 +29,9 @@ if (i == 10) {
 }
 else if (i == 20) {
     i--;
-}
-else if (i == 30) {
+} else if (i == 30) {
     i += 70;
-}
-else {
+} else {
     i--;
 }
 //# sourceMappingURL=sourceMapValidationIfElse.js.map

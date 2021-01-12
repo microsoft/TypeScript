@@ -50,6 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 __exportStar(require("./exportStarFromEmptyModule_module2"), exports);
 __exportStar(require("./exportStarFromEmptyModule_module1"), exports);
+
 var A = /** @class */ (function () {
     function A() {
     }

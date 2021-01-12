@@ -93,8 +93,7 @@ function f() {
     }
     if (x > 17) {
         x /= 9;
-    }
-    else {
+    } else {
         x += 10;
         x++;
     }
@@ -113,22 +112,18 @@ function f() {
     }
     try {
         obj.q = "ohhh";
-    }
-    catch (e) {
+    } catch (e) {
         if (obj.z < 10) {
             obj.z = 12;
-        }
-        else {
+        } else {
             obj.q = "hmm";
         }
     }
     try {
         throw new Error();
-    }
-    catch (e1) {
+    } catch (e1) {
         var b = e1;
-    }
-    finally {
+    } finally {
         y = 70;
     }
     with (obj) {
@@ -139,15 +134,18 @@ function f() {
         case 0: {
             x++;
             break;
+
         }
         case 1: {
             x--;
             break;
+
         }
         default: {
             x *= 2;
             x = 50;
             break;
+
         }
     }
     while (x < 10) {

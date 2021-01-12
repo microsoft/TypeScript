@@ -95,13 +95,13 @@ var a2;
 var a2 = m2.Point;
 var a2 = M2.Point;
 var o = a2.Origin();
+
 var p2;
 var p2;
 var p2 = new m2.Point();
 var p2 = new M2.Point();
 var M3;
-(function (M3) {
-    var Color;
+(function (M3) {var Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
@@ -113,6 +113,7 @@ var a3;
 var a3 = m3.Color;
 var a3 = M3.Color;
 var blue = a3.Blue;
+
 var p3;
 var p3 = M3.Color.Red;
 var p3 = m3.Color.Blue;

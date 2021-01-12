@@ -41,9 +41,9 @@ var result;
 var result2;
 if (!(result instanceof RegExp)) {
     result = result2;
+} else if (!result.global) {
 }
-else if (!result.global) {
-}
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -62,3 +62,4 @@ function foo() {
         v.onChanges({});
     }
 }
+

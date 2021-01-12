@@ -90,8 +90,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/out.js]
 System.register("link/a", [], function (exports_1, context_1) {
-    "use strict";
-    var a, b;
+    "use strict";var a, b;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -102,27 +101,22 @@ System.register("link/a", [], function (exports_1, context_1) {
     };
 });
 System.register("b", ["./yX/a", "link/a"], function (exports_2, context_2) {
-    "use strict";
-    var a_1, a_2;
+    "use strict";var a_1, a_2;
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [
-            function (a_1_1) {
-                a_1 = a_1_1;
+            function (a_1_1) {a_1 = a_1_1;
             },
-            function (a_2_1) {
-                a_2 = a_2_1;
+            function (a_2_1) {a_2 = a_2_1;
             }
         ],
         execute: function () {
-            a_1.a;
-            a_2.b;
+            a_1.a;a_2.b;
         }
     };
 });
 System.register("XY/a", [], function (exports_3, context_3) {
-    "use strict";
-    var a, b;
+    "use strict";var a, b;
     var __moduleName = context_3 && context_3.id;
     return {
         setters: [],
@@ -204,8 +198,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/out.js]
 System.register("link/a", [], function (exports_1, context_1) {
-    "use strict";
-    var a, b;
+    "use strict";var a, b;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -216,28 +209,23 @@ System.register("link/a", [], function (exports_1, context_1) {
     };
 });
 System.register("b", ["./yX/a", "link/a"], function (exports_2, context_2) {
-    "use strict";
-    var a_1, a_2;
+    "use strict";var a_1, a_2;
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [
-            function (a_1_1) {
-                a_1 = a_1_1;
+            function (a_1_1) {a_1 = a_1_1;
             },
-            function (a_2_1) {
-                a_2 = a_2_1;
+            function (a_2_1) {a_2 = a_2_1;
             }
         ],
         execute: function () {
-            a_1.a;
-            a_2.b;
+            a_1.a;a_2.b;
         }
     };
 });
 // some comment
 System.register("XY/a", [], function (exports_3, context_3) {
-    "use strict";
-    var a, b;
+    "use strict";var a, b;
     var __moduleName = context_3 && context_3.id;
     return {
         setters: [],

@@ -32,6 +32,7 @@ class SomeClass2 {
 }
 
 //// [typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js]
+
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }

@@ -9,8 +9,8 @@ export interface B<T> extends A<T> {
 
 //// [privacyCheckCallbackOfInterfaceMethodWithTypeParameter.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
+
 });
 
 

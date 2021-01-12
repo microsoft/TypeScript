@@ -27,3 +27,4 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 var props = { answer: 42 };
 var a = jsx_runtime_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
 var b = react_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
+

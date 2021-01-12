@@ -16,6 +16,7 @@ class C<T extends Options> {
 }
 
 //// [definiteAssignmentOfDestructuredVariable.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

@@ -20,12 +20,13 @@ function Bar<T extends { prop: number }>(arg: T) {
 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     function createComponent(arg) {
         var a1 = <Component {...arg}/>;
         var a2 = <Component {...arg} prop1/>;
     }
+
+
     function Bar(arg) {
         var a1 = <ComponentSpecific {...arg} ignore-prop="hi"/>; // U is number
         var a2 = <ComponentSpecific1 {...arg} ignore-prop={10}/>; // U is number

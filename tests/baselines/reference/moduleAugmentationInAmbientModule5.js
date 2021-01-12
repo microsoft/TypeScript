@@ -27,6 +27,7 @@ let y = x.getA().x;
 exports.__esModule = true;
 /// <reference path="array.d.ts"/>
 require("array");
+
 var x = [1];
 var y = x.getA().x;
 

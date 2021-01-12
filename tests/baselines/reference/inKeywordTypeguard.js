@@ -115,49 +115,45 @@ function negativeIntersectionTest() {
 
 //// [inKeywordTypeguard.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 function negativeClassesTest(x) {
     if ("a" in x) {
         x.b = "1";
-    }
-    else {
+    } else {
         x.a = "1";
     }
 }
+
 function positiveClassesTest(x) {
     if ("a" in x) {
         x.b = "1";
-    }
-    else {
+    } else {
         x.a = "1";
     }
 }
+
 var AWithOptionalProp = /** @class */ (function () {
-    function AWithOptionalProp() {
-    }
+    function AWithOptionalProp() {}
     return AWithOptionalProp;
 }());
 var BWithOptionalProp = /** @class */ (function () {
-    function BWithOptionalProp() {
-    }
+    function BWithOptionalProp() {}
     return BWithOptionalProp;
 }());
 function positiveTestClassesWithOptionalProperties(x) {
     if ("a" in x) {
         x.a = "1";
-    }
-    else {
+    } else {
         x.b = "1";
     }
 }
+
 var AWithMethod = /** @class */ (function () {
     function AWithMethod() {
     }
@@ -174,59 +170,55 @@ function negativeTestClassesWithMembers(x) {
     if ("a" in x) {
         x.a();
         x.b();
-    }
-    else {
+    } else {
     }
 }
+
 function negativeTestClassesWithMemberMissingInBothClasses(x) {
     if ("c" in x) {
         x.a();
         x.b();
-    }
-    else {
+    } else {
         x.a();
         x.b();
     }
 }
+
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 function negativeMultipleClassesTest(x) {
     if ("a" in x) {
         x.b = "1";
-    }
-    else {
+    } else {
         x.a = "1";
     }
 }
+
 var ClassWithUnionProp = /** @class */ (function () {
-    function ClassWithUnionProp() {
-    }
+    function ClassWithUnionProp() {}
     return ClassWithUnionProp;
 }());
 function negativePropTest(x) {
     if ("a" in x.prop) {
         var y = x.prop.b;
-    }
-    else {
+    } else {
         var z = x.prop.a;
     }
 }
+
 var NegativeClassTest = /** @class */ (function () {
     function NegativeClassTest() {
     }
     NegativeClassTest.prototype.inThis = function () {
         if ("a" in this.prop) {
             var z = this.prop.b;
-        }
-        else {
+        } else {
             var y = this.prop.a;
         }
     };
@@ -237,8 +229,7 @@ var UnreachableCodeDetection = /** @class */ (function () {
     }
     UnreachableCodeDetection.prototype.inThis = function () {
         if ("a" in this) {
-        }
-        else {
+        } else {
             var y = this.a;
         }
     };
@@ -247,16 +238,14 @@ var UnreachableCodeDetection = /** @class */ (function () {
 function positiveIntersectionTest(x) {
     if ("a" in x) {
         var s = x.a;
-    }
-    else {
+    } else {
         var n = x;
     }
 }
 function negativeIntersectionTest() {
     if ("ontouchstart" in window) {
         window.ontouchstart;
-    }
-    else {
+    } else {
         window.ontouchstart;
     }
 }

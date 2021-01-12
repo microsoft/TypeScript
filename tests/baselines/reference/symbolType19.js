@@ -12,8 +12,7 @@ else {
 
 //// [symbolType19.js]
 var E;
-(function (E) {
-})(E || (E = {}));
+(function (E) {})(E || (E = {}));
 var x;
 x;
 if (typeof x === "number") {

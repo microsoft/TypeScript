@@ -16,11 +16,9 @@ import * as b from './b.json';
 }
 //// [out/file1.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {
-        }
+        execute: function () {}
     };
 });

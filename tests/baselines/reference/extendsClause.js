@@ -26,8 +26,7 @@ class V extends types.C {} // Error
 exports.__esModule = true;
 exports.C = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 exports.C = C;
@@ -52,6 +51,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+
 var U = /** @class */ (function (_super) {
     __extends(U, _super);
     function U() {

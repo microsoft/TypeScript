@@ -189,9 +189,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
@@ -215,6 +215,24 @@ var OtherDerived = /** @class */ (function (_super) {
     }
     return OtherDerived;
 }(Base));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var r1arg1 = function (x) { return [x]; };
 var r1arg2 = function (x) { return [1]; };
 var r1 = foo1(r1arg1); // any, return types are not subtype of first overload
@@ -260,20 +278,16 @@ var r9arg2 = function (x, y) { return function (r) { return null; }; };
 var r9 = foo9(r9arg1); // any
 var r9a = [r9arg1, r9arg2];
 var r9b = [r9arg2, r9arg1];
-var r10arg1 = function () {
-    var x = [];
+var r10arg1 = function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
-    return x[0];
-};
-var r10arg2 = function () {
-    var x = [];
+    return x[0];};
+var r10arg2 = function () {var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
-    return null;
-};
+    return null;};
 var r10 = foo10(r10arg1); // any
 var r10a = [r10arg1, r10arg2];
 var r10b = [r10arg2, r10arg1];

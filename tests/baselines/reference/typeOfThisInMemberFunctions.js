@@ -38,6 +38,7 @@ var C = /** @class */ (function () {
     C.prototype.foo = function () {
         var r = this;
     };
+
     C.bar = function () {
         var r2 = this;
     };
@@ -49,6 +50,7 @@ var D = /** @class */ (function () {
     D.prototype.foo = function () {
         var r = this;
     };
+
     D.bar = function () {
         var r2 = this;
     };
@@ -60,6 +62,7 @@ var E = /** @class */ (function () {
     E.prototype.foo = function () {
         var r = this;
     };
+
     E.bar = function () {
         var r2 = this;
     };

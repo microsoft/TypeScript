@@ -70,9 +70,11 @@ function j() {
 function k(t) {
     return __assign(__assign(__assign({ command: "hi" }, { spoiler: true }), { spoiler2: true }), t); // error
 }
+
 function l(anyrequired) {
     return __assign({ a: 'zzz' }, anyrequired); // error
 }
 function m(anyoptional) {
     return __assign({ a: 'zzz' }, anyoptional); // ok
 }
+

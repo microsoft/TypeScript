@@ -77,43 +77,53 @@ use(x);
 for (var x_2 = 10;;) {
     use(x_2);
 }
+
 for (;;) {
     var x_3 = 10;
     use(x_3);
     x_3 = 1;
 }
+
 for (;;) {
     var x_4 = 10;
     use(x_4);
 }
+
 for (var x_5;;) {
     use(x_5);
     x_5 = 1;
 }
+
 for (;;) {
     var x_6 = void 0;
     use(x_6);
     x_6 = 1;
 }
+
 while (true) {
     var x_7 = void 0;
     use(x_7);
 }
+
 while (true) {
     var x_8 = true;
     use(x_8);
 }
+
 do {
     var x_9 = void 0;
     use(x_9);
 } while (true);
+
 do {
     var x_10 = void 0;
     use(x_10);
 } while (true);
+
 for (var x_11 in []) {
     use(x_11);
 }
+
 for (var x_12 in []) {
     use(x_12);
 }

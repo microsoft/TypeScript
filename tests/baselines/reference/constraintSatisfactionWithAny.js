@@ -54,6 +54,7 @@ var c8 = new C4<any>(b);
 
 //// [constraintSatisfactionWithAny.js]
 // any is not a valid type argument unless there is no constraint, or the constraint is any
+
 function foo(x) { return null; }
 function foo2(x) { return null; }
 //function foo3<T extends T[]>(x: T): T { return null; }
@@ -68,6 +69,7 @@ foo(b);
 foo2(b);
 //foo3<any>(b);
 foo4(b);
+
 //function foo5<T extends String, U extends T>(x: T, y: U): T { return null; }
 //foo5(a, a);
 //foo5<any, any>(b, b);
@@ -79,6 +81,7 @@ var C = /** @class */ (function () {
 }());
 var c1 = new C(a);
 var c2 = new C(b);
+
 var C2 = /** @class */ (function () {
     function C2(x) {
         this.x = x;
@@ -87,6 +90,7 @@ var C2 = /** @class */ (function () {
 }());
 var c3 = new C2(a);
 var c4 = new C2(b);
+
 //class C3<T extends T[]> {
 //    constructor(public x: T) { }
 //}
@@ -100,3 +104,5 @@ var C4 = /** @class */ (function () {
 }());
 var c7 = new C4(a);
 var c8 = new C4(b);
+
+

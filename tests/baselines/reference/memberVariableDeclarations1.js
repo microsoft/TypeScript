@@ -29,6 +29,7 @@ e2 = e1;
 
 //// [memberVariableDeclarations1.js]
 // from spec
+
 var Employee = /** @class */ (function () {
     function Employee() {
         this.retired = false;

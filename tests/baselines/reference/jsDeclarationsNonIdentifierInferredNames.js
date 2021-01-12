@@ -10,7 +10,9 @@ export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynProp
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 const dynPropName = "data-dyn";
-export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (React.createElement(React.Fragment, null, "Hello"));
+export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
+    React.createElement(React.Fragment, null, "Hello")
+);
 
 
 //// [jsDeclarationsNonIdentifierInferredNames.d.ts]

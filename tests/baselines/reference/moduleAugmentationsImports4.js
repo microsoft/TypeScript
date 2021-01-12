@@ -48,30 +48,25 @@ let c = a.getCls().y.toLowerCase();
 
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.A = void 0;
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     exports.A = A;
 });
 define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.B = void 0;
     var B = /** @class */ (function () {
-        function B() {
-        }
+        function B() {}
         return B;
     }());
     exports.B = B;
 });
 define("main", ["require", "exports", "D", "E"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();

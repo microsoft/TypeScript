@@ -30,8 +30,7 @@ exports.__esModule = true;
 exports.Yoha = void 0;
 // https://github.com/Microsoft/TypeScript/issues/19799
 var Yoha = /** @class */ (function () {
-    function Yoha() {
-    }
+    function Yoha() {}
     return Yoha;
 }());
 exports.Yoha = Yoha;
@@ -51,8 +50,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 exports.__esModule = true;
 var yoha_1 = require("./yoha");
-function foo() {
-    var args = [];
+
+function foo() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
@@ -85,8 +84,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 exports.__esModule = true;
 var yoha_1 = require("./yoha");
-function foo() {
-    var args = [];
+
+function foo() {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
@@ -94,8 +93,7 @@ function foo() {
 var Bar = /** @class */ (function () {
     function Bar() {
     }
-    Bar.prototype.yoha = function (yoha) {
-        var bar = [];
+    Bar.prototype.yoha = function (yoha) {var bar = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             bar[_i - 1] = arguments[_i];
         }

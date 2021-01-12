@@ -43,8 +43,7 @@ var r5 = new i2(1, 1);
 // No errors expected for basic overloads of construct signatures with merged declarations
 // clodules
 var C = /** @class */ (function () {
-    function C(x) {
-    }
+    function C(x) {}
     return C;
 }());
 (function (C) {
@@ -52,14 +51,15 @@ var C = /** @class */ (function () {
 })(C || (C = {}));
 var r1 = new C(1, '');
 var C2 = /** @class */ (function () {
-    function C2(x) {
-    }
+    function C2(x) {}
     return C2;
 }());
 (function (C2) {
     C2.x = 1;
 })(C2 || (C2 = {}));
 var r2 = new C2(1, '');
+
+
 var i2;
 var r4 = new i2(1, '');
 var r5 = new i2(1, 1);

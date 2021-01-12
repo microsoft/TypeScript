@@ -24,12 +24,15 @@ let b = <SFC2AndEmptyComp x />
 "use strict";
 exports.__esModule = true;
 var React = require("react");
+
 function EmptySFC1() {
     return React.createElement("div", null, "hello");
 }
+
 function EmptySFC2() {
     return React.createElement("div", null, "Hello");
 }
+
 function SFC2(prop) {
     return React.createElement("h1", null, "World");
 }

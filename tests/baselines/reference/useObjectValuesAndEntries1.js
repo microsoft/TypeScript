@@ -38,12 +38,16 @@ for (var _i = 0, _a = Object.values(o); _i < _a.length; _i++) {
 }
 var entries = Object.entries(o); // [string, number][]
 var values = Object.values(o); // number[]
+
 var entries1 = Object.entries(1); // [string, any][]
 var values1 = Object.values(1); // any[]
+
 var entries2 = Object.entries({ a: true, b: 2 }); // [string, number|boolean][]
 var values2 = Object.values({ a: true, b: 2 }); // (number|boolean)[]
+
 var entries3 = Object.entries({}); // [string, {}][]
 var values3 = Object.values({}); // {}[]
+
 var a = ["a", "b", "c"];
 var entries4 = Object.entries(a); // [string, string][]
 var values4 = Object.values(a); // string[]

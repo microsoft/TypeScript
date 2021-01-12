@@ -26,6 +26,11 @@ class A {
 
 
 //// [inlinedAliasAssignableToConstraintSameAsAlias.js]
+
+
+
+
+
 var A = /** @class */ (function () {
     function A() {
     }

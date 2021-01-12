@@ -147,6 +147,10 @@ var publicClass = /** @class */ (function () {
     return publicClass;
 }());
 exports.publicClass = publicClass;
+
+
+
+
 var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function publicClassWithWithPrivateTypeParameters() {
     }
@@ -212,8 +216,12 @@ function publicFunctionWithPublicTypeParameters() {
 exports.publicFunctionWithPublicTypeParameters = publicFunctionWithPublicTypeParameters;
 function privateFunctionWithPrivateTypeParameters() {
 }
+
 function privateFunctionWithPublicTypeParameters() {
 }
+
+
+
 var publicClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (function () {
     function publicClassWithWithPublicTypeParametersWithoutExtends() {
     }

@@ -8,8 +8,7 @@ interface C<T> { }
 
 //// [a.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 //// [b.js]

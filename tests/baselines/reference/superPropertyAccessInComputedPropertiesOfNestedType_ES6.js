@@ -18,6 +18,7 @@ class B extends A {
 class A {
     foo() { return 1; }
 }
+
 class B extends A {
     foo() { return 2; }
     bar() {

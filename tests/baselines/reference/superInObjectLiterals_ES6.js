@@ -85,9 +85,11 @@ var obj = {
         super.method();
     }
 };
+
 class A {
     method() { }
 }
+
 class B extends A {
     f() {
         var obj = {

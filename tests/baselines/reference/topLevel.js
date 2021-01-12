@@ -28,6 +28,7 @@ result+=(M.origin.move(1,1));
 
 
 //// [topLevel.js]
+
 var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;

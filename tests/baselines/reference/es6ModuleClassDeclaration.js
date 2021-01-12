@@ -118,6 +118,10 @@ export class c {
         this.x = 10;
         this.y = 30;
     }
+
+
+
+
     method1() {
     }
     method2() {
@@ -134,6 +138,10 @@ class c2 {
         this.x = 10;
         this.y = 30;
     }
+
+
+
+
     method1() {
     }
     method2() {
@@ -154,6 +162,10 @@ export var m1;
             this.x = 10;
             this.y = 30;
         }
+
+
+
+
         method1() {
         }
         method2() {
@@ -171,6 +183,10 @@ export var m1;
             this.x = 10;
             this.y = 30;
         }
+
+
+
+
         method1() {
         }
         method2() {
@@ -194,6 +210,10 @@ var m2;
             this.x = 10;
             this.y = 30;
         }
+
+
+
+
         method1() {
         }
         method2() {
@@ -211,6 +231,10 @@ var m2;
             this.x = 10;
             this.y = 30;
         }
+
+
+
+
         method1() {
         }
         method2() {

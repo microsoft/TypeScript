@@ -15,14 +15,11 @@ if (!module.exports) module.exports = "";
 
 //// [moduleExports1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.TypeScript = void 0;
     var TypeScript;
-    (function (TypeScript) {
-        var Strasse;
-        (function (Strasse) {
-            var Street;
+    (function (TypeScript) {var Strasse;
+        (function (Strasse) {var Street;
             (function (Street) {
                 var Rue = /** @class */ (function () {
                     function Rue() {
@@ -34,8 +31,11 @@ define(["require", "exports"], function (require, exports) {
         })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));
     })(TypeScript = exports.TypeScript || (exports.TypeScript = {}));
     var rue = new TypeScript.Strasse.Street.Rue();
+
     rue.address = "1 Main Street";
+
     void 0;
+
     if (!module.exports)
         module.exports = "";
 });

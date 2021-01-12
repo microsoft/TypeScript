@@ -15,8 +15,7 @@ exports.getSomething = void 0;
 function getSomething() { return null; }
 exports.getSomething = getSomething;
 var Something = /** @class */ (function () {
-    function Something() {
-    }
+    function Something() {}
     return Something;
 }());
 exports["default"] = Something;

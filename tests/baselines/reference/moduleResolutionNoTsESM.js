@@ -25,6 +25,7 @@ import z2 from "./z";
 
 //// [x.js]
 // ESM output
+
 export default 0;
 //// [y.jsx]
 export default 0;

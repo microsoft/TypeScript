@@ -7,6 +7,7 @@ f(y => {
 })
 
 //// [stringLiteralTypesOverloads04.js]
+
 f(function (y) {
     var z = y = "foo";
     return z;

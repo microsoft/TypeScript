@@ -88,6 +88,7 @@ function foo() { }
 // properties
 foo.x = 1;
 foo.y = 1;
+
 // keywords
 foo["break"] = 1;
 foo["case"] = 1;

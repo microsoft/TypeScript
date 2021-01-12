@@ -63,6 +63,7 @@ exports.circularReference = /** @class */ (function () {
     C.prototype.tags = function (c) { return c; };
     return C;
 }());
+
 // repro from #15066
 var FooItem = /** @class */ (function () {
     function FooItem() {

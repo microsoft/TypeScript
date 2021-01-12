@@ -12,10 +12,11 @@
 
 
 //// [parenthesizedExpressionInternalComments.js]
-/*1*/ ( /*2*/"foo" /*3*/) /*4*/;
+/*1*/ /*1*/ ( /*2*/"foo" /*3*/) /*4*/;
+
 // open
 /*1*/ (
-// next
-/*2*/ "foo"
+    // next
+    /*2*/ "foo"
 //close
 /*3*/ ) /*4*/;

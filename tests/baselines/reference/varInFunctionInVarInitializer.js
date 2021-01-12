@@ -9,4 +9,5 @@ var a = function () {
 var a = function () {
     var c = 1;
     return c;
-}, b = 1;
+},
+    b = 1;

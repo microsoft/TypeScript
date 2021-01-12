@@ -17,13 +17,11 @@ const _: string = repeat(new Date().toUTCString() + " ", 2);
 
 //// [greeter.js]
 System.register(["core-js/fn/string/repeat"], function (exports_1, context_1) {
-    "use strict";
-    var repeat_1, _;
+    "use strict";var repeat_1, _;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (repeat_1_1) {
-                repeat_1 = repeat_1_1;
+            function (repeat_1_1) {repeat_1 = repeat_1_1;
             }
         ],
         execute: function () {

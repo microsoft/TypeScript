@@ -46,9 +46,11 @@ module GenericParameter {
 var NonGenericParameter;
 (function (NonGenericParameter) {
     var a;
+
     function foo4(cb) {
         return cb;
     }
+
     var b;
     var r3 = foo4(b); // ok
 })(NonGenericParameter || (NonGenericParameter = {}));
@@ -57,11 +59,13 @@ var GenericParameter;
     function foo5(cb) {
         return cb;
     }
+
     var a;
     var r6 = foo5(a); // ok
     function foo6(cb) {
         return cb;
     }
+
     var b;
     var r10 = foo6(b); // error
     function foo7(x, cb) {

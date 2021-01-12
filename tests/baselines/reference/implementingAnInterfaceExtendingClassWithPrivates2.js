@@ -100,12 +100,12 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Foo = /** @class */ (function () {
+})();var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
+
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
@@ -142,6 +142,7 @@ var M;
         }
         return Baz;
     }(Foo));
+
     var Bar = /** @class */ (function (_super) {
         __extends(Bar, _super);
         function Bar() {
@@ -179,6 +180,7 @@ var M2;
         }
         return Baz;
     }(Foo));
+
     var Bar = /** @class */ (function (_super) {
         __extends(Bar, _super);
         function Bar() {

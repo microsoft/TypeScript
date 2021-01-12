@@ -147,8 +147,7 @@ var B = /** @class */ (function () {
     return B;
 }());
 var C = /** @class */ (function () {
-    function C(p1, p2, p3) {
-        if (p1 === void 0) { p1 = 0; }
+    function C(p1, p2, p3) {if (p1 === void 0) { p1 = 0; }
         if (p2 === void 0) { p2 = 0; }
         if (p3 === void 0) { p3 = 0; }
         this.p1 = p1;
@@ -191,9 +190,7 @@ var G = /** @class */ (function (_super) {
     return G;
 }(D));
 var H = /** @class */ (function () {
-    function H() {
-        _this = _super.call(this) || this;
-    } // ERROR - no super call allowed
+    function H() {_this = _super.call(this) || this;} // ERROR - no super call allowed
     return H;
 }());
 var I = /** @class */ (function (_super) {

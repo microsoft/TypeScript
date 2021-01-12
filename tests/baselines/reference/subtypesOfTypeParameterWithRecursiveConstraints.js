@@ -174,45 +174,57 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 function f(t, u, v) {
     // ok
     var r1 = true ? t : u;
     var r1 = true ? u : t;
+
     // ok
     var r2 = true ? t : v;
     var r2 = true ? v : t;
+
     // ok
     var r3 = true ? v : u;
     var r3 = true ? u : v;
     // ok
     var r4 = true ? t : new Foo();
     var r4 = true ? new Foo() : t;
+
     // ok
     var r5 = true ? u : new Foo();
     var r5 = true ? new Foo() : u;
+
     // ok
     var r6 = true ? v : new Foo();
     var r6 = true ? new Foo() : v;
+
+
     // ok
     var r7 = true ? t : new Foo();
     var r7 = true ? new Foo() : t;
+
     // ok
     var r8 = true ? u : new Foo();
     var r8 = true ? new Foo() : u;
+
     // ok
     var r9 = true ? v : new Foo();
     var r9 = true ? new Foo() : v;
+
+
     // ok
     var r10 = true ? t : new Foo();
     var r10 = true ? new Foo() : t;
+
     // ok
     var r11 = true ? u : new Foo();
     var r11 = true ? new Foo() : u;
+
     // ok
     var r12 = true ? v : new Foo();
     var r12 = true ? new Foo() : v;

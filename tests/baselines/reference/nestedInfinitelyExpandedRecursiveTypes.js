@@ -12,6 +12,7 @@ f = g;
 g = f;
 
 //// [nestedInfinitelyExpandedRecursiveTypes.js]
+
 var f;
 var g;
 f = g;

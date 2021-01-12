@@ -74,8 +74,7 @@ export { _await as await };
 
 //// [other.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var _await;
+    "use strict";var _await;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -87,14 +86,14 @@ System.register([], function (exports_1, context_1) {
 });
 //// [index.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var x, C1, C2, C3, C, y;
+    "use strict";var x, C1, C2, C3, C, y;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: async function () {
             exports_1("x", x = 1);
             await x;
+
             // reparse element access as await
             await [x];
             await [x, x];
@@ -113,8 +112,7 @@ System.register([], function (exports_1, context_1) {
                 get await() { return 1; }
                 set await(value) { }
             };
-            C3 = class C3 {
-                constructor() {
+            C3 = class C3 {constructor() {
                     this.await = 1;
                 }
             };
@@ -128,6 +126,7 @@ System.register([], function (exports_1, context_1) {
             ({
                 await: 1
             });
+
             // property access name should be ok
             C1.prototype.await;
             C = class C {

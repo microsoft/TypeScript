@@ -22,6 +22,7 @@ function f1() {
 function f() {
     return 5;
 }
+
 /**
  * @returns {string | number} This comment is not currently exposed
  */

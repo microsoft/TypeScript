@@ -9,8 +9,6 @@ void 0;
 exports.__esModule = true;
 exports.Baz = void 0;
 var Baz;
-(function (Baz) {
-    Baz.x = "hello";
-})(Baz = exports.Baz || (exports.Baz = {}));
+(function (Baz) {Baz.x = "hello";})(Baz = exports.Baz || (exports.Baz = {}));
 Baz.x = "goodbye";
 void 0;

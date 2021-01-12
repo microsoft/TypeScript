@@ -11,6 +11,7 @@ for (const item of arr) {
 
 
 //// [for-of58.js]
+
 for (const item of arr) {
     item.x;
     item.y;

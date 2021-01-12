@@ -48,8 +48,7 @@ module TypeScript.Syntax {
 
 //// [moduleMemberWithoutTypeAnnotation1.js]
 var TypeScript;
-(function (TypeScript) {
-    var Parser;
+(function (TypeScript) {var Parser;
     (function (Parser) {
         var SyntaxCursor = /** @class */ (function () {
             function SyntaxCursor() {
@@ -84,8 +83,7 @@ var TypeScript;
     var SyntaxNode = /** @class */ (function () {
         function SyntaxNode() {
         }
-        SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {
-            if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
+        SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {if (includeSkippedTokens === void 0) { includeSkippedTokens = false; }
             var positionedToken = this.findTokenInternal(null, position, 0);
             return null;
         };
@@ -96,8 +94,7 @@ var TypeScript;
     }());
     TypeScript.SyntaxNode = SyntaxNode;
 })(TypeScript || (TypeScript = {}));
-(function (TypeScript) {
-    var Syntax;
+(function (TypeScript) {var Syntax;
     (function (Syntax) {
         function childIndex() { }
         Syntax.childIndex = childIndex;

@@ -48,3 +48,6 @@ var c = n; // ok
 c = n; // ok
 c = 4; // ok
 var ca = 1; // error, Computed.A isn't a literal type because Computed has no enum literals
+
+
+

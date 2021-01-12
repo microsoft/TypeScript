@@ -112,6 +112,10 @@ function beastFoo(beast: Object) {
 }
 
 //// [typeGuardIntersectionTypes.js]
+
+
+
+
 function f1(obj) {
     if (isX(obj) || isY(obj) || isZ(obj)) {
         obj;
@@ -120,26 +124,35 @@ function f1(obj) {
         obj;
     }
 }
+
+
+
 // a type guard for B
 function isB(toTest) {
     return toTest && toTest.b;
 }
+
 // a function that turns an A into an A & B
 function union(a) {
     if (isB(a)) {
         return a;
-    }
-    else {
+    } else {
         return null;
     }
 }
+
+
+
 // Beast feature detection via user-defined type guards
 function hasLegs(x) { return x && typeof x.legs === 'number'; }
 function hasWings(x) { return x && !!x.wings; }
+
 // Function to identify a given beast by detecting its features
 function identifyBeast(beast) {
+
     // All beasts with legs
     if (hasLegs(beast)) {
+
         // All winged beasts with legs
         if (hasWings(beast)) {
             if (beast.legs === 4) {
@@ -152,11 +165,15 @@ function identifyBeast(beast) {
                 log("unknown - " + beast.legs + " legs, wings");
             }
         }
+
+
         // All non-winged beasts with legs
         else {
             log("manbearpig - " + beast.legs + " legs, no wings");
         }
     }
+
+
     // All beasts without legs    
     else {
         if (hasWings(beast)) {
@@ -167,6 +184,7 @@ function identifyBeast(beast) {
         }
     }
 }
+
 function beastFoo(beast) {
     if (hasWings(beast) && hasLegs(beast)) {
         beast; // Winged & Legged
@@ -174,6 +192,7 @@ function beastFoo(beast) {
     else {
         beast;
     }
+
     if (hasLegs(beast) && hasWings(beast)) {
         beast; // Legged & Winged
     }

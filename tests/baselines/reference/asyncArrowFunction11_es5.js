@@ -53,13 +53,10 @@ var A = /** @class */ (function () {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            return __awaiter(_this, void 0, void 0, function () {
-                var obj;
+            return __awaiter(_this, void 0, void 0, function () {var obj;
                 var _a;
                 var _this = this;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0: return [4 /*yield*/, Promise.resolve()];
+                return __generator(this, function (_b) {switch (_b.label) {case 0: return [4 /*yield*/, Promise.resolve()];
                         case 1:
                             _b.sent();
                             obj = (_a = {}, _a["a"] = function () { return _this; }, _a);

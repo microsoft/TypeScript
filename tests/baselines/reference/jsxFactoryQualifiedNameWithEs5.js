@@ -14,8 +14,10 @@ class Component {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./jsx");
+
 var skate;
 var React = { createElement: skate.h };
+
 var Component = /** @class */ (function () {
     function Component() {
     }

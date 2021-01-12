@@ -8,8 +8,7 @@ try {
 //// [sourceMap-SkippedNode.js]
 try {
     // ...
-}
-finally {
+} finally {
     // N.B. No 'catch' block
 }
 //# sourceMappingURL=sourceMap-SkippedNode.js.map

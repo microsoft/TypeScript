@@ -94,9 +94,11 @@ function h4() {
 
 //// [controlFlowIterationErrors.js]
 var cond;
+
 function len(s) {
     return s.length;
 }
+
 function f1() {
     var x;
     x = "";
@@ -106,6 +108,7 @@ function f1() {
     }
     x;
 }
+
 function f2() {
     var x;
     x = "";
@@ -115,6 +118,8 @@ function f2() {
     }
     x;
 }
+
+
 function g1() {
     var x;
     x = "";
@@ -124,6 +129,7 @@ function g1() {
     }
     x;
 }
+
 function g2() {
     var x;
     x = "";
@@ -133,9 +139,11 @@ function g2() {
     }
     x;
 }
+
 function asNumber(x) {
     return +x;
 }
+
 function h1() {
     var x;
     x = "0";
@@ -144,6 +152,7 @@ function h1() {
         x;
     }
 }
+
 function h2() {
     var x;
     x = "0";
@@ -152,6 +161,7 @@ function h2() {
         x;
     }
 }
+
 function h3() {
     var x;
     x = "0";
@@ -161,6 +171,7 @@ function h3() {
         x;
     }
 }
+
 function h4() {
     var x;
     x = "0";

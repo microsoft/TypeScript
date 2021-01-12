@@ -18,8 +18,7 @@ foo(import("./0"));
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var B;
+    "use strict";var B;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -32,8 +31,7 @@ System.register([], function (exports_1, context_1) {
     };
 });
 //// [2.js]
-System.register([], function (exports_1, context_1) {
-    var __moduleName = context_1 && context_1.id;
+System.register([], function (exports_1, context_1) {var __moduleName = context_1 && context_1.id;
     // We use Promise<any> for now as there is no way to specify shape of module object
     function foo(x) {
         x.then(value => {

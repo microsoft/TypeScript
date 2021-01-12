@@ -75,6 +75,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var C1 = /** @class */ (function () {
     function C1() {
     }
@@ -126,6 +127,7 @@ var arr_c3 = [];
 arr_c3 = arr_c2_2; // should be an error - is
 arr_c3 = arr_c1_2; // should be an error - is
 arr_c3 = arr_i1_2; // should be an error - is
+
 arr_any = f1; // should be an error - is
 arr_any = function () { return null; }; // should be an error - is
 arr_any = o1; // should be an error - is

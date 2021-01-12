@@ -29,6 +29,8 @@ switch (1) {
     default:
         var z = 2;
 }
+
+
 switch (2) {
     case 0:
         var x = void 0;

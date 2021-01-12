@@ -65,6 +65,7 @@ var a3: {
 
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.js]
 function foo(x) { }
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -83,8 +84,13 @@ var C3 = /** @class */ (function () {
     C3.prototype.foo = function (x) { };
     return C3;
 }());
+
+
+
 var a;
+
 var a2;
+
 var a3;
 
 

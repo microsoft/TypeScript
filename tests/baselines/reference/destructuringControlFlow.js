@@ -50,6 +50,7 @@ function f1(obj) {
         var a2 = obj.a; // string | undefined
     }
 }
+
 function f2(obj) {
     var a0 = obj[0]; // number | null
     var a1 = obj[1]; // string | null
@@ -62,12 +63,14 @@ function f2(obj) {
         (c0 = obj[0], c1 = obj[1]);
     }
 }
+
 function f3(obj) {
     if (obj.a && obj.b) {
         var a = obj.a, b = obj.b; // number, string
         (a = obj.a, b = obj.b);
     }
 }
+
 function f4() {
     var _a, _b;
     var x;
@@ -75,5 +78,9 @@ function f4() {
     (x = 0["x"]); // Error
     (_a = 0, _b = "x" + "", x = _a[_b]); // Errpr
 }
+
+
+
+
 var _a = ["foo"], key = _a[0], value = _a[1];
 value.toUpperCase(); // Error

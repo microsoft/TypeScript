@@ -60,4 +60,14 @@ declare module 'bar' {
 
 
 //// [ambientErrors.js]
+
+
+
+
+
 ;
+
+
+
+
+

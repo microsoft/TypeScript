@@ -7,8 +7,7 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    C.prototype.foo = function () {
-        var bar = [];
+    C.prototype.foo = function () {var bar = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             bar[_i] = arguments[_i];
         }

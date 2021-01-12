@@ -146,11 +146,13 @@ var _loop_1 = function (x) {
         var x_2;
         (function () { return x_2; });
     }
+
     try { }
     catch (e) {
         var x_3;
         (function () { return x_3; });
     }
+
     switch (x_1) {
         case 1:
             var x_4;
@@ -164,6 +166,7 @@ var _loop_1 = function (x) {
     while (1 == 1) {
         _loop_2();
     }
+
     var A = /** @class */ (function () {
         function A() {
         }
@@ -176,12 +179,14 @@ var _loop_1 = function (x) {
 for (var x = 0; x < 1; ++x) {
     _loop_1(x);
 }
+
+
 function foo() {
-    var _loop_3 = function (a) {
-        var _b;
+    var _loop_3 = function (a) {var _b;
         if (a === 1) {
             return "break";
         }
+
         if (a === 2) {
             return "break-l0";
         }
@@ -199,15 +204,16 @@ function foo() {
             }
             return { value: 50 };
         }
-        var _loop_4 = function (b) {
-            var _g;
+        var _loop_4 = function (b) {var _g;
             _g = [{ x1: 1, y: arguments_1.length }][0], x1 = _g.x1, z1 = _g.y;
             if (b === 1) {
                 return "break";
             }
+
             if (b === 2) {
                 return "break-l0";
             }
+
             (function () { return b; });
             return { value: 100 };
         };
@@ -218,8 +224,7 @@ function foo() {
                 return state_2;
             if (state_2 === "break")
                 break;
-            switch (state_2) {
-                case "break-l0": return state_2;
+            switch (state_2) {case "break-l0": return state_2;
             }
         }
         (function () { return a; });
@@ -232,8 +237,7 @@ function foo() {
             return state_1.value;
         if (state_1 === "break")
             break;
-        switch (state_1) {
-            case "break-l0": break l0;
+        switch (state_1) {case "break-l0": break l0;
         }
     }
     use(x);
@@ -241,6 +245,7 @@ function foo() {
     use(x1);
     use(z1);
 }
+
 function foo2() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x = _a[_i];
@@ -250,6 +255,7 @@ function foo2() {
         else if (x === 2) {
             continue;
         }
+
         while (1 === 1) {
             if (x) {
                 break;
@@ -258,6 +264,7 @@ function foo2() {
                 continue;
             }
         }
+
         switch (x) {
             case 1: break;
             case 2: continue;
@@ -271,6 +278,7 @@ function foo2() {
         }
     }
 }
+
 var C = /** @class */ (function () {
     function C(N) {
         this.N = N;

@@ -31,7 +31,9 @@ var Bar = /** @class */ (function () {
         this.size = x;
     }
     Bar.prototype.clone = function () {
+
         return new Bar(this.size);
+
     };
     return Bar;
 }());

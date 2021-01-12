@@ -28,6 +28,10 @@ function bar() { }
 
 
 //// [doNotEmitDetachedComments.js]
+
 var x = 10;
+
 function foo() { }
+
+
 function bar() { }

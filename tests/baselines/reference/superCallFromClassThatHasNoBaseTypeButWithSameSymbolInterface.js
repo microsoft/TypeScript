@@ -9,6 +9,7 @@ class Foo {
 
 
 //// [superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.js]
+
 var Foo = /** @class */ (function () {
     function Foo() {
         _this = _super.call(this) || this; // error

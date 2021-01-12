@@ -48,7 +48,9 @@ var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
 // ~ operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];
+
 function foo() { return 1; }
+
 var A = /** @class */ (function () {
     function A() {
     }
@@ -59,9 +61,11 @@ var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // number type var
 var ResultIsNumber1 = ~NUMBER;
 var ResultIsNumber2 = ~NUMBER1;
+
 // number type literal
 var ResultIsNumber3 = ~1;
 var ResultIsNumber4 = ~{ x: 1, y: 2 };
@@ -73,9 +77,11 @@ var ResultIsNumber8 = ~NUMBER1[0];
 var ResultIsNumber9 = ~foo();
 var ResultIsNumber10 = ~A.foo();
 var ResultIsNumber11 = ~(NUMBER + NUMBER);
+
 // multiple ~ operators
 var ResultIsNumber12 = ~~NUMBER;
 var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
+
 // miss assignment operators
 ~NUMBER;
 ~NUMBER1;

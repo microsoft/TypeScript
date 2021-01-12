@@ -11,7 +11,9 @@ var d3 = f(b, x => x.b, null); // type [B, any]
 
 //// [typeParameterFixingWithContextSensitiveArguments.js]
 function f(y, f, x) { return [y, f(x)]; }
+
 var a, b;
+
 var d = f(b, function (x) { return x.a; }, a); // type [A, A]
 var d2 = f(b, function (x) { return x.a; }, null); // type [B, A]
 var d3 = f(b, function (x) { return x.b; }, null); // type [B, any]

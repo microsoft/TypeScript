@@ -21,7 +21,9 @@ class A {
         console.log(this.x);
     }
 }
+
 class B extends A {
+
     constructor() {
         super(...arguments);
         Object.defineProperty(this, "x", {
@@ -32,6 +34,7 @@ class B extends A {
         });
     }
 }
+
 class C extends A {
     get x() { return 'C.x'; }
     ;

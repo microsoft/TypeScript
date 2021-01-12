@@ -8,8 +8,7 @@ var y: A<A>;
 
 //// [missingTypeArguments2.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 var x;

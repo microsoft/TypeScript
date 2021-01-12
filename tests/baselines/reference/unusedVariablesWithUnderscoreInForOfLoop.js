@@ -43,6 +43,8 @@ function t1() {
         var _k = _j[_h], _a = _k[0], _b = _k[1];
     }
 }
+
+
 function t2() {
     for (var _i = 0, _c = [['key', 1]]; _i < _c.length; _i++) {
         var _d = _c[_i], _a = _d[0], b = _d[1];
@@ -54,6 +56,7 @@ function t2() {
         var _k = _j[_h], a = _k[0], b = _k[1];
     }
 }
+
 function t3() {
     for (var _i = 0, _c = [[[['key', 1]]]]; _i < _c.length; _i++) {
         var _d = _c[_i][0][0], _a = _d[0], b = _d[1];

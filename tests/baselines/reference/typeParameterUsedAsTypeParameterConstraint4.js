@@ -56,6 +56,7 @@ var f4 = <U extends T, T>(x: V, y: X) => { // error
 //// [typeParameterUsedAsTypeParameterConstraint4.js]
 // Type parameters are in scope in their own and other type parameter lists
 // Some negative cases
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -65,6 +66,7 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
+
 function foo(x, y) {
     function bar() {
         function baz(a, b) {
@@ -73,6 +75,7 @@ function foo(x, y) {
         }
     }
 }
+
 function foo2(x, y) {
     function bar() {
         function baz(a, b) {
@@ -81,6 +84,7 @@ function foo2(x, y) {
         }
     }
 }
+
 var f3 = function (x, y) {
     function bar(r, s) {
         var g = function (a, b) {
@@ -89,6 +93,7 @@ var f3 = function (x, y) {
         };
     }
 };
+
 var f4 = function (x, y) {
     function bar() {
         var g = function (a, b) {

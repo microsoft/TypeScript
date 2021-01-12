@@ -62,8 +62,7 @@ export var newVar2 = new extMod.m4.m2.c();
 
 //// [commentsExternalModules2_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.m4 = exports.m1 = void 0;
     /** Module comment*/
     var m1;
@@ -128,8 +127,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [commentsExternalModules_1.js]
 define(["require", "exports", "commentsExternalModules2_0"], function (require, exports, extMod) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.newVar2 = exports.newVar = void 0;
     extMod.m1.fooExport();
     exports.newVar = new extMod.m1.m2.c();

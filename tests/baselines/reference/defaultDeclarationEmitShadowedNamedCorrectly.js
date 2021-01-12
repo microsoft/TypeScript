@@ -28,6 +28,7 @@ function make(x) {
     return null;
 }
 exports.make = make;
+
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }

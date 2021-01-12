@@ -12,6 +12,7 @@ betaOfNumber.takesArgOfT(5);
 
 
 //// [extendedInterfaceGenericType.js]
+
 var alpha;
 var betaOfNumber = alpha.makeBetaOfNumber();
 betaOfNumber.takesArgOfT(5);

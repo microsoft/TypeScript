@@ -30,10 +30,13 @@ const test = (base) => {
 class Base {
     constructor() { }
 }
+
 const BaseFactory = () => {
     return new Base();
 };
+
 BaseFactory.Base = Base;
+
 module.exports = BaseFactory;
 //// [file.js]
 /** @typedef {typeof import('./base')} BaseFactory */

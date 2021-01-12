@@ -2,5 +2,4 @@
 var v = class C {};
 
 //// [classExpressionES61.js]
-var v = class C {
-};
+var v = class C {};

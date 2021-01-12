@@ -17,6 +17,7 @@ import { everywhere, onlyInA } from "b.foo"; // Error
 
 
 //// [types.js]
+
 //// [testA.js]
 "use strict";
 exports.__esModule = true;

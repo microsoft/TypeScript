@@ -109,6 +109,9 @@ for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i <
 }
 
 //// [sourceMapValidationDestructuringForArrayBindingPatternDefaultValues.js]
+
+
+
 var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
@@ -136,6 +139,7 @@ for (var _k = getMultiRobot(), _l = _k[1], _m = _l === void 0 ? ["none", "none"]
 for (var _q = ["trimmer", ["trimming", "edging"]], _r = _q[1], _s = _r === void 0 ? ["none", "none"] : _r, _t = _s[0], primarySkillA = _t === void 0 ? "primary" : _t, _u = _s[1], secondarySkillA = _u === void 0 ? "secondary" : _u, i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
+
 for (var _v = robotA[0], numberB = _v === void 0 ? -1 : _v, i = 0; i < 1; i++) {
     console.log(numberB);
 }
@@ -154,6 +158,7 @@ for (var _z = getMultiRobot()[0], nameB = _z === void 0 ? "name" : _z, i = 0; i 
 for (var _0 = ["trimmer", ["trimming", "edging"]][0], nameB = _0 === void 0 ? "name" : _0, i = 0; i < 1; i++) {
     console.log(nameB);
 }
+
 for (var _1 = robotA[0], numberA2 = _1 === void 0 ? -1 : _1, _2 = robotA[1], nameA2 = _2 === void 0 ? "name" : _2, _3 = robotA[2], skillA2 = _3 === void 0 ? "skill" : _3, i = 0; i < 1; i++) {
     console.log(nameA2);
 }
@@ -172,6 +177,7 @@ for (var _17 = getMultiRobot(), _18 = _17[0], nameMA = _18 === void 0 ? "noName"
 for (var _23 = ["trimmer", ["trimming", "edging"]], _24 = _23[0], nameMA = _24 === void 0 ? "noName" : _24, _25 = _23[1], _26 = _25 === void 0 ? ["none", "none"] : _25, _27 = _26[0], primarySkillA = _27 === void 0 ? "primary" : _27, _28 = _26[1], secondarySkillA = _28 === void 0 ? "secondary" : _28, i = 0; i < 1; i++) {
     console.log(nameMA);
 }
+
 for (var _29 = robotA[0], numberA3 = _29 === void 0 ? -1 : _29, robotAInfo = robotA.slice(1), i = 0; i < 1; i++) {
     console.log(numberA3);
 }

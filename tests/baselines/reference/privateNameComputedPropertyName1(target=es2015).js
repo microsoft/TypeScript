@@ -53,6 +53,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _a, _b, _c, _d, _e;
 class A {
+
     constructor() {
         _a.set(this, 'a');
         _b.set(this, void 0);
@@ -62,9 +63,16 @@ class A {
         __classPrivateFieldSet(this, _b, 'b');
         __classPrivateFieldSet(this, _d, 'd');
     }
+
     test() {
         const data = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
-        const { [__classPrivateFieldGet(this, _a)]: a, [__classPrivateFieldGet(this, _b)]: b, [__classPrivateFieldGet(this, _c)]: c, [__classPrivateFieldGet(this, _d)]: d, [__classPrivateFieldSet(this, _e, 'e')]: e, } = data;
+        const {
+        [__classPrivateFieldGet(this, _a)]: a,
+            [__classPrivateFieldGet(this, _b)]: b,
+            [__classPrivateFieldGet(this, _c)]: c,
+            [__classPrivateFieldGet(this, _d)]: d,
+            [__classPrivateFieldSet(this, _e, 'e')]: e,
+        } = data;
         console.log(a, b, c, d, e);
         const a1 = data[__classPrivateFieldGet(this, _a)];
         const b1 = data[__classPrivateFieldGet(this, _b)];

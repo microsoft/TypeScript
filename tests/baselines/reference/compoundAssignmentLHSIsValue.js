@@ -140,6 +140,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
+
 // this
 var C = /** @class */ (function () {
     function C() {
@@ -160,23 +161,25 @@ function foo() {
     this *= value;
     this += value;
 }
+
 this *= value;
 this += value;
 // identifiers: module, class, enum, function
 var M;
-(function (M) {
-})(M || (M = {}));
+(function (M) {})(M || (M = {}));
 M *= value;
 M += value;
+
 C *= value;
 C += value;
 var E;
-(function (E) {
-})(E || (E = {}));
+(function (E) {})(E || (E = {}));
 E *= value;
 E += value;
+
 foo *= value;
 foo += value;
+
 // literals
 null *= value;
 null += value;
@@ -190,15 +193,11 @@ false += value;
 '' += value;
 /d+/ *= value;
 /d+/ += value;
+
 // object literals
-{
-    a: 0;
-}
-value;
-{
-    a: 0;
-}
-value;
+{a: 0;}value;
+{a: 0;}value;
+
 // array literals
 ['', ''] *= value;
 ['', ''] += value;
@@ -215,6 +214,7 @@ var Derived = /** @class */ (function (_super) {
         _super.prototype. *= value;
         _super.prototype. += value;
     };
+
     Derived.sfoo = function () {
         _super. *= value;
         _super. += value;
@@ -222,17 +222,17 @@ var Derived = /** @class */ (function (_super) {
     return Derived;
 }(C));
 // function expression
-function bar1() { }
-value;
-function bar2() { }
-value;
+function bar1() { }value;
+function bar2() { }value;
 (function () { });
 value;
 (function () { });
 value;
+
 // function calls
 foo() *= value;
 foo() += value;
+
 // parentheses, the containted expression is value
 (this) *= value;
 (this) += value;

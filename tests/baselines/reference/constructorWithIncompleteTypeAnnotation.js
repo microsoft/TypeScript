@@ -295,6 +295,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var fs = module;
 ("fs");
 var TypeScriptAllInOne;
@@ -303,8 +304,7 @@ var TypeScriptAllInOne;
         function Program() {
             this["case"] = bfs.STATEMENTS(4);
         }
-        Program.Main = function () {
-            var args = [];
+        Program.Main = function () {var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
@@ -317,26 +317,33 @@ var TypeScriptAllInOne;
                         "return": 1
                     };
             }
+
             finally {
-            }
-        };
+            }};
+
+
         Program.prototype["if"] = function (retValue) { };
         return Program;
     }());
     TypeScriptAllInOne.Program = Program;
      != 0;
     {
+
         return 1;
             ^
+
+
                 retValue;
         bfs.TYPES();
         if (retValue != 0) {
+
             return 1 &&
             ;
         }
-        retValue = bfs.OPERATOR;
-        ' );;
+
+        retValue = bfs.OPERATOR;' );;
         if (retValue != 0) {
+
             return 1;
         }
     }
@@ -347,7 +354,9 @@ var TypeScriptAllInOne;
     }
     finally {
     }
+
     console.log('Done');
+
     return 0;
 })(TypeScriptAllInOne || (TypeScriptAllInOne = {}));
 var BasicFeatures = /** @class */ (function () {
@@ -364,10 +373,12 @@ var BasicFeatures = /** @class */ (function () {
         ;
         var nan = Number.NaN;
         var undef = undefined;
+
         var _\uD4A5\u7204\uC316, uE59F = local;
         var мир = local;
         var local5 = null;
         var local6 = local5 instanceof fs.File;
+
         var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
         var float = 6.02e23, float2 = 6.02E-23;
         var char = 'c', \u0066 = '\u0066', hexchar = '\x42' !=
@@ -376,7 +387,9 @@ var BasicFeatures = /** @class */ (function () {
         var reg = /\w*/;
         var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, "instanceof": function () { return 'objLit{42}'; } };
         var weekday = Weekdays.Monday;
+
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
+
         //
         var any = 0 ^=
         ;
@@ -398,9 +411,12 @@ var BasicFeatures = /** @class */ (function () {
         var string = 0 /  >
         ;
         var yield = 0;
+
         var sum3 = any + bool + declare + constructor + get + implements + interface + let + module + number + package + private + protected + public + set + static + string + yield;
+
         return 0;
     };
+
     /// <summary>
     /// Test different statements. Including if-else,swith,foreach,(un)checked,lock,using,try-catch-finally
     /// </summary>
@@ -410,6 +426,7 @@ var BasicFeatures = /** @class */ (function () {
         var retVal = 0;
         if (i == 1)
             retVal = 1;
+
         else
             retVal = 0;
         switch (i) {
@@ -422,8 +439,10 @@ var BasicFeatures = /** @class */ (function () {
             default:
                 break;
         }
+
         for (var x in { x: 0, y: 1 }) {
             !;
+
             try {
                 throw null;
             }
@@ -435,8 +454,10 @@ var BasicFeatures = /** @class */ (function () {
             try { }
             catch (Exception) { }
         }
+
         return retVal;
     };
+
     /// <summary>
     /// Test types in ts language. Including class,struct,interface,delegate,anonymous type
     /// </summary>
@@ -446,16 +467,20 @@ var BasicFeatures = /** @class */ (function () {
         var c = new CLASS();
         var xx = c;
         retVal += ;
-        try { }
-        catch (_a) { }
+        try { } catch (_a) { }
         Property;
         retVal += c.Member();
         retVal += xx.Foo() ? 0 : 1;
+
         //anonymous type
         var anony = { a: new CLASS() };
+
         retVal += anony.a.d();
+
         return retVal;
     };
+
+
     ///// <summary>
     ///// Test different operators
     ///// </summary>
@@ -488,6 +513,7 @@ var BasicFeatures = /** @class */ (function () {
         i ^= i; /*^=*/
         i <<= i; /*<<=*/
         i >>= i; /*>>=*/
+
         if (i == 0 &&  != b && f == 1)
             return 0;
         else
@@ -495,6 +521,7 @@ var BasicFeatures = /** @class */ (function () {
     };
     return BasicFeatures;
 }());
+
 var CLASS = /** @class */ (function () {
     function CLASS() {
         this.d = function () { yield 0; };
@@ -513,6 +540,7 @@ var CLASS = /** @class */ (function () {
             return true ?
                 :
             ;
+
         else
             return false;
     };
@@ -520,16 +548,13 @@ var CLASS = /** @class */ (function () {
 }());
 // todo: use these
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
-method1(val, number);
-{
+method1(val, number);{
     return val;
 }
-method2();
-{
+method2();{
     return 2 * this.method1(2);
 }
 var B = /** @class */ (function (_super) {
@@ -549,15 +574,10 @@ var Overloading = /** @class */ (function () {
     return Overloading;
 }());
 Overloads(value, string);
-Overloads();
-while ()
-    : string, ;
-rest: string[];
-{
-     &
-        public;
-    DefaultValue(value ?  : string = "Hello");
-    { }
+Overloads();while ()
+    : string, ;rest: string[];{ &
+
+        public;DefaultValue(value ?  : string = "Hello");{ }
 }
 var Weekdays;
 (function (Weekdays) {

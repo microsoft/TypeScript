@@ -25,6 +25,8 @@ export const spread = {
 exports.__esModule = true;
 exports.createInstance = exports.SYMBOL = void 0;
 exports.SYMBOL = Symbol();
+
+
 function createInstance() {
     var _a;
     return _a = {},
@@ -48,6 +50,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 exports.spread = void 0;
 var bug_1 = require("./bug");
+
 exports.spread = __assign({}, bug_1.createInstance());
 
 

@@ -19,13 +19,11 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [a.js]
 System.register(["tslib"], function (exports_1, context_1) {
-    "use strict";
-    var tslib_1, A, o, y;
+    "use strict";var tslib_1, A, o, y;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (tslib_1_1) {
-                tslib_1 = tslib_1_1;
+            function (tslib_1_1) {tslib_1 = tslib_1_1;
             }
         ],
         execute: function () {

@@ -16,8 +16,7 @@ var Foo = /** @class */ (function () {
     }
     Foo.prototype.f1 = function () {
         if (a.b) {
-        }
-    };
+        }};
     Foo.prototype.f2 = function () {
     };
     Foo.prototype.f3 = function () {

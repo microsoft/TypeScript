@@ -19,6 +19,7 @@ function bigger() {
         this.big; // Expect property to exist
     }
 }
+
 function bar() {
     if (typeof this === "string") {
         var x = this;

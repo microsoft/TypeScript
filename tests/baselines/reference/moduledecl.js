@@ -233,12 +233,16 @@ var m3eVar: mAmbient.m3.e;
 
 
 //// [moduledecl.js]
+
+
+
 var m0;
 (function (m0) {
     function f1() {
     }
     function f2(ns) {
     }
+
     var c1 = /** @class */ (function () {
         function c1() {
         }
@@ -268,8 +272,7 @@ var m1;
     m1.c1 = c1;
 })(m1 || (m1 = {}));
 var m;
-(function (m) {
-    var m2;
+(function (m) {var m2;
     (function (m2) {
         var a = 10;
     })(m2 = m.m2 || (m.m2 = {}));
@@ -277,21 +280,16 @@ var m;
     (function (m3) {
     })(m3 = m.m3 || (m.m3 = {}));
 })(m || (m = {}));
-(function (m) {
-    var m25;
-    (function (m25) {
-        var m5;
+(function (m) {var m25;
+    (function (m25) {var m5;
         (function (m5) {
         })(m5 = m25.m5 || (m25.m5 = {}));
     })(m25 = m.m25 || (m.m25 = {}));
 })(m || (m = {}));
 var m13;
-(function (m13) {
-    var m4;
-    (function (m4) {
-        var m2;
-        (function (m2) {
-            var m3;
+(function (m13) {var m4;
+    (function (m4) {var m2;
+        (function (m2) {var m3;
             (function (m3) {
             })(m3 = m2.m3 || (m2.m3 = {}));
         })(m2 = m4.m2 || (m4.m2 = {}));
@@ -301,6 +299,10 @@ var m13;
         m4.f = f;
     })(m4 = m13.m4 || (m13.m4 = {}));
 })(m13 || (m13 = {}));
+
+
+
+
 var exportTests;
 (function (exportTests) {
     var C1_public = /** @class */ (function () {
@@ -309,6 +311,7 @@ var exportTests;
         C1_public.prototype.f2 = function () {
             return 30;
         };
+
         C1_public.prototype.f3 = function () {
             return "string";
         };
@@ -321,6 +324,7 @@ var exportTests;
         C2_private.prototype.f2 = function () {
             return 30;
         };
+
         C2_private.prototype.f3 = function () {
             return "string";
         };
@@ -360,6 +364,7 @@ var exportTests;
 function foo() {
     return mAmbient.foo();
 }
+
 var cVar = new mAmbient.C();
 var aVar = mAmbient.aVar;
 var bB;
@@ -367,10 +372,12 @@ var eVar;
 function m3foo() {
     return mAmbient.m3.foo();
 }
+
 var m3cVar = new mAmbient.m3.C();
 var m3aVar = mAmbient.m3.aVar;
 var m3bB;
 var m3eVar;
+
 
 
 //// [moduledecl.d.ts]

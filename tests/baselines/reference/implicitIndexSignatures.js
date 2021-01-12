@@ -59,6 +59,7 @@ function f5() {
 
 
 //// [implicitIndexSignatures.js]
+
 var empty1 = {};
 var empty2;
 var names1 = { a: "foo", b: "bar" };
@@ -69,24 +70,28 @@ map = empty1;
 map = empty2;
 map = names1;
 map = names2;
+
 function f1() {
     var o1 = { a: 1, b: 2 };
     var o2;
     var v1 = getStringIndexValue(o1);
     var v2 = getStringIndexValue(o2);
 }
+
 function f2() {
     var o1 = { a: "1", b: "2" };
     var o2;
     var v1 = getStringIndexValue(o1);
     var v2 = getStringIndexValue(o2);
 }
+
 function f3() {
     var o1 = { a: 1, b: "2" };
     var o2;
     var v1 = getStringIndexValue(o1);
     var v2 = getStringIndexValue(o2);
 }
+
 function f4() {
     var o1 = { 0: "0", 1: "1", count: 2 };
     var o2;
@@ -95,6 +100,7 @@ function f4() {
     var v3 = getNumberIndexValue(o1);
     var v4 = getNumberIndexValue(o2);
 }
+
 function f5() {
     var E1;
     (function (E1) {

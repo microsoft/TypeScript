@@ -14,8 +14,7 @@ class Foo {
 
 //// [privateNamesAssertion.js]
 "use strict";
-class Foo {
-    constructor() {
+class Foo {constructor() {
         this.#p1 = (v) => {
             if (typeof v !== "string") {
                 throw new Error();

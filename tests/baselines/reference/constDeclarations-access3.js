@@ -61,19 +61,27 @@ M.x >>>= 9;
 M.x &= 10;
 M.x |= 11;
 M.x ^= 12;
+
 M.x++;
 M.x--;
 ++M.x;
 --M.x;
+
 ++((M.x));
+
 M["x"] = 0;
+
 // OK
 var a = M.x + 1;
 function f(v) { }
 f(M.x);
+
 if (M.x) { }
+
 M.x;
 (M.x);
+
 -M.x;
 +M.x;
+
 M.x.toString();

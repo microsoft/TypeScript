@@ -39,7 +39,9 @@ var Bar = /** @class */ (function () {
         this._store = store;
     }
     Bar.prototype.foo = function () {
+
         return this._store.length; // shouldn't be an error
+
     };
     return Bar;
 }());

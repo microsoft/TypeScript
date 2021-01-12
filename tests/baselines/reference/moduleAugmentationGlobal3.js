@@ -24,8 +24,7 @@ let y = x.getCountAsString().toLowerCase();
 exports.__esModule = true;
 exports.A = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 exports.A = A;
@@ -37,6 +36,7 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 require("./f2");
+
 var x = [1];
 var y = x.getCountAsString().toLowerCase();
 

@@ -61,7 +61,9 @@ z: typeof M.n;
 // typeof  operator on string type
 var STRING;
 var STRING1 = ["", "abc"];
+
 function foo() { return "abc"; }
+
 var A = /** @class */ (function () {
     function A() {
     }
@@ -72,9 +74,11 @@ var M;
 (function (M) {
 })(M || (M = {}));
 var objA = new A();
+
 // string type var
 var ResultIsString1 = typeof STRING;
 var ResultIsString2 = typeof STRING1;
+
 // string type literal
 var ResultIsString3 = typeof "";
 var ResultIsString4 = typeof { x: "", y: "" };
@@ -87,9 +91,11 @@ var ResultIsString9 = typeof foo();
 var ResultIsString10 = typeof A.foo();
 var ResultIsString11 = typeof (STRING + STRING);
 var ResultIsString12 = typeof STRING.charAt(0);
+
 // multiple typeof  operators
 var ResultIsString13 = typeof typeof STRING;
 var ResultIsString14 = typeof typeof typeof (STRING + STRING);
+
 // miss assignment operators
 typeof "";
 typeof STRING;

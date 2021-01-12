@@ -77,15 +77,14 @@ var __extends = (this && this.__extends) || (function () {
 var A;
 (function (A_1) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
+
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
@@ -103,8 +102,7 @@ var A;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module || (Module = {}));
@@ -126,17 +124,16 @@ var A;
 var Y;
 (function (Y) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     Y.A = A;
     var AA = /** @class */ (function () {
-        function AA() {
-        }
+        function AA() {}
         return AA;
     }());
     Y.AA = AA;
+
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
@@ -156,8 +153,7 @@ var Y;
     var Module;
     (function (Module) {
         var A = /** @class */ (function () {
-            function A() {
-            }
+            function A() {}
             return A;
         }());
     })(Module = Y.Module || (Y.Module = {}));

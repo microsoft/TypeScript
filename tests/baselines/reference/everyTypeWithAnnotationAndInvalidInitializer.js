@@ -55,6 +55,7 @@ var aFunctionInModule: typeof M.F2 = F2;
 
 
 //// [everyTypeWithAnnotationAndInvalidInitializer.js]
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -92,15 +93,20 @@ var N;
 var aNumber = 'this is a string';
 var aString = 9.9;
 var aDate = 9.9;
+
 var aVoid = 9.9;
+
 var anInterface = new D();
 var aClass = new D();
 var aGenericClass = new C();
 var anObjectLiteral = { id: 'a string' };
 var anOtherObjectLiteral = new C();
+
 var aFunction = F2;
 var anOtherFunction = F2;
 var aLambda = function (x) { return 'a string'; };
+
 var aModule = N;
 var aClassInModule = new N.A();
 var aFunctionInModule = F2;
+

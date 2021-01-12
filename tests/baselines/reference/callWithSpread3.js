@@ -42,6 +42,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
+
+
 // error
 fs2.apply(void 0, __spreadArray(['a'], s2)); // error on ...s2
 fs2.apply(void 0, __spreadArray(['a', 'b', 'c'], s2)); // error on 'c' and ...s2
@@ -53,8 +55,11 @@ fs2_.apply(void 0, s_); // error on ...s_
 fs2_.apply(void 0, s2n_); // error on ...s2n_
 fs2_.apply(void 0, __spreadArray(__spreadArray([], s_), s_)); // error         FIXME: bad error message
 fs2_.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], s_), s_), s_)); // error  FIXME: worse error message
+
 // fs2n_(...s2, ...s_); //           FIXME: should be a type error
 fs2n_.apply(void 0, s2_); // error on ...s2_
+
+
 // ok
 fs2_.apply(void 0, s2_);
 fs2_.apply(void 0, __spreadArray(__spreadArray([], s2_), s_));

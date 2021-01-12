@@ -10,3 +10,5 @@ interface Foo {
 
 
 //// [methodSignatureHandledDeclarationKindForSymbol.js]
+
+

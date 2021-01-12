@@ -12,8 +12,7 @@ exports.Z = void 0;
 var Z = /** @class */ (function () {
     function Z() {
     }
-    Z.prototype.f = function (x, y) {
-        if (x === void 0) { x = 1; }
+    Z.prototype.f = function (x, y) {if (x === void 0) { x = 1; }
         return [x, y];
     };
     return Z;

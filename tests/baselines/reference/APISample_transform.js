@@ -30,7 +30,10 @@ console.log(JSON.stringify(result));
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+
 var ts = require("typescript");
+
 var source = "let x: string  = 'string'";
+
 var result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 console.log(JSON.stringify(result));

@@ -14,17 +14,14 @@ declare module "tslib" {
 
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    class A {
-    }
+    class A {}
     exports.A = A;
 });
 //// [b.js]
 define(["require", "exports", "./a"], function (require, exports, a) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = a;
 });

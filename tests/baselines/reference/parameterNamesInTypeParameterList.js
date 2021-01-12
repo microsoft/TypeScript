@@ -27,14 +27,17 @@ class A {
 function f0(a) {
     a.b;
 }
+
 function f1(_a) {
     var a = _a.a;
     a.b;
 }
+
 function f2(_a) {
     var a = _a[0];
     a.b;
 }
+
 var A = /** @class */ (function () {
     function A() {
     }

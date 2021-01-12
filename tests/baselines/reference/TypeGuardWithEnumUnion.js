@@ -53,6 +53,7 @@ function f1(x) {
         var z;
     }
 }
+
 function f2(x) {
     if (typeof x === "object") {
         var y = x;

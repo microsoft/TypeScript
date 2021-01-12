@@ -40,9 +40,11 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 function clonePet(pet, fullCopy) {
     return __assign({ name: pet.name, kind: pet.kind }, (fullCopy && pet));
 }
+
 function billOwner(pet) {
     return __assign(__assign({}, (pet.owner && pet)), { paid: false });
 }

@@ -60,8 +60,7 @@ exports.backup = backup;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-class C {
-    constructor() {
+class C {constructor() {
         this.myModule = Promise.resolve().then(() => require("./0"));
     }
     method() {
@@ -75,8 +74,8 @@ class C {
         });
     }
 }
-class D {
-    constructor() {
+
+class D {constructor() {
         this.myModule = Promise.resolve().then(() => require("./0"));
     }
     method() {

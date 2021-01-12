@@ -13,14 +13,12 @@ const b: A = new B();     // Error: Property #foo is missing
 //// [privateNamesUnique-1.js]
 "use strict";
 var _foo, _foo_1;
-class A {
-    constructor() {
+class A {constructor() {
         _foo.set(this, void 0);
     }
 }
 _foo = new WeakMap();
-class B {
-    constructor() {
+class B {constructor() {
         _foo_1.set(this, void 0);
     }
 }

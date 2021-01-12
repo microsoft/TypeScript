@@ -73,7 +73,9 @@ for (const k of keys) {
 
 //// [partialOfLargeAPIIsAbleToBeWorkedWith.js]
 "use strict";
+
 var obj = {};
+
 for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
     var k = keys_1[_i];
     obj[k] = function () { return "12"; }; // shouldn't cause a complexity error

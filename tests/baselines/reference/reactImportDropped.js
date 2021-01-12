@@ -38,7 +38,9 @@ const x = <TabBar height={layout.footerHeight} />;
 //// [TabBar.js]
 export default React.createClass({
     render() {
-        return (null);
+        return (
+            null
+        );
     }
 });
 //// [NavigationView.js]

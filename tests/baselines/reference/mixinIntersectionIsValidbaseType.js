@@ -46,10 +46,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.Serializable = void 0;
+
 /**
  * Plain mixin where the superclass must be Initable
  */
-var Serializable = function (SuperClass) {
+var Serializable = function (
+SuperClass
+) {
     var LocalMixin = function (InnerSuperClass) {
         return /** @class */ (function (_super) {
             __extends(SerializableLocal, _super);
@@ -63,6 +66,7 @@ var Serializable = function (SuperClass) {
     return ResultClass;
 };
 exports.Serializable = Serializable;
+
 var AMixin = function (SuperClass) {
     var SomeHowOkay = /** @class */ (function (_super) {
         __extends(A, _super);
@@ -71,6 +75,7 @@ var AMixin = function (SuperClass) {
         }
         return A;
     }(SuperClass));
+
     var SomeHowNotOkay = /** @class */ (function (_super) {
         __extends(A, _super);
         function A() {

@@ -25,6 +25,7 @@ class D {
 // body but are not permitted to reference parameters or local variables of the constructor.
 // This effectively means that entities from outer scopes by the same name as a constructor parameter or 
 // local variable are inaccessible in initializer expressions for instance member variables
+
 var x = 1;
 var C = /** @class */ (function () {
     function C(x) {

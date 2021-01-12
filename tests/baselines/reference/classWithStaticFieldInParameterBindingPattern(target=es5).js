@@ -7,8 +7,7 @@
 (function (_a) {
     var _b;
     var _c = (_b = /** @class */ (function () {
-            function class_1() {
-            }
+            function class_1() {}
             return class_1;
         }()),
         _b.x = 1,

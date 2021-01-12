@@ -45,18 +45,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 function empty() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {return [2 /*return*/];
         });
     });
 }
+
 function singleAwait() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, x];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];

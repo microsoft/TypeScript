@@ -107,11 +107,13 @@ function f1() {
     var a;
     var a;
 }
+
 function f2(a, b, c) {
     b = a;
     c = a;
     c = b;
 }
+
 function f3(a, b) {
     var x = a + b;
     var y = a == b;
@@ -124,6 +126,8 @@ function f3(a, b) {
     var y = a <= b;
     var y = !b;
 }
+
+
 function f5(a, b, c) {
     var z1 = g("yes" /* Yes */);
     var z2 = g("no" /* No */);
@@ -131,15 +135,18 @@ function f5(a, b, c) {
     var z4 = g(b);
     var z5 = g(c);
 }
+
 function assertNever(x) {
     throw new Error("Unexpected value");
 }
+
 function f10(x) {
     switch (x) {
         case "yes" /* Yes */: return "true";
         case "no" /* No */: return "false";
     }
 }
+
 function f11(x) {
     switch (x) {
         case "yes" /* Yes */: return "true";
@@ -147,6 +154,7 @@ function f11(x) {
     }
     return assertNever(x);
 }
+
 function f12(x) {
     if (x) {
         x;
@@ -155,6 +163,7 @@ function f12(x) {
         x;
     }
 }
+
 function f13(x) {
     if (x === "yes" /* Yes */) {
         x;
@@ -163,12 +172,18 @@ function f13(x) {
         x;
     }
 }
+
+
+
+
+
 function f20(x) {
     switch (x.kind) {
         case "yes" /* Yes */: return x.a;
         case "no" /* No */: return x.b;
     }
 }
+
 function f21(x) {
     switch (x.kind) {
         case "yes" /* Yes */: return x.a;

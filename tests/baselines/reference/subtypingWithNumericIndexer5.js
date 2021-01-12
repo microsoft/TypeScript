@@ -45,6 +45,9 @@ module Generics {
 
 //// [subtypingWithNumericIndexer5.js]
 // Derived type indexer must be subtype of base type indexer
+
+
+
 var B = /** @class */ (function () {
     function B() {
     }
@@ -57,6 +60,7 @@ var B2 = /** @class */ (function () {
 }());
 var Generics;
 (function (Generics) {
+
     var B = /** @class */ (function () {
         function B() {
         }

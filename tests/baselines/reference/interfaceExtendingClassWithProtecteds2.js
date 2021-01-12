@@ -38,11 +38,14 @@ var Bar = /** @class */ (function () {
     }
     return Bar;
 }());
+
+
 var Baz = /** @class */ (function () {
     function Baz() {
     }
     return Baz;
 }());
+
 var i;
 var r = i.z;
 var r2 = i.x; // error

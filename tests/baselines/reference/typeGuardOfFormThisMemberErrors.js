@@ -93,6 +93,7 @@ var Test;
         return Directory;
     }(FileSystemObject));
     Test.Directory = Directory;
+
     var file = new File("foo/bar.txt", "foo");
     file.isNetworked = file.isFile;
     file.isFSO = file.isNetworked;

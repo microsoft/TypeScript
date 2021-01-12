@@ -9,8 +9,7 @@ module.exports = Bar;
 //// [index.js]
 var tslib_1 = require("tslib");
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 var Bar = /** @class */ (function (_super) {

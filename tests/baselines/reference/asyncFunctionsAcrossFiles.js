@@ -24,8 +24,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-import { a } from './a';
+};import { a } from './a';
 export const b = {
     f: () => __awaiter(void 0, void 0, void 0, function* () {
         yield a.f();
@@ -40,8 +39,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-};
-import { b } from './b';
+};import { b } from './b';
 export const a = {
     f: () => __awaiter(void 0, void 0, void 0, function* () {
         yield b.f();

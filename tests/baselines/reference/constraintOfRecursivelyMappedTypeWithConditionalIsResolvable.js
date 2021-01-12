@@ -25,3 +25,12 @@ export interface IImmutableMap2<T extends ImmutableModel2<T>> extends Map<string
 "use strict";
 // https://github.com/Microsoft/TypeScript/issues/25379
 exports.__esModule = true;
+
+
+
+
+
+
+
+
+

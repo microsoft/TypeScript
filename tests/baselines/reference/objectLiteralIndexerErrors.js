@@ -15,8 +15,11 @@ var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers ar
 o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
 
 //// [objectLiteralIndexerErrors.js]
+
+
 var a;
 var b;
 var c;
+
 var o1 = { x: b, 0: a }; // both indexers are A
 o1 = { x: c, 0: a }; // string indexer is any, number indexer is A

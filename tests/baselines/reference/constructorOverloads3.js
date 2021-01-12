@@ -38,6 +38,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
+
 var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
@@ -51,4 +53,5 @@ var f1 = new Foo("hey");
 var f2 = new Foo(0);
 var f3 = new Foo(f1);
 var f4 = new Foo([f1, f2, f3]);
+
 f1.bar1();

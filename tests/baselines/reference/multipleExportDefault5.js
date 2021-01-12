@@ -8,8 +8,7 @@ exports.__esModule = true;
 function bar() { }
 exports["default"] = bar;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 exports["default"] = C;

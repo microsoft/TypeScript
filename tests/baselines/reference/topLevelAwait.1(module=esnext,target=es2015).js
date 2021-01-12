@@ -74,11 +74,13 @@ export { _await as await };
 
 //// [other.js]
 const _await = 1;
+
 // await allowed in aliased export
 export { _await as await };
 //// [index.js]
 export const x = 1;
 await x;
+
 // reparse element access as await
 await [x];
 await [x, x];
@@ -97,8 +99,7 @@ class C2 {
     get await() { return 1; }
     set await(value) { }
 }
-class C3 {
-    constructor() {
+class C3 {constructor() {
         this.await = 1;
     }
 }
@@ -112,8 +113,10 @@ class C3 {
 ({
     await: 1
 });
+
 // property access name should be ok
 C1.prototype.await;
+
 let C = class C {
 };
 C = __decorate([
@@ -122,7 +125,9 @@ C = __decorate([
 // newlines
 // await in throw
 throw await 1;
+
 // await in var
 let y = await 1;
+
 // await in expression statement;
 await 1;

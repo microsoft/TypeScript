@@ -42,8 +42,7 @@ export const obj = {
         const req = await import('./test'); // THREE
     }
 };
-export class cl2 {
-    constructor() {
+export class cl2 {constructor() {
         this.p = {
             m: async () => {
                 const req = await import('./test'); // FOUR

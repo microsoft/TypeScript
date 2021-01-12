@@ -57,6 +57,7 @@ var IceCreamMonster = /** @class */ (function () {
             this.iceCreamRemaining = 0;
             return false;
         }
+
         else {
             return 12345;
         }

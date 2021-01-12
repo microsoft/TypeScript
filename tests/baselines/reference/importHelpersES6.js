@@ -22,8 +22,7 @@ export declare function __classPrivateFieldSet(): any;
 //// [a.js]
 var _x;
 import { __awaiter, __classPrivateFieldGet, __classPrivateFieldSet, __decorate } from "tslib";
-let A = class A {
-    constructor() {
+let A = class A {constructor() {
         _x.set(this, 1);
     }
     f() {

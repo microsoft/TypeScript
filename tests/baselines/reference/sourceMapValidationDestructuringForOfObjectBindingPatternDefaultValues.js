@@ -90,12 +90,15 @@ for (let {
 }
 
 //// [sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.js]
+
+
 var robots = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 var multiRobots = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
 function getRobots() {
     return robots;
 }
+
 function getMultiRobots() {
     return multiRobots;
 }
@@ -119,8 +122,7 @@ for (var _o = 0, _p = getMultiRobots(); _o < _p.length; _o++) {
     var _q = _p[_o].skills, _r = _q === void 0 ? { primary: "nosKill", secondary: "noSkill" } : _q, _s = _r.primary, primaryA = _s === void 0 ? "primary" : _s, _t = _r.secondary, secondaryA = _t === void 0 ? "secondary" : _t;
     console.log(primaryA);
 }
-for (var _u = 0, _v = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _u < _v.length; _u++) {
+for (var _u = 0, _v = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } }, { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _u < _v.length; _u++) {
     var _w = _v[_u].skills, _x = _w === void 0 ? { primary: "nosKill", secondary: "noSkill" } : _w, _y = _x.primary, primaryA = _y === void 0 ? "primary" : _y, _z = _x.secondary, secondaryA = _z === void 0 ? "secondary" : _z;
     console.log(primaryA);
 }
@@ -137,16 +139,18 @@ for (var _9 = 0, _10 = [{ name: "mower", skill: "mowing" }, { name: "trimmer", s
     console.log(nameA);
 }
 for (var _14 = 0, multiRobots_2 = multiRobots; _14 < multiRobots_2.length; _14++) {
-    var _15 = multiRobots_2[_14], _16 = _15.name, nameA = _16 === void 0 ? "noName" : _16, _17 = _15.skills, _18 = _17 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _17, _19 = _18.primary, primaryA = _19 === void 0 ? "primary" : _19, _20 = _18.secondary, secondaryA = _20 === void 0 ? "secondary" : _20;
+    var _15 = multiRobots_2[_14], _16 = _15.name, nameA = _16 === void 0 ? "noName" : _16, _17 = _15.skills, _18 = _17 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _17, _19 = _18.primary, primaryA = _19 === void 0 ? "primary" : _19, _20 = _18.secondary, secondaryA = _20 === void 0 ? "secondary" : _20
+    ;
     console.log(nameA);
 }
 for (var _21 = 0, _22 = getMultiRobots(); _21 < _22.length; _21++) {
-    var _23 = _22[_21], _24 = _23.name, nameA = _24 === void 0 ? "noName" : _24, _25 = _23.skills, _26 = _25 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _25, _27 = _26.primary, primaryA = _27 === void 0 ? "primary" : _27, _28 = _26.secondary, secondaryA = _28 === void 0 ? "secondary" : _28;
+    var _23 = _22[_21], _24 = _23.name, nameA = _24 === void 0 ? "noName" : _24, _25 = _23.skills, _26 = _25 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _25, _27 = _26.primary, primaryA = _27 === void 0 ? "primary" : _27, _28 = _26.secondary, secondaryA = _28 === void 0 ? "secondary" : _28
+    ;
     console.log(nameA);
 }
-for (var _29 = 0, _30 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _29 < _30.length; _29++) {
-    var _31 = _30[_29], _32 = _31.name, nameA = _32 === void 0 ? "noName" : _32, _33 = _31.skills, _34 = _33 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _33, _35 = _34.primary, primaryA = _35 === void 0 ? "primary" : _35, _36 = _34.secondary, secondaryA = _36 === void 0 ? "secondary" : _36;
+for (var _29 = 0, _30 = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } }, { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]; _29 < _30.length; _29++) {
+    var _31 = _30[_29], _32 = _31.name, nameA = _32 === void 0 ? "noName" : _32, _33 = _31.skills, _34 = _33 === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _33, _35 = _34.primary, primaryA = _35 === void 0 ? "primary" : _35, _36 = _34.secondary, secondaryA = _36 === void 0 ? "secondary" : _36
+    ;
     console.log(nameA);
 }
 //# sourceMappingURL=sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.js.map

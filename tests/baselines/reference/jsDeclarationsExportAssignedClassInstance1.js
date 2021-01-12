@@ -5,8 +5,7 @@ module.exports = new Foo();
 
 //// [index.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 module.exports = new Foo();

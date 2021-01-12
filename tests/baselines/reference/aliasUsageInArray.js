@@ -63,5 +63,6 @@ exports.VisualizationModel = VisualizationModel;
 "use strict";
 exports.__esModule = true;
 var moduleA = require("./aliasUsageInArray_moduleA");
+
 var xs = [moduleA];
 var xs2 = [moduleA];

@@ -20,8 +20,7 @@ module m3g { export class C { foo() { } } }
 
 //// [augmentedTypesModules3b.js]
 var m3b = /** @class */ (function () {
-    function m3b() {
-    }
+    function m3b() {}
     m3b.prototype.foo = function () { };
     return m3b;
 }());
@@ -29,27 +28,20 @@ var m3b = /** @class */ (function () {
     var y = 2;
 })(m3b || (m3b = {}));
 var m3c = /** @class */ (function () {
-    function m3c() {
-    }
+    function m3c() {}
     m3c.prototype.foo = function () { };
     return m3c;
 }());
-(function (m3c) {
-    m3c.y = 2;
-})(m3c || (m3c = {}));
+(function (m3c) {m3c.y = 2;})(m3c || (m3c = {}));
 var m3d;
-(function (m3d) {
-    m3d.y = 2;
-})(m3d || (m3d = {}));
+(function (m3d) {m3d.y = 2;})(m3d || (m3d = {}));
 var m3e;
-(function (m3e) {
-    m3e.y = 2;
-})(m3e || (m3e = {}));
+(function (m3e) {m3e.y = 2;})(m3e || (m3e = {}));
+
+
 var m3g;
-(function (m3g) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
+(function (m3g) {var C = /** @class */ (function () {
+        function C() {}
         C.prototype.foo = function () { };
         return C;
     }());

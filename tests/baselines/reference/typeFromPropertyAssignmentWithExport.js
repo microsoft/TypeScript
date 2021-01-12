@@ -15,5 +15,6 @@ exports.__esModule = true;
 exports.Adapter = void 0;
 exports.Adapter = {};
 exports.Adapter.prop = {};
+
 // comment this out, and it works
 exports.Adapter.asyncMethod = function () { };

@@ -26,6 +26,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var CStatic;
 var E = /** @class */ (function (_super) {
     __extends(E, _super);

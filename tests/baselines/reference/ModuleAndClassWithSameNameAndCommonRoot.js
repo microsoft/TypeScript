@@ -33,10 +33,8 @@ class A {
 
 //// [module.js]
 var X;
-(function (X) {
-    var Y;
-    (function (Y) {
-        var Point;
+(function (X) {var Y;
+    (function (Y) {var Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
         })(Point = Y.Point || (Y.Point = {}));
@@ -44,8 +42,7 @@ var X;
 })(X || (X = {}));
 //// [classPoint.js]
 var X;
-(function (X) {
-    var Y;
+(function (X) {var Y;
     (function (Y) {
         // duplicate identifier
         var Point = /** @class */ (function () {

@@ -24,8 +24,10 @@ class SymbolIterator {
             done: false
         };
     }
+
     [Symbol.iterator]() {
         return this;
     }
 }
+
 foo(...new SymbolIterator);

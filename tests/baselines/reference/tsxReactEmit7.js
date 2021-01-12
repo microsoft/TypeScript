@@ -20,10 +20,12 @@ var e = <div xxxxx="val"></div>;
 
 
 //// [file.js]
+
 var m = React.createElement("div", { "x-y": "val" });
 var n = React.createElement("div", { "xx-y": "val" });
 var o = React.createElement("div", { "x-yy": "val" });
 var p = React.createElement("div", { "xx-yy": "val" });
+
 // Investigation
 var a = React.createElement("div", { x: "val" });
 var b = React.createElement("div", { xx: "val" });

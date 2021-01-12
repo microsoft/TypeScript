@@ -65,6 +65,7 @@ function f1() {
     var y = "";
     y;
 }
+
 function f2() {
     var x = [1][0];
     x;
@@ -73,6 +74,7 @@ function f2() {
     var _a = [undefined][0], z = _a === void 0 ? "" : _a;
     z;
 }
+
 function f3() {
     var x = [1][0];
     x;
@@ -81,6 +83,7 @@ function f3() {
     var _a = [undefined][0], z = _a === void 0 ? "" : _a;
     z;
 }
+
 function f4() {
     var x = { x: 1 }.x;
     x;
@@ -89,6 +92,7 @@ function f4() {
     var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
     z;
 }
+
 function f5() {
     var x = { x: 1 }.x;
     x;
@@ -97,6 +101,7 @@ function f5() {
     var _a = { z: undefined }.z, z = _a === void 0 ? "" : _a;
     z;
 }
+
 function f6() {
     var x = {}.x;
     x;
@@ -105,6 +110,7 @@ function f6() {
     var _a = {}.z, z = _a === void 0 ? "" : _a;
     z;
 }
+
 function f7() {
     var o = { x: 1 };
     var x = o.x;

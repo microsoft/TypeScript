@@ -50,8 +50,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var MyBase = /** @class */ (function () {
+})();var MyBase = /** @class */ (function () {
     function MyBase() {
         this.m2 = function () { };
         this.d1 = 42;
@@ -74,14 +73,23 @@ var MyDerived = /** @class */ (function (_super) {
     }
     MyDerived.prototype.foo = function () {
         _super.prototype["m1"].call(this, "hi"); // Should be allowed, method on base prototype
+
         var l2 = _super.prototype["m1"].bind(this); // Should be allowed, can access properties as well as invoke
+
         var x = _super.prototype["m1"]; // Should be allowed, can assign to var with compatible signature
+
         _super.prototype["m2"].bind(this); // Should error, instance property, not a public instance member function
+
         _super.prototype["p1"].call(this); // Should error, private not public instance member function
+
         var l1 = _super.prototype["d1"]; // Should error, instance data property not a public instance member function
+
         var l1 = _super.prototype["d2"]; // Should error, instance data property not a public instance member function
+
         _super.prototype["m1"] = function (a) { return ""; }; // Should be allowed, we will not restrict assignment
+
         _super.prototype["value"] = 0; // Should error, instance data property not a public instance member function
+
         var z = _super.prototype["value"]; // Should error, instance data property not a public instance member function
     };
     return MyDerived;

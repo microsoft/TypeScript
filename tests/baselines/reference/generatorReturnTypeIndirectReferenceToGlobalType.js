@@ -9,6 +9,7 @@ function* f1(): I1 {
 
 //// [generatorReturnTypeIndirectReferenceToGlobalType.js]
 "use strict";
+
 function* f1() {
     const a = yield 0;
     return 1;

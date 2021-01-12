@@ -29,8 +29,7 @@ exports.__esModule = true;
 var ns;
 (function (ns) {
     var Class = /** @class */ (function () {
-        function Class() {
-        }
+        function Class() {}
         return Class;
     }());
     ns.Class = Class;

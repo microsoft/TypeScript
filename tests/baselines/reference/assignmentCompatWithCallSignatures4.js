@@ -118,8 +118,7 @@ var __extends = (this && this.__extends) || (function () {
 var Errors;
 (function (Errors) {
     var Base = /** @class */ (function () {
-        function Base() {
-        }
+        function Base() {}
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
@@ -156,6 +155,7 @@ var Errors;
         var a15;
         var a16;
         var a17;
+
         var b2;
         a2 = b2;
         b2 = a2;

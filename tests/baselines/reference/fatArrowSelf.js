@@ -48,6 +48,7 @@ var Consumer;
                 _this.changed();
             });
         };
+
         EventEmitterConsummer.prototype.changed = function () {
         };
         return EventEmitterConsummer;

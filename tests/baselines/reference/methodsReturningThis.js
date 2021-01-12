@@ -22,8 +22,10 @@ Class.prototype.m9 = function () { return this; };
 //// [output.js]
 function Class() {
 }
+
 // error: 'Class' doesn't have property 'notPresent'
 Class.prototype.containsError = function () { return this.notPresent; };
+
 // lots of methods that return this, which caused out-of-memory in #9527
 Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
 Class.prototype.m2 = function (x, y) { return this; };

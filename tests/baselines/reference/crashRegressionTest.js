@@ -27,12 +27,11 @@ module MsPortal.Util.TemplateEngine {
 
 //// [crashRegressionTest.js]
 var MsPortal;
-(function (MsPortal) {
-    var Util;
-    (function (Util) {
-        var TemplateEngine;
+(function (MsPortal) {var Util;
+    (function (Util) {var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
+
             var StringTemplate = /** @class */ (function () {
                 function StringTemplate(templateStorage) {
                     this._templateStorage = templateStorage;

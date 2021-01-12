@@ -20,24 +20,22 @@ sourceFile:sourceMap-SkippedNode.ts
 >>>    // ...
 1->^^^^
 2 >    ^^^^^^
+3 >          ^^->
 1->{
   >
 2 >    // ...
 1->Emitted(2, 5) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 11) Source(2, 7) + SourceIndex(0)
 ---
->>>}
-1 >^
-2 > ^^^^^^^^^->
-1 >
+>>>} finally {
+1->^
+2 > ^^^^^^^^^
+3 >          ^^^^^^^^^^^^^^^^^^^->
+1->
   >}
-1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
----
->>>finally {
-1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^->
-1-> finally 
-1->Emitted(4, 9) Source(3, 11) + SourceIndex(0)
+2 >  finally 
+1->Emitted(3, 2) Source(3, 2) + SourceIndex(0)
+2 >Emitted(3, 11) Source(3, 11) + SourceIndex(0)
 ---
 >>>    // N.B. No 'catch' block
 1->^^^^
@@ -45,14 +43,14 @@ sourceFile:sourceMap-SkippedNode.ts
 1->{
   >
 2 >    // N.B. No 'catch' block
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
-2 >Emitted(5, 29) Source(4, 25) + SourceIndex(0)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 29) Source(4, 25) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(6, 2) Source(5, 2) + SourceIndex(0)
+1 >Emitted(5, 2) Source(5, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-SkippedNode.js.map

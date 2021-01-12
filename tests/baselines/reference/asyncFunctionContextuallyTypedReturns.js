@@ -26,7 +26,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 f(v => v ? [0] : Promise.reject());
 f((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? [0] : Promise.reject(); }));
+
 g(v => v ? "contextuallyTypable" : Promise.reject());
 g((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? "contextuallyTypable" : Promise.reject(); }));
+
+
 h(v => v ? (abc) => { } : Promise.reject());
 h((v) => __awaiter(void 0, void 0, void 0, function* () { return v ? (def) => { } : Promise.reject(); }));

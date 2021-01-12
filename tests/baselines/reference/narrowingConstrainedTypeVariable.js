@@ -39,8 +39,7 @@ function f3<T extends E>(v: T | { x: string }) {
 "use strict";
 // Repro from #20138
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 function f1(v) {
@@ -51,9 +50,9 @@ function f1(v) {
         var s = v;
     }
 }
+
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     return D;
 }());
 function f2(v) {
@@ -64,9 +63,9 @@ function f2(v) {
         var y = v;
     }
 }
+
 var E = /** @class */ (function () {
-    function E() {
-    }
+    function E() {}
     return E;
 }());
 function f3(v) {

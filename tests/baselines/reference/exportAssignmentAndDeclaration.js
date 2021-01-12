@@ -12,8 +12,7 @@ export = C1;
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.E1 = void 0;
+    "use strict";exports.E1 = void 0;
     var E1;
     (function (E1) {
         E1[E1["A"] = 0] = "A";

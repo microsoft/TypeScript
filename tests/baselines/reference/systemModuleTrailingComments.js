@@ -5,8 +5,7 @@ export const test = "TEST";
 
 //// [systemModuleTrailingComments.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var test;
+    "use strict";var test;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

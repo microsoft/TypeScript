@@ -12,17 +12,13 @@ const c = new C();
 c.dynamic();
 
 //// [dynamicImportWithNestedThis_es5.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";// https://github.com/Microsoft/TypeScript/issues/17564
     // https://github.com/Microsoft/TypeScript/issues/17564
     var C = /** @class */ (function () {
         function C() {

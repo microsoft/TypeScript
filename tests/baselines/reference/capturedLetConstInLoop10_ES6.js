@@ -76,6 +76,7 @@ class A {
         }
     }
 }
+
 class B {
     foo() {
         let a = () => {

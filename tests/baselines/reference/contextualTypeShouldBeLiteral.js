@@ -124,7 +124,10 @@ const test: TestGeneric = {
 
 //// [contextualTypeShouldBeLiteral.js]
 "use strict";
+
+
 function foo(bar) { }
+
 foo({
     type: 'y',
     value: 'done',
@@ -134,7 +137,11 @@ foo({
         this.value;
     }
 });
+
+
+
 function foo2(bar) { }
+
 foo2({
     type2: 'y',
     value: 'done',
@@ -143,12 +150,17 @@ foo2({
         this.value;
     }
 });
+
+
+
 var xy = {
     type: 'y',
     value: 11,
     ytra: 12
 };
 xy;
+
+
 var xyz = {
     x: 'x',
     y: 'y',
@@ -161,6 +173,10 @@ var xyz = {
     }
 };
 xyz;
+
+
+
+
 var test = {
     items: {
         hello: { type: 'string' },

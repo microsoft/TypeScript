@@ -15,7 +15,11 @@ function foo2(y = class {[x] = x}, x = 1) {
 }
 
 //// [capturedParametersInInitializers2.js]
-function foo(y, x, z) {
+function foo(
+y,
+    x,
+    z
+) {
     var _a;
     if (y === void 0) { y = (_a = /** @class */ (function () {
             function class_1() {

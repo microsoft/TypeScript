@@ -26,10 +26,12 @@ function foo() {
     var x;
     return x;
 }
+
 function bar() {
     var x;
     return x;
 }
+
 var a = foo();
 var b = bar();
 // Relating types of a and b produces instantiations of the cyclic anonymous types in foo and bar

@@ -16,6 +16,7 @@ class C {
 
 
 //// [useBeforeDeclaration_jsx.jsx]
+
 class C {
 }
 C.a = <C.z></C.z>;

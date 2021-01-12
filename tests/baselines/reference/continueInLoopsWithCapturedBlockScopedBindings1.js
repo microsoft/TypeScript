@@ -18,6 +18,7 @@ function foo() {
         if (i === 0) {
             return "continue";
         }
+
         // Trigger non-simple-loop emit
         (function () {
             return i;

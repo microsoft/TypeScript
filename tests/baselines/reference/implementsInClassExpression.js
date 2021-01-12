@@ -8,6 +8,7 @@ let cls = class implements Foo {
 }
 
 //// [implementsInClassExpression.js]
+
 var cls = /** @class */ (function () {
     function class_1() {
     }

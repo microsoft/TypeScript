@@ -37,8 +37,7 @@ C.B = B;
 exports.__esModule = true;
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 exports.Foo = Foo;
@@ -63,8 +62,7 @@ Example.Foo = foo_1.Foo;
 exports.__esModule = true;
 exports.Bar = void 0;
 var Bar = /** @class */ (function () {
-    function Bar() {
-    }
+    function Bar() {}
     return Bar;
 }());
 exports.Bar = Bar;
@@ -76,6 +74,7 @@ Example.Bar = Bar;
 exports.__esModule = true;
 exports.C = void 0;
 function A() { }
+
 function B() { }
 function C() {
     return null;

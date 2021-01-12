@@ -13,5 +13,7 @@ const tag = <El className="ok" key="key">{"Title"}</El>;
 /// <reference path="react16.d.ts" />
 exports.__esModule = true;
 var React = require("react");
+
 var El = Math.random() ? 'h1' : 'h2';
+
 var tag = React.createElement(El, { className: "ok", key: "key" }, "Title");

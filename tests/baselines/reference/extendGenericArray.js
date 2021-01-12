@@ -7,5 +7,6 @@ var arr: string[] = [];
 var x: number = arr.foo();
 
 //// [extendGenericArray.js]
+
 var arr = [];
 var x = arr.foo();

@@ -32,18 +32,17 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-function cloneAgain(_a) {
+};function cloneAgain(_a) {
     var { a } = _a, clone = __rest(_a, ["a"]);
 }
+
 suddenly((_a) => {
     var { x: a } = _a, rest = __rest(_a, ["x"]);
-    return rest.y;
-});
+    return rest.y;});
 suddenly((_a = { x: { z: 1, ka: 1 }, y: 'noo' }) => {
     var _b = _a.x, { z = 12 } = _b, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
-    return rest.y + nested.ka;
-});
+    return rest.y + nested.ka;});
+
 class C {
     m(_a) {
         var { a } = _a, clone = __rest(_a, ["a"]);

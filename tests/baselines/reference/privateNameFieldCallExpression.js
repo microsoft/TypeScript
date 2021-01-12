@@ -27,8 +27,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return privateMap.get(receiver);
 };
 var _fieldFunc, _fieldFunc2;
-class A {
-    constructor() {
+class A {constructor() {
         _fieldFunc.set(this, function () { this.x = 10; });
         _fieldFunc2.set(this, function (a, ...b) { });
         this.x = 1;

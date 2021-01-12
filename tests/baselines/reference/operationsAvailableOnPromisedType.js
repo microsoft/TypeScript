@@ -77,15 +77,19 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
         to[j] = from[i];
     return to;
-};
-function fn(a, b, c, d, e, f, g) {
+};function fn(
+a,
+    b,
+    c,
+    d,
+    e,
+    f,
+    g
+) {
     var c_1, c_1_1;
     var e_1, _a;
-    return __awaiter(this, void 0, void 0, function () {
-        var _i, c_2, s, s, e_1_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
+    return __awaiter(this, void 0, void 0, function () {var _i, c_2, s, s, e_1_1;
+        return __generator(this, function (_b) {switch (_b.label) {case 0:
                     // All errors
                     a | b;
                     b | a;
@@ -101,31 +105,25 @@ function fn(a, b, c, d, e, f, g) {
                         d.prop;
                     }
                     _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 6, 7, 12]);
+                case 1:_b.trys.push([1, 6, 7, 12]);
                     c_1 = __asyncValues(c);
                     _b.label = 2;
                 case 2: return [4 /*yield*/, c_1.next()];
-                case 3:
-                    if (!(c_1_1 = _b.sent(), !c_1_1.done)) return [3 /*break*/, 5];
+                case 3:if (!(c_1_1 = _b.sent(), !c_1_1.done)) return [3 /*break*/, 5];
                     s = c_1_1.value;
                     _b.label = 4;
                 case 4: return [3 /*break*/, 2];
                 case 5: return [3 /*break*/, 12];
-                case 6:
-                    e_1_1 = _b.sent();
+                case 6:e_1_1 = _b.sent();
                     e_1 = { error: e_1_1 };
                     return [3 /*break*/, 12];
-                case 7:
-                    _b.trys.push([7, , 10, 11]);
+                case 7:_b.trys.push([7, , 10, 11]);
                     if (!(c_1_1 && !c_1_1.done && (_a = c_1["return"]))) return [3 /*break*/, 9];
                     return [4 /*yield*/, _a.call(c_1)];
-                case 8:
-                    _b.sent();
+                case 8:_b.sent();
                     _b.label = 9;
                 case 9: return [3 /*break*/, 11];
-                case 10:
-                    if (e_1) throw e_1.error;
+                case 10:if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
                 case 11: return [7 /*endfinally*/];
                 case 12:

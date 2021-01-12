@@ -20,8 +20,7 @@ export class B {
 }
 //// [2.js]
 async function foo() {
-    class C extends (await import("./0")).B {
-    }
+    class C extends (await import("./0")).B {}
     var c = new C();
     c.print();
 }

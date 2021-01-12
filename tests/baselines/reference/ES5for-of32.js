@@ -18,5 +18,6 @@ for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
     if (sum === 0) {
         array = [4, 5, 6];
     }
+
     sum += num;
 }

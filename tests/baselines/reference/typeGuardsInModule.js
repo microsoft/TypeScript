@@ -122,8 +122,12 @@ var m2;
     (function (m3) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
+
+
         // local variables from outer module declaration
         num = typeof var2 === "string" && var2.length; // string
+
+
         // exported variable from outer the module
         strOrNum = typeof m2.var3 === "string" && m2.var3; // string | number
         // variables in module declaration
@@ -144,8 +148,7 @@ var m2;
 })(m2 || (m2 = {}));
 // Dotted module
 var m3;
-(function (m3) {
-    var m4;
+(function (m3) {var m4;
     (function (m4) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string

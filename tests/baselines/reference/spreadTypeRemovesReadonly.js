@@ -20,6 +20,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 var data = { value: 'foo' };
 var clone = __assign({}, data);
 clone.value = 'bar';

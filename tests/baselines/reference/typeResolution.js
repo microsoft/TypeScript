@@ -112,14 +112,11 @@ module TopLevelModule2 {
 
 //// [typeResolution.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.TopLevelModule1 = void 0;
     var TopLevelModule1;
-    (function (TopLevelModule1) {
-        var SubModule1;
-        (function (SubModule1) {
-            var SubSubModule1;
+    (function (TopLevelModule1) {var SubModule1;
+        (function (SubModule1) {var SubSubModule1;
             (function (SubSubModule1) {
                 var ClassA = /** @class */ (function () {
                     function ClassA() {
@@ -220,27 +217,23 @@ define(["require", "exports"], function (require, exports) {
             }());
         })(SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));
         var SubModule2;
-        (function (SubModule2) {
-            var SubSubModule2;
+        (function (SubModule2) {var SubSubModule2;
             (function (SubSubModule2) {
                 // No code here since these are the mirror of the above calls
                 var ClassA = /** @class */ (function () {
-                    function ClassA() {
-                    }
+                    function ClassA() {}
                     ClassA.prototype.AisIn1_2_2 = function () { };
                     return ClassA;
                 }());
                 SubSubModule2.ClassA = ClassA;
                 var ClassB = /** @class */ (function () {
-                    function ClassB() {
-                    }
+                    function ClassB() {}
                     ClassB.prototype.BisIn1_2_2 = function () { };
                     return ClassB;
                 }());
                 SubSubModule2.ClassB = ClassB;
                 var ClassC = /** @class */ (function () {
-                    function ClassC() {
-                    }
+                    function ClassC() {}
                     ClassC.prototype.CisIn1_2_2 = function () { };
                     return ClassC;
                 }());
@@ -256,16 +249,14 @@ define(["require", "exports"], function (require, exports) {
         var NotExportedModule;
         (function (NotExportedModule) {
             var ClassA = /** @class */ (function () {
-                function ClassA() {
-                }
+                function ClassA() {}
                 return ClassA;
             }());
             NotExportedModule.ClassA = ClassA;
         })(NotExportedModule || (NotExportedModule = {}));
     })(TopLevelModule1 = exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
     var TopLevelModule2;
-    (function (TopLevelModule2) {
-        var SubModule3;
+    (function (TopLevelModule2) {var SubModule3;
         (function (SubModule3) {
             var ClassA = /** @class */ (function () {
                 function ClassA() {

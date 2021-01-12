@@ -19,8 +19,11 @@ exports.Repro = void 0;
 /// <reference path="react16.d.ts" />
 var Select = function (p) { return <p></p>; };
 var react_1 = __importDefault(require("react"));
+
 function Repro(_a) {
     var _b = _a.SelectProps, SelectProps = _b === void 0 ? {} : _b;
-    return (<Select value={'test'} {...SelectProps}/>);
+    return (
+        <Select value={'test'} {...SelectProps}/>
+    );
 }
 exports.Repro = Repro;

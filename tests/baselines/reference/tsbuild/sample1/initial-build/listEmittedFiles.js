@@ -405,8 +405,7 @@ exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
 exports.multiply = multiply;
 var someClass = /** @class */ (function () {
-    function someClass() {
-    }
+    function someClass() {}
     return someClass;
 }());
 exports.someClass = someClass;
@@ -619,14 +618,12 @@ exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
 exports.multiply = multiply;
 var someClass = /** @class */ (function () {
-    function someClass() {
-    }
+    function someClass() {}
     return someClass;
 }());
 exports.someClass = someClass;
 var someClass2 = /** @class */ (function () {
-    function someClass2() {
-    }
+    function someClass2() {}
     return someClass2;
 }());
 

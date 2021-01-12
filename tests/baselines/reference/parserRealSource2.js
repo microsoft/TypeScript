@@ -277,6 +277,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
+
     function hasFlag(val, flag) {
         return (val & flag) != 0;
     }

@@ -46,27 +46,39 @@ export let h = numNumNumNumNum.map(n => n * n);
 exports.__esModule = true;
 exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = exports.mapOnLooseArrayLiteral = void 0;
 exports.mapOnLooseArrayLiteral = [1, 2, 3, 4].map(function (n) { return n * n; });
+
 // Length 1
 var numTuple = [1];
 exports.a = numTuple.map(function (x) { return x * x; });
+
 // Length 2
 var numNum = [100, 100];
 var strStr = ["hello", "hello"];
 var numStr = [100, "hello"];
+
 exports.b = numNum.map(function (n) { return n * n; });
 exports.c = strStr.map(function (s) { return s.charCodeAt(0); });
 exports.d = numStr.map(function (x) { return x; });
+
 // Length 3
 var numNumNum = [1, 2, 3];
+
 exports.e = numNumNum.map(function (n) { return n * n; });
+
 // Length 4
 var numNumNumNum = [1, 2, 3, 4];
+
 exports.f = numNumNumNum.map(function (n) { return n * n; });
+
 // Length 5
 var numNumNumNumNum = [1, 2, 3, 4, 5];
+
 exports.g = numNumNumNumNum.map(function (n) { return n * n; });
+
+
 // Length 6
 var numNumNumNumNumNum = [1, 2, 3, 4, 5, 6];
+
 exports.h = numNumNumNumNum.map(function (n) { return n * n; });
 
 

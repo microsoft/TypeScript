@@ -25,8 +25,7 @@ y = x;
 exports.__esModule = true;
 exports.MyClass = void 0;
 var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
+    function MyClass() {}
     return MyClass;
 }());
 exports.MyClass = MyClass;

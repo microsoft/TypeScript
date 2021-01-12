@@ -22,9 +22,9 @@ export class ExportedClass4 {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportedClass4 = exports.ExportedClass3 = exports.ExportedClass2 = exports.ExportedClass1 = void 0;
+
 var ExportedClass1 = /** @class */ (function () {
-    function ExportedClass1(data) {
-    }
+    function ExportedClass1(data) {}
     return ExportedClass1;
 }());
 exports.ExportedClass1 = ExportedClass1;

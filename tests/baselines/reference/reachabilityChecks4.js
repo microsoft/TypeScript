@@ -79,6 +79,7 @@ function foo(x, y) {
             return 3;
     }
 }
+
 function f1(x) {
     switch (x) {
         case 0:
@@ -89,6 +90,13 @@ function f1(x) {
             return;
     }
 }
+
+
+
+
+
+
+
 function f2(transition) {
     switch (transition.behavior) {
         case 'SLIDE':

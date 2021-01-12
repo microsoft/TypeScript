@@ -59,8 +59,7 @@ var e4;
     e4[e4["One"] = 0] = "One";
 })(e4 || (e4 = {})); // error
 var e4 = /** @class */ (function () {
-    function e4() {
-    }
+    function e4() {}
     e4.prototype.foo = function () { };
     return e4;
 }()); // error
@@ -95,9 +94,7 @@ var e6b;
 (function (e6b) {
     e6b[e6b["One"] = 0] = "One";
 })(e6b || (e6b = {}));
-(function (e6b) {
-    e6b.y = 2;
-})(e6b || (e6b = {})); // should be error
+(function (e6b) {e6b.y = 2;})(e6b || (e6b = {})); // should be error
 // enum then import, messes with error reporting
 //enum e7 { One }
 //import e7 = require(''); // should be error

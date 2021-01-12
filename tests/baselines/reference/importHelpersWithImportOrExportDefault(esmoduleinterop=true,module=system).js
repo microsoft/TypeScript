@@ -16,27 +16,23 @@ declare module "tslib" {
 
 //// [a.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var default_1;
+    "use strict";var default_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            default_1 = class {
-            };
+            default_1 = class {};
             exports_1("default", default_1);
         }
     };
 });
 //// [b.js]
 System.register(["./a"], function (exports_1, context_1) {
-    "use strict";
-    var a_1;
+    "use strict";var a_1;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [
-            function (a_2_1) {
-                exports_1({
+            function (a_2_1) {exports_1({
                     "default": a_2_1["default"]
                 });
                 exports_1({

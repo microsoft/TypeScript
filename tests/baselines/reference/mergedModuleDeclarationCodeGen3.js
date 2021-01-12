@@ -10,17 +10,14 @@ module my.data.foo {
 
 //// [mergedModuleDeclarationCodeGen3.js]
 var my;
-(function (my) {
-    var data;
+(function (my) {var data;
     (function (data) {
         function buz() { }
         data.buz = buz;
     })(data = my.data || (my.data = {}));
 })(my || (my = {}));
-(function (my_1) {
-    var data;
-    (function (data_1) {
-        var foo;
+(function (my_1) {var data;
+    (function (data_1) {var foo;
         (function (foo_1) {
             function data(my, foo) {
                 data_1.buz();

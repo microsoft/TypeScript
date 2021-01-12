@@ -53,18 +53,18 @@ var N;
 (function (N) {
     N;
 })(N || (N = {}));
+
 var P = /** @class */ (function () {
-    function P() {
-    }
+    function P() {}
     P.prototype.m = function () { this.m; };
     return P;
 }());
 P;
+
 // Does not detect mutual recursion.
 function g() { D; }
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     D.prototype.m = function () { g; };
     return D;
 }());

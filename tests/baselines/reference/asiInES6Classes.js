@@ -30,7 +30,9 @@ var Foo = /** @class */ (function () {
         };
     }
     Foo.prototype.bar = function () {
+
         return 3;
+
     };
     return Foo;
 }());

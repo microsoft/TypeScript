@@ -27,8 +27,7 @@ var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 path_1["default"].resolve("", "../");
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 exports.Foo = Foo;
@@ -40,8 +39,7 @@ var tslib_1 = require("tslib");
 var path = tslib_1.__importStar(require("path"));
 path.resolve("", "../");
 var Foo2 = /** @class */ (function () {
-    function Foo2() {
-    }
+    function Foo2() {}
     return Foo2;
 }());
 exports.Foo2 = Foo2;
@@ -53,8 +51,7 @@ var tslib_1 = require("tslib");
 var path_1 = tslib_1.__importDefault(require("path"));
 path_1["default"]("", "../");
 var Foo3 = /** @class */ (function () {
-    function Foo3() {
-    }
+    function Foo3() {}
     return Foo3;
 }());
 exports.Foo3 = Foo3;

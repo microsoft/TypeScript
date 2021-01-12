@@ -32,6 +32,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+
 function foobar(_a) {
     "use strict";
     "Some other prologue";
@@ -39,6 +40,7 @@ function foobar(_a) {
     var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
     opts.baz(bar);
 }
+
 var C = /** @class */ (function () {
     function C(_a) {
         "use strict";

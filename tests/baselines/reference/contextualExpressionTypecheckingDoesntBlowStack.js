@@ -25,6 +25,7 @@ export default class Operation {
 //// [contextualExpressionTypecheckingDoesntBlowStack.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
 var Operation = /** @class */ (function () {
     function Operation() {
     }
@@ -35,6 +36,7 @@ var Operation = /** @class */ (function () {
             var parameter = this.getParameter();
             ;
             var values = this.getValues();
+
             var innerResult = parameter.validate(values[parameter.oaParameter.name]);
             if (innerResult && innerResult.length > 0) {
                 // Commenting out this line will fix the problem.

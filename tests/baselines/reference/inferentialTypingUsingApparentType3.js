@@ -27,6 +27,7 @@ var person = new ObjectField({
 person.fields.id;
 
 //// [inferentialTypingUsingApparentType3.js]
+
 var CharField = /** @class */ (function () {
     function CharField() {
     }
@@ -53,4 +54,5 @@ var person = new ObjectField({
     id: new NumberField(),
     name: new CharField()
 });
+
 person.fields.id;

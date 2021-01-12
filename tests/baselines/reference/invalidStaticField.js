@@ -4,14 +4,12 @@ class B { static NOT_NULL = new B(); }
 
 //// [invalidStaticField.js]
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     A.prototype.foo = function () { return B.NULL; };
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     B.NOT_NULL = new B();
     return B;
 }());

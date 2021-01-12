@@ -12,6 +12,7 @@ class A {
 function foo(a) {
     return "";
 }
+
 var A = /** @class */ (function () {
     function A() {
     }

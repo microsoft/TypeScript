@@ -8,3 +8,4 @@ interface Q extends P { // Check assignability here. Any is assignable to {}
 }
 
 //// [anyIsAssignableToObject.js]
+

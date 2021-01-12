@@ -18,17 +18,11 @@ var __values = (this && this.__values) || function(o) {
 };
 var e_1, _a;
 try {
-    for (var _b = __values([2, 3]), _c = _b.next(); !_c.done; _c = _b.next()) {
-        var _d = _c.value, _e = _d.x, a = _e === void 0 ? 0 : _e, _f = _d.y, b = _f === void 0 ? 1 : _f;
+    for (var _b = __values([2, 3]), _c = _b.next(); !_c.done; _c = _b.next()) {var _d = _c.value, _e = _d.x, a = _e === void 0 ? 0 : _e, _f = _d.y, b = _f === void 0 ? 1 : _f;
         a;
         b;
     }
-}
-catch (e_1_1) { e_1 = { error: e_1_1 }; }
-finally {
-    try {
-        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
-    }
-    finally { if (e_1) throw e_1.error; }
+} catch (e_1_1) { e_1 = { error: e_1_1 }; } finally {try {if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+    } finally { if (e_1) throw e_1.error; }
 }
 //# sourceMappingURL=ES5For-of35.js.map

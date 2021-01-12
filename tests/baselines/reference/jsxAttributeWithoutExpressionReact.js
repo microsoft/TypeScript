@@ -9,5 +9,5 @@ declare var React: any;
 
 
 //// [jsxAttributeWithoutExpressionReact.js]
-React.createElement(View, null,
-    React.createElement(ListView, { refreshControl: React.createElement(RefreshControl, { onRefresh: true, refreshing: true }), dataSource: this.state.ds, renderRow: true }));
+React.createElement(View, null, React.createElement(ListView, { refreshControl: React.createElement(RefreshControl, { onRefresh: true, refreshing: true }), dataSource: this.state.ds, renderRow: true })
+);

@@ -7,8 +7,7 @@ module m {
 
 //// [declarationEmitDestructuringPrivacyError.js]
 var m;
-(function (m) {
-    var _a;
+(function (m) {var _a;
     var c = /** @class */ (function () {
         function c() {
         }

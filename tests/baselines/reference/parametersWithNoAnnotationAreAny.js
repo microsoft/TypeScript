@@ -34,6 +34,7 @@ function foo(x) { return x; }
 var f = function foo(x) { return x; };
 var f2 = function (x) { return x; };
 var f3 = function (x) { return x; };
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -42,7 +43,9 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
+
 var a;
+
 var b = {
     foo: function (x) {
         return x;

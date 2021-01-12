@@ -13,8 +13,7 @@ var x: c.b;
 
 //// [internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.c = void 0;
     var c;
     (function (c) {

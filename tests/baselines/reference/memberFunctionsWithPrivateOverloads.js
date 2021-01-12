@@ -54,8 +54,19 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x, y) { };
+
+
+
+
     C.prototype.bar = function (x, y) { };
+
+
+
     C.foo = function (x, y) { };
+
+
+
+
     C.bar = function (x, y) { };
     return C;
 }());
@@ -63,8 +74,19 @@ var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.foo = function (x, y) { };
+
+
+
+
     D.prototype.bar = function (x, y) { };
+
+
+
     D.foo = function (x, y) { };
+
+
+
+
     D.bar = function (x, y) { };
     return D;
 }());
@@ -72,5 +94,6 @@ var c;
 var r = c.foo(1); // error
 var d;
 var r2 = d.foo(2); // error
+
 var r3 = C.foo(1); // error
 var r4 = D.bar(''); // error

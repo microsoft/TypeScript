@@ -22,6 +22,7 @@ var b = new ComparableString("b");
 var c = compare<ComparableString>(a, b);
 
 //// [genericConstraint2.js]
+
 function compare(x, y) {
     if (x == null)
         return y == null ? 0 : -1;
@@ -29,6 +30,7 @@ function compare(x, y) {
         return 1;
     return x.comparer(y);
 }
+
 var ComparableString = /** @class */ (function () {
     function ComparableString(currentValue) {
         this.currentValue = currentValue;

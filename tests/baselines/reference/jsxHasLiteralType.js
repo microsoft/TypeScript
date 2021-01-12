@@ -27,6 +27,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
+
 var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);
     function MyComponent() {

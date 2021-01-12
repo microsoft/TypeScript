@@ -15,6 +15,7 @@ sq(3);
 
 //// [strictNullLogicalAndOr.js]
 // Repro from #9113
+
 var sinOrCos = Math.random() < .5;
 var choice = sinOrCos && Math.sin || Math.cos;
 choice(Math.PI);

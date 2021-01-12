@@ -41,15 +41,13 @@ M.foo.z // error
 
 //// [mergedDeclarations3.js]
 var M;
-(function (M) {
-    var Color;
+(function (M) {var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
     })(Color = M.Color || (M.Color = {}));
 })(M || (M = {}));
-(function (M) {
-    var Color;
+(function (M) {var Color;
     (function (Color) {
         Color.Blue = 4;
     })(Color = M.Color || (M.Color = {}));
@@ -60,20 +58,17 @@ var p = M.Color.Blue; // ok
     }
     M.foo = foo;
 })(M || (M = {}));
-(function (M) {
-    var foo;
+(function (M) {var foo;
     (function (foo) {
         foo.x = 1;
     })(foo || (foo = {}));
 })(M || (M = {}));
-(function (M) {
-    var foo;
+(function (M) {var foo;
     (function (foo) {
         foo.y = 2;
     })(foo = M.foo || (M.foo = {}));
 })(M || (M = {}));
-(function (M) {
-    var foo;
+(function (M) {var foo;
     (function (foo) {
         foo.z = 1;
     })(foo || (foo = {}));

@@ -32,9 +32,9 @@ async function withStatement3() {
 }
 
 //// [es5-asyncFunctionWithStatements.js]
+
 function withStatement0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
+    return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {
             with (x) {
                 y;
             }
@@ -42,17 +42,14 @@ function withStatement0() {
         });
     });
 }
+
 function withStatement1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, x];
+    return __awaiter(this, void 0, void 0, function () {var _a;
+        return __generator(this, function (_b) {switch (_b.label) {case 0: return [4 /*yield*/, x];
                 case 1:
                     _a = _b.sent();
                     _b.label = 2;
-                case 2:
-                    with (_a) {
+                case 2:with (_a) {
                         y;
                     }
                     _b.label = 3;
@@ -61,20 +58,17 @@ function withStatement1() {
         });
     });
 }
+
 function withStatement2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
+    return __awaiter(this, void 0, void 0, function () {var _a;
+        return __generator(this, function (_b) {switch (_b.label) {case 0:
                     _a = x;
                     _b.label = 1;
                 case 1: with (_a) {
                     a;
                     return [4 /*yield*/, y];
                 }
-                case 2:
-                    with (_a) {
+                case 2:with (_a) {
                         _b.sent();
                         b;
                     }
@@ -84,28 +78,22 @@ function withStatement2() {
         });
     });
 }
+
 function withStatement3() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
+    return __awaiter(this, void 0, void 0, function () {var _a, _b;
+        return __generator(this, function (_c) {switch (_c.label) {case 0:
                     _a = x;
                     _c.label = 1;
-                case 1:
-                    with (_a) {
+                case 1:with (_a) {
                         _b = z;
                     }
                     _c.label = 2;
-                case 2: with (_a) {
-                    with (_b) {
+                case 2: with (_a) {with (_b) {
                         a;
                         return [4 /*yield*/, y];
                     }
                 }
-                case 3:
-                    with (_a) {
-                        with (_b) {
+                case 3:with (_a) {with (_b) {
                             _c.sent();
                             b;
                         }

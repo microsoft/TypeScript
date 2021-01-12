@@ -36,6 +36,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
+
 function MyComp2(props) {
     return null;
 }

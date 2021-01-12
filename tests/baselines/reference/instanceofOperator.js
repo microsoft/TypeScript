@@ -32,15 +32,16 @@ module test {
 var test;
 (function (test) {
     var Object = /** @class */ (function () {
-        function Object() {
-        }
+        function Object() {}
         return Object;
     }());
     var obj;
     4 instanceof null;
+
     // Error and should be error
     obj instanceof 4;
     Object instanceof obj;
+
     // Error on left hand side
     null instanceof null;
     obj instanceof Object;

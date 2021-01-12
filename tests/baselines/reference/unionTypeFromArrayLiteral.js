@@ -43,6 +43,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var arr1 = [1, 2]; // number[]
 var arr2 = ["hello", true]; // (string | number)[]
 var arr3Tuple = [3, "three"]; // [number, string]
@@ -50,14 +51,12 @@ var arr4Tuple = [3, "three", "hello"]; // [number, string, string]
 var arrEmpty = [];
 var arr5Tuple = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     C.prototype.foo = function () { };
     return C;
 }());
 var D = /** @class */ (function () {
-    function D() {
-    }
+    function D() {}
     D.prototype.foo2 = function () { };
     return D;
 }());

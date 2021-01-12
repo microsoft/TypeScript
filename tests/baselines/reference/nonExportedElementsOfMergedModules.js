@@ -18,8 +18,7 @@ module One {
 
 //// [nonExportedElementsOfMergedModules.js]
 var One;
-(function (One) {
-    var A;
+(function (One) {var A;
     (function (A) {
         A[A["X"] = 0] = "X";
     })(A || (A = {}));
@@ -27,8 +26,7 @@ var One;
     (function (B) {
     })(B || (B = {}));
 })(One || (One = {}));
-(function (One) {
-    var A;
+(function (One) {var A;
     (function (A) {
         A[A["Y"] = 0] = "Y";
     })(A || (A = {}));

@@ -74,6 +74,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 // Error, no Base constructor function
 var D0 = /** @class */ (function (_super) {
     __extends(D0, _super);
@@ -82,6 +83,8 @@ var D0 = /** @class */ (function (_super) {
     }
     return D0;
 }(Base));
+
+
 var D1 = /** @class */ (function (_super) {
     __extends(D1, _super);
     function D1() {
@@ -121,6 +124,8 @@ var D4 = /** @class */ (function (_super) {
     }
     return D4;
 }(getBase()));
+
+
 // Error, constructor return types differ
 var D5 = /** @class */ (function (_super) {
     __extends(D5, _super);

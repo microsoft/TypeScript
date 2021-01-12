@@ -31,8 +31,7 @@ for ([x] of [[1]]) {}
 
 //// [systemModule8.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var _a, x, y, z0, z1;
+    "use strict";var _a, x, y, z0, z1;
     var __moduleName = context_1 && context_1.id;
     function foo() {
         exports_1("x", x = 100);

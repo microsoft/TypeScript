@@ -39,6 +39,7 @@ class C {
 
 //// [privateClassPropertyAccessibleWithinNestedClass.js]
 // no errors
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -57,6 +58,7 @@ var C = /** @class */ (function () {
     });
     C.foo = function () { return this.foo; };
     C.bar = function () { this.foo(); };
+
     C.prototype.bar = function () {
         var C2 = /** @class */ (function () {
             function C2() {
@@ -67,6 +69,7 @@ var C = /** @class */ (function () {
                 var x2 = x.bar;
                 var x3 = x.x;
                 var x4 = x.y;
+
                 var sx1 = C.x;
                 var sx2 = C.y;
                 var sx3 = C.bar;

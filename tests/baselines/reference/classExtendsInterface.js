@@ -32,8 +32,7 @@ var A = /** @class */ (function (_super) {
     return A;
 }(Comparable));
 var B = /** @class */ (function () {
-    function B() {
-    }
+    function B() {}
     return B;
 }());
 var A2 = /** @class */ (function (_super) {
@@ -44,7 +43,6 @@ var A2 = /** @class */ (function (_super) {
     return A2;
 }(Comparable2));
 var B2 = /** @class */ (function () {
-    function B2() {
-    }
+    function B2() {}
     return B2;
 }());

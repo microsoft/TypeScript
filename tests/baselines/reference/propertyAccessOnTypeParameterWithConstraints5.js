@@ -59,8 +59,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
+})();var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () { return ''; };
@@ -87,6 +86,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var r = (new C()).f();
+
 var i;
 var r2 = i.foo.notHere();
 var r2b = i.foo['foo']();
@@ -94,6 +94,7 @@ var a;
 // BUG 794164
 var r3 = a().notHere();
 var r3b = a()['foo']();
+
 var b = {
     foo: function (x) {
         var a = x['foo'](); // should be string

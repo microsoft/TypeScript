@@ -85,16 +85,20 @@ exports.argumentsOfG = exports.argumentsOfGAsFirstArgument = exports.val = expor
 a = b;
 a = c;
 a = d;
+
 b = a;
 b = c;
 b = d;
+
 c = a;
 c = b;
 c = d;
+
 d = a;
 d = b;
 d = c;
 exports.func = null;
+
 function useState(initial) {
     return null;
 }
@@ -105,10 +109,16 @@ function readSegment(_a) {
 exports.readSegment = readSegment;
 // documenting binding pattern behavior (currently does _not_ generate tuple names)
 exports.val = null;
+
+
+
+
+
 q = r;
 r = q;
 x = y;
 y = x;
+
 exports.argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
 exports.argumentsOfG = f.apply(void 0, getArgsForInjection(g)); // captured arguments list re-spread
 

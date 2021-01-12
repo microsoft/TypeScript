@@ -20,6 +20,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var react_1 = __importDefault(require("react"));
+
+
 var bad = react_1["default"].createElement(Elem, null);
+
 var good = react_1["default"].createElement(Elem, { someKey: "ok" });
+
 var alsoOk = react_1["default"].createElement(Elem2, null, "text");

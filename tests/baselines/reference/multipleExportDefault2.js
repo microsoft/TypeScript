@@ -15,3 +15,4 @@ exports["default"] = {
 };
 function Foo() { }
 exports["default"] = Foo;
+

@@ -14,6 +14,7 @@ module M {
 var M;
 (function (M) {
     var Symbol;
+
     var C = /** @class */ (function () {
         function C() {
         }

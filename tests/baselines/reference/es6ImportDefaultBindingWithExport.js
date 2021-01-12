@@ -11,15 +11,13 @@ export import defaultBinding2 from "server"; // non referenced
 
 //// [server.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     var a = 10;
     exports.default = a;
 });
 //// [client.js]
 define(["require", "exports", "server"], function (require, exports, server_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x = server_1.default;
 });

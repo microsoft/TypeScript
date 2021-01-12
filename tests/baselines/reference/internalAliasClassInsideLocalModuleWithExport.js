@@ -34,8 +34,7 @@ var x;
     x.c = c;
 })(x = exports.x || (exports.x = {}));
 var m2;
-(function (m2) {
-    var m3;
+(function (m2) {var m3;
     (function (m3) {
         m3.c = x.c;
         m3.cProp = new m3.c();

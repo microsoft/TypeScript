@@ -50,6 +50,14 @@ var AlienAnimalTypes;
     AlienAnimalTypes["CAT"] = "cat";
 })(AlienAnimalTypes || (AlienAnimalTypes = {}));
 ;
+
+
+
+
+
+
+
+
 var catMap = {
     cat: [
         { type: TerrestrialAnimalTypes.CAT, address: "" },

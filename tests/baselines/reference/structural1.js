@@ -15,6 +15,7 @@ module M {
 //// [structural1.js]
 var M;
 (function (M) {
+
     function f(i) {
     }
     M.f = f;

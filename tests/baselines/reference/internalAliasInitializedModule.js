@@ -13,8 +13,7 @@ module c {
 
 //// [internalAliasInitializedModule.js]
 var a;
-(function (a) {
-    var b;
+(function (a) {var b;
     (function (b) {
         var c = /** @class */ (function () {
             function c() {

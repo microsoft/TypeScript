@@ -7,3 +7,4 @@ interface Entry {
 }
 
 //// [noImplicitAnyForwardReferencedInterface.js]
+

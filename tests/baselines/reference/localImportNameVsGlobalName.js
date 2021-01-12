@@ -15,8 +15,7 @@ module App {
 
 //// [localImportNameVsGlobalName.js]
 var Keyboard;
-(function (Keyboard) {
-    var Key;
+(function (Keyboard) {var Key;
     (function (Key) {
         Key[Key["UP"] = 0] = "UP";
         Key[Key["DOWN"] = 1] = "DOWN";
@@ -27,6 +26,7 @@ var Keyboard;
 var App;
 (function (App) {
     var Key = Keyboard.Key;
+
     function foo(key) { }
     App.foo = foo;
     foo(Key.UP);

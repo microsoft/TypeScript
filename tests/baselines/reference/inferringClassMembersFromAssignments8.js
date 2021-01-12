@@ -11,6 +11,7 @@ a
 
 //// [inferringClassMembersFromAssignments8.js]
 // no inference in TS files, even for `this` aliases:
+
 var app = function () {
     var _this = this;
     _this.swap = function () { };

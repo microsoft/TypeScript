@@ -28,6 +28,8 @@ module MyModule {
 }
 
 //// [getAccessorWithImpliedReturnTypeAndFunctionClassMerge.js]
+
+
 var MyModule;
 (function (MyModule) {
     var MyClass = /** @class */ (function () {

@@ -71,8 +71,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.D = void 0;
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 // This uses getTypeFromClassOrInterfaceReference instead of getTypeFromTypeAliasReference.
@@ -91,13 +90,16 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 var unknown_1 = require("unknown");
+
 unknown_1.foo();
 //// [new.js]
 "use strict";
 exports.__esModule = true;
 var unkown_1 = require("unkown");
+
 new unkown_1.Foo();
 //// [callAny.js]
+
 g();
 g(); // Should get error for type argument
 //// [super.js]
@@ -120,6 +122,9 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.C = void 0;
 var unknown_1 = require("unknown");
+
+
+
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {

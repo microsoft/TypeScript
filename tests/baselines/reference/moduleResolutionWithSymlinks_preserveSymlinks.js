@@ -26,6 +26,7 @@ x = new C2();
 exports.__esModule = true;
 var linked_1 = require("linked");
 var linked2_1 = require("linked2");
+
 var x = new linked_1.C();
 // Should fail. We no longer resolve any symlinks.
 x = new linked2_1.C();

@@ -20,14 +20,12 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 define(["require", "exports", "../file2"], function (require, exports, file2_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
     __createBinding(exports, file2_1, "x");
 });
 //// [file1.js]
 define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     use(file3_1.x.toExponential());
 });

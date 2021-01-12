@@ -414,18 +414,28 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 function tup2(t, u) {
     return __spreadArray(__spreadArray(__spreadArray(__spreadArray([1], t), [2]), u), [3]);
 }
+
 var t2 = tup2(['hello'], [10, true]);
+
 function concat(t, u) {
     return __spreadArray(__spreadArray([], t), u);
 }
+
+
 var tc1 = concat([], []);
 var tc2 = concat(['hello'], [42]);
 var tc3 = concat([1, 2, 3], sa);
 var tc4 = concat(sa, [1, 2, 3]); // Ideally would be [...string[], number, number, number]
+
 function concat2(t, u) {
     return __spreadArray(__spreadArray([], t), u); // (T[number] | U[number])[]
 }
+
 var tc5 = concat2([1, 2, 3], [4, 5, 6]); // (1 | 2 | 3 | 4 | 5 | 6)[]
+
+
+
+
 function foo2(t1, t2, a1) {
     foo1(1, 'abc', true, 42, 43, 44);
     foo1.apply(void 0, __spreadArray(__spreadArray([], t1), [true, 42, 43, 44]));
@@ -434,12 +444,15 @@ function foo2(t1, t2, a1) {
     foo1.apply(void 0, t1); // Error
     foo1.apply(void 0, __spreadArray(__spreadArray([], t1), [45])); // Error
 }
+
+
 function foo4(u) {
     foo3(1, 2);
     foo3(1, 'hello', true, 2);
     foo3.apply(void 0, __spreadArray(__spreadArray([1], u), ['hi', 2]));
     foo3(1);
 }
+
 ft1(['hello', 42]); // (string | number)[]
 ft2(['hello', 42]); // readonly (string | number)[]
 ft3(['hello', 42]); // [string, number]
@@ -451,24 +464,40 @@ function f0(t, n) {
     var c = t[2]; // [string, ...T][2]
     var d = t[n]; // [string, ...T][number]
 }
+
 function f1(t, n) {
     var a = t[0]; // string
     var b = t[1]; // [string, ...T, number][1]
     var c = t[2]; // [string, ...T, number][2]
     var d = t[n]; // [string, ...T, number][number]
 }
+
 // Destructuring variadic tuple types
 function f2(t) {
     var ax = t.slice(0); // [string, ...T]
     var b1 = t[0], bx = t.slice(1); // string, [...T]
     var c1 = t[0], c2 = t[1], cx = t.slice(2); // string, [string, ...T][1], T[number][]
 }
+
 function f3(t) {
     var ax = t.slice(0); // [string, ...T, number]
     var b1 = t[0], bx = t.slice(1); // string, [...T, number]
     var c1 = t[0], c2 = t[1], cx = t.slice(2); // string, [string, ...T, number][1], (number | T[number])[]
 }
+
+
+
+
+
+
+
+
+
 var tm1 = fm1([['abc'], [42], [true], ['def']]); // [boolean, string]
+
+
+
+
 function gx1(u, v) {
     fx1('abc'); // []
     fx1.apply(void 0, __spreadArray(['abc'], u)); // U
@@ -476,6 +505,8 @@ function gx1(u, v) {
     fx1.apply(void 0, __spreadArray(['abc'], u)); // U
     fx1.apply(void 0, __spreadArray(['abc'], v)); // Error
 }
+
+
 function gx2(u, v) {
     fx2('abc'); // []
     fx2.apply(void 0, __spreadArray(['abc'], u)); // U
@@ -483,6 +514,7 @@ function gx2(u, v) {
     fx2.apply(void 0, __spreadArray(['abc'], u)); // U
     fx2.apply(void 0, __spreadArray(['abc'], v)); // V
 }
+
 // Relations involving variadic tuple types
 function f10(x, y, z) {
     x = y;
@@ -492,6 +524,7 @@ function f10(x, y, z) {
     z = x; // Error
     z = y; // Error
 }
+
 // For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
 // to [...T] when T is constrained to a mutable array or tuple type.
 function f11(t, m, r) {
@@ -502,6 +535,7 @@ function f11(t, m, r) {
     r = t;
     r = m;
 }
+
 function f12(t, m, r) {
     t = m;
     t = r; // Error
@@ -510,6 +544,7 @@ function f12(t, m, r) {
     r = t;
     r = m;
 }
+
 function f13(t0, t1, t2) {
     t0 = t1;
     t0 = t2;
@@ -518,6 +553,7 @@ function f13(t0, t1, t2) {
     t2 = t0; // Error
     t2 = t1; // Error
 }
+
 function f14(t0, t1, t2) {
     t0 = t1;
     t0 = t2;
@@ -526,6 +562,7 @@ function f14(t0, t1, t2) {
     t2 = t0; // Error
     t2 = t1; // Error
 }
+
 function f15(k0, k1, k2, k3) {
     k0 = 'length';
     k1 = 'length';
@@ -537,84 +574,187 @@ function f15(k0, k1, k2, k3) {
     k3 = '1';
     k3 = '2'; // Error
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Inference to [...T, ...U] with implied arity for T
-function curry(f) {
-    var a = [];
+function curry(f) {var a = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         a[_i - 1] = arguments[_i];
     }
-    return function () {
-        var b = [];
+    return function () {var b = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             b[_i] = arguments[_i];
         }
-        return f.apply(void 0, __spreadArray(__spreadArray([], a), b));
-    };
+        return f.apply(void 0, __spreadArray(__spreadArray([], a), b));};
 }
+
 var fn1 = function (a, b, c, d) { return 0; };
+
 var c0 = curry(fn1); // (a: number, b: string, c: boolean, d: string[]) => number
 var c1 = curry(fn1, 1); // (b: string, c: boolean, d: string[]) => number
 var c2 = curry(fn1, 1, 'abc'); // (c: boolean, d: string[]) => number
 var c3 = curry(fn1, 1, 'abc', true); // (d: string[]) => number
 var c4 = curry(fn1, 1, 'abc', true, ['x', 'y']); // () => number
-var fn2 = function (x, b) {
-    var args = [];
+
+var fn2 = function (x, b) {var args = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         args[_i - 2] = arguments[_i];
     }
-    return 0;
-};
+    return 0;};
+
 var c10 = curry(fn2); // (x: number, b: boolean, ...args: string[]) => number
 var c11 = curry(fn2, 1); // (b: boolean, ...args: string[]) => number
 var c12 = curry(fn2, 1, true); // (...args: string[]) => number
 var c13 = curry(fn2, 1, true, 'abc', 'def'); // (...args: string[]) => number
-var fn3 = function () {
-    var args = [];
+
+var fn3 = function () {var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
-    return 0;
-};
+    return 0;};
+
 var c20 = curry(fn3); // (...args: string[]) => number
 var c21 = curry(fn3, 'abc', 'def'); // (...args: string[]) => number
 var c22 = curry.apply(void 0, __spreadArray([fn3], sa)); // (...args: string[]) => number
+
+
+
 // No inference to [...T, ...U] when there is no implied arity
 function curry2(f, t, u) {
     return f.apply(void 0, __spreadArray(__spreadArray([], t), u));
 }
+
 curry2(fn10, ['hello', 42], [true]);
 curry2(fn10, ['hello'], [42, true]);
 ft([1, 2, 3], [1, 2, 3]);
 ft([1, 2], [1, 2, 3]);
 ft(['a', 'b'], ['c', 'd']);
 ft(['a', 'b'], ['c', 'd', 42]);
+
 call('hello', 32, function (a, b) { return 42; });
-call.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {
-        var x = [];
+call.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
-        return 42;
-    }]));
+        return 42;}]));
+
+
 function f21(args) {
     var v1 = f20(args); // U
     var v2 = f20(["foo", "bar"]); // [string]
     var v3 = f20(["foo", 42]); // [string]
 }
+
+
 function f23(args) {
     var v1 = f22(args); // U
     var v2 = f22(["foo", "bar"]); // [string, string]
     var v3 = f22(["foo", 42]); // [string]
 }
+
+
 var b = a.bind("", 1); // Desc<[boolean], object>
+
+
+
+
+
 function callApi(method) {
-    return function () {
-        var args = [];
+    return function () {var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return method.apply(void 0, __spreadArray(__spreadArray([], args), [{}]));
-    };
+        return method.apply(void 0, __spreadArray(__spreadArray([], args), [{}]));};
 }
 callApi(getUser);
 callApi(getOrgUser);

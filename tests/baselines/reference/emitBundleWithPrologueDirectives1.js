@@ -23,13 +23,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 /* Detached Comment */
 define("test", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.Doo = void 0;
     // Class Doo Comment
     var Doo = /** @class */ (function () {
-        function Doo() {
-        }
+        function Doo() {}
         return Doo;
     }());
     exports.Doo = Doo;

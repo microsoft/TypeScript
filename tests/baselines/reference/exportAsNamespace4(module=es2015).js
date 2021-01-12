@@ -33,8 +33,10 @@ export default ns;
 //// [2.js]
 import foo from './1';
 import foo1 from './11';
+
 foo.a;
 foo1.a;
+
 foo.b;
 foo1.b;
 

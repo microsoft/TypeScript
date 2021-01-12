@@ -59,17 +59,20 @@ function f6(x: string | undefined) {
 function doSomething(cb) {
     cb();
 }
+
 function fn(x) {
     if (typeof x === 'number') {
         doSomething(function () { return x.toFixed(); });
     }
 }
+
 function f1(x) {
     if (!x) {
         return;
     }
     doSomething(function () { return x.length; });
 }
+
 function f2(x) {
     if (x) {
         doSomething(function () {
@@ -77,6 +80,7 @@ function f2(x) {
         });
     }
 }
+
 function f3(x) {
     inner();
     function inner() {
@@ -85,18 +89,22 @@ function f3(x) {
         }
     }
 }
+
 function f4(x) {
     x = "abc"; // causes x to be considered non-const
     if (x) {
         doSomething(function () { return x.length; });
     }
 }
+
 function f5(x) {
     if (x) {
         doSomething(function () { return x.length; });
     }
     x = "abc"; // causes x to be considered non-const
 }
+
+
 function f6(x) {
     var y = x || "";
     if (x) {

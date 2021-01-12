@@ -7,6 +7,7 @@ function f() {
 }
 
 //// [functionDeclarationWithResolutionOfTypeNamedArguments01.js]
+
 function f() {
     arguments;
 }

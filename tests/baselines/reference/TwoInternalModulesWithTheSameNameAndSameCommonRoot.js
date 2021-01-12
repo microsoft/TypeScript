@@ -68,6 +68,7 @@ var A;
 })(A || (A = {}));
 //// [part3.js]
 // test the merging actually worked
+
 var o;
 var o;
 var o = A.Origin;

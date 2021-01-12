@@ -59,6 +59,7 @@ function a0() {
         var x = 1;
     }
 }
+
 function a1() {
     {
         var x = void 0;
@@ -67,6 +68,7 @@ function a1() {
         var x = 1;
     }
 }
+
 function a2() {
     {
         var x = 1;
@@ -75,6 +77,7 @@ function a2() {
         var x = void 0;
     }
 }
+
 function a3() {
     {
         var x = 1;
@@ -85,6 +88,8 @@ function a3() {
             break;
     }
 }
+
+
 function a4() {
     {
         var x = void 0;

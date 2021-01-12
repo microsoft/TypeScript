@@ -33,8 +33,11 @@ function foo2(x: A | B): any {
 
 //// [discriminantsAndTypePredicates.js]
 // Repro from #10145
+
+
 function isA(x) { return x.type === 'A'; }
 function isB(x) { return x.type === 'B'; }
+
 function foo1(x) {
     x; // A | B
     if (isA(x)) {
@@ -46,6 +49,7 @@ function foo1(x) {
     }
     x; // never
 }
+
 function foo2(x) {
     x; // A | B
     if (x.type === 'A') {

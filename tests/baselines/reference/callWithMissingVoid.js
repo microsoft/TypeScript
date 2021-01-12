@@ -112,6 +112,10 @@ new MyPromise(function (resolve) { return resolve(); }); // no error
 new MyPromise(function (resolve) { return resolve(); }); // error, `any` arguments cannot be omitted
 new MyPromise(function (resolve) { return resolve(); }); // error, `unknown` arguments cannot be omitted
 new MyPromise(function (resolve) { return resolve(); }); // error, `never` arguments cannot be omitted
+
+
+
+
 // Multiple parameters
 function a(x, y, z) {
 }
@@ -130,8 +134,10 @@ c(3, void 0, void 0); // ok
 c(3, void 0); // ok
 c(3); // ok
 c(); // ok
+
 call(function (x, y) { return x + y; }); // error
 call(function (x, y) { return x + y; }, 4, 2); // ok
+
 call(function (x, y) { return x; }, 4, void 0); // ok
 call(function (x, y) { return x; }, 4); // ok
 call(function (x, y) { return 42; }); // ok

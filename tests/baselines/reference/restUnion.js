@@ -26,13 +26,17 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-var union;
+};var union;
+
 var rest1;
 var a = union.a, rest1 = __rest(union, ["a"]);
+
+
 var undefinedUnion;
 var rest2;
 var n = undefinedUnion.n, rest2 = __rest(undefinedUnion, ["n"]);
+
+
 var nullUnion;
 var rest3;
 var n = nullUnion.n, rest3 = __rest(nullUnion, ["n"]);

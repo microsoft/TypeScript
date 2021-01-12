@@ -14,6 +14,7 @@ class TestController {
 
 
 //// [invalidThisEmitInContextualObjectLiteral.js]
+
 var TestController = /** @class */ (function () {
     function TestController() {
         var _this = this;

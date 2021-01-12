@@ -22,6 +22,7 @@ var y = {
 
 //// [accessorWithES3.js]
 // error to use accessors in ES3 mode
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -48,6 +49,7 @@ var D = /** @class */ (function () {
 var x = {
     get a() { return 1; }
 };
+
 var y = {
     set b(v) { }
 };

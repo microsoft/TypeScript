@@ -31,8 +31,11 @@ var GenericClass = /** @class */ (function () {
 function createClass(f) {
     return new GenericClass( /* ... use f */);
 }
+
 function consumeClass(c) { }
+
 // should work
 consumeClass(createClass(function (str) { return console.log(str.length); }));
+
 // should work
 consumeClass(createClass(function (str, _unused_num) { return console.log(str.length); }));

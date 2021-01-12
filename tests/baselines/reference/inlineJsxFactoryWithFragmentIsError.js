@@ -24,12 +24,10 @@ import { dom } from "./renderer";
 exports.__esModule = true;
 /** @jsx React.createElement */
 var React = require("./renderer");
-React.createElement(React.Fragment, null,
-    React.createElement("h", null));
+React.createElement(React.Fragment, null, React.createElement("h", null));
 //// [index.js]
 "use strict";
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
-renderer_1.dom(React.Fragment, null,
-    renderer_1.dom("h", null));
+renderer_1.dom(React.Fragment, null, renderer_1.dom("h", null));

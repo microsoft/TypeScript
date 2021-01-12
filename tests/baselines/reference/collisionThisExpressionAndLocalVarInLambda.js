@@ -11,6 +11,7 @@ alert(x.doStuff(x => alert(x)));
 
 //// [collisionThisExpressionAndLocalVarInLambda.js]
 var _this_1 = this;
+
 var x = {
     doStuff: function (callback) { return function () {
         var _this = 2;

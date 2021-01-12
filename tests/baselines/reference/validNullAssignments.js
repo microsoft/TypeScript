@@ -35,6 +35,7 @@ var a = null;
 var b = null;
 var c = null;
 var d = null;
+
 var e = null;
 e = null; // ok
 var E;
@@ -43,8 +44,7 @@ var E;
 })(E || (E = {}));
 E.A = null; // error
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var f;
@@ -54,11 +54,10 @@ var g;
 g = null; // ok
 I = null; // error
 var M;
-(function (M) {
-    M.x = 1;
-})(M || (M = {}));
+(function (M) {M.x = 1;})(M || (M = {}));
 M = null; // error
 var h = null;
+
 function i(a) {
     a = null;
 }

@@ -4,8 +4,7 @@ export class Object {}
 
 //// [es6modulekindExportClassNameWithObject.js]
 var Object = /** @class */ (function () {
-    function Object() {
-    }
+    function Object() {}
     return Object;
 }());
 export { Object };

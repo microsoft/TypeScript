@@ -83,18 +83,15 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/output/main.js]
 var Main;
-(function (Main) {
-    function fooBar() { }
+(function (Main) {function fooBar() { }
     Main.fooBar = fooBar;
 })(Main || (Main = {}));
 
 
 //// [/a/b/output/main2.js]
 var main;
-(function (main) {
-    var file4;
-    (function (file4) {
-        function foo(a) { }
+(function (main) {var file4;
+    (function (file4) {function foo(a) { }
         file4.foo = foo;
     })(file4 = main.file4 || (main.file4 = {}));
 })(main || (main = {}));

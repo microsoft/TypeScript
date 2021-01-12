@@ -138,6 +138,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 var Base = /** @class */ (function () {
     function Base() {
     }
@@ -271,8 +272,7 @@ var D12 = /** @class */ (function (_super) {
     return D12;
 }(Base));
 var c = /** @class */ (function () {
-    function c() {
-    }
+    function c() {}
     return c;
 }());
 (function (c) {

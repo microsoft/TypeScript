@@ -51,20 +51,26 @@
 //// [emptyVariableDeclarationBindingPatterns01_ES5.js]
 (function () {
     var a;
+
     var _a = a;
     var _b = a;
     var _c = a;
+
     var _d = a;
     var _e = a;
     var _f = a;
+
     var _g = a, _h = a;
     var _j = a, _k = a;
     var _l = a, _m = a;
+
     var _o = a.p1, _p = a.p2;
     var _q = a.p1, _r = a.p2;
     var _s = a.p1, _t = a.p2;
+
     for (var _u = {}, _v = {}; false; void 0) {
     }
+
     function f(_a, _b, _c) {
         _a = a;
         _b = a;
@@ -73,10 +79,10 @@
             _a = a;
             _b = a;
             var _d = _c === void 0 ? a : _c, _e = _d.p, _f = _e === void 0 ? a : _e, _g = _f;
-            return a;
-        };
+            return a;};
     }
 })();
+
 (function () {
     var ns = [];
     for (var _i = 0, ns_1 = ns; _i < ns_1.length; _i++) {

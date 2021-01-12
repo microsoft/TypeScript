@@ -116,6 +116,9 @@ for ([numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; 
 
 //// [sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.js]
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28;
+
+
+
 var robotA = [1, "mower", "mowing"];
 function getRobot() {
     return robotA;
@@ -130,6 +133,7 @@ var numberB, nameB;
 var numberA2, nameA2, skillA2, nameMA;
 var numberA3, robotAInfo, multiRobotAInfo;
 var i;
+
 for (_a = robotA[1], nameA = _a === void 0 ? "name" : _a, i = 0; i < 1; i++) {
     console.log(nameA);
 }
@@ -148,6 +152,7 @@ for (_k = getMultiRobot(), _l = _k[1], _m = _l === void 0 ? ["none", "none"] : _
 for (_q = ["trimmer", ["trimming", "edging"]], _r = _q[1], _s = _r === void 0 ? ["none", "none"] : _r, _t = _s[0], primarySkillA = _t === void 0 ? "primary" : _t, _u = _s[1], secondarySkillA = _u === void 0 ? "secondary" : _u, i = 0; i < 1; i++) {
     console.log(primarySkillA);
 }
+
 for (_v = robotA[0], numberB = _v === void 0 ? -1 : _v, i = 0; i < 1; i++) {
     console.log(numberB);
 }
@@ -166,6 +171,7 @@ for (_z = getMultiRobot()[0], nameB = _z === void 0 ? "name" : _z, i = 0; i < 1;
 for (_0 = ["trimmer", ["trimming", "edging"]][0], nameB = _0 === void 0 ? "name" : _0, i = 0; i < 1; i++) {
     console.log(nameB);
 }
+
 for (_1 = robotA[0], numberA2 = _1 === void 0 ? -1 : _1, _2 = robotA[1], nameA2 = _2 === void 0 ? "name" : _2, _3 = robotA[2], skillA2 = _3 === void 0 ? "skill" : _3, i = 0; i < 1; i++) {
     console.log(nameA2);
 }
@@ -184,6 +190,7 @@ for (_12 = getMultiRobot(), _13 = _12[0], nameMA = _13 === void 0 ? "noName" : _
 for (_18 = ["trimmer", ["trimming", "edging"]], _19 = _18[0], nameMA = _19 === void 0 ? "noName" : _19, _20 = _18[1], _21 = _20 === void 0 ? ["none", "none"] : _20, _22 = _21[0], primarySkillA = _22 === void 0 ? "primary" : _22, _23 = _21[1], secondarySkillA = _23 === void 0 ? "secondary" : _23, i = 0; i < 1; i++) {
     console.log(nameMA);
 }
+
 for (_24 = robotA[0], numberA3 = _24 === void 0 ? -1 : _24, robotAInfo = robotA.slice(1), i = 0; i < 1; i++) {
     console.log(numberA3);
 }

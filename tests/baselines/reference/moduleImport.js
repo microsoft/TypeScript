@@ -15,10 +15,8 @@ module X {
 
 //// [moduleImport.js]
 var A;
-(function (A) {
-    var B;
-    (function (B) {
-        var C;
+(function (A) {var B;
+    (function (B) {var C;
         (function (C) {
             var XYZ = X.Y.Z;
             function ping(x) {

@@ -19,7 +19,12 @@ export const Hoc = <Tag extends Tags>(
 exports.__esModule = true;
 exports.Hoc = void 0;
 var React = require("react");
-var Hoc = function (TagElement) {
+
+
+
+var Hoc = function (
+TagElement
+) {
     var Component = function () { return React.createElement(TagElement, null); };
     return Component;
 };

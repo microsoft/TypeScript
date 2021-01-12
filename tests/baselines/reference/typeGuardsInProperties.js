@@ -28,6 +28,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 //// [typeGuardsInProperties.js]
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
+
 var num;
 var strOrNum;
 var C1 = /** @class */ (function () {

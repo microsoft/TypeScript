@@ -64,6 +64,7 @@ var class1 = /** @class */ (function () {
                     return callback(_this);
                 }; }
             };
+
         },
         enumerable: false,
         configurable: true
@@ -90,6 +91,7 @@ var class2 = /** @class */ (function () {
                     return callback(_this);
                 }; }
             };
+
         },
         enumerable: false,
         configurable: true

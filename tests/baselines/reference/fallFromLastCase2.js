@@ -27,6 +27,7 @@ function foo2(a: number) {
 }
 
 //// [fallFromLastCase2.js]
+
 function foo1(a) {
     switch (a) {
         case 1:
@@ -38,6 +39,8 @@ function foo1(a) {
             use("3");
     }
 }
+
+
 function foo2(a) {
     switch (a) {
         case 1:

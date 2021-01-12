@@ -25,16 +25,13 @@ var __rest = (this && this.__rest) || function (s, e) {
                 t[p[i]] = s[p[i]];
         }
     return t;
-};
-let array;
-for (let _a of array) {
-    let { x } = _a, restOf = __rest(_a, ["x"]);
+};let array;
+for (let _a of array) {let { x } = _a, restOf = __rest(_a, ["x"]);
     [x, restOf];
 }
 let xx;
 let rrestOff;
-for (let _b of array) {
-    ({ x: xx } = _b, rrestOff = __rest(_b, ["x"]));
+for (let _b of array) {({ x: xx } = _b, rrestOff = __rest(_b, ["x"]));
     [xx, rrestOff];
 }
 for (const norest of array.map(a => (Object.assign(Object.assign({}, a), { x: 'a string' })))) {

@@ -20,8 +20,7 @@ var _this = this;
 var m;
 (function (m) {
     var base = /** @class */ (function () {
-        function base() {
-        }
+        function base() {}
         return base;
     }());
     m.base = base;

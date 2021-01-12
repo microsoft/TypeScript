@@ -28,10 +28,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var A = /** @class */ (function () {
-    function A(str1, str2) {
-    }
+})();var A = /** @class */ (function () {
+    function A(str1, str2) {}
     return A;
 }());
 var B = /** @class */ (function (_super) {
@@ -40,8 +38,7 @@ var B = /** @class */ (function (_super) {
         var _this = this;
         if (true) {
             _this = _super.call(this, 'a1', 'b1') || this;
-        }
-        else {
+        } else {
             _this = _super.call(this, 'a2', 'b2') || this;
         }
         return _this;

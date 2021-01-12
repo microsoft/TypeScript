@@ -108,7 +108,9 @@ var ExpandoArrow = function (n) { return n.toString(); };
 ExpandoArrow.prop = 2;
 ExpandoArrow.m = function (n) {
     return n + 1;
+
 };
+
 function ExpandoNested(n) {
     var nested = function (m) {
         return n + m;

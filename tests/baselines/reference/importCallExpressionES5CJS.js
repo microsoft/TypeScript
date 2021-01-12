@@ -43,10 +43,13 @@ var p1 = Promise.resolve().then(function () { return require("./0"); });
 p1.then(function (zero) {
     return zero.foo();
 });
+
 exports.p2 = Promise.resolve().then(function () { return require("./0"); });
+
 function foo() {
     var p2 = Promise.resolve().then(function () { return require("./0"); });
 }
+
 var C = /** @class */ (function () {
     function C() {
     }

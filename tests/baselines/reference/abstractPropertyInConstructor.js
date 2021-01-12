@@ -86,8 +86,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var AbstractClass = /** @class */ (function () {
+})();var AbstractClass = /** @class */ (function () {
     function AbstractClass(str, other) {
         var _this = this;
         this.other = this.prop;
@@ -117,7 +116,9 @@ var DerivedAbstractClass = /** @class */ (function (_super) {
         _this.cb = function (s) { };
         // there is no implementation of 'prop' in any base class
         _this.cb(_this.prop.toLowerCase());
+
         _this.method(1);
+
         // OK, references are to another instance
         other.cb(other.prop);
         yetAnother.cb(yetAnother.prop);

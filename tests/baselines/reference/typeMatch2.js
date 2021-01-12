@@ -59,8 +59,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-function f1() {
+})();function f1() {
     var a = { x: 1, y: 2 };
     a = {}; // error
     a = { x: 1 }; // error
@@ -68,8 +67,7 @@ function f1() {
     a = { x: 1, z: 3 }; // error
 }
 var Animal = /** @class */ (function () {
-    function Animal() {
-    }
+    function Animal() {}
     return Animal;
 }());
 var Giraffe = /** @class */ (function (_super) {
@@ -108,3 +106,5 @@ function f4() {
     mf(_any);
     zf(_any);
 }
+
+

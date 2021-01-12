@@ -18,8 +18,7 @@ Color.prototype = {
 //// [index.js]
 function Color(obj) {
     this.example = true;
-}
-;
+};
 Color.prototype = {
     negate: function () { return this; },
     lighten: function (ratio) { return this; },

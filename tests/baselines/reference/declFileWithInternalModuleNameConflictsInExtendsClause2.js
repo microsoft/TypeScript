@@ -15,12 +15,9 @@ module X.A.B.C {
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause2.js]
 var X;
-(function (X) {
-    var A;
-    (function (A) {
-        var B;
-        (function (B) {
-            var C;
+(function (X) {var A;
+    (function (A) {var B;
+        (function (B) {var C;
             (function (C) {
                 var W = /** @class */ (function () {
                     function W() {

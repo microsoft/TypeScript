@@ -56,12 +56,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 // legal JS, if nonsensical, which also triggers the issue
-var date = function (inspectedElement) { return 0; }.date;
+var 
+date = function (inspectedElement) { return 0; }.date;
 date.toISOString();
 // Working flow code
-var date2 = function (inspectedElement) { return ; }.date2, props;
+var 
+date2 = function (inspectedElement) { return ; }.date2, props;
 date2.toISOString();
 // It could also be an async function
-var constructor = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
+var constructor = function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {return [2 /*return*/];
 }); }); }.constructor;

@@ -42,8 +42,7 @@ var a: { id: string };
 
 //// [class.js]
 var X;
-(function (X) {
-    var Y;
+(function (X) {var Y;
     (function (Y) {
         var Point = /** @class */ (function () {
             function Point(x, y) {
@@ -57,10 +56,8 @@ var X;
 })(X || (X = {}));
 //// [module.js]
 var X;
-(function (X) {
-    var Y;
-    (function (Y) {
-        var Point;
+(function (X) {var Y;
+    (function (Y) {var Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
         })(Point = Y.Point || (Y.Point = {}));

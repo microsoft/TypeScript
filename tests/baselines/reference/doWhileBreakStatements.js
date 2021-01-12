@@ -42,29 +42,32 @@ do{
 do {
     break;
 } while (true);
+
 ONE: do {
     break ONE;
-} while (true);
+}
+while (true);
+
 TWO: THREE: do {
     break THREE;
 } while (true);
+
 FOUR: do {
     FIVE: do {
         break FOUR;
     } while (true);
 } while (true);
+
 do {
     SIX: do
-        break SIX;
-    while (true);
+        break SIX; while (true);
 } while (true);
+
 SEVEN: do
     do
         do
-            break SEVEN;
-        while (true);
-    while (true);
-while (true);
+            break SEVEN; while (true); while (true); while (true);
+
 EIGHT: do {
     var fn = function () { };
     break EIGHT;

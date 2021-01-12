@@ -20,6 +20,8 @@ bar(g1, g2);
 
 //// [contravariantTypeAliasInference.js]
 "use strict";
+
 foo(f1, f2);
+
 bar(f1, f2);
 bar(g1, g2);

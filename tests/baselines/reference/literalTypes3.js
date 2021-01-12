@@ -73,6 +73,7 @@ function f1(s) {
         s; // "foo" | "bar"
     }
 }
+
 function f2(s) {
     switch (s) {
         case "foo":
@@ -85,30 +86,36 @@ function f2(s) {
             s; // string
     }
 }
+
 function f3(s) {
     return s === "foo" || s === "bar" ? s : undefined; // "foo" | "bar" | undefined
 }
+
 function f4(x) {
     if (x === 1 || x === 2) {
         return x; // 1 | 2
     }
     throw new Error();
 }
+
 function f5(x, y) {
     if (x === 0 || x === y) {
         x; // 0 | 1 | 2
     }
 }
+
 function f6(x, y) {
     if (y === x || 0 === x) {
         x; // 0 | 1 | 2
     }
 }
+
 function f7(x, y) {
     if (x === y) {
         x; // "foo" | "bar" | 1 | 2
     }
 }
+
 function f8(x) {
     switch (x) {
         case 1:

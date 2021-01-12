@@ -27,4 +27,5 @@ type T4 = {
 
 
 //// [typeUsedAsTypeLiteralIndex.js]
+
 const K1 = Symbol();

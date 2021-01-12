@@ -29,8 +29,7 @@ const a14 = tag`${ 100 }\x00` // \x00
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
-};
-function tag(str, ...args) {
+};function tag(str, ...args) {
     return str;
 }
 const a = tag `123`;

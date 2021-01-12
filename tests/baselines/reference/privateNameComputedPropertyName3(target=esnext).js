@@ -26,14 +26,14 @@ console.log(new Foo("NAME").getValue(100));
 
 //// [privateNameComputedPropertyName3.js]
 class Foo {
+
     constructor(name) {
         this.#name = name;
     }
     #name;
     getValue(x) {
         const obj = this;
-        class Bar {
-            constructor() {
+        class Bar {constructor() {
                 this.#y = 100;
             }
             #y;

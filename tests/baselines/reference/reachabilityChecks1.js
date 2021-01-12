@@ -107,8 +107,7 @@ var A4;
     while (true)
         ;
     var A;
-    (function (A) {
-        var E;
+    (function (A) {var E;
         (function (E) {
             E[E["X"] = 0] = "X";
         })(E || (E = {}));
@@ -144,6 +143,7 @@ function f3() {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));
 }
+
 function f4() {
     if (true) {
         throw new Error();
@@ -153,3 +153,4 @@ function f4() {
         E[E["X"] = 1] = "X";
     })(E || (E = {}));
 }
+

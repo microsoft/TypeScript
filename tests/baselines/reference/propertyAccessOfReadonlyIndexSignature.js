@@ -8,4 +8,5 @@ a.foo = 'baz';
 
 
 //// [propertyAccessOfReadonlyIndexSignature.js]
+
 a.foo = 'baz';

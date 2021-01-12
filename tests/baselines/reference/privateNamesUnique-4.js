@@ -9,12 +9,10 @@ const c: C = a;
 
 //// [privateNamesUnique-4.js]
 var _something;
-class A1 {
-}
-class C {
-    constructor() {
+class A1 {}
+
+class C {constructor() {
         _something.set(this, void 0);
-    }
-}
+    }}
 _something = new WeakMap();
 const c = a;

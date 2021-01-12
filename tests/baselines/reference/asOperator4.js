@@ -21,6 +21,7 @@ exports.foo = foo;
 "use strict";
 exports.__esModule = true;
 var foo_1 = require("./foo");
+
 // These should emit identically
 foo_1.foo;
 foo_1.foo;

@@ -31,8 +31,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 exports["default"] = A;
@@ -63,6 +62,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var a_1 = require("./a");
+
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {

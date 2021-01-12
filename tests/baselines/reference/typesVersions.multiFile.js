@@ -35,5 +35,6 @@ const bb: "ts3.1 b" = b;
 Object.defineProperty(exports, "__esModule", { value: true });
 const ext_1 = require("ext");
 const other_1 = require("ext/other");
+
 const aa = ext_1.a;
 const bb = other_1.b;

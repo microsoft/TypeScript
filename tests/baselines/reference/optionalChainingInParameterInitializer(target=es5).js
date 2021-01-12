@@ -8,5 +8,4 @@ const a = (): { d: string } | undefined => undefined;
 var a = function () { return undefined; };
 (function (b) {
     var _a;
-    if (b === void 0) { b = (_a = a()) === null || _a === void 0 ? void 0 : _a.d; }
-})();
+    if (b === void 0) { b = (_a = a()) === null || _a === void 0 ? void 0 : _a.d; }})();

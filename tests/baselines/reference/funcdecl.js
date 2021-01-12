@@ -76,6 +76,7 @@ function simpleFunc() {
     return "this is my simple func";
 }
 var simpleFuncVar = simpleFunc;
+
 function anotherFuncNoReturn() {
 }
 var anotherFuncNoReturnVar = anotherFuncNoReturn;
@@ -94,17 +95,14 @@ var withMultiParamsVar = withMultiParams;
 function withOptionalParams(a) {
 }
 var withOptionalParamsVar = withOptionalParams;
-function withInitializedParams(a, b0, b, c) {
-    if (b === void 0) { b = 30; }
+function withInitializedParams(a, b0, b, c) {if (b === void 0) { b = 30; }
     if (c === void 0) { c = "string value"; }
 }
 var withInitializedParamsVar = withInitializedParams;
-function withOptionalInitializedParams(a, c) {
-    if (c === void 0) { c = "hello string"; }
+function withOptionalInitializedParams(a, c) {if (c === void 0) { c = "hello string"; }
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
-function withRestParams(a) {
-    var myRestParameter = [];
+function withRestParams(a) {var myRestParameter = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         myRestParameter[_i - 1] = arguments[_i];
     }
@@ -123,9 +121,14 @@ var m2;
     m2.foo = foo;
 })(m2 || (m2 = {}));
 m2.foo(function () {
+
     var b = 30;
     return b;
 });
+
+
+
+
 var f2 = function () {
     return "string";
 };

@@ -8,8 +8,7 @@ var c = new C(new C('')); // error
 
 //// [wrappedAndRecursiveConstraints2.js]
 var C = /** @class */ (function () {
-    function C(x) {
-    }
+    function C(x) {}
     return C;
 }());
 var c = new C(1);

@@ -10,8 +10,7 @@ async function foo() {
 
 //// [foo.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = "./foo";
 });
 //// [index.js]
@@ -25,8 +24,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    function foo() {
+    "use strict";function foo() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield new Promise((resolve_1, reject_1) => { require([(yield new Promise((resolve_2, reject_2) => { require(["./foo"], resolve_2, reject_2); })).default], resolve_1, reject_1); });
         });

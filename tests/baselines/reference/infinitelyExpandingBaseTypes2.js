@@ -14,5 +14,7 @@ var b: B<string> = a
 
 
 //// [infinitelyExpandingBaseTypes2.js]
+
+
 var a;
 var b = a;

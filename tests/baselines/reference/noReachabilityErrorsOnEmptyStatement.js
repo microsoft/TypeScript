@@ -5,6 +5,5 @@ function foo() {
 
 //// [noReachabilityErrorsOnEmptyStatement.js]
 function foo() {
-    return 1;
-    ;
+    return 1;;
 }

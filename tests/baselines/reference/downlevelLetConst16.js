@@ -243,6 +243,7 @@ function foo1() {
     var z = { a: 1 }.a;
     use(z);
 }
+
 function foo2() {
     {
         var x_1 = 1;
@@ -254,6 +255,7 @@ function foo2() {
     }
     use(x);
 }
+
 var A = /** @class */ (function () {
     function A() {
     }
@@ -310,6 +312,7 @@ function bar1() {
     var z = { a: 1 }.a;
     use(z);
 }
+
 function bar2() {
     {
         var x_4 = 1;
@@ -377,6 +380,7 @@ function foo3() {
     }
     use(x);
 }
+
 function foo4() {
     for (var x_8 = 1;;) {
         use(x_8);
@@ -389,18 +393,21 @@ function foo4() {
     }
     use(x);
 }
+
 function foo5() {
     for (var x_9 in []) {
         use(x_9);
     }
     use(x);
 }
+
 function foo6() {
     for (var x_10 in []) {
         use(x_10);
     }
     use(x);
 }
+
 function foo7() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_11 = _a[_i];
@@ -408,6 +415,7 @@ function foo7() {
     }
     use(x);
 }
+
 function foo8() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_12 = _a[_i][0];
@@ -415,6 +423,7 @@ function foo8() {
     }
     use(x);
 }
+
 function foo9() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_13 = _a[_i].a;
@@ -422,6 +431,7 @@ function foo9() {
     }
     use(x);
 }
+
 function foo10() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_14 = _a[_i];
@@ -429,6 +439,7 @@ function foo10() {
     }
     use(x);
 }
+
 function foo11() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_15 = _a[_i][0];
@@ -436,6 +447,7 @@ function foo11() {
     }
     use(x);
 }
+
 function foo12() {
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var x_16 = _a[_i].a;

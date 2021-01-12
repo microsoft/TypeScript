@@ -19,8 +19,7 @@ var p: m.Point; // Error
 var M;
 (function (M) {
     var Point = /** @class */ (function () {
-        function Point() {
-        }
+        function Point() {}
         return Point;
     }());
     M.Point = Point;
@@ -32,3 +31,5 @@ var M2;
 })(M2 || (M2 = {}));
 var m = M2;
 var p; // Error
+
+

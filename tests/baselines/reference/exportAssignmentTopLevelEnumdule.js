@@ -19,8 +19,7 @@ if(color === foo.green){
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var foo;
+    "use strict";var foo;
     (function (foo) {
         foo[foo["red"] = 0] = "red";
         foo[foo["green"] = 1] = "green";
@@ -33,8 +32,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var color;
     if (color === foo.green) {
         color = foo.answer;

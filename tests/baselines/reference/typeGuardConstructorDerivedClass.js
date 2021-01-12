@@ -106,8 +106,7 @@ if (var1.constructor === C2) {
 }
 // Derived classes with the same structure
 var C3 = /** @class */ (function () {
-    function C3() {
-    }
+    function C3() {}
     return C3;
 }());
 var C4 = /** @class */ (function (_super) {

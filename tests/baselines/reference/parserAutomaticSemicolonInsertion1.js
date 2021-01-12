@@ -16,6 +16,7 @@ a = o;
 
 
 //// [parserAutomaticSemicolonInsertion1.js]
+
 var i;
 var o;
 o = i;

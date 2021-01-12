@@ -57,6 +57,7 @@ module M {
 //// [mergedInterfacesWithMultipleBases.js]
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
+
 var C = /** @class */ (function () {
     function C() {
     }
@@ -67,6 +68,8 @@ var C2 = /** @class */ (function () {
     }
     return C2;
 }());
+
+
 var D = /** @class */ (function () {
     function D() {
     }
@@ -87,6 +90,8 @@ var M;
         }
         return C2;
     }());
+
+
     var D = /** @class */ (function () {
         function D() {
         }

@@ -22,8 +22,13 @@ const element = (
 exports.__esModule = true;
 /// <reference path="react16.d.ts" />
 var React = require("react");
+
+
 function Wrapper(props) {
     return React.createElement("div", null, props.children);
 }
-var element = (React.createElement(Wrapper, null,
-    React.createElement("div", null, "Hello")));
+
+var element = (
+    React.createElement(Wrapper, null, React.createElement("div", null, "Hello")
+    )
+);

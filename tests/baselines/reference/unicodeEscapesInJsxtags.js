@@ -24,10 +24,12 @@ let compa2 = <Comp\u{0061} x={12} />; // works
 //// [file.js]
 import * as React from "react";
 const Compa = (x) => React.createElement("div", null, "" + x);
+
 let a = React.createElement("a", null); // works
 let ab = React.createElement("a-b", null); // works
 let ac = React.createElement("a-c", null); // works
 let compa = React.createElement(Comp\u0061, { x: 12 }); // works
+
 let a2 = React.createElement("a", null); // works
 let ab2 = React.createElement("a-b", null); // works
 let ac2 = React.createElement("a-c", null); // works

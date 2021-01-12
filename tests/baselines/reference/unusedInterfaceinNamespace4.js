@@ -20,6 +20,9 @@ namespace Validation {
 //// [unusedInterfaceinNamespace4.js]
 var Validation;
 (function (Validation) {
+
+
+
     var c1 = /** @class */ (function () {
         function c1() {
         }

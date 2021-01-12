@@ -10,8 +10,7 @@ function f() {
 //// [localVariablesReturnedFromCatchBlocks.js]
 function f() {
     try {
-    }
-    catch (e) {
+    } catch (e) {
         var stack2 = e.stack;
         return stack2; //error TS2095: Could not find symbol 'stack2'.
     }

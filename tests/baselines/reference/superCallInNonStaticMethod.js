@@ -65,8 +65,7 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Doing = /** @class */ (function () {
+})();var Doing = /** @class */ (function () {
     function Doing() {
     }
     Doing.prototype.instanceMethod = function () {
@@ -86,6 +85,7 @@ var Other = /** @class */ (function (_super) {
     Other.prototype.instanceMethod = function () {
         _super.prototype.instanceMethod.call(this);
     };
+
     // in a lambda inside a instance method
     Other.prototype.lambdaInsideAnInstanceMethod = function () {
         var _this = this;
@@ -93,6 +93,7 @@ var Other = /** @class */ (function (_super) {
             _super.prototype.instanceMethod.call(_this);
         });
     };
+
     // in an object literal inside a instance method
     Other.prototype.objectLiteralInsideAnInstanceMethod = function () {
         var _this = this;

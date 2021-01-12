@@ -10,6 +10,7 @@ let f = "baz" as typeof fooOrBar;
 
 //// [stringLiteralsWithTypeAssertions01.js]
 var fooOrBar;
+
 var a = "foo";
 var b = "bar";
 var c = fooOrBar;

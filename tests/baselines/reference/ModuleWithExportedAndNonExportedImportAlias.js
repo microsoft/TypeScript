@@ -64,5 +64,6 @@ var p;
 var p = Geometry.Origin;
 var line;
 var line = Geometry.Unit;
+
 // not expected to work since non are exported
 var line = Geometry.Lines.Line;

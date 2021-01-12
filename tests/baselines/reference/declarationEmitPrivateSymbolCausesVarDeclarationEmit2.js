@@ -30,6 +30,7 @@ var _a;
 exports.__esModule = true;
 exports.C = void 0;
 var a_1 = require("./a");
+
 var C = /** @class */ (function () {
     function C() {
         this[_a] = 1;
@@ -60,6 +61,7 @@ exports.__esModule = true;
 exports.D = void 0;
 var a_1 = require("./a");
 var b_1 = require("./b");
+
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {

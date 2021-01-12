@@ -31,6 +31,7 @@ var x = SwitchTest(0);
 //// [parserS12.11_A3_T4.js]
 // Copyright 2009 the Sputnik authors.  All rights reserved.
 // This code is governed by the BSD license found in the LICENSE file.
+
 /**
  * Syntax constructions of switch statement
  *
@@ -40,6 +41,7 @@ var x = SwitchTest(0);
  */
 function SwitchTest(value) {
     var result = 0;
+
     switch (value) {
         case :
             result += 2;
@@ -47,6 +49,8 @@ function SwitchTest(value) {
             result += 32;
             break;
     }
+
     return result;
 }
+
 var x = SwitchTest(0);

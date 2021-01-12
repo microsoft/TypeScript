@@ -65,6 +65,7 @@ var e14 = { 0: 0, 000: 0 };
 var e15 = { "100": 0, 1e2: 0 };
 var e16 = { 0x20: 0, 3.2e1: 0 };
 var e17 = { a: 0, b: 1, a: 0 };
+
 // Accessor and property with the same name
 var f1 = { a: 0, get a() { return 0; } };
 var f2 = { a: '', get a() { return ''; } };

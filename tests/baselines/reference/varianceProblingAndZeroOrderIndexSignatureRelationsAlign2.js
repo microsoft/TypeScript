@@ -115,13 +115,17 @@ var Right = /** @class */ (function () {
 var Type = /** @class */ (function () {
     function Type(
     /** a unique name for this codec */
-    name, 
-    /** a custom type guard */
-    is, 
-    /** succeeds if a value of type I can be decoded to a value of type A */
-    validate, 
-    /** converts a value of type A to a value of type O */
-    encode) {
+    name,
+
+        /** a custom type guard */
+        is,
+
+        /** succeeds if a value of type I can be decoded to a value of type A */
+        validate,
+
+        /** converts a value of type A to a value of type O */
+        encode
+    ) {
         this.name = name;
         this.is = is;
         this.validate = validate;
@@ -131,12 +135,23 @@ var Type = /** @class */ (function () {
     Type.prototype.decode = function (i) { return null; };
     return Type;
 }());
+
+
+
+
+
+
+
+
+
+
+
+
 var tmp1 = null;
 function tmp2(n) { }
 // tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ?? (see test 1, needs to behave the same)
 var Server = /** @class */ (function () {
-    function Server() {
-    }
+    function Server() {}
     return Server;
 }());
 var MyServer = /** @class */ (function (_super) {

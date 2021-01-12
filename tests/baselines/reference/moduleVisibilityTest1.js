@@ -78,8 +78,7 @@ var OuterMod;
 })(OuterMod || (OuterMod = {}));
 var OuterInnerAlias = OuterMod.OuterInnerMod;
 var M;
-(function (M) {
-    var InnerMod;
+(function (M) {var InnerMod;
     (function (InnerMod) {
         function someExportedInnerFunc() { return -2; }
         InnerMod.someExportedInnerFunc = someExportedInnerFunc;
@@ -92,6 +91,7 @@ var M;
     })(E = M.E || (M.E = {}));
     M.x = 5;
     var y = M.x + M.x;
+
     var B = /** @class */ (function () {
         function B() {
             this.b = 0;
@@ -112,6 +112,7 @@ var M;
     }());
     M.C = C;
     var someModuleVar = 4;
+
     function someModuleFunction() { return 5; }
 })(M || (M = {}));
 (function (M) {

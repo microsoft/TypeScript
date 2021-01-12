@@ -14,6 +14,7 @@ const x: import("fo") = { x: 0, y: 0 }; // typo, error
 var x = { x: 0, y: 0 }; // typo, error
 
 
+
 //// [importTypeAmbientMissing.d.ts]
 declare module "foo" {
     interface Point {

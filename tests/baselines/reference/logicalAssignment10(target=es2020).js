@@ -20,6 +20,7 @@ var obj = {};
 function incr() {
     return ++count;
 }
+
 const oobj = {
     obj
 };

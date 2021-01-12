@@ -5,8 +5,7 @@ module M {
 
 //// [declarationEmitDestructuringArrayPattern3.js]
 var M;
-(function (M) {
-    var _a;
+(function (M) {var _a;
     _a = [1, 2], M.a = _a[0], M.b = _a[1];
 })(M || (M = {}));
 

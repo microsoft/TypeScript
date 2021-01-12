@@ -8,3 +8,4 @@ declare module "b:/block" { // <-- still an error
 }
 
 //// [declarationEmitRelativeModuleError.js]
+

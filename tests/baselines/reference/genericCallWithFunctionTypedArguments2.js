@@ -44,9 +44,11 @@ var r9 = foo3<string, string>('', i2, ''); // string
 //// [genericCallWithFunctionTypedArguments2.js]
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using construct signature arguments, no errors expected
+
 function foo(x) {
     return new x(null);
 }
+
 var i;
 var i2;
 var a;
@@ -61,6 +63,7 @@ var r4 = foo2(1, i2); // error
 var r4b = foo2(1, a); // any
 var r5 = foo2(1, i); // any
 var r6 = foo2('', i2); // string
+
 function foo3(x, cb, y) {
     return new cb(x);
 }

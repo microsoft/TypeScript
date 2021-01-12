@@ -3,12 +3,10 @@ export default 3.14159;
 
 //// [app.js]
 System.register("pi", [], function (exports_1, context_1) {
-    "use strict";
-    var __moduleName = context_1 && context_1.id;
+    "use strict";var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {
-            exports_1("default", 3.14159);
+        execute: function () {exports_1("default", 3.14159);
         }
     };
 });

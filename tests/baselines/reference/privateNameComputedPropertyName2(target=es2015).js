@@ -18,8 +18,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 };
 var _x;
 let getX;
-class A {
-    constructor() {
+
+class A {constructor() {
         _x.set(this, 100);
     }
     [(_x = new WeakMap(), (getX = (a) => __classPrivateFieldGet(a, _x), "_"))]() { }

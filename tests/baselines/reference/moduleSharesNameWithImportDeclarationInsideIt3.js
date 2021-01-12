@@ -18,8 +18,7 @@ module A.M {
 
 //// [moduleSharesNameWithImportDeclarationInsideIt3.js]
 var Z;
-(function (Z) {
-    var M;
+(function (Z) {var M;
     (function (M) {
         function bar() {
             return "";
@@ -28,10 +27,11 @@ var Z;
     })(M = Z.M || (Z.M = {}));
 })(Z || (Z = {}));
 var A;
-(function (A) {
-    var M;
+(function (A) {var M;
     (function (M_1) {
         var M = Z.M;
+
+
         function bar() {
         }
         M_1.bar = bar;

@@ -28,10 +28,12 @@ function g1(headerNames) {
     var t = [{ hasLineBreak: false, cells: [] }];
     var table = [{ cells: headerNames }].concat(t);
 }
+
 function g2(headerNames) {
     var t = [{ hasLineBreak: false, cells: [] }];
     var table = [{ cells: headerNames }]["concat"](t);
 }
+
 // Object in property or element access is widened when target of assignment
 function foo(options) {
     var x1 = (options || {}).a; // Object type not widened

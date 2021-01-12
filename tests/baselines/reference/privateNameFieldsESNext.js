@@ -21,8 +21,7 @@ class C {
 
 
 //// [privateNameFieldsESNext.js]
-class C {
-    constructor() {
+class C {constructor() {
         this.a = 123;
         this.#a = 10;
         this.c = "hello";

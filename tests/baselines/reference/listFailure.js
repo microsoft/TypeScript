@@ -44,13 +44,16 @@ module Editor {
 //// [listFailure.js]
 var Editor;
 (function (Editor) {
+
     var Buffer = /** @class */ (function () {
         function Buffer() {
             this.lines = ListMakeHead();
         }
         Buffer.prototype.addLine = function (lineText) {
+
             var line = new Line();
             var lineEntry = this.lines.add(line);
+
             return lineEntry;
         };
         return Buffer;
@@ -75,14 +78,14 @@ var Editor;
             this.next = ListMakeEntry(data);
             return this.next;
         };
+
         List.prototype.popEntry = function (head) {
             return (ListRemoveEntry(this.next));
         };
         return List;
     }());
     var Line = /** @class */ (function () {
-        function Line() {
-        }
+        function Line() {}
         return Line;
     }());
     Editor.Line = Line;

@@ -82,11 +82,11 @@ export class BarIncorrectlyWorks extends Foo {
 
 
 //// [checkSuperCallBeforeThisAccess.js]
-class A {
-    constructor() {
+class A {constructor() {
         this.x = 1;
     }
 }
+
 class C1 extends A {
     constructor(n) {
         let a1 = this; // Error
@@ -130,11 +130,13 @@ class C1 extends A {
         let f3 = super.x; // Error
     }
 }
+
 // Repro from #38512
 export class Foo {
     constructor(value) {
     }
 }
+
 export class BarCorrectlyFails extends Foo {
     constructor(something) {
         if (!something) {
@@ -147,6 +149,7 @@ export class BarCorrectlyFails extends Foo {
     }
     bar() { return 4; }
 }
+
 export class BarIncorrectlyWorks extends Foo {
     constructor(something) {
         if (something) {

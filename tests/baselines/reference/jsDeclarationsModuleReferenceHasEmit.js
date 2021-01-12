@@ -21,8 +21,7 @@ exports.el = void 0;
  * @module A
  */
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 /**

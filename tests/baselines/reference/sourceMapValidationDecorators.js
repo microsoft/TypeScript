@@ -65,8 +65,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var Greeter = /** @class */ (function () {
-    function Greeter(greeting) {
-        var b = [];
+    function Greeter(greeting) {var b = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             b[_i - 1] = arguments[_i];
         }
@@ -75,7 +74,17 @@ var Greeter = /** @class */ (function () {
     Greeter.prototype.greet = function () {
         return "<h1>" + this.greeting + "</h1>";
     };
-    Greeter.prototype.fn = function (x) {
+
+
+
+
+
+
+
+
+
+    Greeter.prototype.fn = function (
+    x) {
         return this.greeting;
     };
     Object.defineProperty(Greeter.prototype, "greetings", {

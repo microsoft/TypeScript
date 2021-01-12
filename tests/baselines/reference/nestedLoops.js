@@ -23,10 +23,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
 var Test = /** @class */ (function () {
     function Test() {
+
         var outerArray = [1, 2, 3];
         var innerArray = [1, 2, 3];
-        var _loop_1 = function (outer) {
-            var _loop_2 = function (inner) {
+        var _loop_1 = function (outer) {var _loop_2 = function (inner) {
                 this_1.aFunction(function (newValue, oldValue) {
                     var x = outer + inner + newValue;
                 });

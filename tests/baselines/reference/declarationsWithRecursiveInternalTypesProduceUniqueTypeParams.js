@@ -60,26 +60,29 @@ exports.testRecFun = exports.updateIfChanged = void 0;
 var updateIfChanged = function (t) {
     var reduce = function (u, update) {
         var set = function (newU) { return Object.is(u, newU) ? t : update(newU); };
-        return Object.assign(function (key) {
+        return Object.assign(
+        function (key) {
             return reduce(u[key], function (v) {
                 var _a;
                 return update(Object.assign(Array.isArray(u) ? [] : {}, u, (_a = {}, _a[key] = v, _a)));
-            });
-        }, { map: function (updater) { return set(updater(u)); }, set: set });
+            });},
+            { map: function (updater) { return set(updater(u)); }, set: set });
     };
     return reduce(t, function (t) { return t; });
 };
 exports.updateIfChanged = updateIfChanged;
+
 // example from https://github.com/microsoft/TypeScript/issues/31605
 var testRecFun = function (parent) {
     return {
         result: parent,
         deeper: function (child) {
-            return exports.testRecFun(__assign(__assign({}, parent), child));
-        }
+            return exports.testRecFun(__assign(__assign({}, parent), child));}
     };
 };
 exports.testRecFun = testRecFun;
+
+
 var p1 = exports.testRecFun({ one: '1' });
 void p1.result.one;
 var p2 = p1.deeper({ two: '2' });

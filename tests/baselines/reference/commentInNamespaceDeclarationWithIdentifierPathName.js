@@ -8,10 +8,8 @@ namespace hello.hi.world
 
 //// [commentInNamespaceDeclarationWithIdentifierPathName.js]
 var hello;
-(function (hello) {
-    var hi;
-    (function (hi) {
-        var world;
+(function (hello) {var hi;
+    (function (hi) {var world;
         (function (world) {
             function foo() { }
             // TODO, blah

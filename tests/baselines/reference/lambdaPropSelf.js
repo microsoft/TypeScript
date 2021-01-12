@@ -24,6 +24,7 @@ module M {
 
 
 //// [lambdaPropSelf.js]
+
 var Person = /** @class */ (function () {
     function Person(name, children) {
         var _this = this;

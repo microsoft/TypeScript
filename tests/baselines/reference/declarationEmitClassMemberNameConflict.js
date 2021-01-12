@@ -43,6 +43,7 @@ var C1 = /** @class */ (function () {
     function C1() {
     }
     C1.prototype.C1 = function () { }; // has to be the same as the class name
+
     C1.prototype.bar = function () {
         return function (t) {
         };

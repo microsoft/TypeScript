@@ -61,14 +61,12 @@ exports.j = exports.h = exports.g = exports.f = exports.x = exports.e = exports.
 var C;
 (function (C) {
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     C.A = A;
     var B = /** @class */ (function () {
-        function B() {
-        }
+        function B() {}
         return B;
     }());
     C.B = B;
@@ -96,10 +94,13 @@ exports.b = C.F;
 exports.c = C.F2;
 exports.d = C.F3;
 exports.e = C.F4;
+
 exports.x = (new C.D(new C.A())).val;
+
 function f() { }
 exports.f = f;
 exports.g = C.F5();
+
 var h = /** @class */ (function (_super) {
     __extends(h, _super);
     function h() {
@@ -108,6 +109,7 @@ var h = /** @class */ (function (_super) {
     return h;
 }(C.A));
 exports.h = h;
+
 exports.j = C.F6;
 
 

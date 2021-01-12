@@ -9,17 +9,12 @@ async function foo() {
 }
 
 //// [foo.js]
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
+    "use strict";Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = "./foo";
 });
 //// [index.js]
@@ -59,23 +54,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
+(function (factory) {if (typeof module === "object" && typeof module.exports === "object") {var v = factory(require, exports);
         if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+    } else if (typeof define === "function" && define.amd) {define(["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
-    function foo() {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                var _b;
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require("./foo"); }) : new Promise(function (resolve_1, reject_1) { require(["./foo"], resolve_1, reject_1); })];
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";function foo() {
+        return __awaiter(this, void 0, void 0, function () {return __generator(this, function (_a) {var _b;
+                switch (_a.label) {case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require("./foo"); }) : new Promise(function (resolve_1, reject_1) { require(["./foo"], resolve_1, reject_1); })];
                     case 1: return [4 /*yield*/, (_b = (_a.sent()).default, __syncRequire ? Promise.resolve().then(function () { return require(_b); }) : new Promise(function (resolve_2, reject_2) { require([_b], resolve_2, reject_2); }))];
                     case 2: return [2 /*return*/, _a.sent()];
                 }

@@ -27,6 +27,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 var p1, p2, p3;
 var spreads1 = React.createElement("div", __assign({}, p1), p2);
 var spreads2 = React.createElement("div", __assign({}, p1), p2);

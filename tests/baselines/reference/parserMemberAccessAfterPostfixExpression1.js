@@ -2,5 +2,4 @@
 a--.toString()
 
 //// [parserMemberAccessAfterPostfixExpression1.js]
-a--;
-toString();
+a--;toString();

@@ -23,8 +23,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var Doo = /** @class */ (function () {
-    function Doo() {
-    }
+    function Doo() {}
     return Doo;
 }());
 var Scooby = /** @class */ (function (_super) {

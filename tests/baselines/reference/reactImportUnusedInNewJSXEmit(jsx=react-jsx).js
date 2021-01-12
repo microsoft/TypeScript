@@ -19,6 +19,7 @@ var jsx_runtime_1 = require("react/jsx-runtime");
 function Bar() {
     return jsx_runtime_1.jsx("div", {}, void 0);
 }
+
 function Foo() {
     return jsx_runtime_1.jsx(Bar, {}, void 0);
 }

@@ -34,7 +34,9 @@ b.foo();
 var B = /** @class */ (function () {
     function B() {
         function foo() { }
+
         foo();
+
         var a = 0;
         var inner = (function () {
             var CScriptIO = (function () {
@@ -51,4 +53,5 @@ var B = /** @class */ (function () {
     return B;
 }());
 var b = new B();
+
 b.foo();

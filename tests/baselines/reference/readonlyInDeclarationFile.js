@@ -54,6 +54,7 @@ function g() {
 }
 
 //// [readonlyInDeclarationFile.js]
+
 var C = /** @class */ (function () {
     function C() {
     }

@@ -18,28 +18,24 @@ export var y = 100;
 
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
     exports.x = 1;
 });
 //// [file4.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.y = void 0;
     exports.y = 100;
 });
 //// [file2.js]
 define(["require", "exports", "./file3", "file4"], function (require, exports, file3_1, file4_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.x = void 0;
     exports.x = file3_1.x + file4_1.y;
 });
 //// [file1.js]
 define(["require", "exports", "folder2/file2"], function (require, exports, file2_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     use(file2_1.x.toExponential());
 });

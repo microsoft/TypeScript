@@ -29,7 +29,9 @@ for (var _b = 0, _c = [1, 2, 3]; _b < _c.length; _b++) {
     var let = _c[_b];
 }
 for (var let in [1, 2, 3]) { }
+
 for (var let in [1, 2, 3]) { }
+
 {
     for (var _d = 0, _e = [1, 2, 3]; _d < _e.length; _d++) {
         var let = _e[_d];
@@ -38,5 +40,7 @@ for (var let in [1, 2, 3]) { }
         var let = _g[_f];
     }
     for (var let in [1, 2, 3]) { }
+
     for (var let in [1, 2, 3]) { }
 }
+

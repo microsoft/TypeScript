@@ -26,15 +26,17 @@ function _setBarAndText(): void {
 }
 
 //// [dottedSymbolResolution1.js]
+
+
 var Base = /** @class */ (function () {
-    function Base() {
-    }
+    function Base() {}
     Base.prototype.foo = function () { };
     return Base;
 }());
 function each(collection, callback) {
     return null;
 }
+
 function _setBarAndText() {
     var x, $;
     each(x.find(" "), function () {

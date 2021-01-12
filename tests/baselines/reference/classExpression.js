@@ -18,6 +18,7 @@ var x = /** @class */ (function () {
     }
     return C;
 }());
+
 var y = {
     foo: /** @class */ (function () {
         function C2() {

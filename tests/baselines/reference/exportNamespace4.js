@@ -23,8 +23,7 @@ ns.A;
 exports.__esModule = true;
 exports.A = void 0;
 var A = /** @class */ (function () {
-    function A() {
-    }
+    function A() {}
     return A;
 }());
 exports.A = A;

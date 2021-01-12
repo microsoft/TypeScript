@@ -23,6 +23,7 @@ var N=new f();  // ok with void fn
 function f() {
     var x = 1;
 }
+
 var y = f(); // error void fn
 var why = f(); // error void fn
 var w;

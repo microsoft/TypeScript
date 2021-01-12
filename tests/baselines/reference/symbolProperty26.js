@@ -17,6 +17,7 @@ class C1 {
         return "";
     }
 }
+
 class C2 extends C1 {
     [Symbol.toStringTag]() {
         return "";

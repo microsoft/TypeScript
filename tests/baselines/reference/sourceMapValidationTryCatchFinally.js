@@ -25,11 +25,9 @@ finally
 var x = 10;
 try {
     x = x + 1;
-}
-catch (e) {
+} catch (e) {
     x = x - 1;
-}
-finally {
+} finally {
     x = x * 10;
 }
 try {
@@ -39,6 +37,7 @@ try {
 catch (e) {
     x = x - 1;
 }
+
 finally {
     x = x * 10;
 }

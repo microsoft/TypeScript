@@ -8,4 +8,6 @@ function f2<T extends A, U extends B>(ab: T & U): (A | B) & T & U { return ab; }
 
 //// [typeParameterExtendsUnionConstraintDistributed.js]
 function f(a) { return a; } // Shouldn't error
+
+
 function f2(ab) { return ab; } // Also shouldn't error

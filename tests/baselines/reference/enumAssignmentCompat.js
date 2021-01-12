@@ -42,8 +42,7 @@ var p: W.D;
 var W;
 (function (W) {
     var D = /** @class */ (function () {
-        function D() {
-        }
+        function D() {}
         return D;
     }());
     W.D = D;
@@ -53,6 +52,9 @@ var W;
     W[W["b"] = 1] = "b";
     W[W["c"] = 2] = "c";
 })(W || (W = {}));
+
+
+
 var x = W;
 var y = W;
 var z = W; // error

@@ -11,8 +11,7 @@ module M
 var M;
 (function (M) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     M.C = C;

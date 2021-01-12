@@ -15,8 +15,7 @@ use(data[0]() === data[1]());
 var data = [];
 var _loop_1 = function (x) {
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         return C;
     }());
     data.push(function () { return C; });

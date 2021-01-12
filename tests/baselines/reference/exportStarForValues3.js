@@ -25,8 +25,7 @@ var x = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
 });
 //// [file2.js]
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -40,8 +39,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 define(["require", "exports", "file1"], function (require, exports, file1_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     __exportStar(file1_1, exports);
     var x = 1;
 });
@@ -57,8 +55,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 define(["require", "exports", "file1"], function (require, exports, file1_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     __exportStar(file1_1, exports);
     var x = 1;
 });
@@ -74,8 +71,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 define(["require", "exports", "file2", "file3"], function (require, exports, file2_1, file3_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     __exportStar(file2_1, exports);
     __exportStar(file3_1, exports);
     var x = 1;
@@ -92,8 +88,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 define(["require", "exports", "file4"], function (require, exports, file4_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     __exportStar(file4_1, exports);
     var x = 1;
 });

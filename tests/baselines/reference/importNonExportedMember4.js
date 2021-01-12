@@ -10,8 +10,7 @@ import { Foo } from './a';
 //// [a.js]
 "use strict";
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     return Foo;
 }());
 module.exports = Foo;

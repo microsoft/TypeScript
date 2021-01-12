@@ -682,8 +682,7 @@ export declare module eaM {
 
 //// [giant.js]
 define(["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.eM = exports.eC = exports.eF = exports.eV = void 0;
     /*
         Prefixes
@@ -699,11 +698,9 @@ define(["require", "exports"], function (require, exports) {
         MAX DEPTH 3 LEVELS
     */
     var V;
-    function F() { }
-    ;
+    function F() { };
     var C = /** @class */ (function () {
-        function C() {
-        }
+        function C() {}
         C.prototype.pF = function () { };
         C.prototype.rF = function () { };
         C.prototype.pgF = function () { };
@@ -748,11 +745,9 @@ define(["require", "exports"], function (require, exports) {
     var M;
     (function (M_1) {
         var V;
-        function F() { }
-        ;
+        function F() { };
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             C.prototype.pF = function () { };
             C.prototype.rF = function () { };
             C.prototype.pgF = function () { };
@@ -797,11 +792,9 @@ define(["require", "exports"], function (require, exports) {
         var M;
         (function (M) {
             var V;
-            function F() { }
-            ;
+            function F() { };
             var C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             ;
@@ -811,8 +804,7 @@ define(["require", "exports"], function (require, exports) {
             M.eF = eF;
             ;
             var eC = /** @class */ (function () {
-                function eC() {
-                }
+                function eC() {}
                 return eC;
             }());
             M.eC = eC;
@@ -827,8 +819,7 @@ define(["require", "exports"], function (require, exports) {
         M_1.eF = eF;
         ;
         var eC = /** @class */ (function () {
-            function eC() {
-            }
+            function eC() {}
             eC.prototype.pF = function () { };
             eC.prototype.rF = function () { };
             eC.prototype.pgF = function () { };
@@ -874,11 +865,9 @@ define(["require", "exports"], function (require, exports) {
         var eM;
         (function (eM) {
             var V;
-            function F() { }
-            ;
+            function F() { };
             var C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             ;
@@ -888,8 +877,7 @@ define(["require", "exports"], function (require, exports) {
             eM.eF = eF;
             ;
             var eC = /** @class */ (function () {
-                function eC() {
-                }
+                function eC() {}
                 return eC;
             }());
             eM.eC = eC;
@@ -906,8 +894,7 @@ define(["require", "exports"], function (require, exports) {
     exports.eF = eF;
     ;
     var eC = /** @class */ (function () {
-        function eC() {
-        }
+        function eC() {}
         eC.prototype.pF = function () { };
         eC.prototype.rF = function () { };
         eC.prototype.pgF = function () { };
@@ -953,11 +940,9 @@ define(["require", "exports"], function (require, exports) {
     var eM;
     (function (eM_1) {
         var V;
-        function F() { }
-        ;
+        function F() { };
         var C = /** @class */ (function () {
-            function C() {
-            }
+            function C() {}
             C.prototype.pF = function () { };
             C.prototype.rF = function () { };
             C.prototype.pgF = function () { };
@@ -1002,11 +987,9 @@ define(["require", "exports"], function (require, exports) {
         var M;
         (function (M) {
             var V;
-            function F() { }
-            ;
+            function F() { };
             var C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             ;
@@ -1016,8 +999,7 @@ define(["require", "exports"], function (require, exports) {
             M.eF = eF;
             ;
             var eC = /** @class */ (function () {
-                function eC() {
-                }
+                function eC() {}
                 return eC;
             }());
             M.eC = eC;
@@ -1032,8 +1014,7 @@ define(["require", "exports"], function (require, exports) {
         eM_1.eF = eF;
         ;
         var eC = /** @class */ (function () {
-            function eC() {
-            }
+            function eC() {}
             eC.prototype.pF = function () { };
             eC.prototype.rF = function () { };
             eC.prototype.pgF = function () { };
@@ -1079,11 +1060,9 @@ define(["require", "exports"], function (require, exports) {
         var eM;
         (function (eM) {
             var V;
-            function F() { }
-            ;
+            function F() { };
             var C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             ;
@@ -1093,8 +1072,7 @@ define(["require", "exports"], function (require, exports) {
             eM.eF = eF;
             ;
             var eC = /** @class */ (function () {
-                function eC() {
-                }
+                function eC() {}
                 return eC;
             }());
             eM.eC = eC;

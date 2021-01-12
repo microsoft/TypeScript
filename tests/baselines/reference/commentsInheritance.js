@@ -172,11 +172,20 @@ var c1 = /** @class */ (function () {
     // i1_f1
     c1.prototype.i1_f1 = function () {
     };
+
+
     c1.prototype.i1_nc_f1 = function () {
     };
+
+
+
     /** c1_f1*/
     c1.prototype.f1 = function () {
     };
+
+
+
+
     /** c1_nc_f1*/
     c1.prototype.nc_f1 = function () {
     };

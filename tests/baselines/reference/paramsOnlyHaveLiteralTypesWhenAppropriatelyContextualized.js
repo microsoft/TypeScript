@@ -32,12 +32,15 @@ appendToOptionalArray(foo, 'x', "no");  // should fail
 "use strict";
 exports.__esModule = true;
 exports.appendToOptionalArray = void 0;
-function appendToOptionalArray(object, key, value) {
+function appendToOptionalArray(
+object,
+    key,
+    value
+) {
     var array = object[key];
     if (array) {
         array.push(value);
-    }
-    else {
+    } else {
         object[key] = [value];
     }
 }

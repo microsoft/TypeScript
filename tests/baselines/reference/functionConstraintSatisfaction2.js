@@ -42,17 +42,21 @@ function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 
 //// [functionConstraintSatisfaction2.js]
 // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
+
 function foo(x) { return x; }
 foo(1);
 foo(function () { }, 1);
 foo(1, function () { });
+
 function foo2(x) { return x; }
+
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var b;
+
 var C2 = /** @class */ (function () {
     function C2() {
     }

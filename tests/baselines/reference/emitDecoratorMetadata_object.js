@@ -21,8 +21,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var A = /** @class */ (function () {
-    function A(hi) {
-    }
+    function A(hi) {}
     A.prototype.method = function (there) { };
     __decorate([
         MyMethodDecorator,

@@ -20,9 +20,7 @@ var X;
     X.MyPromise = MyPromise;
 })(X || (X = {}));
 function f() {
-    return __awaiter(this, void 0, X.MyPromise, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/];
+    return __awaiter(this, void 0, X.MyPromise, function () {return __generator(this, function (_a) {return [2 /*return*/];
         });
     });
 }

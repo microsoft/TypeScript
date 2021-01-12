@@ -30,13 +30,17 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+
 function foo(_a, _b) {
     var foo = _b.foo, bar = _b.bar;
 }
+
 function baz(_a, _b) {
     var foo = _b.foo, bar = _b.bar;
 }
+
 function one(_a, _b) { }
+
 function two(_a, _b) {
     var _c = __read(_b, 3), a = _c[0], b = _c[1], c = _c[2];
 }

@@ -11,8 +11,7 @@ module M {
 
 //// [aliasInaccessibleModule2.js]
 var M;
-(function (M) {
-    var N;
+(function (M) {var N;
     (function (N) {
         var C = /** @class */ (function () {
             function C() {

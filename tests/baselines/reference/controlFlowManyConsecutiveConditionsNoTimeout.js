@@ -203,6 +203,7 @@ if (choice === choiceOne) { }
 if (choice === choiceOne) { }
 if (choice === choiceOne) { }
 if (choice === choiceOne) { }
+
 while (true) {
     if (choice === choiceOne) { }
     if (choice === choiceOne) { }

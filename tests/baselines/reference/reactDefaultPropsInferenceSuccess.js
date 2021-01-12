@@ -91,6 +91,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
+
+
 var FieldFeedback = /** @class */ (function (_super) {
     __extends(FieldFeedback, _super);
     function FieldFeedback() {
@@ -106,6 +108,7 @@ var FieldFeedback = /** @class */ (function (_super) {
 }(react_1["default"].Component));
 // OK
 var Test1 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return !!value; } }); };
+
 // Error: Void not assignable to boolean
 var Test2 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return console.log(value); } }); };
 var FieldFeedbackBeta = /** @class */ (function (_super) {
@@ -123,8 +126,10 @@ var FieldFeedbackBeta = /** @class */ (function (_super) {
 }(react_1["default"].Component));
 // OK
 var Test1a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return !!value; }, error: true }, "Hah"); };
+
 // Error: Void not assignable to boolean
 var Test2a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return console.log(value); }, error: true }, "Hah"); };
+
 var FieldFeedback2 = /** @class */ (function (_super) {
     __extends(FieldFeedback2, _super);
     function FieldFeedback2() {
@@ -141,7 +146,9 @@ var FieldFeedback2 = /** @class */ (function (_super) {
 }(FieldFeedback));
 // OK
 var Test3 = function () { return react_1["default"].createElement(FieldFeedback2, { when: function (value) { return !!value; } }); };
+
 // Error: Void not assignable to boolean
 var Test4 = function () { return react_1["default"].createElement(FieldFeedback2, { when: function (value) { return console.log(value); } }); };
+
 // OK
 var Test5 = function () { return react_1["default"].createElement(FieldFeedback2, null); };

@@ -48,8 +48,7 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function () {
-    function B(x) {
-    }
+    function B(x) {}
     B = __decorate([
         dec,
         __metadata("design:paramtypes", [Number])

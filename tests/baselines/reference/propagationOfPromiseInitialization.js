@@ -15,6 +15,7 @@ foo.then((x) => {
 
 
 //// [propagationOfPromiseInitialization.js]
+
 var foo;
 foo.then(function (x) {
     // x is inferred to be a number

@@ -17,16 +17,13 @@ module X.Y.base.Z {
 
 //// [declarationEmitNameConflicts2.js]
 var X;
-(function (X) {
-    var Y;
-    (function (Y) {
-        var base;
+(function (X) {var Y;
+    (function (Y) {var base;
         (function (base) {
             function f() { }
             base.f = f;
             var C = /** @class */ (function () {
-                function C() {
-                }
+                function C() {}
                 return C;
             }());
             base.C = C;
@@ -34,17 +31,13 @@ var X;
             (function (M) {
             })(M = base.M || (base.M = {}));
             var E;
-            (function (E) {
-            })(E = base.E || (base.E = {}));
+            (function (E) {})(E = base.E || (base.E = {}));
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
-(function (X) {
-    var Y;
-    (function (Y) {
-        var base;
-        (function (base) {
-            var Z;
+(function (X) {var Y;
+    (function (Y) {var base;
+        (function (base) {var Z;
             (function (Z) {
                 Z.f = X.Y.base.f; // Should be base.f
                 Z.C = X.Y.base.C; // Should be base.C

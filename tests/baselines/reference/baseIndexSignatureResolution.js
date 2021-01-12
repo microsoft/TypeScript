@@ -39,10 +39,8 @@ var __extends = (this && this.__extends) || (function () {
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-})();
-var Base = /** @class */ (function () {
-    function Base() {
-    }
+})();var Base = /** @class */ (function () {
+    function Base() {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
@@ -54,6 +52,7 @@ var Derived = /** @class */ (function (_super) {
 }(Base));
 var x = null;
 var y = x[0];
+
 /*
 // Note - the equivalent for normal interface methods works fine:
 interface A {

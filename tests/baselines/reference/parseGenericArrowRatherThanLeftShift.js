@@ -7,5 +7,6 @@ const b = foo<<T>(x: T) => number>(() => 1);
 
 
 //// [parseGenericArrowRatherThanLeftShift.js]
+
 function foo(_x) { }
 var b = foo(function () { return 1; });

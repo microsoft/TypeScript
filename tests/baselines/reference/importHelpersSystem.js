@@ -19,15 +19,12 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [a.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var A;
+    "use strict";var A;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            A = /** @class */ (function () {
-                function A() {
-                }
+            A = /** @class */ (function () {function A() {}
                 return A;
             }());
             exports_1("A", A);
@@ -36,26 +33,21 @@ System.register([], function (exports_1, context_1) {
 });
 //// [b.js]
 System.register(["tslib", "./a"], function (exports_1, context_1) {
-    "use strict";
-    var tslib_1, a_1, B;
+    "use strict";var tslib_1, a_1, B;
     var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "B": true
     };
-    function exportStar_1(m) {
-        var exports = {};
-        for (var n in m) {
-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+    function exportStar_1(m) {var exports = {};
+        for (var n in m) {if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
         exports_1(exports);
     }
     return {
         setters: [
-            function (tslib_1_1) {
-                tslib_1 = tslib_1_1;
+            function (tslib_1_1) {tslib_1 = tslib_1_1;
             },
-            function (a_1_1) {
-                a_1 = a_1_1;
+            function (a_1_1) {a_1 = a_1_1;
                 exportStar_1(a_1_1);
             }
         ],

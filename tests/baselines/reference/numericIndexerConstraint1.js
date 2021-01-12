@@ -6,8 +6,7 @@ var result: Foo = x["one"]; // error
 
 //// [numericIndexerConstraint1.js]
 var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+    function Foo() {}
     Foo.prototype.foo = function () { };
     return Foo;
 }());

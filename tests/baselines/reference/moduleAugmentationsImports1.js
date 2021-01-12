@@ -43,37 +43,32 @@ let c = a.getCls().y.toLowerCase();
 
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.A = void 0;
     var A = /** @class */ (function () {
-        function A() {
-        }
+        function A() {}
         return A;
     }());
     exports.A = A;
 });
 define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     exports.B = void 0;
     var B = /** @class */ (function () {
-        function B() {
-        }
+        function B() {}
         return B;
     }());
     exports.B = B;
 });
 /// <reference path="c.d.ts"/>
 define("d", ["require", "exports", "a"], function (require, exports, a_1) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     a_1.A.prototype.getB = function () { return undefined; };
     a_1.A.prototype.getCls = function () { return undefined; };
+
 });
 define("main", ["require", "exports", "d"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
+    "use strict";exports.__esModule = true;
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();

@@ -14,12 +14,13 @@ try {
 result // should not error here
 
 //// [flowAfterFinally1.js]
+
 var result;
 openFile();
 try {
     result = someOperation();
-}
-finally {
+} finally {
     closeFile();
 }
+
 result; // should not error here

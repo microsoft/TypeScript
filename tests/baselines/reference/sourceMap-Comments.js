@@ -22,8 +22,7 @@ module sas.tools {
 
 //// [sourceMap-Comments.js]
 var sas;
-(function (sas) {
-    var tools;
+(function (sas) {var tools;
     (function (tools) {
         var Test = /** @class */ (function () {
             function Test() {

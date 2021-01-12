@@ -76,26 +76,21 @@ System.register([], function (exports_1, context_1) {
             } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
             if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
         }
-    };
-    var __moduleName = context_1 && context_1.id;
+    };var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
             // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
-            (function () { return __awaiter(void 0, void 0, void 0, function () {
-                var response, blob, size, image;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, fetch(new URL("../hamsters.jpg", context_1.meta.url).toString())];
-                        case 1:
-                            response = _a.sent();
+            (function () { return __awaiter(void 0, void 0, void 0, function () {var response, blob, size, image;
+                return __generator(this, function (_a) {switch (_a.label) {case 0: return [4 /*yield*/, fetch(new URL("../hamsters.jpg", context_1.meta.url).toString())];
+                        case 1:response = _a.sent();
                             return [4 /*yield*/, response.blob()];
-                        case 2:
-                            blob = _a.sent();
+                        case 2:blob = _a.sent();
                             size = context_1.meta.scriptElement.dataset.size || 300;
                             image = new Image();
                             image.src = URL.createObjectURL(blob);
                             image.width = image.height = size;
+
                             document.body.appendChild(image);
                             return [2 /*return*/];
                     }
@@ -106,8 +101,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [moduleLookingFile01.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var x, y, z;
+    "use strict";var x, y, z;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -120,8 +114,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [scriptLookingFile01.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var globalA, globalB, globalC;
+    "use strict";var globalA, globalB, globalC;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -134,8 +127,7 @@ System.register([], function (exports_1, context_1) {
 });
 //// [assignmentTargets.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
-    var foo, _a, a, b, c;
+    "use strict";var foo, _a, a, b, c;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

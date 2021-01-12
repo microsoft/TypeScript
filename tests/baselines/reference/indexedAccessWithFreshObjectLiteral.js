@@ -63,6 +63,7 @@ function foo(id) {
         c: true
     }[id];
 }
+
 function bar(id) {
     return {
         a: 1,
@@ -70,6 +71,7 @@ function bar(id) {
         c: false
     }[id];
 }
+
 function baz(id) {
     return {
         1: 1,
@@ -77,6 +79,7 @@ function baz(id) {
         3: false
     }[id];
 }
+
 function qux(id) {
     return {
         1: 1,
@@ -84,6 +87,7 @@ function qux(id) {
         3: false
     }[id];
 }
+
 function quux(id) {
     return {
         a: 1,
@@ -91,12 +95,14 @@ function quux(id) {
         c: false
     }[id];
 }
+
 function corge(id) {
     return {
         a: 123,
         b: ""
     }[id];
 }
+
 function grault(id) {
     return {
         a: 123,

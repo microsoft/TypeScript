@@ -201,11 +201,12 @@ var _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, 
 function x(o, k) { }
 let i = 0;
 function foo() { return ++i + ""; }
+
 const fieldNameA = "fieldName1";
 const fieldNameB = "fieldName2";
 const fieldNameC = "fieldName3";
-class A {
-    constructor() {
+
+class A {constructor() {
         this["property2"] = 2;
         this[Symbol.iterator] = null;
         this["property4"] = 2;
@@ -239,8 +240,7 @@ __decorate([
 __decorate([
     x
 ], A.prototype, _h, void 0);
-void (_a = class B {
-        constructor() {
+void (_a = class B {constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
@@ -255,8 +255,8 @@ void (_a = class B {
     _l = fieldNameB,
     _m = fieldNameC,
     _a);
-class C {
-    constructor() {
+
+class C {constructor() {
         this["property2"] = 2;
         this[Symbol.iterator] = null;
         this["property4"] = 2;
@@ -290,8 +290,7 @@ __decorate([
 __decorate([
     x
 ], C.prototype, _r, void 0);
-void class D {
-    constructor() {
+void class D {constructor() {
         this["property2"] = 2;
         this[Symbol.iterator] = null;
         this["property4"] = 2;
@@ -301,8 +300,8 @@ void class D {
     }
     [(foo(), _s = foo(), _t = foo(), _u = fieldNameB, _v = fieldNameC, "some" + "method")]() { }
 };
-class E {
-    constructor() {
+
+class E {constructor() {
         this["property2"] = 2;
         this[Symbol.iterator] = null;
         this["property4"] = 2;
@@ -337,8 +336,7 @@ __decorate([
 __decorate([
     x
 ], E.prototype, _z, void 0);
-void (_b = class F {
-        constructor() {
+void (_b = class F {constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
@@ -351,8 +349,8 @@ void (_b = class F {
     _2 = fieldNameB,
     _3 = fieldNameC,
     _b);
-class G {
-    constructor() {
+
+class G {constructor() {
         this["property2"] = 2;
         this[Symbol.iterator] = null;
         this["property4"] = 2;
@@ -361,6 +359,8 @@ class G {
         this[_7] = null;
     }
     [(foo(), _4 = foo(), _5 = foo(), "some" + "method")]() { }
+
+
     [(_6 = fieldNameB, "some" + "method2")]() { }
 }
 _7 = fieldNameC;
@@ -388,8 +388,7 @@ __decorate([
 __decorate([
     x
 ], G.prototype, _7, void 0);
-void (_c = class H {
-        constructor() {
+void (_c = class H {constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
@@ -398,12 +397,14 @@ void (_c = class H {
             this[_11] = null;
         }
         [(foo(), _8 = foo(), _9 = foo(), "some" + "method")]() { }
+
+
         [(_10 = fieldNameB, "some" + "method2")]() { }
     },
     _11 = fieldNameC,
     _c);
-class I {
-    constructor() {
+
+class I {constructor() {
         this["property2"] = 2;
         this[Symbol.iterator] = null;
         this["property4"] = 2;
@@ -412,6 +413,8 @@ class I {
         this[_16] = null;
     }
     [(foo(), _12 = foo(), _13 = foo(), _14 = "some" + "method")]() { }
+
+
     [(_15 = fieldNameB, "some" + "method2")]() { }
 }
 _16 = fieldNameC;
@@ -442,8 +445,7 @@ __decorate([
 __decorate([
     x
 ], I.prototype, _16, void 0);
-void (_d = class J {
-        constructor() {
+void (_d = class J {constructor() {
             this["property2"] = 2;
             this[Symbol.iterator] = null;
             this["property4"] = 2;
@@ -452,6 +454,8 @@ void (_d = class J {
             this[_21] = null;
         }
         [(foo(), _17 = foo(), _18 = foo(), _19 = "some" + "method")]() { }
+
+
         [(_20 = fieldNameB, "some" + "method2")]() { }
     },
     _21 = fieldNameC,

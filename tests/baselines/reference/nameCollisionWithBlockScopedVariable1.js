@@ -12,8 +12,7 @@ module M {
 //// [nameCollisionWithBlockScopedVariable1.js]
 var M;
 (function (M) {
-    class C {
-    }
+    class C {}
     M.C = C;
 })(M || (M = {}));
 (function (M_1) {

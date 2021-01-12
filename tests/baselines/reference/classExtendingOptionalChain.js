@@ -29,8 +29,7 @@ var __extends = (this && this.__extends) || (function () {
 var A;
 (function (A) {
     var B = /** @class */ (function () {
-        function B() {
-        }
+        function B() {}
         return B;
     }());
     A.B = B;
@@ -45,7 +44,6 @@ var C1 = /** @class */ (function (_super) {
 }((A === null || A === void 0 ? void 0 : A.B)));
 // error
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     return C2;
 }());

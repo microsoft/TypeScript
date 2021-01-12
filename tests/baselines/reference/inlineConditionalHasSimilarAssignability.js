@@ -17,6 +17,7 @@ function foo<T>(a: T) {
 }
 
 //// [inlineConditionalHasSimilarAssignability.js]
+
 function foo(a) {
     var b = 0;
     a = b; // ok

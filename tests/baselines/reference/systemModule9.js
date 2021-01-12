@@ -22,41 +22,31 @@ export {y as z};
 
 //// [systemModule9.js]
 System.register(["file1", "file2", "file3", "file4", "file5", "file6", "file7"], function (exports_1, context_1) {
-    "use strict";
-    var ns, file2_1, file3_1, file5_1, ns3, x, y;
+    "use strict";var ns, file2_1, file3_1, file5_1, ns3, x, y;
     var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "x": true,
         "z": true
     };
-    function exportStar_1(m) {
-        var exports = {};
-        for (var n in m) {
-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
+    function exportStar_1(m) {var exports = {};
+        for (var n in m) {if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
         exports_1(exports);
     }
     return {
         setters: [
-            function (ns_1) {
-                ns = ns_1;
+            function (ns_1) {ns = ns_1;
             },
-            function (file2_1_1) {
-                file2_1 = file2_1_1;
+            function (file2_1_1) {file2_1 = file2_1_1;
             },
-            function (file3_1_1) {
-                file3_1 = file3_1_1;
+            function (file3_1_1) {file3_1 = file3_1_1;
             },
-            function (_1) {
+            function (_1) {},
+            function (file5_1_1) {file5_1 = file5_1_1;
             },
-            function (file5_1_1) {
-                file5_1 = file5_1_1;
+            function (ns3_1) {ns3 = ns3_1;
             },
-            function (ns3_1) {
-                ns3 = ns3_1;
-            },
-            function (file7_1_1) {
-                exportStar_1(file7_1_1);
+            function (file7_1_1) {exportStar_1(file7_1_1);
             }
         ],
         execute: function () {

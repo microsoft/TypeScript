@@ -79,6 +79,8 @@ a.doThing().then((result: Bar | Baz) => {
 
 //// [unionOfClassCalls.js]
 "use strict";
+
+
 switch (tmp.get('t')) {
     case 'A': break;
     case 'B': break;
@@ -87,34 +89,45 @@ switch (tmp.get('t')) {
 var arr = []; // Works with Array<number | string>
 var arr1 = [];
 var arr2 = [];
+
 arr.map(function (a, index) {
     return index;
 });
+
 // This case still doesn't work because `reduce` has multiple overloads :(
 arr.reduce(function (acc, a, index) {
     return [];
 }, []);
+
 arr.forEach(function (a, index) {
     return index;
 });
+
 arr1.map(function (a, index) {
     return index;
 });
+
 arr1.reduce(function (acc, a, index) {
     return [a];
 }, []);
+
 arr1.forEach(function (a, index) {
     return index;
 });
 arr2.map(function (a, index) {
     return index;
 });
+
 arr2.reduce(function (acc, a, index) {
     return [];
 }, []);
+
 arr2.forEach(function (a, index) {
     return index;
 });
+
+
+
 // note, you must annotate `result` for now
 a.doThing().then(function (result) {
     // whatever

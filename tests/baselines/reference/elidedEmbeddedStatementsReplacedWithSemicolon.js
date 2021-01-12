@@ -27,15 +27,20 @@ with (window)
 //// [elidedEmbeddedStatementsReplacedWithSemicolon.js]
 if (1)
     ;
+
 else
     ;
+
 do
     ;
 while (0);
+
 while (0)
     ;
+
 for (; 0;)
     ;
+
 for (var _ in [])
     ;
 for (var _i = 0, _a = []; _i < _a.length; _i++) {

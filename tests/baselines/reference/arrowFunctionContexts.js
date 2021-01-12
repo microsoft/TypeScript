@@ -116,10 +116,10 @@ var _this = this;
 with (window) {
     var p = function () { return _this; };
 }
+
 // Arrow function as argument to super call
 var Base = /** @class */ (function () {
-    function Base(n) {
-    }
+    function Base(n) {}
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {
@@ -132,15 +132,16 @@ var Derived = /** @class */ (function (_super) {
 }(Base));
 // Arrow function as function argument
 window.setTimeout(function () { return null; }, 100);
+
 // Arrow function as value in array literal
 var obj = function (n) { return ''; };
 var obj; // OK
+
 var arr = [function (n) { return ''; }];
 var arr; // Incorrect error here (bug 829597)
 // Arrow function as enum value
 var E;
-(function (E) {
-    var _this = this;
+(function (E) {var _this = this;
     E[E["x"] = function () { return 4; }] = "x";
     E[E["y"] = (function () { return _this; }).length] = "y"; // error, can't use this in enum
 })(E || (E = {}));
@@ -152,16 +153,15 @@ var M;
 })(M || (M = {}));
 // Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
-(function (M2) {
-    var _this = this;
+(function (M2) {var _this = this;
     // Arrow function used in with statement
     with (window) {
         var p = function () { return _this; };
     }
+
     // Arrow function as argument to super call
     var Base = /** @class */ (function () {
-        function Base(n) {
-        }
+        function Base(n) {}
         return Base;
     }());
     var Derived = /** @class */ (function (_super) {
@@ -174,15 +174,16 @@ var M2;
     }(Base));
     // Arrow function as function argument
     window.setTimeout(function () { return null; }, 100);
+
     // Arrow function as value in array literal
     var obj = function (n) { return ''; };
     var obj; // OK
+
     var arr = [function (n) { return ''; }];
     var arr; // Incorrect error here (bug 829597)
     // Arrow function as enum value
     var E;
-    (function (E) {
-        var _this = this;
+    (function (E) {var _this = this;
         E[E["x"] = function () { return 4; }] = "x";
         E[E["y"] = (function () { return _this; }).length] = "y";
     })(E || (E = {}));
@@ -198,8 +199,10 @@ var generic1 = function (n) { return [n]; };
 var generic1; // Incorrect error, Bug 829597
 var generic2 = function (n) { return [n]; };
 var generic2;
+
 // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 var asserted1 = (function (n) { return [n]; });
 var asserted1;
 var asserted2 = (function (n) { return n; });
 var asserted2;
+

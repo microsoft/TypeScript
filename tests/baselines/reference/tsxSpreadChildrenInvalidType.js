@@ -44,6 +44,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
 function Todo(prop) {
     return React.createElement("div", null, prop.key.toString() + prop.todo);
 }

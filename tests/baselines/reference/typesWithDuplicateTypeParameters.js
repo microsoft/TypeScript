@@ -10,14 +10,13 @@ function f2<T, U, T>() { }
 
 //// [typesWithDuplicateTypeParameters.js]
 var C = /** @class */ (function () {
-    function C() {
-    }
+    function C() {}
     return C;
 }());
 var C2 = /** @class */ (function () {
-    function C2() {
-    }
+    function C2() {}
     return C2;
 }());
+
 function f() { }
 function f2() { }

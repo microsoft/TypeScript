@@ -17,8 +17,6 @@ var A = /** @class */ (function () {
     return A;
 }());
 var B = /** @class */ (function () {
-    function B() {
-        _this = _super.call(this, function (value) { return String(value); }) || this;
-    }
+    function B() {_this = _super.call(this, function (value) { return String(value); }) || this;}
     return B;
 }());

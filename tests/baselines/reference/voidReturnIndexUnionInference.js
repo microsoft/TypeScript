@@ -29,15 +29,18 @@ function bad<P extends Props>(props: Readonly<P>) {
 exports.__esModule = true;
 exports.safeInvoke = void 0;
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
-function safeInvoke(func, arg1) {
+function safeInvoke(
+func,
+    arg1
+) {
     if (func) {
         return func(arg1);
-    }
-    else {
+    } else {
         return undefined;
     }
 }
 exports.safeInvoke = safeInvoke;
+
 function bad(props) {
     safeInvoke(props.onFoo, "blah");
     // ERROR HERE!!!
