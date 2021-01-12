@@ -162,11 +162,11 @@ function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
 
 function intersection2<T>(thing: T & (0 | 1 | 2)) {
 >intersection2 : <T>(thing: T & (0 | 1 | 2)) => void
->thing : (T & 0) | (T & 1) | (T & 2)
+>thing : T & (0 | 1 | 2)
 
   "key" in thing; // Error (because all possible instantations are errors)
 >"key" in thing : boolean
 >"key" : "key"
->thing : (T & 0) | (T & 1) | (T & 2)
+>thing : T & (0 | 1 | 2)
 }
 
