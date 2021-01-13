@@ -203,7 +203,7 @@ namespace ts.refactor.extractSymbol {
         IsGenerator = 1 << 1,
         IsAsyncFunction = 1 << 2,
         UsesThis = 1 << 3,
-        IsThisReferringToFunction = 1 << 4,
+        UsesThisInFunction = 1 << 4,
         /**
          * The range is in a function which needs the 'static' modifier in a class
          */
@@ -440,7 +440,7 @@ namespace ts.refactor.extractSymbol {
                     (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
                     container.kind === SyntaxKind.FunctionExpression
                 ) {
-                    rangeFacts |= RangeFacts.IsThisReferringToFunction;
+                    rangeFacts |= RangeFacts.UsesThisInFunction;
                 }
             }
 
@@ -628,7 +628,7 @@ namespace ts.refactor.extractSymbol {
     function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
         if (range.facts & RangeFacts.UsesThis) {
-            if (range.facts & RangeFacts.IsThisReferringToFunction) {
+            if (range.facts & RangeFacts.UsesThisInFunction) {
                 // fall through
             }
             else {
@@ -886,7 +886,7 @@ namespace ts.refactor.extractSymbol {
 
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
-        const callThis = !!(range.facts & RangeFacts.IsThisReferringToFunction);
+        const callThis = !!(range.facts & RangeFacts.UsesThisInFunction);
 
         if (isClassLike(scope)) {
             // always create private method in TypeScript files
@@ -1719,7 +1719,7 @@ namespace ts.refactor.extractSymbol {
                 constantErrorsPerScope[i].push(createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes));
             }
 
-            if (targetRange.facts & RangeFacts.IsThisReferringToFunction && isClassLike(scopes[i])) {
+            if (targetRange.facts & RangeFacts.UsesThisInFunction && isClassLike(scopes[i])) {
                 functionErrorsPerScope[i].push(createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod));
             }
 
