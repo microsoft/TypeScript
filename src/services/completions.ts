@@ -1514,11 +1514,7 @@ namespace ts.Completions {
                     }
 
                     // Filter out variables from their own initializers
-                    // e.g.
-                    // 1. `const o = { prop: /* no 'o' here */ }`
-                    // 2. `const a = /* no 'a' here */`
-                    // 3. `const b = a && /* no 'b' here */`
-                    // 4. `const c = [{ prop: [/* no 'c' here */] }]`
+                    // `const a = /* no 'a' here */`
                     if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
                         return false;
                     }
@@ -1542,24 +1538,17 @@ namespace ts.Completions {
         }
 
         function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
-
-            const isArrowFunctionBody = (node: Node) => {
-                return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
-            };
-
-            const variableDeclaration = findAncestor(property, (node) => {
-                if (isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)) {
-                    return "quit";
-                }
-
-                if (isVariableDeclaration(node)) {
-                    return true;
-                }
-                return false;
-            });
+            const variableDeclaration = findAncestor(property, node =>
+                isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+                    ? "quit"
+                    : isVariableDeclaration(node));
 
             return variableDeclaration as VariableDeclaration;
         }
+
+        function isArrowFunctionBody(node: Node) {
+            return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+        };
 
         function isTypeOnlyCompletion(): boolean {
             return insideJsDocTagTypeExpression
