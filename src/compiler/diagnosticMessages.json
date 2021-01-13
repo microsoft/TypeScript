@@ -3813,6 +3813,10 @@
         "category": "Error",
         "code": 5090
     },
+    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 5091
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

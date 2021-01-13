@@ -3157,6 +3157,10 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
                 }
 
+                if (options.preserveConstEnums === false) {
+                    createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_isolatedModules_is_enabled, "preserveConstEnums", "isolatedModules");
+                }
+
                 const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);

@@ -6001,6 +6001,10 @@ namespace ts {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
+    export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
+        return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    }
+
     export function isIncrementalCompilation(options: CompilerOptions) {
         return !!(options.incremental || options.composite);
     }

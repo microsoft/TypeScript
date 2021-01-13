@@ -2395,7 +2395,7 @@ namespace ts {
                 }
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
-                    if (compilerOptions.preserveConstEnums) {
+                    if (shouldPreserveConstEnums(compilerOptions)) {
                         diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                     }
                 }
@@ -23215,7 +23215,13 @@ namespace ts {
             if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
                 const target = resolveAlias(symbol);
                 if (target.flags & SymbolFlags.Value) {
-                    if (compilerOptions.preserveConstEnums && isExportOrExportExpression(location) || !isConstEnumOrConstEnumOnlyModule(target)) {
+                    // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
+                    // (because the const enum value will not be inlined), or if (2) the alias is an export
+                    // of a const enum declaration that will be preserved.
+                    if (compilerOptions.isolatedModules ||
+                        shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
+                        !isConstEnumOrConstEnumOnlyModule(target)
+                    ) {
                         markAliasSymbolAsReferenced(symbol);
                     }
                     else {
@@ -26271,7 +26277,11 @@ namespace ts {
                 }
                 prop = getPropertyOfType(apparentType, right.escapedText);
             }
-            if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
+            // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
+            // The exceptions are:
+            //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
+            //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
+            if (isIdentifier(left) && parentSymbol && (compilerOptions.isolatedModules || !(prop && isConstEnumOrConstEnumOnlyModule(prop)) || shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node))) {
                 markAliasReferenced(parentSymbol, node);
             }
 
@@ -36648,7 +36658,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.ValueModule
                     && !inAmbientContext
                     && symbol.declarations.length > 1
-                    && isInstantiatedModule(node, !!compilerOptions.preserveConstEnums || !!compilerOptions.isolatedModules)) {
+                    && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))) {
                     const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (firstNonAmbientClassOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
@@ -38571,7 +38581,7 @@ namespace ts {
             // const enums and modules that contain only const enums are not considered values from the emit perspective
             // unless 'preserveConstEnums' option is set to true
             return !!(target.flags & SymbolFlags.Value) &&
-                (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(target));
+                (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target));
         }
 
         function isConstEnumOrConstEnumOnlyModule(s: Symbol): boolean {
@@ -38581,13 +38591,14 @@ namespace ts {
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
-                if (symbol && getSymbolLinks(symbol).referenced) {
+                const links = symbol && getSymbolLinks(symbol);
+                if (links?.referenced) {
                     return true;
                 }
                 const target = getSymbolLinks(symbol!).target; // TODO: GH#18217
                 if (target && getEffectiveModifierFlags(node) & ModifierFlags.Export &&
                     target.flags & SymbolFlags.Value &&
-                    (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(target))) {
+                    (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target))) {
                     // An `export import ... =` of a value symbol is always considered referenced
                     return true;
                 }
