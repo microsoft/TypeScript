@@ -105,7 +105,7 @@ type TT3 = TupleOf<number, any>;
 >TT3 : number[]
 
 type TT4 = TupleOf<number, 100>;  // Depth error
->TT4 : any
+>TT4 : [any, ...any[]]
 
 function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
 >f22 : <N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) => void
