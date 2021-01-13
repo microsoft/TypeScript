@@ -1143,7 +1143,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
+                tracing?.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
                 throw new OperationCanceledException();
             }
         }
@@ -1174,7 +1174,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
+                tracing?.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
                 throw new OperationCanceledException();
             }
         }
