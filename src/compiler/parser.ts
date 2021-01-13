@@ -578,7 +578,8 @@ namespace ts {
     export function forEachChildRecursively<T, S>(rootNode: Node, cbNode: (node: Node, parent: Node, state: S | undefined) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node, state: S | undefined) => T | "skip" | undefined, state?: S): T | undefined {
         const queue: (Node | NodeArray<Node>)[] = [];
         const parents: Node[] = []; // tracks parent references for elements in queue
-        forEachChild(rootNode, addWorkItem, addWorkItem, queue);
+        // if there's no cbNodes, we don't need to handle NodeArray and let forEachChild flatten them
+        forEachChild(rootNode, addWorkItem, cbNodes && addWorkItem, queue);
         while (parents.length < queue.length) {
             parents.push(rootNode);
         }
@@ -586,12 +587,10 @@ namespace ts {
             const current = queue.pop()!;
             const parent = parents.pop()!;
             if (isArray(current)) {
-                if (cbNodes) {
-                    const res = cbNodes(current, parent, state);
-                    if (res) {
-                        if (res === "skip") continue;
-                        return res;
-                    }
+                const res = cbNodes!(current, parent, state);
+                if (res) {
+                    if (res === "skip") continue;
+                    return res;
                 }
                 for (let i = current.length - 1; i >= 0; --i) {
                     queue.push(current[i]);
@@ -606,7 +605,7 @@ namespace ts {
                 }
                 if (current.kind >= SyntaxKind.FirstNode) {
                     const children: (Node | NodeArray<Node>)[] = [];
-                    forEachChild(current, addWorkItem, addWorkItem, children);
+                    forEachChild(current, addWorkItem, cbNodes && addWorkItem, children);
                     // add children in reverse order to the queue, so popping gives the first child
                     for (const child of children) {
                         queue.push(child);
