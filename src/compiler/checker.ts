@@ -22950,7 +22950,13 @@ namespace ts {
             if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
                 const target = resolveAlias(symbol);
                 if (target.flags & SymbolFlags.Value) {
-                    if (shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) || !isConstEnumOrConstEnumOnlyModule(target)) {
+                    // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
+                    // (because the const enum value will not be inlined), or if (2) the alias is an export
+                    // of a const enum declaration that will be preserved.
+                    if (compilerOptions.isolatedModules ||
+                        shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
+                        !isConstEnumOrConstEnumOnlyModule(target)
+                    ) {
                         markAliasSymbolAsReferenced(symbol);
                     }
                     else {
@@ -26009,7 +26015,9 @@ namespace ts {
                 }
                 prop = getPropertyOfType(apparentType, right.escapedText);
             }
-            if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
+            // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
+            // The exception is if 'isolatedModules' is enabled, because the const enum value will not be inlined.
+            if (isIdentifier(left) && parentSymbol && (compilerOptions.isolatedModules || !(prop && isConstEnumOrConstEnumOnlyModule(prop)))) {
                 markAliasReferenced(parentSymbol, node);
             }
 
@@ -38264,7 +38272,7 @@ namespace ts {
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
                 const links = symbol && getSymbolLinks(symbol);
-                if (links?.referenced || (compilerOptions.isolatedModules && links?.constEnumReferenced)) {
+                if (links?.referenced) {
                     return true;
                 }
                 const target = getSymbolLinks(symbol!).target; // TODO: GH#18217
