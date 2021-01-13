@@ -12,17 +12,17 @@ const markers = test.markers();
 verify.getInlineHints([
     {
         text: '= 0',
-        position: markers[0].position,
+        rangeOrPosition: markers[0].position,
         whitespaceBefore: true
     },
     {
         text: '= 1',
-        position: markers[1].position,
+        rangeOrPosition: markers[1].position,
         whitespaceBefore: true
     },
     {
         text: '= 11',
-        position: markers[2].position,
+        rangeOrPosition: markers[2].position,
         whitespaceBefore: true
     },
 ], undefined, {

@@ -22,7 +22,7 @@ verify.getInlineHints(
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'].map(mark => {
         return {
             text: `${mark}:`,
-            position: test.markerByName(mark).position,
+            rangeOrPosition: test.markerByName(mark).position,
             whitespaceAfter: true
         }
     }), span, {

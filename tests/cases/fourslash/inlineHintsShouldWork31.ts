@@ -10,7 +10,7 @@ const markers = test.markers();
 verify.getInlineHints([
     {
         text: ':{ a: number; b: string; }',
-        position: markers[0].position,
+        rangeOrPosition: markers[0].position,
         whitespaceBefore: true
     }
 ], undefined, {

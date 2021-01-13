@@ -9,22 +9,22 @@ const markers = test.markers();
 verify.getInlineHints([
     {
         text: 'a:',
-        position: markers[0].position,
+        rangeOrPosition: markers[0].position,
         whitespaceAfter: true
     },
     {
         text: ':(c: (d: 2 | 3) => void) => ...',
-        position: markers[1].position,
+        rangeOrPosition: markers[1].position,
         whitespaceBefore: true
     },
     {
         text: 'c:',
-        position: markers[2].position,
+        rangeOrPosition: markers[2].position,
         whitespaceAfter: true
     },
     {
         text: ':2 | 3',
-        position: markers[3].position,
+        rangeOrPosition: markers[3].position,
         whitespaceBefore: true
     }
 ], undefined, {

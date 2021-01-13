@@ -7,7 +7,7 @@ const markers = test.markers();
 verify.getInlineHints([
     {
         text: 'Im_very_very_very_very_very...:',
-        position: markers[0].position,
+        rangeOrPosition: markers[0].position,
         whitespaceAfter: true
     }
 ], undefined, {

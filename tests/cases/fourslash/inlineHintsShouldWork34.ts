@@ -21,7 +21,7 @@ const markers = test.markers();
 verify.getInlineHints(
     markers.map(m => ({
         text: 'v:',
-        position: m.position,
+        rangeOrPosition: m.position,
         whitespaceAfter: true
     })) , undefined, {
     includeInlineParameterNameHints: true,

@@ -827,10 +827,29 @@ namespace FourSlash {
         public verifyInlineHints(expected: readonly FourSlashInterface.VerifyInlineHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlineHintsOptions) {
             const hints = this.languageService.provideInlineHints(this.activeFile.fileName, span, preference);
             assert.equal(hints.length, expected.length, "Number of hints");
-            const sortHints = (a: ts.InlineHint, b: ts.InlineHint) => a.position - b.position;
-            ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
+            const normalizeVerifyInlineHintsOptions = (rangeOrPosition: FourSlashInterface.VerifyInlineHintsOptions["rangeOrPosition"]) => {
+                if (typeof rangeOrPosition === "number") {
+                    return { start: rangeOrPosition, length: 0 };
+                }
+                return rangeOrPosition;
+            };
+            const compareTextSpan = (spanA: ts.TextSpan, spanB: ts.TextSpan) => {
+                if (spanA.start !== spanB.start) {
+                    return spanA.start - spanB.start;
+                }
+                return spanA.length - spanB.length;
+            };
+            const compareHintOptions = (a: FourSlashInterface.VerifyInlineHintsOptions, b: FourSlashInterface.VerifyInlineHintsOptions) => {
+                const spanA = normalizeVerifyInlineHintsOptions(a.rangeOrPosition);
+                const spanB = normalizeVerifyInlineHintsOptions(b.rangeOrPosition);
+                return compareTextSpan(spanA, spanB);
+            };
+            const sortHints = (a: ts.InlineHint, b: ts.InlineHint) => {
+                return compareTextSpan(a.range, b.range);
+            };
+            ts.zipWith(hints.sort(sortHints), [...expected].sort(compareHintOptions), (actual, expected) => {
                 assert.equal(actual.text, expected.text, "Text");
-                assert.equal(actual.position, expected.position, "Position");
+                assert.deepEqual(actual.range, normalizeVerifyInlineHintsOptions(expected.rangeOrPosition), "RangeOrPosition");
                 assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
                 assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
             });

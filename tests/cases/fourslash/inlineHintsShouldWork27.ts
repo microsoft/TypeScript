@@ -9,12 +9,12 @@ const markers = test.markers();
 verify.getInlineHints([
     {
         text: ':(c: (d: 2 | 3) => void) => ...',
-        position: markers[0].position,
+        rangeOrPosition: markers[0].position,
         whitespaceBefore: true
     },
     {
         text: ':2 | 3',
-        position: markers[1].position,
+        rangeOrPosition: markers[1].position,
         whitespaceBefore: true
     }
 ], undefined, {

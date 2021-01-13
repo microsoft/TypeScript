@@ -702,7 +702,7 @@ namespace ts {
 
     export interface InlineHint {
         text: string;
-        position: number;
+        range: TextSpan;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

@@ -641,6 +641,13 @@ namespace ts.server {
             return location;
         }
 
+        textSpanToProtoTextSpan(range: TextSpan): protocol.TextSpan {
+            return {
+                start: this.positionToLineOffset(range.start),
+                end: this.positionToLineOffset(range.start + range.length)
+            };
+        }
+
         public isJavaScript() {
             return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
         }

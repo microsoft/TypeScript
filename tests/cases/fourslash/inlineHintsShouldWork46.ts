@@ -14,7 +14,7 @@ const markers = test.markers();
 verify.getInlineHints([
     {
         text: ':typeof import("/a")',
-        position: markers[0].position,
+        rangeOrPosition: markers[0].position,
         whitespaceBefore: true
     }
 ], undefined, {
