@@ -1,9 +1,9 @@
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(12,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(22,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(32,15): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(41,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(53,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(62,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(45,15): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(54,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(66,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(75,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts (6 errors) ====
@@ -35,6 +35,19 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
             super(x);
             this.x2 = x;
+        }
+    }
+    
+    class DerivedComments extends Object {
+        x: any;
+        constructor() {
+            // c1
+            console.log();
+            // c2
+            super();
+            // c3
+            this.x = null;
+            // c4
         }
     }
     

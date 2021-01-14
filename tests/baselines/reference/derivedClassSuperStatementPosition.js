@@ -26,6 +26,19 @@ class DerivedAfterRestParameter extends Object {
     }
 }
 
+class DerivedComments extends Object {
+    x: any;
+    constructor() {
+        // c1
+        console.log();
+        // c2
+        super();
+        // c3
+        this.x = null;
+        // c4
+    }
+}
+
 class DerivedInConditional extends Object {
     prop = 1;
     constructor() {
@@ -119,6 +132,22 @@ var DerivedAfterRestParameter = /** @class */ (function (_super) {
         return _this;
     }
     return DerivedAfterRestParameter;
+}(Object));
+var DerivedComments = /** @class */ (function (_super) {
+    __extends(DerivedComments, _super);
+    function DerivedComments() {
+        var _this = this;
+        // c1
+        console.log();
+        _this = 
+        // c2
+        _super.call(this) || this;
+        // c3
+        _this.x = null;
+        return _this;
+        // c4
+    }
+    return DerivedComments;
 }(Object));
 var DerivedInConditional = /** @class */ (function (_super) {
     __extends(DerivedInConditional, _super);

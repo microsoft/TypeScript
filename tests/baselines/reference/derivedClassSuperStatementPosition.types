@@ -83,6 +83,38 @@ class DerivedAfterRestParameter extends Object {
     }
 }
 
+class DerivedComments extends Object {
+>DerivedComments : DerivedComments
+>Object : Object
+
+    x: any;
+>x : any
+
+    constructor() {
+        // c1
+        console.log();
+>console.log() : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+        // c2
+        super();
+>super() : void
+>super : ObjectConstructor
+
+        // c3
+        this.x = null;
+>this.x = null : null
+>this.x : any
+>this : this
+>x : any
+>null : null
+
+        // c4
+    }
+}
+
 class DerivedInConditional extends Object {
 >DerivedInConditional : DerivedInConditional
 >Object : Object
