@@ -1,27 +1,33 @@
 /// <reference path="fourslash.ts" />
 
 //// const z = [1, 2, 3];
-//// z
-////     .map(function (e) { return String(e) })/*a*/
-////     .map(function (e) { return Number(e) })/*b*/
-////     .map(function (e) { return String(e) })/*c*/
+//// /*a*/z
+////     .map(function (e) { return String(e) })/*b*/
+////     .map(function (e) { return Number(e) })/*c*/
+////     .map(function (e) { return String(e) })/*d*/
 ////     .map(function (e) { return Number(e) });
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: ':string[]',
-        rangeOrPosition: markers[0].position,
-        whitespaceBefore: true
-    },
-    {
-        text: ':number[]',
+        text: 'string[]',
+        triggerPosition: markers[0].position,
         rangeOrPosition: markers[1].position,
+        prefix: ':',
         whitespaceBefore: true
     },
     {
-        text: ':string[]',
+        text: 'number[]',
+        triggerPosition: markers[0].position,
         rangeOrPosition: markers[2].position,
+        prefix: ':',
+        whitespaceBefore: true
+    },
+    {
+        text: 'string[]',
+        triggerPosition: markers[0].position,
+        rangeOrPosition: markers[3].position,
+        prefix: ':',
         whitespaceBefore: true
     }
 ], undefined, {

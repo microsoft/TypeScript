@@ -703,6 +703,9 @@ namespace ts {
     export interface InlineHint {
         text: string;
         range: TextSpan;
+        triggerPosition: number;
+        prefix?: string;
+        postfix?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

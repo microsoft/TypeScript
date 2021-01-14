@@ -21,8 +21,10 @@ const span = { start: start.position, length: end.position - start.position };
 verify.getInlineHints(
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'].map(mark => {
         return {
-            text: `${mark}:`,
+            text: mark,
+            triggerPosition: test.markerByName(mark).position,
             rangeOrPosition: test.markerByName(mark).position,
+            postfix: ':',
             whitespaceAfter: true
         }
     }), span, {

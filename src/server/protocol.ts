@@ -2493,6 +2493,9 @@ namespace ts.server.protocol {
     export interface HintItem {
         text: string;
         range: TextSpan;
+        triggerPosition: Location;
+        prefix?: string;
+        postfix?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

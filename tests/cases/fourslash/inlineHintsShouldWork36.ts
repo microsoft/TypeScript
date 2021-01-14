@@ -7,13 +7,17 @@
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: 'a:',
+        text: 'a',
+        triggerPosition: markers[0].position,
         rangeOrPosition: markers[0].position,
+        postfix: ':',
         whitespaceAfter: true
     },
     {
-        text: 'b:',
+        text: 'b',
+        triggerPosition: markers[1].position,
         rangeOrPosition: markers[1].position,
+        postfix: ':',
         whitespaceAfter: true
     },
 ], undefined, {

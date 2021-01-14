@@ -3,6 +3,9 @@ namespace ts.InlineHints {
     interface HintInfo {
         text: string;
         range: TextSpan;
+        triggerPosition: number;
+        prefix?: string;
+        postfix?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -80,26 +83,32 @@ namespace ts.InlineHints {
             return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node);
         }
 
-        function addNameHints(text: string, range: TextSpan) {
+        function addNameHints(node: Node, text: string, range: TextSpan) {
             result.push({
-                text: `${truncation(text, maxHintsLength)}:`,
+                text: truncation(text, maxHintsLength),
                 range,
+                triggerPosition: node.getStart(),
+                postfix: ":",
                 whitespaceAfter: true,
             });
         }
 
-        function addTypeHints(text: string, range: TextSpan) {
+        function addTypeHints(node: Node, text: string, range: TextSpan) {
             result.push({
-                text: `:${truncation(text, maxHintsLength)}`,
+                text: truncation(text, maxHintsLength),
                 range,
+                triggerPosition: node.getStart(),
+                prefix: ":",
                 whitespaceBefore: true,
             });
         }
 
-        function addEnumMemberValueHints(text: string, range: TextSpan) {
+        function addEnumMemberValueHints(node: Node, text: string, range: TextSpan) {
             result.push({
-                text: `= ${truncation(text, maxHintsLength)}`,
+                text: truncation(text, maxHintsLength),
                 range,
+                triggerPosition: node.getStart(),
+                prefix: "= ",
                 whitespaceBefore: true,
             });
         }
@@ -121,7 +130,7 @@ namespace ts.InlineHints {
                 return;
             }
 
-            addTypeHints(typeDisplayString, makeEmptyRange(call.end));
+            addTypeHints(call, typeDisplayString, makeEmptyRange(call.end));
         }
 
         function shouldCallExpressionHint(call: CallExpression) {
@@ -151,7 +160,7 @@ namespace ts.InlineHints {
 
             const enumValue = checker.getConstantValue(member);
             if (enumValue !== undefined) {
-                addEnumMemberValueHints(enumValue.toString(), makeEmptyRange(member.end));
+                addEnumMemberValueHints(member, enumValue.toString(), makeEmptyRange(member.end));
             }
         }
 
@@ -167,7 +176,7 @@ namespace ts.InlineHints {
 
             const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
-                addTypeHints(typeDisplayString, makeEmptyRange(decl.name.end));
+                addTypeHints(decl.name, typeDisplayString, makeEmptyRange(decl.name.end));
             }
         }
 
@@ -191,7 +200,7 @@ namespace ts.InlineHints {
                 const parameterName = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (parameterName) {
                     if (preferences.includeInlineDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName) {
-                        addNameHints(unescapeLeadingUnderscores(parameterName), makeEmptyRange(expr.arguments[i].getStart()));
+                        addNameHints(arg, unescapeLeadingUnderscores(parameterName), makeEmptyRange(expr.arguments[i].getStart()));
                     }
                 }
             }
@@ -219,7 +228,7 @@ namespace ts.InlineHints {
                 return;
             }
 
-            addTypeHints(typeDisplayString, makeEmptyRange(getTypeAnnotationPosition(decl)));
+            addTypeHints(decl, typeDisplayString, makeEmptyRange(getTypeAnnotationPosition(decl)));
         }
 
         function getTypeAnnotationPosition(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
@@ -257,7 +266,7 @@ namespace ts.InlineHints {
                     continue;
                 }
 
-                addTypeHints(typeDisplayString, makeEmptyRange(param.end));
+                addTypeHints(param, typeDisplayString, makeEmptyRange(param.end));
             }
         }
 

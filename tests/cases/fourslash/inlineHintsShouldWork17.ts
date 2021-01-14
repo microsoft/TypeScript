@@ -1,12 +1,14 @@
 /// <reference path="fourslash.ts" />
 
-//// const a/*a*/ = { a: 123 };
+//// const /*a*/a/*b*/ = { a: 123 };
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: ':{ a: number; }',
-        rangeOrPosition: markers[0].position,
+        text: '{ a: number; }',
+        triggerPosition: markers[0].position,
+        rangeOrPosition: markers[1].position,
+        prefix: ':',
         whitespaceBefore: true
     },
 ], undefined, {

@@ -644,7 +644,12 @@ namespace ts.server {
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 text: item.text,
-                range: this.decodeSpan(item.range, file)
+                range: this.decodeSpan(item.range, file),
+                triggerPosition: this.lineOffsetToPosition(file, item.triggerPosition),
+                prefix: item.prefix,
+                postfix: item.postfix,
+                whitespaceBefore: item.whitespaceBefore,
+                whitespaceAfter: item.whitespaceAfter
             }));
         }
 

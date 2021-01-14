@@ -1,13 +1,15 @@
 /// <reference path="fourslash.ts" />
 
 //// function f<T>(v: T, a: (v: T) => void) {}
-//// f(1, a/*a*/ => { })
+//// f(1, /*a*/a/*b*/ => { })
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: ':number',
-        rangeOrPosition: markers[0].position,
+        text: 'number',
+        triggerPosition: markers[0].position,
+        rangeOrPosition: markers[1].position,
+        prefix: ':',
         whitespaceBefore: true
     }
 ], undefined, {
