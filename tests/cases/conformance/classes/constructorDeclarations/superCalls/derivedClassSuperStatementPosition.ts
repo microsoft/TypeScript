@@ -7,6 +7,26 @@ class DerivedBasic extends Object {
     }
 }
 
+class DerivedAfterParameterDefault extends Object {
+    x1: boolean;
+    x2: boolean;
+    constructor(x = false) {
+        this.x1 = x;
+        super(x);
+        this.x2 = x;
+    }
+}
+
+class DerivedAfterRestParameter extends Object {
+    x1: boolean[];
+    x2: boolean[];
+    constructor(...x: boolean[]) {
+        this.x1 = x;
+        super(x);
+        this.x2 = x;
+    }
+}
+
 class DerivedInConditional extends Object {
     prop = 1;
     constructor() {

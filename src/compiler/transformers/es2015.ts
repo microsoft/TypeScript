@@ -991,8 +991,6 @@ namespace ts {
             // The assumption is that no prior step in the pipeline has added any prologue directives.
             let statementOffset = postSuperStatementsStart;
             if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, statementOffset, /*ensureUseStrict*/ false);
-            addDefaultValueAssignmentsIfNeeded(statements, constructor);
-            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
             // If there already exists a call to `super()`, visit the statement directly
@@ -1007,6 +1005,10 @@ namespace ts {
             if (superCallExpression) {
                 hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
             }
+
+            // Add parameter defaults at the beginning of the output, with prologue statements
+            addDefaultValueAssignmentsIfNeeded(prologue, constructor);
+            addRestParameterIfNeeded(prologue, constructor, hasSynthesizedSuper);
 
             // visit the remaining statements
             addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));

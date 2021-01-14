@@ -14,6 +14,75 @@ class DerivedBasic extends Object {
     }
 }
 
+class DerivedAfterParameterDefault extends Object {
+>DerivedAfterParameterDefault : DerivedAfterParameterDefault
+>Object : Object
+
+    x1: boolean;
+>x1 : boolean
+
+    x2: boolean;
+>x2 : boolean
+
+    constructor(x = false) {
+>x : boolean
+>false : false
+
+        this.x1 = x;
+>this.x1 = x : boolean
+>this.x1 : boolean
+>this : this
+>x1 : boolean
+>x : boolean
+
+        super(x);
+>super(x) : void
+>super : ObjectConstructor
+>x : boolean
+
+        this.x2 = x;
+>this.x2 = x : boolean
+>this.x2 : boolean
+>this : this
+>x2 : boolean
+>x : boolean
+    }
+}
+
+class DerivedAfterRestParameter extends Object {
+>DerivedAfterRestParameter : DerivedAfterRestParameter
+>Object : Object
+
+    x1: boolean[];
+>x1 : boolean[]
+
+    x2: boolean[];
+>x2 : boolean[]
+
+    constructor(...x: boolean[]) {
+>x : boolean[]
+
+        this.x1 = x;
+>this.x1 = x : boolean[]
+>this.x1 : boolean[]
+>this : this
+>x1 : boolean[]
+>x : boolean[]
+
+        super(x);
+>super(x) : void
+>super : ObjectConstructor
+>x : boolean[]
+
+        this.x2 = x;
+>this.x2 = x : boolean[]
+>this.x2 : boolean[]
+>this : this
+>x2 : boolean[]
+>x : boolean[]
+    }
+}
+
 class DerivedInConditional extends Object {
 >DerivedInConditional : DerivedInConditional
 >Object : Object

@@ -6,6 +6,26 @@ class DerivedBasic extends Object {
     }
 }
 
+class DerivedAfterParameterDefault extends Object {
+    x1: boolean;
+    x2: boolean;
+    constructor(x = false) {
+        this.x1 = x;
+        super(x);
+        this.x2 = x;
+    }
+}
+
+class DerivedAfterRestParameter extends Object {
+    x1: boolean[];
+    x2: boolean[];
+    constructor(...x: boolean[]) {
+        this.x1 = x;
+        super(x);
+        this.x2 = x;
+    }
+}
+
 class DerivedInConditional extends Object {
     prop = 1;
     constructor() {
@@ -72,6 +92,33 @@ var DerivedBasic = /** @class */ (function (_super) {
         return _this;
     }
     return DerivedBasic;
+}(Object));
+var DerivedAfterParameterDefault = /** @class */ (function (_super) {
+    __extends(DerivedAfterParameterDefault, _super);
+    function DerivedAfterParameterDefault(x) {
+        if (x === void 0) { x = false; }
+        var _this = this;
+        _this.x1 = x;
+        _this = _super.call(this, x) || this;
+        _this.x2 = x;
+        return _this;
+    }
+    return DerivedAfterParameterDefault;
+}(Object));
+var DerivedAfterRestParameter = /** @class */ (function (_super) {
+    __extends(DerivedAfterRestParameter, _super);
+    function DerivedAfterRestParameter() {
+        var x = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            x[_i] = arguments[_i];
+        }
+        var _this = this;
+        _this.x1 = x;
+        _this = _super.call(this, x) || this;
+        _this.x2 = x;
+        return _this;
+    }
+    return DerivedAfterRestParameter;
 }(Object));
 var DerivedInConditional = /** @class */ (function (_super) {
     __extends(DerivedInConditional, _super);
