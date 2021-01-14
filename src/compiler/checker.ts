@@ -13255,54 +13255,40 @@ namespace ts {
             return includes;
         }
 
-        function isSetOfLiteralsFromSameEnum(types: readonly Type[]): boolean {
-            const first = types[0];
-            if (first.flags & TypeFlags.EnumLiteral) {
-                const firstEnum = getParentOfSymbol(first.symbol);
-                for (let i = 1; i < types.length; i++) {
-                    const other = types[i];
-                    if (!(other.flags & TypeFlags.EnumLiteral) || (firstEnum !== getParentOfSymbol(other.symbol))) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        function removeSubtypes(types: Type[], primitivesOnly: boolean): boolean {
-            const len = types.length;
-            if (len === 0 || isSetOfLiteralsFromSameEnum(types)) {
-                return true;
-            }
+        function removeSubtypes(types: Type[]): boolean {
+            // We assume that redundant primitive types have already been removed from the types array and that there
+            // are no any and unknown types in the array. Thus, the only possible supertypes for primitive types are empty
+            // object types, and if none of those are present we can exclude primitive types from the subtype check.
+            const hasEmptyObject = some(types, t => !!(t.flags & TypeFlags.Object) && !isGenericMappedType(t) && isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>t)));
+            let len = types.length;
             let i = len;
             let count = 0;
             while (i > 0) {
                 i--;
                 const source = types[i];
-                for (const target of types) {
-                    if (source !== target) {
-                        if (count === 100000) {
-                            // After 100000 subtype checks we estimate the remaining amount of work by assuming the
-                            // same ratio of checks per element. If the estimated number of remaining type checks is
-                            // greater than an upper limit we deem the union type too complex to represent. The
-                            // upper limit is 25M for unions of primitives only, and 1M otherwise. This for example
-                            // caps union types at 5000 unique literal types and 1000 unique object types.
-                            const estimatedCount = (count / (len - i)) * len;
-                            if (estimatedCount > (primitivesOnly ? 25000000 : 1000000)) {
-                                tracing.instant(tracing.Phase.CheckTypes, "removeSubtypes_DepthLimit", { typeIds: types.map(t => t.id) });
-                                error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
-                                return false;
+                if (hasEmptyObject || source.flags & TypeFlags.StructuredOrInstantiable) {
+                    for (const target of types) {
+                        if (source !== target) {
+                            if (count === 100000) {
+                                // After 100000 subtype checks we estimate the remaining amount of work by assuming the
+                                // same ratio of checks per element. If the estimated number of remaining type checks is
+                                // greater than 1M we deem the union type too complex to represent. This for example
+                                // caps union types at 1000 unique object types.
+                                const estimatedCount = (count / (len - i)) * len;
+                                if (estimatedCount > 1000000) {
+                                    tracing.instant(tracing.Phase.CheckTypes, "removeSubtypes_DepthLimit", { typeIds: types.map(t => t.id) });
+                                    error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                                    return false;
+                                }
                             }
-                        }
-                        count++;
-                        if (isTypeRelatedTo(source, target, strictSubtypeRelation) && (
-                            !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
-                            !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
-                            isTypeDerivedFrom(source, target))) {
-                            orderedRemoveItemAt(types, i);
-                            break;
+                            count++;
+                            if (isTypeRelatedTo(source, target, strictSubtypeRelation) && (
+                                !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
+                                !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
+                                isTypeDerivedFrom(source, target))) {
+                                orderedRemoveItemAt(types, i);
+                                break;
+                            }
                         }
                     }
                 }
@@ -13315,11 +13301,13 @@ namespace ts {
             while (i > 0) {
                 i--;
                 const t = types[i];
+                const flags = t.flags;
                 const remove =
-                    t.flags & TypeFlags.StringLikeLiteral && includes & TypeFlags.String ||
-                    t.flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
-                    t.flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
-                    t.flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
+                    flags & TypeFlags.StringLikeLiteral && includes & TypeFlags.String ||
+                    flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
+                    flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
+                    flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
+                    flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
                     isFreshLiteralType(t) && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -13385,20 +13373,18 @@ namespace ts {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
                 }
-                switch (unionReduction) {
-                    case UnionReduction.Literal:
-                        if (includes & (TypeFlags.FreshableLiteral | TypeFlags.UniqueESSymbol)) {
-                            removeRedundantLiteralTypes(typeSet, includes);
-                        }
-                        if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
-                            removeStringLiteralsMatchedByTemplateLiterals(typeSet);
-                        }
-                        break;
-                    case UnionReduction.Subtype:
-                        if (!removeSubtypes(typeSet, !(includes & TypeFlags.IncludesStructuredOrInstantiable))) {
-                            return errorType;
-                        }
-                        break;
+                if (unionReduction & (UnionReduction.Literal | UnionReduction.Subtype)) {
+                    if (includes & (TypeFlags.FreshableLiteral | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
+                        removeRedundantLiteralTypes(typeSet, includes);
+                    }
+                    if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
+                        removeStringLiteralsMatchedByTemplateLiterals(typeSet);
+                    }
+                }
+                if (unionReduction & UnionReduction.Subtype) {
+                    if (!removeSubtypes(typeSet)) {
+                        return errorType;
+                    }
                 }
                 if (typeSet.length === 0) {
                     return includes & TypeFlags.Null ? includes & TypeFlags.IncludesNonWideningType ? nullType : nullWideningType :
