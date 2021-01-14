@@ -13,5 +13,3 @@ verify.currentFileContentIs(
     a: 1,
     b: 2
 })`);
-
-// verify.formatDocumentChangesNothing();
