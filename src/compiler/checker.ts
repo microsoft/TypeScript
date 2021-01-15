@@ -13255,12 +13255,12 @@ namespace ts {
             return includes;
         }
 
-        function removeSubtypes(types: Type[]): boolean {
+        function removeSubtypes(types: Type[], hasObjectTypes: boolean): boolean {
             // We assume that redundant primitive types have already been removed from the types array and that there
             // are no any and unknown types in the array. Thus, the only possible supertypes for primitive types are empty
             // object types, and if none of those are present we can exclude primitive types from the subtype check.
-            const hasEmptyObject = some(types, t => !!(t.flags & TypeFlags.Object) && !isGenericMappedType(t) && isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>t)));
-            let len = types.length;
+            const hasEmptyObject = hasObjectTypes && some(types, t => !!(t.flags & TypeFlags.Object) && !isGenericMappedType(t) && isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>t)));
+            const len = types.length;
             let i = len;
             let count = 0;
             while (i > 0) {
@@ -13382,7 +13382,7 @@ namespace ts {
                     }
                 }
                 if (unionReduction & UnionReduction.Subtype) {
-                    if (!removeSubtypes(typeSet)) {
+                    if (!removeSubtypes(typeSet, !!(includes & TypeFlags.Object))) {
                         return errorType;
                     }
                 }
