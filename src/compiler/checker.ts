@@ -12325,6 +12325,10 @@ namespace ts {
             return result;
         }
 
+        function getAliasId(aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
+            return aliasSymbol ? `@${getSymbolId(aliasSymbol)}` + (aliasTypeArguments ? `:${getTypeListId(aliasTypeArguments)}` : "") : "";
+        }
+
         // This function is used to propagate certain flags when creating new object type references and union types.
         // It is only necessary to do so if a constituent type might be the undefined type, the null type, the type
         // of an object literal or the anyFunctionType. This is because there are operations in the type checker
@@ -12453,7 +12457,7 @@ namespace ts {
             }
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters!;
-            const id = getTypeListId(typeArguments) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+            const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
             let instantiation = links.instantiations!.get(id);
             if (!instantiation) {
                 links.instantiations!.set(id, instantiation = instantiateTypeWithAlias(type,
@@ -13487,7 +13491,7 @@ namespace ts {
                 origin.flags & TypeFlags.Union ? `|${getTypeListId((<UnionType>origin).types)}` :
                 origin.flags & TypeFlags.Intersection ? `&${getTypeListId((<IntersectionType>origin).types)}` :
                 `#${(<IndexType>origin).type.id}`;
-            const id = typeKey + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+            const id = typeKey + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = unionTypes.get(id);
             if (!type) {
                 type = createUnionType(types, aliasSymbol, aliasTypeArguments, origin);
@@ -13724,7 +13728,7 @@ namespace ts {
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
-            const id = getTypeListId(typeSet) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+            const id = getTypeListId(typeSet) + getAliasId(aliasSymbol, aliasTypeArguments);
             let result = intersectionTypes.get(id);
             if (!result) {
                 if (includes & TypeFlags.Union) {
@@ -14486,7 +14490,7 @@ namespace ts {
                     return objectType;
                 }
                 // Defer the operation by creating an indexed access type.
-                const id = objectType.id + "," + indexType.id + (shouldIncludeUndefined ? "?" : "") + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+                const id = objectType.id + "," + indexType.id + (shouldIncludeUndefined ? "?" : "") + getAliasId(aliasSymbol, aliasTypeArguments);
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
                     indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, aliasSymbol, aliasTypeArguments, shouldIncludeUndefined));
@@ -15481,15 +15485,15 @@ namespace ts {
                 const combinedMapper = combineTypeMappers(type.mapper, mapper);
                 const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
-                const id = getTypeListId(typeArguments) + (newAliasSymbol ? `@${getSymbolId(newAliasSymbol)}` : "");
+                const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
+                const id = getTypeListId(typeArguments) + getAliasId(newAliasSymbol, newAliasTypeArguments);
                 if (!target.instantiations) {
                     target.instantiations = new Map<string, Type>();
-                    target.instantiations.set(getTypeListId(typeParameters) + (target.aliasSymbol ? `@${getSymbolId(target.aliasSymbol)}` : ""), target);
+                    target.instantiations.set(getTypeListId(typeParameters) + getAliasId(target.aliasSymbol, target.aliasTypeArguments), target);
                 }
                 let result = target.instantiations.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
                     result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((<DeferredTypeReference>type).target, (<DeferredTypeReference>type).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
                         target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper, newAliasSymbol, newAliasTypeArguments) :
                         instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
@@ -15657,7 +15661,7 @@ namespace ts {
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
                 const typeArguments = map(root.outerTypeParameters, t => getMappedType(t, mapper));
-                const id = getTypeListId(typeArguments) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+                const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
                 let result = root.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
