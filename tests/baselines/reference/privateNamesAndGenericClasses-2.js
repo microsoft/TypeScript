@@ -42,12 +42,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _foo;
+var _foo, _bar;
 class C {
     constructor(t) {
         _foo.set(this, void 0);
         __classPrivateFieldSet(this, _foo, t);
-        t = this..call(this);
+        t = __classPrivateFieldGet(this, _bar).call(this);
     }
     () {
         return __classPrivateFieldGet(this, _foo);
@@ -59,7 +59,7 @@ class C {
         return __classPrivateFieldGet(this, _foo);
     }
 }
-_foo = new WeakMap();
+_foo = new WeakMap(), _bar = new WeakMap();
 let a = new C(3);
 let b = new C("hello");
 a.baz = 5; // OK

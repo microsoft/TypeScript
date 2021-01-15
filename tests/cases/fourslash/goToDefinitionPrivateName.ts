@@ -1,12 +1,15 @@
 /// <reference path='fourslash.ts' />
 
 //// class A {
-////     [|/*pnDecl*/#foo|] = 3;
+////     [|/*pnMethodDecl*/#method|]() { }
+////     [|/*pnFieldDecl*/#foo|] = 3;
 ////     constructor() {
-////         this.[|/*pnUse*/#foo|]
+////         this.[|/*pnFieldUse*/#foo|]
+////         this.[|/*pnMethodUse*/#method|]
 ////     }
 //// }
 
 verify.goToDefinition({
-    pnUse: "pnDecl",
+    pnFieldUse: "pnFieldDecl",
+    pnMethodUse: "pnMethodDecl"
 });

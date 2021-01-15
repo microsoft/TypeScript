@@ -32,8 +32,8 @@ var A = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    var _field, _sField;
-    _field = new WeakMap(), _sField = new WeakMap();
+    var _field, _method, _sField, _sMethod, _acc, _acc_1, _sAcc, _sAcc_1;
+    _field = new WeakMap(), _method = new WeakMap(), _sField = new WeakMap(), _sMethod = new WeakMap(), _acc = new WeakMap(), _acc_1 = new WeakMap(), _sAcc = new WeakMap(), _sAcc_1 = new WeakMap();
     _sField.set(A, "hello world");
     return A;
 }());
