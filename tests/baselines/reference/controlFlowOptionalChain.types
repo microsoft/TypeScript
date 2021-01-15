@@ -595,7 +595,7 @@ function f01(x: unknown) {
 >true : true
 
         maybeIsString?.(x);
->maybeIsString?.(x) : void | undefined
+>maybeIsString?.(x) : void
 >maybeIsString : ((value: unknown) => asserts value is string) | undefined
 >x : unknown
 

@@ -18,6 +18,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(148,9): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(153,9): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(208,9): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(211,9): error TS2532: Object is possibly 'undefined'.
@@ -62,7 +63,7 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(518,13): error T
 tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (62 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (63 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;
@@ -251,6 +252,8 @@ tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error T
         }
         if (!!true) {
             maybeIsString?.(x);
+            ~~~~~~~~~~~~~
+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
             x;
         }
         if (!!true) {

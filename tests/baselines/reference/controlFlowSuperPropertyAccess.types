@@ -13,7 +13,7 @@ class C extends B {
 >body : () => void
 
         super.m && super.m();
->super.m && super.m() : void | undefined
+>super.m && super.m() : void
 >super.m : (() => void) | undefined
 >super : B
 >m : (() => void) | undefined
