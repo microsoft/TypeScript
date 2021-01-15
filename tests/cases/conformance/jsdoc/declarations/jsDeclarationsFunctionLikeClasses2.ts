@@ -52,7 +52,7 @@ export function Point2D(x, y) {
 }
 
 Point2D.prototype = {
-    __proto__: Vec,
+    __proto__: Vec.prototype,
     get x() {
         return this.storage[0];
     },
@@ -78,4 +78,4 @@ Point2D.prototype = {
 import {Point2D} from "./source";
 
 export const origin = new Point2D(0, 0);
-// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+export const res = Point2D(2, 3).dot(origin);

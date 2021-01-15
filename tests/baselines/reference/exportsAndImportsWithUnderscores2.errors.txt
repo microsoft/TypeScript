@@ -1,0 +1,16 @@
+tests/cases/conformance/es6/modules/m2.ts(2,21): error TS2339: Property '__proto__' does not exist on type '{ __esmodule: boolean; }'.
+
+
+==== tests/cases/conformance/es6/modules/m1.ts (0 errors) ====
+    var R: any
+    export default R = {
+        "__esmodule": true,
+        "__proto__": {}
+    }
+    
+==== tests/cases/conformance/es6/modules/m2.ts (1 errors) ====
+    import R from "./m1";
+    const { __esmodule, __proto__ } = R;
+                        ~~~~~~~~~
+!!! error TS2339: Property '__proto__' does not exist on type '{ __esmodule: boolean; }'.
+    

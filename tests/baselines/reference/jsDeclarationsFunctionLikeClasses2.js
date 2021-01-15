@@ -48,7 +48,7 @@ export function Point2D(x, y) {
 }
 
 Point2D.prototype = {
-    __proto__: Vec,
+    __proto__: Vec.prototype,
     get x() {
         return this.storage[0];
     },
@@ -73,7 +73,7 @@ Point2D.prototype = {
 import {Point2D} from "./source";
 
 export const origin = new Point2D(0, 0);
-// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+export const res = Point2D(2, 3).dot(origin);
 
 
 //// [source.js]
@@ -126,7 +126,7 @@ function Point2D(x, y) {
 }
 exports.Point2D = Point2D;
 Point2D.prototype = {
-    __proto__: Vec,
+    __proto__: Vec.prototype,
     get x() {
         return this.storage[0];
     },
@@ -149,10 +149,10 @@ Point2D.prototype = {
 //// [referencer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.origin = void 0;
+exports.res = exports.origin = void 0;
 var source_1 = require("./source");
 exports.origin = new source_1.Point2D(0, 0);
-// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+exports.res = source_1.Point2D(2, 3).dot(exports.origin);
 
 
 //// [source.d.ts]
@@ -196,8 +196,15 @@ export class Point2D {
      */
     set y(arg: number);
     get y(): number;
-    __proto__: typeof Vec;
+    __proto__: {
+        /**
+         * @param {Vec} other
+         */
+        dot(other: Vec): number;
+        magnitude(): number;
+    };
 }
 //// [referencer.d.ts]
 export const origin: Point2D;
+export const res: any;
 import { Point2D } from "./source";

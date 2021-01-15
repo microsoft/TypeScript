@@ -1,0 +1,86 @@
+=== tests/cases/compiler/__proto__literal.ts ===
+const o = { a: 1 }
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+>a : Symbol(a, Decl(__proto__literal.ts, 0, 11))
+
+const __proto__ = o
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 1, 5))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+// Should
+const x1 = { __proto__: o }
+>x1 : Symbol(x1, Decl(__proto__literal.ts, 3, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 3, 12))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+const x2 = { __proto_\u005f: o }
+>x2 : Symbol(x2, Decl(__proto__literal.ts, 4, 5))
+>__proto_\u005f : Symbol(__proto_\u005f, Decl(__proto__literal.ts, 4, 12))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+const x3 = { "__proto__": o }
+>x3 : Symbol(x3, Decl(__proto__literal.ts, 5, 5))
+>"__proto__" : Symbol("__proto__", Decl(__proto__literal.ts, 5, 12))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+const x4 = { "__proto_\u005f": o }
+>x4 : Symbol(x4, Decl(__proto__literal.ts, 6, 5))
+>"__proto_\u005f" : Symbol("__proto_\u005f", Decl(__proto__literal.ts, 6, 12))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+// Duplicate
+const y1 = { __proto__: o, __proto_\u005f: o }
+>y1 : Symbol(y1, Decl(__proto__literal.ts, 9, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 9, 12), Decl(__proto__literal.ts, 9, 26))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+>__proto_\u005f : Symbol(__proto__, Decl(__proto__literal.ts, 9, 12), Decl(__proto__literal.ts, 9, 26))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+// Spread order
+const z1 = { ...({a: ''}), __proto__: o }
+>z1 : Symbol(z1, Decl(__proto__literal.ts, 12, 5))
+>a : Symbol(a, Decl(__proto__literal.ts, 12, 18))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 12, 26))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+const z2 = { __proto__: o, ...({a: ''}) }
+>z2 : Symbol(z2, Decl(__proto__literal.ts, 13, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 13, 12))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+>a : Symbol(a, Decl(__proto__literal.ts, 13, 32))
+
+// Null
+const w = { __proto__: null }
+>w : Symbol(w, Decl(__proto__literal.ts, 16, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 16, 11))
+
+// Non-object
+const q = { __proto__: 1, x: 1 }
+>q : Symbol(q, Decl(__proto__literal.ts, 19, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 19, 11))
+>x : Symbol(x, Decl(__proto__literal.ts, 19, 25))
+
+// Should not
+const x5 = { ["__proto__"]: o }
+>x5 : Symbol(x5, Decl(__proto__literal.ts, 22, 5))
+>["__proto__"] : Symbol(["__proto__"], Decl(__proto__literal.ts, 22, 12))
+>"__proto__" : Symbol(["__proto__"], Decl(__proto__literal.ts, 22, 12))
+>o : Symbol(o, Decl(__proto__literal.ts, 0, 5))
+
+const x6 = { __proto__ }
+>x6 : Symbol(x6, Decl(__proto__literal.ts, 23, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 23, 12))
+
+const x7 = { __proto__() {} }
+>x7 : Symbol(x7, Decl(__proto__literal.ts, 24, 5))
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 24, 12))
+
+enum e { __proto__ = 1 }
+>e : Symbol(e, Decl(__proto__literal.ts, 24, 29))
+>__proto__ : Symbol(e.__proto__, Decl(__proto__literal.ts, 25, 8))
+{
+    const { __proto__ } = { ['__proto__']: 1 }
+>__proto__ : Symbol(__proto__, Decl(__proto__literal.ts, 27, 11))
+>['__proto__'] : Symbol(['__proto__'], Decl(__proto__literal.ts, 27, 27))
+>'__proto__' : Symbol(['__proto__'], Decl(__proto__literal.ts, 27, 27))
+}

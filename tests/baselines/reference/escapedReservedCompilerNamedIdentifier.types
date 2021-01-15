@@ -5,8 +5,8 @@ var __proto__ = 10;
 >10 : 10
 
 var o = {
->o : { __proto__: number; }
->{    "__proto__": 0} : { __proto__: number; }
+>o : {}
+>{    "__proto__": 0} : {}
 
     "__proto__": 0
 >"__proto__" : number
@@ -14,24 +14,24 @@ var o = {
 
 };
 var b = o["__proto__"];
->b : number
->o["__proto__"] : number
->o : { __proto__: number; }
+>b : any
+>o["__proto__"] : any
+>o : {}
 >"__proto__" : "__proto__"
 
 var o1 = {
->o1 : { __proto__: number; }
->{    __proto__: 0} : { __proto__: number; }
+>o1 : {}
+>{    __proto__: {}} : {}
 
-    __proto__: 0
->__proto__ : number
->0 : 0
+    __proto__: {}
+>__proto__ : {}
+>{} : {}
 
 };
 var b1 = o1["__proto__"];
->b1 : number
->o1["__proto__"] : number
->o1 : { __proto__: number; }
+>b1 : any
+>o1["__proto__"] : any
+>o1 : {}
 >"__proto__" : "__proto__"
 
 // Triple underscores

@@ -13,7 +13,7 @@ var WorkspacePrototype = {
 WorkspacePrototype['__proto__'] = EntityPrototype;
 
 var o = {
-    "__proto__": 0
+    "__proto__": {}
 };
 class C {
     "__proto__" = 0;
@@ -32,7 +32,7 @@ var WorkspacePrototype = {
 };
 WorkspacePrototype['__proto__'] = EntityPrototype;
 var o = {
-    "__proto__": 0
+    "__proto__": {}
 };
 var C = /** @class */ (function () {
     function C() {

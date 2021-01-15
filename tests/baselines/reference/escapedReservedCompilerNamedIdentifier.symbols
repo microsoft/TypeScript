@@ -13,19 +13,17 @@ var o = {
 var b = o["__proto__"];
 >b : Symbol(b, Decl(escapedReservedCompilerNamedIdentifier.ts, 5, 3))
 >o : Symbol(o, Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 3))
->"__proto__" : Symbol("__proto__", Decl(escapedReservedCompilerNamedIdentifier.ts, 2, 9))
 
 var o1 = {
 >o1 : Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
 
-    __proto__: 0
+    __proto__: {}
 >__proto__ : Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 10))
 
 };
 var b1 = o1["__proto__"];
 >b1 : Symbol(b1, Decl(escapedReservedCompilerNamedIdentifier.ts, 9, 3))
 >o1 : Symbol(o1, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 3))
->"__proto__" : Symbol(__proto__, Decl(escapedReservedCompilerNamedIdentifier.ts, 6, 10))
 
 // Triple underscores
 var ___proto__ = 10;

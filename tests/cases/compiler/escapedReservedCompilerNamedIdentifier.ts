@@ -6,7 +6,7 @@ var o = {
 };
 var b = o["__proto__"];
 var o1 = {
-    __proto__: 0
+    __proto__: {}
 };
 var b1 = o1["__proto__"];
 // Triple underscores
