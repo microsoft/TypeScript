@@ -331,7 +331,7 @@ namespace ts {
  *   Comments
  * @author Early Close Caret > <a@b>
  * @author No Line Breaks:
- *   <the.email@address> must be on the same line to parse
+ *   <the email @address> must be on the same line to parse
  * @author Long Comment <long@comment.org> I
  *  want to keep commenting down here, I dunno.
  */`);
@@ -340,6 +340,17 @@ namespace ts {
                     `/**
  * @example
  * Some\n\n * text\r\n * with newlines.
+ */`);
+                parsesCorrectly(
+                    "no space before @ is not a new tag",
+                    `/**
+ * @param this (@is@)
+ * @param fine its@fine
+ */`);
+                parsesCorrectly(
+                    "@@ does not start a new tag",
+                    `/**
+ * @param this is @@fine@@and is one comment
  */`);
             });
         });
