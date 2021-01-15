@@ -1543,7 +1543,7 @@ namespace ts.Completions {
                     ? "quit"
                     : isVariableDeclaration(node));
 
-            return variableDeclaration as VariableDeclaration;
+            return variableDeclaration as VariableDeclaration | undefined;
         }
 
         function isArrowFunctionBody(node: Node) {
