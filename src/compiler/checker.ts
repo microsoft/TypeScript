@@ -28859,7 +28859,7 @@ namespace ts {
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
-            if (node.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.ExpressionStatement &&
+            if (node.kind === SyntaxKind.CallExpression && !node.questionDotToken && node.parent.kind === SyntaxKind.ExpressionStatement &&
                 returnType.flags & TypeFlags.Void && getTypePredicateOfSignature(signature)) {
                 if (!isDottedName(node.expression)) {
                     error(node.expression, Diagnostics.Assertions_require_the_call_target_to_be_an_identifier_or_qualified_name);
