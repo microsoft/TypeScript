@@ -3257,6 +3257,10 @@
         "code": 2800
     },
 
+    "Cannot assign to private method '{0}'. Private methods are not writable.": {
+        "category": "Error",
+        "code": 2801
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -6302,14 +6306,6 @@
     "'{0}' modifier cannot be used with a private identifier.": {
         "category": "Error",
         "code": 18019
-    },
-    "A method cannot be named with a private identifier.": {
-        "category": "Error",
-        "code": 18022
-    },
-    "An accessor cannot be named with a private identifier.": {
-        "category": "Error",
-        "code": 18023
     },
     "An enum member cannot be named with a private identifier.": {
         "category": "Error",

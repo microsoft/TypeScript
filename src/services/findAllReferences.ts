@@ -1242,7 +1242,7 @@ namespace ts.FindAllReferences {
 
             // If this is private property or method, the scope is the containing class
             if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const privateDeclaration = find(declarations, d => hasEffectiveModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
+                const privateDeclaration = find(declarations, d => hasEffectiveModifier(d, ModifierFlags.Private) || isPrivateIdentifierClassElementDeclaration(d));
                 if (privateDeclaration) {
                     return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                 }

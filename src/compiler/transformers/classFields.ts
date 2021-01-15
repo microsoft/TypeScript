@@ -570,7 +570,7 @@ namespace ts {
             if (shouldTransformPrivateFields) {
                 // Declare private names.
                 for (const member of node.members) {
-                    if (isPrivateIdentifierPropertyDeclaration(member)) {
+                    if (isPrivateIdentifierClassElementDeclaration(member)) {
                         addPrivateIdentifierToEnvironment(member.name);
                     }
                 }
@@ -594,7 +594,7 @@ namespace ts {
                 // then we don't need to transform any class properties.
                 return languageVersion < ScriptTarget.ESNext;
             }
-            return isInitializedProperty(member) || shouldTransformPrivateFields && isPrivateIdentifierPropertyDeclaration(member);
+            return isInitializedProperty(member) || shouldTransformPrivateFields && isPrivateIdentifierClassElementDeclaration(member);
         }
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
