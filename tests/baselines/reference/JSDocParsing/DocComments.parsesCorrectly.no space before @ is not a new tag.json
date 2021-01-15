@@ -1,7 +1,7 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 53,
+    "end": 91,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
@@ -36,7 +36,7 @@
         "1": {
             "kind": "JSDocParameterTag",
             "pos": 29,
-            "end": 51,
+            "end": 50,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -59,9 +59,40 @@
             "isNameFirst": true,
             "isBracketed": false
         },
-        "length": 2,
+        "2": {
+            "kind": "JSDocTag",
+            "pos": 50,
+            "end": 62,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 51,
+                "end": 60,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "zerowidth"
+            }
+        },
+        "3": {
+            "kind": "JSDocTag",
+            "pos": 62,
+            "end": 75,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 63,
+                "end": 73,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "singlestar"
+            },
+            "comment": "*@doublestar"
+        },
+        "length": 4,
         "pos": 7,
-        "end": 51,
+        "end": 75,
         "hasTrailingComma": false,
         "transformFlags": 0
     }
