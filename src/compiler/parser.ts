@@ -7602,8 +7602,15 @@ namespace ts {
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
                                     state = JSDocState.SawAsterisk;
-                                    indent += 1;
-                                    break;
+
+                                    if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AsteriskToken)) {
+                                        pushComment(scanner.getTokenText());
+                                        tok = nextTokenJSDoc();
+                                    }
+                                    else {
+                                        indent += 1;
+                                        break;
+                                    }
                                 }
                                 // record the * as a comment
                                 // falls through
