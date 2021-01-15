@@ -156,34 +156,36 @@ export function Point2D(x, y) {
 >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >Vec : typeof Vec
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->this : this
+>this : this & { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >2 : 2
 
     this.x = x;
 >this.x = x : number
 >this.x : number
->this : this
+>this : this & { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >x : number
 >x : number
 
     this.y = y;
 >this.y = y : number
 >this.y : number
->this : this
+>this : this & { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >y : number
 >y : number
 }
 
 Point2D.prototype = {
->Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; x: number; y: number; }
->Point2D.prototype : { __proto__: typeof Vec; x: number; y: number; }
+>Point2D.prototype = {    __proto__: Vec.prototype,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
+>Point2D.prototype : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >Point2D : typeof Point2D
->prototype : { __proto__: typeof Vec; x: number; y: number; }
->{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: typeof Vec; x: number; y: number; }
+>prototype : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
+>{    __proto__: Vec.prototype,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 
-    __proto__: Vec,
->__proto__ : typeof Vec
+    __proto__: Vec.prototype,
+>__proto__ : { dot(other: Vec): number; magnitude(): number; }
+>Vec.prototype : { dot(other: Vec): number; magnitude(): number; }
 >Vec : typeof Vec
+>prototype : { dot(other: Vec): number; magnitude(): number; }
 
     get x() {
 >x : number
@@ -191,7 +193,7 @@ Point2D.prototype = {
         return this.storage[0];
 >this.storage[0] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
+>this : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >0 : 0
 
@@ -207,7 +209,7 @@ Point2D.prototype = {
 >this.storage[0] = x : number
 >this.storage[0] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
+>this : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >0 : 0
 >x : number
@@ -219,7 +221,7 @@ Point2D.prototype = {
         return this.storage[1];
 >this.storage[1] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
+>this : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >1 : 1
 
@@ -235,7 +237,7 @@ Point2D.prototype = {
 >this.storage[1] = y : number
 >this.storage[1] : any
 >this.storage : any
->this : { __proto__: typeof Vec; x: number; y: number; }
+>this : { x: number; y: number; dot(other: Vec): number; magnitude(): number; }
 >storage : any
 >1 : 1
 >y : number
@@ -253,5 +255,14 @@ export const origin = new Point2D(0, 0);
 >0 : 0
 >0 : 0
 
-// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+export const res = Point2D(2, 3).dot(origin);
+>res : any
+>Point2D(2, 3).dot(origin) : any
+>Point2D(2, 3).dot : any
+>Point2D(2, 3) : Point2D
+>Point2D : typeof Point2D
+>2 : 2
+>3 : 3
+>dot : any
+>origin : Point2D
 

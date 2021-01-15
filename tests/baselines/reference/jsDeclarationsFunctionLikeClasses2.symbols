@@ -125,17 +125,14 @@ export function Point2D(x, y) {
 >Vec.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
->this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 
     this.x = x;
->this.x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
->this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
->x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>this.x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 29), Decl(source.js, 50, 6))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 29), Decl(source.js, 50, 6))
 >x : Symbol(x, Decl(source.js, 37, 24))
 
     this.y = y;
 >this.y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
->this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 >y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
 >y : Symbol(y, Decl(source.js, 37, 26))
 }
@@ -145,12 +142,14 @@ Point2D.prototype = {
 >Point2D : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 >prototype : Symbol(Point2D.prototype, Decl(source.js, 44, 1))
 
-    __proto__: Vec,
+    __proto__: Vec.prototype,
 >__proto__ : Symbol(__proto__, Decl(source.js, 46, 21))
+>Vec.prototype : Symbol(Vec.prototype, Decl(source.js, 8, 1))
 >Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>prototype : Symbol(Vec.prototype, Decl(source.js, 8, 1))
 
     get x() {
->x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 29), Decl(source.js, 50, 6))
 
         return this.storage[0];
 >this : Symbol(__object, Decl(source.js, 46, 19))
@@ -160,7 +159,7 @@ Point2D.prototype = {
      * @param {number} x
      */
     set x(x) {
->x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 29), Decl(source.js, 50, 6))
 >x : Symbol(x, Decl(source.js, 54, 10))
 
         this.storage[0] = x;
@@ -196,5 +195,8 @@ export const origin = new Point2D(0, 0);
 >origin : Symbol(origin, Decl(referencer.js, 2, 12))
 >Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
 
-// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+export const res = Point2D(2, 3).dot(origin);
+>res : Symbol(res, Decl(referencer.js, 3, 12))
+>Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
+>origin : Symbol(origin, Decl(referencer.js, 2, 12))
 

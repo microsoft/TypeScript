@@ -6,7 +6,7 @@ var o = {
 };
 var b = o["__proto__"];
 var o1 = {
-    __proto__: 0
+    __proto__: {}
 };
 var b1 = o1["__proto__"];
 // Triple underscores
@@ -38,7 +38,7 @@ var o = {
 };
 var b = o["__proto__"];
 var o1 = {
-    __proto__: 0
+    __proto__: {}
 };
 var b1 = o1["__proto__"];
 // Triple underscores
@@ -65,14 +65,10 @@ var b5 = o5["_proto__"];
 
 //// [escapedReservedCompilerNamedIdentifier.d.ts]
 declare var __proto__: number;
-declare var o: {
-    __proto__: number;
-};
-declare var b: number;
-declare var o1: {
-    __proto__: number;
-};
-declare var b1: number;
+declare var o: {};
+declare var b: any;
+declare var o1: {};
+declare var b1: any;
 declare var ___proto__: number;
 declare var o2: {
     ___proto__: number;

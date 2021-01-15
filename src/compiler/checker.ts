@@ -27633,6 +27633,26 @@ namespace ts {
             return links.immediateTarget;
         }
 
+        /**
+         * If the node is a `__proto__` literal declaration.
+         * According to ECMA262 B.3.1 only this syntax counted in
+         *      PropertyName ":" AssignmentExpression
+         *
+         * It works in thoes forms:
+         *      { __proto__: value }; { "__proto__": value }; { __proto_\u005f: value };
+         *  It does not work in thoes forms:
+         *      { ["__proto__"]: value }; { __proto__ }
+         */
+        function getProtoLiteralDeclarationInitializer(node: ObjectLiteralElementLike): false | Expression {
+            if (node.kind !== SyntaxKind.PropertyAssignment) return false;
+            const name = node.name;
+            if (!name) return false;
+            // Identifier.escapedText says if the identifier starts with __, it will starts with 3 "_".
+            if (name.kind === SyntaxKind.Identifier && name.escapedText === "___proto__") return node.initializer;
+            if (name.kind === SyntaxKind.StringLiteral && name.text === "__proto__") return node.initializer;
+            return false;
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
@@ -27666,8 +27686,26 @@ namespace ts {
                 }
             }
 
+            const skippedProperties = new Set<ObjectLiteralElementLike>();
+            // It should be the left-most spread element so we loop this first
+            for (const memberDecl of node.properties) {
+                const item = getProtoLiteralDeclarationInitializer(memberDecl);
+                if (!item) continue;
+                // Don't add __proto__ literal to the properties table
+                skippedProperties.add(memberDecl);
+                // it's prototype is null so it works like normal object (despite Object.prototype things).
+                if (item.kind === SyntaxKind.NullKeyword) continue;
+                const type = getReducedType(checkExpression(item));
+                if (!(type.flags & TypeFlags.Object)) {
+                    error(memberDecl, Diagnostics.Type_0_is_not_assignable_to_type_1, typeToString(type), "object | null");
+                }
+                else {
+                    spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
+                }
+            }
             let offset = 0;
             for (const memberDecl of node.properties) {
+                if (skippedProperties.has(memberDecl)) continue;
                 let member = getSymbolOfNode(memberDecl);
                 const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName ?
                     checkComputedPropertyName(memberDecl.name) : undefined;

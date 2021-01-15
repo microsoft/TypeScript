@@ -18,7 +18,7 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 var o = {
 >o : Symbol(o, Decl(protoAsIndexInIndexExpression_1.ts, 8, 3))
 
-    "__proto__": 0
+    "__proto__": {}
 >"__proto__" : Symbol("__proto__", Decl(protoAsIndexInIndexExpression_1.ts, 8, 9))
 
 };
