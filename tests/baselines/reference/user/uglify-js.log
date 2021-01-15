@@ -1,173 +1,192 @@
 Exit Code: 2
 Standard output:
 node_modules/uglify-js/lib/ast.js(125,34): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/ast.js(318,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/ast.js(625,69): error TS2552: Cannot find name 'error'. Did you mean 'Error'?
-node_modules/uglify-js/lib/ast.js(1216,5): error TS2322: Type '{ visit: (node: any, descend: any) => void; parent: (n: any) => any; push: typeof push; pop: typeof pop; self: () => any; find_parent: (type: any) => any; has_directive: (type: any) => any; loopcontrol_target: (node: any) => any; in_boolean_context: () => boolean | undefined; }' is not assignable to type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(330,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/ast.js(522,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/ast.js(722,58): error TS2552: Cannot find name 'error'. Did you mean 'Error'?
+node_modules/uglify-js/lib/ast.js(1446,5): error TS2322: Type '{ visit: (node: any, descend: any) => void; parent: (n: any) => any; push: typeof push; pop: typeof pop; self: () => any; find_parent: (type: any) => any; has_directive: (type: any) => any; loopcontrol_target: (node: any) => any; in_boolean_context: () => boolean | undefined; }' is not assignable to type 'TreeWalker'.
   Object literal may only specify known properties, and 'visit' does not exist in type 'TreeWalker'.
-node_modules/uglify-js/lib/ast.js(1217,14): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/ast.js(1220,14): error TS2339: Property 'pop' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/ast.js(1274,25): error TS2339: Property 'self' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/ast.js(1275,37): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/ast.js(1293,31): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/ast.js(1297,29): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(192,42): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(712,27): error TS2339: Property 'name' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(783,21): error TS2339: Property 'name' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(786,20): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(786,40): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(796,20): error TS2339: Property 'argnames' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(798,55): error TS2339: Property 'uses_arguments' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(803,40): error TS2339: Property 'argnames' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(871,26): error TS2339: Property 'definition' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(880,56): error TS2339: Property 'scope' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(884,34): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(894,49): error TS2339: Property 'scope' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(909,42): error TS2339: Property 'scope' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(1023,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(1028,12): error TS2339: Property 'defun_ids' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(1029,12): error TS2339: Property 'defun_visited' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(1031,12): error TS2339: Property 'in_loop' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(1032,12): error TS2339: Property 'loop_ids' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(1037,12): error TS2339: Property 'safe_ids' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(1314,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1329,51): error TS2349: This expression is not callable.
+node_modules/uglify-js/lib/ast.js(1447,14): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(1450,14): error TS2339: Property 'pop' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(1504,25): error TS2339: Property 'self' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(1505,37): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(1521,52): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(194,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(612,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(689,27): error TS2339: Property 'name' does not exist on type 'reduce_defun'.
+node_modules/uglify-js/lib/compress.js(708,16): error TS2339: Property 'walk' does not exist on type 'reduce_iife'.
+node_modules/uglify-js/lib/compress.js(708,36): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(718,28): error TS2339: Property 'uses_arguments' does not exist on type 'reduce_iife'.
+node_modules/uglify-js/lib/compress.js(719,16): error TS2339: Property 'argnames' does not exist on type 'reduce_iife'.
+node_modules/uglify-js/lib/compress.js(722,32): error TS2339: Property 'argnames' does not exist on type 'reduce_iife'.
+node_modules/uglify-js/lib/compress.js(737,47): error TS2339: Property 'value' does not exist on type 'reduce_iife'.
+node_modules/uglify-js/lib/compress.js(738,20): error TS2339: Property 'value' does not exist on type 'reduce_iife'.
+node_modules/uglify-js/lib/compress.js(985,20): error TS2339: Property 'name' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(985,46): error TS2339: Property 'name' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(985,72): error TS2339: Property 'name' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1017,26): error TS2339: Property 'definition' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1026,56): error TS2339: Property 'scope' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1030,26): error TS2339: Property 'in_arg' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1031,34): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1041,49): error TS2339: Property 'scope' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1056,42): error TS2339: Property 'scope' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(1181,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1186,12): error TS2339: Property 'defun_ids' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(1187,12): error TS2339: Property 'defun_visited' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(1189,12): error TS2339: Property 'in_loop' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(1190,12): error TS2339: Property 'loop_ids' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(1195,12): error TS2339: Property 'safe_ids' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(1243,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1271,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1544,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(1559,51): error TS2349: This expression is not callable.
   Not all constituents of type 'true | ((node: any, tw: any) => any)' are callable.
     Type 'true' has no call signatures.
-node_modules/uglify-js/lib/compress.js(1404,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1425,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1472,112): error TS2454: Variable 'args' is used before being assigned.
-node_modules/uglify-js/lib/compress.js(1473,29): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(1498,33): error TS2322: Type 'boolean' is not assignable to type 'number'.
-node_modules/uglify-js/lib/compress.js(1500,29): error TS2322: Type 'boolean' is not assignable to type 'never'.
-node_modules/uglify-js/lib/compress.js(1672,53): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(1790,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1814,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1829,46): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1860,39): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1892,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1908,39): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1990,45): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(2010,42): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(2049,41): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(2199,53): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
-  Property '0' is optional in type 'number[]' but required in type '[start: number, deleteCount: number, ...items: never[]]'.
-node_modules/uglify-js/lib/compress.js(2556,59): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(2594,53): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
-  Property '0' is optional in type 'any[]' but required in type '[start: number, deleteCount: number, ...items: never[]]'.
-node_modules/uglify-js/lib/compress.js(2629,26): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(2817,34): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(2834,27): error TS2339: Property 'required' does not exist on type 'any[]'.
-node_modules/uglify-js/lib/compress.js(2839,43): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never[]'.
+node_modules/uglify-js/lib/compress.js(1604,61): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1647,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(1668,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(1720,77): error TS2454: Variable 'args' is used before being assigned.
+node_modules/uglify-js/lib/compress.js(1721,33): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(1721,42): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(1746,33): error TS2322: Type 'boolean' is not assignable to type 'number'.
+node_modules/uglify-js/lib/compress.js(1748,29): error TS2322: Type 'boolean' is not assignable to type 'never'.
+node_modules/uglify-js/lib/compress.js(1949,65): error TS2339: Property 'find_parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(1951,45): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1964,75): error TS2339: Property 'find_parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(2105,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(2131,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(2133,68): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2140,46): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(2171,39): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(2201,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(2216,39): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(2240,35): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2316,45): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2336,42): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2375,41): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2533,53): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
+  Source provides no match for required element at position 0 in target.
+node_modules/uglify-js/lib/compress.js(2890,59): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(2928,53): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
+  Source provides no match for required element at position 0 in target.
+node_modules/uglify-js/lib/compress.js(2963,26): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(3159,34): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(3180,27): error TS2339: Property 'required' does not exist on type 'any[]'.
+node_modules/uglify-js/lib/compress.js(3185,43): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never[]'.
   Type 'any' is not assignable to type 'never'.
-node_modules/uglify-js/lib/compress.js(2878,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(2882,20): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(2928,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(2932,20): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(2997,22): error TS2339: Property 'is_undefined' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(2999,49): error TS2339: Property 'is_declared' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3000,22): error TS2339: Property 'is_immutable' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3001,35): error TS2339: Property 'definition' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3002,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3050,22): error TS2551: Property 'is_undefined' does not exist on type '(Anonymous function)'. Did you mean 'is_defined'?
-node_modules/uglify-js/lib/compress.js(3051,49): error TS2339: Property 'is_declared' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3052,22): error TS2339: Property 'is_immutable' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3053,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3057,20): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(3099,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3103,20): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(3189,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3193,20): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(3241,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3245,20): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(3494,44): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(3716,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-node_modules/uglify-js/lib/compress.js(3717,25): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/compress.js(3717,55): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-node_modules/uglify-js/lib/compress.js(3717,56): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/compress.js(3734,48): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(3745,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(3753,24): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/uglify-js/lib/compress.js(3835,48): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(3853,33): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(4284,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(4304,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
-node_modules/uglify-js/lib/compress.js(4455,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(4473,33): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(4495,33): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(4565,52): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(4758,56): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(4759,54): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(4817,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(4818,74): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(4875,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(4922,29): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(5119,56): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never[]'.
-node_modules/uglify-js/lib/compress.js(5243,12): error TS2339: Property 'push' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(5406,18): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5406,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(5427,24): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(5437,28): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(5451,14): error TS2339: Property 'transform' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5457,34): error TS2339: Property 'argnames' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5522,32): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(5615,18): error TS2339: Property 'enclosed' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5618,18): error TS2339: Property 'variables' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5777,17): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
-node_modules/uglify-js/lib/compress.js(5793,29): error TS2339: Property 'left' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5804,29): error TS2339: Property 'right' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5921,23): error TS2454: Variable 'exprs' is used before being assigned.
-node_modules/uglify-js/lib/compress.js(5922,20): error TS2454: Variable 'exprs' is used before being assigned.
-node_modules/uglify-js/lib/compress.js(5976,28): error TS2339: Property 'expression' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5977,41): error TS2339: Property 'operator' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5981,22): error TS2339: Property 'operator' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(5984,42): error TS2339: Property 'operator' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/compress.js(6015,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(6017,44): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(6021,56): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(6022,12): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(6090,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(6146,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(6161,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(6271,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(6273,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(6440,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(6641,37): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(6647,16): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(6687,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(6923,57): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[pattern: string | RegExp, flags?: string | undefined]'.
+node_modules/uglify-js/lib/compress.js(3224,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3228,20): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(3274,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3278,20): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(3342,22): error TS2339: Property 'is_undefined' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3344,49): error TS2339: Property 'is_declared' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3345,22): error TS2339: Property 'is_immutable' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3346,28): error TS2339: Property 'definition' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3350,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3399,22): error TS2551: Property 'is_undefined' does not exist on type '(Anonymous function)'. Did you mean 'is_defined'?
+node_modules/uglify-js/lib/compress.js(3400,49): error TS2339: Property 'is_declared' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3401,22): error TS2339: Property 'is_immutable' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3402,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3406,20): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(3448,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3452,20): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(3538,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3542,20): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(3590,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(3594,20): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(3854,44): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4077,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+node_modules/uglify-js/lib/compress.js(4078,25): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/compress.js(4078,55): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/uglify-js/lib/compress.js(4078,56): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/compress.js(4095,48): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4106,30): error TS2339: Property 'fixed_value' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(4114,24): error TS2790: The operand of a 'delete' operator must be optional.
+node_modules/uglify-js/lib/compress.js(4207,48): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4228,33): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(4696,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4716,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
+node_modules/uglify-js/lib/compress.js(4891,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4896,49): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(4936,33): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(4964,33): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(5027,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'marker' must be of type 'TreeWalker', but here has type '(node: any) => void'.
+node_modules/uglify-js/lib/compress.js(5027,61): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(5032,50): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(5258,56): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(5259,54): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(5348,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(5349,74): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(5411,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(5496,29): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(5739,56): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never[]'.
+node_modules/uglify-js/lib/compress.js(5865,12): error TS2339: Property 'push' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(6162,18): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6162,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(6184,24): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(6193,33): error TS2339: Property 'find_variable' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6200,28): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
+node_modules/uglify-js/lib/compress.js(6218,14): error TS2339: Property 'transform' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6224,34): error TS2339: Property 'argnames' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6292,32): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(6386,18): error TS2339: Property 'enclosed' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6389,18): error TS2339: Property 'variables' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6596,29): error TS2339: Property 'left' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6607,29): error TS2339: Property 'right' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6726,23): error TS2454: Variable 'exprs' is used before being assigned.
+node_modules/uglify-js/lib/compress.js(6727,20): error TS2454: Variable 'exprs' is used before being assigned.
+node_modules/uglify-js/lib/compress.js(6793,28): error TS2339: Property 'expression' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6794,41): error TS2339: Property 'operator' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6798,22): error TS2339: Property 'operator' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6801,42): error TS2339: Property 'operator' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/compress.js(6832,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(6834,44): error TS2339: Property 'loopcontrol_target' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(6838,56): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(6839,12): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(6907,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(6963,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(6978,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(7101,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(7103,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(7270,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(7469,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(7475,16): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(7518,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(7793,57): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[pattern: string | RegExp, flags?: string | undefined]'.
   Target requires 1 element(s) but source may have fewer.
-node_modules/uglify-js/lib/compress.js(7087,45): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(7094,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'code' must be of type 'string', but here has type '{ get: () => string; toString: () => string; indent: (half: any) => void; should_break: () => void; has_parens: () => boolean; newline: () => void; print: (str: any) => void; space: () => void; comma: () => void; colon: () => void; ... 20 more ...; parent: (n: any) => any; }'.
-node_modules/uglify-js/lib/compress.js(7098,36): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(7103,41): error TS2339: Property 'get' does not exist on type 'string'.
-node_modules/uglify-js/lib/compress.js(7255,39): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(7259,21): error TS2322: Type 'null' is not assignable to type 'any[]'.
-node_modules/uglify-js/lib/compress.js(7266,25): error TS2322: Type 'null' is not assignable to type 'any[]'.
-node_modules/uglify-js/lib/compress.js(7275,25): error TS2322: Type 'null' is not assignable to type 'any[]'.
-node_modules/uglify-js/lib/compress.js(7291,32): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(7295,27): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(7524,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(7808,18): error TS2454: Variable 'is_strict_comparison' is used before being assigned.
-node_modules/uglify-js/lib/compress.js(8454,47): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(8544,39): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(8615,39): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(8621,41): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(8624,41): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/compress.js(9205,22): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
-node_modules/uglify-js/lib/compress.js(9205,63): error TS2532: Object is possibly 'undefined'.
-node_modules/uglify-js/lib/compress.js(9241,43): error TS2454: Variable 'property' is used before being assigned.
-node_modules/uglify-js/lib/compress.js(9257,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(9260,46): error TS2339: Property 'has_side_effects' does not exist on type 'number'.
-node_modules/uglify-js/lib/compress.js(9265,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
-node_modules/uglify-js/lib/compress.js(9304,34): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/minify.js(191,57): error TS2339: Property 'compress' does not exist on type 'Compressor'.
-node_modules/uglify-js/lib/mozilla-ast.js(576,33): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(457,37): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(458,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/output.js(473,16): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/output.js(1137,44): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/output.js(1435,58): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/uglify-js/lib/compress.js(7957,45): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(7964,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'code' must be of type 'string', but here has type '{ get: () => string; toString: () => string; indent: (half: any) => void; should_break: () => void; has_parens: () => boolean; newline: () => void; print: (str: any) => void; space: () => void; comma: () => void; colon: () => void; ... 20 more ...; parent: (n: any) => any; }'.
+node_modules/uglify-js/lib/compress.js(7968,36): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(7973,41): error TS2339: Property 'get' does not exist on type 'string'.
+node_modules/uglify-js/lib/compress.js(7997,51): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(8114,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(8189,39): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(8193,21): error TS2322: Type 'null' is not assignable to type 'any[]'.
+node_modules/uglify-js/lib/compress.js(8204,25): error TS2322: Type 'null' is not assignable to type 'any[]'.
+node_modules/uglify-js/lib/compress.js(8213,25): error TS2322: Type 'null' is not assignable to type 'any[]'.
+node_modules/uglify-js/lib/compress.js(8229,32): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(8233,27): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(8477,38): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(8758,18): error TS2454: Variable 'is_strict_comparison' is used before being assigned.
+node_modules/uglify-js/lib/compress.js(9409,47): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(9499,39): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(9568,39): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(9574,41): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(9577,41): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/compress.js(10183,26): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
+node_modules/uglify-js/lib/compress.js(10183,67): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(10218,43): error TS2454: Variable 'property' is used before being assigned.
+node_modules/uglify-js/lib/compress.js(10239,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(10242,46): error TS2339: Property 'has_side_effects' does not exist on type 'number'.
+node_modules/uglify-js/lib/compress.js(10247,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'value' must be of type 'number', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(10288,34): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/minify.js(197,57): error TS2339: Property 'compress' does not exist on type 'Compressor'.
+node_modules/uglify-js/lib/mozilla-ast.js(573,33): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(459,37): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(460,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/output.js(475,16): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/output.js(1202,44): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/output.js(1557,58): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/uglify-js/lib/parse.js(249,9): error TS2322: Type 'string | boolean' is not assignable to type 'boolean'.
   Type 'string' is not assignable to type 'boolean'.
 node_modules/uglify-js/lib/parse.js(318,20): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
@@ -175,24 +194,25 @@ node_modules/uglify-js/lib/parse.js(318,20): error TS2345: Argument of type 'num
 node_modules/uglify-js/lib/parse.js(407,32): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 node_modules/uglify-js/lib/parse.js(418,32): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 node_modules/uglify-js/lib/parse.js(468,20): error TS2339: Property 'raw_source' does not exist on type 'RegExp'.
-node_modules/uglify-js/lib/parse.js(576,57): error TS2339: Property 'push' does not exist on type 'never'.
-node_modules/uglify-js/lib/parse.js(582,32): error TS2345: Argument of type 'never[]' is not assignable to parameter of type 'never'.
-node_modules/uglify-js/lib/parse.js(675,13): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(708,69): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(708,83): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(752,31): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(758,17): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(785,21): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(804,21): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(931,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
-node_modules/uglify-js/lib/parse.js(1049,9): error TS2322: Type 'any[]' is not assignable to type 'never[]'.
-node_modules/uglify-js/lib/parse.js(1108,17): error TS2454: Variable 'cur' is used before being assigned.
-node_modules/uglify-js/lib/parse.js(1306,32): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(1406,20): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(1412,20): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(1498,48): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(1524,35): error TS2531: Object is possibly 'null'.
-node_modules/uglify-js/lib/parse.js(1569,52): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(586,57): error TS2339: Property 'push' does not exist on type 'never'.
+node_modules/uglify-js/lib/parse.js(592,32): error TS2345: Argument of type 'never[]' is not assignable to parameter of type 'never'.
+node_modules/uglify-js/lib/parse.js(687,13): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(720,69): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(720,83): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(764,31): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(770,17): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(792,21): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(808,21): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(827,21): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(951,23): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+node_modules/uglify-js/lib/parse.js(1114,9): error TS2322: Type 'any[]' is not assignable to type 'never[]'.
+node_modules/uglify-js/lib/parse.js(1162,9): error TS2322: Type 'any[]' is not assignable to type 'never[]'.
+node_modules/uglify-js/lib/parse.js(1222,17): error TS2454: Variable 'cur' is used before being assigned.
+node_modules/uglify-js/lib/parse.js(1434,32): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1600,20): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1764,48): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1803,35): error TS2531: Object is possibly 'null'.
+node_modules/uglify-js/lib/parse.js(1894,52): error TS2531: Object is possibly 'null'.
 node_modules/uglify-js/lib/propmangle.js(70,18): error TS2339: Property 'prototype' does not exist on type 'ObjectConstructor | FunctionConstructor | StringConstructor | BooleanConstructor | NumberConstructor | ... 4 more ... | ArrayConstructor'.
   Property 'prototype' does not exist on type 'Math'.
 node_modules/uglify-js/lib/propmangle.js(71,44): error TS2351: This expression is not constructable.
@@ -202,34 +222,33 @@ node_modules/uglify-js/lib/propmangle.js(72,45): error TS2339: Property 'prototy
   Property 'prototype' does not exist on type 'Math'.
 node_modules/uglify-js/lib/propmangle.js(83,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(146,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/propmangle.js(179,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/propmangle.js(176,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(83,26): error TS2339: Property 'defun' does not exist on type 'SymbolDef'.
-node_modules/uglify-js/lib/scope.js(114,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(164,41): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/scope.js(203,10): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(207,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(216,28): error TS2339: Property 'def_global' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(221,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/scope.js(230,26): error TS2339: Property 'uses_eval' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(253,10): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(256,27): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(256,47): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(302,38): error TS2339: Property 'variables' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(342,10): error TS2339: Property 'def_variable' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(344,21): error TS2339: Property 'start' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(345,19): error TS2339: Property 'end' does not exist on type '(Anonymous function)'.
-node_modules/uglify-js/lib/scope.js(489,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(506,49): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
-node_modules/uglify-js/lib/scope.js(550,31): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object | null'.
-node_modules/uglify-js/lib/scope.js(553,30): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(577,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(116,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(166,41): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/scope.js(205,10): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(210,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(267,28): error TS2339: Property 'def_global' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(269,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/scope.js(281,33): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/scope.js(290,26): error TS2339: Property 'uses_eval' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(305,10): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(308,27): error TS2339: Property 'walk' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(308,47): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(360,38): error TS2339: Property 'variables' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(403,10): error TS2339: Property 'def_variable' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(405,21): error TS2339: Property 'start' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(406,19): error TS2339: Property 'end' does not exist on type '(Anonymous function)'.
+node_modules/uglify-js/lib/scope.js(552,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(584,49): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/scope.js(642,31): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object | null'.
+node_modules/uglify-js/lib/scope.js(645,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(669,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(82,11): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/uglify-js/lib/sourcemap.js(178,31): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/uglify-js/lib/sourcemap.js(186,34): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/uglify-js/lib/transform.js(47,21): error TS2345: Argument of type 'this' is not assignable to parameter of type 'TreeWalker'.
   Type 'TreeTransformer' is missing the following properties from type 'TreeWalker': currentNode, filter, root, whatToShow, and 10 more.
-node_modules/uglify-js/tools/exit.js(10,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[code?: number | undefined]'.
-  Target allows only 1 element(s) but source may have more.
 node_modules/uglify-js/tools/exports.js(1,1): error TS2303: Circular definition of import alias '"Dictionary"'.
 node_modules/uglify-js/tools/exports.js(2,1): error TS2303: Circular definition of import alias '"List"'.
 node_modules/uglify-js/tools/exports.js(3,1): error TS2303: Circular definition of import alias '"minify"'.
@@ -238,6 +257,10 @@ node_modules/uglify-js/tools/exports.js(5,1): error TS2303: Circular definition 
 node_modules/uglify-js/tools/exports.js(6,1): error TS2303: Circular definition of import alias '"TreeTransformer"'.
 node_modules/uglify-js/tools/exports.js(7,1): error TS2303: Circular definition of import alias '"TreeWalker"'.
 node_modules/uglify-js/tools/node.js(64,26): error TS2339: Property 'minify' does not exist on type 'typeof import("/uglify-js/node_modules/uglify-js/tools/node")'.
+node_modules/uglify-js/tools/tty.js(4,20): error TS2339: Property '_handle' does not exist on type 'WriteStream & { fd: 1; }'.
+node_modules/uglify-js/tools/tty.js(5,20): error TS2339: Property '_handle' does not exist on type 'WriteStream & { fd: 2; }'.
+node_modules/uglify-js/tools/tty.js(16,41): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[code?: number | undefined]'.
+  Target allows only 1 element(s) but source may have more.
 
 
 
