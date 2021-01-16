@@ -55,15 +55,36 @@ namespace ts.CallHierarchy {
             || isSetAccessorDeclaration(node);
     }
 
+    function isDeclarationOfOverloadedFunction(typeChecker: TypeChecker, node: Node): boolean {
+        if (node?.symbol) {
+            const type = typeChecker.getTypeOfSymbolAtLocation(node.symbol, node);
+            if (type?.symbol?.declarations) {
+                const interfaceDeclarations: InterfaceDeclaration[] = type
+                    .symbol
+                    .declarations
+                    .filter(d => d.kind === SyntaxKind.InterfaceDeclaration) as InterfaceDeclaration[];
+                if (interfaceDeclarations.length === type.symbol.declarations.length) {
+                    let members: TypeElement[] = [];
+                    interfaceDeclarations.forEach(decl => {
+                       members = [...members, ...decl.members];
+                    });
+                    return members.length > 0 && members.filter(m => m.kind !== SyntaxKind.CallSignature).length === 0;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Indicates whether a node is a valid a call hierarchy declaration.
      *
      * See `resolveCallHierarchyDeclaration` for the specific rules.
      */
-    function isValidCallHierarchyDeclaration(node: Node): node is CallHierarchyDeclaration {
+    function isValidCallHierarchyDeclaration(typeChecker: TypeChecker, node: Node): node is CallHierarchyDeclaration {
         return isSourceFile(node)
             || isModuleDeclaration(node) && isIdentifier(node.name)
             || isFunctionDeclaration(node)
+            || isDeclarationOfOverloadedFunction(typeChecker, node)
             || isClassDeclaration(node)
             || isMethodDeclaration(node)
             || isMethodSignature(node)
@@ -71,6 +92,10 @@ namespace ts.CallHierarchy {
             || isSetAccessorDeclaration(node)
             || isNamedExpression(node)
             || isConstNamedExpression(node);
+    }
+
+    function buildIsValidCallHierarchyDeclarationPredicate(typeChecker: TypeChecker) {
+        return (node: Node): node is CallHierarchyDeclaration => isValidCallHierarchyDeclaration(typeChecker, node);
     }
 
     /** Gets the node that can be used as a reference to a call hierarchy declaration. */
@@ -184,7 +209,7 @@ namespace ts.CallHierarchy {
             const sortedDeclarations = map(indices, i => symbol.declarations[i]);
             let lastDecl: CallHierarchyDeclaration | undefined;
             for (const decl of sortedDeclarations) {
-                if (isValidCallHierarchyDeclaration(decl)) {
+                if (isValidCallHierarchyDeclaration(typeChecker, decl)) {
                     if (!lastDecl || lastDecl.parent !== decl.parent || lastDecl.end !== decl.pos) {
                         declarations = append(declarations, decl);
                     }
@@ -222,20 +247,21 @@ namespace ts.CallHierarchy {
 
         const typeChecker = program.getTypeChecker();
         let followingSymbol = false;
+        const isValidCallHierarchyDeclarationPredicate = buildIsValidCallHierarchyDeclarationPredicate(typeChecker);
         while (true) {
-            if (isValidCallHierarchyDeclaration(location)) {
+            if (isValidCallHierarchyDeclaration(typeChecker, location)) {
                 return findImplementationOrAllInitialDeclarations(typeChecker, location);
             }
             if (isPossibleCallHierarchyDeclaration(location)) {
-                const ancestor = findAncestor(location, isValidCallHierarchyDeclaration);
+                const ancestor = findAncestor(location, isValidCallHierarchyDeclarationPredicate);
                 return ancestor && findImplementationOrAllInitialDeclarations(typeChecker, ancestor);
             }
             if (isDeclarationName(location)) {
-                if (isValidCallHierarchyDeclaration(location.parent)) {
+                if (isValidCallHierarchyDeclaration(typeChecker, location.parent)) {
                     return findImplementationOrAllInitialDeclarations(typeChecker, location.parent);
                 }
                 if (isPossibleCallHierarchyDeclaration(location.parent)) {
-                    const ancestor = findAncestor(location.parent, isValidCallHierarchyDeclaration);
+                    const ancestor = findAncestor(location.parent, isValidCallHierarchyDeclarationPredicate);
                     return ancestor && findImplementationOrAllInitialDeclarations(typeChecker, ancestor);
                 }
                 if (isVariableDeclaration(location.parent) && location.parent.initializer && isConstNamedExpression(location.parent.initializer)) {
@@ -244,7 +270,7 @@ namespace ts.CallHierarchy {
                 return undefined;
             }
             if (isConstructorDeclaration(location)) {
-                if (isValidCallHierarchyDeclaration(location.parent)) {
+                if (isValidCallHierarchyDeclaration(typeChecker, location.parent)) {
                     return location.parent;
                 }
                 return undefined;
@@ -291,7 +317,7 @@ namespace ts.CallHierarchy {
         range: TextRange;
     }
 
-    function convertEntryToCallSite(entry: FindAllReferences.Entry): CallSite | undefined {
+    function convertEntryToCallSite(typeChecker: TypeChecker, entry: FindAllReferences.Entry): CallSite | undefined {
         if (entry.kind === FindAllReferences.EntryKind.Node) {
             const { node } = entry;
             if (isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
@@ -301,7 +327,8 @@ namespace ts.CallHierarchy {
                 || isRightSideOfPropertyAccess(node)
                 || isArgumentExpressionOfElementAccess(node)) {
                 const sourceFile = node.getSourceFile();
-                const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) || sourceFile;
+                const isValidCallHierarchyDeclarationPredicate = buildIsValidCallHierarchyDeclarationPredicate(typeChecker);
+                const ancestor = findAncestor(node, isValidCallHierarchyDeclarationPredicate) || sourceFile;
                 return { declaration: ancestor, range: createTextRangeFromNode(node, sourceFile) };
             }
         }
@@ -326,7 +353,7 @@ namespace ts.CallHierarchy {
             return [];
         }
         const location = getCallHierarchyDeclarationReferenceNode(declaration);
-        const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, convertEntryToCallSite), isDefined);
+        const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, entry => convertEntryToCallSite(program.getTypeChecker(), entry)), isDefined);
         return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries)) : [];
     }
 
@@ -358,7 +385,7 @@ namespace ts.CallHierarchy {
                 return;
             }
 
-            if (isValidCallHierarchyDeclaration(node)) {
+            if (isValidCallHierarchyDeclaration(program.getTypeChecker(), node)) {
                 // do not descend into other call site declarations, other than class member names
                 if (isClassLike(node)) {
                     for (const member of node.members) {
