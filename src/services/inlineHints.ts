@@ -6,6 +6,8 @@ namespace ts.InlineHints {
         triggerPosition: number;
         prefix?: string;
         postfix?: string;
+        contextValue?: string;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -89,6 +91,7 @@ namespace ts.InlineHints {
                 range,
                 triggerPosition: node.getStart(),
                 postfix: ":",
+                hoverMessage: text,
                 whitespaceAfter: true,
             });
         }
@@ -99,6 +102,7 @@ namespace ts.InlineHints {
                 range,
                 triggerPosition: node.getStart(),
                 prefix: ":",
+                hoverMessage: text,
                 whitespaceBefore: true,
             });
         }
@@ -109,6 +113,7 @@ namespace ts.InlineHints {
                 range,
                 triggerPosition: node.getStart(),
                 prefix: "= ",
+                hoverMessage: text,
                 whitespaceBefore: true,
             });
         }
