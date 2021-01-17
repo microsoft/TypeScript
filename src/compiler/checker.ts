@@ -21689,7 +21689,27 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
                 const filtered = filter(types, f);
-                return filtered === types ? type : getUnionTypeFromSortedList(filtered, (<UnionType>type).objectFlags);
+                if (filtered === types) {
+                    return type;
+                }
+                const origin = (<UnionType>type).origin;
+                let newOrigin: Type | undefined;
+                if (origin && origin.flags & TypeFlags.Union) {
+                    // If the origin type is a (denormalized) union type, filter its non-union constituents. If that ends
+                    // up removing a smaller number of types than in the normalized constituent set (meaning some of the
+                    // filtered types are within nested unions in the origin), then we can't construct a new origin type.
+                    // Otherwise, if we have exactly one type left in the origin set, return that as the filtered type.
+                    // Otherwise, construct a new filtered origin type.
+                    const originTypes = (<UnionType>origin).types;
+                    const originFiltered = filter(originTypes, t => !!(t.flags & TypeFlags.Union) || f(t));
+                    if (originTypes.length - originFiltered.length === types.length - filtered.length) {
+                        if (originFiltered.length === 1) {
+                            return originFiltered[0];
+                        }
+                        newOrigin = createOriginUnionOrIntersectionType(TypeFlags.Union, originFiltered);
+                    }
+                }
+                return getUnionTypeFromSortedList(filtered, (<UnionType>type).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
             }
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
         }
