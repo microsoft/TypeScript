@@ -33,7 +33,7 @@ namespace jsx {
 >css : string
 
         export type LibraryManagedAttributes<C, P> = WithCSSProp<P>
->LibraryManagedAttributes : WithCSSProp<P>
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
 
     }
 }
