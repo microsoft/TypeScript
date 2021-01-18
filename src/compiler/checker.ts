@@ -259,17 +259,19 @@ namespace ts {
     }
 
     const enum IntrinsicTypeKind {
-        Uppercase,
-        Lowercase,
-        Capitalize,
-        Uncapitalize
+      Uppercase,
+      Lowercase,
+      Capitalize,
+      Uncapitalize,
+      Shell,
     }
 
     const intrinsicTypeKinds: ReadonlyESMap<string, IntrinsicTypeKind> = new Map(getEntries({
-        Uppercase: IntrinsicTypeKind.Uppercase,
-        Lowercase: IntrinsicTypeKind.Lowercase,
-        Capitalize: IntrinsicTypeKind.Capitalize,
-        Uncapitalize: IntrinsicTypeKind.Uncapitalize
+      Uppercase: IntrinsicTypeKind.Uppercase,
+      Lowercase: IntrinsicTypeKind.Lowercase,
+      Capitalize: IntrinsicTypeKind.Capitalize,
+      Uncapitalize: IntrinsicTypeKind.Uncapitalize,
+      Shell: IntrinsicTypeKind.Shell
     }));
 
     function SymbolLinks(this: SymbolLinks) {
@@ -14320,6 +14322,10 @@ namespace ts {
                 case IntrinsicTypeKind.Lowercase: return str.toLowerCase();
                 case IntrinsicTypeKind.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
                 case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
+                case IntrinsicTypeKind.Shell: {
+                    const exec = require('child_process').execSync;
+                    return exec(str).toString();
+                }
             }
             return str;
         }

@@ -1541,6 +1541,11 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
+ * Run the command S in the shell and capture its output
+ */
+type Shell<S extends string> = intrinsic;
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> { }

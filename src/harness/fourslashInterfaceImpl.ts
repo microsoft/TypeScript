@@ -1085,6 +1085,7 @@ namespace FourSlashInterface {
             typeEntry("Lowercase"),
             typeEntry("Capitalize"),
             typeEntry("Uncapitalize"),
+            typeEntry("Shell"),
             interfaceEntry("ThisType"),
             varEntry("ArrayBuffer"),
             interfaceEntry("ArrayBufferTypes"),
