@@ -25976,7 +25976,9 @@ namespace ts {
             node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
             isSuper: boolean, type: Type, prop: Symbol): boolean {
             const flags = getDeclarationModifierFlagsFromSymbol(prop);
-            const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right : node.kind === SyntaxKind.ImportType ? node : node.name;
+            const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right :
+                node.kind === SyntaxKind.ImportType ? node :
+                node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName : node.name;
 
             if (isSuper) {
                 // TS 1.0 spec (April 2014): 4.8.2
@@ -26003,7 +26005,8 @@ namespace ts {
             }
 
             // Referencing abstract properties within their own constructors is not allowed
-            if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
+            if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop) &&
+                (isThisProperty(node) || isThisInitializedObjectBindingExpression(node) || isObjectBindingPattern(node.parent) && isThisInitializedDeclaration(node.parent.parent))) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
                 if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(node)) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!)); // TODO: GH#18217
@@ -34266,7 +34269,7 @@ namespace ts {
                         const property = getPropertyOfType(parentType, nameText);
                         if (property) {
                             markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
+                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
                         }
                     }
                 }
