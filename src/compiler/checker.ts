@@ -32313,6 +32313,11 @@ namespace ts {
             if (hasSyntacticModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.MethodDeclaration && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
+
+            // Private named methods are only allowed in class declarations
+            if (isPrivateIdentifier(node.name) && !isClassDeclaration(node.parent)) {
+                error(node, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+            }
         }
 
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
@@ -40100,7 +40105,7 @@ namespace ts {
                 }
 
                 if (name.kind === SyntaxKind.PrivateIdentifier) {
-                    return grammarErrorOnNode(name, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                    grammarErrorOnNode(name, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
                 }
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
