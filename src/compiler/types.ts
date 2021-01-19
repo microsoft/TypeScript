@@ -828,7 +828,8 @@ namespace ts {
 
         ReportsUnmeasurable = 1 << 3,
         ReportsUnreliable   = 1 << 4,
-        ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
+        ReportsUnmeasurableIfAny = 1 << 5,
+        ReportsMask         = ReportsUnmeasurable | ReportsUnreliable | ReportsUnmeasurableIfAny
     }
 
     /* @internal */
@@ -5242,7 +5243,8 @@ namespace ts {
         VarianceMask  = Invariant | Covariant | Contravariant | Independent, // Mask containing all measured variances without the unmeasurable flag
         Unmeasurable  = 1 << 3,  // Variance result is unusable - relationship relies on structural comparisons which are not reflected in generic relationships
         Unreliable    = 1 << 4,  // Variance result is unreliable - checking may produce false negatives, but not false positives
-        AllowsStructuralFallback = Unmeasurable | Unreliable,
+        UnmeasurableIfAny = 1 << 5, // Variance result cannot be used when comparing with `any`
+        AllowsStructuralFallback = Unmeasurable | Unreliable | UnmeasurableIfAny,
     }
 
     // Generic class and interface types

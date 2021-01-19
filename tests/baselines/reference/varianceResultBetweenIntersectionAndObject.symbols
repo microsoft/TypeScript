@@ -1,0 +1,30 @@
+=== tests/cases/compiler/varianceResultBetweenIntersectionAndObject.ts ===
+type X<T, U> = { traits: T & U };
+>X : Symbol(X, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 0))
+>T : Symbol(T, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 7))
+>U : Symbol(U, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 9))
+>traits : Symbol(traits, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 16))
+>T : Symbol(T, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 7))
+>U : Symbol(U, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 9))
+
+// XX: true
+type XX = X<true, true> extends X<any, false> ? false : true;
+>XX : Symbol(XX, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 33))
+>X : Symbol(X, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 0))
+>X : Symbol(X, Decl(varianceResultBetweenIntersectionAndObject.ts, 0, 0))
+
+// Same as above, but with & {} at the end
+type Y<T, U> = { traits: T & U } & {};
+>Y : Symbol(Y, Decl(varianceResultBetweenIntersectionAndObject.ts, 2, 61))
+>T : Symbol(T, Decl(varianceResultBetweenIntersectionAndObject.ts, 5, 7))
+>U : Symbol(U, Decl(varianceResultBetweenIntersectionAndObject.ts, 5, 9))
+>traits : Symbol(traits, Decl(varianceResultBetweenIntersectionAndObject.ts, 5, 16))
+>T : Symbol(T, Decl(varianceResultBetweenIntersectionAndObject.ts, 5, 7))
+>U : Symbol(U, Decl(varianceResultBetweenIntersectionAndObject.ts, 5, 9))
+
+// YY: false
+type YY = Y<true, true> extends Y<any, false> ? false : true;
+>YY : Symbol(YY, Decl(varianceResultBetweenIntersectionAndObject.ts, 5, 38))
+>Y : Symbol(Y, Decl(varianceResultBetweenIntersectionAndObject.ts, 2, 61))
+>Y : Symbol(Y, Decl(varianceResultBetweenIntersectionAndObject.ts, 2, 61))
+
