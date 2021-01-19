@@ -361,7 +361,7 @@ namespace ts {
             const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
 
-            // All the resolutions in this file are invalidated if this file wasnt resolved using same redirect
+            // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect
             const program = resolutionHost.getCurrentProgram();
             const oldRedirect = program && program.getResolvedProjectReferenceToRedirect(containingFile);
             const unmatchedRedirects = oldRedirect ?

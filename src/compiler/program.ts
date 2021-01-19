@@ -1016,7 +1016,7 @@ namespace ts {
             for (const oldSourceFile of oldSourceFiles) {
                 const newFile = getSourceFileByPath(oldSourceFile.resolvedPath);
                 if (shouldCreateNewSourceFile || !newFile ||
-                    // old file wasnt redirect but new file is
+                    // old file wasn't redirect but new file is
                     (oldSourceFile.resolvedPath === oldSourceFile.path && newFile.resolvedPath !== oldSourceFile.path)) {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
