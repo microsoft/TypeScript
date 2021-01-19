@@ -1,11 +1,73 @@
 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(3,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(7,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(8,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(13,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(14,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(18,5): error TS2393: Duplicate function implementation.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(19,5): error TS2393: Duplicate function implementation.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(24,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(25,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(30,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(31,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(32,9): error TS2300: Duplicate identifier '#foo'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts (1 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts (12 errors) ====
     class A {
         #foo = "foo";
         #foo = "foo";
         ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+    }
+    
+    class A2 {
+        #foo = "foo";
+        ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        #foo() {}
+        ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+    }
+    
+    
+    class A3 {
+        #foo = "foo";
+        ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        get #foo() { return ""}
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+    }
+    
+    class A4 {
+        #foo() { return ""}
+        ~~~~
+!!! error TS2393: Duplicate function implementation.
+        #foo() { return ""}
+        ~~~~
+!!! error TS2393: Duplicate function implementation.
+    }
+    
+    
+    class A5 {
+        #foo() { return ""}
+        ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        get #foo() { return ""}
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+    }
+    
+    
+    class A6 {
+        #foo = "foo";
+        ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        #foo() { return ""}
+        ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        get #foo() { return ""}
+            ~~~~
 !!! error TS2300: Duplicate identifier '#foo'.
     }
     

@@ -11,3 +11,69 @@ class A {
 >"foo" : "foo"
 }
 
+class A2 {
+>A2 : A2
+
+    #foo = "foo";
+>#foo : string
+>"foo" : "foo"
+
+    #foo() {}
+>#foo : () => void
+}
+
+
+class A3 {
+>A3 : A3
+
+    #foo = "foo";
+>#foo : string
+>"foo" : "foo"
+
+    get #foo() { return ""}
+>#foo : string
+>"" : ""
+}
+
+class A4 {
+>A4 : A4
+
+    #foo() { return ""}
+>#foo : () => string
+>"" : ""
+
+    #foo() { return ""}
+>#foo : () => string
+>"" : ""
+}
+
+
+class A5 {
+>A5 : A5
+
+    #foo() { return ""}
+>#foo : () => string
+>"" : ""
+
+    get #foo() { return ""}
+>#foo : string
+>"" : ""
+}
+
+
+class A6 {
+>A6 : A6
+
+    #foo = "foo";
+>#foo : string
+>"foo" : "foo"
+
+    #foo() { return ""}
+>#foo : () => string
+>"" : ""
+
+    get #foo() { return ""}
+>#foo : string
+>"" : ""
+}
+
