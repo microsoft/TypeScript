@@ -3773,7 +3773,7 @@ namespace ts {
                 return;
             }
 
-            symlinkCache.setSymlinkedDirectory(directoryPath, {
+            symlinkCache.setSymlinkedDirectory(directory, {
                 real: ensureTrailingDirectorySeparator(real),
                 realPath
             });

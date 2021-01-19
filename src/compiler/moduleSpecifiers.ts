@@ -301,8 +301,8 @@ namespace ts.moduleSpecifiers {
             : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
         const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
-        const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(importedPath), realPathDirectory => {
-            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(realPathDirectory));
+        const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(importedFileName), realPathDirectory => {
+            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
             if (!symlinkDirectories) return undefined; // Continue to ancestor directory
 
             // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
