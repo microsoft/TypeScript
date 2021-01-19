@@ -7602,15 +7602,8 @@ namespace ts {
                                 if (state === JSDocState.BeginningOfLine) {
                                     // leading asterisks start recording on the *next* (non-whitespace) token
                                     state = JSDocState.SawAsterisk;
-
-                                    if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AsteriskToken)) {
-                                        pushComment(scanner.getTokenText());
-                                        tok = nextTokenJSDoc();
-                                    }
-                                    else {
-                                        indent += 1;
-                                        break;
-                                    }
+                                    indent += 1;
+                                    break;
                                 }
                                 // record the * as a comment
                                 // falls through
@@ -7695,13 +7688,14 @@ namespace ts {
                     skipWhitespaceOrAsterisk();
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
-                    skipWhitespace();
+                    const indentText = skipWhitespaceOrAsterisk();
 
                     if (isNameFirst) {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const comment = parseTagComments(indent + scanner.getStartPos() - start);
+                    const comment = parseTrailingTagComments(indent + scanner.getStartPos() - start, getNodePos(), indent, indentText);
+
                     const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;

@@ -9,7 +9,7 @@
 //// function f1(var1, var2) { }
 //// 
 //// /**
-////  * @param {number} var1 *This asterisk gets trimmed unfortunatelly
+////  * @param {number} var1 *Regular text with an asterisk
 ////  * @param {string} var2 Another *Regular text with an asterisk
 //// */
 //// function f2(var1, var2) { }
@@ -57,10 +57,10 @@ verify.signatureHelp({
 });
 verify.signatureHelp({
     marker: "2",
-    parameterDocComment: "This asterisk gets trimmed unfortunatelly",
+    parameterDocComment: "*Regular text with an asterisk",
     tags: [{
         name: "param",
-        text: "var1 This asterisk gets trimmed unfortunatelly"
+        text: "var1 *Regular text with an asterisk"
     }, {
         name: "param",
         text: "var2 Another *Regular text with an asterisk"
