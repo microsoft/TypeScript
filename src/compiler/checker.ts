@@ -12215,8 +12215,8 @@ namespace ts {
             return symbolTable.get(InternalSymbolName.Index);
         }
 
-        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): IndexSignatureDeclaration | undefined {
-            const indexSymbol = getIndexSymbol(symbol);
+        function getIndexDeclarationOfSymbol(symbol: Symbol | undefined, kind: IndexKind): IndexSignatureDeclaration | undefined {
+            const indexSymbol = symbol && getIndexSymbol(symbol);
             return indexSymbol && getIndexDeclarationOfIndexSymbol(indexSymbol, kind);
         }
 
