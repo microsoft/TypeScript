@@ -1837,6 +1837,7 @@ namespace ts.projectSystem {
         const appPath = "/a/b/app.js" as Path;
         const foooPath = "/a/b/node_modules/fooo/index.d.ts";
         function verifyResolvedModuleOfFooo(project: server.Project) {
+            server.updateProjectIfDirty(project);
             const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo")!;
             assert.equal(foooResolution.resolvedFileName, foooPath);
             return foooResolution;
@@ -1851,6 +1852,7 @@ namespace ts.projectSystem {
                 path: foooPath,
                 content: `export var x: string;`
             };
+
             const host = createServerHost([app, fooo]);
             const installer = new (class extends Installer {
                 constructor() {
@@ -1873,6 +1875,17 @@ namespace ts.projectSystem {
             checkProjectActualFiles(proj, typingFiles.map(f => f.path).concat(app.path, fooo.path));
             const foooResolution2 = verifyResolvedModuleOfFooo(proj);
             assert.strictEqual(foooResolution1, foooResolution2);
+            projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, arrayIterator([{
+                fileName: app.path,
+                changes: arrayIterator([{
+                    span: { start: 0, length: 0 },
+                    newText: `import * as bar from "bar";`
+                }])
+            }]));
+            host.runQueuedTimeoutCallbacks(); // Update the graph
+            // Update the typing
+            host.checkTimeoutQueueLength(2);
+            assert.isTrue(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(app.path as Path));
         }
 
         it("correctly invalidate the resolutions with typing names", () => {
@@ -1883,6 +1896,10 @@ namespace ts.projectSystem {
         });
 
         it("correctly invalidate the resolutions with typing names that are trimmed", () => {
+            const fooIndex: File = {
+                path: `${globalTypingsCacheLocation}/node_modules/foo/index.d.ts`,
+                content: "export function aa(): void;"
+            };
             const fooAA: File = {
                 path: `${globalTypingsCacheLocation}/node_modules/foo/a/a.d.ts`,
                 content: "export function a (): void;"
@@ -1899,7 +1916,7 @@ namespace ts.projectSystem {
                     import * as a from "foo/a/a";
                     import * as b from "foo/a/b";
                     import * as c from "foo/a/c";
-            `, ["foo"], [fooAA, fooAB, fooAC]);
+            `, ["foo"], [fooIndex, fooAA, fooAB, fooAC]);
         });
 
         it("should handle node core modules", () => {
@@ -1930,7 +1947,7 @@ declare module "stream" {
                     executeCommand(this, host, ["node"], [nodeTyping], cb);
                 }
             })();
-            const projectService = createProjectService(host, { typingsInstaller: installer });
+            const projectService = createProjectService(host, { typingsInstaller: installer, logger: createLoggerWritingToConsole() });
             projectService.openClientFile(file.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
 
@@ -1964,6 +1981,17 @@ declare module "stream" {
             // node typings are included in the project
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
+            projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, arrayIterator([{
+                fileName: file.path,
+                changes: arrayIterator([{
+                    span: { start: file.content.indexOf("const"), length: 0 },
+                    newText: `const bar = require("bar");`
+                }])
+            }]));
+            proj.updateGraph(); // Update the graph
+            // Update the typing
+            host.checkTimeoutQueueLength(2);
+            assert.isTrue(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(file.path as Path));
         });
     });
 
