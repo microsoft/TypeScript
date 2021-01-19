@@ -11,10 +11,10 @@ type StringContains<S extends string, L extends string> = (
   )[L]
 
 type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
->ObjectHasKey : StringContains<Extract<keyof O, string>, L>
+>ObjectHasKey : ObjectHasKey<O, L>
 
 type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
->First : StringContains<Extract<keyof T, string>, "0">
+>First : First<T>
 
 type T1 = ObjectHasKey<{ a: string }, 'a'>;  // 'true'
 >T1 : "true"

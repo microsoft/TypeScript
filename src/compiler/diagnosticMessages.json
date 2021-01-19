@@ -1625,7 +1625,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of an 'in' expression must not be a primitive.": {
         "category": "Error",
         "code": 2361
     },
@@ -3231,6 +3231,10 @@
         "category": "Error",
         "code": 2796
     },
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+        "category": "Error",
+        "code": 2797
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3808,6 +3812,10 @@
     "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090
+    },
+    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 5091
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -6191,6 +6199,23 @@
         "category": "Message",
         "code": 95155
     },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95156
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95157
+    },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95158
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95159
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

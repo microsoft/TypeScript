@@ -27,9 +27,9 @@ class Button extends React.Component<ButtonProp, any> {
 >(<InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton>) : JSX.Element
 ><InnerButton {...this.props} children="hi">            <div>Hello World</div>            </InnerButton> : JSX.Element
 >InnerButton : typeof InnerButton
->this.props : ButtonProp & { children?: string | number | boolean | {} | React.ReactElement<any> | (string | number | boolean | any[] | React.ReactElement<any>)[] | undefined; }
+>this.props : ButtonProp & { children?: React.ReactNode | undefined; }
 >this : this
->props : ButtonProp & { children?: string | number | boolean | {} | React.ReactElement<any> | (string | number | boolean | any[] | React.ReactElement<any>)[] | undefined; }
+>props : ButtonProp & { children?: React.ReactNode | undefined; }
 >children : string
 
             <div>Hello World</div>

@@ -1504,11 +1504,19 @@ namespace ts.Completions {
                     : KeywordCompletionFilters.TypeKeywords;
             }
 
+            const variableDeclaration = getVariableDeclaration(location);
+
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
                     // export = /**/ here we want to get all meanings, so any symbol is ok
                     if (isExportAssignment(location.parent)) {
                         return true;
+                    }
+
+                    // Filter out variables from their own initializers
+                    // `const a = /* no 'a' here */`
+                    if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
+                        return false;
                     }
 
                     symbol = skipAlias(symbol, typeChecker);
@@ -1528,6 +1536,19 @@ namespace ts.Completions {
                 return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
             });
         }
+
+        function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
+            const variableDeclaration = findAncestor(property, node =>
+                isFunctionBlock(node) || isArrowFunctionBody(node) || isBindingPattern(node)
+                    ? "quit"
+                    : isVariableDeclaration(node));
+
+            return variableDeclaration as VariableDeclaration | undefined;
+        }
+
+        function isArrowFunctionBody(node: Node) {
+            return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+        };
 
         function isTypeOnlyCompletion(): boolean {
             return insideJsDocTagTypeExpression

@@ -27,6 +27,6 @@ foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 >isArray : (arg: any) => arg is any[]
 >foo2 : Foo
 >foo2 : FooArray
->[foo2] : FooBase[]
->foo2 : FooBase
+>[foo2] : (string | false)[]
+>foo2 : string | false
 

@@ -1,4 +1,4 @@
-/a.ts(1,20): error TS7042: Module 'foo/bar/foobar.json' was resolved to '/node_modules/foo/bar/foobar.json', but '--resolveJsonModule' is not used.
+/a.ts(1,20): error TS2732: Cannot find module 'foo/bar/foobar.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 
 
 ==== /tsconfig.json (0 errors) ====
@@ -16,7 +16,7 @@
 ==== /a.ts (1 errors) ====
     import foobar from "foo/bar/foobar.json";
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7042: Module 'foo/bar/foobar.json' was resolved to '/node_modules/foo/bar/foobar.json', but '--resolveJsonModule' is not used.
+!!! error TS2732: Cannot find module 'foo/bar/foobar.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
     
 ==== /node_modules/foo/bar/foobar.json (0 errors) ====
     { "a": 10 }

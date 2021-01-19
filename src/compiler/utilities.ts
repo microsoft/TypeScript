@@ -4112,7 +4112,6 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
-        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
@@ -4136,16 +4135,7 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        if (referencePath) {
-            return ensurePathIsNonModuleName(extensionless);
-        }
-        const options = host.getCompilerOptions();
-        const rootPkgName = options.bundledPackageName || "";
-        const newPath = combinePaths(rootPkgName, extensionless);
-        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
-            return newPath.slice(0, newPath.length - "/index".length);
-        }
-        return newPath;
+        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4751,7 +4741,7 @@ namespace ts {
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -5452,11 +5442,6 @@ namespace ts {
         });
     }
 
-    // Return true if the given type is the constructor type for an abstract class
-    export function isAbstractConstructorType(type: Type): boolean {
-        return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
-    }
-
     export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
         if (symbol.flags & SymbolFlags.Class) {
             const declaration = getClassLikeDeclarationOfSymbol(symbol);
@@ -6016,6 +6001,10 @@ namespace ts {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
+    export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
+        return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    }
+
     export function isIncrementalCompilation(options: CompilerOptions) {
         return !!(options.incremental || options.composite);
     }
@@ -6107,7 +6096,14 @@ namespace ts {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
             setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
-            setSymlinkedDirectory: (path, directory) => (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory),
+            setSymlinkedDirectory: (path, directory) => {
+                // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
+                // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
+                // this path is never a candidate for a module specifier, we can ignore it entirely.
+                if (!containsIgnoredPath(path)) {
+                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory);
+                }
+            }
         };
     }
 
@@ -7080,5 +7076,9 @@ namespace ts {
             }
             return false;
         }
+    }
+
+    export function containsIgnoredPath(path: string) {
+        return some(ignoredPaths, p => stringContains(path, p));
     }
 }

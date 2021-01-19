@@ -2,7 +2,7 @@
 // Repro from #41931
 
 type Enum = Record<string, string | number>;
->Enum : Record<string, string | number>
+>Enum : Enum
 
 type TypeMap<E extends Enum> = { [key in E[keyof E]]: number | boolean | string | number[] };
 >TypeMap : TypeMap<E>

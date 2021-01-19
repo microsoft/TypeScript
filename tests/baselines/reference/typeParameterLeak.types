@@ -44,7 +44,7 @@ if (b) {
   const x = b.data;
 >x : { x: string; } | { y: string; }
 >b.data : { x: string; } | { y: string; }
->b : BoxTypes
+>b : Box<{ x: string; }> | Box<{ y: string; }>
 >data : { x: string; } | { y: string; }
 }
 

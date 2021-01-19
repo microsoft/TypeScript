@@ -5,7 +5,7 @@ type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P]
 >Getters : Getters<T>
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
->TG1 : Getters<{ foo: string; bar: number; baz: {    z: boolean;}; }>
+>TG1 : TG1
 >foo : string
 >bar : number
 >baz : { z: boolean; }
@@ -22,7 +22,7 @@ type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: 
 >TypeFromDefs : TypeFromDefs<T>
 
 type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
->TP1 : TypeFromDefs<{ name: 'a'; type: string; } | { name: 'b'; type: number; } | { name: 'a'; type: boolean; }>
+>TP1 : TP1
 >name : "a"
 >type : string
 >name : "b"
@@ -33,10 +33,10 @@ type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number 
 // No array or tuple type mapping when 'as N' clause present
 
 type TA1 = Getters<string[]>;
->TA1 : Getters<string[]>
+>TA1 : TA1
 
 type TA2 = Getters<[number, boolean]>;
->TA2 : Getters<[number, boolean]>
+>TA2 : TA2
 
 // Filtering using 'as N' clause
 
@@ -56,7 +56,7 @@ type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 >DoubleProp : DoubleProp<T>
 
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
->TD1 : DoubleProp<{ a: string; b: number; }>
+>TD1 : TD1
 >a : string
 >b : number
 
