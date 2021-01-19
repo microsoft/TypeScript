@@ -12143,7 +12143,7 @@ namespace ts {
         }
 
         function getIndexSymbol(symbol: Symbol): Symbol | undefined {
-            return getIndexSymbolFromSymbolTable(symbol.members!);
+            return symbol.members ? getIndexSymbolFromSymbolTable(symbol.members) : undefined;
         }
 
         function getIndexSymbolFromSymbolTable(symbolTable: SymbolTable): Symbol | undefined {
