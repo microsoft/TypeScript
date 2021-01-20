@@ -286,7 +286,8 @@ namespace ts.moduleSpecifiers {
         const getCanonicalFileName = hostGetCanonicalFileName(host);
         const cwd = host.getCurrentDirectory();
         const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
-        const redirects = host.redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName)) || emptyArray;
+        const importedPath = toPath(importedFileName, cwd, getCanonicalFileName);
+        const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
@@ -299,22 +300,25 @@ namespace ts.moduleSpecifiers {
             ? host.getSymlinkCache()
             : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
-        const symlinkedDirectories = links.getSymlinkedDirectories();
-        const useCaseSensitiveFileNames = !host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames();
-        const result = symlinkedDirectories && forEachEntry(symlinkedDirectories, (resolved, path) => {
-            if (resolved === false) return undefined;
-            if (startsWithDirectory(importingFileName, resolved.realPath, getCanonicalFileName)) {
-                return undefined; // Don't want to a package to globally import from itself
+        const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
+        const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
+        const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {
+            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
+            if (!symlinkDirectories) return undefined; // Continue to ancestor directory
+
+            // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
+            if (startsWithDirectory(importingFileName, realPathDirectory, getCanonicalFileName)) {
+                return false; // Stop search, each ancestor directory will also hit this condition
             }
 
             return forEach(targets, target => {
-                if (!containsPath(resolved.real, target, !useCaseSensitiveFileNames)) {
+                if (!startsWithDirectory(target, realPathDirectory, getCanonicalFileName)) {
                     return;
                 }
 
-                const relative = getRelativePathFromDirectory(resolved.real, target, getCanonicalFileName);
-                const option = resolvePath(path, relative);
-                if (!host.fileExists || host.fileExists(option)) {
+                const relative = getRelativePathFromDirectory(realPathDirectory, target, getCanonicalFileName);
+                for (const symlinkDirectory of symlinkDirectories) {
+                    const option = resolvePath(symlinkDirectory, relative);
                     const result = cb(option, target === referenceRedirect);
                     if (result) return result;
                 }

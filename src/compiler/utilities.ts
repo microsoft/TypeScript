@@ -6083,32 +6083,43 @@ namespace ts {
     }
 
     export interface SymlinkCache {
+        /** Gets a map from symlink to realpath. Keys have trailing directory separators. */
         getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+        /** Gets a map from realpath to symlinks. Keys have trailing directory separators. */
+        getSymlinkedDirectoriesByRealpath(): MultiMap<Path, string> | undefined;
+        /** Gets a map from symlink to realpath */
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
-        setSymlinkedDirectory(path: Path, directory: SymlinkedDirectory | false): void;
-        setSymlinkedFile(path: Path, real: string): void;
+        setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
+        setSymlinkedFile(symlinkPath: Path, real: string): void;
     }
 
-    export function createSymlinkCache(): SymlinkCache {
+    export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
+            getSymlinkedDirectoriesByRealpath: () => symlinkedDirectoriesByRealpath,
             setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
-            setSymlinkedDirectory: (path, directory) => {
+            setSymlinkedDirectory: (symlink, real) => {
                 // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
                 // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
                 // this path is never a candidate for a module specifier, we can ignore it entirely.
-                if (!containsIgnoredPath(path)) {
-                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory);
+                let symlinkPath = toPath(symlink, cwd, getCanonicalFileName);
+                if (!containsIgnoredPath(symlinkPath)) {
+                    symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
+                    if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
+                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                    }
+                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
                 }
             }
         };
     }
 
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
-        const cache = createSymlinkCache();
+        const cache = createSymlinkCache(cwd, getCanonicalFileName);
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
@@ -6116,7 +6127,7 @@ namespace ts {
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
-                    toPath(commonOriginal, cwd, getCanonicalFileName),
+                    commonOriginal,
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }
@@ -6124,8 +6135,8 @@ namespace ts {
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
-        const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
-        const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        const aParts = getPathComponents(getNormalizedAbsolutePath(a, cwd));
+        const bParts = getPathComponents(getNormalizedAbsolutePath(b, cwd));
         let isDirectory = false;
         while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
