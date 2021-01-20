@@ -7694,7 +7694,7 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const comment = parseTrailingTagComments(indent + scanner.getStartPos() - start, getNodePos(), indent, indentText);
+                    const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
 
                     const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
                     if (nestedTypeLiteral) {
