@@ -14613,7 +14613,7 @@ namespace ts {
                     combinedMapper = mergeTypeMappers(mapper, context.mapper);
                 }
                 // Instantiate the extends type including inferences for 'infer T' type parameters
-                const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
+                const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
                 // We attempt to resolve the conditional type only when the check and extends types are non-generic
                 if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
                     // Return falseType for a definitely false extends check. We check an instantiations of the two
