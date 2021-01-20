@@ -3,14 +3,49 @@ Standard output:
 node_modules/connect-mongo/src/types.d.ts(113,66): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
 node_modules/connect-mongo/src/types.d.ts(114,45): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
 node_modules/connect-mongo/src/types.d.ts(118,47): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
-src/app.ts(72,21): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
-  Property 'returnTo' does not exist on type 'Session'.
-src/app.ts(75,21): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
-  Property 'returnTo' does not exist on type 'Session'.
-src/app.ts(116,30): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
-  Property 'returnTo' does not exist on type 'Session'.
-src/controllers/user.ts(51,38): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
-  Property 'returnTo' does not exist on type 'Session'.
+src/app.ts(31,10): error TS2540: Cannot assign to 'Promise' because it is a read-only property.
+src/app.ts(72,21): error TS2339: Property 'returnTo' does not exist on type 'Session & Partial<SessionData>'.
+src/app.ts(75,21): error TS2339: Property 'returnTo' does not exist on type 'Session & Partial<SessionData>'.
+src/app.ts(116,30): error TS2339: Property 'returnTo' does not exist on type 'Session & Partial<SessionData>'.
+src/config/passport.ts(14,5): error TS2349: This expression is not callable.
+  Type 'User' has no call signatures.
+src/config/passport.ts(18,24): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(18,29): error TS7006: Parameter 'user' implicitly has an 'any' type.
+src/config/passport.ts(28,51): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(71,49): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(71,54): error TS7006: Parameter 'existingUser' implicitly has an 'any' type.
+src/config/passport.ts(77,45): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(92,49): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(92,54): error TS7006: Parameter 'existingUser' implicitly has an 'any' type.
+src/config/passport.ts(97,59): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/config/passport.ts(97,64): error TS7006: Parameter 'existingEmailUser' implicitly has an 'any' type.
+src/controllers/user.ts(51,38): error TS2339: Property 'returnTo' does not exist on type 'Session & Partial<SessionData>'.
+src/controllers/user.ts(101,46): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/controllers/user.ts(101,51): error TS7006: Parameter 'existingUser' implicitly has an 'any' type.
+src/controllers/user.ts(146,29): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/controllers/user.ts(153,19): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options?: SaveOptions): Promise<UserDocument>', gave the following error.
+    Type '(err: WriteError) => void' has no properties in common with type 'SaveOptions'.
+  Overload 2 of 3, '(options?: SaveOptions, fn?: (err: NativeError, doc: UserDocument) => void): void', gave the following error.
+    Type '(err: WriteError) => void' has no properties in common with type 'SaveOptions'.
+  Overload 3 of 3, '(fn?: (err: NativeError, doc: UserDocument) => void): void', gave the following error.
+    Argument of type '(err: WriteError) => void' is not assignable to parameter of type '(err: NativeError, doc: UserDocument) => void'.
+      Types of parameters 'err' and 'err' are incompatible.
+        Type 'NativeError' is missing the following properties from type 'WriteError': code, index, errmsg
+src/controllers/user.ts(183,29): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/controllers/user.ts(186,19): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options?: SaveOptions): Promise<UserDocument>', gave the following error.
+    Type '(err: WriteError) => void' has no properties in common with type 'SaveOptions'.
+  Overload 2 of 3, '(options?: SaveOptions, fn?: (err: NativeError, doc: UserDocument) => void): void', gave the following error.
+    Type '(err: WriteError) => void' has no properties in common with type 'SaveOptions'.
+  Overload 3 of 3, '(fn?: (err: NativeError, doc: UserDocument) => void): void', gave the following error.
+    Argument of type '(err: WriteError) => void' is not assignable to parameter of type '(err: NativeError, doc: UserDocument) => void'.
+      Types of parameters 'err' and 'err' are incompatible.
+        Type 'NativeError' is not assignable to type 'WriteError'.
+src/controllers/user.ts(215,29): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/controllers/user.ts(349,54): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/models/User.ts(81,15): error TS2339: Property 'email' does not exist on type 'Document<any>'.
+src/models/User.ts(84,54): error TS2339: Property 'email' does not exist on type 'Document<any>'.
 
 
 

@@ -247,41 +247,69 @@ namespace ts.codefix {
         );
     }
 
-    export function createMethodFromCallExpression(
+    export function createSignatureDeclarationFromCallExpression(
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration,
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
-        methodName: string,
+        name: Identifier,
         modifierFlags: ModifierFlags,
-        contextNode: Node,
-        inJs: boolean
-    ): MethodDeclaration {
-        const body = !isInterfaceDeclaration(contextNode);
-        const { typeArguments, arguments: args, parent } = call;
+        contextNode: Node
+    ) {
+        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
-        const checker = context.program.getTypeChecker();
         const tracker = getNoopSymbolTrackerWithResolver(context);
-        const types = map(args, arg =>
-            typeToAutoImportableTypeNode(checker, importAdder, checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, scriptTarget, /*flags*/ undefined, tracker));
+        const checker = context.program.getTypeChecker();
+        const isJs = isInJSFile(contextNode);
+        const { typeArguments, arguments: args, parent } = call;
+
+        const contextualType = isJs ? undefined : checker.getContextualType(call);
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
-        const contextualType = checker.getContextualType(call);
-        const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
-        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
-        return factory.createMethodDeclaration(
+        const types = isJs ? [] : map(args, arg =>
+            typeToAutoImportableTypeNode(checker, importAdder, checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, scriptTarget, /*flags*/ undefined, tracker));
+
+        const modifiers = modifierFlags
+            ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags))
+            : undefined;
+        const asteriskToken = isYieldExpression(parent)
+            ? factory.createToken(SyntaxKind.AsteriskToken)
+            : undefined;
+        const typeParameters = isJs || typeArguments === undefined
+            ? undefined
+            : map(typeArguments, (_, i) =>
+                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
+        const parameters = createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, isJs);
+        const type = isJs || contextualType === undefined
+            ? undefined
+            : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
+
+        if (kind === SyntaxKind.MethodDeclaration) {
+            return factory.createMethodDeclaration(
+                /*decorators*/ undefined,
+                modifiers,
+                asteriskToken,
+                name,
+                /*questionToken*/ undefined,
+                typeParameters,
+                parameters,
+                type,
+                isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference)
+            );
+        }
+        return factory.createFunctionDeclaration(
             /*decorators*/ undefined,
-            /*modifiers*/ modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined,
-            /*asteriskToken*/ isYieldExpression(parent) ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
-            methodName,
-            /*questionToken*/ undefined,
-            /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
-                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
-            /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
-            /*type*/ returnType,
-            body ? createStubbedMethodBody(quotePreference) : undefined);
+            modifiers,
+            asteriskToken,
+            name,
+            typeParameters,
+            parameters,
+            type,
+            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
+        );
     }
 
-    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
         const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -381,14 +409,18 @@ namespace ts.codefix {
             createStubbedMethodBody(quotePreference));
     }
 
-    function createStubbedMethodBody(quotePreference: QuotePreference): Block {
+    function createStubbedMethodBody(quotePreference: QuotePreference) {
+        return createStubbedBody(Diagnostics.Method_not_implemented.message, quotePreference);
+    }
+
+    export function createStubbedBody(text: string, quotePreference: QuotePreference): Block {
         return factory.createBlock(
             [factory.createThrowStatement(
                 factory.createNewExpression(
                     factory.createIdentifier("Error"),
                     /*typeArguments*/ undefined,
                     // TODO Handle auto quote preference.
-                    [factory.createStringLiteral("Method not implemented.", /*isSingleQuote*/ quotePreference === QuotePreference.Single)]))],
+                    [factory.createStringLiteral(text, /*isSingleQuote*/ quotePreference === QuotePreference.Single)]))],
             /*multiline*/ true);
     }
 

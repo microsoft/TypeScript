@@ -30,7 +30,7 @@ strOrBoolean = new unionOfDifferentReturnType("hello"); // error
 >"hello" : "hello"
 
 new unionOfDifferentReturnType1(true); // error in type of parameter
->new unionOfDifferentReturnType1(true) : (Date & string) | (Date & false) | (Date & true)
+>new unionOfDifferentReturnType1(true) : (number | Date) & (string | boolean)
 >unionOfDifferentReturnType1 : { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; }
 >true : true
 
@@ -56,12 +56,12 @@ strOrBoolean = new unionOfDifferentReturnType1("hello");
 >"hello" : "hello"
 
 new unionOfDifferentReturnType1(true); // error in type of parameter
->new unionOfDifferentReturnType1(true) : (Date & string) | (Date & false) | (Date & true)
+>new unionOfDifferentReturnType1(true) : (number | Date) & (string | boolean)
 >unionOfDifferentReturnType1 : { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; }
 >true : true
 
 new unionOfDifferentReturnType1(); // error missing parameter
->new unionOfDifferentReturnType1() : (Date & string) | (Date & false) | (Date & true)
+>new unionOfDifferentReturnType1() : (number | Date) & (string | boolean)
 >unionOfDifferentReturnType1 : { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; }
 
 var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };

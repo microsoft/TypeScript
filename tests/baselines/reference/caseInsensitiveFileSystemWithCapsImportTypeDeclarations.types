@@ -6,10 +6,10 @@ export class Broken {
 >Broken : Broken
 
     method () {
->method : () => import("tests/cases/compiler/Uppercased_Dir/src/types").Merge<import("tests/cases/compiler/Uppercased_Dir/src/type-a").TypeA, { b: string; }>
+>method : () => TypeB
 
         return { } as TypeB;
->{ } as TypeB : import("tests/cases/compiler/Uppercased_Dir/src/types").Merge<import("tests/cases/compiler/Uppercased_Dir/src/type-a").TypeA, { b: string; }>
+>{ } as TypeB : TypeB
 >{ } : {}
     }
 }
@@ -21,7 +21,7 @@ import { TypeA } from './type-a';
 >TypeA : any
 
 export type TypeB = Merge<TypeA, {
->TypeB : Merge<TypeA, { b: string; }>
+>TypeB : TypeB
 
     b: string;
 >b : string

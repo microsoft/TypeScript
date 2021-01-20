@@ -1,6 +1,6 @@
 Exit Code: 2
 Standard output:
-../../../../built/local/lib.es5.d.ts(1451,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1463,11): error TS2300: Duplicate identifier 'ArrayLike'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -11,7 +11,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(283,12): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(525,9): error TS2322: Type 'Window' is not assignable to type 'Window & typeof globalThis'.
-  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 839 more.
+  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 838 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,49): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'new () => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Window & typeof globalThis' provides no match for the signature 'new (): any'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,24): error TS2351: This expression is not constructable.
@@ -22,7 +22,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(746,5): error TS2322: Type 'Window | {}' is not assignable to type 'Window'.
-  Type '{}' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 224 more.
+  Type '{}' is missing the following properties from type 'Window': applicationCache, clientInformation, closed, customElements, and 226 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1083,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(203,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -593,6 +593,10 @@ node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/repo
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(110,47): error TS2304: Cannot find name 'Util'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(172,8): error TS2339: Property 'ReportRenderer' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/report-renderer.js(193,21): error TS2503: Cannot find namespace 'DetailsRenderer'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/util.js(75,54): error TS2345: Argument of type '{ month: string; day: string; year: string; hour: string; minute: string; timeZoneName: string; }' is not assignable to parameter of type 'DateTimeFormatOptions'.
+  Types of property 'year' are incompatible.
+    Type 'string' is not assignable to type '"numeric" | "2-digit"'.
+node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/util.js(82,52): error TS2345: Argument of type '{ month: string; day: string; year: string; hour: string; minute: string; timeZoneName: string; }' is not assignable to parameter of type 'DateTimeFormatOptions'.
 node_modules/chrome-devtools-frontend/front_end/audits2/lighthouse/renderer/util.js(124,5): error TS2739: Type '{}' is missing the following properties from type '{ numPathParts: number; preserveQuery: boolean; preserveHost: boolean; }': numPathParts, preserveQuery, preserveHost
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(53,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/audits2_test_runner/Audits2TestRunner.js(76,33): error TS2339: Property 'textElement' does not exist on type 'Element'.
@@ -1017,6 +1021,10 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18584,28): error TS2792: Cannot find module '../web-inspector'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18840,20): error TS2792: Cannot find module '../report/v2/renderer/util.js'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19198,56): error TS2339: Property '_onRequestStarted' does not exist on type 'NetworkLog'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19364,47): error TS2345: Argument of type '{ month: string; day: string; year: string; hour: string; minute: string; timeZoneName: string; }' is not assignable to parameter of type 'DateTimeFormatOptions'.
+  Types of property 'year' are incompatible.
+    Type 'string' is not assignable to type '"numeric" | "2-digit"'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19371,43): error TS2345: Argument of type '{ month: string; day: string; year: string; hour: string; minute: string; timeZoneName: string; }' is not assignable to parameter of type 'DateTimeFormatOptions'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19499,6): error TS2339: Property 'Util' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19512,22): error TS2792: Cannot find module './gather/driver.js'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19513,28): error TS2792: Cannot find module './gather/gather-runner'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
@@ -5244,20 +5252,20 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(27
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(289,16): error TS2339: Property 'window' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(293,19): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(305,10): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(tagName: "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr"'.
-  Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"listing" | "xmp"'.
+  Overload 1 of 3, '(tagName: keyof HTMLElementTagNameMap, options?: ElementCreationOptions): HTMLElement | HTMLCanvasElement | ... 69 more ... | HTMLUListElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'keyof HTMLElementTagNameMap'.
+  Overload 2 of 3, '(tagName: keyof HTMLElementDeprecatedTagNameMap, options?: ElementCreationOptions): HTMLPreElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'keyof HTMLElementDeprecatedTagNameMap'.
   Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
     Type 'string' has no properties in common with type 'ElementCreationOptions'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(314,34): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(323,20): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(324,17): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(tagName: "object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr", options?: ElementCreationOptions): HTMLElement | ... 70 more ... | HTMLUListElement', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"object" | "link" | "small" | "sub" | "sup" | "track" | "progress" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | ... 99 more ... | "wbr"'.
-  Overload 2 of 3, '(tagName: "listing" | "xmp", options?: ElementCreationOptions): HTMLPreElement', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"listing" | "xmp"'.
+  Overload 1 of 3, '(tagName: keyof HTMLElementTagNameMap, options?: ElementCreationOptions): HTMLElement | HTMLCanvasElement | ... 69 more ... | HTMLUListElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'keyof HTMLElementTagNameMap'.
+  Overload 2 of 3, '(tagName: keyof HTMLElementDeprecatedTagNameMap, options?: ElementCreationOptions): HTMLPreElement', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'keyof HTMLElementDeprecatedTagNameMap'.
   Overload 3 of 3, '(tagName: string, options?: ElementCreationOptions): HTMLElement', gave the following error.
     Type 'string' has no properties in common with type 'ElementCreationOptions'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(338,19): error TS2339: Property 'createElementWithClass' does not exist on type 'Document'.
@@ -5619,7 +5627,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(755,33): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(758,36): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(813,22): error TS2339: Property 'index' does not exist on type 'DOMNode'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(920,9): error TS2740: Type 'Node & ParentNode' is missing the following properties from type 'Element': assignedSlot, attributes, classList, className, and 64 more.
+node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(920,9): error TS2740: Type 'Node & ParentNode' is missing the following properties from type 'Element': attributes, classList, className, clientHeight, and 64 more.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(930,13): error TS2339: Property 'type' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(1106,44): error TS2339: Property 'keysArray' does not exist on type 'Map<DOMNode, UpdateRecord>'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(1110,89): error TS2339: Property 'scrollTop' does not exist on type 'Node & ParentNode'.
@@ -5774,7 +5782,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(10
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1056,29): error TS2339: Property '_section' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1073,24): error TS2339: Property '_section' does not exist on type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1074,29): error TS2339: Property '_section' does not exist on type 'ChildNode'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1087,7): error TS2740: Type 'ChildNode' is missing the following properties from type 'Element': assignedSlot, attributes, classList, className, and 68 more.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1087,7): error TS2740: Type 'ChildNode' is missing the following properties from type 'Element': attributes, classList, className, clientHeight, and 68 more.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1088,38): error TS2339: Property '_section' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1090,36): error TS2339: Property '_section' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1099,7): error TS2322: Type 'ChildNode' is not assignable to type 'Element'.
@@ -6084,8 +6092,6 @@ node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUt
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(295,16): error TS2339: Property 'devtoolsFrameworkEventListeners' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(295,68): error TS2339: Property 'devtoolsFrameworkEventListeners' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(296,41): error TS2339: Property 'devtoolsFrameworkEventListeners' does not exist on type 'Window & typeof globalThis'.
-node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(306,66): error TS2349: This expression is not callable.
-  Each member of the union type '(<U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: { handler: any; useCapture: boolean; passive: boolean; once: boolean; type: string; }, index: number, array: { ...; }[]) => U, thisArg?: any) => U[])' has signatures, but none of those signatures are compatible with each other.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(324,5): error TS2741: Property 'internalHandlers' is missing in type '{ eventListeners: any[]; }' but required in type '{ eventListeners: EventListenerObjectInInspectedPage[]; internalHandlers: (() => any)[]; }'.
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersUtils.js(371,103): error TS2322: Type '{ type: any; useCapture: any; passive: any; once: any; handler: any; remove: any; }' is not assignable to type 'EventListenerObjectInInspectedPage'.
   Object literal may only specify known properties, and 'remove' does not exist in type 'EventListenerObjectInInspectedPage'.
@@ -6240,6 +6246,7 @@ node_modules/chrome-devtools-frontend/front_end/externs.js(803,13): error TS2355
 node_modules/chrome-devtools-frontend/front_end/externs.js(805,9): error TS2339: Property 'prototype' does not exist on type 'typeof Console'.
 node_modules/chrome-devtools-frontend/front_end/externs.js(811,13): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/externs.js(817,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/externs.js(819,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ResizeObserver' must be of type '{ new (callback: ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }', but here has type 'typeof ResizeObserver'.
 node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js(28,40): error TS2339: Property 'keysArray' does not exist on type 'Map<Worker, Task>'.
 node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js(74,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/formatter/FormatterWorkerPool.js(162,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -11233,7 +11240,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1595
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1609,18): error TS2339: Property 'preciseMillisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1652,69): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1657,64): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'Node'.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1675,5): error TS2740: Type 'DocumentFragment' is missing the following properties from type 'Element': assignedSlot, attributes, classList, className, and 64 more.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1675,5): error TS2740: Type 'DocumentFragment' is missing the following properties from type 'Element': attributes, classList, className, clientHeight, and 64 more.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1684,30): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1685,16): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1687,13): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
@@ -12242,6 +12249,9 @@ node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(26,17): error TS70
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(28,17): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(31,21): error TS2339: Property '_observer' does not exist on type 'typeof XWidget'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(32,18): error TS2339: Property '_observer' does not exist on type 'typeof XWidget'.
+node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(34,28): error TS2339: Property '_visible' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(34,53): error TS2339: Property '_onResizedCallback' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(35,26): error TS2339: Property '_onResizedCallback' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(39,16): error TS2339: Property '_observer' does not exist on type 'typeof XWidget'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(48,25): error TS2339: Property 'parentNodeOrShadowHost' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(56,19): error TS2339: Property 'parentNodeOrShadowHost' does not exist on type 'Node'.
@@ -12249,8 +12259,8 @@ node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(75,15): error TS70
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(82,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(89,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(100,7): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(type: "fullscreenchange" | "fullscreenerror", listener: (this: Element, ev: Event) => any, options?: boolean | EventListenerOptions): void', gave the following error.
-    Argument of type '"scroll"' is not assignable to parameter of type '"fullscreenchange" | "fullscreenerror"'.
+  Overload 1 of 2, '(type: keyof ElementEventMap, listener: (this: Element, ev: Event) => any, options?: boolean | EventListenerOptions): void', gave the following error.
+    Argument of type '"scroll"' is not assignable to parameter of type 'keyof ElementEventMap'.
   Overload 2 of 2, '(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void', gave the following error.
     Argument of type '{ passive: boolean; capture: false; }' is not assignable to parameter of type 'boolean | EventListenerOptions'.
       Object literal may only specify known properties, and 'passive' does not exist in type 'EventListenerOptions'.

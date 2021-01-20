@@ -104,8 +104,21 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
-
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
+
+        const existingSpecifier = forEach(modulePaths, modulePath => forEach(
+            host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
+            reason => {
+                if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
+                const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
+                // If the preference is for non relative and the module specifier is relative, ignore it
+                return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
+                    specifier :
+                    undefined;
+            }
+        ));
+        if (existingSpecifier) return [existingSpecifier];
+
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
 
         // Module specifier priority:
@@ -277,7 +290,9 @@ namespace ts.moduleSpecifiers {
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
-            const result = forEach(targets, p => cb(p, referenceRedirect === p));
+            // Symlinks inside ignored paths are already filtered out of the symlink cache,
+            // so we only need to remove them from the realpath filenames.
+            const result = forEach(targets, p => !containsIgnoredPath(p) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
         const links = host.getSymlinkCache
@@ -305,8 +320,9 @@ namespace ts.moduleSpecifiers {
                 }
             });
         });
-        return result ||
-            (preferSymlinks ? forEach(targets, p => cb(p, p === referenceRedirect)) : undefined);
+        return result || (preferSymlinks
+            ? forEach(targets, p => containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
+            : undefined);
     }
 
     interface ModulePath {

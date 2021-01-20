@@ -34,9 +34,9 @@ ChangeDetectionStrategy[ChangeDetectionStrategy.Default] = 'Default';
 
 Object.defineProperty(ChangeDetectionStrategy, "aField", {value: 42});
 >Object.defineProperty(ChangeDetectionStrategy, "aField", {value: 42}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >ChangeDetectionStrategy : { OnPush: number; Default: number; }
 >"aField" : "aField"
 >{value: 42} : { value: number; }
