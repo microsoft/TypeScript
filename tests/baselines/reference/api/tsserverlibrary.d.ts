@@ -5732,7 +5732,8 @@ declare namespace ts {
     }
     interface InlineHint {
         text: string;
-        position: number;
+        range: TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -8427,7 +8428,8 @@ declare namespace ts.server.protocol {
     }
     interface HintItem {
         text: string;
-        position: Location;
+        range: TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -9252,6 +9254,7 @@ declare namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number;
         positionToLineOffset(position: number): protocol.Location;
+        textSpanToProtoTextSpan(range: TextSpan): protocol.TextSpan;
         isJavaScript(): boolean;
     }
 }

@@ -5732,7 +5732,8 @@ declare namespace ts {
     }
     interface InlineHint {
         text: string;
-        position: number;
+        range: TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
