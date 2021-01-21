@@ -244,7 +244,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [jqueryJs.path]);
 
             installer.installAll(/*expectedCount*/ 0);
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLength(0);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             // files should not be removed from project if ATA is skipped
             checkProjectActualFiles(p, [jqueryJs.path]);
@@ -1024,9 +1024,8 @@ namespace ts.projectSystem {
             service.openClientFile(f.path);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
-
             host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
-            host.checkTimeoutQueueLengthAndRun(2); // To refresh the project and refresh inferred projects
+            host.checkTimeoutQueueLength(0);
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
             host.checkTimeoutQueueLengthAndRun(2);
@@ -1212,7 +1211,8 @@ namespace ts.projectSystem {
                 }
             };
             session.executeCommand(changeRequest);
-            host.checkTimeoutQueueLengthAndRun(2); // This enqueues the updategraph and refresh inferred projects
+            host.checkTimeoutQueueLength(0);
+            proj.updateGraph();
             const version2 = proj.lastCachedUnresolvedImportsList;
             assert.strictEqual(version1, version2, "set of unresolved imports should change");
         });
@@ -1884,8 +1884,8 @@ namespace ts.projectSystem {
             }]));
             host.runQueuedTimeoutCallbacks(); // Update the graph
             // Update the typing
-            host.checkTimeoutQueueLength(2);
-            assert.isTrue(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(app.path as Path));
+            host.checkTimeoutQueueLength(0);
+            assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(app.path as Path));
         }
 
         it("correctly invalidate the resolutions with typing names", () => {
@@ -1947,7 +1947,7 @@ declare module "stream" {
                     executeCommand(this, host, ["node"], [nodeTyping], cb);
                 }
             })();
-            const projectService = createProjectService(host, { typingsInstaller: installer, logger: createLoggerWritingToConsole() });
+            const projectService = createProjectService(host, { typingsInstaller: installer });
             projectService.openClientFile(file.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
 
@@ -1975,11 +1975,8 @@ declare module "stream" {
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
 
-            // Here, since typings doesnt contain node typings and resolution fails and
-            // node typings go out of project,
-            // but because we handle core node modules when resolving from typings cache
-            // node typings are included in the project
-            host.checkTimeoutQueueLengthAndRun(2);
+            // Here, since typings dont change, there is no timeout scheduled
+            host.checkTimeoutQueueLength(0);
             checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
             projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, arrayIterator([{
                 fileName: file.path,
@@ -1989,9 +1986,10 @@ declare module "stream" {
                 }])
             }]));
             proj.updateGraph(); // Update the graph
+            checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
             // Update the typing
-            host.checkTimeoutQueueLength(2);
-            assert.isTrue(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(file.path as Path));
+            host.checkTimeoutQueueLength(0);
+            assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(file.path as Path));
         });
     });
 
