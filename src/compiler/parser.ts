@@ -429,6 +429,8 @@ namespace ts {
                 return visitNode(cbNode, (<TemplateLiteralTypeNode>node).head) || visitNodes(cbNode, cbNodes, (<TemplateLiteralTypeNode>node).templateSpans);
             case SyntaxKind.TemplateLiteralTypeSpan:
                 return visitNode(cbNode, (<TemplateLiteralTypeSpan>node).type) || visitNode(cbNode, (<TemplateLiteralTypeSpan>node).literal);
+            case SyntaxKind.DoExpression:
+                return visitNode(cbNode, (<DoExpression>node).block);
             case SyntaxKind.ComputedPropertyName:
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
@@ -2585,6 +2587,12 @@ namespace ts {
             );
         }
 
+        function parseDoExpression() {
+            const pos = getNodePos();
+            parseExpectedToken(SyntaxKind.DoKeyword);
+            return finishNode(factory.createDoExpression(parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
+        }
+
         function parseTemplateType(): TemplateLiteralTypeNode {
             const pos = getNodePos();
             return finishNode(
@@ -3816,6 +3824,7 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateHead:
+                case SyntaxKind.DoKeyword:
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.OpenBraceToken:
@@ -3870,11 +3879,12 @@ namespace ts {
         }
 
         function isStartOfExpressionStatement(): boolean {
-            // As per the grammar, none of '{' or 'function' or 'class' can start an expression statement.
+            // As per the grammar, none of '{' or 'function' or 'class' or 'do' can start an expression statement.
             return token() !== SyntaxKind.OpenBraceToken &&
                 token() !== SyntaxKind.FunctionKeyword &&
                 token() !== SyntaxKind.ClassKeyword &&
                 token() !== SyntaxKind.AtToken &&
+                token() !== SyntaxKind.DoKeyword &&
                 isStartOfExpression();
         }
 
@@ -4620,6 +4630,7 @@ namespace ts {
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.AwaitKeyword:
+                case SyntaxKind.DoKeyword:
                     return false;
                 case SyntaxKind.LessThanToken:
                     // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
@@ -4745,6 +4756,7 @@ namespace ts {
             //      (Expression)
             //      FunctionExpression
             //      new MemberExpression Arguments?
+            //      DoExpression
             //
             //   MemberExpression : See 11.2
             //      PrimaryExpression
@@ -5227,6 +5239,7 @@ namespace ts {
 
         function parseArgumentList() {
             parseExpected(SyntaxKind.OpenParenToken);
+            debugger;
             const result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return result;
@@ -5341,6 +5354,8 @@ namespace ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
+                case SyntaxKind.DoKeyword:
+                    return parseDoExpression();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);

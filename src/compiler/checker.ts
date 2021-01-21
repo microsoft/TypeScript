@@ -31238,6 +31238,12 @@ namespace ts {
             return getFreshTypeOfLiteralType(getTemplateLiteralType(texts, types));
         }
 
+        function checkDoExpression(node: DoExpression): Type {
+            checkBlock(node.block);
+            // TODO:
+            return unknownType;
+        }
+
         function getContextNode(node: Expression): Node {
             if (node.kind === SyntaxKind.JsxAttributes && !isJsxSelfClosingElement(node.parent)) {
                 return node.parent.parent; // Needs to be the root JsxElement, so it encompasses the attributes _and_ the children (which are essentially part of the attributes)
@@ -31708,6 +31714,8 @@ namespace ts {
                     return falseType;
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
+                case SyntaxKind.DoExpression:
+                    return checkDoExpression(<DoExpression>node);
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:

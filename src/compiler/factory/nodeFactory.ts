@@ -203,6 +203,8 @@ namespace ts {
             createTemplateTail,
             createNoSubstitutionTemplateLiteral,
             createTemplateLiteralLikeNode,
+            createDoExpression,
+            updateDoExpression,
             createYieldExpression,
             updateYieldExpression,
             createSpreadElement,
@@ -2855,6 +2857,23 @@ namespace ts {
         // @api
         function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
             return <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText, templateFlags);
+        }
+
+        // @api
+        function createDoExpression(block: Block) {
+            const node = createBaseExpression<DoExpression>(SyntaxKind.DoExpression);
+            node.block = block;
+            node.transformFlags |=
+                propagateChildFlags(node.block) |
+                TransformFlags.ContainsESNext;
+            return node;
+        }
+
+        // @api
+        function updateDoExpression(node: DoExpression, block: Block) {
+            return node.block !== block
+                ? update(createDoExpression(block), node)
+                : node;
         }
 
         // @api
