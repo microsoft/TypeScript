@@ -1526,6 +1526,7 @@ namespace ts {
                 )
             );
             insertStatementAfterCustomPrologue(statements, assignSuperExpression);
+            setCommentRange(assignSuperExpression, getOriginalNode(superExpression));
         }
 
         function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
@@ -3907,6 +3908,7 @@ namespace ts {
                         ? factory.createAssignment(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), initializer)
                         : initializer;
                 }
+
                 return setOriginalNode(resultingCall, node);
             }
 

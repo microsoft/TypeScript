@@ -139,9 +139,8 @@ var DerivedComments = /** @class */ (function (_super) {
         var _this = this;
         // c1
         console.log();
-        _this = 
         // c2
-        _super.call(this) || this;
+        _this = _super.call(this) || this;
         // c3
         _this.x = null;
         return _this;
