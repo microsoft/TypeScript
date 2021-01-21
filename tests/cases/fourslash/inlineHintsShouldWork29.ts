@@ -8,31 +8,23 @@
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: 'a',
+        text: 'a:',
         rangeOrPosition: markers[0].position,
-        triggerPosition: markers[0].position,
-        postfix: ':',
         whitespaceAfter: true
     },
     {
-        text: '(c: (d: 2 | 3) => void) => ...',
-        triggerPosition: markers[0].position,
+        text: ':(c: (d: 2 | 3) => void) => ...',
         rangeOrPosition: markers[1].position,
-        prefix: ':',
         whitespaceBefore: true
     },
     {
-        text: 'c',
-        triggerPosition: markers[2].position,
+        text: 'c:',
         rangeOrPosition: markers[2].position,
-        postfix: ':',
         whitespaceAfter: true
     },
     {
-        text: '2 | 3',
-        triggerPosition: markers[2].position,
+        text: ':2 | 3',
         rangeOrPosition: markers[3].position,
-        prefix: ':',
         whitespaceBefore: true
     }
 ], undefined, {

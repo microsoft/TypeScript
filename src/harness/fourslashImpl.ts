@@ -850,9 +850,6 @@ namespace FourSlash {
             ts.zipWith(hints.sort(sortHints), [...expected].sort(compareHintOptions), (actual, expected) => {
                 assert.equal(actual.text, expected.text, "Text");
                 assert.deepEqual(actual.range, normalizeVerifyInlineHintsOptions(expected.rangeOrPosition), "RangeOrPosition");
-                assert.equal(actual.triggerPosition, expected.triggerPosition, "TriggerPosition");
-                assert.equal(actual.prefix, expected.prefix, "Prefix");
-                assert.equal(actual.postfix, expected.postfix, "Postfix");
                 assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
                 assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
             });

@@ -1,22 +1,18 @@
 /// <reference path="fourslash.ts" />
 
 //// type F = (a: string, b: number) => void
-//// const f: F = (/*a*/a/*b*/, /*c*/b/*d*/) => { }
+//// const f: F = (a/*a*/, b/*b*/) => { }
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: 'string',
-        triggerPosition: markers[0].position,
-        rangeOrPosition: markers[1].position,
-        prefix: ':',
+        text: ':string',
+        rangeOrPosition: markers[0].position,
         whitespaceBefore: true
     },
     {
-        text: 'number',
-        triggerPosition: markers[2].position,
-        rangeOrPosition: markers[3].position,
-        prefix: ':',
+        text: ':number',
+        rangeOrPosition: markers[1].position,
         whitespaceBefore: true
     }
 ], undefined, {

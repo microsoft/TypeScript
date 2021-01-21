@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 //// class C {
-////     /*a*/a/*b*/ = 1
+////     a/*a*/ = 1
 ////     b: number = 2
 ////     c;
 //// }
@@ -9,10 +9,8 @@
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: 'number',
-        triggerPosition: markers[0].position,
-        rangeOrPosition: markers[1].position,
-        prefix: ':',
+        text: ':number',
+        rangeOrPosition: markers[0].position,
         whitespaceBefore: true
     },
 ], undefined, {

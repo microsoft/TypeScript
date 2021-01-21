@@ -1652,9 +1652,6 @@ namespace FourSlashInterface {
     export interface VerifyInlineHintsOptions {
         text: string;
         rangeOrPosition: number | ts.TextSpan;
-        triggerPosition: number;
-        prefix?: string;
-        postfix?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

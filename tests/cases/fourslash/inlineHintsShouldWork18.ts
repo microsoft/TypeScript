@@ -1,16 +1,14 @@
 /// <reference path="fourslash.ts" />
 
 //// class Class {}
-//// const /*a*/a/*b*/ = new Class();
+//// const a/*a*/ = new Class();
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: 'Class',
-        triggerPosition: markers[0].position,
-        rangeOrPosition: markers[1].position,
-        whitespaceBefore: true,
-        prefix: ':'
+        text: ':Class',
+        rangeOrPosition: markers[0].position,
+        whitespaceBefore: true
     },
 ], undefined, {
     includeInlineVariableTypeHints: true
