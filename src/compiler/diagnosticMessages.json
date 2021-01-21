@@ -3235,6 +3235,14 @@
         "category": "Error",
         "code": 2797
     },
+    "Type produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2798
+    },
+    "Expression produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2799
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
