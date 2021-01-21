@@ -3,7 +3,14 @@ namespace ts.Rename {
     export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
         if (nodeIsEligibleForRename(node)) {
-            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options);
+            const renameInfo = getRenameInfoForNode(
+                node,
+                program.getTypeChecker(),
+                sourceFile,
+                declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()),
+                declaration => program.isSourceFileFromExternalLibrary(declaration.getSourceFile()),
+                options
+            );
             if (renameInfo) {
                 return renameInfo;
             }
@@ -11,7 +18,7 @@ namespace ts.Rename {
         return getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
     }
 
-    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
+    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, isDefinedInExternalLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) {
             if (isStringLiteralLike(node)) {
@@ -37,6 +44,11 @@ namespace ts.Rename {
             return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
         }
 
+        // Disallow rename for elements that are defined in external library.
+        if (declarations.some(isDefinedInExternalLibraryFile)) {
+            return undefined;
+        }
+
         // Cannot rename `default` as in `import { default as foo } from "./someModule";
         if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
             return undefined;
@@ -52,7 +64,7 @@ namespace ts.Rename {
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);
         const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker,symbol), node, sourceFile);
+        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker, symbol), node, sourceFile);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
