@@ -75,7 +75,7 @@ namespace Harness {
                         if (fs.existsSync(path.join(cwd, "node_modules"))) {
                             del.sync(path.join(cwd, "node_modules"), { force: true });
                         }
-                        exec("npm", ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                        exec("npm", ["i", "--ignore-scripts", "--force"], { cwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                     }
                     const args = [path.join(IO.getWorkspaceRoot(), "built/local/tsc.js")];
                     if (types) {
