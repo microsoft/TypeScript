@@ -730,6 +730,7 @@ declare namespace FourSlashInterface {
     export interface VerifyInlineHintsOptions {
         text: string;
         rangeOrPosition: number |TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

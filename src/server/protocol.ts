@@ -2493,6 +2493,7 @@ namespace ts.server.protocol {
     export interface HintItem {
         text: string;
         range: TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

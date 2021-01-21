@@ -1429,6 +1429,7 @@ namespace ts.server {
             return hints.map(hint => ({
                 text: hint.text,
                 range: scriptInfo.textSpanToProtoTextSpan(hint.range),
+                hoverMessage: hint.hoverMessage,
                 whitespaceBefore: hint.whitespaceBefore,
                 whitespaceAfter: hint.whitespaceAfter
             }));

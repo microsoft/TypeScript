@@ -644,7 +644,10 @@ namespace ts.server {
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 text: item.text,
-                range: this.decodeSpan(item.range, file)
+                range: this.decodeSpan(item.range, file),
+                hoverMessage: item.hoverMessage,
+                whitespaceBefore: item.whitespaceBefore,
+                whitespaceAfter: item.whitespaceAfter
             }));
         }
 

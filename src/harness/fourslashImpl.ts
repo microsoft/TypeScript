@@ -1,3 +1,4 @@
+
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -850,6 +851,7 @@ namespace FourSlash {
             ts.zipWith(hints.sort(sortHints), [...expected].sort(compareHintOptions), (actual, expected) => {
                 assert.equal(actual.text, expected.text, "Text");
                 assert.deepEqual(actual.range, normalizeVerifyInlineHintsOptions(expected.rangeOrPosition), "RangeOrPosition");
+                assert.equal(actual.hoverMessage, expected.hoverMessage, "hoverMessage");
                 assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
                 assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
             });

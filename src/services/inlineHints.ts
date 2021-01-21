@@ -1,19 +1,13 @@
 /* @internal */
 namespace ts.InlineHints {
-    interface HintInfo {
-        text: string;
-        range: TextSpan;
-        whitespaceBefore?: boolean;
-        whitespaceAfter?: boolean;
-    }
 
     const maxHintsLength = 30;
 
-    export function provideInlineHints(context: InlineHintsContext): HintInfo[] {
+    export function provideInlineHints(context: InlineHintsContext): InlineHint[] {
         const { file, program, span, cancellationToken, preferences } = context;
 
         const checker = program.getTypeChecker();
-        const result: HintInfo[] = [];
+        const result: InlineHint[] = [];
         const callExpressionHintableCache = new Map<CallExpression, boolean>();
 
         visitor(file);

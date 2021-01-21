@@ -1652,6 +1652,7 @@ namespace FourSlashInterface {
     export interface VerifyInlineHintsOptions {
         text: string;
         rangeOrPosition: number | ts.TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

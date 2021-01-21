@@ -703,6 +703,7 @@ namespace ts {
     export interface InlineHint {
         text: string;
         range: TextSpan;
+        hoverMessage?: string;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
