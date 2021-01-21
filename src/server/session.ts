@@ -1432,8 +1432,6 @@ namespace ts.server {
                 triggerPosition: scriptInfo.positionToLineOffset(hint.triggerPosition),
                 prefix: hint.prefix,
                 postfix: hint.postfix,
-                contextValue: hint.contextValue,
-                hoverMessage: hint.hoverMessage,
                 whitespaceBefore: hint.whitespaceBefore,
                 whitespaceAfter: hint.whitespaceAfter
             }));
