@@ -5,7 +5,7 @@ Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
 Node.js version is 15.6.0 (unstable)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
-==[ @azure/eslint-plugin-azure-sdk ]==============================[ 1 of 58 ]==
+==[ @azure/eslint-plugin-azure-sdk ]==============================[ 1 of 59 ]==
 "@azure/abort-controller" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/communication-administration" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/communication-chat" is blocked by "@azure/eslint-plugin-azure-sdk".
@@ -54,6 +54,7 @@ Executing a maximum of ?simultaneous processes...
 "@azure/storage-internal-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/test-utils-multi-version" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-https" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-crypto" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-asynciterator-polyfill" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-paging" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-tracing" is blocked by "@azure/eslint-plugin-azure-sdk".
@@ -63,7 +64,7 @@ Executing a maximum of ?simultaneous processes...
 "@azure/event-processor-host" is blocked by "@azure/eslint-plugin-azure-sdk".
 "testhub" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/logger" is blocked by "@azure/eslint-plugin-azure-sdk".
-==[ BLOCKED: 57 projects ]=====================================================
+==[ BLOCKED: 58 projects ]=====================================================
 These projects were blocked by dependencies that failed:
   @azure/abort-controller
   @azure/ai-anomaly-detector
@@ -80,6 +81,7 @@ These projects were blocked by dependencies that failed:
   @azure/core-asynciterator-polyfill
   @azure/core-auth
   @azure/core-client
+  @azure/core-crypto
   @azure/core-http
   @azure/core-https
   @azure/core-lro
