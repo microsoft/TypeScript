@@ -22598,10 +22598,13 @@ namespace ts {
                 if (propName === undefined) {
                     return type;
                 }
-                const propType = getTypeOfPropertyOfType(type, propName);
+                const includesUndefined = strictNullChecks && maybeTypeOfKind(type, TypeFlags.Undefined);
+                const removeOptional = includesUndefined && isOptionalChain(access);
+                let propType = getTypeOfPropertyOfType(removeOptional ? getTypeWithFacts(type, TypeFacts.NEUndefined) : type, propName);
                 if (!propType) {
                     return type;
                 }
+                propType = removeOptional ? getOptionalType(propType) : propType;
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
