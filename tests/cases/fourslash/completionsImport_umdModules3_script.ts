@@ -4,7 +4,7 @@
 //// { "dependencies": { "@types/classnames": "*" } }
 
 // @filename: /tsconfig.json
-//// {}
+//// { "compilerOptions": { "module": "es2015" }}
 
 // @filename: /node_modules/@types/classnames/package.json
 //// { "name": "@types/classnames", "types": "index.d.ts" }
