@@ -11,14 +11,10 @@ type B = {
 
 function funcTwo(arg: A | B | undefined) {
   if (arg?.type === 'B') {
-    // arg; // `B`
-    return 'B';
+    arg; // `B`
+    return;
   }
 
-  arg; // `A | B | undefined`
-
-  // arg cannot be of type B here
-  const errorTwo = arg?.name; // unexpected error
-
-  return errorTwo;
+  arg;
+  arg?.name;
 }

@@ -10,27 +10,21 @@ type B = {
 
 function funcTwo(arg: A | B | undefined) {
   if (arg?.type === 'B') {
-    // arg; // `B`
-    return 'B';
+    arg; // `B`
+    return;
   }
 
-  arg; // `A | B | undefined`
-
-  // arg cannot be of type B here
-  const errorTwo = arg?.name; // unexpected error
-
-  return errorTwo;
+  arg;
+  arg?.name;
 }
 
 
 //// [controlFlowOptionalChain2.js]
 function funcTwo(arg) {
     if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {
-        // arg; // `B`
-        return 'B';
+        arg; // `B`
+        return;
     }
-    arg; // `A | B | undefined`
-    // arg cannot be of type B here
-    var errorTwo = arg === null || arg === void 0 ? void 0 : arg.name; // unexpected error
-    return errorTwo;
+    arg;
+    arg === null || arg === void 0 ? void 0 : arg.name;
 }

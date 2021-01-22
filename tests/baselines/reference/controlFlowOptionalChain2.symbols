@@ -27,21 +27,18 @@ function funcTwo(arg: A | B | undefined) {
 >arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
 >type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
 
-    // arg; // `B`
-    return 'B';
-  }
-
-  arg; // `A | B | undefined`
+    arg; // `B`
 >arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
 
-  // arg cannot be of type B here
-  const errorTwo = arg?.name; // unexpected error
->errorTwo : Symbol(errorTwo, Decl(controlFlowOptionalChain2.ts, 18, 7))
+    return;
+  }
+
+  arg;
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+
+  arg?.name;
 >arg?.name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
 >arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
 >name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
-
-  return errorTwo;
->errorTwo : Symbol(errorTwo, Decl(controlFlowOptionalChain2.ts, 18, 7))
 }
 

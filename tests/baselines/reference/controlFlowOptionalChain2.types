@@ -17,7 +17,7 @@ type B = {
 }
 
 function funcTwo(arg: A | B | undefined) {
->funcTwo : (arg: A | B | undefined) => string | undefined
+>funcTwo : (arg: A | B | undefined) => void
 >arg : A | B | undefined
 
   if (arg?.type === 'B') {
@@ -27,22 +27,18 @@ function funcTwo(arg: A | B | undefined) {
 >type : "A" | "B" | undefined
 >'B' : "B"
 
-    // arg; // `B`
-    return 'B';
->'B' : "B"
+    arg; // `B`
+>arg : B
+
+    return;
   }
 
-  arg; // `A | B | undefined`
+  arg;
 >arg : A | undefined
 
-  // arg cannot be of type B here
-  const errorTwo = arg?.name; // unexpected error
->errorTwo : string | undefined
+  arg?.name;
 >arg?.name : string | undefined
 >arg : A | undefined
 >name : string | undefined
-
-  return errorTwo;
->errorTwo : string | undefined
 }
 
