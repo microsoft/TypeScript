@@ -1527,6 +1527,7 @@ namespace ts.Completions {
                     // import suggestions will win in the completion
                     const symbolOrigin = skipAlias(symbol, typeChecker);
                     // We only want to filter out the global keywords
+                    // Auto Imports are not available for scripts so this conditional is always false
                     if (symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
                         && symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
                         && !compilerOptions.allowUmdGlobalAccess) {
