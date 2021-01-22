@@ -14109,7 +14109,8 @@ namespace ts {
                 return some((type as IntersectionType).types, isJSLiteralType);
             }
             if (type.flags & TypeFlags.Instantiable) {
-                return isJSLiteralType(getResolvedBaseConstraint(type));
+                const constraint = getResolvedBaseConstraint(type);
+                return constraint !== type && isJSLiteralType(constraint);
             }
             return false;
         }
