@@ -1057,13 +1057,16 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
-            enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 /*inserted*/ noop,
                 removed => this.detachScriptInfoFromProject(removed)
-            );
-            this.typingFiles = typingFiles;
-            // Invalidate files with unresolved imports
-            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+            )) {
+                // If typing files changed, then only schedule project update
+                this.typingFiles = typingFiles;
+                // Invalidate files with unresolved imports
+                this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+                this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+            }
         }
 
         /* @internal */
