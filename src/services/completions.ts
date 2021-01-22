@@ -1506,7 +1506,6 @@ namespace ts.Completions {
             }
 
             const variableDeclaration = getVariableDeclaration(location);
-            const isFileSourceAModule = !!sourceFile.externalModuleIndicator;
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1529,7 +1528,7 @@ namespace ts.Completions {
                     const symbolOrigin = skipAlias(symbol, typeChecker);
                     // We only want to filter out the global keywords
                     // Auto Imports are not available for scripts so this conditional is always false
-                    if (isFileSourceAModule
+                    if (!!sourceFile.externalModuleIndicator
                         && !compilerOptions.allowUmdGlobalAccess
                         && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
                         && symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions) {
