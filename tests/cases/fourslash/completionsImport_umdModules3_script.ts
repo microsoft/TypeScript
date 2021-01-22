@@ -4,7 +4,7 @@
 //// { "dependencies": { "@types/classnames": "*" } }
 
 // @filename: /tsconfig.json
-//// { "compilerOptions": { "allowUmdGlobalAccess": true } }
+//// {}
 
 // @filename: /node_modules/@types/classnames/package.json
 //// { "name": "@types/classnames", "types": "index.d.ts" }
@@ -15,9 +15,8 @@
 //// export as namespace classNames;
 
 // @filename: /SomeReactComponent.tsx
-//// import * as React from 'react';
 ////
-//// const el1 = <div className={class/*1*/}>foo</div>;
+//// const el1 = <div className={class/*1*/}>foo</div>
 
 goTo.marker("1");
 
