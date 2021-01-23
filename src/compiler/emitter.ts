@@ -1690,6 +1690,8 @@ namespace ts {
                         return emitConditionalExpression(<ConditionalExpression>node);
                     case SyntaxKind.TemplateExpression:
                         return emitTemplateExpression(<TemplateExpression>node);
+                    case SyntaxKind.DoExpression:
+                        return emitDoExpression(<DoExpression>node);
                     case SyntaxKind.YieldExpression:
                         return emitYieldExpression(<YieldExpression>node);
                     case SyntaxKind.SpreadElement:
@@ -2642,6 +2644,11 @@ namespace ts {
         function emitTemplateExpression(node: TemplateExpression) {
             emit(node.head);
             emitList(node, node.templateSpans, ListFormat.TemplateExpressionSpans);
+        }
+
+        function emitDoExpression(node: DoExpression) {
+            emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
+            emitBlock(node.block);
         }
 
         function emitYieldExpression(node: YieldExpression) {
