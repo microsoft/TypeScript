@@ -34157,7 +34157,7 @@ namespace ts {
             }
             else {
                 forEach(node.statements, node => {
-                    type = type || checkSourceElement(node);
+                    type = checkSourceElement(node) || type;
                 });
             }
             if (node.locals) {
