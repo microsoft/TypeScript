@@ -31239,14 +31239,13 @@ namespace ts {
         }
 
         function checkDoExpression(node: DoExpression): Type {
-            // TODO: it seems like there is a spec bug. case like do { function x() {}} never check the error case.
-            checkEndsInIterationOrDeclaration(node.block.statements);
+            checkEndsInIterationOrDeclaration(node.block.statements, [], true);
             return checkBlock(node.block);
         }
 
         type LabelSet = ReadonlyArray<__String | undefined>;
         // https://bakkot.github.io/do-expressions-v2/#sec-endsiniterationordeclaration
-        function checkEndsInIterationOrDeclaration(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet = [], isLast = false): boolean {
+        function checkEndsInIterationOrDeclaration(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet, isLast: boolean): boolean {
             if (!node) return false;
             if (isArray(node)) {
                 if (!node.length) return false;
@@ -31275,7 +31274,8 @@ namespace ts {
                     return checkEndsInIterationOrDeclaration(node.statement, isLast ? [...labelSet, label] : labelSet, isLast);
                 }
                 // param dropped in the spec
-                else if (isSwitchStatement(node)) return checkEndsInIterationOrDeclaration(node.caseBlock, []);
+                // TODO: revisit the spec
+                else if (isSwitchStatement(node)) return checkEndsInIterationOrDeclaration(node.caseBlock, [], true);
                 else if (isCaseBlock(node)) {
                     // TODO: very complex, do it later.
                     error(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
@@ -31294,7 +31294,7 @@ namespace ts {
             }
         }
         // https://bakkot.github.io/do-expressions-v2/#sec-isempty
-        function isEmpty(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet = []): boolean {
+        function isEmpty(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
             if (!node) return true;
             if (isArray(node)) {
                 if (!node.length) return false;
@@ -31334,7 +31334,7 @@ namespace ts {
                 const statementList = node.slice(0, -1);
                 const statementListItem = last(node);
                 if (isBreak(statementList, labelSet)) return true;
-                if (!isEmpty(statementListItem)) return false;
+                if (!isEmpty(statementListItem, [])) return false;
                 return isBreak(statementList, labelSet);
             }
             else {
