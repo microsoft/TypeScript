@@ -31239,21 +31239,21 @@ namespace ts {
         }
 
         function checkDoExpression(node: DoExpression): Type {
-            checkEndsInIterationOrDeclaration(node.block.statements, [], true);
+            checkEndsInIterationOrDeclaration(node.block.statements, [], /** isLast */ true);
             return checkBlock(node.block);
         }
 
-        type LabelSet = ReadonlyArray<__String | undefined>;
+        type LabelSet = readonly (__String | undefined)[];
         // https://bakkot.github.io/do-expressions-v2/#sec-endsiniterationordeclaration
-        function checkEndsInIterationOrDeclaration(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet, isLast: boolean): boolean {
+        function checkEndsInIterationOrDeclaration(node: undefined | Node | readonly Statement[], labelSet: LabelSet, isLast: boolean): boolean {
             if (!node) return false;
             if (isArray(node)) {
                 if (!node.length) return false;
                 const statementList = node.slice(0, -1);
                 const statementListItem = last(node);
                 if (isEmpty(statementListItem, [])) return checkEndsInIterationOrDeclaration(statementList, labelSet, isLast);
-                if (isBreak(statementListItem, labelSet)) return checkEndsInIterationOrDeclaration(statementList, labelSet, true);
-                if (checkEndsInIterationOrDeclaration(statementList, labelSet, false)) return true;
+                if (isBreak(statementListItem, labelSet)) return checkEndsInIterationOrDeclaration(statementList, labelSet, /** last */ true);
+                if (checkEndsInIterationOrDeclaration(statementList, labelSet, /** isLast */ false)) return true;
                 return checkEndsInIterationOrDeclaration(statementListItem, labelSet, isLast);
             }
             else {
@@ -31291,7 +31291,7 @@ namespace ts {
                 return false;
             }
             // https://bakkot.github.io/do-expressions-v2/#sec-isempty
-            function isEmpty(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
+            function isEmpty(node: undefined | Node | readonly Statement[], labelSet: LabelSet): boolean {
                 if (!node) return true;
                 if (isArray(node)) {
                     if (!node.length) return false;
@@ -31324,7 +31324,7 @@ namespace ts {
                 }
             }
             // https://bakkot.github.io/do-expressions-v2/#sec-isbreak
-            function isBreak(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
+            function isBreak(node: undefined | Node | readonly Statement[], labelSet: LabelSet): boolean {
                 if (!node) return false;
                 if (isArray(node)) {
                     if (!node.length) return false;
@@ -34147,6 +34147,7 @@ namespace ts {
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
+            // eslint-disable-next-line no-undef-init
             let type: Type | void = undefined;
             if (isFunctionOrModuleBlock(node)) {
                 const saveFlowAnalysisDisabled = flowAnalysisDisabled;
@@ -34155,7 +34156,7 @@ namespace ts {
             }
             else {
                 forEach(node.statements, node => {
-                    type = checkSourceElement(node) || type;
+                    type = checkSourceElementWithType(node) || type;
                 });
             }
             if (node.locals) {
@@ -34585,13 +34586,13 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
             const type = checkTruthinessExpression(node.expression);
             checkTestingKnownTruthyCallableType(node.expression, type, node.thenStatement);
-            const type1 = checkSourceElement(node.thenStatement);
+            const type1 = checkSourceElementWithType(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
                 error(node.thenStatement, Diagnostics.The_body_of_an_if_statement_cannot_be_the_empty_statement);
             }
 
-            const type2 = checkSourceElement(node.elseStatement);
+            const type2 = checkSourceElementWithType(node.elseStatement);
             return getUnionType([type1 || voidType, type2 || voidType], UnionReduction.Subtype);
         }
 
@@ -35742,7 +35743,7 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            let types: (Type | void)[] = []
+            const types: (Type | void)[] = [];
             types.push(checkBlock(node.tryBlock));
             const catchClause = node.catchClause;
             if (catchClause) {
@@ -37357,7 +37358,11 @@ namespace ts {
             }
         }
 
-        function checkSourceElement(node: Node | undefined): Type | void {
+        function checkSourceElement(node: Node | undefined): void {
+            checkSourceElementWithType(node);
+        }
+
+        function checkSourceElementWithType(node: Node | undefined): void | Type {
             if (node) {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
