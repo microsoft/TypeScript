@@ -1352,6 +1352,10 @@
         "category": "Message",
         "code": 1430
     },
+    "Declaration or iteration cannot present at end of the do expression": {
+        "category": "Error",
+        "code": 1431
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
