@@ -90,8 +90,8 @@ created packages/compiler-ssr/dist/compiler-ssr.cjs.js in ?s
 Warning: dist/packages/compiler-sfc/src/compileScript.d.ts:27:36 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
 Warning: dist/packages/compiler-sfc/src/compileScript.d.ts:27:23 - (tsdoc-html-tag-missing-equals) The HTML element has an invalid attribute: Expecting "=" after HTML attribute name
 Warning: dist/packages/compiler-sfc/src/compileStyle.d.ts:18:8 - (tsdoc-missing-deprecation-message) The @deprecated block must include a deprecation message, e.g. describing the recommended alternative
-/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-bundler.js...
 /vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.esm-bundler.js...
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-bundler.js...
 [!] (plugin rpt2) Error: /vue-next/packages/reactivity/src/baseHandlers.ts(192,3): semantic error TS2322: Type '(target: object) => (string | number | symbol)[]' is not assignable to type '(target: object) => ArrayLike<string | symbol>'.
   Type '(string | number | symbol)[]' is not assignable to type 'ArrayLike<string | symbol>'.
     Index signatures are incompatible.
@@ -104,9 +104,9 @@ Error: /vue-next/packages/reactivity/src/baseHandlers.ts(192,3): semantic error 
       Type 'string | number | symbol' is not assignable to type 'string | symbol'.
         Type 'number' is not assignable to type 'string | symbol'.
     at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:4533:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:18092:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18699:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18261:38)
+    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:18144:12)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18751:24)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18313:38)
     at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
     at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
     at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
@@ -116,13 +116,13 @@ Error: /vue-next/packages/reactivity/src/baseHandlers.ts(192,3): semantic error 
 /vue-next/node_modules/brotli/build/encode.js:3
 1<process.argv.length?process.argv[1].replace(/\\/g,"/"):"unknown-program");b.arguments=process.argv.slice(2);"undefined"!==typeof module&&(module.exports=b);process.on("uncaughtException",function(a){if(!(a instanceof y))throw a;});b.inspect=function(){return"[Emscripten Module object]"}}else if(x)b.print||(b.print=print),"undefined"!=typeof printErr&&(b.printErr=printErr),b.read="undefined"!=typeof read?read:function(){throw"no read() available (jsc?)";},b.readBinary=function(a){if("function"===
                                                                                                                                                                                                                               ^
-Error: Command failed with exit code 1: rollup -c --environment COMMIT:e79feb0,NODE_ENV:production,TARGET:reactivity,TYPES:true
+Error: Command failed with exit code 1: rollup -c --environment COMMIT:c2f4664,NODE_ENV:production,TARGET:reactivity,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
-    at processTicksAndRejections (node:internal/process/task_queues:93:5)
+    at processTicksAndRejections (node:internal/process/task_queues:94:5)
     at async build (/vue-next/scripts/build.js:91:3) {
-  shortMessage: 'Command failed with exit code 1: rollup -c --environment COMMIT:e79feb0,NODE_ENV:production,TARGET:reactivity,TYPES:true',
-  command: 'rollup -c --environment COMMIT:e79feb0,NODE_ENV:production,TARGET:reactivity,TYPES:true',
+  shortMessage: 'Command failed with exit code 1: rollup -c --environment COMMIT:c2f4664,NODE_ENV:production,TARGET:reactivity,TYPES:true',
+  command: 'rollup -c --environment COMMIT:c2f4664,NODE_ENV:production,TARGET:reactivity,TYPES:true',
   exitCode: 1,
   signal: undefined,
   signalDescription: undefined,
