@@ -31273,9 +31273,7 @@ namespace ts {
                     const label = node.label.escapedText;
                     return checkEndsInIterationOrDeclaration(node.statement, isLast ? [...labelSet, label] : labelSet, isLast);
                 }
-                // param dropped in the spec
-                // TODO: revisit the spec
-                else if (isSwitchStatement(node)) return checkEndsInIterationOrDeclaration(node.caseBlock, [], true);
+                else if (isSwitchStatement(node)) return checkEndsInIterationOrDeclaration(node.caseBlock, labelSet, isLast);
                 else if (isCaseBlock(node)) {
                     // TODO: very complex, do it later.
                     error(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
@@ -31292,63 +31290,63 @@ namespace ts {
                 }
                 return false;
             }
-        }
-        // https://bakkot.github.io/do-expressions-v2/#sec-isempty
-        function isEmpty(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
-            if (!node) return true;
-            if (isArray(node)) {
-                if (!node.length) return false;
-                const statementList = node.slice(0, -1);
-                const statementListItem = last(node);
-                if (isBreak(statementList, labelSet)) return true;
-                if (!isEmpty(statementListItem, labelSet)) return false;
-                return isEmpty(statementList, labelSet);
-            }
-            else {
-                switch (node.kind) {
-                    case SyntaxKind.EmptyStatement:
-                    case SyntaxKind.DebuggerStatement:
-                        return true;
-                    case SyntaxKind.DefaultClause:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.Block:
-                        return isEmpty((<DefaultClause | CaseClause | Block>node).statements, labelSet);
-                    case SyntaxKind.BreakStatement: {
-                        const label = (<BreakStatement>node).label;
-                        return labelSet.includes(label?.escapedText);
+            // https://bakkot.github.io/do-expressions-v2/#sec-isempty
+            function isEmpty(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
+                if (!node) return true;
+                if (isArray(node)) {
+                    if (!node.length) return false;
+                    const statementList = node.slice(0, -1);
+                    const statementListItem = last(node);
+                    if (isBreak(statementList, labelSet)) return true;
+                    if (!isEmpty(statementListItem, labelSet)) return false;
+                    return isEmpty(statementList, labelSet);
+                }
+                else {
+                    switch (node.kind) {
+                        case SyntaxKind.EmptyStatement:
+                        case SyntaxKind.DebuggerStatement:
+                            return true;
+                        case SyntaxKind.DefaultClause:
+                        case SyntaxKind.CaseClause:
+                        case SyntaxKind.Block:
+                            return isEmpty((<DefaultClause | CaseClause | Block>node).statements, labelSet);
+                        case SyntaxKind.BreakStatement: {
+                            const label = (<BreakStatement>node).label;
+                            return labelSet.includes(label?.escapedText);
+                        }
+                        case SyntaxKind.LabeledStatement: {
+                            const n = <LabeledStatement>node;
+                            const label = n.label?.escapedText;
+                            return isEmpty(n.statement, [...labelSet, label]);
+                        }
+                        default: return false;
                     }
-                    case SyntaxKind.LabeledStatement: {
-                        const n = <LabeledStatement>node;
-                        const label = n.label?.escapedText;
-                        return isEmpty(n.statement, [...labelSet, label]);
-                    }
-                    default: return false;
                 }
             }
-        }
-        // https://bakkot.github.io/do-expressions-v2/#sec-isbreak
-        function isBreak(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
-            if (!node) return false;
-            if (isArray(node)) {
-                if (!node.length) return false;
-                const statementList = node.slice(0, -1);
-                const statementListItem = last(node);
-                if (isBreak(statementList, labelSet)) return true;
-                if (!isEmpty(statementListItem, [])) return false;
-                return isBreak(statementList, labelSet);
-            }
-            else {
-                switch (node.kind) {
-                    case SyntaxKind.Block:
-                    case SyntaxKind.CaseClause:
-                    case SyntaxKind.DefaultClause:
-                        return isBreak((<Block | CaseClause | DefaultClause>node).statements, labelSet);
-                    case SyntaxKind.BreakStatement: {
-                        const label = (<BreakStatement>node).label;
-                        return labelSet.includes(label?.escapedText);
+            // https://bakkot.github.io/do-expressions-v2/#sec-isbreak
+            function isBreak(node: undefined | Node | ReadonlyArray<Statement>, labelSet: LabelSet): boolean {
+                if (!node) return false;
+                if (isArray(node)) {
+                    if (!node.length) return false;
+                    const statementList = node.slice(0, -1);
+                    const statementListItem = last(node);
+                    if (isBreak(statementList, labelSet)) return true;
+                    if (!isEmpty(statementListItem, [])) return false;
+                    return isBreak(statementList, labelSet);
+                }
+                else {
+                    switch (node.kind) {
+                        case SyntaxKind.Block:
+                        case SyntaxKind.CaseClause:
+                        case SyntaxKind.DefaultClause:
+                            return isBreak((<Block | CaseClause | DefaultClause>node).statements, labelSet);
+                        case SyntaxKind.BreakStatement: {
+                            const label = (<BreakStatement>node).label;
+                            return labelSet.includes(label?.escapedText);
+                        }
+                        case SyntaxKind.LabeledStatement: return isBreak((<LabeledStatement>node).statement, labelSet);
+                        default: return false;
                     }
-                    case SyntaxKind.LabeledStatement: return isBreak((<LabeledStatement>node).statement, labelSet);
-                    default: return false;
                 }
             }
         }
