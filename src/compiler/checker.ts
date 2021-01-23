@@ -35722,7 +35722,7 @@ namespace ts {
             }
 
             // ensure that label is unique
-            return checkSourceElement(node.statement);
+            return checkSourceElementWithType(node.statement);
         }
 
         function checkThrowStatement(node: ThrowStatement) {
