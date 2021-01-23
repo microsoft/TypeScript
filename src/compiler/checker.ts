@@ -35464,11 +35464,12 @@ namespace ts {
                 getIterationTypesOfIterator(type, resolver, /*errorNode*/ undefined);
         }
 
-        function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
+        function checkBreakOrContinueStatement(node: BreakOrContinueStatement): Type {
             // Grammar checking
             if (!checkGrammarStatementInAmbientContext(node)) checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
+            return neverType;
         }
 
         function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
@@ -35530,7 +35531,7 @@ namespace ts {
             }
         }
 
-        function checkWithStatement(node: WithStatement) {
+        function checkWithStatement(node: WithStatement): Type {
             // Grammar checking for withStatement
             if (!checkGrammarStatementInAmbientContext(node)) {
                 if (node.flags & NodeFlags.AwaitContext) {
@@ -35546,6 +35547,7 @@ namespace ts {
                 const end = node.statement.pos;
                 grammarErrorAtPos(sourceFile, start, end - start, Diagnostics.The_with_statement_is_not_supported_All_symbols_in_a_with_block_will_have_type_any);
             }
+            return anyType;
         }
 
         function checkSwitchStatement(node: SwitchStatement) {
