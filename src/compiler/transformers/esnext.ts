@@ -20,6 +20,8 @@ namespace ts {
                 return node;
             }
             switch (node.kind) {
+                case SyntaxKind.DoExpression:
+                    return transformDoExpression(<DoExpression>node);
                 case SyntaxKind.BinaryExpression:
                     const binaryExpression = <BinaryExpression>node;
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
@@ -86,6 +88,11 @@ namespace ts {
                     )
                 )
             );
+        }
+
+        function transformDoExpression(expr: DoExpression): VisitResult<Node> {
+            // TODO:
+            return factory.createImmediatelyInvokedArrowFunction(expr.block.statements);
         }
     }
 }
