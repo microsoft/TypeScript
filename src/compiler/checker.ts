@@ -31239,9 +31239,8 @@ namespace ts {
         }
 
         function checkDoExpression(node: DoExpression): Type {
-            checkBlock(node.block);
-            // TODO:
-            return unknownType;
+            // TODO: check early errors
+            return checkBlock(node.block);
         }
 
         function getContextNode(node: Expression): Node {
@@ -34035,22 +34034,26 @@ namespace ts {
             return decl.kind === SyntaxKind.ImportClause ? decl : decl.kind === SyntaxKind.NamespaceImport ? decl.parent : decl.parent.parent;
         }
 
-        function checkBlock(node: Block) {
+        function checkBlock(node: Block): Type {
             // Grammar checking for SyntaxKind.Block
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
+            let type: Type | void = undefined;
             if (isFunctionOrModuleBlock(node)) {
                 const saveFlowAnalysisDisabled = flowAnalysisDisabled;
                 forEach(node.statements, checkSourceElement);
                 flowAnalysisDisabled = saveFlowAnalysisDisabled;
             }
             else {
-                forEach(node.statements, checkSourceElement);
+                forEach(node.statements, node => {
+                    type = type || checkSourceElement(node);
+                });
             }
             if (node.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
+            return type as Type | void || voidType;
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -34462,25 +34465,26 @@ namespace ts {
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
-        function checkExpressionStatement(node: ExpressionStatement) {
+        function checkExpressionStatement(node: ExpressionStatement): Type {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkExpression(node.expression);
+            return checkExpression(node.expression);
         }
 
-        function checkIfStatement(node: IfStatement) {
+        function checkIfStatement(node: IfStatement): Type {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
             const type = checkTruthinessExpression(node.expression);
             checkTestingKnownTruthyCallableType(node.expression, type, node.thenStatement);
-            checkSourceElement(node.thenStatement);
+            const type1 = checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
                 error(node.thenStatement, Diagnostics.The_body_of_an_if_statement_cannot_be_the_empty_statement);
             }
 
-            checkSourceElement(node.elseStatement);
+            const type2 = checkSourceElement(node.elseStatement);
+            return getUnionType([type1 || voidType, type2 || voidType], UnionReduction.Subtype);
         }
 
         function checkTestingKnownTruthyCallableType(condExpr: Expression, type: Type, body: Statement | Expression | undefined) {
@@ -35607,7 +35611,7 @@ namespace ts {
             }
 
             // ensure that label is unique
-            checkSourceElement(node.statement);
+            return checkSourceElement(node.statement);
         }
 
         function checkThrowStatement(node: ThrowStatement) {
@@ -35621,13 +35625,15 @@ namespace ts {
             if (node.expression) {
                 checkExpression(node.expression);
             }
+            return neverType;
         }
 
-        function checkTryStatement(node: TryStatement) {
+        function checkTryStatement(node: TryStatement): Type {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            checkBlock(node.tryBlock);
+            let types: (Type | void)[] = []
+            types.push(checkBlock(node.tryBlock));
             const catchClause = node.catchClause;
             if (catchClause) {
                 // Grammar checking
@@ -35655,12 +35661,14 @@ namespace ts {
                     }
                 }
 
-                checkBlock(catchClause.block);
+                types.push(checkBlock(catchClause.block));
             }
 
             if (node.finallyBlock) {
+                // completion value of finally block never contributes to the return type of try-catch
                 checkBlock(node.finallyBlock);
             }
+            return getUnionType(filter(types, (x): x is Type => !!x), UnionReduction.Subtype);
         }
 
         function checkIndexConstraints(type: Type) {
@@ -37239,17 +37247,19 @@ namespace ts {
             }
         }
 
-        function checkSourceElement(node: Node | undefined): void {
+        function checkSourceElement(node: Node | undefined): Type | void {
             if (node) {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
                 instantiationCount = 0;
-                checkSourceElementWorker(node);
+                const type = checkSourceElementWorker(node);
                 currentNode = saveCurrentNode;
+                return type;
             }
         }
 
-        function checkSourceElementWorker(node: Node): void {
+        /** If your new statement contributes to the type of do expreesion, please return a Type. */
+        function checkSourceElementWorker(node: Node): Type | void {
             if (isInJSFile(node)) {
                 forEach((node as JSDocContainer).jsDoc, ({ tags }) => forEach(tags, checkSourceElement));
             }
@@ -37423,7 +37433,7 @@ namespace ts {
                 case SyntaxKind.EmptyStatement:
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
-                    return;
+                    return voidType;
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
             }

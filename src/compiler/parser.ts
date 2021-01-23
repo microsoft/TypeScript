@@ -5239,7 +5239,6 @@ namespace ts {
 
         function parseArgumentList() {
             parseExpected(SyntaxKind.OpenParenToken);
-            debugger;
             const result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return result;
