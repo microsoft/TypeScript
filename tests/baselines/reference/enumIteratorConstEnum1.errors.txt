@@ -1,0 +1,19 @@
+tests/cases/compiler/enumIteratorConstEnum1.ts(8,22): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+tests/cases/compiler/enumIteratorConstEnum1.ts(8,22): error TS2488: Type 'typeof ConstTest' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/compiler/enumIteratorConstEnum1.ts (2 errors) ====
+    const enum ConstTest {
+      Foo,
+      Bar,
+      Baz,
+    }
+    
+    // Should be an error.
+    for (const member of ConstTest) {
+                         ~~~~~~~~~
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+                         ~~~~~~~~~
+!!! error TS2488: Type 'typeof ConstTest' must have a '[Symbol.iterator]()' method that returns an iterator.
+    }
+    

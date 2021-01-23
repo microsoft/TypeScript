@@ -1,0 +1,56 @@
+=== tests/cases/compiler/enumIteratorBasics1.ts ===
+enum Test {
+>Test : Test
+
+  Foo,
+>Foo : Test.Foo
+
+  Bar,
+>Bar : Test.Bar
+
+  Baz,
+>Baz : Test.Baz
+}
+
+const AlsoTest = Test;
+>AlsoTest : typeof Test
+>Test : typeof Test
+
+for (const member of AlsoTest) {
+>member : [string, Test]
+>AlsoTest : typeof Test
+
+  const x: string = member[0];
+>x : string
+>member[0] : string
+>member : [string, Test]
+>0 : 0
+
+  const y: Test = member[1];
+>y : Test
+>member[1] : Test
+>member : [string, Test]
+>1 : 1
+
+  console.log(x, y);
+>console.log(x, y) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : string
+>y : Test
+}
+
+const members: [string, Test][] = [...AlsoTest];
+>members : [string, Test][]
+>[...AlsoTest] : [string, Test][]
+>...AlsoTest : [string, Test]
+>AlsoTest : typeof Test
+
+console.log(members);
+>console.log(members) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>members : [string, Test][]
+

@@ -1,0 +1,52 @@
+=== tests/cases/compiler/enumIteratorBasics1.ts ===
+enum Test {
+>Test : Symbol(Test, Decl(enumIteratorBasics1.ts, 0, 0))
+
+  Foo,
+>Foo : Symbol(Test.Foo, Decl(enumIteratorBasics1.ts, 0, 11))
+
+  Bar,
+>Bar : Symbol(Test.Bar, Decl(enumIteratorBasics1.ts, 1, 6))
+
+  Baz,
+>Baz : Symbol(Test.Baz, Decl(enumIteratorBasics1.ts, 2, 6))
+}
+
+const AlsoTest = Test;
+>AlsoTest : Symbol(AlsoTest, Decl(enumIteratorBasics1.ts, 6, 5))
+>Test : Symbol(Test, Decl(enumIteratorBasics1.ts, 0, 0))
+
+for (const member of AlsoTest) {
+>member : Symbol(member, Decl(enumIteratorBasics1.ts, 8, 10))
+>AlsoTest : Symbol(AlsoTest, Decl(enumIteratorBasics1.ts, 6, 5))
+
+  const x: string = member[0];
+>x : Symbol(x, Decl(enumIteratorBasics1.ts, 9, 7))
+>member : Symbol(member, Decl(enumIteratorBasics1.ts, 8, 10))
+>0 : Symbol(0)
+
+  const y: Test = member[1];
+>y : Symbol(y, Decl(enumIteratorBasics1.ts, 10, 7))
+>Test : Symbol(Test, Decl(enumIteratorBasics1.ts, 0, 0))
+>member : Symbol(member, Decl(enumIteratorBasics1.ts, 8, 10))
+>1 : Symbol(1)
+
+  console.log(x, y);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(enumIteratorBasics1.ts, 9, 7))
+>y : Symbol(y, Decl(enumIteratorBasics1.ts, 10, 7))
+}
+
+const members: [string, Test][] = [...AlsoTest];
+>members : Symbol(members, Decl(enumIteratorBasics1.ts, 14, 5))
+>Test : Symbol(Test, Decl(enumIteratorBasics1.ts, 0, 0))
+>AlsoTest : Symbol(AlsoTest, Decl(enumIteratorBasics1.ts, 6, 5))
+
+console.log(members);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>members : Symbol(members, Decl(enumIteratorBasics1.ts, 14, 5))
+

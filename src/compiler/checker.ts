@@ -35078,6 +35078,17 @@ namespace ts {
                 return anyIterationTypes;
             }
 
+            const symbolType = getDeclaredTypeOfSymbol(type.symbol);
+
+            if (symbolType.symbol.flags & SymbolFlags.RegularEnum) {
+                return createIterationTypes(
+                    createTupleType([
+                        stringType,
+                        symbolType,
+                    ]),
+                );
+            }
+
             if (use & IterationUse.AllowsAsyncIterablesFlag) {
                 const iterationTypes =
                     getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||

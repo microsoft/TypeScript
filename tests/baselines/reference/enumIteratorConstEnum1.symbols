@@ -1,0 +1,20 @@
+=== tests/cases/compiler/enumIteratorConstEnum1.ts ===
+const enum ConstTest {
+>ConstTest : Symbol(ConstTest, Decl(enumIteratorConstEnum1.ts, 0, 0))
+
+  Foo,
+>Foo : Symbol(ConstTest.Foo, Decl(enumIteratorConstEnum1.ts, 0, 22))
+
+  Bar,
+>Bar : Symbol(ConstTest.Bar, Decl(enumIteratorConstEnum1.ts, 1, 6))
+
+  Baz,
+>Baz : Symbol(ConstTest.Baz, Decl(enumIteratorConstEnum1.ts, 2, 6))
+}
+
+// Should be an error.
+for (const member of ConstTest) {
+>member : Symbol(member, Decl(enumIteratorConstEnum1.ts, 7, 10))
+>ConstTest : Symbol(ConstTest, Decl(enumIteratorConstEnum1.ts, 0, 0))
+}
+

@@ -2425,7 +2425,20 @@ namespace ts {
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            const members = map(node.members, transformEnumMember);
+            const membersAndExpressions = node.members.map(member => {
+                const [nameExpression, valueExpression] = getEnumMemberExpressions(member);
+                return {
+                    member,
+                    nameExpression,
+                    valueExpression,
+                };
+            });
+            const members = membersAndExpressions.map(m => transformEnumMember(
+                m.member,
+                m.nameExpression,
+                m.valueExpression,
+            ));
+            members.push(transformEnumMembersToIterator(membersAndExpressions));
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             addRange(statements, members);
 
@@ -2437,20 +2450,37 @@ namespace ts {
         }
 
         /**
-         * Transforms an enum member into a statement.
+         * Get an expression for the name and value of an enum member.
+         * For example `enum Maybe { Yes = 1, No = 2 }` would give
+         * [`"Yes"`, `1`] and [`"No"`, `2`] as the expressions.
          *
          * @param member The enum member node.
          */
-        function transformEnumMember(member: EnumMember): Statement {
+        function getEnumMemberExpressions(member: EnumMember): [Expression, Expression] {
             // enums don't support computed properties
             // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
             // old emitter always generate 'expression' part of the name as-is.
             const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
             const valueExpression = transformEnumMemberDeclarationValue(member);
+            return [name, valueExpression];
+        }
+
+        /**
+         * Transforms an enum member into a statement.
+         *
+         * @param member The enum member node.
+         * @param nameExpression A string literal expression containing the member name
+         * @param valueExpression An expression containing the member value.
+         */
+        function transformEnumMember(
+            member: EnumMember,
+            nameExpression: Expression,
+            valueExpression: Expression,
+        ): Statement {
             const innerAssignment = factory.createAssignment(
                 factory.createElementAccessExpression(
                     currentNamespaceContainerName,
-                    name
+                    nameExpression
                 ),
                 valueExpression
             );
@@ -2461,7 +2491,7 @@ namespace ts {
                         currentNamespaceContainerName,
                         innerAssignment
                     ),
-                    name
+                    nameExpression
                 );
             return setTextRange(
                 factory.createExpressionStatement(
@@ -2472,6 +2502,56 @@ namespace ts {
                 ),
                 member
             );
+        }
+
+        /**
+         * Transforms all enum members into a generator function that yields
+         * the enum members.
+         *
+         * @param members The enum member nodes.
+         */
+        function transformEnumMembersToIterator(
+            memberExpressions: {
+                nameExpression: Expression,
+                valueExpression: Expression,
+            }[],
+        ): Statement {
+            const symbolIterator = factory.createPropertyAccessExpression(
+                factory.createIdentifier("Symbol"),
+                "iterator",
+            );
+            const iteratorMember = factory.createElementAccessExpression(
+                currentNamespaceContainerName,
+                symbolIterator,
+            );
+
+            const yieldExpression = factory.createYieldExpression(
+                factory.createToken(SyntaxKind.AsteriskToken),
+                factory.createArrayLiteralExpression(memberExpressions.map(
+                    expressions => factory.createArrayLiteralExpression([
+                        expressions.nameExpression,
+                        expressions.valueExpression,
+                    ]),
+                )),
+            );
+            const generatorBody = factory.createBlock([
+                factory.createExpressionStatement(yieldExpression)
+            ]);
+
+            const iteratorGenerator = factory.createFunctionExpression(
+                /*modifiers*/ undefined,
+                factory.createToken(SyntaxKind.AsteriskToken),
+                /*name*/ undefined,
+                [],
+                [],
+                /*type*/ undefined,
+                generatorBody,
+            );
+            const outerAssignment = factory.createAssignment(
+                iteratorMember,
+                iteratorGenerator,
+            );
+            return factory.createExpressionStatement(outerAssignment);
         }
 
         /**

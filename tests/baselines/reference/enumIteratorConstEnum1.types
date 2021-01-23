@@ -1,0 +1,20 @@
+=== tests/cases/compiler/enumIteratorConstEnum1.ts ===
+const enum ConstTest {
+>ConstTest : ConstTest
+
+  Foo,
+>Foo : ConstTest.Foo
+
+  Bar,
+>Bar : ConstTest.Bar
+
+  Baz,
+>Baz : ConstTest.Baz
+}
+
+// Should be an error.
+for (const member of ConstTest) {
+>member : any
+>ConstTest : typeof ConstTest
+}
+
