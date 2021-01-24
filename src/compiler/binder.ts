@@ -1197,10 +1197,10 @@ namespace ts {
                     addAntecedent(currentReturnTarget, currentFlow);
                 }
             }
-            // DoExpression should not affect the control flow by return
-            if (node.kind !== SyntaxKind.ReturnStatement && hasDirectDoExpressionAncestor(node)) {
-                currentFlow = unreachableFlow;
+            if (node.kind === SyntaxKind.ReturnStatement && hasDirectDoExpressionAncestor(node)) {
+                // DoExpression should not affect the control flow by return
             }
+            else currentFlow = unreachableFlow;
         }
 
         function findActiveLabel(name: __String) {
