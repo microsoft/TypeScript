@@ -31275,9 +31275,17 @@ namespace ts {
                 }
                 else if (isSwitchStatement(node)) return checkEndsInIterationOrDeclaration(node.caseBlock, labelSet, isLast);
                 else if (isCaseBlock(node)) {
-                    // TODO: very complex, do it later.
-                    error(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
-                    return true;
+                    const newLabelSet = isLast ? [...labelSet, undefined] : labelSet.filter(nonNullable);
+                    let result = false;
+                    forEachRight(node.clauses, clause => {
+                        if (isEmpty(clause, [])) return;
+                        if (checkEndsInIterationOrDeclaration(clause, newLabelSet, isLast)) {
+                            result = true;
+                            return;
+                        }
+                        isLast = isBreak(clause, newLabelSet);
+                    });
+                    return result;
                 }
                 else if (isCaseClause(node) || isDefaultClause(node)) {
                     if (!node.statements) return false;
@@ -35659,7 +35667,7 @@ namespace ts {
             return anyType;
         }
 
-        function checkSwitchStatement(node: SwitchStatement) {
+        function checkSwitchStatement(node: SwitchStatement): Type {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
@@ -35668,7 +35676,7 @@ namespace ts {
 
             const expressionType = checkExpression(node.expression);
             const expressionIsLiteral = isLiteralType(expressionType);
-            forEach(node.caseBlock.clauses, clause => {
+            const types = map(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
                     if (firstDefaultClause === undefined) {
@@ -35696,14 +35704,20 @@ namespace ts {
                         checkTypeComparableTo(caseType, comparedExpressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
-                forEach(clause.statements, checkSourceElement);
+                let caseType: Type | void = undefined;
+                for (const statement of clause.statements) {
+                    caseType = checkSourceElementWithType(statement);
+                }
                 if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                     error(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
-            });
+                return caseType;
+            }).filter(nonNullable);
             if (node.caseBlock.locals) {
                 registerForUnusedIdentifiersCheck(node.caseBlock);
             }
+            if (types.length === 0) return voidType;
+            return getUnionType(types, UnionReduction.Subtype);
         }
 
         function checkLabeledStatement(node: LabeledStatement) {
@@ -35779,7 +35793,7 @@ namespace ts {
                 // completion value of finally block never contributes to the return type of try-catch
                 checkBlock(node.finallyBlock);
             }
-            return getUnionType(filter(types, (x): x is Type => !!x), UnionReduction.Subtype);
+            return getUnionType(filter(types, nonNullable), UnionReduction.Subtype);
         }
 
         function checkIndexConstraints(type: Type) {

@@ -305,6 +305,10 @@ namespace ts {
         return count;
     }
 
+    export function nonNullable<T>(value: T | null | undefined | void): value is T {
+        return !!value;
+    }
+
     /**
      * Filters an array by a predicate function. Returns the same array instance if the predicate is
      * true for all elements, otherwise returns a new array instance containing the filtered subset.
