@@ -90,9 +90,10 @@ namespace ts {
             );
         }
 
+        const star = factory.createToken(SyntaxKind.AsteriskToken);
         function transformDoExpression(expr: DoExpression): VisitResult<Node> {
-            const hasAsync = expr.transformFlags & TransformFlags.ContainsAwait;
-            const hasYield = expr.transformFlags & TransformFlags.ContainsYield;
+            const hasAsync = Boolean(expr.transformFlags & TransformFlags.ContainsAwait);
+            const hasYield = Boolean(expr.transformFlags & TransformFlags.ContainsYield);
             const temp = context.factory.createTempVariable(context.hoistVariableDeclaration);
             function do_visit<T extends Block | CaseBlock | CatchClause | Statement | Expression>(node: T): T
             function do_visit(node: Node): Node {
@@ -127,20 +128,39 @@ namespace ts {
                 return visitEachChild(node, do_visit, context);
             }
             const block = visitEachChild(expr.block, do_visit, context);
-            const star = factory.createToken(SyntaxKind.AsteriskToken);
-            const f = factory.createFunctionExpression(
-                hasAsync ? [factory.createModifier(SyntaxKind.AsyncKeyword)] : undefined,
+            const f = createDoBlockFunction(block, hasAsync, hasYield);
+            const exec = createDoBlockExecutor(f, hasAsync, hasYield);
+            return factory.createCommaListExpression([exec, temp]);
+        }
+
+        function createDoBlockFunction(block: Block, hasAsync: boolean, hasYield: boolean) {
+            const modifiers = hasAsync ? [factory.createModifier(SyntaxKind.AsyncKeyword)] : undefined;
+            if (!hasYield) {
+                return factory.createArrowFunction(
+                    modifiers,
+                    /** generics */ undefined, [],
+                    /** type */ undefined,
+                    factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                    block
+                );
+            }
+            return factory.createFunctionExpression(
+                modifiers,
                 hasYield ? star : undefined,
                 /* name */ undefined, /* typeParam */ undefined, /** param */[], /** type */ undefined,
                 block
             );
-            // f.call(this)
-            const call = factory.createCallExpression(
-                factory.createPropertyAccessExpression(f, "call"), /** typeArgs */ undefined, [factory.createThis()]
-            );
-            // yield* f.call(this)
-            const executor = hasYield ? factory.createYieldExpression(star, call) : hasAsync ? factory.createAwaitExpression(call) : call;
-            return factory.createCommaListExpression([executor, temp]);
+        }
+        function createDoBlockExecutor(f: ArrowFunction | FunctionExpression, hasAsync: boolean, hasYield: boolean) {
+            // yield* expr.call(this)
+            if (hasYield) return factory.createYieldExpression(star, call(factory.createPropertyAccessExpression(f, "call"), [factory.createThis()]));
+            // await expr()
+            if (hasAsync) return factory.createAwaitExpression(call(f, []));
+            // expr()
+            return call(f, [])
+        }
+        function call(expr: Expression, args: Expression[]) {
+            return factory.createCallExpression(expr, /** generics */ undefined, args);
         }
     }
 }
