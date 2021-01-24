@@ -31258,7 +31258,7 @@ namespace ts {
             }
             else {
                 if (isDeclaration(node) || isVariableStatement(node) || isIterationStatement(node, /** lookInLabeledStatements */ false) || (isLabeledStatement(node) && isFunctionDeclaration(node.statement))) {
-                    if (isLast) error(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
+                    if (isLast) grammarErrorOnNode(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
                     return isLast;
                 }
                 // Not mentioned in the spec
@@ -35612,6 +35612,13 @@ namespace ts {
             if (!func) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 return;
+            }
+            const containingDoExpression = findAncestor(node, isDoExpression);
+            if (containingDoExpression) {
+                if (!findAncestor(func, x => x === containingDoExpression)) {
+                    grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_within_a_do_expression);
+                    return;
+                }
             }
 
             const signature = getSignatureFromDeclaration(func);

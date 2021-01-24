@@ -337,6 +337,10 @@ namespace ts {
         return node.kind === SyntaxKind.TemplateExpression;
     }
 
+    export function isDoExpression(node: Node): node is DoExpression {
+        return node.kind === SyntaxKind.DoExpression;
+    }
+
     export function isYieldExpression(node: Node): node is YieldExpression {
         return node.kind === SyntaxKind.YieldExpression;
     }

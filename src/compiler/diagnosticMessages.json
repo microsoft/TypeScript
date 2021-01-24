@@ -1356,6 +1356,10 @@
         "category": "Error",
         "code": 1431
     },
+    "A return statement cannot be used within a do expression": {
+        "category": "Error",
+        "code": 1432
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
