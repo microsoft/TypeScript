@@ -95,15 +95,34 @@ namespace ts {
             const hasYield = expr.transformFlags & TransformFlags.ContainsYield;
             const temp = context.factory.createTempVariable(context.hoistVariableDeclaration);
             function do_visit(node: Node): VisitResult<Node> {
-                const isFinallyBlock = isBlock(node) && isTryStatement(node.parent) && node === node.parent.finallyBlock;
-                if (isFinallyBlock) return visitEachChild(node, visitor, context);
                 if (isExpressionStatement(node) && !(isFunctionLike(node) || isClassLike(node) || isNamespaceBody(node))) {
                     return factory.createExpressionStatement(
                         factory.createAssignment(temp, visitEachChild(node.expression, visitor, context))
                     );
                 }
-                if (isTryStatement(node) || isSwitchStatement(node) || (isIfStatement(node) && !(isIfStatement(node.parent)))) {
-                    return [factory.createAssignment(temp, factory.createVoidZero()), visitEachChild(node, do_visit, context)];
+                const cleanPreviousCompletionValue = factory.createAssignment(temp, factory.createVoidZero());
+                if (isIfStatement(node) && !isIfStatement(node.parent)) {
+                    const expr = visitEachChild(node.expression, visitor, context);
+                    return factory.createIfStatement(
+                        factory.createCommaListExpression([cleanPreviousCompletionValue, expr]),
+                        visitEachChild(node.thenStatement, do_visit, context),
+                        node.elseStatement && visitEachChild(node.elseStatement, do_visit, context)
+                    );
+                } else if (isSwitchStatement(node)) {
+                    return factory.createSwitchStatement(
+                        factory.createCommaListExpression([cleanPreviousCompletionValue, node.expression]),
+                        visitEachChild(node.caseBlock, do_visit, context)
+                    );
+                } else if (isTryStatement(node)) {
+                    return factory.createTryStatement(
+                        factory.createBlock([
+                            factory.createExpressionStatement(cleanPreviousCompletionValue),
+                            ...visitEachChild(node.tryBlock, do_visit, context).statements,
+                        ], node.tryBlock.multiLine),
+                        visitEachChild(node.catchClause, do_visit, context),
+                        // completion value of finally is ignored
+                        visitEachChild(node.finallyBlock, visitor, context),
+                    );
                 }
                 return visitEachChild(node, do_visit, context);
             }
