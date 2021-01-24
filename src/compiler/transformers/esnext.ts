@@ -5,6 +5,7 @@ namespace ts {
             hoistVariableDeclaration,
             factory
         } = context;
+        const star = factory.createToken(SyntaxKind.AsteriskToken);
         return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -90,7 +91,6 @@ namespace ts {
             );
         }
 
-        const star = factory.createToken(SyntaxKind.AsteriskToken);
         function transformDoExpression(expr: DoExpression): VisitResult<Node> {
             const hasAsync = Boolean(expr.transformFlags & TransformFlags.ContainsAwait);
             const hasYield = Boolean(expr.transformFlags & TransformFlags.ContainsYield);
@@ -125,7 +125,7 @@ namespace ts {
                         visitEachChild(node.finallyBlock, visitor, context),
                     );
                 }
-                return visitEachChild(node, do_visit, context);
+                return visitEachChild(visitEachChild(node, do_visit, context), visitor, context);
             }
             const block = visitEachChild(expr.block, do_visit, context);
             const f = createDoBlockFunction(block, hasAsync, hasYield);

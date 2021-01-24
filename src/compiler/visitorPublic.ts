@@ -731,6 +731,10 @@ namespace ts {
                 return factory.updateYieldExpression(<YieldExpression>node,
                     nodeVisitor((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
                     nodeVisitor((<YieldExpression>node).expression, visitor, isExpression));
+            
+            case SyntaxKind.DoExpression:
+                return factory.updateDoExpression(<DoExpression>node,
+                    nodeVisitor((<DoExpression>node).block, visitor, isBlock));
 
             case SyntaxKind.SpreadElement:
                 return factory.updateSpreadElement(<SpreadElement>node,
