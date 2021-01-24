@@ -1395,6 +1395,13 @@ namespace ts {
         }
     }
 
+    export function hasDirectDoExpressionAncestor(node: Node) {
+        return findAncestor(node, x => {
+            if (isFunctionLike(x)) return "quit";
+            return isDoExpression(x);
+        }) !== undefined;
+    }
+
     /**
      * Gets the most likely element type for a TypeNode. This is not an exhaustive test
      * as it assumes a rest argument can only be an array type (either T[], or Array<T>).

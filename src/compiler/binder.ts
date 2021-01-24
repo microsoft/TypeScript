@@ -1190,6 +1190,9 @@ namespace ts {
         }
 
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+            if (node.kind === SyntaxKind.ReturnStatement && hasDirectDoExpressionAncestor(node)) {
+                return; // DoExpression should not affect the control flow by return
+            }
             bind(node.expression);
             if (node.kind === SyntaxKind.ReturnStatement) {
                 hasExplicitReturn = true;
