@@ -37621,8 +37621,7 @@ namespace ts {
                 case SyntaxKind.EmptyStatement:
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
-                    if (requiresStatementType) error(node, Diagnostics.Not_all_code_paths_return_a_value);
-                    return voidType;
+                    return;
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
             }
