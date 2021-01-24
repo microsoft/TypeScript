@@ -338,6 +338,8 @@ namespace ts {
         let instantiationCount = 0;
         let instantiationDepth = 0;
         let currentNode: Node | undefined;
+        // used in analysis of do-expression
+        let isLastStatement = false;
 
         const typeCatalog: Type[] = []; // NB: id is index + 1
 
@@ -31239,8 +31241,14 @@ namespace ts {
         }
 
         function checkDoExpression(node: DoExpression): Type {
+            // grammar check
             checkEndsInIterationOrDeclaration(node.block.statements, [], /** isLast */ true);
-            return checkBlock(node.block);
+
+            const oldValue = isLastStatement
+            isLastStatement = true;
+            const type = checkBlock(node.block);
+            isLastStatement = oldValue;
+            return type;
         }
 
         type LabelSet = readonly (__String | undefined)[];
