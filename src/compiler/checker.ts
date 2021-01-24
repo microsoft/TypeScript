@@ -341,7 +341,7 @@ namespace ts {
         // used in analysis of do-expression
         let requiresStatementType = false;
         function startRequireStatementTypeContext<T>(f: (currentRequiresStatementType: boolean) => T): T {
-            if (!compilerOptions.noImplicitReturns) return f(/* neverCheck */false);
+            if (!compilerOptions.noImplicitReturns) return f(/* neverCheck */ false);
             const old = requiresStatementType;
             requiresStatementType = false;
             const val = f(old);
