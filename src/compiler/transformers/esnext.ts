@@ -102,7 +102,7 @@ namespace ts {
                         factory.createAssignment(temp, visitEachChild(node.expression, visitor, context))
                     );
                 }
-                if (isTryStatement(node) || isSwitchStatement(node) || isIfStatement(node)) {
+                if (isTryStatement(node) || isSwitchStatement(node) || (isIfStatement(node) && !(isIfStatement(node.parent)))) {
                     return [factory.createAssignment(temp, factory.createVoidZero()), visitEachChild(node, do_visit, context)];
                 }
                 return visitEachChild(node, do_visit, context);
