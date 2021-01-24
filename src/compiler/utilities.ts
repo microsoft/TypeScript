@@ -1879,6 +1879,7 @@ namespace ts {
             case SyntaxKind.JsxFragment:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.AwaitExpression:
+            case SyntaxKind.DoExpression:
             case SyntaxKind.MetaProperty:
                 return true;
             case SyntaxKind.QualifiedName:

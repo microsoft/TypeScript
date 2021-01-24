@@ -95,9 +95,10 @@ namespace ts {
             const hasAsync = Boolean(expr.transformFlags & TransformFlags.ContainsAwait);
             const hasYield = Boolean(expr.transformFlags & TransformFlags.ContainsYield);
             const temp = context.factory.createTempVariable(context.hoistVariableDeclaration);
-            function do_visit<T extends Block | CaseBlock | CatchClause | Statement | Expression>(node: T): T
+            function do_visit<T extends Block | CaseBlock | CatchClause | Statement | Expression>(node: T): T;
             function do_visit(node: Node): Node {
-                if (isExpressionStatement(node) && !(isFunctionLike(node) || isClassLike(node) || isNamespaceBody(node))) {
+                if (isFunctionLike(node) || isClassLike(node) || isNamespaceBody(node)) return node;
+                if (isExpressionStatement(node)) {
                     return factory.createExpressionStatement(
                         factory.createAssignment(temp, visitEachChild(node.expression, visitor, context))
                     );
@@ -109,12 +110,14 @@ namespace ts {
                         do_visit(node.thenStatement),
                         node.elseStatement && do_visit(node.elseStatement)
                     );
-                } else if (isSwitchStatement(node)) {
+                }
+                else if (isSwitchStatement(node)) {
                     return factory.createSwitchStatement(
                         factory.createCommaListExpression([cleanPreviousCompletionValue, node.expression]),
                         do_visit(node.caseBlock)
                     );
-                } else if (isTryStatement(node)) {
+                }
+                else if (isTryStatement(node)) {
                     return factory.createTryStatement(
                         factory.createBlock([
                             factory.createExpressionStatement(cleanPreviousCompletionValue),
@@ -157,7 +160,7 @@ namespace ts {
             // await expr()
             if (hasAsync) return factory.createAwaitExpression(call(f, []));
             // expr()
-            return call(f, [])
+            return call(f, []);
         }
         function call(expr: Expression, args: Expression[]) {
             return factory.createCallExpression(expr, /** generics */ undefined, args);

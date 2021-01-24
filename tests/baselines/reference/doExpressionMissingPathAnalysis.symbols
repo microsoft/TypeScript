@@ -1,0 +1,92 @@
+=== tests/cases/compiler/doExpressionMissingPathAnalysis.ts ===
+const a = do {
+>a : Symbol(a, Decl(doExpressionMissingPathAnalysis.ts, 0, 5))
+
+    if (1 > 2) true; // missing else
+}
+
+const b = do {
+>b : Symbol(b, Decl(doExpressionMissingPathAnalysis.ts, 4, 5))
+
+    if (1 > 2) true;
+    else if (2 > 1) false; // missing else
+}
+
+const c = do {
+>c : Symbol(c, Decl(doExpressionMissingPathAnalysis.ts, 9, 5))
+
+    try { 1; } catch {} // catch clause missing val
+}
+
+const d = do {
+>d : Symbol(d, Decl(doExpressionMissingPathAnalysis.ts, 13, 5))
+
+    try { } catch { 1; } // try clause missing val
+}
+
+const e = do {
+>e : Symbol(e, Decl(doExpressionMissingPathAnalysis.ts, 17, 5))
+
+    try {1} catch {2} finally {} // this is fine
+}
+
+enum F {
+>F : Symbol(F, Decl(doExpressionMissingPathAnalysis.ts, 19, 1))
+
+    A, B
+>A : Symbol(F.A, Decl(doExpressionMissingPathAnalysis.ts, 21, 8))
+>B : Symbol(F.B, Decl(doExpressionMissingPathAnalysis.ts, 22, 6))
+}
+
+function f(x: F) {
+>f : Symbol(f, Decl(doExpressionMissingPathAnalysis.ts, 23, 1))
+>x : Symbol(x, Decl(doExpressionMissingPathAnalysis.ts, 25, 11))
+>F : Symbol(F, Decl(doExpressionMissingPathAnalysis.ts, 19, 1))
+
+    const a = do {
+>a : Symbol(a, Decl(doExpressionMissingPathAnalysis.ts, 26, 9))
+
+        switch (x) { } // empty switch
+>x : Symbol(x, Decl(doExpressionMissingPathAnalysis.ts, 25, 11))
+    }
+    const b = do {
+>b : Symbol(b, Decl(doExpressionMissingPathAnalysis.ts, 29, 9))
+
+        switch (x) { case F.A: {} } // empty case
+>x : Symbol(x, Decl(doExpressionMissingPathAnalysis.ts, 25, 11))
+>F.A : Symbol(F.A, Decl(doExpressionMissingPathAnalysis.ts, 21, 8))
+>F : Symbol(F, Decl(doExpressionMissingPathAnalysis.ts, 19, 1))
+>A : Symbol(F.A, Decl(doExpressionMissingPathAnalysis.ts, 21, 8))
+    }
+    const c = do {
+>c : Symbol(c, Decl(doExpressionMissingPathAnalysis.ts, 32, 9))
+
+        // TODO: it should report, not all cases (F.B) handled / missing a default block
+        switch (x) { case F.A: 1; }
+>x : Symbol(x, Decl(doExpressionMissingPathAnalysis.ts, 25, 11))
+>F.A : Symbol(F.A, Decl(doExpressionMissingPathAnalysis.ts, 21, 8))
+>F : Symbol(F, Decl(doExpressionMissingPathAnalysis.ts, 19, 1))
+>A : Symbol(F.A, Decl(doExpressionMissingPathAnalysis.ts, 21, 8))
+    }
+}
+
+const g = do {
+>g : Symbol(g, Decl(doExpressionMissingPathAnalysis.ts, 38, 5))
+
+    console.log('') // void returning functions
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+// No problem
+const h = do { 1;;;;; }
+>h : Symbol(h, Decl(doExpressionMissingPathAnalysis.ts, 42, 5))
+
+// No problem
+const i = do { "val"; debugger; }
+>i : Symbol(i, Decl(doExpressionMissingPathAnalysis.ts, 44, 5))
+
+const j = do { throw new Error(""); }
+>j : Symbol(j, Decl(doExpressionMissingPathAnalysis.ts, 45, 5))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,218 @@
+=== tests/cases/compiler/doExpressionsBasic.ts ===
+//#region If
+const a = do {
+>a : boolean
+>do {    if (Math.random() > 0.5) true;    else false;} : boolean
+
+    if (Math.random() > 0.5) true;
+>Math.random() > 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>true : true
+
+    else false;
+>false : false
+}
+const b = do {
+>b : 3 | 6 | 10
+>do {    const tmp = Math.random();    if (tmp > 0.3) 3;    else if (tmp > 0.6) 6;    else 10;} : 3 | 6 | 10
+
+    const tmp = Math.random();
+>tmp : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+    if (tmp > 0.3) 3;
+>tmp > 0.3 : boolean
+>tmp : number
+>0.3 : 0.3
+>3 : 3
+
+    else if (tmp > 0.6) 6;
+>tmp > 0.6 : boolean
+>tmp : number
+>0.6 : 0.6
+>6 : 6
+
+    else 10;
+>10 : 10
+}
+//#endregion
+
+//#region try
+const c = do {
+>c : 1 | 2
+>do {    try { 1; } catch { 2; }} : 1 | 2
+
+    try { 1; } catch { 2; }
+>1 : 1
+>2 : 2
+}
+const d = do {
+>d : 1
+>do {    try { 1; } finally { 2 }} : 1
+
+    try { 1; } finally { 2 }
+>1 : 1
+>2 : 2
+}
+const e = do {
+>e : 1 | 2
+>do {    try { 1; } catch { 2; } finally {3}} : 1 | 2
+
+    try { 1; } catch { 2; } finally {3}
+>1 : 1
+>2 : 2
+>3 : 3
+}
+//#endregion
+
+//#region Switch
+const f = do {
+>f : "lucky" | "Normal"
+>do {    switch (Math.random()) {        case 0: "lucky";        default: "Normal";    }} : "lucky" | "Normal"
+
+    switch (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+        case 0: "lucky";
+>0 : 0
+>"lucky" : "lucky"
+
+        default: "Normal";
+>"Normal" : "Normal"
+    }
+}
+//#endregion
+
+//#region Await
+async function g() {
+>g : () => Promise<void>
+
+    const val = do {
+>val : 1
+>do {        await 1;    } : 1
+
+        await 1;
+>await 1 : 1
+>1 : 1
+    }
+}
+//#endregion
+
+//#region Yield
+function* h() {
+>h : () => {}
+
+    const val = do {
+>val : number
+>do {        const val: number = yield 1;        val * val;    } : number
+
+        const val: number = yield 1;
+>val : number
+>yield 1 : any
+>1 : 1
+
+        val * val;
+>val * val : number
+>val : number
+>val : number
+    }
+}
+//#endregion
+
+//#region Await and Yield
+async function* i() {
+>i : () => {}
+
+    const val = do {
+>val : number
+>do {        const val: number = yield await 1        val * val;    } : number
+
+        const val: number = yield await 1
+>val : number
+>yield await 1 : any
+>await 1 : 1
+>1 : 1
+
+        val * val;
+>val * val : number
+>val : number
+>val : number
+    }
+    const val2 = do {
+>val2 : 1
+>do {        await 1    } : 1
+
+        await 1
+>await 1 : 1
+>1 : 1
+    }
+}
+//#endregion
+
+//#region Nested
+const j = do {
+>j : 3 | 5 | 4
+>do {    if (6 > 5) 5;    else if (6 > 2) 3;    else {        try {            4;        } catch {            5        }    }} : 3 | 5 | 4
+
+    if (6 > 5) 5;
+>6 > 5 : boolean
+>6 : 6
+>5 : 5
+>5 : 5
+
+    else if (6 > 2) 3;
+>6 > 2 : boolean
+>6 : 6
+>2 : 2
+>3 : 3
+
+    else {
+        try {
+            4;
+>4 : 4
+
+        } catch {
+            5
+>5 : 5
+        }
+    }
+}
+//#endregion
+
+//#region Not across boundary
+const k = do {
+>k : number
+>do {    function x() {        1 * 1; // no transform here    }    class T {        field = x    }    1 * 2;} : number
+
+    function x() {
+>x : () => void
+
+        1 * 1; // no transform here
+>1 * 1 : number
+>1 : 1
+>1 : 1
+    }
+    class T {
+>T : T
+
+        field = x
+>field : () => void
+>x : () => void
+    }
+    1 * 2;
+>1 * 2 : number
+>1 : 1
+>2 : 2
+}
+//#endregion
+

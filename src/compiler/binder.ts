@@ -1190,9 +1190,6 @@ namespace ts {
         }
 
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
-            if (node.kind === SyntaxKind.ReturnStatement && hasDirectDoExpressionAncestor(node)) {
-                return; // DoExpression should not affect the control flow by return
-            }
             bind(node.expression);
             if (node.kind === SyntaxKind.ReturnStatement) {
                 hasExplicitReturn = true;
@@ -1200,7 +1197,10 @@ namespace ts {
                     addAntecedent(currentReturnTarget, currentFlow);
                 }
             }
-            currentFlow = unreachableFlow;
+            // DoExpression should not affect the control flow by return
+            if (node.kind !== SyntaxKind.ReturnStatement && hasDirectDoExpressionAncestor(node)) {
+                currentFlow = unreachableFlow;
+            }
         }
 
         function findActiveLabel(name: __String) {

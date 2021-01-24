@@ -1,0 +1,70 @@
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(2,5): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(7,10): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(11,22): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(15,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(28,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(31,22): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionMissingPathAnalysis.ts(40,5): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/compiler/doExpressionMissingPathAnalysis.ts (7 errors) ====
+    const a = do {
+        if (1 > 2) true; // missing else
+        ~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    
+    const b = do {
+        if (1 > 2) true;
+        else if (2 > 1) false; // missing else
+             ~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    
+    const c = do {
+        try { 1; } catch {} // catch clause missing val
+                         ~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    
+    const d = do {
+        try { } catch { 1; } // try clause missing val
+            ~~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    
+    const e = do {
+        try {1} catch {2} finally {} // this is fine
+    }
+    
+    enum F {
+        A, B
+    }
+    
+    function f(x: F) {
+        const a = do {
+            switch (x) { } // empty switch
+            ~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        }
+        const b = do {
+            switch (x) { case F.A: {} } // empty case
+                         ~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        }
+        const c = do {
+            // TODO: it should report, not all cases (F.B) handled / missing a default block
+            switch (x) { case F.A: 1; }
+        }
+    }
+    
+    const g = do {
+        console.log('') // void returning functions
+        ~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    // No problem
+    const h = do { 1;;;;; }
+    // No problem
+    const i = do { "val"; debugger; }
+    const j = do { throw new Error(""); }
