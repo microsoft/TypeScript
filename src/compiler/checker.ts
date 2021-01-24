@@ -339,7 +339,15 @@ namespace ts {
         let instantiationDepth = 0;
         let currentNode: Node | undefined;
         // used in analysis of do-expression
-        let isLastStatement = false;
+        let requiresStatementType = false;
+        function startRequireStatementTypeContext<T>(f: (currentRequiresStatementType: boolean) => T): T {
+            if (!compilerOptions.noImplicitReturns) return f(/* neverCheck */false);
+            const old = requiresStatementType;
+            requiresStatementType = false;
+            const val = f(old);
+            requiresStatementType = old;
+            return val;
+        }
 
         const typeCatalog: Type[] = []; // NB: id is index + 1
 
@@ -31244,11 +31252,15 @@ namespace ts {
             // grammar check
             checkEndsInIterationOrDeclaration(node.block.statements, [], /** isLast */ true);
 
-            const oldValue = isLastStatement
-            isLastStatement = true;
-            const type = checkBlock(node.block);
-            isLastStatement = oldValue;
-            return type;
+            return startRequireStatementTypeContext(() => {
+                requiresStatementType = true;
+                return checkBlock(node.block);
+            });
+        }
+
+        function isVoidLikeType(type: Type | undefined | void) {
+            if (!type) return true;
+            return type === voidType;
         }
 
         type LabelSet = readonly (__String | undefined)[];
@@ -34164,21 +34176,30 @@ namespace ts {
                 checkGrammarStatementInAmbientContext(node);
             }
             // eslint-disable-next-line no-undef-init
-            let type: Type | void = undefined;
+            const types: (Type | void)[] = [];
             if (isFunctionOrModuleBlock(node)) {
                 const saveFlowAnalysisDisabled = flowAnalysisDisabled;
                 forEach(node.statements, checkSourceElement);
                 flowAnalysisDisabled = saveFlowAnalysisDisabled;
             }
             else {
-                forEach(node.statements, node => {
-                    type = checkSourceElementWithType(node) || type;
+                startRequireStatementTypeContext(currentLast => {
+                    forEach(node.statements, node => {
+                        types.push(checkSourceElementWithType(node));
+                    });
+                    if (currentLast) {
+                        const lastType = findLastIndex(types, nonNullable);
+                        requiresStatementType = true;
+                        // check again with requiresStatementType on
+                        if (lastType !== -1) checkSourceElement(node.statements[lastType]);
+                    }
                 });
             }
             if (node.locals) {
                 registerForUnusedIdentifiersCheck(node);
             }
-            return type as Type | void || voidType;
+            // TODO: combine with break/continue analysis
+            return findLast(types, nonNullable) || voidType;
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -34600,7 +34621,12 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            return checkExpression(node.expression);
+            const type = checkExpression(node.expression);
+            if (requiresStatementType && isVoidLikeType(type)) {
+                // there is no meaning to use do expreesion and return a void type. mark it as a warning.
+                error(node, Diagnostics.Not_all_code_paths_return_a_value);
+            }
+            return type;
         }
 
         function checkIfStatement(node: IfStatement): Type {
@@ -34615,6 +34641,9 @@ namespace ts {
             }
 
             const type2 = checkSourceElementWithType(node.elseStatement);
+            if (requiresStatementType) {
+                if (isVoidLikeType(type1) || isVoidLikeType(type2)) error(node, Diagnostics.Not_all_code_paths_return_a_value);
+            }
             return getUnionType([type1 || voidType, type2 || voidType], UnionReduction.Subtype);
         }
 
@@ -35722,17 +35751,23 @@ namespace ts {
                         checkTypeComparableTo(caseType, comparedExpressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
-                let caseType: Type | void = undefined;
+                let caseType: Type | void = voidType;
                 for (const statement of clause.statements) {
-                    caseType = checkSourceElementWithType(statement);
+                    caseType = checkSourceElementWithType(statement) || caseType;
                 }
                 if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                     error(clause, Diagnostics.Fallthrough_case_in_switch);
+                }
+                if (requiresStatementType && isVoidLikeType(caseType)) {
+                    error(clause, Diagnostics.Not_all_code_paths_return_a_value);
                 }
                 return caseType;
             }).filter(nonNullable);
             if (node.caseBlock.locals) {
                 registerForUnusedIdentifiersCheck(node.caseBlock);
+            }
+            if (requiresStatementType && node.caseBlock.clauses.length === 0) {
+                error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
             if (types.length === 0) return voidType;
             return getUnionType(types, UnionReduction.Subtype);
@@ -35775,8 +35810,10 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
 
-            const types: (Type | void)[] = [];
-            types.push(checkBlock(node.tryBlock));
+            const types = [checkBlock(node.tryBlock)];
+            if (requiresStatementType && isVoidLikeType(types[0])) {
+                error(node.tryBlock, Diagnostics.Not_all_code_paths_return_a_value);
+            }
             const catchClause = node.catchClause;
             if (catchClause) {
                 // Grammar checking
@@ -35804,7 +35841,11 @@ namespace ts {
                     }
                 }
 
-                types.push(checkBlock(catchClause.block));
+                const catchType = checkBlock(catchClause.block);
+                types.push(catchType);
+                if (requiresStatementType && isVoidLikeType(catchType)) {
+                    error(catchClause.block, Diagnostics.Not_all_code_paths_return_a_value);
+                }
             }
 
             if (node.finallyBlock) {
@@ -37580,6 +37621,7 @@ namespace ts {
                 case SyntaxKind.EmptyStatement:
                 case SyntaxKind.DebuggerStatement:
                     checkGrammarStatementInAmbientContext(node);
+                    if (requiresStatementType) error(node, Diagnostics.Not_all_code_paths_return_a_value);
                     return voidType;
                 case SyntaxKind.MissingDeclaration:
                     return checkMissingDeclaration(node);
