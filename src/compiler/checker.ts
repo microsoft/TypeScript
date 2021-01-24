@@ -31322,7 +31322,7 @@ namespace ts {
             function isEmpty(node: undefined | Node | readonly Statement[], labelSet: LabelSet): boolean {
                 if (!node) return true;
                 if (isArray(node)) {
-                    if (!node.length) return false;
+                    if (!node.length) return true;
                     const statementList = node.slice(0, -1);
                     const statementListItem = last(node);
                     if (isBreak(statementList, labelSet)) return true;
