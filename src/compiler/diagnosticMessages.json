@@ -1360,6 +1360,10 @@
         "category": "Error",
         "code": 1432
     },
+    "A var declaration cannot be used within a do expression unless the target is ESNext.": {
+        "category": "Error",
+        "code": 1433
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200

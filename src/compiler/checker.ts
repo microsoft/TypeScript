@@ -34579,6 +34579,16 @@ namespace ts {
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
             if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
+            const declarationKind = node.declarationList.flags;
+            if (languageVersion < ScriptTarget.ESNext && !(declarationKind & NodeFlags.Let) && !(declarationKind & NodeFlags.Const)) {
+                // var statement cannot appears inside a do-expression if target is not ESNext.
+                // cause the way our transpile it doesn't support this kind of var declaration hoisting.
+                const invalid = findAncestor(node, e => {
+                    if (isFunctionLike(e)) return "quit";
+                    return isDoExpression(e);
+                });
+                if (invalid) grammarErrorOnNode(node, Diagnostics.A_var_declaration_cannot_be_used_within_a_do_expression_unless_the_target_is_ESNext);
+            }
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
