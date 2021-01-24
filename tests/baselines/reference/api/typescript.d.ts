@@ -4418,6 +4418,7 @@ declare namespace ts {
     function isBinaryExpression(node: Node): node is BinaryExpression;
     function isConditionalExpression(node: Node): node is ConditionalExpression;
     function isTemplateExpression(node: Node): node is TemplateExpression;
+    function isDoExpression(node: Node): node is DoExpression;
     function isYieldExpression(node: Node): node is YieldExpression;
     function isSpreadElement(node: Node): node is SpreadElement;
     function isClassExpression(node: Node): node is ClassExpression;
