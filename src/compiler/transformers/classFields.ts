@@ -51,7 +51,7 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
 
-        const shouldTransformPrivateFields = languageVersion < ScriptTarget.ESNext;
+        const shouldTransformPrivateElements = languageVersion < ScriptTarget.ESNext;
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -136,7 +136,7 @@ namespace ts {
          * Replace it with an empty identifier to indicate a problem with the code.
          */
         function visitPrivateIdentifier(node: PrivateIdentifier) {
-            if (!shouldTransformPrivateFields) {
+            if (!shouldTransformPrivateElements) {
                 return node;
             }
             return setOriginalNode(factory.createIdentifier(""), node);
@@ -207,7 +207,7 @@ namespace ts {
             Debug.assert(!some(node.decorators));
             const transformedMethod = visitEachChild(node, classElementVisitor, context);
 
-            if (!shouldTransformPrivateFields || !isPrivateIdentifier(node.name) || !transformedMethod.body) {
+            if (!shouldTransformPrivateElements || !isPrivateIdentifier(node.name) || !transformedMethod.body) {
                 return transformedMethod;
             }
 
@@ -245,7 +245,7 @@ namespace ts {
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
             Debug.assert(!some(node.decorators));
-            if (!shouldTransformPrivateFields && isPrivateIdentifier(node.name)) {
+            if (!shouldTransformPrivateElements && isPrivateIdentifier(node.name)) {
                 // Initializer is elided as the field is initialized in transformConstructor.
                 return factory.updatePropertyDeclaration(
                     node,
@@ -288,7 +288,7 @@ namespace ts {
         }
 
         function visitPropertyAccessExpression(node: PropertyAccessExpression) {
-            if (shouldTransformPrivateFields && isPrivateIdentifier(node.name)) {
+            if (shouldTransformPrivateElements && isPrivateIdentifier(node.name)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(node.name);
                 if (privateIdentifierInfo) {
                     return setOriginalNode(
@@ -301,7 +301,7 @@ namespace ts {
         }
 
         function visitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
+            if (shouldTransformPrivateElements && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
                 const operator = node.operator === SyntaxKind.PlusPlusToken ?
                     SyntaxKind.PlusToken : node.operator === SyntaxKind.MinusMinusToken ?
                         SyntaxKind.MinusToken : undefined;
@@ -327,7 +327,7 @@ namespace ts {
         }
 
         function visitPostfixUnaryExpression(node: PostfixUnaryExpression, valueIsDiscarded: boolean) {
-            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
+            if (shouldTransformPrivateElements && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
                 const operator = node.operator === SyntaxKind.PlusPlusToken ?
                     SyntaxKind.PlusToken : node.operator === SyntaxKind.MinusMinusToken ?
                         SyntaxKind.MinusToken : undefined;
@@ -393,7 +393,7 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.expression)) {
+            if (shouldTransformPrivateElements && isPrivateIdentifierPropertyAccessExpression(node.expression)) {
                 // Transform call expressions of private names to properly bind the `this` parameter.
                 const { thisArg, target } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
                 if (isCallChain(node)) {
@@ -416,7 +416,7 @@ namespace ts {
         }
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.tag)) {
+            if (shouldTransformPrivateElements && isPrivateIdentifierPropertyAccessExpression(node.tag)) {
                 // Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
                 const { thisArg, target } = factory.createCallBinding(node.tag, hoistVariableDeclaration, languageVersion);
                 return factory.updateTaggedTemplateExpression(
@@ -434,7 +434,7 @@ namespace ts {
         }
 
         function visitBinaryExpression(node: BinaryExpression) {
-            if (shouldTransformPrivateFields) {
+            if (shouldTransformPrivateElements) {
                 if (isDestructuringAssignment(node)) {
                     const savedPendingExpressions = pendingExpressions;
                     pendingExpressions = undefined!;
@@ -503,7 +503,7 @@ namespace ts {
         function visitClassLike(node: ClassLikeDeclaration) {
             const savedPendingExpressions = pendingExpressions;
             pendingExpressions = undefined;
-            if (shouldTransformPrivateFields) {
+            if (shouldTransformPrivateElements) {
                 startPrivateIdentifierEnvironment();
             }
 
@@ -511,7 +511,7 @@ namespace ts {
                 visitClassDeclaration(node) :
                 visitClassExpression(node);
 
-            if (shouldTransformPrivateFields) {
+            if (shouldTransformPrivateElements) {
                 endPrivateIdentifierEnvironment();
             }
             pendingExpressions = savedPendingExpressions;
@@ -519,7 +519,7 @@ namespace ts {
         }
 
         function doesClassElementNeedTransform(node: ClassElement) {
-            return isPropertyDeclaration(node) || (shouldTransformPrivateFields && node.name && isPrivateIdentifier(node.name));
+            return isPropertyDeclaration(node) || (shouldTransformPrivateElements && node.name && isPrivateIdentifier(node.name));
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
@@ -631,7 +631,7 @@ namespace ts {
         }
 
         function transformClassMembers(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
-            if (shouldTransformPrivateFields) {
+            if (shouldTransformPrivateElements) {
                 // Declare private names.
                 for (const member of node.members) {
                     if (isPrivateIdentifierClassElementDeclaration(member)) {
@@ -658,7 +658,7 @@ namespace ts {
                 // then we don't need to transform any class properties.
                 return languageVersion < ScriptTarget.ESNext;
             }
-            return isInitializedProperty(member) || shouldTransformPrivateFields && isPrivateIdentifierClassElementDeclaration(member);
+            return isInitializedProperty(member) || shouldTransformPrivateElements && isPrivateIdentifierClassElementDeclaration(member);
         }
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
@@ -829,7 +829,7 @@ namespace ts {
                 ? factory.updateComputedPropertyName(property.name, factory.getGeneratedNameForNode(property.name))
                 : property.name;
 
-            if (shouldTransformPrivateFields && isPrivateIdentifier(propertyName)) {
+            if (shouldTransformPrivateElements && isPrivateIdentifier(propertyName)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
                 if (privateIdentifierInfo) {
                     switch (privateIdentifierInfo.placement) {
@@ -909,7 +909,7 @@ namespace ts {
          * @param receiver The receiver on which the method should be assigned.
          */
         function transformMethod(method: MethodDeclaration, receiver: LeftHandSideExpression) {
-            if (!shouldTransformPrivateFields || !isPrivateIdentifier(method.name)) {
+            if (!shouldTransformPrivateElements || !isPrivateIdentifier(method.name)) {
                 return;
             }
 
