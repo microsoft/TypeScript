@@ -7691,13 +7691,14 @@ namespace ts {
                     skipWhitespaceOrAsterisk();
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
-                    skipWhitespace();
+                    const indentText = skipWhitespaceOrAsterisk();
 
                     if (isNameFirst) {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const comment = parseTagComments(indent + scanner.getStartPos() - start);
+                    const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+
                     const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
