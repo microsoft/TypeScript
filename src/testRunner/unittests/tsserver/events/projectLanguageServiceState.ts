@@ -7,7 +7,7 @@ namespace ts.projectSystem {
             };
             const f2 = {
                 path: "/a/largefile.js",
-                content: ""
+                content: "",
             };
             const config = {
                 path: "/a/jsconfig.json",
@@ -46,6 +46,40 @@ namespace ts.projectSystem {
             assert.equal(events[1].data.project, project, "project");
             assert.equal(events[1].data.project.getProjectName(), config.path, "config path");
             assert.isTrue(events[1].data.languageServiceEnabled, "Language service state");
+        });
+
+        it("Large file size is determined correctly", () => {
+            const f1: File = {
+                path: "/a/app.js",
+                content: "let x = 1;"
+            };
+            const f2: File = {
+                path: "/a/largefile.js",
+                content: "",
+                fileSize: server.maxProgramSizeForNonTsFiles + 1
+            };
+            const f3: File = {
+                path: "/a/extremlylarge.d.ts",
+                content: "",
+                fileSize: server.maxProgramSizeForNonTsFiles + 100
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, f2, f3, libFile, config]);
+            const logs: string[] = [];
+            const logger: server.Logger = {
+                ...nullLogger,
+                info: s => logs.push(s)
+            };
+            const service = createProjectService(host, { logger });
+            service.openClientFile(f1.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(config.path)!;
+            assert.isFalse(project.languageServiceEnabled, "Language service enabled");
+            assert.equal(project.lastFileExceededProgramSize, f2.path);
+            assert.isTrue(contains(logs, `Non TS file size exceeded limit (${f1.content.length + f2.fileSize!}). Largest files: ${f2.path}:${f2.fileSize}, ${f1.path}:${f1.content.length}`));
         });
     });
 }

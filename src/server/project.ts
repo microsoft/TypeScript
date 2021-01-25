@@ -147,7 +147,8 @@ namespace ts.server {
         /*@internal*/
         private hasAddedorRemovedFiles = false;
 
-        private lastFileExceededProgramSize: string | undefined;
+        /*@internal*/
+        lastFileExceededProgramSize: string | undefined;
 
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
