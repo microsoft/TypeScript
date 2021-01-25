@@ -210,7 +210,7 @@ Alternatively, you can set the `DIFF` environment variable and run `gulp diff`, 
 
 After verifying that the changes in the baselines are correct, run
 
-```Shell
+```Shel
 gulp baseline-accept
 ```
 
