@@ -4880,6 +4880,12 @@ namespace ts {
                 return baseStr + "." + entityNameToString(expr.name);
             }
         }
+        else if (isElementAccessExpression(expr)) {
+            const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
+            if (baseStr !== undefined && isPropertyName(expr.argumentExpression)) {
+                return baseStr + "." + getPropertyNameForPropertyNameNode(expr.argumentExpression);
+            }
+        }
         else if (isIdentifier(expr)) {
             return unescapeLeadingUnderscores(expr.escapedText);
         }

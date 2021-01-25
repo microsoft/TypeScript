@@ -3235,6 +3235,10 @@
         "category": "Error",
         "code": 2797
     },
+    "The declaration was marked as deprecated here.": {
+        "category": "Error",
+        "code": 2798
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4898,7 +4902,7 @@
         "category": "Message",
         "code": 6384
     },
-    "'{0}' is deprecated": {
+    "'{0}' is deprecated.": {
         "category": "Suggestion",
         "code": 6385,
         "reportsDeprecated": true
@@ -4906,6 +4910,11 @@
     "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
         "category": "Message",
         "code": 6386
+    },
+    "The signature '{0}' of '{1}' is deprecated.": {
+        "category": "Suggestion",
+        "code": 6387,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
