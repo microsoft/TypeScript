@@ -2333,8 +2333,7 @@ namespace ts {
          */
         function shouldEmitEnumDeclaration(node: EnumDeclaration) {
             return !isEnumConst(node)
-                || compilerOptions.preserveConstEnums
-                || compilerOptions.isolatedModules;
+                || shouldPreserveConstEnums(compilerOptions);
         }
 
         /**
@@ -2524,7 +2523,7 @@ namespace ts {
                 // If we can't find a parse tree node, assume the node is instantiated.
                 return true;
             }
-            return isInstantiatedModule(node, !!compilerOptions.preserveConstEnums || !!compilerOptions.isolatedModules);
+            return isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions));
         }
 
         /**

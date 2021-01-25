@@ -31,7 +31,7 @@ function f2() {
 >false : false
 
     type ElementOrArray = Element | Element[]; 
->ElementOrArray : string | false | (string | false)[]
+>ElementOrArray : (string | false) | (string | false)[]
 
     let el: Element = null as any;
 >el : string | false
@@ -44,32 +44,32 @@ function f2() {
 >null : null
 
     let elOrA: ElementOrArray = null as any;
->elOrA : string | false | (string | false)[]
+>elOrA : (string | false) | (string | false)[]
 >null as any : any
 >null : null
 
     // Desired/actual: All OK
     let a1: ElementOrArray = el;
->a1 : string | false | (string | false)[]
+>a1 : (string | false) | (string | false)[]
 >el : string | false
 
     let a2: ElementOrArray = arr;
->a2 : string | false | (string | false)[]
+>a2 : (string | false) | (string | false)[]
 >arr : (string | false)[]
 
     let a3: ElementOrArray = [el];
->a3 : string | false | (string | false)[]
+>a3 : (string | false) | (string | false)[]
 >[el] : (string | false)[]
 >el : string | false
 
     let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
->a4 : string | false | (string | false)[]
+>a4 : (string | false) | (string | false)[]
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->elOrA : string | false | (string | false)[]
+>elOrA : (string | false) | (string | false)[]
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]
 >elOrA : string | false
@@ -78,7 +78,7 @@ function f2() {
     // 3.0: Error
     // 3.1: OK
     let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
->a5 : string | false | (string | false)[]
+>a5 : (string | false) | (string | false)[]
 >[...Array.isArray(elOrA) ? elOrA : [elOrA]] : (string | false)[]
 >...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
@@ -86,7 +86,7 @@ function f2() {
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->elOrA : string | false | (string | false)[]
+>elOrA : (string | false) | (string | false)[]
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]
 >elOrA : string | false

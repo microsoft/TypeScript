@@ -76,7 +76,7 @@ type B0 = Flatten<string[][][]>;
 >B0 : string[]
 
 type B1 = Flatten<string[][] | readonly (number[] | boolean[][])[]>;
->B1 : string[] | readonly (number | boolean)[]
+>B1 : B1
 
 type B2 = Flatten<InfiniteArray<string>>;
 >B2 : any[]
@@ -96,7 +96,7 @@ type TT0 = TupleOf<string, 4>;
 >TT0 : [string, string, string, string]
 
 type TT1 = TupleOf<number, 0 | 2 | 4>;
->TT1 : [] | [number, number] | [number, number, number, number]
+>TT1 : TT1
 
 type TT2 = TupleOf<number, number>;
 >TT2 : number[]
@@ -105,7 +105,7 @@ type TT3 = TupleOf<number, any>;
 >TT3 : number[]
 
 type TT4 = TupleOf<number, 100>;  // Depth error
->TT4 : any
+>TT4 : [any, ...any[]]
 
 function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
 >f22 : <N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) => void
@@ -230,7 +230,7 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >value : { readonly value: { readonly value: any; }; }
 >{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
 >value : { readonly value: any; }
->this : { readonly value: any; } | { readonly value: { readonly value: any; }; } | Box<RecBox<{ readonly value: { readonly value: any; }; }>>
+>this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
 
 // Inference from nested instantiations of same generic types
 

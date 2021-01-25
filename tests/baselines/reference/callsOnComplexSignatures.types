@@ -30,8 +30,8 @@ function test1() {
 >t : Temp1 | Temp2
 
         const z = t.getValue("bar"); // Should be fine
->z : React.ReactText
->t.getValue("bar") : React.ReactText
+>z : string | number
+>t.getValue("bar") : string | number
 >t.getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
 >t : Temp1 | Temp2
 >getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
@@ -399,7 +399,7 @@ function test5() {
         }
 
         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
->C : React.ComponentClass<P1, any> | React.StatelessComponent<P1> | React.ComponentClass<P2, any> | React.StatelessComponent<P2>
+>C : React.ComponentType<P1> | React.ComponentType<P2>
 >React : any
 >React : any
 >null as any : any
@@ -408,7 +408,7 @@ function test5() {
         const a = <C p={true} />;
 >a : JSX.Element
 ><C p={true} /> : JSX.Element
->C : React.ComponentClass<P1, any> | React.StatelessComponent<P1> | React.ComponentClass<P2, any> | React.StatelessComponent<P2>
+>C : React.ComponentType<P1> | React.ComponentType<P2>
 >p : true
 >true : true
     }

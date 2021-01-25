@@ -3022,7 +3022,7 @@ namespace FourSlash {
                  this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
             }
             if (expectedTextArray.length !== actualTextArray.length) {
-                this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}`);
+                this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
             }
             ts.zipWith(expectedTextArray, actualTextArray, (expected, actual, index) => {
                 if (expected !== actual) {

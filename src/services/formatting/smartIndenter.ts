@@ -581,7 +581,7 @@ namespace ts.formatting {
                     if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
                         return false;
                     }
-                    // falls through
+                    break;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
