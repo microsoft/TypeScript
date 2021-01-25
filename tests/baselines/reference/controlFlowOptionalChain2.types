@@ -1,0 +1,44 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts ===
+type A = {
+>A : A
+
+  type: 'A';
+>type : "A"
+
+  name: string;
+>name : string
+}
+
+type B = {
+>B : B
+
+  type: 'B';
+>type : "B"
+}
+
+function funcTwo(arg: A | B | undefined) {
+>funcTwo : (arg: A | B | undefined) => void
+>arg : A | B | undefined
+
+  if (arg?.type === 'B') {
+>arg?.type === 'B' : boolean
+>arg?.type : "A" | "B" | undefined
+>arg : A | B | undefined
+>type : "A" | "B" | undefined
+>'B' : "B"
+
+    arg; // `B`
+>arg : B
+
+    return;
+  }
+
+  arg;
+>arg : A | undefined
+
+  arg?.name;
+>arg?.name : string | undefined
+>arg : A | undefined
+>name : string | undefined
+}
+

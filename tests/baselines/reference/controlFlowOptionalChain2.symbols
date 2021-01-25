@@ -1,0 +1,44 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts ===
+type A = {
+>A : Symbol(A, Decl(controlFlowOptionalChain2.ts, 0, 0))
+
+  type: 'A';
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10))
+
+  name: string;
+>name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+}
+
+type B = {
+>B : Symbol(B, Decl(controlFlowOptionalChain2.ts, 3, 1))
+
+  type: 'B';
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 5, 10))
+}
+
+function funcTwo(arg: A | B | undefined) {
+>funcTwo : Symbol(funcTwo, Decl(controlFlowOptionalChain2.ts, 7, 1))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+>A : Symbol(A, Decl(controlFlowOptionalChain2.ts, 0, 0))
+>B : Symbol(B, Decl(controlFlowOptionalChain2.ts, 3, 1))
+
+  if (arg?.type === 'B') {
+>arg?.type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
+
+    arg; // `B`
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+
+    return;
+  }
+
+  arg;
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+
+  arg?.name;
+>arg?.name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+>name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+}
+
