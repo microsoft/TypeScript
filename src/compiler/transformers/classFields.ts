@@ -9,14 +9,23 @@ namespace ts {
     }
 
     const enum PrivateIdentifierPlacement {
-        InstanceField
+        InstanceField,
+        InstanceMethod,
     }
 
-    type PrivateIdentifierInfo = PrivateIdentifierInstanceField;
+    type PrivateIdentifierInfo =
+        | PrivateIdentifierInstanceField
+        | PrivateIdentifierInstanceMethod;
 
     interface PrivateIdentifierInstanceField {
         placement: PrivateIdentifierPlacement.InstanceField;
         weakMapName: Identifier;
+    }
+
+    interface PrivateIdentifierInstanceMethod {
+        placement: PrivateIdentifierPlacement.InstanceMethod;
+        weakSetName: Identifier;
+        functionName: Identifier;
     }
 
     /**
@@ -147,9 +156,11 @@ namespace ts {
 
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                case SyntaxKind.MethodDeclaration:
                     // Visit the name of the member (if it's a computed property name).
                     return visitEachChild(node, classElementVisitor, context);
+
+                case SyntaxKind.MethodDeclaration:
+                    return visitMethodDeclaration(node as MethodDeclaration);
 
                 case SyntaxKind.PropertyDeclaration:
                     return visitPropertyDeclaration(node as PropertyDeclaration);
@@ -192,6 +203,46 @@ namespace ts {
             return node;
         }
 
+        function visitMethodDeclaration(node: MethodDeclaration) {
+            Debug.assert(!some(node.decorators));
+            const transformedMethod = visitEachChild(node, classElementVisitor, context);
+
+            if (!shouldTransformPrivateFields || !isPrivateIdentifier(node.name) || !transformedMethod.body) {
+                return transformedMethod;
+            }
+
+            const functionName = getHoistedFunctionName(node);
+            getPendingExpressions().push(
+                factory.createAssignment(
+                    functionName,
+                    factory.createFunctionExpression(
+                        transformedMethod.modifiers,
+                        transformedMethod.asteriskToken,
+                        functionName,
+                        transformedMethod.typeParameters,
+                        transformedMethod.parameters,
+                        transformedMethod.type,
+                        transformedMethod.body
+                    )
+                )
+            );
+
+            // remove method declaration from class
+            return undefined;
+        }
+
+        function getHoistedFunctionName(node: MethodDeclaration) {
+            Debug.assert(isPrivateIdentifier(node.name));
+            const privateIdentifierInfo = accessPrivateIdentifier(node.name);
+            Debug.assert(privateIdentifierInfo, "Undeclared private name for property declaration.");
+
+            if (privateIdentifierInfo.placement === PrivateIdentifierPlacement.InstanceMethod) {
+                return privateIdentifierInfo.functionName;
+            }
+
+            Debug.fail("Unexpected private identifier placement");
+        }
+
         function visitPropertyDeclaration(node: PropertyDeclaration) {
             Debug.assert(!some(node.decorators));
             if (!shouldTransformPrivateFields && isPrivateIdentifier(node.name)) {
@@ -218,11 +269,19 @@ namespace ts {
 
         function createPrivateIdentifierAccess(info: PrivateIdentifierInfo, receiver: Expression): Expression {
             receiver = visitNode(receiver, visitor, isExpression);
+            const synthesizedReceiver = nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
+
             switch (info.placement) {
                 case PrivateIdentifierPlacement.InstanceField:
                     return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver),
+                        synthesizedReceiver,
                         info.weakMapName
+                    );
+                case PrivateIdentifierPlacement.InstanceMethod:
+                    return context.getEmitHelperFactory().createClassPrivateMethodGetHelper(
+                        synthesizedReceiver,
+                        info.weakSetName,
+                        info.functionName
                     );
                 default: return Debug.fail("Unexpected private identifier placement");
             }
@@ -406,9 +465,10 @@ namespace ts {
 
         function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator) {
             switch (info.placement) {
-                case PrivateIdentifierPlacement.InstanceField: {
+                case PrivateIdentifierPlacement.InstanceField:
                     return createPrivateIdentifierInstanceFieldAssignment(info, receiver, right, operator);
-                }
+                case PrivateIdentifierPlacement.InstanceMethod:
+                    return createPrivateIdentifierInstanceMethodAssignment();
                 default: return Debug.fail("Unexpected private identifier placement");
             }
         }
@@ -431,6 +491,10 @@ namespace ts {
             else {
                 return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(receiver, info.weakMapName, right);
             }
+        }
+
+        function createPrivateIdentifierInstanceMethodAssignment() {
+            return context.getEmitHelperFactory().createClassPrivateReadonlyHelper();
         }
 
         /**
@@ -571,7 +635,7 @@ namespace ts {
                 // Declare private names.
                 for (const member of node.members) {
                     if (isPrivateIdentifierClassElementDeclaration(member)) {
-                        addPrivateIdentifierToEnvironment(member.name);
+                        addPrivateIdentifierToEnvironment(member);
                     }
                 }
             }
@@ -585,8 +649,8 @@ namespace ts {
             return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
         }
 
-        function isPropertyDeclarationThatRequiresConstructorStatement(member: ClassElement): member is PropertyDeclaration {
-            if (!isPropertyDeclaration(member) || hasStaticModifier(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
+        function isClassElementThatRequiresConstructorStatement(member: ClassElement) {
+            if (hasStaticModifier(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
                 return false;
             }
             if (context.getCompilerOptions().useDefineForClassFields) {
@@ -599,8 +663,8 @@ namespace ts {
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
             const constructor = visitNode(getFirstConstructorWithBody(node), visitor, isConstructorDeclaration);
-            const properties = node.members.filter(isPropertyDeclarationThatRequiresConstructorStatement);
-            if (!some(properties)) {
+            const elements = node.members.filter(isClassElementThatRequiresConstructorStatement);
+            if (!some(elements)) {
                 return constructor;
             }
             const parameters = visitParameterList(constructor ? constructor.parameters : undefined, visitor, context);
@@ -631,9 +695,11 @@ namespace ts {
                 properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
             }
 
+            const privateMethods = filter(getMethods(node, /*isStatic*/ false), method => isPrivateIdentifier(method.name));
+            const needsConstructorBody = some(properties) || some(privateMethods);
 
             // Only generate synthetic constructor when there are property initializers to move.
-            if (!constructor && !some(properties)) {
+            if (!constructor && !needsConstructorBody) {
                 return visitFunctionBody(/*node*/ undefined, visitor, context);
             }
 
@@ -683,7 +749,10 @@ namespace ts {
                     indexOfFirstStatement = afterParameterProperties;
                 }
             }
-            addPropertyStatements(statements, properties, factory.createThis());
+            const receiver = factory.createThis();
+            // private methods can be called in property initializers, they should execute first.
+            addMethodStatements(statements, privateMethods, receiver);
+            addPropertyStatements(statements, properties, receiver);
 
             // Add existing statements, skipping the initial super call.
             if (constructor) {
@@ -771,16 +840,13 @@ namespace ts {
                                 privateIdentifierInfo.weakMapName
                             );
                         }
+                        default: return Debug.fail("Unexpected private identifier placement");
                     }
                 }
                 else {
                     Debug.fail("Undeclared private name for property declaration.");
                 }
             }
-            if (isPrivateIdentifier(propertyName) && !property.initializer) {
-                return undefined;
-            }
-
             if (isPrivateIdentifier(propertyName) && !property.initializer) {
                 return undefined;
             }
@@ -816,6 +882,51 @@ namespace ts {
 
                 // Keep track of class aliases.
                 classAliases = [];
+            }
+        }
+
+        /**
+         * Generates access-control initializer for private methods.
+         *
+         * @param methods An array of method declarations to transform.
+         * @param receiver The receiver on which each method should be assigned.
+         */
+        function addMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration)[], receiver: LeftHandSideExpression) {
+            for (const method of methods) {
+                const expression = transformMethod(method, receiver);
+                if (!expression) {
+                    continue;
+                }
+                const statement = factory.createExpressionStatement(expression);
+                statements.push(statement);
+            }
+        }
+
+        /**
+         * Transforms a method declaration to access-control initializer.
+         *
+         * @param method The method declaration.
+         * @param receiver The receiver on which the method should be assigned.
+         */
+        function transformMethod(method: MethodDeclaration, receiver: LeftHandSideExpression) {
+            if (!shouldTransformPrivateFields || !isPrivateIdentifier(method.name)) {
+                return;
+            }
+
+            const privateIdentifierInfo = accessPrivateIdentifier(method.name);
+            if (privateIdentifierInfo) {
+                switch (privateIdentifierInfo.placement){
+                    case PrivateIdentifierPlacement.InstanceMethod: {
+                        return createPrivateInstanceMethodInitializer(
+                            receiver,
+                            privateIdentifierInfo.weakSetName
+                        );
+                    }
+                    default: return Debug.fail("Unexpected private identifier placement");
+                }
+            }
+            else {
+                Debug.fail("Undeclared private name for method declaration.");
             }
         }
 
@@ -907,21 +1018,57 @@ namespace ts {
             return pendingExpressions || (pendingExpressions = []);
         }
 
-        function addPrivateIdentifierToEnvironment(name: PrivateIdentifier) {
-            const text = getTextOfPropertyName(name) as string;
-            const weakMapName = factory.createUniqueName("_" + text.substring(1), GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes);
-            hoistVariableDeclaration(weakMapName);
-            getPrivateIdentifierEnvironment().set(name.escapedText, { placement: PrivateIdentifierPlacement.InstanceField, weakMapName });
-            getPendingExpressions().push(
-                factory.createAssignment(
-                    weakMapName,
+        function addPrivateIdentifierToEnvironment(node: PrivateClassElementDeclaration) {
+            const text = getTextOfPropertyName(node.name) as string;
+            const accessControlObject = createHoistedVariableForPrivateName(text);
+            let info: PrivateIdentifierInfo;
+            const assignmentExpressions: Expression[] = [];
+
+            if (isPropertyDeclaration(node)) {
+                info = {
+                    placement: PrivateIdentifierPlacement.InstanceField,
+                    weakMapName: accessControlObject
+                };
+
+                assignmentExpressions.push(factory.createAssignment(
+                    accessControlObject,
                     factory.createNewExpression(
                         factory.createIdentifier("WeakMap"),
                         /*typeArguments*/ undefined,
                         []
                     )
-                )
-            );
+                ));
+            }
+            else if (isMethodDeclaration(node)) {
+                const functionName = createHoistedVariableForPrivateName(text);
+
+                info = {
+                    placement: PrivateIdentifierPlacement.InstanceMethod,
+                    weakSetName: accessControlObject,
+                    functionName
+                };
+
+                assignmentExpressions.push(factory.createAssignment(
+                    accessControlObject,
+                    factory.createNewExpression(
+                        factory.createIdentifier("WeakSet"),
+                        /*typeArguments*/ undefined,
+                        []
+                    )
+                ));
+            }
+            else {
+                return;
+            }
+
+            getPrivateIdentifierEnvironment().set(node.name.escapedText, info);
+            getPendingExpressions().push(...assignmentExpressions);
+        }
+
+        function createHoistedVariableForPrivateName(privateName: string): Identifier {
+            const name = factory.createUniqueName("_" + privateName.substring(1), GeneratedIdentifierFlags.Optimistic);
+            hoistVariableDeclaration(name);
+            return name;
         }
 
         function accessPrivateIdentifier(name: PrivateIdentifier) {
@@ -1071,6 +1218,14 @@ namespace ts {
             factory.createPropertyAccessExpression(weakMapName, "set"),
             /*typeArguments*/ undefined,
             [receiver, initializer || factory.createVoidZero()]
+        );
+    }
+
+    function createPrivateInstanceMethodInitializer(receiver: LeftHandSideExpression, weakSetName: Identifier) {
+        return factory.createCallExpression(
+            factory.createPropertyAccessExpression(weakSetName, "add"),
+            /*typeArguments*/ undefined,
+            [receiver]
         );
     }
 }

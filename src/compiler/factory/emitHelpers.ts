@@ -34,6 +34,8 @@ namespace ts {
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
+        createClassPrivateMethodGetHelper(receiver: Expression, accessCheck: Identifier, fn: Identifier): Expression;
+        createClassPrivateReadonlyHelper(): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -72,6 +74,8 @@ namespace ts {
             // Class Fields Helpers
             createClassPrivateFieldGetHelper,
             createClassPrivateFieldSetHelper,
+            createClassPrivateMethodGetHelper,
+            createClassPrivateReadonlyHelper,
         };
 
         /**
@@ -377,6 +381,17 @@ namespace ts {
             context.requestEmitHelper(classPrivateFieldSetHelper);
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, [receiver, privateField, value]);
         }
+
+        function createClassPrivateMethodGetHelper(receiver: Expression, accessCheck: Identifier, fn: Identifier) {
+            context.requestEmitHelper(classPrivateMethodGetHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateMethodGet"), /*typeArguments*/ undefined, [receiver, accessCheck, fn]);
+        }
+
+        function createClassPrivateReadonlyHelper() {
+            context.requestEmitHelper(classPrivateReadonlyHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateReadonly"), /*typeArguments*/ undefined, []);
+        }
+
     }
 
     /* @internal */
@@ -844,6 +859,29 @@ namespace ts {
             };`
     };
 
+    export const classPrivateMethodGetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateMethodGet",
+        importName: "__classPrivateMethodGet",
+        scoped: false,
+        text: `
+            var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
+                if (!accessCheck.has(receiver)) {
+                    throw new TypeError("attempted to get private method on non-instance");
+                }
+                return fn;
+            };`
+    };
+
+    export const classPrivateReadonlyHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateReadonly",
+        importName: "__classPrivateReadonly",
+        scoped: false,
+        text: `
+            var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
+                throw new TypeError("private element is not writable");
+            };`
+    };
+
     let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
 
     export function getAllUnscopedEmitHelpers() {
@@ -869,6 +907,8 @@ namespace ts {
             exportStarHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
+            classPrivateMethodGetHelper,
+            classPrivateReadonlyHelper,
             createBindingHelper,
             setModuleDefaultHelper
         ], helper => helper.name));

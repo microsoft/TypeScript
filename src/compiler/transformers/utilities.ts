@@ -344,6 +344,16 @@ namespace ts {
     }
 
     /**
+     * Gets all the static or all the instance method declarations of a class.
+     *
+     * @param node The class node.
+     * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
+     */
+    export function getMethods(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly MethodDeclaration[] {
+        return filter(node.members, m => isStaticMethodDeclaration(m, isStatic)) as MethodDeclaration[];
+    }
+
+    /**
      * Is a class element either a static or an instance property declaration with an initializer?
      *
      * @param member The class element node.
@@ -365,4 +375,15 @@ namespace ts {
         return member.kind === SyntaxKind.PropertyDeclaration
             && (<PropertyDeclaration>member).initializer !== undefined;
     }
+
+    /**
+     * Gets a value indicating whether a class element is either a static or an instance method declaration.
+     *
+     * @param member The class element node.
+     * @param isStatic A value indicating whether the member should be a static or instance member.
+     */
+    export function isStaticMethodDeclaration(member: ClassElement, isStatic: boolean): member is MethodDeclaration {
+        return isMethodDeclaration(member) && hasStaticModifier(member) === isStatic;
+    }
+
 }
