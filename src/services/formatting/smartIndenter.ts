@@ -323,6 +323,27 @@ namespace ts.formatting {
             return false;
         }
 
+        // A multiline conditional typically increases the indentation of its whenTrue and whenFalse children:
+        //
+        // condition
+        //   ? whenTrue
+        //   : whenFalse;
+        //
+        // However, that indentation does not apply if the subexpressions themselves span multiple lines,
+        // applying their own indentation:
+        //
+        // (() => {
+        //   return complexCalculationForCondition();
+        // })() ? {
+        //   whenTrue: 'multiline object literal'
+        // } : (
+        //   whenFalse('multiline parenthesized expression')
+        // );
+        //
+        // In these cases, we must discard the indenation increase that would otherwise be applied to the
+        // whenTrue and whenFalse children to avoid double-indenting their contents. To identify this scenario,
+        // we check for the whenTrue branch beginning on the line that the condition ends, and the whenFalse
+        // branch beginning on the line that the whenTrue branch ends.
         export function childIsUnindentedBranchOfConditionalExpression(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
             if (isConditionalExpression(parent) && (child === parent.whenTrue || child === parent.whenFalse)) {
                 const conditionEndLine = getLineAndCharacterOfPosition(sourceFile, parent.condition.end).line;
