@@ -1,0 +1,17 @@
+=== /a/index.ts ===
+export * from "./src/"
+No type information for this code.=== /b/index.ts ===
+export * from "./src/"
+No type information for this code.=== /b/src/index.ts ===
+export class B {}
+>B : B
+
+=== /a/src/index.ts ===
+import { B } from "b";
+>B : typeof B
+
+export default function () {
+	return new B();
+>new B() : B
+>B : typeof B
+}
