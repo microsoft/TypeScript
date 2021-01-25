@@ -1121,33 +1121,29 @@ namespace ts {
             return diagnostic;
         }
 
-        function addDeprecatedSuggestionImpl(declarations: Node[], diagnostic: DiagnosticWithLocation) {
-            for (const declaration of declarations) {
-                const deprecatedTag = getJSDocDeprecatedTag(declaration);
-                if (deprecatedTag) {
-                    addRelatedInfo(
-                        diagnostic,
-                        createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here)
-                    );
-                    break;
-                }
+        function addDeprecatedSuggestionWorker(declarations: Node | Node[], diagnostic: DiagnosticWithLocation) {
+            const deprecatedTag = Array.isArray(declarations) ? forEach(declarations, getJSDocDeprecatedTag) : getJSDocDeprecatedTag(declarations);
+            if (deprecatedTag) {
+                addRelatedInfo(
+                    diagnostic,
+                    createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here)
+                );
             }
-            //We call `addRelatedInfo()` before adding the diagnostic
-            //to prevent duplicates.
+            // We call `addRelatedInfo()` before adding the diagnostic to prevent duplicates.
             suggestionDiagnostics.add(diagnostic);
             return diagnostic;
         }
 
         function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
             const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
-            return addDeprecatedSuggestionImpl(declarations, diagnostic);
+            return addDeprecatedSuggestionWorker(declarations, diagnostic);
         }
 
-        function addDeprecatedSuggestionWithSignature(location: Node, declarations: Node[], deprecatedEntity: string | undefined, signatureString: string) {
+        function addDeprecatedSuggestionWithSignature(location: Node, declaration: Node, deprecatedEntity: string | undefined, signatureString: string) {
             const diagnostic = deprecatedEntity
                 ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_deprecated, signatureString, deprecatedEntity)
                 : createDiagnosticForNode(location, Diagnostics._0_is_deprecated, signatureString);
-            return addDeprecatedSuggestionImpl(declarations, diagnostic);
+            return addDeprecatedSuggestionWorker(declaration, diagnostic);
         }
 
         function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
@@ -28997,10 +28993,8 @@ namespace ts {
         function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
             if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
                 const suggestionNode = getDeprecatedSuggestionNode(node);
-                const expr = getInvokedExpression(node);
-                const name = tryGetPropertyAccessOrIdentifierToString(expr);
-                const signatureString = signatureToString(signature);
-                addDeprecatedSuggestionWithSignature(suggestionNode, [signature.declaration], name, signatureString);
+                const name = tryGetPropertyAccessOrIdentifierToString(getInvokedExpression(node));
+                addDeprecatedSuggestionWithSignature(suggestionNode, signature.declaration, name, signatureToString(signature));
             }
         }
 
