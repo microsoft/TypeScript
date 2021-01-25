@@ -1,0 +1,30 @@
+=== tests/cases/compiler/initializerWithNonNullAssertion.ts ===
+// https://github.com/microsoft/TypeScript/issues/19577
+
+function test(numbers: number[]) {
+>test : Symbol(test, Decl(initializerWithNonNullAssertion.ts, 0, 0))
+>numbers : Symbol(numbers, Decl(initializerWithNonNullAssertion.ts, 2, 14))
+
+    let last;
+>last : Symbol(last, Decl(initializerWithNonNullAssertion.ts, 3, 7))
+
+    for (const n of numbers) {
+>n : Symbol(n, Decl(initializerWithNonNullAssertion.ts, 5, 14))
+>numbers : Symbol(numbers, Decl(initializerWithNonNullAssertion.ts, 2, 14))
+
+        if (n % 2) {
+>n : Symbol(n, Decl(initializerWithNonNullAssertion.ts, 5, 14))
+
+            return n;
+>n : Symbol(n, Decl(initializerWithNonNullAssertion.ts, 5, 14))
+        }
+
+        last = n;
+>last : Symbol(last, Decl(initializerWithNonNullAssertion.ts, 3, 7))
+>n : Symbol(n, Decl(initializerWithNonNullAssertion.ts, 5, 14))
+    }
+
+    return last!;
+>last : Symbol(last, Decl(initializerWithNonNullAssertion.ts, 3, 7))
+}
+
