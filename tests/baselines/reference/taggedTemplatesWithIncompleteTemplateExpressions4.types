@@ -10,7 +10,7 @@ function f(x: TemplateStringsArray, y: string, z: string) {
 f `123qdawdrqw${ 1 }${ }${ 
 >f `123qdawdrqw${ 1 }${ }${ : void
 >f : (x: TemplateStringsArray, y: string, z: string) => void
->`123qdawdrqw${ 1 }${ }${ : string
+>`123qdawdrqw${ 1 }${ }${ : `123qdawdrqw1${any}${any}`
 >1 : 1
 > : any
 > : any

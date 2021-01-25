@@ -42,7 +42,7 @@ namespace ts {
         function getImplicitImportForName(name: string) {
             const importSource = name === "createElement"
                 ? currentFileState.importSpecifier!
-                : `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}`;
+                : getJSXRuntimeImport(currentFileState.importSpecifier, compilerOptions)!;
             const existing = currentFileState.utilizedImplicitRuntimeImports?.get(importSource)?.get(name);
             if (existing) {
                 return existing.name;

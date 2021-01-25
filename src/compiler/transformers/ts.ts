@@ -1900,7 +1900,7 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
-            if (node.flags & NodeFlags.Ambient) {
+            if (node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract)) {
                 return undefined;
             }
             const updated = factory.updatePropertyDeclaration(
@@ -2316,8 +2316,7 @@ namespace ts {
          */
         function shouldEmitEnumDeclaration(node: EnumDeclaration) {
             return !isEnumConst(node)
-                || compilerOptions.preserveConstEnums
-                || compilerOptions.isolatedModules;
+                || shouldPreserveConstEnums(compilerOptions);
         }
 
         /**
@@ -2507,7 +2506,7 @@ namespace ts {
                 // If we can't find a parse tree node, assume the node is instantiated.
                 return true;
             }
-            return isInstantiatedModule(node, !!compilerOptions.preserveConstEnums || !!compilerOptions.isolatedModules);
+            return isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions));
         }
 
         /**
@@ -2973,6 +2972,11 @@ namespace ts {
          * @param node The import equals declaration node.
          */
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+            // Always elide type-only imports
+            if (node.isTypeOnly) {
+                return undefined;
+            }
+
             if (isExternalModuleImportEqualsDeclaration(node)) {
                 const isReferenced = resolver.isReferencedAliasDeclaration(node);
                 // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.

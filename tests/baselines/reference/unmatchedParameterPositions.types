@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unmatchedParameterPositions.ts ===
+// Repros from #40251
+
+declare let s: (...items: never[]) => never[];
+>s : (...items: never[]) => never[]
+>items : never[]
+
+let t1: () => unknown[] = s;
+>t1 : () => unknown[]
+>s : (...items: never[]) => never[]
+
+let t2: (...args: []) => unknown[] = s;
+>t2 : () => unknown[]
+>args : []
+>s : (...items: never[]) => never[]
+

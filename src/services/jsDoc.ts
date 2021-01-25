@@ -269,34 +269,35 @@ namespace ts.JsDoc {
         if (!commentOwnerInfo) {
             return undefined;
         }
-        const { commentOwner, parameters } = commentOwnerInfo;
+
+        const { commentOwner, parameters, hasReturn } = commentOwnerInfo;
         if (commentOwner.getStart(sourceFile) < position) {
             return undefined;
         }
 
-        if (!parameters || parameters.length === 0) {
-            // if there are no parameters, just complete to a single line JSDoc comment
-            const singleLineResult = "/** */";
-            return { newText: singleLineResult, caretOffset: 3 };
-        }
-
         const indentationStr = getIndentationStringAtPosition(sourceFile, position);
+        const isJavaScriptFile = hasJSFileExtension(sourceFile.fileName);
+        const tags =
+            (parameters ? parameterDocComments(parameters || [], isJavaScriptFile, indentationStr, newLine) : "") +
+            (hasReturn ? returnsDocComment(indentationStr, newLine) : "");
 
         // A doc comment consists of the following
         // * The opening comment line
         // * the first line (without a param) for the object's untagged info (this is also where the caret ends up)
         // * the '@param'-tagged lines
+        // * the '@returns'-tag
         // * TODO: other tags.
         // * the closing comment line
         // * if the caret was directly in front of the object, then we add an extra line and indentation.
-        const preamble = "/**" + newLine + indentationStr + " * ";
-        const result =
-            preamble + newLine +
-            parameterDocComments(parameters, hasJSFileExtension(sourceFile.fileName), indentationStr, newLine) +
-            indentationStr + " */" +
-            (tokenStart === position ? newLine + indentationStr : "");
-
-        return { newText: result, caretOffset: preamble.length };
+        const openComment = "/**";
+        const closeComment = " */";
+        if (tags) {
+            const preamble = openComment + newLine + indentationStr + " * ";
+            const endLine = tokenStart === position ? newLine + indentationStr : "";
+            const result = preamble + newLine + tags + indentationStr + closeComment + endLine;
+            return { newText: result, caretOffset: preamble.length };
+        }
+        return { newText: openComment + closeComment, caretOffset: 3 };
     }
 
     function getIndentationStringAtPosition(sourceFile: SourceFile, position: number): string {
@@ -315,9 +316,14 @@ namespace ts.JsDoc {
         }).join("");
     }
 
+    function returnsDocComment(indentationStr: string, newLine: string) {
+        return `${indentationStr} * @returns${newLine}`;
+    }
+
     interface CommentOwnerInfo {
         readonly commentOwner: Node;
         readonly parameters?: readonly ParameterDeclaration[];
+        readonly hasReturn?: boolean;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         return forEachAncestor(tokenAtPos, getCommentOwnerInfoWorker);
@@ -330,8 +336,8 @@ namespace ts.JsDoc {
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ArrowFunction:
-                const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
-                return { commentOwner, parameters };
+                const host = commentOwner as ArrowFunction | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
+                return { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host) };
 
             case SyntaxKind.PropertyAssignment:
                 return getCommentOwnerInfoWorker((commentOwner as PropertyAssignment).initializer);
@@ -347,10 +353,12 @@ namespace ts.JsDoc {
             case SyntaxKind.VariableStatement: {
                 const varStatement = <VariableStatement>commentOwner;
                 const varDeclarations = varStatement.declarationList.declarations;
-                const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
-                    ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
+                const host = varDeclarations.length === 1 && varDeclarations[0].initializer
+                    ? getRightHandSideOfAssignment(varDeclarations[0].initializer)
                     : undefined;
-                return { commentOwner, parameters };
+                return host
+                    ? { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host) }
+                    : { commentOwner };
             }
 
             case SyntaxKind.SourceFile:
@@ -369,26 +377,24 @@ namespace ts.JsDoc {
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
                     return "quit";
                 }
-                const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
-                return { commentOwner, parameters };
+                return isFunctionLike(be.right)
+                    ? { commentOwner, parameters: be.right.parameters, hasReturn: hasReturn(be.right) }
+                    : { commentOwner };
             }
             case SyntaxKind.PropertyDeclaration:
                 const init = (commentOwner as PropertyDeclaration).initializer;
                 if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
-                    return { commentOwner, parameters: init.parameters };
+                    return { commentOwner, parameters: init.parameters, hasReturn: hasReturn(init) };
                 }
         }
     }
 
-    /**
-     * Digs into an an initializer or RHS operand of an assignment operation
-     * to get the parameters of an apt signature corresponding to a
-     * function expression or a class expression.
-     *
-     * @param rightHandSide the expression which may contain an appropriate set of parameters
-     * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
-     */
-    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): readonly ParameterDeclaration[] {
+    function hasReturn(node: Node) {
+        return isArrowFunction(node) && isExpression(node.body)
+            || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n);
+    }
+
+    function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
             rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
         }
@@ -396,13 +402,9 @@ namespace ts.JsDoc {
         switch (rightHandSide.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return (<FunctionExpression>rightHandSide).parameters;
-            case SyntaxKind.ClassExpression: {
-                const ctr = find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
-                return ctr ? ctr.parameters : emptyArray;
-            }
+                return (<FunctionExpression>rightHandSide);
+            case SyntaxKind.ClassExpression:
+                return find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
         }
-
-        return emptyArray;
     }
 }

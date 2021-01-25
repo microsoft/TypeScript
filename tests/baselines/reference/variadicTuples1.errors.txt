@@ -1,6 +1,7 @@
-tests/cases/conformance/types/tuple/variadicTuples1.ts(6,48): error TS1256: A rest element must be last in a tuple type.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(52,5): error TS2555: Expected at least 3 arguments, but got 2.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(53,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(62,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], number]'.
+  Source has 0 element(s) but target requires 1.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(131,9): error TS2344: Type 'V' does not satisfy the constraint 'unknown[]'.
   The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'unknown[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(149,5): error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...T]'.
@@ -38,23 +39,20 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Typ
       Type 'readonly string[]' is not assignable to type 'U'.
         'U' could be instantiated with an arbitrary type which could be unrelated to 'readonly string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
-  Type '"2"' is not assignable to type 'number | "0" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "1"'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(346,14): error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(354,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(393,19): error TS1256: A rest element must be last in a tuple type.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(396,20): error TS1256: A rest element must be last in a tuple type.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A rest element must be last in a tuple type.
+  Type '"2"' is not assignable to type 'number | "0" | keyof T[] | "1"'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
+  Type at position 0 in source is not compatible with type at position 0 in target.
+    Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/tuple/variadicTuples1.ts (23 errors) ====
+==== tests/cases/conformance/types/tuple/variadicTuples1.ts (20 errors) ====
     // Variadics in tuple types
     
     type TV0<T extends unknown[]> = [string, ...T];
     type TV1<T extends unknown[]> = [string, ...T, number];
     type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-    type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
-                                                   ~~~~~~~~~~~
-!!! error TS1256: A rest element must be last in a tuple type.
+    type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
     
     // Normalization
     
@@ -116,6 +114,9 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A 
         foo3(1, 'hello', true, 2);
         foo3(1, ...u, 'hi', 2);
         foo3(1);
+        ~~~~~~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], number]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 1.
     }
     
     // Contextual typing of array literals
@@ -309,16 +310,23 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A 
         k3 = '2';  // Error
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
-!!! error TS2322:   Type '"2"' is not assignable to type 'number | "0" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "1"'.
+!!! error TS2322:   Type '"2"' is not assignable to type 'number | "0" | keyof T[] | "1"'.
     }
     
     // Inference between variadic tuple types
     
-    type First<T extends readonly unknown[]> = T[0];
-    type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+    type First<T extends readonly unknown[]> =
+        T extends readonly [unknown, ...unknown[]] ? T[0] :
+        T[0] | undefined;
     
-    type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-    type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+    type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+    
+    type Last<T extends readonly unknown[]> =
+        T extends readonly [...unknown[], infer U] ? U :
+        T extends readonly [unknown, ...unknown[]] ? T[number] :
+        T[number] | undefined;
+    
+    type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
     
     type T00 = First<[number, symbol, string]>;
     type T01 = First<[symbol, string]>;
@@ -349,8 +357,8 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A 
     type T24 = Last<[symbol, ...string[]]>;
     type T25 = Last<[string?]>;
     type T26 = Last<string[]>;
-    type T27 = Last<[]>;  // unknown, maybe should undefined
-    type T28 = Last<any>;  // unknown, maybe should be any
+    type T27 = Last<[]>;
+    type T28 = Last<any>;
     type T29 = Last<never>;
     
     type T30 = DropLast<[number, symbol, string]>;
@@ -448,13 +456,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A 
     declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
     
     call('hello', 32, (a, b) => 42);
-    
-    // Would be nice to infer [...string[], (...args: string[]) => number] here
-    // Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-    
     call(...sa, (...x) => 42);
-                 ~~~~
-!!! error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
     
     // No inference to ending optional elements (except with identical structure)
     
@@ -504,15 +506,13 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A 
     
     type Numbers = number[];
     type Unbounded = [...Numbers, boolean];
-                      ~~~~~~~~~~
-!!! error TS1256: A rest element must be last in a tuple type.
-    const data: Unbounded = [false, false];
+    const data: Unbounded = [false, false];  // Error
+          ~~~~
+!!! error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
+!!! error TS2322:   Type at position 0 in source is not compatible with type at position 0 in target.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
     
     type U1 = [string, ...Numbers, boolean];
-                       ~~~~~~~~~~
-!!! error TS1256: A rest element must be last in a tuple type.
     type U2 = [...[string, ...Numbers], boolean];
-               ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1256: A rest element must be last in a tuple type.
     type U3 = [...[string, number], boolean];
     

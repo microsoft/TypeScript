@@ -190,3 +190,23 @@ tests/cases/compiler/recursiveConditionalTypes.ts(116,9): error TS2345: Argument
 !!! error TS2345:               Type 'string' is not assignable to type 'number'.
     }
     
+    // Repros from #41756
+    
+    type ParseSuccess<R extends string> = { rest: R };
+    
+    type ParseManyWhitespace<S extends string> =
+        S extends ` ${infer R0}` ?
+            ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
+            ParseSuccess<S>;
+    
+    type TP1 = ParseManyWhitespace<" foo">;
+    
+    type ParseManyWhitespace2<S extends string> =
+        S extends ` ${infer R0}` ?
+            Helper<ParseManyWhitespace2<R0>> :
+            ParseSuccess<S>;
+    
+    type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+    
+    type TP2 = ParseManyWhitespace2<" foo">;
+    

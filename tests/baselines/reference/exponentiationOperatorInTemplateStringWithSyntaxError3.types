@@ -13,7 +13,7 @@ var s;
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 // With TemplateTail
 `${-t1 ** t2 - t1} world`;
->`${-t1 ** t2 - t1} world` : string
+>`${-t1 ** t2 - t1} world` : `${number} world`
 >-t1 ** t2 - t1 : number
 >-t1 ** t2 : number
 >-t1 : number
@@ -22,7 +22,7 @@ var s;
 >t1 : number
 
 `${-++t1 ** t2 - t1} world`;
->`${-++t1 ** t2 - t1} world` : string
+>`${-++t1 ** t2 - t1} world` : `${number} world`
 >-++t1 ** t2 - t1 : number
 >-++t1 ** t2 : number
 >-++t1 : number
@@ -32,7 +32,7 @@ var s;
 >t1 : number
 
 `${-t1++ ** t2 - t1} world`;
->`${-t1++ ** t2 - t1} world` : string
+>`${-t1++ ** t2 - t1} world` : `${number} world`
 >-t1++ ** t2 - t1 : number
 >-t1++ ** t2 : number
 >-t1++ : number
@@ -42,7 +42,7 @@ var s;
 >t1 : number
 
 `${!t1 ** t2 ** --t1 } world`;
->`${!t1 ** t2 ** --t1 } world` : string
+>`${!t1 ** t2 ** --t1 } world` : `${number} world`
 >!t1 ** t2 ** --t1 : number
 >!t1 : boolean
 >t1 : number
@@ -52,7 +52,7 @@ var s;
 >t1 : number
 
 `${typeof t1 ** t2 ** t1} world`;
->`${typeof t1 ** t2 ** t1} world` : string
+>`${typeof t1 ** t2 ** t1} world` : `${number} world`
 >typeof t1 ** t2 ** t1 : number
 >typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
@@ -61,7 +61,7 @@ var s;
 >t1 : number
 
 `${1 + typeof t1 ** t2 ** t1} world`;
->`${1 + typeof t1 ** t2 ** t1} world` : string
+>`${1 + typeof t1 ** t2 ** t1} world` : `${number} world`
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
@@ -72,7 +72,7 @@ var s;
 >t1 : number
 
 `${-t1 ** t2 - t1}${-t1 ** t2 - t1} world`;
->`${-t1 ** t2 - t1}${-t1 ** t2 - t1} world` : string
+>`${-t1 ** t2 - t1}${-t1 ** t2 - t1} world` : `${number}${number} world`
 >-t1 ** t2 - t1 : number
 >-t1 ** t2 : number
 >-t1 : number
@@ -87,7 +87,7 @@ var s;
 >t1 : number
 
 `${-++t1 ** t2 - t1}${-++t1 ** t2 - t1} world`;
->`${-++t1 ** t2 - t1}${-++t1 ** t2 - t1} world` : string
+>`${-++t1 ** t2 - t1}${-++t1 ** t2 - t1} world` : `${number}${number} world`
 >-++t1 ** t2 - t1 : number
 >-++t1 ** t2 : number
 >-++t1 : number
@@ -104,7 +104,7 @@ var s;
 >t1 : number
 
 `${-t1++ ** t2 - t1}${-t1++ ** t2 - t1} world`;
->`${-t1++ ** t2 - t1}${-t1++ ** t2 - t1} world` : string
+>`${-t1++ ** t2 - t1}${-t1++ ** t2 - t1} world` : `${number}${number} world`
 >-t1++ ** t2 - t1 : number
 >-t1++ ** t2 : number
 >-t1++ : number
@@ -121,7 +121,7 @@ var s;
 >t1 : number
 
 `${!t1 ** t2 ** --t1 }${!t1 ** t2 ** --t1 } world`;
->`${!t1 ** t2 ** --t1 }${!t1 ** t2 ** --t1 } world` : string
+>`${!t1 ** t2 ** --t1 }${!t1 ** t2 ** --t1 } world` : `${number}${number} world`
 >!t1 ** t2 ** --t1 : number
 >!t1 : boolean
 >t1 : number
@@ -138,7 +138,7 @@ var s;
 >t1 : number
 
 `${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1} world`;
->`${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1} world` : string
+>`${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1} world` : `${number}${number} world`
 >typeof t1 ** t2 ** t1 : number
 >typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
@@ -153,7 +153,7 @@ var s;
 >t1 : number
 
 `${1 + typeof t1 ** t2 ** t1}${1 + typeof t1 ** t2 ** t1} world`;
->`${1 + typeof t1 ** t2 ** t1}${1 + typeof t1 ** t2 ** t1} world` : string
+>`${1 + typeof t1 ** t2 ** t1}${1 + typeof t1 ** t2 ** t1} world` : `${number}${number} world`
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
@@ -172,7 +172,7 @@ var s;
 >t1 : number
 
 `${-t1 ** t2 - t1} hello world ${-t1 ** t2 - t1} !!`;
->`${-t1 ** t2 - t1} hello world ${-t1 ** t2 - t1} !!` : string
+>`${-t1 ** t2 - t1} hello world ${-t1 ** t2 - t1} !!` : `${number} hello world ${number} !!`
 >-t1 ** t2 - t1 : number
 >-t1 ** t2 : number
 >-t1 : number
@@ -187,7 +187,7 @@ var s;
 >t1 : number
 
 `${-++t1 ** t2 - t1} hello world ${-++t1 ** t2 - t1} !!`;
->`${-++t1 ** t2 - t1} hello world ${-++t1 ** t2 - t1} !!` : string
+>`${-++t1 ** t2 - t1} hello world ${-++t1 ** t2 - t1} !!` : `${number} hello world ${number} !!`
 >-++t1 ** t2 - t1 : number
 >-++t1 ** t2 : number
 >-++t1 : number
@@ -204,7 +204,7 @@ var s;
 >t1 : number
 
 `${-t1++ ** t2 - t1} hello world ${-t1++ ** t2 - t1} !!`;
->`${-t1++ ** t2 - t1} hello world ${-t1++ ** t2 - t1} !!` : string
+>`${-t1++ ** t2 - t1} hello world ${-t1++ ** t2 - t1} !!` : `${number} hello world ${number} !!`
 >-t1++ ** t2 - t1 : number
 >-t1++ ** t2 : number
 >-t1++ : number
@@ -221,7 +221,7 @@ var s;
 >t1 : number
 
 `${!t1 ** t2 ** --t1 } hello world ${!t1 ** t2 ** --t1 } !!`;
->`${!t1 ** t2 ** --t1 } hello world ${!t1 ** t2 ** --t1 } !!` : string
+>`${!t1 ** t2 ** --t1 } hello world ${!t1 ** t2 ** --t1 } !!` : `${number} hello world ${number} !!`
 >!t1 ** t2 ** --t1 : number
 >!t1 : boolean
 >t1 : number
@@ -238,7 +238,7 @@ var s;
 >t1 : number
 
 `${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1} !!`;
->`${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1} !!` : string
+>`${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1} !!` : `${number} hello world ${number} !!`
 >typeof t1 ** t2 ** t1 : number
 >typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
@@ -253,7 +253,7 @@ var s;
 >t1 : number
 
 `${1 + typeof t1 ** t2 ** t1} hello world ${1 + typeof t1 ** t2 ** t1} !!`;
->`${1 + typeof t1 ** t2 ** t1} hello world ${1 + typeof t1 ** t2 ** t1} !!` : string
+>`${1 + typeof t1 ** t2 ** t1} hello world ${1 + typeof t1 ** t2 ** t1} !!` : `${number} hello world ${number} !!`
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number

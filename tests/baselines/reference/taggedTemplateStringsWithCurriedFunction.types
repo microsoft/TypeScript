@@ -37,7 +37,7 @@ f({ ...{ x: 0 } })`x${f}x`;
 >{ x: 0 } : { x: number; }
 >x : number
 >0 : 0
->`x${f}x` : string
+>`x${f}x` : `x${string}x`
 >f : (_: any) => (..._: any[]) => string
 
 f({ ...{ x: 0 }, y: (() => 1)() })``;

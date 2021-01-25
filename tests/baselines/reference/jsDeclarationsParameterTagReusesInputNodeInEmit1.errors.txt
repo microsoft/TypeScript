@@ -1,0 +1,30 @@
+tests/cases/conformance/jsdoc/declarations/file.js(8,1): error TS9006: Declaration emit for this file requires using private name 'Base' from module '"tests/cases/conformance/jsdoc/declarations/base"'. An explicit type annotation may unblock declaration emit.
+
+
+==== tests/cases/conformance/jsdoc/declarations/base.js (0 errors) ====
+    class Base {
+        constructor() {}
+    }
+    
+    const BaseFactory = () => {
+        return new Base();
+    };
+    
+    BaseFactory.Base = Base;
+    
+    module.exports = BaseFactory;
+    
+==== tests/cases/conformance/jsdoc/declarations/file.js (1 errors) ====
+    /** @typedef {import('./base')} BaseFactory */
+    
+    /**
+     *
+     * @param {InstanceType<BaseFactory["Base"]>} base
+     * @returns {InstanceType<BaseFactory["Base"]>}
+     */
+    const test = (base) => {
+    ~~~~~
+!!! error TS9006: Declaration emit for this file requires using private name 'Base' from module '"tests/cases/conformance/jsdoc/declarations/base"'. An explicit type annotation may unblock declaration emit.
+        return base;
+    };
+    

@@ -1,0 +1,26 @@
+tests/cases/conformance/jsx/jsxs/preact.tsx(3,11): error TS2307: Cannot find module 'preact/jsx-runtime' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/jsx/jsxs/react.tsx (0 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    /* @jsxImportSource react */
+    import "./preact";
+    const a = <>
+      <p></p>
+      text
+      <div className="foo"></div>
+    </>
+    
+    export {};
+==== tests/cases/conformance/jsx/jsxs/preact.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    /* @jsxImportSource preact */
+    const a = <>
+              ~~
+!!! error TS2307: Cannot find module 'preact/jsx-runtime' or its corresponding type declarations.
+      <p></p>
+      text
+      <div className="foo"></div>
+    </>
+    
+    export {};

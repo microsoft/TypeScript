@@ -12,11 +12,11 @@ import * as Z from "./0"
 
 //let v2: Z.Data;
 let v = "str" || true;
->v : Z.Data
+>v : string | boolean
 >"str" || true : true | "str"
 >"str" : "str"
 >true : true
 
 export { v }
->v : Z.Data
+>v : string | boolean
 

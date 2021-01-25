@@ -16,7 +16,7 @@ export type RequiredKeys<V> = { [K in keyof V]-?: Exclude<V[K], undefined> exten
 >true : true
 
 export type OptionalKeys<V> = Exclude<keyof V, RequiredKeys<V>>;
->OptionalKeys : Exclude<keyof V, RequiredKeys<V>>
+>OptionalKeys : OptionalKeys<V>
 
 export type InferPropsInner<V> = { [K in keyof V]-?: InferType<V[K]>; };
 >InferPropsInner : InferPropsInner<V>
@@ -275,12 +275,12 @@ const propTypesWithoutAnnotation = {
 };
 
 type ExtractedProps = PropTypes.InferProps<typeof propTypes>;
->ExtractedProps : PropTypes.InferProps<PropTypes.ValidationMap<Props>>
+>ExtractedProps : ExtractedProps
 >PropTypes : any
 >propTypes : PropTypes.ValidationMap<Props>
 
 type ExtractedPropsWithoutAnnotation = PropTypes.InferProps<typeof propTypesWithoutAnnotation>;
->ExtractedPropsWithoutAnnotation : PropTypes.InferProps<{ any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>; oneOfType: PropTypes.Validator<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>; }>
+>ExtractedPropsWithoutAnnotation : ExtractedPropsWithoutAnnotation
 >PropTypes : any
 >propTypesWithoutAnnotation : { any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>; oneOfType: PropTypes.Validator<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>; }
 

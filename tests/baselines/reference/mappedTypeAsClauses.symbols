@@ -264,3 +264,108 @@ let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
 >KeysOfPrimitives : Symbol(KeysOfPrimitives, Decl(mappedTypeAsClauses.ts, 82, 36))
 >Car : Symbol(Car, Decl(mappedTypeAsClauses.ts, 57, 21))
 
+// Repro from #41453
+
+type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
+>Equal : Symbol(Equal, Decl(mappedTypeAsClauses.ts, 86, 35))
+>A : Symbol(A, Decl(mappedTypeAsClauses.ts, 90, 11))
+>B : Symbol(B, Decl(mappedTypeAsClauses.ts, 90, 13))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 90, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 90, 21))
+>A : Symbol(A, Decl(mappedTypeAsClauses.ts, 90, 11))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 90, 60))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 90, 60))
+>B : Symbol(B, Decl(mappedTypeAsClauses.ts, 90, 13))
+
+type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
+>If : Symbol(If, Decl(mappedTypeAsClauses.ts, 90, 104))
+>Cond : Symbol(Cond, Decl(mappedTypeAsClauses.ts, 92, 8))
+>Then : Symbol(Then, Decl(mappedTypeAsClauses.ts, 92, 29))
+>Else : Symbol(Else, Decl(mappedTypeAsClauses.ts, 92, 35))
+>Cond : Symbol(Cond, Decl(mappedTypeAsClauses.ts, 92, 8))
+>Then : Symbol(Then, Decl(mappedTypeAsClauses.ts, 92, 29))
+>Else : Symbol(Else, Decl(mappedTypeAsClauses.ts, 92, 35))
+
+type GetKey<S, V> = keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any };
+>GetKey : Symbol(GetKey, Decl(mappedTypeAsClauses.ts, 92, 76))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 94, 12))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 94, 14))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 94, 29))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 94, 12))
+>Equal : Symbol(Equal, Decl(mappedTypeAsClauses.ts, 86, 35))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 94, 12))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 94, 29))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 94, 14))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 94, 29))
+
+type GetKeyWithIf<S, V> = keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
+>GetKeyWithIf : Symbol(GetKeyWithIf, Decl(mappedTypeAsClauses.ts, 94, 96))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 96, 18))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 96, 20))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 96, 35))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 96, 18))
+>If : Symbol(If, Decl(mappedTypeAsClauses.ts, 90, 104))
+>Equal : Symbol(Equal, Decl(mappedTypeAsClauses.ts, 86, 35))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 96, 18))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 96, 35))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 96, 20))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 96, 35))
+
+type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
+>GetObjWithIf : Symbol(GetObjWithIf, Decl(mappedTypeAsClauses.ts, 96, 91))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 98, 18))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 98, 20))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 98, 29))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 98, 18))
+>If : Symbol(If, Decl(mappedTypeAsClauses.ts, 90, 104))
+>Equal : Symbol(Equal, Decl(mappedTypeAsClauses.ts, 86, 35))
+>S : Symbol(S, Decl(mappedTypeAsClauses.ts, 98, 18))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 98, 29))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 98, 20))
+>TP : Symbol(TP, Decl(mappedTypeAsClauses.ts, 98, 29))
+
+type Task = {
+>Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 98, 85))
+
+  isDone: boolean;
+>isDone : Symbol(isDone, Decl(mappedTypeAsClauses.ts, 100, 13))
+
+};
+
+type Schema = {
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+
+  root: {
+>root : Symbol(root, Decl(mappedTypeAsClauses.ts, 104, 15))
+
+    title: string;
+>title : Symbol(title, Decl(mappedTypeAsClauses.ts, 105, 9))
+
+    task: Task;
+>task : Symbol(task, Decl(mappedTypeAsClauses.ts, 106, 18))
+>Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 98, 85))
+  }
+  Task: Task;
+>Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 108, 3))
+>Task : Symbol(Task, Decl(mappedTypeAsClauses.ts, 98, 85))
+
+};
+
+type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
+>Res1 : Symbol(Res1, Decl(mappedTypeAsClauses.ts, 110, 2))
+>GetKey : Symbol(GetKey, Decl(mappedTypeAsClauses.ts, 92, 76))
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+
+type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
+>Res2 : Symbol(Res2, Decl(mappedTypeAsClauses.ts, 112, 51))
+>GetKeyWithIf : Symbol(GetKeyWithIf, Decl(mappedTypeAsClauses.ts, 94, 96))
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+
+type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
+>Res3 : Symbol(Res3, Decl(mappedTypeAsClauses.ts, 113, 57))
+>GetObjWithIf : Symbol(GetObjWithIf, Decl(mappedTypeAsClauses.ts, 96, 91))
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+>Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
+
