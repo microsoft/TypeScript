@@ -24,25 +24,25 @@ class B2 {
 
 
 //// [privateNameMethodAccess.js]
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
+    if (!accessCheck.has(receiver)) {
+        throw new TypeError("attempted to get private method on non-instance");
     }
-    return privateMap.get(receiver);
+    return fn;
 };
-var _method, _a;
+var _method, _method_1, _a;
 class A2 {
     constructor() {
-        console.log(__classPrivateFieldGet(this, _method));
+        _method.add(this);
+        console.log(__classPrivateMethodGet(this, _method, _method_1));
         let a = this;
-        __classPrivateFieldGet(a, _method).call(a);
+        __classPrivateMethodGet(a, _method, _method_1).call(a);
         function foo() {
-            __classPrivateFieldGet(a, _method).call(a);
+            __classPrivateMethodGet(a, _method, _method_1).call(a);
         }
     }
-    () { return ""; }
 }
-_method = new WeakMap();
+_method = new WeakSet(), _method_1 = function _method_1() { return ""; };
 (_a = new A2())..call(_a); // Error
 function foo() {
     var _a;

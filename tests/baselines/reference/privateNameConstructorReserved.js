@@ -5,8 +5,10 @@ class A {
 
 
 //// [privateNameConstructorReserved.js]
-var _constructor;
+var _constructor, _constructor_1;
 class A {
-    () { } // Error: `#constructor` is a reserved word.
+    constructor() {
+        _constructor.add(this);
+    }
 }
-_constructor = new WeakMap();
+_constructor = new WeakSet(), _constructor_1 = function _constructor_1() { };

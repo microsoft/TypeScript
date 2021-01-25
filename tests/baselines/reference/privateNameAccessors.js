@@ -16,29 +16,15 @@ class A1 {
 
 //// [privateNameAccessors.js]
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
 var _prop, _prop_1, _roProp;
 class A1 {
     constructor(name) {
-        __classPrivateFieldSet(this, _prop_1, "");
-        __classPrivateFieldSet(this, _roProp, ""); // Error
-        console.log(__classPrivateFieldGet(this, _prop_1));
-        console.log(__classPrivateFieldGet(this, _roProp));
+        this. = "";
+        this. = ""; // Error
+        console.log(this.);
+        console.log(this.);
     }
     get () { return ""; }
     set (param) { }
     get () { return ""; }
 }
-_prop = new WeakMap(), _prop_1 = new WeakMap(), _roProp = new WeakMap();

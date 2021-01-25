@@ -26,26 +26,19 @@ class B2 {
 
 
 //// [privateNameAccessorsAccess.js]
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
 var _prop, _prop_1;
 class A2 {
     constructor() {
-        console.log(__classPrivateFieldGet(this, _prop_1));
+        console.log(this.);
         let a = this;
-        __classPrivateFieldGet(a, _prop_1);
+        a.;
         function foo() {
-            __classPrivateFieldGet(a, _prop_1);
+            a.;
         }
     }
     get () { return ""; }
     set (param) { }
 }
-_prop = new WeakMap(), _prop_1 = new WeakMap();
 new A2().; // Error
 function foo() {
     new A2().; // Error

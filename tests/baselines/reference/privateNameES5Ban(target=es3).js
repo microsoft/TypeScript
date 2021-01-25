@@ -16,10 +16,9 @@ class A {
 //// [privateNameES5Ban.js]
 var A = /** @class */ (function () {
     function A() {
+        _method.add(this);
         _field.set(this, 123);
     }
-    A.prototype. = function () { };
-    A. = function () { };
     Object.defineProperty(A.prototype, "", {
         get: function () { return ""; },
         set: function (x) { },
@@ -32,8 +31,8 @@ var A = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    var _field, _method, _sField, _sMethod, _acc, _acc_1, _sAcc, _sAcc_1;
-    _field = new WeakMap(), _method = new WeakMap(), _sField = new WeakMap(), _sMethod = new WeakMap(), _acc = new WeakMap(), _acc_1 = new WeakMap(), _sAcc = new WeakMap(), _sAcc_1 = new WeakMap();
+    var _field, _method, _method_1, _sField, _sMethod, _sMethod_1, _acc, _acc_1, _sAcc, _sAcc_1;
+    _field = new WeakMap(), _method = new WeakSet(), _sField = new WeakMap(), _sMethod = new WeakSet(), _method_1 = function _method_1() { }, _sMethod_1 = function _sMethod_1() { };
     _sField.set(A, "hello world");
     return A;
 }());

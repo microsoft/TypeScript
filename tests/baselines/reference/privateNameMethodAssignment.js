@@ -13,33 +13,27 @@ class A3 {
 
 
 //// [privateNameMethodAssignment.js]
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
+    throw new TypeError("private element is not writable");
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
+    if (!accessCheck.has(receiver)) {
+        throw new TypeError("attempted to get private method on non-instance");
     }
-    return privateMap.get(receiver);
+    return fn;
 };
-var _method;
+var _method, _method_1;
 class A3 {
     constructor(a, b) {
         var _a, _b;
-        __classPrivateFieldSet(this, _method, () => { }); // Error, not writable 
-        __classPrivateFieldSet(// Error, not writable 
-        a, _method, () => { }); // Error, not writable 
-        __classPrivateFieldSet(// Error, not writable 
-        b, _method, () => { }); //Error, not writable 
-        (_a = this, { x: ({ set value(_b) { __classPrivateFieldSet(_a, _method, _b); } }).value } = { x: () => { } }); //Error, not writable 
-        let x = __classPrivateFieldGet(this, _method);
-        __classPrivateFieldSet(_b = b, _method, +__classPrivateFieldGet(_b, _method) + 1); //Error, not writable 
+        _method.add(this);
+        __classPrivateReadonly(); // Error, not writable 
+        __classPrivateReadonly(); // Error, not writable 
+        __classPrivateReadonly(); //Error, not writable 
+        (_a = this, { x: ({ set value(_b) { __classPrivateReadonly(); } }).value } = { x: () => { } }); //Error, not writable 
+        let x = __classPrivateMethodGet(this, _method, _method_1);
+        __classPrivateReadonly(); //Error, not writable 
     }
-    () { }
     ;
 }
-_method = new WeakMap();
+_method = new WeakSet(), _method_1 = function _method_1() { };
