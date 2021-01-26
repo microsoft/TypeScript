@@ -10424,6 +10424,24 @@ namespace ts {
         }
 
         function combineUnionParameters(left: Signature, right: Signature, mapper: TypeMapper | undefined) {
+            function isUncallableCallback(callbackType: Type): boolean {
+                const callbackSignatures = getSignaturesOfType(callbackType, SignatureKind.Call);
+                if (callbackSignatures.length === 0) {
+                    return false;
+                }
+                return callbackSignatures.every(signature => {
+                    for (let i = 0; i < getMinArgumentCount(signature); i++) {
+                        const paramType = tryGetTypeAtPosition(signature, i);
+                        if (!paramType) {
+                            return false;
+                        }
+                        if (paramType.flags & TypeFlags.Never) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+            }
             const leftCount = getParameterCount(left);
             const rightCount = getParameterCount(right);
             const longest = leftCount >= rightCount ? left : right;
@@ -10441,7 +10459,24 @@ namespace ts {
                 if (shorter === right) {
                     shorterParamType = instantiateType(shorterParamType, mapper);
                 }
-                const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
+                let unionParamType: Type | undefined;
+                if (isFunctionType(longestParamType) && isFunctionType(shorterParamType)) {
+                    // If both parameters are callbacks, but only one of them is uncallable,
+                    // use the type of the other one in the resulting union signature.
+                    
+                    // This improves inference around higher-order functions, like .map
+                    // one a (T[] | never[]) value, since (never[]).map asks for a function
+                    // (item: never, index: number) => R which it cannot actually call.
+                    if (isUncallableCallback(longestParamType) && !isUncallableCallback(shorterParamType)) {
+                        unionParamType = shorterParamType;
+                    }
+                    if (isUncallableCallback(shorterParamType) && !isUncallableCallback(longestParamType)) {
+                        unionParamType = longestParamType;
+                    }
+                }
+                if (!unionParamType) {
+                    unionParamType = getIntersectionType([longestParamType, shorterParamType]);
+                }
                 const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
                 const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
                 const leftName = i >= leftCount ? undefined : getParameterNameAtPosition(left, i);

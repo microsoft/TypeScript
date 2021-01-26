@@ -1,0 +1,143 @@
+=== tests/cases/compiler/resolveIncompatibleMethodCallbackWithNeverArgument.ts ===
+let f!:
+>f : Symbol(f, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 0, 3))
+
+  | (<UStr>(
+>UStr : Symbol(UStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 1, 6))
+
+    callbackfnStr: (valueStr: string, indexStr: number, arrayStr: string[]) => UStr,
+>callbackfnStr : Symbol(callbackfnStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 1, 12))
+>valueStr : Symbol(valueStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 2, 20))
+>indexStr : Symbol(indexStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 2, 37))
+>arrayStr : Symbol(arrayStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 2, 55))
+>UStr : Symbol(UStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 1, 6))
+
+  ) => UStr[])
+>UStr : Symbol(UStr, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 1, 6))
+
+  | (<UNev>(
+>UNev : Symbol(UNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 4, 6))
+
+    callbackfnNev: (valueNev: never, indexNev: number, arrayNev: never[]) => UNev,
+>callbackfnNev : Symbol(callbackfnNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 4, 12))
+>valueNev : Symbol(valueNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 5, 20))
+>indexNev : Symbol(indexNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 5, 36))
+>arrayNev : Symbol(arrayNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 5, 54))
+>UNev : Symbol(UNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 4, 6))
+
+  ) => UNev[]);
+>UNev : Symbol(UNev, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 4, 6))
+
+f(item => item.length);
+>f : Symbol(f, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 0, 3))
+>item : Symbol(item, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 8, 2))
+>item.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 8, 2))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+function orDefault<T, D>(x: T | null, d: D): T | D {
+>orDefault : Symbol(orDefault, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 8, 23))
+>T : Symbol(T, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 19))
+>D : Symbol(D, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 21))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 25))
+>T : Symbol(T, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 19))
+>d : Symbol(d, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 37))
+>D : Symbol(D, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 21))
+>T : Symbol(T, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 19))
+>D : Symbol(D, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 21))
+
+  return x !== null ? x : d;
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 25))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 25))
+>d : Symbol(d, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 10, 37))
+}
+
+const xs: string[] | null = ["a", "bc", "def"];
+>xs : Symbol(xs, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 14, 5))
+
+const y = orDefault(xs, []).map(word => word.length);
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 16, 5))
+>orDefault(xs, []).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>orDefault : Symbol(orDefault, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 8, 23))
+>xs : Symbol(xs, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 14, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>word : Symbol(word, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 16, 32))
+>word.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>word : Symbol(word, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 16, 32))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+// Now, check optional arguments for correctness:
+
+
+
+const f1: ((ask: (x: string, y?: number) => void) => void) | ((ask: (x: number, y?: never) => void) => void) = null as any;
+>f1 : Symbol(f1, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 5))
+>ask : Symbol(ask, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 12))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 18))
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 28))
+>ask : Symbol(ask, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 63))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 69))
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 79))
+
+f1((a, b) => {
+>f1 : Symbol(f1, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 22, 5))
+>a : Symbol(a, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 23, 4))
+>b : Symbol(b, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 23, 6))
+
+  // The 'remove uncallable candidates' rule DOES NOT APPLY:
+  a; // should be 'any' (in future, could be string|number)
+>a : Symbol(a, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 23, 4))
+
+  b; // should be 'any' (in future, could be number|undefined)
+>b : Symbol(b, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 23, 6))
+
+})
+
+const f2: ((ask: (x: string, y?: number) => void) => void) | ((ask: (x: number, y: never) => void) => void) = null as any;
+>f2 : Symbol(f2, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 5))
+>ask : Symbol(ask, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 12))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 18))
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 28))
+>ask : Symbol(ask, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 63))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 69))
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 79))
+
+f2((a, b) => {
+>f2 : Symbol(f2, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 29, 5))
+>a : Symbol(a, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 30, 4))
+>b : Symbol(b, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 30, 6))
+
+  // The 'remove uncallable candidates' rule applies:
+  a; // should be string
+>a : Symbol(a, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 30, 4))
+
+  b; // should be number|undefined
+>b : Symbol(b, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 30, 6))
+
+})
+
+
+const f3: ((ask: (x: string, ...y: number[]) => void) => void) | ((ask: (x: number, ...y: never[]) => void) => void) = null as any;
+>f3 : Symbol(f3, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 5))
+>ask : Symbol(ask, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 12))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 18))
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 28))
+>ask : Symbol(ask, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 67))
+>x : Symbol(x, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 73))
+>y : Symbol(y, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 83))
+
+f3((a, b) => {
+>f3 : Symbol(f3, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 37, 5))
+>a : Symbol(a, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 38, 4))
+>b : Symbol(b, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 38, 6))
+
+  // The 'remove uncallable candidates' rule DOES NOT APPLY:
+  a; // should be 'any' (in future, could be string|number)
+>a : Symbol(a, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 38, 4))
+
+  b; // should be 'any' (in future, could be number|undefined)
+>b : Symbol(b, Decl(resolveIncompatibleMethodCallbackWithNeverArgument.ts, 38, 6))
+
+})
+
+

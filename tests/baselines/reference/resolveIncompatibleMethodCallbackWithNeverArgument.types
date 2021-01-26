@@ -1,0 +1,155 @@
+=== tests/cases/compiler/resolveIncompatibleMethodCallbackWithNeverArgument.ts ===
+let f!:
+>f : (<UStr>(callbackfnStr: (valueStr: string, indexStr: number, arrayStr: string[]) => UStr) => UStr[]) | (<UNev>(callbackfnNev: (valueNev: never, indexNev: number, arrayNev: never[]) => UNev) => UNev[])
+
+  | (<UStr>(
+    callbackfnStr: (valueStr: string, indexStr: number, arrayStr: string[]) => UStr,
+>callbackfnStr : (valueStr: string, indexStr: number, arrayStr: string[]) => UStr
+>valueStr : string
+>indexStr : number
+>arrayStr : string[]
+
+  ) => UStr[])
+  | (<UNev>(
+    callbackfnNev: (valueNev: never, indexNev: number, arrayNev: never[]) => UNev,
+>callbackfnNev : (valueNev: never, indexNev: number, arrayNev: never[]) => UNev
+>valueNev : never
+>indexNev : number
+>arrayNev : never[]
+
+  ) => UNev[]);
+
+f(item => item.length);
+>f(item => item.length) : number[]
+>f : (<UStr>(callbackfnStr: (valueStr: string, indexStr: number, arrayStr: string[]) => UStr) => UStr[]) | (<UNev>(callbackfnNev: (valueNev: never, indexNev: number, arrayNev: never[]) => UNev) => UNev[])
+>item => item.length : (item: string) => number
+>item : string
+>item.length : number
+>item : string
+>length : number
+
+function orDefault<T, D>(x: T | null, d: D): T | D {
+>orDefault : <T, D>(x: T | null, d: D) => T | D
+>x : T | null
+>null : null
+>d : D
+
+  return x !== null ? x : d;
+>x !== null ? x : d : T | D
+>x !== null : boolean
+>x : T | null
+>null : null
+>x : T
+>d : D
+}
+
+const xs: string[] | null = ["a", "bc", "def"];
+>xs : string[] | null
+>null : null
+>["a", "bc", "def"] : string[]
+>"a" : "a"
+>"bc" : "bc"
+>"def" : "def"
+
+const y = orDefault(xs, []).map(word => word.length);
+>y : number[]
+>orDefault(xs, []).map(word => word.length) : number[]
+>orDefault(xs, []).map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>orDefault(xs, []) : string[] | never[]
+>orDefault : <T, D>(x: T | null, d: D) => T | D
+>xs : string[]
+>[] : never[]
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[])
+>word => word.length : (word: string) => number
+>word : string
+>word.length : number
+>word : string
+>length : number
+
+// Now, check optional arguments for correctness:
+
+
+
+const f1: ((ask: (x: string, y?: number) => void) => void) | ((ask: (x: number, y?: never) => void) => void) = null as any;
+>f1 : ((ask: (x: string, y?: number | undefined) => void) => void) | ((ask: (x: number, y?: undefined) => void) => void)
+>ask : (x: string, y?: number | undefined) => void
+>x : string
+>y : number | undefined
+>ask : (x: number, y?: undefined) => void
+>x : number
+>y : undefined
+>null as any : any
+>null : null
+
+f1((a, b) => {
+>f1((a, b) => {  // The 'remove uncallable candidates' rule DOES NOT APPLY:  a; // should be 'any' (in future, could be string|number)  b; // should be 'any' (in future, could be number|undefined)}) : void
+>f1 : ((ask: (x: string, y?: number | undefined) => void) => void) | ((ask: (x: number, y?: undefined) => void) => void)
+>(a, b) => {  // The 'remove uncallable candidates' rule DOES NOT APPLY:  a; // should be 'any' (in future, could be string|number)  b; // should be 'any' (in future, could be number|undefined)} : (a: any, b: any) => void
+>a : any
+>b : any
+
+  // The 'remove uncallable candidates' rule DOES NOT APPLY:
+  a; // should be 'any' (in future, could be string|number)
+>a : any
+
+  b; // should be 'any' (in future, could be number|undefined)
+>b : any
+
+})
+
+const f2: ((ask: (x: string, y?: number) => void) => void) | ((ask: (x: number, y: never) => void) => void) = null as any;
+>f2 : ((ask: (x: string, y?: number | undefined) => void) => void) | ((ask: (x: number, y: never) => void) => void)
+>ask : (x: string, y?: number | undefined) => void
+>x : string
+>y : number | undefined
+>ask : (x: number, y: never) => void
+>x : number
+>y : never
+>null as any : any
+>null : null
+
+f2((a, b) => {
+>f2((a, b) => {  // The 'remove uncallable candidates' rule applies:  a; // should be string  b; // should be number|undefined}) : void
+>f2 : ((ask: (x: string, y?: number | undefined) => void) => void) | ((ask: (x: number, y: never) => void) => void)
+>(a, b) => {  // The 'remove uncallable candidates' rule applies:  a; // should be string  b; // should be number|undefined} : (a: string, b: number | undefined) => void
+>a : string
+>b : number | undefined
+
+  // The 'remove uncallable candidates' rule applies:
+  a; // should be string
+>a : string
+
+  b; // should be number|undefined
+>b : number | undefined
+
+})
+
+
+const f3: ((ask: (x: string, ...y: number[]) => void) => void) | ((ask: (x: number, ...y: never[]) => void) => void) = null as any;
+>f3 : ((ask: (x: string, ...y: number[]) => void) => void) | ((ask: (x: number, ...y: never[]) => void) => void)
+>ask : (x: string, ...y: number[]) => void
+>x : string
+>y : number[]
+>ask : (x: number, ...y: never[]) => void
+>x : number
+>y : never[]
+>null as any : any
+>null : null
+
+f3((a, b) => {
+>f3((a, b) => {  // The 'remove uncallable candidates' rule DOES NOT APPLY:  a; // should be 'any' (in future, could be string|number)  b; // should be 'any' (in future, could be number|undefined)}) : void
+>f3 : ((ask: (x: string, ...y: number[]) => void) => void) | ((ask: (x: number, ...y: never[]) => void) => void)
+>(a, b) => {  // The 'remove uncallable candidates' rule DOES NOT APPLY:  a; // should be 'any' (in future, could be string|number)  b; // should be 'any' (in future, could be number|undefined)} : (a: any, b: any) => void
+>a : any
+>b : any
+
+  // The 'remove uncallable candidates' rule DOES NOT APPLY:
+  a; // should be 'any' (in future, could be string|number)
+>a : any
+
+  b; // should be 'any' (in future, could be number|undefined)
+>b : any
+
+})
+
+
