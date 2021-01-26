@@ -1836,6 +1836,7 @@ namespace ts {
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
             getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
             getFileIncludeReasons: () => program.getFileIncludeReasons(),
+            getResolvedPaths: program.getResolvedPaths,
         };
     }
 

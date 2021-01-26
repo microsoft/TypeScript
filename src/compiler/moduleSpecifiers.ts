@@ -192,7 +192,8 @@ namespace ts.moduleSpecifiers {
         }
 
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+        const redirectFileName = host.getProjectReferenceRedirect(moduleFileName);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths, host.getResolvedPaths(), redirectFileName, baseDirectory, getCanonicalFileName);
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
         if (!nonRelative) {
             return relativePath;
@@ -434,9 +435,12 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined;
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>, resolvedPaths: MapLike<readonly (string | undefined)[]> | undefined, redirectFileName: string | undefined, pathsBasePath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined;
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>, resolvedPaths?: MapLike<readonly (string | undefined)[]>, redirectFileName?: string, pathsBasePath?: string, getCanonicalFileName?: GetCanonicalFileName): string | undefined {
         for (const key in paths) {
-            for (const patternText of paths[key]) {
+            for (let i = 0; i < paths[key].length; i++) {
+                const patternText = paths[key][i];
                 const pattern = removeFileExtension(normalizePath(patternText));
                 const indexOfStar = pattern.indexOf("*");
                 if (indexOfStar !== -1) {
@@ -452,6 +456,23 @@ namespace ts.moduleSpecifiers {
                 }
                 else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
                     return key;
+                }
+                else if (resolvedPaths) {
+                    const resolvedCandidate = resolvedPaths?.[key]?.[i];
+                    if (resolvedCandidate) {
+                        if (redirectFileName === resolvedCandidate) {
+                            return key;
+                        }
+                        const relativeFileName = removeFileExtension(normalizePath(getRelativePathToDirectoryOrUrl(
+                            pathsBasePath!,
+                            resolvedCandidate,
+                            pathsBasePath!,
+                            getCanonicalFileName!,
+                            /*isAbsolutePathAnUrl*/ false)));
+                        if (relativeFileName === relativeToBaseUrl || relativeFileName === relativeToBaseUrlWithIndex) {
+                            return key;
+                        }
+                    }
                 }
             }
         }

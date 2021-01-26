@@ -3886,6 +3886,7 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
+        /*@internal*/ getResolvedPaths(): MapLike<readonly (string | undefined)[]>;
     }
 
     /*@internal*/
@@ -7958,6 +7959,7 @@ namespace ts {
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        getResolvedPaths(): MapLike<readonly (string | undefined)[]>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

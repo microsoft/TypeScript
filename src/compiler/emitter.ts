@@ -851,6 +851,7 @@ namespace ts {
             getSourceFileFromReference: returnUndefined,
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,
+            getResolvedPaths: notImplemented
         };
         emitFiles(
             notImplementedResolver,

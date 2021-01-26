@@ -808,6 +808,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Set<__String>;
+        let resolvedPaths: MapLike<readonly (string | undefined)[]> | undefined;
         const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
         let fileReasons = createMultiMap<Path, FileIncludeReason>();
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
@@ -1009,6 +1010,10 @@ namespace ts {
 
         Debug.assert(!!missingFilePaths);
 
+        // Resolve path mappings between 'updateHostForUseSourceOfProjectReferenceRedirect' and 'onProgramCreateComplete'
+        // so resolution can use the patched host to detect project reference redirects.
+        getResolvedPaths();
+
         // Release any files we have acquired in the old program but are
         // not part of the new program.
         if (oldProgram && host.onReleaseOldSourceFile) {
@@ -1088,6 +1093,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getFileIncludeReasons: () => fileReasons,
             structureIsReused,
+            getResolvedPaths,
         };
 
         onProgramCreateComplete();
@@ -1609,6 +1615,7 @@ namespace ts {
             fileReasons = oldProgram.getFileIncludeReasons();
             fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+            resolvedPaths = oldProgram.getResolvedPaths();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
@@ -1650,6 +1657,7 @@ namespace ts {
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
+                getResolvedPaths
             };
         }
 
@@ -3644,6 +3652,34 @@ namespace ts {
                 files,
                 getCanonicalFileName,
                 host.getCurrentDirectory()));
+        }
+
+        function getResolvedPaths(): MapLike<readonly (string | undefined)[]> {
+            if (resolvedPaths) {
+                return resolvedPaths;
+            }
+            if (options.paths) {
+                const basePath = getPathsBasePath(options, host)!;
+                for (const pattern in options.paths) {
+                    const values = options.paths[pattern];
+                    let resolvedValues: (string | undefined)[] | undefined;
+                    for (let i = 0; i < values.length; i++) {
+                        const value = values[i];
+                        if (!stringContains(value, "*")) {
+                            (resolvedValues ||= [])[i] = nodeModuleNameResolver(
+                                combinePaths(basePath, value),
+                                options.configFilePath || combinePaths(currentDirectory, "tsconfig.json"),
+                                { moduleResolution: ModuleResolutionKind.NodeJs },
+                                host
+                            ).resolvedModule?.resolvedFileName;
+                        }
+                    }
+                    if (resolvedValues) {
+                        (resolvedPaths ||= {})[pattern] = resolvedValues;
+                    }
+                }
+            }
+            return (resolvedPaths ||= {});
         }
     }
 

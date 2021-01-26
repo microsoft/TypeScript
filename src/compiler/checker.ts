@@ -4429,6 +4429,7 @@ namespace ts {
                         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
                         fileExists: fileName => host.fileExists(fileName),
                         getFileIncludeReasons: () => host.getFileIncludeReasons(),
+                        getResolvedPaths: () => host.getResolvedPaths(),
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,
