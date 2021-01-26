@@ -4336,6 +4336,7 @@ namespace ts {
             if (token() !== SyntaxKind.SemicolonToken &&
                 token() !== SyntaxKind.FunctionKeyword &&
                 token() !== SyntaxKind.ClassKeyword &&
+                token() !== SyntaxKind.DoKeyword &&
                 isStartOfStatement() &&
                 !isStartOfExpressionStatement()) {
                 // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
