@@ -926,46 +926,19 @@ namespace ts {
         /**
          * Generates brand-check initializer for private methods.
          *
-         * @param methods An array of method declarations to transform.
+         * @param methods An array of method declarations.
          * @param receiver The receiver on which each method should be assigned.
          */
         function addMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration)[], receiver: LeftHandSideExpression) {
-            for (const method of methods) {
-                const expression = transformMethod(method, receiver);
-                if (!expression) {
-                    continue;
-                }
-                const statement = factory.createExpressionStatement(expression);
-                statements.push(statement);
-            }
-        }
-
-        /**
-         * Transforms a method declaration to brand-check initializer.
-         *
-         * @param method The method declaration.
-         * @param receiver The receiver on which the method should be assigned.
-         */
-        function transformMethod(method: MethodDeclaration, receiver: LeftHandSideExpression) {
-            if (!shouldTransformPrivateElements || !isPrivateIdentifier(method.name)) {
+            if (!shouldTransformPrivateElements || !some(methods)) {
                 return;
             }
 
-            const privateIdentifierInfo = accessPrivateIdentifier(method.name);
-            if (privateIdentifierInfo) {
-                switch (privateIdentifierInfo.placement){
-                    case PrivateIdentifierPlacement.InstanceMethod: {
-                        return createPrivateInstanceMethodInitializer(
-                            receiver,
-                            getPrivateIdentifierEnvironment().weakSetName
-                        );
-                    }
-                    default: return Debug.fail("Unexpected private identifier placement");
-                }
-            }
-            else {
-                Debug.fail("Undeclared private name for method declaration.");
-            }
+            statements.push(
+                factory.createExpressionStatement(
+                    createPrivateInstanceMethodInitializer(receiver, getPrivateIdentifierEnvironment().weakSetName)
+                )
+            );
         }
 
         /**
