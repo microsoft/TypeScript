@@ -111,7 +111,7 @@ namespace ts {
             refs.set(getOriginalNodeId(container), container);
         }
 
-        function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult, trueErrorNode?: Node) {
+        function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
             if (symbolAccessibilityResult.accessibility === SymbolAccessibility.Accessible) {
                 // Add aliases back onto the possible imports list if they're not there so we can try them again with updated visibility info
                 if (symbolAccessibilityResult && symbolAccessibilityResult.aliasesToMakeVisible) {
@@ -129,7 +129,7 @@ namespace ts {
             }
             else {
                 // Report error
-                const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult, trueErrorNode);
+                const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult);
                 if (errorInfo) {
                     if (errorInfo.typeName) {
                         context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
@@ -156,7 +156,7 @@ namespace ts {
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, trueErrorNode?: Node) {
             if (symbol.flags & SymbolFlags.TypeParameter) return;
-            handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true), trueErrorNode);
+            handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true, trueErrorNode));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
         }
 
@@ -217,11 +217,11 @@ namespace ts {
 
         function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
             const oldDiag = getSymbolAccessibilityDiagnostic;
-            getSymbolAccessibilityDiagnostic = (s, trueErrorNode) => ({
+            getSymbolAccessibilityDiagnostic = (s) => ({
                 diagnosticMessage: s.errorModuleName
                     ? Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
                     : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
-                errorNode: s.errorNode || trueErrorNode || sourceFile
+                errorNode: s.errorNode || sourceFile
             });
             const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
             getSymbolAccessibilityDiagnostic = oldDiag;

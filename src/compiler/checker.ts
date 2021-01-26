@@ -4072,18 +4072,18 @@ namespace ts {
             return false;
         }
 
-        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined): boolean {
-            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ true);
+        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined, trueErrorNode: Node | undefined): boolean {
+            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ true, trueErrorNode);
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
-        function isValueSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined): boolean {
-            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ true);
+        function isValueSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined, trueErrorNode: Node | undefined): boolean {
+            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ true, trueErrorNode);
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
-        function isSymbolAccessibleByFlags(typeSymbol: Symbol, enclosingDeclaration: Node | undefined, flags: SymbolFlags): boolean {
-            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, flags, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ false);
+        function isSymbolAccessibleByFlags(typeSymbol: Symbol, enclosingDeclaration: Node | undefined, flags: SymbolFlags, trueErrorNode: Node | undefined): boolean {
+            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, flags, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ false, trueErrorNode);
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
@@ -4162,11 +4162,11 @@ namespace ts {
          * @param meaning a SymbolFlags to check if such meaning of the symbol is accessible
          * @param shouldComputeAliasToMakeVisible a boolean value to indicate whether to return aliases to be mark visible in case the symbol is accessible
          */
-        function isSymbolAccessible(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean): SymbolAccessibilityResult {
-            return isSymbolAccessibleWorker(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, /*allowModules*/ true);
+        function isSymbolAccessible(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean, trueErrorNode: Node | undefined): SymbolAccessibilityResult {
+            return isSymbolAccessibleWorker(symbol, enclosingDeclaration, meaning, shouldComputeAliasesToMakeVisible, /*allowModules*/ true, trueErrorNode);
         }
 
-        function isSymbolAccessibleWorker(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean, allowModules: boolean): SymbolAccessibilityResult {
+        function isSymbolAccessibleWorker(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasesToMakeVisible: boolean, allowModules: boolean, trueErrorNode: Node | undefined): SymbolAccessibilityResult {
             if (symbol && enclosingDeclaration) {
                 const result = isAnySymbolAccessible([symbol], enclosingDeclaration, symbol, meaning, shouldComputeAliasesToMakeVisible, allowModules);
                 if (result) {
@@ -4183,7 +4183,8 @@ namespace ts {
                         return {
                             accessibility: SymbolAccessibility.CannotBeNamed,
                             errorSymbolName: symbolToString(symbol, enclosingDeclaration, meaning),
-                            errorModuleName: symbolToString(symbolExternalModule)
+                            errorModuleName: symbolToString(symbolExternalModule),
+                            errorNode: trueErrorNode,
                         };
                     }
                 }
@@ -4192,6 +4193,7 @@ namespace ts {
                 return {
                     accessibility: SymbolAccessibility.NotAccessible,
                     errorSymbolName: symbolToString(symbol, enclosingDeclaration, meaning),
+                    errorNode: trueErrorNode,
                 };
             }
 
@@ -4537,7 +4539,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.UniqueESSymbol) {
                     if (!(context.flags & NodeBuilderFlags.AllowUniqueESSymbolType)) {
-                        if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        if (isValueSymbolAccessible(type.symbol, context.enclosingDeclaration, context.trueErrorNode)) {
                             context.approximateLength += 6;
                             return symbolToTypeNode(type.symbol, context, SymbolFlags.Value);
                         }
@@ -4585,7 +4587,7 @@ namespace ts {
                     return factory.createThisTypeNode();
                 }
 
-                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
+                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, context.trueErrorNode))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
@@ -4604,7 +4606,7 @@ namespace ts {
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                         type.flags & TypeFlags.TypeParameter &&
-                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
+                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration, context.trueErrorNode)) {
                         const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
                         return factory.createTypeReferenceNode(factory.createIdentifier(idText(name)), /*typeArguments*/ undefined);
@@ -4699,7 +4701,7 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyKeyword | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
                     const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>factory.createToken(type.declaration.questionToken.kind) : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
@@ -4762,7 +4764,7 @@ namespace ts {
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
                             return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedTypes?.has(typeId))) && // it is type of the symbol uses itself recursively
-                                (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
+                                (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration, context.trueErrorNode)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
                 }
@@ -4910,7 +4912,7 @@ namespace ts {
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
                         isClassLike(type.symbol.valueDeclaration) &&
-                        !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
+                        !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration, context.trueErrorNode)
                     ) {
                         return createAnonymousTypeNode(type);
                     }
@@ -5967,7 +5969,7 @@ namespace ts {
                 }
                 const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
                 if (sym) {
-                    if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                    if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false, context.trueErrorNode).accessibility !== SymbolAccessibility.Accessible) {
                         introducesError = true;
                     }
                     else {
@@ -6183,7 +6185,7 @@ namespace ts {
                     tracker: {
                         ...oldcontext.tracker,
                         trackSymbol: (sym, decl, meaning, trueErrorNode) => {
-                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
+                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeAliases*/ false, trueErrorNode);
                             if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                                 // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
                                 const chain = lookupSymbolChainWorker(sym, context, meaning);
@@ -7476,11 +7478,11 @@ namespace ts {
 
                     // We don't use `isValueSymbolAccessible` below. since that considers alternative containers (like modules)
                     // which we can't write out in a syntactically valid way as an expression
-                    if ((t as TypeReference).target && isSymbolAccessibleByFlags((t as TypeReference).target.symbol, enclosingDeclaration, flags)) {
+                    if ((t as TypeReference).target && isSymbolAccessibleByFlags((t as TypeReference).target.symbol, enclosingDeclaration, flags, context.trueErrorNode)) {
                         typeArgs = map(getTypeArguments(t as TypeReference), t => typeToTypeNodeHelper(t, context));
                         reference = symbolToExpression((t as TypeReference).target.symbol, context, SymbolFlags.Type);
                     }
-                    else if (t.symbol && isSymbolAccessibleByFlags(t.symbol, enclosingDeclaration, flags)) {
+                    else if (t.symbol && isSymbolAccessibleByFlags(t.symbol, enclosingDeclaration, flags, context.trueErrorNode)) {
                         reference = symbolToExpression(t.symbol, context, SymbolFlags.Type);
                     }
                     if (reference) {
