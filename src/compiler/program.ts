@@ -3662,10 +3662,11 @@ namespace ts {
                 const basePath = getPathsBasePath(options, host)!;
                 for (const pattern in options.paths) {
                     const values = options.paths[pattern];
+                    if (!isArray(values)) continue; // Type of values not validated by config parser
                     let resolvedValues: (string | undefined)[] | undefined;
                     for (let i = 0; i < values.length; i++) {
                         const value = values[i];
-                        if (!stringContains(value, "*")) {
+                        if (typeof value === "string" && !stringContains(value, "*")) {
                             (resolvedValues ||= [])[i] = nodeModuleNameResolver(
                                 combinePaths(basePath, value),
                                 options.configFilePath || combinePaths(currentDirectory, "tsconfig.json"),
