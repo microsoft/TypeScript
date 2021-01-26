@@ -18,3 +18,13 @@ function funcTwo(arg: A | B | undefined) {
   arg;
   arg?.name;
 }
+
+function funcThree(arg: A | B | null) {
+  if (arg?.type === 'B') {
+    arg; // `B`
+    return;
+  }
+
+  arg;
+  arg?.name;
+}
