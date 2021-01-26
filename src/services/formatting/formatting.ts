@@ -399,7 +399,7 @@ namespace ts.formatting {
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
-
+            
         // formatting context is used by rules provider
         const formattingContext = new FormattingContext(sourceFile, requestKind, options);
         let previousRange: TextRangeWithKind;
@@ -739,8 +739,7 @@ namespace ts.formatting {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     const tokenInfo = formattingScanner.readTokenInfo(child);
                     // JSX text shouldn't affect indenting
-                    if (child.kind !== SyntaxKind.JsxText) {
-                        Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
+                    if (child.kind !== SyntaxKind.JsxText && tokenInfo.token.end === child.end) {
                         consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
                         return inheritedIndentation;
                     }

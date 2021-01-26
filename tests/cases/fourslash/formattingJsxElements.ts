@@ -88,6 +88,14 @@
 ////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
 ////<Router routes={() => {}}/*jsxExpressionSpaces3*/
 /////>;/*jsxDanglingSelfClosingToken*/
+////
+//// function foo5() {
+////     const value = "foobar";
+////   
+////     return (
+////     <div>"{value}"</div>/*identifierInString*/
+////     )
+////   }
 
 format.document();
 goTo.marker("autoformat");
@@ -177,3 +185,5 @@ goTo.marker("jsxExpressionSpaces3");
 verify.currentLineContentIs("<Router routes={() => { }}");
 goTo.marker("jsxDanglingSelfClosingToken");
 verify.currentLineContentIs("/>;");
+goTo.marker("identifierInString");
+verify.currentLineContentIs('        <div>"{value}"</div>');
