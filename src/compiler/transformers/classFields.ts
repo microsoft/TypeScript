@@ -280,16 +280,19 @@ namespace ts {
         function createPrivateIdentifierAccess(info: PrivateIdentifierInfo, receiver: Expression): Expression {
             receiver = visitNode(receiver, visitor, isExpression);
             const synthesizedReceiver = nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
+            return createPrivateIdentifierAccessHelper(info, synthesizedReceiver);
+        }
 
+        function createPrivateIdentifierAccessHelper(info: PrivateIdentifierInfo, receiver: Expression): Expression {
             switch (info.placement) {
                 case PrivateIdentifierPlacement.InstanceField:
                     return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        synthesizedReceiver,
+                        receiver,
                         info.weakMapName
                     );
                 case PrivateIdentifierPlacement.InstanceMethod:
                     return context.getEmitHelperFactory().createClassPrivateMethodGetHelper(
-                        synthesizedReceiver,
+                        receiver,
                         getPrivateIdentifierEnvironment().weakSetName,
                         info.functionName
                     );
@@ -474,37 +477,33 @@ namespace ts {
         }
 
         function createPrivateIdentifierAssignment(info: PrivateIdentifierInfo, receiver: Expression, right: Expression, operator: AssignmentOperator) {
-            switch (info.placement) {
-                case PrivateIdentifierPlacement.InstanceField:
-                    return createPrivateIdentifierInstanceFieldAssignment(info, receiver, right, operator);
-                case PrivateIdentifierPlacement.InstanceMethod:
-                    return createPrivateIdentifierInstanceMethodAssignment();
-                default: return Debug.fail("Unexpected private identifier placement");
-            }
-        }
-
-        function createPrivateIdentifierInstanceFieldAssignment(info: PrivateIdentifierInstanceField, receiver: Expression, right: Expression, operator: AssignmentOperator) {
             receiver = visitNode(receiver, visitor, isExpression);
             right = visitNode(right, visitor, isExpression);
+
             if (isCompoundAssignment(operator)) {
                 const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
-                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                    initializeExpression || readExpression,
-                    info.weakMapName,
-                    factory.createBinaryExpression(
-                        context.getEmitHelperFactory().createClassPrivateFieldGetHelper(readExpression, info.weakMapName),
-                        getNonAssignmentOperatorForCompoundAssignment(operator),
-                        right
-                    )
+                receiver = initializeExpression || readExpression;
+                right = factory.createBinaryExpression(
+                    createPrivateIdentifierAccessHelper(info, readExpression),
+                    getNonAssignmentOperatorForCompoundAssignment(operator),
+                    right
                 );
             }
-            else {
-                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(receiver, info.weakMapName, right);
-            }
-        }
 
-        function createPrivateIdentifierInstanceMethodAssignment() {
-            return context.getEmitHelperFactory().createClassPrivateReadonlyHelper();
+            switch (info.placement) {
+                case PrivateIdentifierPlacement.InstanceField:
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                        receiver,
+                        info.weakMapName,
+                        right
+                    );
+                case PrivateIdentifierPlacement.InstanceMethod:
+                    return context.getEmitHelperFactory().createClassPrivateReadonlyHelper(
+                        receiver,
+                        right
+                    );
+                default: return Debug.fail("Unexpected private identifier placement");
+            }
         }
 
         /**

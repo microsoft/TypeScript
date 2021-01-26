@@ -35,7 +35,7 @@ namespace ts {
         createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
         createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
-        createClassPrivateReadonlyHelper(): Expression;
+        createClassPrivateReadonlyHelper(receiver: Expression, value: Expression): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -387,9 +387,9 @@ namespace ts {
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateMethodGet"), /*typeArguments*/ undefined, [receiver, instances, fn]);
         }
 
-        function createClassPrivateReadonlyHelper() {
+        function createClassPrivateReadonlyHelper(receiver: Expression, value: Expression) {
             context.requestEmitHelper(classPrivateReadonlyHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateReadonly"), /*typeArguments*/ undefined, []);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateReadonly"), /*typeArguments*/ undefined, [receiver, value]);
         }
 
     }
