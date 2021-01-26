@@ -399,7 +399,7 @@ namespace ts.formatting {
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
-            
+
         // formatting context is used by rules provider
         const formattingContext = new FormattingContext(sourceFile, requestKind, options);
         let previousRange: TextRangeWithKind;
