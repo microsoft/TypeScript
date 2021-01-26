@@ -34,7 +34,7 @@ namespace ts {
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
-        createClassPrivateMethodGetHelper(receiver: Expression, accessCheck: Identifier, fn: Identifier): Expression;
+        createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
         createClassPrivateReadonlyHelper(): Expression;
     }
 
@@ -382,9 +382,9 @@ namespace ts {
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, [receiver, privateField, value]);
         }
 
-        function createClassPrivateMethodGetHelper(receiver: Expression, accessCheck: Identifier, fn: Identifier) {
+        function createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier) {
             context.requestEmitHelper(classPrivateMethodGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateMethodGet"), /*typeArguments*/ undefined, [receiver, accessCheck, fn]);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateMethodGet"), /*typeArguments*/ undefined, [receiver, instances, fn]);
         }
 
         function createClassPrivateReadonlyHelper() {
@@ -864,8 +864,8 @@ namespace ts {
         importName: "__classPrivateMethodGet",
         scoped: false,
         text: `
-            var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-                if (!accessCheck.has(receiver)) {
+            var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+                if (!instances.has(receiver)) {
                     throw new TypeError("attempted to get private method on non-instance");
                 }
                 return fn;
