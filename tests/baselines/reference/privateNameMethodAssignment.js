@@ -27,12 +27,14 @@ class A3 {
     constructor(a, b) {
         var _a, _b;
         _A3_instances.add(this);
-        __classPrivateReadonly(); // Error, not writable 
-        __classPrivateReadonly(); // Error, not writable 
-        __classPrivateReadonly(); //Error, not writable 
-        (_a = this, { x: ({ set value(_b) { __classPrivateReadonly(); } }).value } = { x: () => { } }); //Error, not writable 
+        __classPrivateReadonly(this, () => { }); // Error, not writable 
+        __classPrivateReadonly(// Error, not writable 
+        a, () => { }); // Error, not writable 
+        __classPrivateReadonly(// Error, not writable 
+        b, () => { }); //Error, not writable 
+        (_a = this, { x: ({ set value(_b) { __classPrivateReadonly(_a, _b); } }).value } = { x: () => { } }); //Error, not writable 
         let x = __classPrivateMethodGet(this, _A3_instances, _A3_method);
-        __classPrivateReadonly(); //Error, not writable 
+        __classPrivateReadonly(_b = b, +__classPrivateMethodGet(_b, _A3_instances, _A3_method) + 1); //Error, not writable 
     }
     ;
 }
