@@ -35,7 +35,6 @@ var _AA_method, _AA_method2, _AA_instances;
 class AA {
     constructor() {
         _AA_instances.add(this);
-        _AA_instances.add(this);
         this.x = 1;
     }
     ;

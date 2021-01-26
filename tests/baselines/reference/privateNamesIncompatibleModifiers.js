@@ -61,12 +61,6 @@ var _A_foo, _A_bar, _A_baz, _A_qux, _A_fooMethod, _A_barMethod, _A_bazMethod, _A
 class A {
     constructor() {
         _A_instances.add(this);
-        _A_instances.add(this);
-        _A_instances.add(this);
-        _A_instances.add(this);
-        _A_instances.add(this);
-        _A_instances.add(this);
-        _A_instances.add(this);
         _A_foo.set(this, 3); // Error
         _A_bar.set(this, 3); // Error
         _A_baz.set(this, 3); // Error
