@@ -5411,12 +5411,12 @@ namespace ts {
                 const firstIdentifier = getFirstIdentifier(accessExpression);
                 const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
                 if (name) {
-                    context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
+                    context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value, context.trueErrorNode);
                 }
             }
 
             function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, yieldModuleSymbol?: boolean) {
-                context.tracker.trackSymbol!(symbol, context.enclosingDeclaration, meaning); // TODO: GH#18217
+                context.tracker.trackSymbol!(symbol, context.enclosingDeclaration, meaning, context.trueErrorNode); // TODO: GH#18217
                 return lookupSymbolChainWorker(symbol, context, meaning, yieldModuleSymbol);
             }
 
@@ -5971,7 +5971,7 @@ namespace ts {
                         introducesError = true;
                     }
                     else {
-                        context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
+                        context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All, context.trueErrorNode);
                         includePrivateSymbol?.(sym);
                     }
                     if (isIdentifier(node)) {
@@ -6182,7 +6182,7 @@ namespace ts {
                     remappedSymbolNames: new Map(),
                     tracker: {
                         ...oldcontext.tracker,
-                        trackSymbol: (sym, decl, meaning) => {
+                        trackSymbol: (sym, decl, meaning, trueErrorNode) => {
                             const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
                             if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                                 // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
@@ -6192,7 +6192,7 @@ namespace ts {
                                 }
                             }
                             else if (oldcontext.tracker && oldcontext.tracker.trackSymbol) {
-                                oldcontext.tracker.trackSymbol(sym, decl, meaning);
+                                oldcontext.tracker.trackSymbol(sym, decl, meaning, trueErrorNode);
                             }
                         }
                     }
@@ -6505,7 +6505,7 @@ namespace ts {
                                         ),
                                         ModifierFlags.None
                                     );
-                                    context.tracker.trackSymbol!(type.symbol, context.enclosingDeclaration, SymbolFlags.Value);
+                                    context.tracker.trackSymbol!(type.symbol, context.enclosingDeclaration, SymbolFlags.Value, context.trueErrorNode);
                                 }
                                 else {
                                     const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
@@ -6654,8 +6654,11 @@ namespace ts {
                     const typeParams = getSymbolLinks(symbol).typeParameters;
                     const typeParamDecls = map(typeParams, p => typeParameterToDeclaration(p, context));
                     const jsdocAliasDecl = find(symbol.declarations, isJSDocTypeAlias);
+
                     const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
                     const oldFlags = context.flags;
+                    const oldTrueErrorNode = context.trueErrorNode;
+                    context.trueErrorNode = jsdocAliasDecl;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
                     const typeNode = jsdocAliasDecl && jsdocAliasDecl.typeExpression
                         && isJSDocTypeExpression(jsdocAliasDecl.typeExpression)
@@ -6666,6 +6669,7 @@ namespace ts {
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
                     ), modifierFlags);
                     context.flags = oldFlags;
+                    context.trueErrorNode = oldTrueErrorNode;
                 }
 
                 function serializeInterface(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
@@ -7628,6 +7632,7 @@ namespace ts {
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
             truncating?: boolean;
+            trueErrorNode?: Node;
             typeParameterSymbolList?: Set<number>;
             typeParameterNames?: ESMap<TypeId, Identifier>;
             typeParameterNamesByText?: Set<string>;
