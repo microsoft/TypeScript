@@ -22,19 +22,19 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _x;
+var _C_x;
 class D {
 }
 ;
 class C {
     constructor() {
-        _x.set(this, void 0);
+        _C_x.set(this, void 0);
     }
     foo() {
         const c = new C();
-        __classPrivateFieldGet(c, _x); // OK
+        __classPrivateFieldGet(c, _C_x); // OK
         const d = new C();
-        __classPrivateFieldGet(d, _x); // Error
+        __classPrivateFieldGet(d, _C_x); // Error
     }
 }
-_x = new WeakMap();
+_C_x = new WeakMap();

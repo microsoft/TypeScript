@@ -29,16 +29,16 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var _prop;
+var _C_prop;
 class C {
     constructor() {
-        _prop.set(this, 1);
+        _C_prop.set(this, 1);
     }
     method(other) {
         const obj = Object.assign({}, other);
-        __classPrivateFieldGet(obj, _prop);
+        __classPrivateFieldGet(obj, _C_prop);
         const rest = __rest(other, []);
-        __classPrivateFieldGet(rest, _prop);
+        __classPrivateFieldGet(rest, _C_prop);
     }
 }
-_prop = new WeakMap();
+_C_prop = new WeakMap();

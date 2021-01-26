@@ -42,31 +42,31 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     privateMap.set(receiver, value);
     return value;
 };
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _foo, _method, _method_1, _prop, _prop_1;
+var _C_foo, _C_method, _C_prop, _C_prop_1, _C_instances;
 class C {
     constructor() {
-        _method.add(this);
-        _foo.set(this, void 0);
+        _C_instances.add(this);
+        _C_foo.set(this, void 0);
     }
-    get () { return __classPrivateFieldGet(this, _foo); }
-    set (value) { __classPrivateFieldSet(this, _foo, value); }
-    bar(x) { return __classPrivateFieldGet(x, _foo); } // OK
-    bar2(x) { return __classPrivateMethodGet(x, _method, _method_1).call(x); } // OK
+    get () { return __classPrivateFieldGet(this, _C_foo); }
+    set (value) { __classPrivateFieldSet(this, _C_foo, value); }
+    bar(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
+    bar2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method).call(x); } // OK
     bar3(x) { return x.; } // OK
-    baz(x) { return __classPrivateFieldGet(x, _foo); } // OK
-    baz2(x) { return __classPrivateMethodGet(x, _method, _method_1); } // OK
+    baz(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
+    baz2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method); } // OK
     baz3(x) { return x.; } // OK
-    quux(x) { return __classPrivateFieldGet(x, _foo); } // OK
-    quux2(x) { return __classPrivateMethodGet(x, _method, _method_1); } // OK
+    quux(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
+    quux2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method); } // OK
     quux3(x) { return x.; } // OK
 }
-_foo = new WeakMap(), _method = new WeakSet(), _method_1 = function _method_1() { return __classPrivateFieldGet(this, _foo); };
+_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_method = function _C_method() { return __classPrivateFieldGet(this, _C_foo); };
 a.; // Error
 a.; // Error
 a.; // Error

@@ -24,19 +24,19 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     privateMap.set(receiver, value);
     return value;
 };
-var _foo, _foo_1;
+var _A_foo, _B_foo;
 class A {
     constructor() {
-        _foo.set(this, void 0);
-        __classPrivateFieldSet(this, _foo, 3);
+        _A_foo.set(this, void 0);
+        __classPrivateFieldSet(this, _A_foo, 3);
     }
 }
-_foo = new WeakMap();
+_A_foo = new WeakMap();
 class B extends A {
     constructor() {
         super();
-        _foo_1.set(this, void 0);
-        __classPrivateFieldSet(this, _foo_1, "some string");
+        _B_foo.set(this, void 0);
+        __classPrivateFieldSet(this, _B_foo, "some string");
     }
 }
-_foo_1 = new WeakMap();
+_B_foo = new WeakMap();

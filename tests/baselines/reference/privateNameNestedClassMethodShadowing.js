@@ -16,31 +16,31 @@ class Base {
 
 
 //// [privateNameNestedClassMethodShadowing.js]
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _x, _x_1;
+var _Base_x, _Base_instances;
 class Base {
     constructor() {
-        var _x_2, _x_3;
-        _x.add(this);
+        var _Derived_x, _Derived_instances;
+        _Base_instances.add(this);
         class Derived {
             constructor() {
-                _x_2.add(this);
+                _Derived_instances.add(this);
             }
             ;
             testBase(x) {
-                console.log(__classPrivateMethodGet(x, _x_2, _x_3));
+                console.log(__classPrivateMethodGet(x, _Derived_instances, _Derived_x));
             }
             testDerived(x) {
-                console.log(__classPrivateMethodGet(x, _x_2, _x_3));
+                console.log(__classPrivateMethodGet(x, _Derived_instances, _Derived_x));
             }
         }
-        _x_2 = new WeakSet(), _x_3 = function _x_3() { };
+        _Derived_instances = new WeakSet(), _Derived_x = function _Derived_x() { };
     }
     ;
 }
-_x = new WeakSet(), _x_1 = function _x_1() { };
+_Base_instances = new WeakSet(), _Base_x = function _Base_x() { };

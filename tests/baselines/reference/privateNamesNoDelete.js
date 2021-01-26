@@ -15,11 +15,11 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _v;
+var _A_v;
 class A {
     constructor() {
-        _v.set(this, 1);
-        delete __classPrivateFieldGet(this, _v); // Error: The operand of a delete operator cannot be a private name.
+        _A_v.set(this, 1);
+        delete __classPrivateFieldGet(this, _A_v); // Error: The operand of a delete operator cannot be a private name.
     }
 }
-_v = new WeakMap();
+_A_v = new WeakMap();

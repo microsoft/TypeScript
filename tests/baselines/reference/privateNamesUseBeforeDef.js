@@ -27,40 +27,40 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _foo, _bar, _foo_1, _bar_1, _bar_2, _foo_2, _bar_3, _foo_3, _bar_4;
+var _A_foo, _A_bar, _A2_foo, _A2_bar, _A2_instances, _A3_foo, _A3_bar, _B_foo, _B_bar;
 class A {
     constructor() {
-        _foo.set(this, __classPrivateFieldGet(this, _bar)); // Error
-        _bar.set(this, 3);
+        _A_foo.set(this, __classPrivateFieldGet(this, _A_bar)); // Error
+        _A_bar.set(this, 3);
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
+_A_foo = new WeakMap(), _A_bar = new WeakMap();
 class A2 {
     constructor() {
-        _bar_1.add(this);
-        _foo_1.set(this, __classPrivateMethodGet(this, _bar_1, _bar_2).call(this)); // No Error
+        _A2_instances.add(this);
+        _A2_foo.set(this, __classPrivateMethodGet(this, _A2_instances, _A2_bar).call(this)); // No Error
     }
     ;
 }
-_foo_1 = new WeakMap(), _bar_1 = new WeakSet(), _bar_2 = function _bar_2() { return 3; };
+_A2_foo = new WeakMap(), _A2_instances = new WeakSet(), _A2_bar = function _A2_bar() { return 3; };
 class A3 {
     constructor() {
-        _foo_2.set(this, this.); // No Error
+        _A3_foo.set(this, this.); // No Error
     }
     get () { return 3; }
     ;
 }
-_foo_2 = new WeakMap();
+_A3_foo = new WeakMap();
 class B {
     constructor() {
-        _foo_3.set(this, __classPrivateFieldGet(this, _bar_4)); // Error
-        _bar_4.set(this, __classPrivateFieldGet(this, _foo_3));
+        _B_foo.set(this, __classPrivateFieldGet(this, _B_bar)); // Error
+        _B_bar.set(this, __classPrivateFieldGet(this, _B_foo));
     }
 }
-_foo_3 = new WeakMap(), _bar_4 = new WeakMap();
+_B_foo = new WeakMap(), _B_bar = new WeakMap();

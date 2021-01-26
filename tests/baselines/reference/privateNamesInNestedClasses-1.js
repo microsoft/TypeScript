@@ -34,29 +34,29 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _foo, _bar;
+var _A_foo, _A_bar;
 class A {
     constructor() {
-        _foo.set(this, "A's #foo");
-        _bar.set(this, "A's #bar");
+        _A_foo.set(this, "A's #foo");
+        _A_bar.set(this, "A's #bar");
     }
     method() {
-        var _foo_1;
+        var _B_foo;
         class B {
             constructor() {
-                _foo_1.set(this, "B's #foo");
+                _B_foo.set(this, "B's #foo");
             }
             bar(a) {
-                __classPrivateFieldGet(a, _foo_1); // OK, no compile-time error, don't know what `a` is
+                __classPrivateFieldGet(a, _B_foo); // OK, no compile-time error, don't know what `a` is
             }
             baz(a) {
-                __classPrivateFieldGet(a, _foo_1); // compile-time error, shadowed
+                __classPrivateFieldGet(a, _B_foo); // compile-time error, shadowed
             }
             quux(b) {
-                __classPrivateFieldGet(b, _foo_1); // OK
+                __classPrivateFieldGet(b, _B_foo); // OK
             }
         }
-        _foo_1 = new WeakMap();
+        _B_foo = new WeakMap();
         const a = new A();
         new B().bar(a);
         new B().baz(a);
@@ -64,5 +64,5 @@ class A {
         new B().quux(b);
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
+_A_foo = new WeakMap(), _A_bar = new WeakMap();
 new A().method();

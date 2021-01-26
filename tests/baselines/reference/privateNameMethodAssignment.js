@@ -16,24 +16,24 @@ class A3 {
 var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
     throw new TypeError("private element is not writable");
 };
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _method, _method_1;
+var _A3_method, _A3_instances;
 class A3 {
     constructor(a, b) {
         var _a, _b;
-        _method.add(this);
+        _A3_instances.add(this);
         __classPrivateReadonly(); // Error, not writable 
         __classPrivateReadonly(); // Error, not writable 
         __classPrivateReadonly(); //Error, not writable 
         (_a = this, { x: ({ set value(_b) { __classPrivateReadonly(); } }).value } = { x: () => { } }); //Error, not writable 
-        let x = __classPrivateMethodGet(this, _method, _method_1);
+        let x = __classPrivateMethodGet(this, _A3_instances, _A3_method);
         __classPrivateReadonly(); //Error, not writable 
     }
     ;
 }
-_method = new WeakSet(), _method_1 = function _method_1() { };
+_A3_instances = new WeakSet(), _A3_method = function _A3_method() { };

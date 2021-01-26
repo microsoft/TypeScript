@@ -25,36 +25,36 @@ class AA {
 
 
 //// [privateNameMethodCallExpression.js]
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _method, _method_1, _method2, _method2_1;
+var _AA_method, _AA_method2, _AA_instances;
 class AA {
     constructor() {
-        _method.add(this);
-        _method2.add(this);
+        _AA_instances.add(this);
+        _AA_instances.add(this);
         this.x = 1;
     }
     ;
     ;
     test() {
         var _a, _b, _c;
-        __classPrivateMethodGet(this, _method, _method_1).call(this);
-        const func = __classPrivateMethodGet(this, _method, _method_1);
+        __classPrivateMethodGet(this, _AA_instances, _AA_method).call(this);
+        const func = __classPrivateMethodGet(this, _AA_instances, _AA_method);
         func();
-        new (__classPrivateMethodGet(this, _method, _method_1))();
+        new (__classPrivateMethodGet(this, _AA_instances, _AA_method))();
         const arr = [1, 2];
-        __classPrivateMethodGet(this, _method2, _method2_1).call(this, 0, ...arr, 3);
-        const b = new (__classPrivateMethodGet(this, _method2, _method2_1))(0, ...arr, 3); //Error 
-        const str = __classPrivateMethodGet(this, _method2, _method2_1).bind(this) `head${1}middle${2}tail`;
-        __classPrivateMethodGet((_a = this.getInstance()), _method2, _method2_1).bind(_a) `test${1}and${2}`;
-        __classPrivateMethodGet((_b = this.getInstance()), _method2, _method2_1).call(_b, 0, ...arr, 3);
-        const b2 = new (__classPrivateMethodGet(this.getInstance(), _method2, _method2_1))(0, ...arr, 3); //Error 
-        const str2 = __classPrivateMethodGet((_c = this.getInstance()), _method2, _method2_1).bind(_c) `head${1}middle${2}tail`;
+        __classPrivateMethodGet(this, _AA_instances, _AA_method2).call(this, 0, ...arr, 3);
+        const b = new (__classPrivateMethodGet(this, _AA_instances, _AA_method2))(0, ...arr, 3); //Error 
+        const str = __classPrivateMethodGet(this, _AA_instances, _AA_method2).bind(this) `head${1}middle${2}tail`;
+        __classPrivateMethodGet((_a = this.getInstance()), _AA_instances, _AA_method2).bind(_a) `test${1}and${2}`;
+        __classPrivateMethodGet((_b = this.getInstance()), _AA_instances, _AA_method2).call(_b, 0, ...arr, 3);
+        const b2 = new (__classPrivateMethodGet(this.getInstance(), _AA_instances, _AA_method2))(0, ...arr, 3); //Error 
+        const str2 = __classPrivateMethodGet((_c = this.getInstance()), _AA_instances, _AA_method2).bind(_c) `head${1}middle${2}tail`;
     }
     getInstance() { return new AA(); }
 }
-_method = new WeakSet(), _method2 = new WeakSet(), _method_1 = function _method_1() { this.x = 10; }, _method2_1 = function _method2_1(a, ...b) { };
+_AA_instances = new WeakSet(), _AA_method = function _AA_method() { this.x = 10; }, _AA_method2 = function _AA_method2(a, ...b) { };

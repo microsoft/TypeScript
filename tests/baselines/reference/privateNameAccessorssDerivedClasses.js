@@ -13,7 +13,7 @@ class Derived extends Base {
 
 
 //// [privateNameAccessorssDerivedClasses.js]
-var _prop;
+var _Base_prop;
 class Base {
     get () { return 123; }
     static method(x) {

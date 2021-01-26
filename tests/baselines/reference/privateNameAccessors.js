@@ -16,7 +16,7 @@ class A1 {
 
 //// [privateNameAccessors.js]
 "use strict";
-var _prop, _prop_1, _roProp;
+var _A1_prop, _A1_prop_1, _A1_roProp;
 class A1 {
     constructor(name) {
         this. = "";

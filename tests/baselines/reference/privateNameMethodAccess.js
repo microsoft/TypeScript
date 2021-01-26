@@ -24,25 +24,25 @@ class B2 {
 
 
 //// [privateNameMethodAccess.js]
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _method, _method_1, _a;
+var _A2_method, _A2_instances, _a;
 class A2 {
     constructor() {
-        _method.add(this);
-        console.log(__classPrivateMethodGet(this, _method, _method_1));
+        _A2_instances.add(this);
+        console.log(__classPrivateMethodGet(this, _A2_instances, _A2_method));
         let a = this;
-        __classPrivateMethodGet(a, _method, _method_1).call(a);
+        __classPrivateMethodGet(a, _A2_instances, _A2_method).call(a);
         function foo() {
-            __classPrivateMethodGet(a, _method, _method_1).call(a);
+            __classPrivateMethodGet(a, _A2_instances, _A2_method).call(a);
         }
     }
 }
-_method = new WeakSet(), _method_1 = function _method_1() { return ""; };
+_A2_instances = new WeakSet(), _A2_method = function _A2_method() { return ""; };
 (_a = new A2())..call(_a); // Error
 function foo() {
     var _a;

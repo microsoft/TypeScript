@@ -16,10 +16,10 @@ class Base {
 
 
 //// [privateNameNestedClassAccessorsShadowing.js]
-var _x;
+var _Base_x;
 class Base {
     constructor() {
-        var _x_1;
+        var _Derived_x;
         class Derived {
             get () { return 1; }
             ;

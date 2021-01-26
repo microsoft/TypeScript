@@ -23,10 +23,10 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _y;
+var _Test_y;
 class Test {
     constructor() {
-        _y.set(this, 123);
+        _Test_y.set(this, 123);
     }
     static something(obj) {
         var _x, _a, _x_1, _b, _c;
@@ -37,7 +37,7 @@ class Test {
                 }
             },
             _x = new WeakMap(),
-            _a)).s], _y, 1);
+            _a)).s], _Test_y, 1);
         __classPrivateFieldSet(_c = obj[(new (_b = class {
                 constructor() {
                     _x_1.set(this, 1);
@@ -45,7 +45,7 @@ class Test {
                 }
             },
             _x_1 = new WeakMap(),
-            _b)).s], _y, __classPrivateFieldGet(_c, _y) + 1);
+            _b)).s], _Test_y, __classPrivateFieldGet(_c, _Test_y) + 1);
     }
 }
-_y = new WeakMap();
+_Test_y = new WeakMap();

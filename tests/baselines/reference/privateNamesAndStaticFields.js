@@ -37,22 +37,22 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _foo, _bar, _foo_1;
+var _A_foo, _A_bar, _B_foo;
 class A {
     constructor() {
-        __classPrivateFieldSet(A, _foo, 3);
-        __classPrivateFieldGet(B, _foo); // Error
-        __classPrivateFieldGet(B, _bar); // Error
+        __classPrivateFieldSet(A, _A_foo, 3);
+        __classPrivateFieldGet(B, _A_foo); // Error
+        __classPrivateFieldGet(B, _A_bar); // Error
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
+_A_foo = new WeakMap(), _A_bar = new WeakMap();
 class B extends A {
     constructor() {
         super();
-        __classPrivateFieldSet(B, _foo_1, "some string");
+        __classPrivateFieldSet(B, _B_foo, "some string");
     }
 }
-_foo_1 = new WeakMap();
+_B_foo = new WeakMap();
 // We currently filter out static private identifier fields in `getUnmatchedProperties`.
 // We will need a more robust solution when we support static fields
 const willErrorSomeDay = class {

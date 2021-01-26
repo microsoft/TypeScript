@@ -36,8 +36,8 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     privateMap.set(receiver, value);
     return value;
 };
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
@@ -48,23 +48,23 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _foo, _bar, _bar_1;
+var _C_foo, _C_bar, _C_instances;
 class C {
     constructor(t) {
-        _bar.add(this);
-        _foo.set(this, void 0);
-        __classPrivateFieldSet(this, _foo, t);
-        t = __classPrivateMethodGet(this, _bar, _bar_1).call(this);
+        _C_instances.add(this);
+        _C_foo.set(this, void 0);
+        __classPrivateFieldSet(this, _C_foo, t);
+        t = __classPrivateMethodGet(this, _C_instances, _C_bar).call(this);
     }
     set baz(t) {
-        __classPrivateFieldSet(this, _foo, t);
+        __classPrivateFieldSet(this, _C_foo, t);
     }
     get baz() {
-        return __classPrivateFieldGet(this, _foo);
+        return __classPrivateFieldGet(this, _C_foo);
     }
 }
-_foo = new WeakMap(), _bar = new WeakSet(), _bar_1 = function _bar_1() {
-    return __classPrivateFieldGet(this, _foo);
+_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_bar = function _C_bar() {
+    return __classPrivateFieldGet(this, _C_foo);
 };
 let a = new C(3);
 let b = new C("hello");

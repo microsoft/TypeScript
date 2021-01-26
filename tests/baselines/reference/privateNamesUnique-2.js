@@ -23,13 +23,13 @@ a.copy(b); // error
 
 
 //// [b.js]
-var _x;
+var _Foo_x;
 export class Foo {
     constructor() {
-        _x.set(this, void 0);
+        _Foo_x.set(this, void 0);
     }
 }
-_x = new WeakMap();
+_Foo_x = new WeakMap();
 //// [a.js]
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
     if (!privateMap.has(receiver)) {
@@ -37,16 +37,16 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _x;
+var _Foo_x;
 export class Foo {
     constructor() {
-        _x.set(this, void 0);
+        _Foo_x.set(this, void 0);
     }
     copy(other) {
-        __classPrivateFieldGet(other, _x); // error
+        __classPrivateFieldGet(other, _Foo_x); // error
     }
 }
-_x = new WeakMap();
+_Foo_x = new WeakMap();
 //// [main.js]
 import { Foo as A } from "./a";
 import { Foo as B } from "./b";

@@ -38,25 +38,25 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _name;
+var _Foo_name;
 class Foo {
     constructor(name) {
-        _name.set(this, void 0);
-        __classPrivateFieldSet(this, _name, name);
+        _Foo_name.set(this, void 0);
+        __classPrivateFieldSet(this, _Foo_name, name);
     }
     getValue(x) {
-        var _y;
+        var _Bar_y;
         const obj = this;
         class Bar {
             constructor() {
-                _y.set(this, 100);
+                _Bar_y.set(this, 100);
             }
-            [(_y = new WeakMap(), __classPrivateFieldGet(obj, _name))]() {
-                return x + __classPrivateFieldGet(this, _y);
+            [(_Bar_y = new WeakMap(), __classPrivateFieldGet(obj, _Foo_name))]() {
+                return x + __classPrivateFieldGet(this, _Bar_y);
             }
         }
-        return new Bar()[__classPrivateFieldGet(obj, _name)]();
+        return new Bar()[__classPrivateFieldGet(obj, _Foo_name)]();
     }
 }
-_name = new WeakMap();
+_Foo_name = new WeakMap();
 console.log(new Foo("NAME").getValue(100));

@@ -16,15 +16,15 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _foo;
+var _A_foo;
 class A {
     constructor() {
-        _foo.set(this, true);
+        _A_foo.set(this, true);
     }
     method(thing) {
-        __classPrivateFieldGet(thing, _foo); // OK
+        __classPrivateFieldGet(thing, _A_foo); // OK
         thing.; // Error
     }
 }
-_foo = new WeakMap();
+_A_foo = new WeakMap();
 ;

@@ -57,20 +57,20 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var _foo, _bar, _baz, _qux, _fooMethod, _fooMethod_1, _barMethod, _barMethod_1, _bazMethod, _bazMethod_1, _quxMethod, _quxMethod_1, _asyncMethod, _asyncMethod_1, _genMethod, _genMethod_1, _asyncGenMethod, _asyncGenMethod_1, _fooProp, _fooProp_1, _barProp, _barProp_1, _bazProp, _bazProp_1, _quxProp, _quxProp_1, _whatProp, _whatProp_1, _asyncProp, _asyncProp_1;
+var _A_foo, _A_bar, _A_baz, _A_qux, _A_fooMethod, _A_barMethod, _A_bazMethod, _A_quxMethod, _A_asyncMethod, _A_genMethod, _A_asyncGenMethod, _A_fooProp, _A_fooProp_1, _A_barProp, _A_barProp_1, _A_bazProp, _A_bazProp_1, _A_quxProp, _A_quxProp_1, _A_whatProp, _A_whatProp_1, _A_asyncProp, _A_asyncProp_1, _A_instances;
 class A {
     constructor() {
-        _fooMethod.add(this);
-        _barMethod.add(this);
-        _bazMethod.add(this);
-        _quxMethod.add(this);
-        _asyncMethod.add(this);
-        _genMethod.add(this);
-        _asyncGenMethod.add(this);
-        _foo.set(this, 3); // Error
-        _bar.set(this, 3); // Error
-        _baz.set(this, 3); // Error
-        _qux.set(this, 3); // OK
+        _A_instances.add(this);
+        _A_instances.add(this);
+        _A_instances.add(this);
+        _A_instances.add(this);
+        _A_instances.add(this);
+        _A_instances.add(this);
+        _A_instances.add(this);
+        _A_foo.set(this, 3); // Error
+        _A_bar.set(this, 3); // Error
+        _A_baz.set(this, 3); // Error
+        _A_qux.set(this, 3); // OK
     }
     get () { return 3; } // Error
     set (value) { } // Error
@@ -85,8 +85,8 @@ class A {
     get () { return 1; } // Error
     set (value) { } // Error
 }
-_foo = new WeakMap(), _bar = new WeakMap(), _baz = new WeakMap(), _qux = new WeakMap(), _fooMethod = new WeakSet(), _barMethod = new WeakSet(), _bazMethod = new WeakSet(), _quxMethod = new WeakSet(), _asyncMethod = new WeakSet(), _genMethod = new WeakSet(), _asyncGenMethod = new WeakSet(), _fooMethod_1 = function _fooMethod_1() { return 3; }, _barMethod_1 = function _barMethod_1() { return 3; }, _bazMethod_1 = function _bazMethod_1() { return 3; }, _quxMethod_1 = function _quxMethod_1() { return 3; }, _asyncMethod_1 = function _asyncMethod_1() {
+_A_foo = new WeakMap(), _A_bar = new WeakMap(), _A_baz = new WeakMap(), _A_qux = new WeakMap(), _A_instances = new WeakSet(), _A_fooMethod = function _A_fooMethod() { return 3; }, _A_barMethod = function _A_barMethod() { return 3; }, _A_bazMethod = function _A_bazMethod() { return 3; }, _A_quxMethod = function _A_quxMethod() { return 3; }, _A_asyncMethod = function _A_asyncMethod() {
     return __awaiter(this, void 0, void 0, function* () { return 1; });
-}, _genMethod_1 = function* _genMethod_1() { return 1; }, _asyncGenMethod_1 = function _asyncGenMethod_1() { return __asyncGenerator(this, arguments, function* _asyncGenMethod_1_1() { return yield __await(1); }); };
+}, _A_genMethod = function* _A_genMethod() { return 1; }, _A_asyncGenMethod = function _A_asyncGenMethod() { return __asyncGenerator(this, arguments, function* _A_asyncGenMethod_1() { return yield __await(1); }); };
 class B {
 }

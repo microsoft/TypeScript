@@ -28,7 +28,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExp
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js (7 errors) ====
-    var _fieldFunc, _fieldFunc2;
+    var _A_fieldFunc, _A_fieldFunc2;
     class A {
         constructor() {
             this.x = 1;

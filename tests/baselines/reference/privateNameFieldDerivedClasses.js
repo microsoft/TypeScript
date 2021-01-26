@@ -20,16 +20,16 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _prop;
+var _Base_prop;
 class Base {
     constructor() {
-        _prop.set(this, 123);
+        _Base_prop.set(this, 123);
     }
     static method(x) {
-        console.log(__classPrivateFieldGet(x, _prop));
+        console.log(__classPrivateFieldGet(x, _Base_prop));
     }
 }
-_prop = new WeakMap();
+_Base_prop = new WeakMap();
 class Derived extends Base {
     static method(x) {
         console.log(x.);

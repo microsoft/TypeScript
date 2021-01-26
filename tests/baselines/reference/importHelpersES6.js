@@ -20,17 +20,17 @@ export declare function __classPrivateFieldGet(): any;
 export declare function __classPrivateFieldSet(): any;
 
 //// [a.js]
-var _x;
+var _A_x;
 import { __awaiter, __classPrivateFieldGet, __classPrivateFieldSet, __decorate } from "tslib";
 let A = class A {
     constructor() {
-        _x.set(this, 1);
+        _A_x.set(this, 1);
     }
     f() {
-        return __awaiter(this, void 0, void 0, function* () { __classPrivateFieldSet(this, _x, yield __classPrivateFieldGet(this, _x)); });
+        return __awaiter(this, void 0, void 0, function* () { __classPrivateFieldSet(this, _A_x, yield __classPrivateFieldGet(this, _A_x)); });
     }
 };
-_x = new WeakMap();
+_A_x = new WeakMap();
 A = __decorate([
     dec
 ], A);

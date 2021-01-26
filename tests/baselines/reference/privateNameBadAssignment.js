@@ -23,7 +23,7 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     privateMap.set(receiver, value);
     return value;
 };
-var _bar;
+var _C_bar;
 exports. = 1; // Error (outside class body)
 function A() { }
 A.prototype. = 2; // Error (outside class body)
@@ -32,9 +32,9 @@ class B {
 B. = 3; // Error (outside class body)
 class C {
     constructor() {
-        _bar.set(this, 6);
-        __classPrivateFieldSet(exports, _bar, 6); // Error
+        _C_bar.set(this, 6);
+        __classPrivateFieldSet(exports, _C_bar, 6); // Error
         this. = 3; // Error (undeclared)
     }
 }
-_bar = new WeakMap();
+_C_bar = new WeakMap();

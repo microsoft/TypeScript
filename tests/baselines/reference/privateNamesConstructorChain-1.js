@@ -21,23 +21,23 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _foo, _bar, _foo_1, _bar_1;
+var _Parent_foo, _Parent_bar, _Child_foo, _Child_bar;
 class Parent {
     constructor() {
-        _foo.set(this, 3);
+        _Parent_foo.set(this, 3);
     }
     accessChildProps() {
-        __classPrivateFieldGet(new Child(), _foo); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
-        __classPrivateFieldGet(Child, _bar); // Error: not found
+        __classPrivateFieldGet(new Child(), _Parent_foo); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
+        __classPrivateFieldGet(Child, _Parent_bar); // Error: not found
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
-_bar.set(Parent, 5);
+_Parent_foo = new WeakMap(), _Parent_bar = new WeakMap();
+_Parent_bar.set(Parent, 5);
 class Child extends Parent {
     constructor() {
         super(...arguments);
-        _foo_1.set(this, "foo"); // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
-        _bar_1.set(this, "bar"); // OK
+        _Child_foo.set(this, "foo"); // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
+        _Child_bar.set(this, "bar"); // OK
     }
 }
-_foo_1 = new WeakMap(), _bar_1 = new WeakMap();
+_Child_foo = new WeakMap(), _Child_bar = new WeakMap();

@@ -26,7 +26,7 @@ class B2 {
 
 
 //// [privateNameAccessorsAccess.js]
-var _prop, _prop_1;
+var _A2_prop, _A2_prop_1;
 class A2 {
     constructor() {
         console.log(this.);

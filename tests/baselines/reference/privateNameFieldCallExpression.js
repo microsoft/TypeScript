@@ -27,27 +27,27 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _fieldFunc, _fieldFunc2;
+var _A_fieldFunc, _A_fieldFunc2;
 class A {
     constructor() {
-        _fieldFunc.set(this, function () { this.x = 10; });
-        _fieldFunc2.set(this, function (a, ...b) { });
+        _A_fieldFunc.set(this, function () { this.x = 10; });
+        _A_fieldFunc2.set(this, function (a, ...b) { });
         this.x = 1;
     }
     test() {
         var _a;
         var _b;
-        __classPrivateFieldGet(this, _fieldFunc).call(this);
-        (_a = __classPrivateFieldGet(this, _fieldFunc)) === null || _a === void 0 ? void 0 : _a.call(this);
-        const func = __classPrivateFieldGet(this, _fieldFunc);
+        __classPrivateFieldGet(this, _A_fieldFunc).call(this);
+        (_a = __classPrivateFieldGet(this, _A_fieldFunc)) === null || _a === void 0 ? void 0 : _a.call(this);
+        const func = __classPrivateFieldGet(this, _A_fieldFunc);
         func();
-        new (__classPrivateFieldGet(this, _fieldFunc))();
+        new (__classPrivateFieldGet(this, _A_fieldFunc))();
         const arr = [1, 2];
-        __classPrivateFieldGet(this, _fieldFunc2).call(this, 0, ...arr, 3);
-        const b = new (__classPrivateFieldGet(this, _fieldFunc2))(0, ...arr, 3);
-        const str = __classPrivateFieldGet(this, _fieldFunc2).bind(this) `head${1}middle${2}tail`;
-        __classPrivateFieldGet((_b = this.getInstance()), _fieldFunc2).bind(_b) `test${1}and${2}`;
+        __classPrivateFieldGet(this, _A_fieldFunc2).call(this, 0, ...arr, 3);
+        const b = new (__classPrivateFieldGet(this, _A_fieldFunc2))(0, ...arr, 3);
+        const str = __classPrivateFieldGet(this, _A_fieldFunc2).bind(this) `head${1}middle${2}tail`;
+        __classPrivateFieldGet((_b = this.getInstance()), _A_fieldFunc2).bind(_b) `test${1}and${2}`;
     }
     getInstance() { return new A(); }
 }
-_fieldFunc = new WeakMap(), _fieldFunc2 = new WeakMap();
+_A_fieldFunc = new WeakMap(), _A_fieldFunc2 = new WeakMap();

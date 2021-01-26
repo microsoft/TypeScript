@@ -13,22 +13,22 @@ class Derived extends Base {
 
 
 //// [privateNameMethodsDerivedClasses.js]
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, accessCheck, fn) {
-    if (!accessCheck.has(receiver)) {
+var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
         throw new TypeError("attempted to get private method on non-instance");
     }
     return fn;
 };
-var _prop, _prop_1;
+var _Base_prop, _Base_instances;
 class Base {
     constructor() {
-        _prop.add(this);
+        _Base_instances.add(this);
     }
     static method(x) {
-        console.log(__classPrivateMethodGet(x, _prop, _prop_1).call(x));
+        console.log(__classPrivateMethodGet(x, _Base_instances, _Base_prop).call(x));
     }
 }
-_prop = new WeakSet(), _prop_1 = function _prop_1() { return 123; };
+_Base_instances = new WeakSet(), _Base_prop = function _Base_prop() { return 123; };
 class Derived extends Base {
     static method(x) {
         console.log(x..call(x));
