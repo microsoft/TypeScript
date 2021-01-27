@@ -2212,11 +2212,8 @@ namespace ts {
 
         function isAllowedOption({ category, name }: CommandLineOption): boolean {
             // Skip options which do not have a category or have categories which are more niche
-            // Exclude all possible `Advanced_Options` in tsconfig.json which were NOT defined in command line
             const categoriesToSkip = [Diagnostics.Command_line_Options, Diagnostics.Editor_Support, Diagnostics.Debugging_the_Compiler, Diagnostics.Backwards_Compatibility, Diagnostics.Watch_and_Build_Modes];
-            return category !== undefined
-                && !categoriesToSkip.includes(category)
-                && (category !== Diagnostics.Editor_Support || compilerOptionsMap.has(name));
+            return category !== undefined && (!categoriesToSkip.includes(category) || compilerOptionsMap.has(name));
         }
 
         function writeConfigurations() {
