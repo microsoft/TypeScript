@@ -1,3 +1,14 @@
+type Boxified<T> = { [P in keyof T]: { value: T[P]} };
+
+declare function unboxify<T>(obj: Boxified<T>): T;
+
+function foo<U, V>(obj: { u: { value: U }, v: { value: V } }) {
+    return unboxify(obj);
+}
+
+let qq = foo({ u: { value: 10 }, v: { value: 'hello'} });  // { u: U, v: V } but should be { u: number, v: string }
+
+// From #42385
 interface Targets<A> {
     left: A
     right: A
