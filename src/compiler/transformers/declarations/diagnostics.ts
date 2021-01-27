@@ -27,7 +27,10 @@ namespace ts {
         | TypeAliasDeclaration
         | ConstructorDeclaration
         | IndexSignatureDeclaration
-        | PropertyAccessExpression;
+        | PropertyAccessExpression
+        | JSDocTypedefTag
+        | JSDocCallbackTag
+        | JSDocEnumTag;
 
     export function canProduceDiagnostics(node: Node): node is DeclarationDiagnosticProducing {
         return isVariableDeclaration(node) ||
@@ -48,7 +51,8 @@ namespace ts {
             isTypeAliasDeclaration(node) ||
             isConstructorDeclaration(node) ||
             isIndexSignatureDeclaration(node) ||
-            isPropertyAccessExpression(node);
+            isPropertyAccessExpression(node) ||
+            isJSDocTypeAlias(node);
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
@@ -149,7 +153,7 @@ namespace ts {
         else if (isImportEqualsDeclaration(node)) {
             return getImportEntityNameVisibilityError;
         }
-        else if (isTypeAliasDeclaration(node)) {
+        else if (isTypeAliasDeclaration(node) || isJSDocTypeAlias(node)) {
             return getTypeAliasDeclarationVisibilityError;
         }
         else {
