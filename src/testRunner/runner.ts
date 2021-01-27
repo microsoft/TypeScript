@@ -214,7 +214,7 @@ namespace Harness {
             if (process.env.TRAVIS_EVENT_TYPE === "cron") {
                 runners.push(new UserCodeRunner());
                 runners.push(new DockerfileRunner());
-             }
+            }
         }
         if (runUnitTests === undefined) {
             runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
