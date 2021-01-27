@@ -1,4 +1,6 @@
 tests/cases/conformance/jsdoc/declarations/file.js(1,5): error TS4081: Exported type alias 'BaseFactory' has or is using private name 'Base'.
+tests/cases/conformance/jsdoc/declarations/file.js(3,4): error TS4081: Exported type alias 'BaseFactoryFactory' has or is using private name 'Base'.
+tests/cases/conformance/jsdoc/declarations/file.js(6,5): error TS4081: Exported type alias 'Base' has or is using private name '"tests/cases/conformance/jsdoc/declarations/base"'.
 
 
 ==== tests/cases/conformance/jsdoc/declarations/base.js (0 errors) ====
@@ -14,10 +16,22 @@ tests/cases/conformance/jsdoc/declarations/file.js(1,5): error TS4081: Exported 
     
     module.exports = BaseFactory;
     
-==== tests/cases/conformance/jsdoc/declarations/file.js (1 errors) ====
+==== tests/cases/conformance/jsdoc/declarations/file.js (3 errors) ====
     /** @typedef {import('./base')} BaseFactory */
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4081: Exported type alias 'BaseFactory' has or is using private name 'Base'.
+    /**
+     * @callback BaseFactoryFactory
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     * @param {import('./base')} factory
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     */
+    ~
+!!! error TS4081: Exported type alias 'BaseFactoryFactory' has or is using private name 'Base'.
+    /** @enum {import('./base')} BaseFactoryFactoryRegistry */
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4081: Exported type alias 'Base' has or is using private name '"tests/cases/conformance/jsdoc/declarations/base"'.
+    const couldntThinkOfAny = {}
     
     /**
      *
