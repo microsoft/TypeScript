@@ -209,6 +209,12 @@ namespace Harness {
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
             // runners.push(new GeneratedFourslashRunner());
+
+            // CRON-only tests
+            if (process.env.TRAVIS_EVENT_TYPE === "cron") {
+                runners.push(new UserCodeRunner());
+                runners.push(new DockerfileRunner());
+             }
         }
         if (runUnitTests === undefined) {
             runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for
