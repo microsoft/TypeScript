@@ -73,3 +73,10 @@ const _await = 1;
 
 // await allowed in aliased export
 export { _await as await };
+
+// for-await-of
+const arr = [Promise.resolve()];
+
+for await (const item of arr) {
+  item;
+}

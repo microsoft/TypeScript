@@ -4,8 +4,8 @@ const Select = (p: {value?: unknown}) => <p></p>;
 >Select : Symbol(Select, Decl(jsxPartialSpread.tsx, 1, 5))
 >p : Symbol(p, Decl(jsxPartialSpread.tsx, 1, 16))
 >value : Symbol(value, Decl(jsxPartialSpread.tsx, 1, 20))
->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 
 import React from 'react';
 >React : Symbol(React, Decl(jsxPartialSpread.tsx, 2, 6))

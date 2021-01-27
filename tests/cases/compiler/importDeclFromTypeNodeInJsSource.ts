@@ -15,12 +15,38 @@ declare module "events" {
     }
     export = EventEmitter;
 }
+declare module "nestNamespaceModule" {
+    namespace a1.a2 {
+        class d { }
+    }
+
+    namespace a1.a2.n3 {
+        class c { }
+    }
+    export = a1.a2;
+}
+declare module "renameModule" {
+    namespace a.b {
+        class c { }
+    }
+    import d = a.b;
+    export = d;
+}
 
 // @filename: /src/b.js
 import { EventEmitter } from 'events';
-class Foo extends EventEmitter {
-    constructor() {
-        super();
-    }
+import { n3, d } from 'nestNamespaceModule';
+import { c } from 'renameModule';
+
+export class Foo extends EventEmitter {
 }
-export default Foo;
+
+export class Foo2 extends n3.c {
+}
+
+export class Foo3 extends d {
+}
+
+export class Foo4 extends c {
+
+}

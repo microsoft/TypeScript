@@ -13,14 +13,24 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(29,5): error TS23
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(30,9): error TS2322: Type 'T["x"]' is not assignable to type 'string'.
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'Pick<T, FunctionPropertyNames<T>>' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, FunctionPropertyNames<T>>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(104,5): error TS2322: Type 'Pick<T, NonFunctionPropertyNames<T>>' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, NonFunctionPropertyNames<T>>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(106,5): error TS2322: Type 'Pick<T, NonFunctionPropertyNames<T>>' is not assignable to type 'Pick<T, FunctionPropertyNames<T>>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'FunctionProperties<T>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(104,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'NonFunctionProperties<T>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(106,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'FunctionProperties<T>'.
   Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(108,5): error TS2322: Type 'Pick<T, FunctionPropertyNames<T>>' is not assignable to type 'Pick<T, NonFunctionPropertyNames<T>>'.
+    Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+      Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+        Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+          Type 'keyof T' is not assignable to type 'never'.
+            Type 'string | number | symbol' is not assignable to type 'never'.
+              Type 'string' is not assignable to type 'never'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(108,5): error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'NonFunctionProperties<T>'.
   Type 'NonFunctionPropertyNames<T>' is not assignable to type 'FunctionPropertyNames<T>'.
+    Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+      Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+        Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+          Type 'keyof T' is not assignable to type 'never'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(114,5): error TS2322: Type 'keyof T' is not assignable to type 'FunctionPropertyNames<T>'.
   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
@@ -52,7 +62,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'T2'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
   Type 'number | boolean' is not assignable to type 'T94<U>'.
     Type 'number' is not assignable to type 'T94<U>'.
@@ -185,22 +195,32 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
         x = y;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, FunctionPropertyNames<T>>' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, FunctionPropertyNames<T>>'.
+!!! error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'FunctionProperties<T>'.
         x = z;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, NonFunctionPropertyNames<T>>' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Pick<T, NonFunctionPropertyNames<T>>'.
+!!! error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'NonFunctionProperties<T>'.
         y = x;
         y = z;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, NonFunctionPropertyNames<T>>' is not assignable to type 'Pick<T, FunctionPropertyNames<T>>'.
+!!! error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'FunctionProperties<T>'.
 !!! error TS2322:   Type 'FunctionPropertyNames<T>' is not assignable to type 'NonFunctionPropertyNames<T>'.
+!!! error TS2322:     Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:         Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'never'.
+!!! error TS2322:               Type 'string' is not assignable to type 'never'.
         z = x;
         z = y;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, FunctionPropertyNames<T>>' is not assignable to type 'Pick<T, NonFunctionPropertyNames<T>>'.
+!!! error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'NonFunctionProperties<T>'.
 !!! error TS2322:   Type 'NonFunctionPropertyNames<T>' is not assignable to type 'FunctionPropertyNames<T>'.
+!!! error TS2322:     Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:       Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:         Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322:           Type 'keyof T' is not assignable to type 'never'.
     }
     
     function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
@@ -398,7 +418,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         var z: T1;
         var z: T2;  // Error, T2 is distributive, T1 isn't
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'T2'.
 !!! related TS6203 tests/cases/conformance/types/conditional/conditionalTypes1.ts:262:9: 'z' was also declared here.
     }
     

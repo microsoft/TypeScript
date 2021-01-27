@@ -33,7 +33,7 @@ type WithoutIndex = OmitIndex<WithIndex, string>; // { foo: "hello"; bar: "world
 >WithoutIndex : OmitIndex<{ [x: string]: {}; foo: "hello"; bar: "world"; }, string>
 
 type FooBarKey = keyof FooBar;             // "foo" | "bar"   <-- OK
->FooBarKey : "foo" | "bar"
+>FooBarKey : keyof FooBar
 
 type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: string 
 >WithIndexKey : string | number

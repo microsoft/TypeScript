@@ -343,9 +343,11 @@ namespace ts.server {
             }));
         }
 
-        findReferences(_fileName: string, _position: number): ReferencedSymbol[] {
-            // Not yet implemented.
-            return [];
+        findReferences(fileName: string, position: number): ReferencedSymbol[] {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.ReferencesFull, args);
+            const response = this.processResponse(request);
+            return response.body;
         }
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {

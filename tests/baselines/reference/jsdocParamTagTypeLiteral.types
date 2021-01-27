@@ -23,7 +23,7 @@ normal(12);
  * @param {string} [opts1.w="hi"] doc5
  */
 function foo1(opts1) {
->foo1 : (opts1: {    x: string;    y?: string | undefined;    z: string | undefined;    w: string | undefined;}) => void
+>foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
 >opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
 
     opts1.x;
@@ -92,7 +92,7 @@ foo3({x: 'abc'});
  * @param {string} [opts4[].w="hi"]
  */
 function foo4(opts4) {
->foo4 : (opts4: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
+>foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
 >opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
 
     opts4[0].x;
