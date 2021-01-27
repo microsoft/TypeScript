@@ -1,0 +1,30 @@
+=== tests/cases/compiler/omitOfTypeExtendingIndexSignature.ts ===
+// #36981
+type AnyRecord = Record<string, any>;
+>AnyRecord : Symbol(AnyRecord, Decl(omitOfTypeExtendingIndexSignature.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+interface ExtendsAny extends AnyRecord {
+>ExtendsAny : Symbol(ExtendsAny, Decl(omitOfTypeExtendingIndexSignature.ts, 1, 37))
+>AnyRecord : Symbol(AnyRecord, Decl(omitOfTypeExtendingIndexSignature.ts, 0, 0))
+
+    myKey1: string;
+>myKey1 : Symbol(ExtendsAny.myKey1, Decl(omitOfTypeExtendingIndexSignature.ts, 2, 40))
+
+    myKey2: string;
+>myKey2 : Symbol(ExtendsAny.myKey2, Decl(omitOfTypeExtendingIndexSignature.ts, 3, 19))
+}
+
+type OmitsKey = Omit<ExtendsAny, "myKey2">;
+>OmitsKey : Symbol(OmitsKey, Decl(omitOfTypeExtendingIndexSignature.ts, 5, 1))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>ExtendsAny : Symbol(ExtendsAny, Decl(omitOfTypeExtendingIndexSignature.ts, 1, 37))
+
+type OmitsKey1 = OmitsKey["myKey1"]; // should be `string`
+>OmitsKey1 : Symbol(OmitsKey1, Decl(omitOfTypeExtendingIndexSignature.ts, 7, 43))
+>OmitsKey : Symbol(OmitsKey, Decl(omitOfTypeExtendingIndexSignature.ts, 5, 1))
+
+type OmitsKey2 = OmitsKey["myKey2"]; // should be `any`
+>OmitsKey2 : Symbol(OmitsKey2, Decl(omitOfTypeExtendingIndexSignature.ts, 8, 36))
+>OmitsKey : Symbol(OmitsKey, Decl(omitOfTypeExtendingIndexSignature.ts, 5, 1))
+

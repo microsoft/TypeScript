@@ -1,0 +1,22 @@
+=== tests/cases/compiler/omitOfTypeExtendingIndexSignature.ts ===
+// #36981
+type AnyRecord = Record<string, any>;
+>AnyRecord : AnyRecord
+
+interface ExtendsAny extends AnyRecord {
+    myKey1: string;
+>myKey1 : string
+
+    myKey2: string;
+>myKey2 : string
+}
+
+type OmitsKey = Omit<ExtendsAny, "myKey2">;
+>OmitsKey : Omit<ExtendsAny, "myKey2">
+
+type OmitsKey1 = OmitsKey["myKey1"]; // should be `string`
+>OmitsKey1 : string
+
+type OmitsKey2 = OmitsKey["myKey2"]; // should be `any`
+>OmitsKey2 : any
+

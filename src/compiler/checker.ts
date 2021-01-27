@@ -17925,7 +17925,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (isGenericMappedType(target) && !target.declaration.nameType) {
+                else if (isGenericMappedType(target) && (!target.declaration.nameType || relation === comparableRelation)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
@@ -17935,7 +17935,7 @@ namespace ts {
                             return Ternary.True;
                         }
                         if (!isGenericMappedType(source)) {
-                            const targetConstraint = getConstraintTypeFromMappedType(target);
+                            const targetConstraint = relation === comparableRelation ? getNameTypeFromMappedType(target) || getConstraintTypeFromMappedType(target) : getConstraintTypeFromMappedType(target);
                             const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
                             const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
                             const filteredByApplicability = includeOptional ? intersectTypes(targetConstraint, sourceKeys) : undefined;
