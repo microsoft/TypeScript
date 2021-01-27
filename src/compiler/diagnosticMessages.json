@@ -4465,34 +4465,6 @@
         "category": "Message",
         "code": 6171
     },
-    "Basic Options": {
-        "category": "Message",
-        "code": 6172
-    },
-    "Strict Type-Checking Options": {
-        "category": "Message",
-        "code": 6173
-    },
-    "Module Resolution Options": {
-        "category": "Message",
-        "code": 6174
-    },
-    "Source Map Options": {
-        "category": "Message",
-        "code": 6175
-    },
-    "Additional Checks": {
-        "category": "Message",
-        "code": 6176
-    },
-    "Experimental Options": {
-        "category": "Message",
-        "code": 6177
-    },
-    "Advanced Options": {
-        "category": "Message",
-        "code": 6178
-    },
     "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
         "category": "Message",
         "code": 6179
@@ -5310,6 +5282,58 @@
     "Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9006
+    },
+    "Modules": {
+        "category": "Message",
+        "code": 9100
+    },
+    "File Management": {
+        "category": "Message",
+        "code": 9101
+    },
+    "Emit": {
+        "category": "Message",
+        "code": 9102
+    },
+    "JavaScript Support": {
+        "category": "Message",
+        "code": 9103
+    },
+    "Type Checking": {
+        "category": "Message",
+        "code": 9104
+    },
+    "Editor Support": {
+        "category": "Message",
+        "code": 9105
+    },
+    "Watch and Build Modes": {
+        "category": "Message",
+        "code": 9106
+    },
+    "Debugging the Compiler": {
+        "category": "Message",
+        "code": 9107
+    },
+    "Strictness - Linters": {
+        "category": "Message",
+        "code": 9108
+    },
+    "Interop Constraints": {
+        "category": "Message",
+        "code": 9109
+    },
+    "Strictness": {
+        "category": "Message",
+        "code": 9110
+    },
+    "Backwards Compatibility": {
+        "category": "Message",
+        "code": 9111
+    },
+    "Language": {
+        "category": "Message",
+        "code": 9112
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
