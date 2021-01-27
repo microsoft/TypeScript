@@ -11,11 +11,13 @@ namespace ts {
     const enum PrivateIdentifierPlacement {
         InstanceField,
         InstanceMethod,
+        InstanceAccessor
     }
 
     type PrivateIdentifierInfo =
         | PrivateIdentifierInstanceField
-        | PrivateIdentifierInstanceMethod;
+        | PrivateIdentifierInstanceMethod
+        | PrivateIdentifierInstanceAccessor;
 
     interface PrivateIdentifierInstanceField {
         placement: PrivateIdentifierPlacement.InstanceField;
@@ -25,6 +27,12 @@ namespace ts {
     interface PrivateIdentifierInstanceMethod {
         placement: PrivateIdentifierPlacement.InstanceMethod;
         functionName: Identifier;
+    }
+
+    interface PrivateIdentifierInstanceAccessor {
+        placement: PrivateIdentifierPlacement.InstanceAccessor;
+        getterName?: Identifier;
+        setterName?: Identifier;
     }
 
     interface PrivateIdentifierEnvironment {
@@ -166,8 +174,7 @@ namespace ts {
 
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    // Visit the name of the member (if it's a computed property name).
-                    return visitEachChild(node, classElementVisitor, context);
+                    return visitMethodDeclaration(node as AccessorDeclaration);
 
                 case SyntaxKind.MethodDeclaration:
                     return visitMethodDeclaration(node as MethodDeclaration);
@@ -213,7 +220,7 @@ namespace ts {
             return node;
         }
 
-        function visitMethodDeclaration(node: MethodDeclaration) {
+        function visitMethodDeclaration(node: MethodDeclaration | AccessorDeclaration) {
             Debug.assert(!some(node.decorators));
             const transformedMethod = visitEachChild(node, classElementVisitor, context);
 
@@ -241,13 +248,24 @@ namespace ts {
             return undefined;
         }
 
-        function getHoistedFunctionName(node: MethodDeclaration) {
+        function getHoistedFunctionName(node: MethodDeclaration | AccessorDeclaration) {
             Debug.assert(isPrivateIdentifier(node.name));
             const privateIdentifierInfo = accessPrivateIdentifier(node.name);
             Debug.assert(privateIdentifierInfo, "Undeclared private name for property declaration.");
 
             if (privateIdentifierInfo.placement === PrivateIdentifierPlacement.InstanceMethod) {
                 return privateIdentifierInfo.functionName;
+            }
+
+            if (privateIdentifierInfo.placement === PrivateIdentifierPlacement.InstanceAccessor) {
+                if (isGetAccessor(node)) {
+                    Debug.assert(privateIdentifierInfo.getterName);
+                    return privateIdentifierInfo.getterName;
+                }
+                if (isSetAccessor(node)) {
+                    Debug.assert(privateIdentifierInfo.setterName);
+                    return privateIdentifierInfo.setterName;
+                }
             }
 
             Debug.fail("Unexpected private identifier placement");
@@ -296,6 +314,13 @@ namespace ts {
                         getPrivateIdentifierEnvironment().weakSetName,
                         info.functionName
                     );
+                case PrivateIdentifierPlacement.InstanceAccessor: {
+                    return context.getEmitHelperFactory().createClassPrivateAccessorGetHelper(
+                        receiver,
+                        getPrivateIdentifierEnvironment().weakSetName,
+                        info.getterName! // TODO: TypeError is missing
+                    );
+                }
                 default: return Debug.fail("Unexpected private identifier placement");
             }
         }
@@ -500,6 +525,13 @@ namespace ts {
                 case PrivateIdentifierPlacement.InstanceMethod:
                     return context.getEmitHelperFactory().createClassPrivateReadonlyHelper(
                         receiver,
+                        right
+                    );
+                case PrivateIdentifierPlacement.InstanceAccessor:
+                    return context.getEmitHelperFactory().createClassPrivateAccessorSetHelper(
+                        receiver,
+                        getPrivateIdentifierEnvironment().weakSetName,
+                        info.setterName!, // TODO: TypeError if missing
                         right
                     );
                 default: return Debug.fail("Unexpected private identifier placement");
@@ -732,7 +764,10 @@ namespace ts {
                 properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
             }
 
-            const privateMethods = filter(getMethods(node, /*isStatic*/ false), method => isPrivateIdentifier(method.name));
+            const privateMethods = filter(
+                [...getMethods(node, /*isStatic*/ false), ...getAccessors(node, /*isStatic*/ false)],
+                method => isPrivateIdentifier(method.name)
+            );
             const needsConstructorBody = some(properties) || some(privateMethods);
 
             // Only generate synthetic constructor when there are property initializers to move.
@@ -928,7 +963,7 @@ namespace ts {
          * @param methods An array of method declarations.
          * @param receiver The receiver on which each method should be assigned.
          */
-        function addMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration)[], receiver: LeftHandSideExpression) {
+        function addMethodStatements(statements: Statement[], methods: readonly (MethodDeclaration | AccessorDeclaration)[], receiver: LeftHandSideExpression) {
             if (!shouldTransformPrivateElements || !some(methods)) {
                 return;
             }
@@ -1039,18 +1074,18 @@ namespace ts {
 
         function addPrivateIdentifierToEnvironment(node: PrivateClassElementDeclaration) {
             const text = getTextOfPropertyName(node.name) as string;
-            const uniqueVariableName = createHoistedVariableForPrivateName(text);
             let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
 
             if (isPropertyDeclaration(node)) {
+                const weakMapName = createHoistedVariableForPrivateName(text);
                 info = {
                     placement: PrivateIdentifierPlacement.InstanceField,
-                    weakMapName: uniqueVariableName
+                    weakMapName,
                 };
 
                 assignmentExpressions.push(factory.createAssignment(
-                    uniqueVariableName,
+                    weakMapName,
                     factory.createNewExpression(
                         factory.createIdentifier("WeakMap"),
                         /*typeArguments*/ undefined,
@@ -1061,8 +1096,24 @@ namespace ts {
             else if (isMethodDeclaration(node)) {
                 info = {
                     placement: PrivateIdentifierPlacement.InstanceMethod,
-                    functionName: uniqueVariableName
+                    functionName: createHoistedVariableForPrivateName(text)
                 };
+
+                getPrivateIdentifierEnvironment().hasPrivateMethods = true;
+            }
+            else if (isAccessor(node)) {
+                const previousInfo = findPreviousAccessorInfo(node);
+                info = {
+                    ...previousInfo,
+                    placement: PrivateIdentifierPlacement.InstanceAccessor,
+                };
+
+                if (isGetAccessor(node)) {
+                    info.getterName = createHoistedVariableForPrivateName(text + "_get");
+                }
+                else {
+                    info.setterName = createHoistedVariableForPrivateName(text + "_set");;
+                }
 
                 getPrivateIdentifierEnvironment().hasPrivateMethods = true;
             }
@@ -1072,6 +1123,13 @@ namespace ts {
 
             getPrivateIdentifierEnvironment().identifiers.set(node.name.escapedText, info);
             getPendingExpressions().push(...assignmentExpressions);
+        }
+
+        function findPreviousAccessorInfo(node: PrivateIdentifierGetAccessorDeclaration | PrivateIdentifierSetAccessorDeclaration): PrivateIdentifierInstanceAccessor | undefined {
+            const info = getPrivateIdentifierEnvironment().identifiers.get(node.name.escapedText);
+            if (info && info.placement === PrivateIdentifierPlacement.InstanceAccessor) {
+                return info;
+            }
         }
 
         function createHoistedVariableForClass(name: string): Identifier {

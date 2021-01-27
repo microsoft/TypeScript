@@ -36,6 +36,8 @@ namespace ts {
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
         createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
         createClassPrivateReadonlyHelper(receiver: Expression, value: Expression): Expression;
+        createClassPrivateAccessorGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
+        createClassPrivateAccessorSetHelper(receiver: Expression, instances: Identifier, fn: Identifier, value: Expression): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -76,6 +78,8 @@ namespace ts {
             createClassPrivateFieldSetHelper,
             createClassPrivateMethodGetHelper,
             createClassPrivateReadonlyHelper,
+            createClassPrivateAccessorGetHelper,
+            createClassPrivateAccessorSetHelper,
         };
 
         /**
@@ -392,6 +396,15 @@ namespace ts {
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateReadonly"), /*typeArguments*/ undefined, [receiver, value]);
         }
 
+        function createClassPrivateAccessorGetHelper(receiver: Expression, instances: Identifier, fn: Identifier) {
+            context.requestEmitHelper(classPrivateAccessorGetHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateAccessorGet"), /*typeArguments*/ undefined, [receiver, instances, fn]);
+        }
+
+        function createClassPrivateAccessorSetHelper(receiver: Expression, instances: Identifier, fn: Identifier, value: Expression) {
+            context.requestEmitHelper(classPrivateAccessorSetHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateAccessorSet"), /*typeArguments*/ undefined, [receiver, instances, fn, value]);
+        }
     }
 
     /* @internal */
@@ -882,6 +895,32 @@ namespace ts {
             };`
     };
 
+    export const classPrivateAccessorGetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateAccessorGet",
+        importName: "__classPrivateAccessorGet",
+        scoped: false,
+        text: `
+            var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
+                if (!instances.has(receiver)) {
+                    throw new TypeError("attempted to get private accessor on non-instance");
+                }
+                return fn.call(receiver);
+            };`
+    };
+
+    export const classPrivateAccessorSetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateAccessorSet",
+        importName: "__classPrivateAccessorSet",
+        scoped: false,
+        text: `
+            var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || function (receiver, instances, fn, value) {
+                if (!instances.has(receiver)) {
+                    throw new TypeError("attempted to set private accessor on non-instance");
+                }
+                return fn.call(receiver, value);
+            };`
+    };
+
     let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
 
     export function getAllUnscopedEmitHelpers() {
@@ -909,6 +948,8 @@ namespace ts {
             classPrivateFieldSetHelper,
             classPrivateMethodGetHelper,
             classPrivateReadonlyHelper,
+            classPrivateAccessorGetHelper,
+            classPrivateAccessorSetHelper,
             createBindingHelper,
             setModuleDefaultHelper
         ], helper => helper.name));

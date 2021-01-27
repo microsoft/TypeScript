@@ -347,10 +347,20 @@ namespace ts {
      * Gets all the static or all the instance method declarations of a class.
      *
      * @param node The class node.
-     * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
+     * @param isStatic A value indicating whether to get methods from the static or instance side of the class.
      */
     export function getMethods(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly MethodDeclaration[] {
         return filter(node.members, m => isStaticMethodDeclaration(m, isStatic)) as MethodDeclaration[];
+    }
+
+    /**
+     * Gets all the static or all the instance accessor declarations of a class.
+     *
+     * @param node The class node.
+     * @param isStatic A value indicating whether to get accessors from the static or instance side of the class.
+     */
+    export function getAccessors(node: ClassExpression | ClassDeclaration, isStatic: boolean): readonly AccessorDeclaration[] {
+        return filter(node.members, m => isStaticAccessorDeclaration(m, isStatic)) as AccessorDeclaration[];
     }
 
     /**
@@ -386,4 +396,13 @@ namespace ts {
         return isMethodDeclaration(member) && hasStaticModifier(member) === isStatic;
     }
 
+    /**
+     * Gets a value indicating whether a class element is either a static or an instance accessor declaration.
+     *
+     * @param member The class element node.
+     * @param isStatic A value indicating whether the member should be a static or instance member.
+     */
+    export function isStaticAccessorDeclaration(member: ClassElement, isStatic: boolean): member is AccessorDeclaration {
+        return isGetOrSetAccessorDeclaration(member) && hasStaticModifier(member) === isStatic;
+    }
 }
