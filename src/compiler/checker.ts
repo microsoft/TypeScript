@@ -13868,11 +13868,18 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
+        function instantiateTypeAsMappedNameType(nameType: Type, type: MappedType, t: Type) {
+            return instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t));
+        }
+
         function getIndexTypeForMappedType(type: MappedType, noIndexSignatures: boolean | undefined) {
             const constraint = filterType(getConstraintTypeFromMappedType(type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String)));
             const nameType = type.declaration.nameType && getTypeFromTypeNode(type.declaration.nameType);
+            // If the constraint is exclusively string/number/never type(s), we need to pull the property names from the modified type and run them through the `nameType` mapper as well
+            // since they won't appear in the constraint, due to subtype reducing with the string/number index types
+            const properties = nameType && everyType(constraint, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Never))) && getPropertiesOfType(getApparentType(getModifiersTypeFromMappedType(type)));
             return nameType ?
-                mapType(constraint, t => instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t))) :
+                getUnionType([mapType(constraint, t => instantiateTypeAsMappedNameType(nameType, type, t)), mapType(getUnionType(map(properties || emptyArray, p => getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique))), t => instantiateTypeAsMappedNameType(nameType, type, t))]):
                 constraint;
         }
 
