@@ -1,12 +1,13 @@
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(12,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(22,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(45,15): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(54,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(66,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(75,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(45,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(60,15): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(69,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(81,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(90,13): error TS2798: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts (6 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts (7 errors) ====
     class DerivedBasic extends Object {
         prop = 1;
         constructor() {
@@ -42,12 +43,29 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
         x: any;
         constructor() {
             // c1
-            console.log();
-            // c2
-            super();
+            console.log(); // c2
             // c3
-            this.x = null;
-            // c4
+            super(); // c4
+            // c5
+            this.x = null; // c6
+            // c7
+        }
+    }
+    
+    class DerivedCommentsInvalidThis extends Object {
+        x: any;
+        constructor() {
+            // c0
+            this;
+            ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            // c1
+            console.log(); // c2
+            // c3
+            super(); // c4
+            // c5
+            this.x = null; // c6
+            // c7
         }
     }
     

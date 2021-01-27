@@ -31,12 +31,27 @@ class DerivedComments extends Object {
     x: any;
     constructor() {
         // c1
-        console.log();
-        // c2
-        super();
+        console.log(); // c2
         // c3
-        this.x = null;
-        // c4
+        super(); // c4
+        // c5
+        this.x = null; // c6
+        // c7
+    }
+}
+
+class DerivedCommentsInvalidThis extends Object {
+    x: any;
+    constructor() {
+        // c0
+        this;
+        // c1
+        console.log(); // c2
+        // c3
+        super(); // c4
+        // c5
+        this.x = null; // c6
+        // c7
     }
 }
 

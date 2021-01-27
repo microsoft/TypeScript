@@ -1526,7 +1526,7 @@ namespace ts {
                 )
             );
             insertStatementAfterCustomPrologue(statements, assignSuperExpression);
-            setCommentRange(assignSuperExpression, getOriginalNode(superExpression));
+            setCommentRange(assignSuperExpression, getOriginalNode(superExpression).parent);
         }
 
         function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {

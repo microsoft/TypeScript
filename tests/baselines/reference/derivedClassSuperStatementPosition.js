@@ -30,12 +30,27 @@ class DerivedComments extends Object {
     x: any;
     constructor() {
         // c1
-        console.log();
-        // c2
-        super();
+        console.log(); // c2
         // c3
-        this.x = null;
-        // c4
+        super(); // c4
+        // c5
+        this.x = null; // c6
+        // c7
+    }
+}
+
+class DerivedCommentsInvalidThis extends Object {
+    x: any;
+    constructor() {
+        // c0
+        this;
+        // c1
+        console.log(); // c2
+        // c3
+        super(); // c4
+        // c5
+        this.x = null; // c6
+        // c7
     }
 }
 
@@ -138,15 +153,32 @@ var DerivedComments = /** @class */ (function (_super) {
     function DerivedComments() {
         var _this = this;
         // c1
-        console.log();
-        // c2
-        _this = _super.call(this) || this;
+        console.log(); // c2
         // c3
-        _this.x = null;
+        _this = _super.call(this) || this; // c4
+        // c5
+        _this.x = null; // c6
         return _this;
-        // c4
+        // c7
     }
     return DerivedComments;
+}(Object));
+var DerivedCommentsInvalidThis = /** @class */ (function (_super) {
+    __extends(DerivedCommentsInvalidThis, _super);
+    function DerivedCommentsInvalidThis() {
+        var _this = this;
+        // c0
+        _this;
+        // c1
+        console.log(); // c2
+        // c3
+        _this = _super.call(this) || this; // c4
+        // c5
+        _this.x = null; // c6
+        return _this;
+        // c7
+    }
+    return DerivedCommentsInvalidThis;
 }(Object));
 var DerivedInConditional = /** @class */ (function (_super) {
     __extends(DerivedInConditional, _super);
