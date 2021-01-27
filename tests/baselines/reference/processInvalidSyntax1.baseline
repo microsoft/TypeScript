@@ -1,0 +1,13 @@
+/*====== /tests/cases/fourslash/decl.js ======*/
+
+var RENAME = {};
+
+/*====== /tests/cases/fourslash/unicode.js ======*/
+
+RENAME.𝒜 ;
+
+/*====== /tests/cases/fourslash/forof.js ======*/
+
+for (RENAME.prop of arr) {
+
+}

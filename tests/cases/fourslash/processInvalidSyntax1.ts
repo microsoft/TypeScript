@@ -2,6 +2,12 @@
 
 // @allowJs: true
 
+// Test validates that language service getChildren() doesn't
+// crash due to invalid identifier in unicode.js.
+
+// @Filename: decl.js
+//// var obj = {};
+
 // @Filename: unicode.js
 //// obj.𝒜 ;
 
