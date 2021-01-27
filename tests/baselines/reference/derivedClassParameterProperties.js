@@ -172,7 +172,7 @@ var Derived6 = /** @class */ (function (_super) {
         var _this = this;
         _this.a = 1;
         var b = 2;
-        _this = _super.call(this) || this;
+        _this = _super.call(this) || this; // error: "super" has to be called before "this" accessing
         return _this;
     }
     return Derived6;

@@ -7532,6 +7532,7 @@ namespace ts {
                 function parseTagComments(indent: number, initialMargin?: string): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
+                    let previousWhitespace = true;
                     let margin: number | undefined;
                     function pushComment(text: string) {
                         if (!margin) {
@@ -7557,7 +7558,8 @@ namespace ts {
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
-                                if (state === JSDocState.SavingBackticks) {
+                                if (state === JSDocState.SavingBackticks || !previousWhitespace && state === JSDocState.SavingComments) {
+                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace
                                     comments.push(scanner.getTokenText());
                                     break;
                                 }
@@ -7614,6 +7616,7 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
+                        previousWhitespace = token() === SyntaxKind.WhitespaceTrivia;
                         tok = nextTokenJSDoc();
                     }
 
@@ -7688,13 +7691,14 @@ namespace ts {
                     skipWhitespaceOrAsterisk();
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
-                    skipWhitespace();
+                    const indentText = skipWhitespaceOrAsterisk();
 
                     if (isNameFirst) {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const comment = parseTagComments(indent + scanner.getStartPos() - start);
+                    const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+
                     const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
