@@ -326,7 +326,7 @@ namespace ts.Completions.StringCompletions {
         return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensions };
     }
     function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path, preferences: UserPreferences) {
-        const extensionOptions = getExtensionOptions(compilerOptions);
+        const extensionOptions = getExtensionOptions(compilerOptions, preferences.importModuleSpecifierEnding === "js");
         if (compilerOptions.rootDirs) {
             return getCompletionEntriesForDirectoryFragmentWithRootDirs(
                 compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
