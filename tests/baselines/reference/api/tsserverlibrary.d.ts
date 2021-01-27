@@ -9267,7 +9267,6 @@ declare namespace ts.server {
         private missingFilesMap;
         private generatedFilesMap;
         private plugins;
-        private lastFileExceededProgramSize;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
         readonly trace?: (s: string) => void;

@@ -855,6 +855,7 @@ namespace ts.Completions {
         host: LanguageServiceHost
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
 
         let start = timestamp();
         let currentToken = getTokenAtPosition(sourceFile, position); // TODO: GH#15853
@@ -1519,7 +1520,22 @@ namespace ts.Completions {
                         return false;
                     }
 
-                    symbol = skipAlias(symbol, typeChecker);
+                    // External modules can have global export declarations that will be
+                    // available as global keywords in all scopes. But if the external module
+                    // already has an explicit export and user only wants to user explicit
+                    // module imports then the global keywords will be filtered out so auto
+                    // import suggestions will win in the completion
+                    const symbolOrigin = skipAlias(symbol, typeChecker);
+                    // We only want to filter out the global keywords
+                    // Auto Imports are not available for scripts so this conditional is always false
+                    if (!!sourceFile.externalModuleIndicator
+                        && !compilerOptions.allowUmdGlobalAccess
+                        && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
+                        && symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions) {
+                        return false;
+                    }
+                    // Continue with origin symbol
+                    symbol = symbolOrigin;
 
                     // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
                     if (isInRightSideOfInternalImportEqualsDeclaration(location)) {

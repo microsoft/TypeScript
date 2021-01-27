@@ -2430,7 +2430,7 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -2441,6 +2441,8 @@ namespace ts {
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
             case SyntaxKind.CallExpression:
                 return node.arguments[0];
+            case SyntaxKind.ModuleDeclaration:
+                return node.name.kind === SyntaxKind.StringLiteral ? node.name : undefined;
             default:
                 return Debug.assertNever(node);
         }
@@ -4118,9 +4120,19 @@ namespace ts {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
+    function getCanonicalAbsolutePath(host: ResolveModuleNameResolutionHost, path: string) {
+        return host.getCanonicalFileName(getNormalizedAbsolutePath(path, host.getCurrentDirectory()));
+    }
+
     export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
+            return undefined;
+        }
+        // If the declaration already uses a non-relative name, and is outside the common source directory, continue to use it
+        const specifier = getExternalModuleName(declaration);
+        if (specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
+            getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1) {
             return undefined;
         }
         return getResolvedExternalModuleName(host, file);
@@ -4866,6 +4878,12 @@ namespace ts {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
             if (baseStr !== undefined) {
                 return baseStr + "." + entityNameToString(expr.name);
+            }
+        }
+        else if (isElementAccessExpression(expr)) {
+            const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
+            if (baseStr !== undefined && isPropertyName(expr.argumentExpression)) {
+                return baseStr + "." + getPropertyNameForPropertyNameNode(expr.argumentExpression);
             }
         }
         else if (isIdentifier(expr)) {
