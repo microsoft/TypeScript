@@ -13,7 +13,7 @@ type T = keyof A     // should not include '#foo*'
 
 //// [privateNamesAndkeyof.js]
 "use strict";
-var _A_fooField, _A_fooMethod, _A_fooProp, _A_fooProp_1, _A_instances;
+var _A_fooField, _A_fooMethod, _A_fooProp_get, _A_fooProp_set, _A_instances;
 class A {
     constructor() {
         _A_instances.add(this);
@@ -22,9 +22,7 @@ class A {
         this.baz = 3;
     }
     ;
-    get () { return 1; }
     ;
-    set (value) { }
     ;
 }
-_A_fooField = new WeakMap(), _A_instances = new WeakSet(), _A_fooMethod = function _A_fooMethod() { };
+_A_fooField = new WeakMap(), _A_instances = new WeakSet(), _A_fooMethod = function _A_fooMethod() { }, _A_fooProp_get = function _A_fooProp_get() { return 1; }, _A_fooProp_set = function _A_fooProp_set(value) { };

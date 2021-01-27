@@ -18,49 +18,31 @@ class A {
     getInstance() { return new A(); }
 }
 
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(10,14): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(11,27): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(13,18): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(15,14): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(16,28): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(17,26): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js(18,35): error TS1003: Identifier expected.
-
-
-==== tests/cases/conformance/classes/members/privateNames/privateNameAccessorsCallExpression.js (7 errors) ====
-    var _A_fieldFunc, _A_fieldFunc2;
-    class A {
-        constructor() {
-            this.x = 1;
-        }
-        get () { return function () { this.x = 10; }; }
-        get () { return function (a, ...b) { }; }
-        test() {
-            var _a;
-            this..call(this);
-                 ~
-!!! error TS1003: Identifier expected.
-            const func = this.;
-                              ~
-!!! error TS1003: Identifier expected.
-            func();
-            new this.();
-                     ~
-!!! error TS1003: Identifier expected.
-            const arr = [1, 2];
-            this..call(this, 0, ...arr, 3);
-                 ~
-!!! error TS1003: Identifier expected.
-            const b = new this.(0, ...arr, 3);
-                               ~
-!!! error TS1003: Identifier expected.
-            const str = this..bind(this) `head${1}middle${2}tail`;
-                             ~
-!!! error TS1003: Identifier expected.
-            (_a = this.getInstance())..bind(_a) `test${1}and${2}`;
-                                      ~
-!!! error TS1003: Identifier expected.
-        }
-        getInstance() { return new A(); }
+//// [privateNameAccessorsCallExpression.js]
+var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
+        throw new TypeError("attempted to get private accessor on non-instance");
     }
-    
+    return fn.call(receiver);
+};
+var _A_fieldFunc_get, _A_fieldFunc2_get, _A_instances;
+class A {
+    constructor() {
+        _A_instances.add(this);
+        this.x = 1;
+    }
+    test() {
+        var _a;
+        __classPrivateAccessorGet(this, _A_instances, _A_fieldFunc_get).call(this);
+        const func = __classPrivateAccessorGet(this, _A_instances, _A_fieldFunc_get);
+        func();
+        new (__classPrivateAccessorGet(this, _A_instances, _A_fieldFunc_get))();
+        const arr = [1, 2];
+        __classPrivateAccessorGet(this, _A_instances, _A_fieldFunc2_get).call(this, 0, ...arr, 3);
+        const b = new (__classPrivateAccessorGet(this, _A_instances, _A_fieldFunc2_get))(0, ...arr, 3);
+        const str = __classPrivateAccessorGet(this, _A_instances, _A_fieldFunc2_get).bind(this) `head${1}middle${2}tail`;
+        __classPrivateAccessorGet((_a = this.getInstance()), _A_instances, _A_fieldFunc2_get).bind(_a) `test${1}and${2}`;
+    }
+    getInstance() { return new A(); }
+}
+_A_instances = new WeakSet(), _A_fieldFunc_get = function _A_fieldFunc_get() { return function () { this.x = 10; }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };

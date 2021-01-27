@@ -57,7 +57,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var _A_foo, _A_bar, _A_baz, _A_qux, _A_fooMethod, _A_barMethod, _A_bazMethod, _A_quxMethod, _A_asyncMethod, _A_genMethod, _A_asyncGenMethod, _A_fooProp, _A_fooProp_1, _A_barProp, _A_barProp_1, _A_bazProp, _A_bazProp_1, _A_quxProp, _A_quxProp_1, _A_whatProp, _A_whatProp_1, _A_asyncProp, _A_asyncProp_1, _A_instances;
+var _A_foo, _A_bar, _A_baz, _A_qux, _A_fooMethod, _A_barMethod, _A_bazMethod, _A_quxMethod, _A_asyncMethod, _A_genMethod, _A_asyncGenMethod, _A_fooProp_get, _A_fooProp_set, _A_barProp_get, _A_barProp_set, _A_bazProp_get, _A_bazProp_set, _A_quxProp_get, _A_quxProp_set, _A_whatProp_get, _A_whatProp_set, _A_asyncProp_get, _A_asyncProp_set, _A_instances;
 class A {
     constructor() {
         _A_instances.add(this);
@@ -66,21 +66,13 @@ class A {
         _A_baz.set(this, 3); // Error
         _A_qux.set(this, 3); // OK
     }
-    get () { return 3; } // Error
-    set (value) { } // Error
-    get () { return 3; } // Error
-    set (value) { } // Error
-    get () { return 3; } // Error
-    set (value) { } // Error
-    get () { return 3; } // Error
-    set (value) { } // Error
-    get () { } // Error
-    set (value) { } // Error
-    get () { return 1; } // Error
-    set (value) { } // Error
 }
 _A_foo = new WeakMap(), _A_bar = new WeakMap(), _A_baz = new WeakMap(), _A_qux = new WeakMap(), _A_instances = new WeakSet(), _A_fooMethod = function _A_fooMethod() { return 3; }, _A_barMethod = function _A_barMethod() { return 3; }, _A_bazMethod = function _A_bazMethod() { return 3; }, _A_quxMethod = function _A_quxMethod() { return 3; }, _A_asyncMethod = function _A_asyncMethod() {
     return __awaiter(this, void 0, void 0, function* () { return 1; });
-}, _A_genMethod = function* _A_genMethod() { return 1; }, _A_asyncGenMethod = function _A_asyncGenMethod() { return __asyncGenerator(this, arguments, function* _A_asyncGenMethod_1() { return yield __await(1); }); };
+}, _A_genMethod = function* _A_genMethod() { return 1; }, _A_asyncGenMethod = function _A_asyncGenMethod() { return __asyncGenerator(this, arguments, function* _A_asyncGenMethod_1() { return yield __await(1); }); }, _A_fooProp_get = function _A_fooProp_get() { return 3; }, _A_fooProp_set = function _A_fooProp_set(value) { }, _A_barProp_get = function _A_barProp_get() { return 3; }, _A_barProp_set = function _A_barProp_set(value) { }, _A_bazProp_get = function _A_bazProp_get() { return 3; }, _A_bazProp_set = function _A_bazProp_set(value) { }, _A_quxProp_get = function _A_quxProp_get() { return 3; }, _A_quxProp_set = function _A_quxProp_set(value) { }, _A_whatProp_get = function _A_whatProp_get() { }, _A_whatProp_set = function _A_whatProp_set(value) { }, _A_asyncProp_get = function _A_asyncProp_get() {
+    return __awaiter(this, void 0, void 0, function* () { return 1; });
+}, _A_asyncProp_set = function _A_asyncProp_set(value) {
+    return __awaiter(this, void 0, void 0, function* () { });
+};
 class B {
 }

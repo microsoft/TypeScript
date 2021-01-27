@@ -48,25 +48,29 @@ var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function
     }
     return fn;
 };
-var _C_foo, _C_method, _C_prop, _C_prop_1, _C_instances;
+var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
+        throw new TypeError("attempted to get private accessor on non-instance");
+    }
+    return fn.call(receiver);
+};
+var _C_foo, _C_method, _C_prop_get, _C_prop_set, _C_instances;
 class C {
     constructor() {
         _C_instances.add(this);
         _C_foo.set(this, void 0);
     }
-    get () { return __classPrivateFieldGet(this, _C_foo); }
-    set (value) { __classPrivateFieldSet(this, _C_foo, value); }
     bar(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
     bar2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method).call(x); } // OK
-    bar3(x) { return x.; } // OK
+    bar3(x) { return __classPrivateAccessorGet(x, _C_instances, _C_prop_get); } // OK
     baz(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
     baz2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method); } // OK
-    baz3(x) { return x.; } // OK
+    baz3(x) { return __classPrivateAccessorGet(x, _C_instances, _C_prop_get); } // OK
     quux(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
     quux2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method); } // OK
-    quux3(x) { return x.; } // OK
+    quux3(x) { return __classPrivateAccessorGet(x, _C_instances, _C_prop_get); } // OK
 }
-_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_method = function _C_method() { return __classPrivateFieldGet(this, _C_foo); };
+_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_method = function _C_method() { return __classPrivateFieldGet(this, _C_foo); }, _C_prop_get = function _C_prop_get() { return __classPrivateFieldGet(this, _C_foo); }, _C_prop_set = function _C_prop_set(value) { __classPrivateFieldSet(this, _C_foo, value); };
 a.; // Error
 a.; // Error
 a.; // Error

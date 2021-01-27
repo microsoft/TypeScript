@@ -33,7 +33,13 @@ var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function
     }
     return fn;
 };
-var _A_foo, _A_bar, _A2_foo, _A2_bar, _A2_instances, _A3_foo, _A3_bar, _B_foo, _B_bar;
+var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
+    if (!instances.has(receiver)) {
+        throw new TypeError("attempted to get private accessor on non-instance");
+    }
+    return fn.call(receiver);
+};
+var _A_foo, _A_bar, _A2_foo, _A2_bar, _A2_instances, _A3_foo, _A3_bar_get, _A3_instances, _B_foo, _B_bar;
 class A {
     constructor() {
         _A_foo.set(this, __classPrivateFieldGet(this, _A_bar)); // Error
@@ -51,12 +57,12 @@ class A2 {
 _A2_foo = new WeakMap(), _A2_instances = new WeakSet(), _A2_bar = function _A2_bar() { return 3; };
 class A3 {
     constructor() {
-        _A3_foo.set(this, this.); // No Error
+        _A3_instances.add(this);
+        _A3_foo.set(this, __classPrivateAccessorGet(this, _A3_instances, _A3_bar_get)); // No Error
     }
-    get () { return 3; }
     ;
 }
-_A3_foo = new WeakMap();
+_A3_foo = new WeakMap(), _A3_instances = new WeakSet(), _A3_bar_get = function _A3_bar_get() { return 3; };
 class B {
     constructor() {
         _B_foo.set(this, __classPrivateFieldGet(this, _B_bar)); // Error
