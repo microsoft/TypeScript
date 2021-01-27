@@ -74,7 +74,8 @@ namespace ts.performance {
         if (enabled) {
             const end = (endMarkName !== undefined ? marks.get(endMarkName) : undefined) ?? timestamp();
             const start = (startMarkName !== undefined ? marks.get(startMarkName) : undefined) ?? timeorigin;
-            durations.set(measureName, end - start);
+            const previousDuration = durations.get(measureName) || 0;
+            durations.set(measureName, previousDuration + (end - start));
             performanceImpl?.measure(measureName, startMarkName, endMarkName);
         }
     }
