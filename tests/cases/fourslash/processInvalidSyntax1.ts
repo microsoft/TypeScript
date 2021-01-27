@@ -8,8 +8,14 @@
 // @Filename: decl.js
 //// var obj = {};
 
-// @Filename: unicode.js
+// @Filename: unicode1.js
 //// obj.𝒜 ;
+
+// @Filename: unicode2.js
+//// obj.¬ ;
+
+// @Filename: unicode3.js
+//// obj¬
 
 // @Filename: forof.js
 //// for (obj/**/.prop of arr) {
