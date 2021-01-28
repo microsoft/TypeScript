@@ -41037,7 +41037,12 @@ namespace ts {
                 if (sourceProperties) {
                     const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
                     if (sourcePropertiesFiltered) {
-                        return discriminateTypeByDiscriminableItems(<UnionType>target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo, /*defaultValue*/ undefined, skipPartial);
+                        return discriminateTypeByDiscriminableItems(
+                            <UnionType>target,
+                            map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName])),
+                            isRelatedTo, /*defaultValue*/ undefined,
+                            skipPartial
+                        );
                     }
                 }
             }
