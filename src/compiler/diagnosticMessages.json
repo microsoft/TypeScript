@@ -6342,5 +6342,9 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof {0}' with '{0}'.": {
+        "category": "Error",
+        "code": 18036
     }
 }

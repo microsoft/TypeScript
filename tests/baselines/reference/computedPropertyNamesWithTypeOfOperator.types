@@ -1,0 +1,35 @@
+=== tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts ===
+interface SymbolConstructor {
+  observable: symbol;
+>observable : symbol
+}
+
+type Observer<T> = (x: T) => void;
+>Observer : Observer<T>
+>x : T
+
+interface Observable<T> {
+  subscribe(observer: Observer<T>): { unsubscribe(): void }
+>subscribe : (observer: Observer<T>) => {    unsubscribe(): void;}
+>observer : Observer<T>
+>unsubscribe : () => void
+}
+
+declare function from1<T>(obj: { [typeof Symbol.observable](): Observable<T> }): Observable<T>;
+>from1 : <T>(obj: {    [typeof Symbol.observable](): Observable<T>;}) => Observable<T>
+>obj : {}
+>[typeof Symbol.observable] : () => Observable<T>
+>typeof Symbol.observable : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>Symbol.observable : any
+>Symbol : any
+>observable : any
+
+//                               ^^^^^^ Look at this use of 'typeof'.
+declare function from2<T>(obj: { [Symbol.observable](): Observable<T> }): Observable<T>;
+>from2 : <T>(obj: {    [Symbol.observable](): Observable<T>;}) => Observable<T>
+>obj : { [Symbol.observable](): Observable<T>; }
+>[Symbol.observable] : () => Observable<T>
+>Symbol.observable : any
+>Symbol : any
+>observable : any
+

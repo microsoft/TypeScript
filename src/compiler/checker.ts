@@ -40365,9 +40365,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
+        function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage, ...args: any[]) {
             if (isNonBindableDynamicName(node)) {
-                return grammarErrorOnNode(node, message);
+                return grammarErrorOnNode(node, message, ...args);
             }
         }
 
@@ -40414,6 +40414,9 @@ namespace ts {
                 return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
+                if (node.name.kind === SyntaxKind.ComputedPropertyName && node.name.expression.kind === SyntaxKind.TypeOfExpression) {
+                    return checkGrammarForInvalidDynamicName(node.name, Diagnostics.Computed_property_names_can_only_be_named_with_well_known_symbols_without_the_typeof_operator_Try_replacing_typeof_0_with_0, (node.name.expression as TypeOfExpression).expression);
+                }
                 return checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type);
             }
         }

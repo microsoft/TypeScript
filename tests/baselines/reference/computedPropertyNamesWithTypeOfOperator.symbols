@@ -1,0 +1,47 @@
+=== tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts ===
+interface SymbolConstructor {
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 0))
+
+  observable: symbol;
+>observable : Symbol(SymbolConstructor.observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 29))
+}
+
+type Observer<T> = (x: T) => void;
+>Observer : Symbol(Observer, Decl(computedPropertyNamesWithTypeOfOperator.ts, 2, 1))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 14))
+>x : Symbol(x, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 20))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 14))
+
+interface Observable<T> {
+>Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 6, 21))
+
+  subscribe(observer: Observer<T>): { unsubscribe(): void }
+>subscribe : Symbol(Observable.subscribe, Decl(computedPropertyNamesWithTypeOfOperator.ts, 6, 25))
+>observer : Symbol(observer, Decl(computedPropertyNamesWithTypeOfOperator.ts, 7, 12))
+>Observer : Symbol(Observer, Decl(computedPropertyNamesWithTypeOfOperator.ts, 2, 1))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 6, 21))
+>unsubscribe : Symbol(unsubscribe, Decl(computedPropertyNamesWithTypeOfOperator.ts, 7, 37))
+}
+
+declare function from1<T>(obj: { [typeof Symbol.observable](): Observable<T> }): Observable<T>;
+>from1 : Symbol(from1, Decl(computedPropertyNamesWithTypeOfOperator.ts, 8, 1))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 23))
+>obj : Symbol(obj, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 26))
+>[typeof Symbol.observable] : Symbol([typeof Symbol.observable], Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 32))
+>Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 23))
+>Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 23))
+
+//                               ^^^^^^ Look at this use of 'typeof'.
+declare function from2<T>(obj: { [Symbol.observable](): Observable<T> }): Observable<T>;
+>from2 : Symbol(from2, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 95))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 23))
+>obj : Symbol(obj, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 26))
+>[Symbol.observable] : Symbol([Symbol.observable], Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 32))
+>Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 23))
+>Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
+>T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 23))
+
