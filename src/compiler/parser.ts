@@ -5879,6 +5879,7 @@ namespace ts {
                         return nextTokenIsIdentifierOrStringLiteralOnSameLine();
                     case SyntaxKind.AbstractKeyword:
                     case SyntaxKind.AsyncKeyword:
+                    case SyntaxKind.BitFlagskeyword:
                     case SyntaxKind.DeclareKeyword:
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
@@ -5956,6 +5957,7 @@ namespace ts {
                 case SyntaxKind.ImportKeyword:
                     return isStartOfDeclaration() || lookAhead(nextTokenIsOpenParenOrLessThanOrDot);
 
+                case SyntaxKind.BitFlagskeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
                     return isStartOfDeclaration();
@@ -6048,6 +6050,7 @@ namespace ts {
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.BitFlagskeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ExportKeyword:

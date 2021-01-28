@@ -4767,6 +4767,7 @@ namespace ts {
             case SyntaxKind.AbstractKeyword: return ModifierFlags.Abstract;
             case SyntaxKind.ExportKeyword: return ModifierFlags.Export;
             case SyntaxKind.DeclareKeyword: return ModifierFlags.Ambient;
+            case SyntaxKind.BitFlagskeyword: return ModifierFlags.BitFlags;
             case SyntaxKind.ConstKeyword: return ModifierFlags.Const;
             case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;

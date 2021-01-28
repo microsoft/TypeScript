@@ -1139,10 +1139,11 @@ namespace ts {
     // Keywords
 
     /* @internal */
-    export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
+    export function isModifierKind(token: SyntaxKind): token is ModifierSyntaxKind {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.AsyncKeyword:
+            case SyntaxKind.BitFlagskeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.DefaultKeyword:

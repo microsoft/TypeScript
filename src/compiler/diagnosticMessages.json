@@ -2625,6 +2625,10 @@
         "category": "Error",
         "code": 2622
     },
+    "Bit operation is only allowed for enum with 'bitflags' modifier": {
+        "category": "Error",
+        "code": 2623
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",

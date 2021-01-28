@@ -109,6 +109,7 @@ namespace ts {
         Identifier,
         PrivateIdentifier,
         // Reserved words
+        BitFlagskeyword,
         BreakKeyword,
         CaseKeyword,
         CatchKeyword,
@@ -539,6 +540,7 @@ namespace ts {
         | SyntaxKind.AsyncKeyword
         | SyntaxKind.AwaitKeyword
         | SyntaxKind.BigIntKeyword
+        | SyntaxKind.BitFlagskeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
         | SyntaxKind.CaseKeyword
@@ -614,6 +616,7 @@ namespace ts {
     export type ModifierSyntaxKind =
         | SyntaxKind.AbstractKeyword
         | SyntaxKind.AsyncKeyword
+        | SyntaxKind.BitFlagskeyword
         | SyntaxKind.ConstKeyword
         | SyntaxKind.DeclareKeyword
         | SyntaxKind.DefaultKeyword
@@ -794,6 +797,7 @@ namespace ts {
         Abstract =           1 << 7,  // Class/Method/ConstructSignature
         Async =              1 << 8,  // Property/Method/Function
         Default =            1 << 9,  // Function/Class (export default declaration)
+        BitFlags =           1 << 10, // BitFlags enum
         Const =              1 << 11, // Const enum
         HasComputedJSDocModifiers = 1 << 12, // Indicates the computed modifier flags include modifiers from JSDoc.
 
@@ -805,9 +809,9 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | BitFlags,
         ExportDefault = Export | Default,
-        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated
+        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | BitFlags | Const | Deprecated
     }
 
     export const enum JsxFlags {
@@ -1019,6 +1023,7 @@ namespace ts {
 
     export type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
     export type AsyncKeyword = ModifierToken<SyntaxKind.AsyncKeyword>;
+    export type BitFlagskeyword = ModifierToken<SyntaxKind.BitFlagskeyword>;
     export type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
     export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
     export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
@@ -1035,6 +1040,7 @@ namespace ts {
     export type Modifier =
         | AbstractKeyword
         | AsyncKeyword
+        | BitFlagskeyword
         | ConstKeyword
         | DeclareKeyword
         | DefaultKeyword
@@ -4629,32 +4635,34 @@ namespace ts {
         Function                = 1 << 4,   // Function
         Class                   = 1 << 5,   // Class
         Interface               = 1 << 6,   // Interface
-        ConstEnum               = 1 << 7,   // Const enum
-        RegularEnum             = 1 << 8,   // Enum
-        ValueModule             = 1 << 9,   // Instantiated module
-        NamespaceModule         = 1 << 10,  // Uninstantiated module
-        TypeLiteral             = 1 << 11,  // Type Literal or mapped type
-        ObjectLiteral           = 1 << 12,  // Object Literal
-        Method                  = 1 << 13,  // Method
-        Constructor             = 1 << 14,  // Constructor
-        GetAccessor             = 1 << 15,  // Get accessor
-        SetAccessor             = 1 << 16,  // Set accessor
-        Signature               = 1 << 17,  // Call, construct, or index signature
-        TypeParameter           = 1 << 18,  // Type parameter
-        TypeAlias               = 1 << 19,  // Type alias
-        ExportValue             = 1 << 20,  // Exported value marker (see comment in declareModuleMember in binder)
-        Alias                   = 1 << 21,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
-        Prototype               = 1 << 22,  // Prototype property (no source representation)
-        ExportStar              = 1 << 23,  // Export * declaration
-        Optional                = 1 << 24,  // Optional property
-        Transient               = 1 << 25,  // Transient symbol (created during type check)
-        Assignment              = 1 << 26,  // Assignment treated as declaration (eg `this.prop = 1`)
-        ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
+        BitFlagsEnum            = 1 << 7,   // Bitflags enum
+        ConstEnum               = 1 << 8,   // Const enum
+        RegularEnum             = 1 << 9,   // Enum
+        ValueModule             = 1 << 10,   // Instantiated module
+        NamespaceModule         = 1 << 11,  // Uninstantiated module
+        TypeLiteral             = 1 << 12,  // Type Literal or mapped type
+        ObjectLiteral           = 1 << 13,  // Object Literal
+        Method                  = 1 << 14,  // Method
+        Constructor             = 1 << 15,  // Constructor
+        GetAccessor             = 1 << 16,  // Get accessor
+        SetAccessor             = 1 << 17,  // Set accessor
+        Signature               = 1 << 18,  // Call, construct, or index signature
+        TypeParameter           = 1 << 19,  // Type parameter
+        TypeAlias               = 1 << 20,  // Type alias
+        ExportValue             = 1 << 21,  // Exported value marker (see comment in declareModuleMember in binder)
+        Alias                   = 1 << 22,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
+        Prototype               = 1 << 23,  // Prototype property (no source representation)
+        ExportStar              = 1 << 24,  // Export * declaration
+        Optional                = 1 << 25,  // Optional property
+        Transient               = 1 << 26,  // Transient symbol (created during type check)
+        Assignment              = 1 << 27,  // Assignment treated as declaration (eg `this.prop = 1`)
+        ModuleExports           = 1 << 28,  // Symbol for CommonJS `module` of `module.exports`
+
         /* @internal */
-        All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
+        All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | BitFlagsEnum | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
             | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
 
-        Enum = RegularEnum | ConstEnum,
+        Enum = RegularEnum | ConstEnum | BitFlagsEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
         Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias,

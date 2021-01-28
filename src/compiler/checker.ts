@@ -6651,7 +6651,9 @@ namespace ts {
                 function serializeEnum(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
                     addResult(factory.createEnumDeclaration(
                         /*decorators*/ undefined,
-                        factory.createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
+                        factory.createModifiersFromModifierFlags(isConstEnumSymbol(symbol) && isBitflagsEnumSymbol(symbol) ? ModifierFlags.Const | ModifierFlags.BitFlags :
+                            isConstEnumSymbol(symbol) ? ModifierFlags.Const :
+                            isBitflagsEnumSymbol(symbol) ? ModifierFlags.BitFlags : 0),
                         getInternalSymbolName(symbol, symbolName),
                         map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
                             // TODO: Handle computed names
@@ -9582,6 +9584,10 @@ namespace ts {
                         for (const member of (<EnumDeclaration>declaration).members) {
                             const value = getEnumMemberValue(member);
                             const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
+                            // if(hasEffectiveModifier(declaration, ModifierFlags.BitFlags)){
+                            //     // Should we add falgs here? What is fresh type and regular type? Should we change their typeFlags too?
+                            //     memberType.flags |= TypeFlags
+                            // }
                             getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
                             memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                         }
@@ -30021,6 +30027,10 @@ namespace ts {
             return (symbol.flags & SymbolFlags.ConstEnum) !== 0;
         }
 
+        function isBitflagsEnumSymbol(symbol: Symbol): boolean {
+            return (symbol.flags & SymbolFlags.BitFlagsEnum) !== 0;
+        }
+
         function checkInstanceOfExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             if (leftType === silentNeverType || rightType === silentNeverType) {
                 return silentNeverType;
@@ -30497,6 +30507,33 @@ namespace ts {
                         }
                         if (leftOk && rightOk) {
                             checkAssignmentOperator(resultType);
+                        }
+
+                        // try check bitflags enum.
+                        if (leftType.flags & TypeFlags.EnumLike || rightType.flags & TypeFlags.EnumLike) {
+                            const isBitFlagEnumType = (t: Type) => {
+                                let enumDeclaration = t?.symbol?.valueDeclaration;
+                                if(enumDeclaration?.kind !==SyntaxKind.EnumDeclaration){
+                                    enumDeclaration = enumDeclaration?.parent;
+                                }
+                                return enumDeclaration ? hasEffectiveModifier(enumDeclaration, ModifierFlags.BitFlags) : false;
+                            };
+                            // only check when operator is bit operator.
+                            switch (operator) {
+                                case SyntaxKind.BarToken:
+                                case SyntaxKind.BarEqualsToken:
+                                case SyntaxKind.CaretToken:
+                                case SyntaxKind.CaretEqualsToken:
+                                case SyntaxKind.AmpersandToken:
+                                case SyntaxKind.AmpersandEqualsToken:
+                                    if (isBitFlagEnumType(leftType) || isBitFlagEnumType(rightType)) {
+                                        // which condition is more proper? OR or AND?
+                                        // could we give back a accurate return type?
+                                    } else {
+                                        error(errorNode || operatorToken, Diagnostics.Bit_operation_is_only_allowed_for_enum_with_bitflags_modifier);
+                                    }
+                                    break;
+                            }
                         }
                         return resultType;
                     }
