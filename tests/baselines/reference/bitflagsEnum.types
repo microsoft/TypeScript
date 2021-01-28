@@ -1,0 +1,69 @@
+=== tests/cases/compiler/bitflagsEnum.ts ===
+bitflags enum BitEnum {
+>BitEnum : BitEnum
+
+    TS = 3,
+>TS : BitEnum.TS
+>3 : 3
+
+    TSX = 4,
+>TSX : BitEnum.TSX
+>4 : 4
+}
+
+var q = BitEnum.TS;
+>q : BitEnum
+>BitEnum.TS : BitEnum.TS
+>BitEnum : typeof BitEnum
+>TS : BitEnum.TS
+
+var w = BitEnum.TSX;
+>w : BitEnum
+>BitEnum.TSX : BitEnum.TSX
+>BitEnum : typeof BitEnum
+>TSX : BitEnum.TSX
+
+var e = "123" | w;
+>e : number
+>"123" | w : number
+>"123" : "123"
+>w : BitEnum.TSX
+
+q |= 2;
+>q |= 2 : number
+>q : BitEnum
+>2 : 2
+
+enum NormalEnum{
+>NormalEnum : NormalEnum
+
+    Black,
+>Black : NormalEnum.Black
+
+    White
+>White : NormalEnum.White
+}
+
+var q1 = NormalEnum.Black;
+>q1 : NormalEnum
+>NormalEnum.Black : NormalEnum.Black
+>NormalEnum : typeof NormalEnum
+>Black : NormalEnum.Black
+
+var w1 = NormalEnum.White;
+>w1 : NormalEnum
+>NormalEnum.White : NormalEnum.White
+>NormalEnum : typeof NormalEnum
+>White : NormalEnum.White
+
+var e1 = "123" | w1;
+>e1 : number
+>"123" | w1 : number
+>"123" : "123"
+>w1 : NormalEnum.White
+
+q1 |= 2;
+>q1 |= 2 : number
+>q1 : NormalEnum
+>2 : 2
+

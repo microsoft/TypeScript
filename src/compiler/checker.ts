@@ -30512,8 +30512,8 @@ namespace ts {
                         // try check bitflags enum.
                         if (leftType.flags & TypeFlags.EnumLike || rightType.flags & TypeFlags.EnumLike) {
                             const isBitFlagEnumType = (t: Type) => {
-                                let enumDeclaration = t?.symbol?.valueDeclaration;
-                                if(enumDeclaration?.kind !==SyntaxKind.EnumDeclaration){
+                                let enumDeclaration: Node = t?.symbol?.valueDeclaration;
+                                if (enumDeclaration?.kind !== SyntaxKind.EnumDeclaration) {
                                     enumDeclaration = enumDeclaration?.parent;
                                 }
                                 return enumDeclaration ? hasEffectiveModifier(enumDeclaration, ModifierFlags.BitFlags) : false;
@@ -30529,7 +30529,8 @@ namespace ts {
                                     if (isBitFlagEnumType(leftType) || isBitFlagEnumType(rightType)) {
                                         // which condition is more proper? OR or AND?
                                         // could we give back a accurate return type?
-                                    } else {
+                                    }
+                                    else {
                                         error(errorNode || operatorToken, Diagnostics.Bit_operation_is_only_allowed_for_enum_with_bitflags_modifier);
                                     }
                                     break;

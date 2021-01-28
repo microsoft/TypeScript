@@ -1,0 +1,59 @@
+=== tests/cases/compiler/bitflagsEnum.ts ===
+bitflags enum BitEnum {
+>BitEnum : Symbol(BitEnum, Decl(bitflagsEnum.ts, 0, 0))
+
+    TS = 3,
+>TS : Symbol(BitEnum.TS, Decl(bitflagsEnum.ts, 0, 23))
+
+    TSX = 4,
+>TSX : Symbol(BitEnum.TSX, Decl(bitflagsEnum.ts, 1, 11))
+}
+
+var q = BitEnum.TS;
+>q : Symbol(q, Decl(bitflagsEnum.ts, 5, 3))
+>BitEnum.TS : Symbol(BitEnum.TS, Decl(bitflagsEnum.ts, 0, 23))
+>BitEnum : Symbol(BitEnum, Decl(bitflagsEnum.ts, 0, 0))
+>TS : Symbol(BitEnum.TS, Decl(bitflagsEnum.ts, 0, 23))
+
+var w = BitEnum.TSX;
+>w : Symbol(w, Decl(bitflagsEnum.ts, 6, 3))
+>BitEnum.TSX : Symbol(BitEnum.TSX, Decl(bitflagsEnum.ts, 1, 11))
+>BitEnum : Symbol(BitEnum, Decl(bitflagsEnum.ts, 0, 0))
+>TSX : Symbol(BitEnum.TSX, Decl(bitflagsEnum.ts, 1, 11))
+
+var e = "123" | w;
+>e : Symbol(e, Decl(bitflagsEnum.ts, 7, 3))
+>w : Symbol(w, Decl(bitflagsEnum.ts, 6, 3))
+
+q |= 2;
+>q : Symbol(q, Decl(bitflagsEnum.ts, 5, 3))
+
+enum NormalEnum{
+>NormalEnum : Symbol(NormalEnum, Decl(bitflagsEnum.ts, 8, 7))
+
+    Black,
+>Black : Symbol(NormalEnum.Black, Decl(bitflagsEnum.ts, 10, 16))
+
+    White
+>White : Symbol(NormalEnum.White, Decl(bitflagsEnum.ts, 11, 10))
+}
+
+var q1 = NormalEnum.Black;
+>q1 : Symbol(q1, Decl(bitflagsEnum.ts, 15, 3))
+>NormalEnum.Black : Symbol(NormalEnum.Black, Decl(bitflagsEnum.ts, 10, 16))
+>NormalEnum : Symbol(NormalEnum, Decl(bitflagsEnum.ts, 8, 7))
+>Black : Symbol(NormalEnum.Black, Decl(bitflagsEnum.ts, 10, 16))
+
+var w1 = NormalEnum.White;
+>w1 : Symbol(w1, Decl(bitflagsEnum.ts, 16, 3))
+>NormalEnum.White : Symbol(NormalEnum.White, Decl(bitflagsEnum.ts, 11, 10))
+>NormalEnum : Symbol(NormalEnum, Decl(bitflagsEnum.ts, 8, 7))
+>White : Symbol(NormalEnum.White, Decl(bitflagsEnum.ts, 11, 10))
+
+var e1 = "123" | w1;
+>e1 : Symbol(e1, Decl(bitflagsEnum.ts, 17, 3))
+>w1 : Symbol(w1, Decl(bitflagsEnum.ts, 16, 3))
+
+q1 |= 2;
+>q1 : Symbol(q1, Decl(bitflagsEnum.ts, 15, 3))
+

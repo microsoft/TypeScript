@@ -1,0 +1,35 @@
+tests/cases/compiler/bitflagsEnum.ts(8,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/bitflagsEnum.ts(18,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/bitflagsEnum.ts(18,10): error TS2623: Bit operation is only allowed for enum with 'bitflags' modifier
+tests/cases/compiler/bitflagsEnum.ts(19,1): error TS2623: Bit operation is only allowed for enum with 'bitflags' modifier
+
+
+==== tests/cases/compiler/bitflagsEnum.ts (4 errors) ====
+    bitflags enum BitEnum {
+        TS = 3,
+        TSX = 4,
+    }
+    
+    var q = BitEnum.TS;
+    var w = BitEnum.TSX;
+    var e = "123" | w;
+            ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    q |= 2;
+    
+    enum NormalEnum{
+        Black,
+        White
+    }
+    
+    var q1 = NormalEnum.Black;
+    var w1 = NormalEnum.White;
+    var e1 = "123" | w1;
+             ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+             ~~~~~~~~~~
+!!! error TS2623: Bit operation is only allowed for enum with 'bitflags' modifier
+    q1 |= 2;
+    ~~~~~~~
+!!! error TS2623: Bit operation is only allowed for enum with 'bitflags' modifier
+    
