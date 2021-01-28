@@ -965,6 +965,7 @@ namespace ts {
             classPrivateFieldSetHelper,
             classPrivateMethodGetHelper,
             classPrivateReadonlyHelper,
+            classPrivateWriteonlyHelper,
             classPrivateAccessorGetHelper,
             classPrivateAccessorSetHelper,
             createBindingHelper,
