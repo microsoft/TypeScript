@@ -24752,6 +24752,8 @@ namespace ts {
                     const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
                     return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent, contextFlags);
                 }
+                case SyntaxKind.NonNullExpression:
+                    return getContextualType(parent as NonNullExpression, contextFlags);
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
                 case SyntaxKind.JsxAttribute:
