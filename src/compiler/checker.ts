@@ -21289,8 +21289,12 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     return isAccessExpression(target) &&
-                        getAccessedPropertyName(<AccessExpression>source) === getAccessedPropertyName(target) &&
-                        isMatchingReference((<AccessExpression>source).expression, target.expression);
+                        getAccessedPropertyName(source as AccessExpression) === getAccessedPropertyName(target) &&
+                        isMatchingReference((source as AccessExpression).expression, target.expression);
+                case SyntaxKind.QualifiedName:
+                    return isAccessExpression(target) &&
+                        (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
+                        isMatchingReference((source as QualifiedName).left, target.expression);
                 case SyntaxKind.BinaryExpression:
                     return (isBinaryExpression(source) && source.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source.right, target));
             }
@@ -26419,8 +26423,7 @@ namespace ts {
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
-            if (!isAccessExpression(node) ||
-                assignmentKind === AssignmentKind.Definite ||
+            if (assignmentKind === AssignmentKind.Definite ||
                 prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
@@ -26432,7 +26435,7 @@ namespace ts {
             // and if we are in a constructor of the same class as the property declaration, assume that
             // the property is uninitialized at the top of the control flow.
             let assumeUninitialized = false;
-            if (strictNullChecks && strictPropertyInitialization && node.expression.kind === SyntaxKind.ThisKeyword) {
+            if (strictNullChecks && strictPropertyInitialization && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
                 const declaration = prop && prop.valueDeclaration;
                 if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
                     const flowContainer = getControlFlowContainer(node);
