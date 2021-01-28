@@ -112,20 +112,20 @@ namespace ts.GoToDefinition {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { reference: referencePath, fileName: file.fileName };
+            return file && { reference: referencePath, fileName: file.fileName, file };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { reference: typeReferenceDirective, fileName: file.fileName };
+            return file && { reference: typeReferenceDirective, fileName: file.fileName, file };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { reference: libReferenceDirective, fileName: file.fileName };
+            return file && { reference: libReferenceDirective, fileName: file.fileName, file };
         }
 
         if (sourceFile.resolvedModules?.size) {
