@@ -4183,7 +4183,8 @@ namespace ts {
                         return {
                             accessibility: SymbolAccessibility.CannotBeNamed,
                             errorSymbolName: symbolToString(symbol, enclosingDeclaration, meaning),
-                            errorModuleName: symbolToString(symbolExternalModule)
+                            errorModuleName: symbolToString(symbolExternalModule),
+                            errorNode: isInJSFile(enclosingDeclaration) ? enclosingDeclaration : undefined,
                         };
                     }
                 }
@@ -4699,7 +4700,7 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyKeyword | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
                     const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>factory.createToken(type.declaration.questionToken.kind) : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
@@ -6183,7 +6184,7 @@ namespace ts {
                     tracker: {
                         ...oldcontext.tracker,
                         trackSymbol: (sym, decl, meaning) => {
-                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
+                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeAliases*/ false);
                             if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                                 // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
                                 const chain = lookupSymbolChainWorker(sym, context, meaning);
@@ -6625,16 +6626,17 @@ namespace ts {
                 function addResult(node: Statement, additionalModifierFlags: ModifierFlags) {
                     if (canHaveModifiers(node)) {
                         let newModifierFlags: ModifierFlags = ModifierFlags.None;
+                        const enclosingDeclaration = context.enclosingDeclaration &&
+                            (isJSDocTypeAlias(context.enclosingDeclaration) ? getSourceFileOfNode(context.enclosingDeclaration) : context.enclosingDeclaration);
                         if (additionalModifierFlags & ModifierFlags.Export &&
-                            context.enclosingDeclaration &&
-                            (isExportingScope(context.enclosingDeclaration) || isModuleDeclaration(context.enclosingDeclaration)) &&
+                            enclosingDeclaration && (isExportingScope(enclosingDeclaration) || isModuleDeclaration(enclosingDeclaration)) &&
                             canHaveExportModifier(node)
                         ) {
                             // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
                             newModifierFlags |= ModifierFlags.Export;
                         }
                         if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) &&
-                            (!context.enclosingDeclaration || !(context.enclosingDeclaration.flags & NodeFlags.Ambient)) &&
+                            (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) &&
                             (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
                             // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
                             newModifierFlags |= ModifierFlags.Ambient;
@@ -6657,6 +6659,8 @@ namespace ts {
                     const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
                     const oldFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
+                    const oldEnclosingDecl = context.enclosingDeclaration;
+                    context.enclosingDeclaration = jsdocAliasDecl;
                     const typeNode = jsdocAliasDecl && jsdocAliasDecl.typeExpression
                         && isJSDocTypeExpression(jsdocAliasDecl.typeExpression)
                         && serializeExistingTypeNode(context, jsdocAliasDecl.typeExpression.type, includePrivateSymbol, bundled)
@@ -6666,6 +6670,7 @@ namespace ts {
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
                     ), modifierFlags);
                     context.flags = oldFlags;
+                    context.enclosingDeclaration = oldEnclosingDecl;
                 }
 
                 function serializeInterface(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
