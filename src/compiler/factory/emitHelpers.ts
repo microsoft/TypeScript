@@ -36,6 +36,7 @@ namespace ts {
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
         createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
         createClassPrivateReadonlyHelper(receiver: Expression, value: Expression): Expression;
+        createClassPrivateWriteonlyHelper(receiver: Expression): Expression;
         createClassPrivateAccessorGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
         createClassPrivateAccessorSetHelper(receiver: Expression, instances: Identifier, fn: Identifier, value: Expression): Expression;
     }
@@ -78,6 +79,7 @@ namespace ts {
             createClassPrivateFieldSetHelper,
             createClassPrivateMethodGetHelper,
             createClassPrivateReadonlyHelper,
+            createClassPrivateWriteonlyHelper,
             createClassPrivateAccessorGetHelper,
             createClassPrivateAccessorSetHelper,
         };
@@ -394,6 +396,11 @@ namespace ts {
         function createClassPrivateReadonlyHelper(receiver: Expression, value: Expression) {
             context.requestEmitHelper(classPrivateReadonlyHelper);
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateReadonly"), /*typeArguments*/ undefined, [receiver, value]);
+        }
+
+        function createClassPrivateWriteonlyHelper(receiver: Expression) {
+            context.requestEmitHelper(classPrivateWriteonlyHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateWriteonly"), /*typeArguments*/ undefined, [receiver]);
         }
 
         function createClassPrivateAccessorGetHelper(receiver: Expression, instances: Identifier, fn: Identifier) {
@@ -892,6 +899,16 @@ namespace ts {
         text: `
             var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
                 throw new TypeError("private element is not writable");
+            };`
+    };
+
+    export const classPrivateWriteonlyHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateWriteonly",
+        importName: "__classPrivateWriteonly",
+        scoped: false,
+        text: `
+            var __classPrivateWriteonly = (this && this.__classPrivateWriteonly) || function () {
+                throw new TypeError("private element was defined without a getter");
             };`
     };
 
