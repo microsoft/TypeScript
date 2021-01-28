@@ -22,7 +22,7 @@ module.exports = BaseFactory;
  * @callback BaseFactoryFactory
  * @param {import('./base')} factory
  */
-/** @enum {import('./base')} BaseFactoryFactoryRegistry */
+/** @enum {import('./base')} */
 const couldntThinkOfAny = {}
 
 /**

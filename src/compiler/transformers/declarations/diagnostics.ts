@@ -128,7 +128,7 @@ namespace ts {
         }
     }
 
-    export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
+    export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): GetSymbolAccessibilityDiagnostic {
         if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
             return getVariableDeclarationTypeVisibilityError;
         }
@@ -478,11 +478,13 @@ namespace ts {
             };
         }
 
-        function getTypeAliasDeclarationVisibilityError(): SymbolAccessibilityDiagnostic {
+        function getTypeAliasDeclarationVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
             return {
-                diagnosticMessage: Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
-                errorNode: (node as TypeAliasDeclaration).type,
-                typeName: (node as TypeAliasDeclaration).name
+                diagnosticMessage: symbolAccessibilityResult.errorModuleName
+                    ? Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1_from_module_2
+                    : Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
+                errorNode: isJSDocTypeAlias(node) ? Debug.checkDefined(node.typeExpression) : (node as TypeAliasDeclaration).type,
+                typeName: isJSDocTypeAlias(node) ? getNameOfDeclaration(node) : (node as TypeAliasDeclaration).name,
             };
         }
     }
