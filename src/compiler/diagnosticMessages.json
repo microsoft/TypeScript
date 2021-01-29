@@ -6346,5 +6346,9 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
+        "category": "Error",
+        "code": 18036
     }
 }
