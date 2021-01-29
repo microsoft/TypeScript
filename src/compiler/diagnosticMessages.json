@@ -875,7 +875,10 @@
         "category": "Error",
         "code": 1264
     },
-
+    "'bitflags' modifier can only be used with enum declaration": {
+        "category": "Error",
+        "code": 1265
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -4696,7 +4699,10 @@
         "category": "Error",
         "code": 6238
     },
-
+    "Enable strict bit checking for enum.": {
+        "category": "Message",
+        "code": 6239
+    },
     "Projects to reference": {
         "category": "Message",
         "code": 6300

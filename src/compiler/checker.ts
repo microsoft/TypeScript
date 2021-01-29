@@ -30510,8 +30510,9 @@ namespace ts {
                         }
 
                         // try check bitflags enum.
-                        if (leftType.flags & TypeFlags.EnumLike || rightType.flags & TypeFlags.EnumLike) {
+                        if (compilerOptions.bitEnum && (leftType.flags & TypeFlags.EnumLike || rightType.flags & TypeFlags.EnumLike)) {
                             const isBitFlagEnumType = (t: Type) => {
+                                // or use `isBitflagsEnumSymbol(t?.symbol)`, which way is better?
                                 let enumDeclaration: Node = t?.symbol?.valueDeclaration;
                                 if (enumDeclaration?.kind !== SyntaxKind.EnumDeclaration) {
                                     enumDeclaration = enumDeclaration?.parent;
@@ -39096,6 +39097,11 @@ namespace ts {
                     }
                 }
                 switch (modifier.kind) {
+                    case SyntaxKind.BitFlagskeyword:
+                        if (node.kind !== SyntaxKind.EnumDeclaration) {
+                            return grammarErrorOnNode(node, Diagnostics.bitflags_modifier_can_only_be_used_with_enum_declaration);
+                        }
+                        break;
                     case SyntaxKind.ConstKeyword:
                         if (node.kind !== SyntaxKind.EnumDeclaration) {
                             return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));

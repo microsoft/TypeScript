@@ -3277,6 +3277,7 @@ namespace ts.server.protocol {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
         baseUrl?: string;
+        bitEnum?: boolean;
         charset?: string;
         checkJs?: boolean;
         declaration?: boolean;

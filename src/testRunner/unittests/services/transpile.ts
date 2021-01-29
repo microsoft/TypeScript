@@ -235,6 +235,10 @@ var x = 0;`, {
             options: { compilerOptions: { baseUrl: "./folder/baseUrl" }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'bitEnum'", "x;", {
+            options: { compilerOptions: { bitEnum: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'charset'", "x;", {
             options: { compilerOptions: { charset: "en-us" }, fileName: "input.js", reportDiagnostics: true }
         });

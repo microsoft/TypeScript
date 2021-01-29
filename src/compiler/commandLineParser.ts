@@ -855,7 +855,12 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Include_modules_imported_with_json_extension
         },
-
+        {
+            name: "bitEnum",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Enable_strict_bit_checking_for_enum
+        },
         {
             name: "out",
             type: "string",
