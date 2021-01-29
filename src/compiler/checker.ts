@@ -25079,8 +25079,9 @@ namespace ts {
             if (forceTuple || inConstContext || contextualType && forEachType(contextualType, isTupleLikeType)) {
                 return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
             }
+            const reduction = !contextualType || checkMode && checkMode & CheckMode.Inferential ? UnionReduction.Subtype : UnionReduction.Literal;
             return createArrayLiteralType(createArrayType(elementTypes.length ?
-                getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
+                getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), reduction) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
