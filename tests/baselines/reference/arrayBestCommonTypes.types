@@ -231,7 +231,7 @@ module EmptyTypes {
 >t1 : { x: number; y: base; }[]
 >x : number
 >y : base
->[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: derived; }[]
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : ({ x: number; y: derived; } | { x: number; y: base; })[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
 >7 : 7
@@ -267,7 +267,7 @@ module EmptyTypes {
 >t3 : { x: string; y: base; }[]
 >x : string
 >y : base
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: derived; }[]
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >x : undefined
 >undefined : undefined
@@ -627,7 +627,7 @@ module NonEmptyTypes {
 >t1 : { x: number; y: base; }[]
 >x : number
 >y : base
->[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : ({ x: number; y: derived; } | { x: number; y: base; })[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
 >7 : 7

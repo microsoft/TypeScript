@@ -8,7 +8,7 @@ const a0: ValueOrArray<number> = 1;
 
 const a1: ValueOrArray<number> = [1, [2, 3], [4, [5, [6, 7]]]];
 >a1 : ValueOrArray<number>
->[1, [2, 3], [4, [5, [6, 7]]]] : (number | (number | (number | number[])[])[])[]
+>[1, [2, 3], [4, [5, [6, 7]]]] : (number | number[] | (number | (number | number[])[])[])[]
 >1 : 1
 >[2, 3] : number[]
 >2 : 2
@@ -538,7 +538,7 @@ function cons(hs: HTMLHeadingElement[]): Tree {
 >concat(hss, [hs, [h]]) : any
 >concat : any
 >hss : HTMLHeadingElement[][]
->[hs, [h]] : HTMLHeadingElement[][]
+>[hs, [h]] : (HTMLHeadingElement[] | HTMLHeadingElement[])[]
 >hs : HTMLHeadingElement[]
 >[h] : HTMLHeadingElement[]
 >h : HTMLHeadingElement
