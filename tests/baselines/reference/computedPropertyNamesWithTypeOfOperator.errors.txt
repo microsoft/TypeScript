@@ -1,4 +1,4 @@
-tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(11,34): error TS1167: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof [object Object]' with '[object Object]'.
+tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(11,34): error TS1167: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof Symbol.observable' with 'Symbol.observable'.
 
 
 ==== tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts (1 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(11,34): error TS
     
     declare function from1<T>(obj: { [typeof Symbol.observable](): Observable<T> }): Observable<T>;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1167: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof [object Object]' with '[object Object]'.
+!!! error TS1167: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof Symbol.observable' with 'Symbol.observable'.
     //                               ^^^^^^ Look at this use of 'typeof'.
     declare function from2<T>(obj: { [Symbol.observable](): Observable<T> }): Observable<T>;
     
