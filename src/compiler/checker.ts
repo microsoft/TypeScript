@@ -36324,7 +36324,7 @@ namespace ts {
                         else {
                             // where should we report this error? on the whole initializer or more accurate?
                             if (!isAllOperatorBitwiseOrShiftOperator(node.initializer)) {
-                                error(node, Diagnostics.An_enum_member_initializer_can_only_use_bitwise_operator_in_bitflags_enum);
+                                error(node, Diagnostics.An_enum_member_initializer_can_only_use_bitwise_or_shift_operator_in_bitflags_enum);
                             }
                         }
                     }
@@ -36355,7 +36355,7 @@ namespace ts {
                 return result;
             }
 
-            function isAllOperatorBitwiseOrShiftOperator(initializer: BinaryExpression):boolean {
+            function isAllOperatorBitwiseOrShiftOperator(initializer: BinaryExpression): boolean {
                 const leftRes = isBinaryExpression(initializer.left) ? isAllOperatorBitwiseOrShiftOperator(initializer.left) : true;
                 const rightRes = isBinaryExpression(initializer.right) ? isAllOperatorBitwiseOrShiftOperator(initializer.right) : true;
                 const operatorRes = isBitwiseOrShiftOperator(initializer.operatorToken.kind);
