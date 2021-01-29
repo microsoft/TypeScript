@@ -20,16 +20,16 @@ declare function from1<T>(obj: { [typeof Symbol.observable](): Observable<T> }):
 >obj : {}
 >[typeof Symbol.observable] : () => Observable<T>
 >typeof Symbol.observable : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->Symbol.observable : any
->Symbol : any
->observable : any
+>Symbol.observable : symbol
+>Symbol : SymbolConstructor
+>observable : symbol
 
 //                               ^^^^^^ Look at this use of 'typeof'.
 declare function from2<T>(obj: { [Symbol.observable](): Observable<T> }): Observable<T>;
 >from2 : <T>(obj: {    [Symbol.observable](): Observable<T>;}) => Observable<T>
 >obj : { [Symbol.observable](): Observable<T>; }
 >[Symbol.observable] : () => Observable<T>
->Symbol.observable : any
->Symbol : any
->observable : any
+>Symbol.observable : symbol
+>Symbol : SymbolConstructor
+>observable : symbol
 

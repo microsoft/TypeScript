@@ -1,6 +1,6 @@
 === tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts ===
 interface SymbolConstructor {
->SymbolConstructor : Symbol(SymbolConstructor, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 0))
+>SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.symbol.d.ts, --, --), Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 0))
 
   observable: symbol;
 >observable : Symbol(SymbolConstructor.observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 29))
@@ -29,6 +29,9 @@ declare function from1<T>(obj: { [typeof Symbol.observable](): Observable<T> }):
 >T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 23))
 >obj : Symbol(obj, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 26))
 >[typeof Symbol.observable] : Symbol([typeof Symbol.observable], Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 32))
+>Symbol.observable : Symbol(SymbolConstructor.observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 29))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>observable : Symbol(SymbolConstructor.observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 29))
 >Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
 >T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 10, 23))
 >Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
@@ -40,6 +43,9 @@ declare function from2<T>(obj: { [Symbol.observable](): Observable<T> }): Observ
 >T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 23))
 >obj : Symbol(obj, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 26))
 >[Symbol.observable] : Symbol([Symbol.observable], Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 32))
+>Symbol.observable : Symbol(SymbolConstructor.observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 29))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>observable : Symbol(SymbolConstructor.observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 0, 29))
 >Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))
 >T : Symbol(T, Decl(computedPropertyNamesWithTypeOfOperator.ts, 12, 23))
 >Observable : Symbol(Observable, Decl(computedPropertyNamesWithTypeOfOperator.ts, 4, 34))

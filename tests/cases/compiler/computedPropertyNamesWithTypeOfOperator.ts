@@ -1,3 +1,5 @@
+// @lib: es5, es2015.symbol
+
 interface SymbolConstructor {
   observable: symbol;
 }
