@@ -182,7 +182,25 @@ namespace ts.formatting {
 
                 if (useActualIndentation) {
                     // check if current node is a list item - if yes, take indentation from it
-                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, !parentAndChildShareLine);
+                    const firstListChild = getContainingList(current, sourceFile)?.[0];
+                    // A list indents its children if the children begin on a later line than the list itself:
+                    //
+                    // f1(               L0 - List start
+                    //   {               L1 - First child start: indented, along with all other children
+                    //     prop: 0
+                    //   },
+                    //   {
+                    //     prop: 1
+                    //   }
+                    // )
+                    //
+                    // f2({             L0 - List start and first child start: children are not indented.
+                    //   prop: 0             Object properties are indented only one level, because the list
+                    // }, {                  itself contributes nothing.
+                    //   prop: 1        L3 - The indentation of the second object literal is best understood by
+                    // })                    looking at the relationship between the list and *first* list item.
+                    const listIndentsChild = !!firstListChild && getStartLineAndCharacterForNode(firstListChild, sourceFile).line > containingListOrParentStart.line;
+                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, listIndentsChild);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
