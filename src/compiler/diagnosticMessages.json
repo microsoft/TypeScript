@@ -507,6 +507,10 @@
         "category": "Error",
         "code": 1166
     },
+    "Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof {0}' with '{0}'.": {
+        "category": "Error",
+        "code": 1167
+    },
     "A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1168
@@ -6342,9 +6346,5 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
-    },
-    "Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof {0}' with '{0}'.": {
-        "category": "Error",
-        "code": 18036
     }
 }

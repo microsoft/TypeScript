@@ -1,4 +1,4 @@
-tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(11,34): error TS18036: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof [object Object]' with '[object Object]'.
+tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(11,34): error TS1167: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof [object Object]' with '[object Object]'.
 tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(11,42): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(13,35): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 
@@ -16,7 +16,7 @@ tests/cases/compiler/computedPropertyNamesWithTypeOfOperator.ts(13,35): error TS
     
     declare function from1<T>(obj: { [typeof Symbol.observable](): Observable<T> }): Observable<T>;
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS18036: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof [object Object]' with '[object Object]'.
+!!! error TS1167: Computed property names can only be named with well-known symbols without the 'typeof' operator. Try replacing 'typeof [object Object]' with '[object Object]'.
                                              ~~~~~~
 !!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
     //                               ^^^^^^ Look at this use of 'typeof'.
