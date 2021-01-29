@@ -6298,7 +6298,7 @@
         "category": "Error",
         "code": 18037
     },
-    "An enum member initializer can only use bitwise operator in bitflags enum.": {
+    "An enum member initializer can only use bitwise or shift operator in bitflags enum.": {
         "category": "Error",
         "code": 18038
     }
