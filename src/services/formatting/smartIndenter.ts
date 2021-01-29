@@ -341,6 +341,49 @@ namespace ts.formatting {
             return false;
         }
 
+        // A multiline conditional typically increases the indentation of its whenTrue and whenFalse children:
+        //
+        // condition
+        //   ? whenTrue
+        //   : whenFalse;
+        //
+        // However, that indentation does not apply if the subexpressions themselves span multiple lines,
+        // applying their own indentation:
+        //
+        // (() => {
+        //   return complexCalculationForCondition();
+        // })() ? {
+        //   whenTrue: 'multiline object literal'
+        // } : (
+        //   whenFalse('multiline parenthesized expression')
+        // );
+        //
+        // In these cases, we must discard the indentation increase that would otherwise be applied to the
+        // whenTrue and whenFalse children to avoid double-indenting their contents. To identify this scenario,
+        // we check for the whenTrue branch beginning on the line that the condition ends, and the whenFalse
+        // branch beginning on the line that the whenTrue branch ends.
+        export function childIsUnindentedBranchOfConditionalExpression(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+            if (isConditionalExpression(parent) && (child === parent.whenTrue || child === parent.whenFalse)) {
+                const conditionEndLine = getLineAndCharacterOfPosition(sourceFile, parent.condition.end).line;
+                if (child === parent.whenTrue) {
+                    return childStartLine === conditionEndLine;
+                }
+                else {
+                    // On the whenFalse side, we have to look at the whenTrue side, because if that one was
+                    // indented, whenFalse must also be indented:
+                    //
+                    // const y = true
+                    //   ? 1 : (          L1: whenTrue indented because it's on a new line
+                    //     0              L2: indented two stops, one because whenTrue was indented
+                    //   );                   and one because of the parentheses spanning multiple lines
+                    const trueStartLine = getStartLineAndCharacterForNode(parent.whenTrue, sourceFile).line;
+                    const trueEndLine = getLineAndCharacterOfPosition(sourceFile, parent.whenTrue.end).line;
+                    return conditionEndLine === trueStartLine && trueEndLine === childStartLine;
+                }
+            }
+            return false;
+        }
+
         export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
             if (isCallOrNewExpression(parent)) {
                 if (!parent.arguments) return false;
