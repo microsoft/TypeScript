@@ -1,26 +1,26 @@
 === tests/cases/compiler/file1.ts ===
 import b1 = require('./b.json');
->b1 : { [x: number]: number; }
+>b1 : { [x: string]: number; }
 
 let x = b1;
->x : { [x: number]: number; }
->b1 : { [x: number]: number; }
+>x : { [x: string]: number; }
+>b1 : { [x: string]: number; }
 
 import b2 = require('./b.json');
->b2 : { [x: number]: number; }
+>b2 : { [x: string]: number; }
 
 if (x) {
->x : { [x: number]: number; }
+>x : { [x: string]: number; }
 
     x = b2;
->x = b2 : { [x: number]: number; }
->x : { [x: number]: number; }
->b2 : { [x: number]: number; }
+>x = b2 : { [x: string]: number; }
+>x : { [x: string]: number; }
+>b2 : { [x: string]: number; }
 }
 
 === tests/cases/compiler/b.json ===
 {
->{    [a]: 10} : { [x: number]: number; }
+>{    [a]: 10} : { [x: string]: number; }
 
     [a]: 10
 >[a] : number

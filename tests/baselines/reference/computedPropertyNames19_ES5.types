@@ -3,8 +3,8 @@ module M {
 >M : typeof M
 
     var obj = {
->obj : { [x: number]: number; }
->{        [this.bar]: 0    } : { [x: number]: number; }
+>obj : { [x: string]: number; }
+>{        [this.bar]: 0    } : { [x: string]: number; }
 
         [this.bar]: 0
 >[this.bar] : number

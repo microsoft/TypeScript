@@ -2308,12 +2308,6 @@ namespace ts {
         ;
 
     /** @internal */
-    export interface WellKnownSymbolExpression extends PropertyAccessExpression {
-        readonly expression: Identifier & { readonly escapedText: __String & "Symbol" };
-        readonly name: Identifier;
-    }
-
-    /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & {
         readonly arguments: readonly [BindableStaticNameExpression, StringLiteralLike | NumericLiteral, ObjectLiteralExpression] & Readonly<TextRange>;
     };
@@ -2326,7 +2320,7 @@ namespace ts {
 
     /** @internal */
     export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
-        readonly argumentExpression: StringLiteralLike | NumericLiteral | WellKnownSymbolExpression;
+        readonly argumentExpression: StringLiteralLike | NumericLiteral;
     };
 
     /** @internal */

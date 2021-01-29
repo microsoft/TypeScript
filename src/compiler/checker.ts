@@ -898,6 +898,7 @@ namespace ts {
         // This allows users to just specify library files they want to used through --lib
         // and they will not get an error from not having unrelated library files
         let deferredGlobalESSymbolConstructorSymbol: Symbol | undefined;
+        let deferredGlobalESSymbolConstructorTypeSymbol: Symbol | undefined;
         let deferredGlobalESSymbolType: ObjectType;
         let deferredGlobalTypedPropertyDescriptorType: GenericType;
         let deferredGlobalPromiseType: GenericType;
@@ -3677,11 +3678,25 @@ namespace ts {
                 const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
                 const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
                 const objectLiteralContainer = getVariableDeclarationOfObjectLiteral(container, meaning);
-                if (enclosingDeclaration && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
+                if (enclosingDeclaration && container.flags & getQualifiedLeftMeaning(meaning) && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
                     return append(concatenate(concatenate([container], additionalContainers), reexportContainers), objectLiteralContainer); // This order expresses a preference for the real container if it is in scope
                 }
+                // we potentially a symbol which is a member of the instance side of something - look for a variable in scope with the container's type
+                // which may be acting like a namespace
+                const firstVariableMatch = !(container.flags & getQualifiedLeftMeaning(meaning))
+                    && container.flags & SymbolFlags.Type
+                    && getDeclaredTypeOfSymbol(container).flags & TypeFlags.Object
+                    && meaning === SymbolFlags.Value
+                ? forEachSymbolTableInScope(enclosingDeclaration, t => {
+                    return forEachEntry(t, s => {
+                        if (s.flags & getQualifiedLeftMeaning(meaning) && getTypeOfSymbol(s) === getDeclaredTypeOfSymbol(container)) {
+                            return s;
+                        }
+                    });
+                }) : undefined;
                 const res = append(append(additionalContainers, container), objectLiteralContainer);
-                return concatenate(res, reexportContainers);
+                const resWithReexports = concatenate(res, reexportContainers);
+                return firstVariableMatch ? [firstVariableMatch, ...resWithReexports] : resWithReexports;
             }
             const candidates = mapDefined(symbol.declarations, d => {
                 if (!isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
@@ -5104,8 +5119,9 @@ namespace ts {
                         }
                     }
                 }
-                context.enclosingDeclaration = saveEnclosingDeclaration;
+                context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
                 const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
+                context.enclosingDeclaration = saveEnclosingDeclaration;
                 context.approximateLength += (symbolName(propertySymbol).length + 1);
                 const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
                 if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
@@ -5848,9 +5864,6 @@ namespace ts {
                 const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote);
                 if (fromNameType) {
                     return fromNameType;
-                }
-                if (isKnownSymbol(symbol)) {
-                    return factory.createComputedPropertyName(factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
                 }
                 const rawName = unescapeLeadingUnderscores(symbol.escapedName);
                 const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
@@ -8704,8 +8717,18 @@ namespace ts {
             return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true), declaration, reportErrors);
         }
 
+        function isGlobalSymbolConstructor(node: Node) {
+            const symbol = getSymbolOfNode(node);
+            const globalSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
+            return globalSymbol && symbol && symbol === globalSymbol;
+        }
+
         function widenTypeForVariableLikeDeclaration(type: Type | undefined, declaration: any, reportErrors?: boolean) {
             if (type) {
+                // TODO: Remove the following SymbolConstructor special case when back compat with pre-3.0 libs isn't required
+                if (type.flags & TypeFlags.ESSymbol && isGlobalSymbolConstructor(declaration.parent)) {
+                    type = getESSymbolLikeTypeForNode(declaration);
+                }
                 if (reportErrors) {
                     reportErrorsFromWidening(declaration, type);
                 }
@@ -12835,6 +12858,10 @@ namespace ts {
             return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
         }
 
+        function getGlobalESSymbolConstructorTypeSymbol(reportErrors: boolean) {
+            return deferredGlobalESSymbolConstructorTypeSymbol || (deferredGlobalESSymbolConstructorTypeSymbol = getGlobalTypeSymbol("SymbolConstructor" as __String, reportErrors));
+        }
+
         function getGlobalESSymbolType(reportErrors: boolean) {
             return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
@@ -13919,13 +13946,13 @@ namespace ts {
         function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getSymbolLinks(getLateBoundSymbol(prop)).nameType;
-                if (!type && !isKnownSymbol(prop)) {
+                if (!type) {
                     if (prop.escapedName === InternalSymbolName.Default) {
                         type = getLiteralType("default");
                     }
                     else {
                         const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
-                        type = name && getLiteralTypeFromPropertyName(name) || getLiteralType(symbolName(prop));
+                        type = name && getLiteralTypeFromPropertyName(name) || (!isKnownSymbol(prop) ? getLiteralType(symbolName(prop)) : undefined);
                     }
                 }
                 if (type && type.flags & include) {
@@ -14153,11 +14180,8 @@ namespace ts {
         }
 
         function getPropertyNameFromIndex(indexType: Type, accessNode: StringLiteral | Identifier | PrivateIdentifier | ObjectBindingPattern | ArrayBindingPattern | ComputedPropertyName | NumericLiteral | IndexedAccessTypeNode | ElementAccessExpression | SyntheticExpression | undefined) {
-            const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             return isTypeUsableAsPropertyName(indexType) ?
                 getPropertyNameFromType(indexType) :
-                accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
-                    getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
                     accessNode && isPropertyName(accessNode) ?
                         // late bound names are handled in the first branch, so here we only need to handle normal names
                         getPropertyNameForPropertyNameNode(accessNode) :
@@ -25151,9 +25175,6 @@ namespace ts {
                     !isTypeAssignableTo(links.resolvedType, stringNumberSymbolType)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
-                else {
-                    checkThatExpressionIsProperSymbolReference(node.expression, links.resolvedType, /*reportError*/ true);
-                }
             }
 
             return links.resolvedType;
@@ -25214,7 +25235,7 @@ namespace ts {
             // As otherwise they may not be checked until exports for the type at this position are retrieved,
             // which may never occur.
             for (const elem of node.properties) {
-                if (elem.name && isComputedPropertyName(elem.name) && !isWellKnownSymbolSyntactically(elem.name)) {
+                if (elem.name && isComputedPropertyName(elem.name)) {
                     checkComputedPropertyName(elem.name);
                 }
             }
@@ -25222,7 +25243,7 @@ namespace ts {
             let offset = 0;
             for (const memberDecl of node.properties) {
                 let member = getSymbolOfNode(memberDecl);
-                const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically(memberDecl.name.expression) ?
+                const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName ?
                     checkComputedPropertyName(memberDecl.name) : undefined;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
@@ -25321,7 +25342,10 @@ namespace ts {
                 }
 
                 if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
-                    if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
+                    if (isTypeAny(computedNameType)) {
+                        hasComputedStringProperty = true; // string is the closest to a catch-all index signature we have
+                    }
+                    else if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
                         if (isTypeAssignableTo(computedNameType, numberType)) {
                             hasComputedNumberProperty = true;
                         }
@@ -26877,48 +26901,6 @@ namespace ts {
                 AccessFlags.None;
             const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, /*noUncheckedIndexedAccessCandidate*/ undefined, node, accessFlags | AccessFlags.ExpressionPosition) || errorType;
             return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, indexedAccessType.symbol, indexedAccessType, indexExpression), node);
-        }
-
-        function checkThatExpressionIsProperSymbolReference(expression: Expression, expressionType: Type, reportError: boolean): boolean {
-            if (expressionType === errorType) {
-                // There is already an error, so no need to report one.
-                return false;
-            }
-
-            if (!isWellKnownSymbolSyntactically(expression)) {
-                return false;
-            }
-
-            // Make sure the property type is the primitive symbol type
-            if ((expressionType.flags & TypeFlags.ESSymbolLike) === 0) {
-                if (reportError) {
-                    error(expression, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(expression));
-                }
-                return false;
-            }
-
-            // The name is Symbol.<someName>, so make sure Symbol actually resolves to the
-            // global Symbol object
-            const leftHandSide = <Identifier>(<PropertyAccessExpression>expression).expression;
-            const leftHandSideSymbol = getResolvedSymbol(leftHandSide);
-            if (!leftHandSideSymbol) {
-                return false;
-            }
-
-            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ true);
-            if (!globalESSymbol) {
-                // Already errored when we tried to look up the symbol
-                return false;
-            }
-
-            if (leftHandSideSymbol !== globalESSymbol) {
-                if (reportError) {
-                    error(leftHandSide, Diagnostics.Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object);
-                }
-                return false;
-            }
-
-            return true;
         }
 
         function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
@@ -35196,6 +35178,12 @@ namespace ts {
                 const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
                 return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(yieldType, returnType, nextType));
             }
+        }
+
+        function getPropertyNameForKnownSymbolName(symbolName: string): __String {
+            const ctorType = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
+            const uniqueType = ctorType && getTypeOfPropertyOfType(getTypeOfSymbol(ctorType), escapeLeadingUnderscores(symbolName));
+            return uniqueType && isTypeUsableAsPropertyName(uniqueType) ? getPropertyNameFromType(uniqueType) : `__@${symbolName}` as __String;
         }
 
         /**
