@@ -35,16 +35,22 @@ const optional = <T>(x: OptionalGenericMap<T>) => x
 
 const withinConstraint = <T extends Constraint>(foo: T['foo']) => {
 >withinConstraint : <T extends Constraint>(foo: T["foo"]) => void
-><T extends Constraint>(foo: T['foo']) => {	required<T>({ foo }) // no error as { foo: T['foo'] } <: GenericMap<T>	optional<T>({}) // no error as {} <: OptionalGenericMap<T>	optional<T>({ foo }) // no error as { foo: T['foo'] } <: OptionalGenericMap<T>} : <T extends Constraint>(foo: T["foo"]) => void
+><T extends Constraint>(foo: T['foo']) => {	required<Constraint>({ foo }) // no error as { foo: T['foo'] } <: GenericMap<Constraint>	required<T>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<T> because other properties may be missing	optional<T>({}) // no error as {} <: OptionalGenericMap<Constraint>	optional<T>({ foo }) // no error as { foo: T['foo'] } <: OptionalGenericMap<T>} : <T extends Constraint>(foo: T["foo"]) => void
 >foo : T["foo"]
 
-	required<T>({ foo }) // no error as { foo: T['foo'] } <: GenericMap<T>
+	required<Constraint>({ foo }) // no error as { foo: T['foo'] } <: GenericMap<Constraint>
+>required<Constraint>({ foo }) : GenericMap<Constraint>
+>required : <T>(x: GenericMap<T>) => GenericMap<T>
+>{ foo } : { foo: T["foo"]; }
+>foo : T["foo"]
+
+	required<T>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<T> because other properties may be missing
 >required<T>({ foo }) : GenericMap<T>
 >required : <T>(x: GenericMap<T>) => GenericMap<T>
 >{ foo } : { foo: T["foo"]; }
 >foo : T["foo"]
 
-	optional<T>({}) // no error as {} <: OptionalGenericMap<T>
+	optional<T>({}) // no error as {} <: OptionalGenericMap<Constraint>
 >optional<T>({}) : OptionalGenericMap<T>
 >optional : <T>(x: OptionalGenericMap<T>) => OptionalGenericMap<T>
 >{} : {}
@@ -58,23 +64,30 @@ const withinConstraint = <T extends Constraint>(foo: T['foo']) => {
 
 const withinExtendedConstraint = <T extends ExtendedConstraint>(foo: T['foo'], bar: T['bar']) => {
 >withinExtendedConstraint : <T extends ExtendedConstraint>(foo: T["foo"], bar: T["bar"]) => void
-><T extends ExtendedConstraint>(foo: T['foo'], bar: T['bar']) => {	required<T>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<T> because bar is missing	required<T>({ bar }) // error as { bar: T['bar'] } /<: GenericMap<T> because foo is missing	required<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: GenericMap<T>	optional<T>({}) // no error as {} <: OptionalGenericMap<T>	optional<T>({ foo }) // no error as { foo: T['foo'] } <: OptionalGenericMap<T>	optional<T>({ bar }) // no error as { bar: T['bar'] } <: OptionalGenericMap<T>	optional<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>} : <T extends ExtendedConstraint>(foo: T["foo"], bar: T["bar"]) => void
+><T extends ExtendedConstraint>(foo: T['foo'], bar: T['bar']) => {	required<ExtendedConstraint>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<ExtendedConstraint> because bar is missing	required<ExtendedConstraint>({ bar }) // error as { bar: T['bar'] } /<: GenericMap<ExtendedConstraint> because foo is missing	required<ExtendedConstraint>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: GenericMap<ExtendedConstraint>	required<T>({ foo, bar }) // error as { foo: T['foo'], bar: T['bar'] } /<: GenericMap<T> because other properties may be missing	optional<T>({}) // no error as {} <: OptionalGenericMap<T>	optional<T>({ foo }) // no error as { foo: T['foo'] } <: OptionalGenericMap<T>	optional<T>({ bar }) // no error as { bar: T['bar'] } <: OptionalGenericMap<T>	optional<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>} : <T extends ExtendedConstraint>(foo: T["foo"], bar: T["bar"]) => void
 >foo : T["foo"]
 >bar : T["bar"]
 
-	required<T>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<T> because bar is missing
->required<T>({ foo }) : GenericMap<T>
+	required<ExtendedConstraint>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<ExtendedConstraint> because bar is missing
+>required<ExtendedConstraint>({ foo }) : GenericMap<ExtendedConstraint>
 >required : <T>(x: GenericMap<T>) => GenericMap<T>
 >{ foo } : { foo: T["foo"]; }
 >foo : T["foo"]
 
-	required<T>({ bar }) // error as { bar: T['bar'] } /<: GenericMap<T> because foo is missing
->required<T>({ bar }) : GenericMap<T>
+	required<ExtendedConstraint>({ bar }) // error as { bar: T['bar'] } /<: GenericMap<ExtendedConstraint> because foo is missing
+>required<ExtendedConstraint>({ bar }) : GenericMap<ExtendedConstraint>
 >required : <T>(x: GenericMap<T>) => GenericMap<T>
 >{ bar } : { bar: T["bar"]; }
 >bar : T["bar"]
 
-	required<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: GenericMap<T>
+	required<ExtendedConstraint>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: GenericMap<ExtendedConstraint>
+>required<ExtendedConstraint>({ foo, bar }) : GenericMap<ExtendedConstraint>
+>required : <T>(x: GenericMap<T>) => GenericMap<T>
+>{ foo, bar } : { foo: T["foo"]; bar: T["bar"]; }
+>foo : T["foo"]
+>bar : T["bar"]
+
+	required<T>({ foo, bar }) // error as { foo: T['foo'], bar: T['bar'] } /<: GenericMap<T> because other properties may be missing
 >required<T>({ foo, bar }) : GenericMap<T>
 >required : <T>(x: GenericMap<T>) => GenericMap<T>
 >{ foo, bar } : { foo: T["foo"]; bar: T["bar"]; }

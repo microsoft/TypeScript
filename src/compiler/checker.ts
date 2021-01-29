@@ -17887,7 +17887,7 @@ namespace ts {
                             const objectType = (<IndexedAccessType>template).objectType;
                             if (objectType === source) return Ternary.True;
                             const objectTypeConstraint = getConstraintOfType(objectType);
-                            if (objectTypeConstraint && isTypeAssignableTo(source, objectTypeConstraint)) return Ternary.True;
+                            if (objectTypeConstraint && isTypeAssignableTo(source, objectTypeConstraint) && target.declaration.questionToken?.kind === SyntaxKind.QuestionToken) return Ternary.True;
                         }
                         if (!isGenericMappedType(source)) {
                             const targetConstraint = getConstraintTypeFromMappedType(target);

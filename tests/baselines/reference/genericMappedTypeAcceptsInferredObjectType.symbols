@@ -59,64 +59,75 @@ const withinConstraint = <T extends Constraint>(foo: T['foo']) => {
 >foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 19, 48))
 >T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 19, 26))
 
-	required<T>({ foo }) // no error as { foo: T['foo'] } <: GenericMap<T>
+	required<Constraint>({ foo }) // no error as { foo: T['foo'] } <: GenericMap<Constraint>
+>required : Symbol(required, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 16, 5))
+>Constraint : Symbol(Constraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 0, 0))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 20, 23))
+
+	required<T>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<T> because other properties may be missing
 >required : Symbol(required, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 16, 5))
 >T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 19, 26))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 20, 14))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 21, 14))
 
-	optional<T>({}) // no error as {} <: OptionalGenericMap<T>
+	optional<T>({}) // no error as {} <: OptionalGenericMap<Constraint>
 >optional : Symbol(optional, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 17, 5))
 >T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 19, 26))
 
 	optional<T>({ foo }) // no error as { foo: T['foo'] } <: OptionalGenericMap<T>
 >optional : Symbol(optional, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 17, 5))
 >T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 19, 26))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 22, 14))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 23, 14))
 }
 
 const withinExtendedConstraint = <T extends ExtendedConstraint>(foo: T['foo'], bar: T['bar']) => {
->withinExtendedConstraint : Symbol(withinExtendedConstraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
+>withinExtendedConstraint : Symbol(withinExtendedConstraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 5))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
 >ExtendedConstraint : Symbol(ExtendedConstraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 2, 1))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 64))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 78))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 64))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
+>bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 78))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
 
-	required<T>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<T> because bar is missing
+	required<ExtendedConstraint>({ foo }) // error as { foo: T['foo'] } /<: GenericMap<ExtendedConstraint> because bar is missing
 >required : Symbol(required, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 16, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 14))
+>ExtendedConstraint : Symbol(ExtendedConstraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 2, 1))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 27, 31))
 
-	required<T>({ bar }) // error as { bar: T['bar'] } /<: GenericMap<T> because foo is missing
+	required<ExtendedConstraint>({ bar }) // error as { bar: T['bar'] } /<: GenericMap<ExtendedConstraint> because foo is missing
 >required : Symbol(required, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 16, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 27, 14))
+>ExtendedConstraint : Symbol(ExtendedConstraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 2, 1))
+>bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 28, 31))
 
-	required<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: GenericMap<T>
+	required<ExtendedConstraint>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: GenericMap<ExtendedConstraint>
 >required : Symbol(required, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 16, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 28, 14))
->bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 28, 19))
+>ExtendedConstraint : Symbol(ExtendedConstraint, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 2, 1))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 29, 31))
+>bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 29, 36))
+
+	required<T>({ foo, bar }) // error as { foo: T['foo'], bar: T['bar'] } /<: GenericMap<T> because other properties may be missing
+>required : Symbol(required, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 16, 5))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 30, 14))
+>bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 30, 19))
 
 	optional<T>({}) // no error as {} <: OptionalGenericMap<T>
 >optional : Symbol(optional, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 17, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
 
 	optional<T>({ foo }) // no error as { foo: T['foo'] } <: OptionalGenericMap<T>
 >optional : Symbol(optional, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 17, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 30, 14))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 32, 14))
 
 	optional<T>({ bar }) // no error as { bar: T['bar'] } <: OptionalGenericMap<T>
 >optional : Symbol(optional, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 17, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 31, 14))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
+>bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 33, 14))
 
 	optional<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>
 >optional : Symbol(optional, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 17, 5))
->T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 25, 34))
->foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 32, 14))
->bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 32, 19))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 26, 34))
+>foo : Symbol(foo, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 34, 14))
+>bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 34, 19))
 }
 
