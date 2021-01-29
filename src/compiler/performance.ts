@@ -115,13 +115,19 @@ namespace ts.performance {
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
-    export function enable() {
+    export function enable(system: System = sys) {
         if (!enabled) {
             enabled = true;
             perfHooks ||= tryGetNativePerformanceHooks();
             if (perfHooks) {
-                performanceImpl = perfHooks.performance;
-                timeorigin = performanceImpl.timeOrigin;
+                timeorigin = perfHooks.performance.timeOrigin;
+                // NodeJS's Web Performance API is currently slower than expected, but we'd still like
+                // to be able to leverage native trace events when node is run with either `--cpu-prof`
+                // or `--prof`, if we're running with our own `--generateCpuProfile` flag, or when
+                // running in debug mode (since its possible to generate a cpu profile while debugging).
+                if (perfHooks.shouldWriteNativeEvents || system?.cpuProfilingEnabled?.() || system?.debugMode) {
+                    performanceImpl = perfHooks.performance;
+                }
             }
         }
         return true;
