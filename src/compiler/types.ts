@@ -4786,8 +4786,8 @@ namespace ts {
 
     /* @internal */
     export const enum EnumKind {
-        Numeric,                            // Numeric enum (each member has a TypeFlags.Enum type)
-        Literal                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
+        Numeric,                                  // Numeric enum (each member has a TypeFlags.Enum type)
+        StringLiteral                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
     }
 
     /* @internal */

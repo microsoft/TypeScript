@@ -9518,13 +9518,13 @@ namespace ts {
             if (isStringLiteralLike(expr)) {
                 return true;
             }
-            else if (expr.kind === SyntaxKind.BinaryExpression) {
-                return isStringConcatExpression((<BinaryExpression>expr).left) && isStringConcatExpression((<BinaryExpression>expr).right);
+            else if (isBinaryExpression(expr)) {
+                return expr.operatorToken.kind === SyntaxKind.PlusToken && isStringConcatExpression(expr.left) && isStringConcatExpression(expr.right);
             }
             return false;
         }
 
-        function isLiteralEnumMember(member: EnumMember) {
+        function isStringLiteralEnumMember(member: EnumMember) {
             const expr = member.initializer;
             if (!expr) {
                 return !(member.flags & NodeFlags.Ambient);
@@ -9556,15 +9556,15 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
                     for (const member of (<EnumDeclaration>declaration).members) {
                         if (member.initializer && isStringLiteralLike(member.initializer)) {
-                            return links.enumKind = EnumKind.Literal;
+                            return links.enumKind = EnumKind.StringLiteral;
                         }
-                        if (!isLiteralEnumMember(member)) {
+                        if (!isStringLiteralEnumMember(member)) {
                             hasNonLiteralMember = true;
                         }
                     }
                 }
             }
-            return links.enumKind = hasNonLiteralMember ? EnumKind.Numeric : EnumKind.Literal;
+            return links.enumKind = hasNonLiteralMember ? EnumKind.Numeric : EnumKind.StringLiteral;
         }
 
         function getBaseTypeOfEnumLiteralType(type: Type) {
@@ -9576,29 +9576,20 @@ namespace ts {
             if (links.declaredType) {
                 return links.declaredType;
             }
-            if (getEnumKind(symbol) === EnumKind.Literal) {
-                enumCount++;
-                const memberTypeList: Type[] = [];
-                for (const declaration of symbol.declarations) {
-                    if (declaration.kind === SyntaxKind.EnumDeclaration) {
-                        for (const member of (<EnumDeclaration>declaration).members) {
-                            const value = getEnumMemberValue(member);
-                            const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
-                            getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
-                        }
+            enumCount++;
+            const memberTypeList: Type[] = [];
+            for (const declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.EnumDeclaration) {
+                    for (const member of (<EnumDeclaration>declaration).members) {
+                        const value = getEnumMemberValue(member);
+                        const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
+                        getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
+                        memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                     }
-                }
-                if (memberTypeList.length) {
-                    const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
-                    if (enumType.flags & TypeFlags.Union) {
-                        enumType.flags |= TypeFlags.EnumLiteral;
-                        enumType.symbol = symbol;
-                    }
-                    return links.declaredType = enumType;
                 }
             }
-            const enumType = createType(TypeFlags.Enum);
+            const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
+            enumType.flags |= getEnumKind(symbol) === EnumKind.StringLiteral ? TypeFlags.EnumLiteral : TypeFlags.Enum;
             enumType.symbol = symbol;
             return links.declaredType = enumType;
         }
@@ -21901,66 +21892,69 @@ namespace ts {
                         sharedFlow = flow;
                     }
                     let type: FlowType | undefined;
-                    if (flags & FlowFlags.Assignment) {
-                        type = getTypeAtFlowAssignment(<FlowAssignment>flow);
-                        if (!type) {
-                            flow = (<FlowAssignment>flow).antecedent;
-                            continue;
-                        }
-                    }
-                    else if (flags & FlowFlags.Call) {
-                        type = getTypeAtFlowCall(<FlowCall>flow);
-                        if (!type) {
-                            flow = (<FlowCall>flow).antecedent;
-                            continue;
-                        }
-                    }
-                    else if (flags & FlowFlags.Condition) {
-                        type = getTypeAtFlowCondition(<FlowCondition>flow);
-                    }
-                    else if (flags & FlowFlags.SwitchClause) {
-                        type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
-                    }
-                    else if (flags & FlowFlags.Label) {
-                        if ((<FlowLabel>flow).antecedents!.length === 1) {
-                            flow = (<FlowLabel>flow).antecedents![0];
-                            continue;
-                        }
-                        type = flags & FlowFlags.BranchLabel ?
-                            getTypeAtFlowBranchLabel(<FlowLabel>flow) :
-                            getTypeAtFlowLoopLabel(<FlowLabel>flow);
-                    }
-                    else if (flags & FlowFlags.ArrayMutation) {
-                        type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
-                        if (!type) {
-                            flow = (<FlowArrayMutation>flow).antecedent;
-                            continue;
-                        }
-                    }
-                    else if (flags & FlowFlags.ReduceLabel) {
-                        const target = (<FlowReduceLabel>flow).target;
-                        const saveAntecedents = target.antecedents;
-                        target.antecedents = (<FlowReduceLabel>flow).antecedents;
-                        type = getTypeAtFlowNode((<FlowReduceLabel>flow).antecedent);
-                        target.antecedents = saveAntecedents;
-                    }
-                    else if (flags & FlowFlags.Start) {
-                        // Check if we should continue with the control flow of the containing function.
-                        const container = (<FlowStart>flow).node;
-                        if (container && container !== flowContainer &&
-                            reference.kind !== SyntaxKind.PropertyAccessExpression &&
-                            reference.kind !== SyntaxKind.ElementAccessExpression &&
-                            reference.kind !== SyntaxKind.ThisKeyword) {
-                            flow = container.flowNode!;
-                            continue;
-                        }
-                        // At the top of the flow we have the initial type.
-                        type = initialType;
-                    }
-                    else {
-                        // Unreachable code errors are reported in the binding phase. Here we
-                        // simply return the non-auto declared type to reduce follow-on errors.
-                        type = convertAutoToAny(declaredType);
+                    switch (true) {
+                        case !!(flags & FlowFlags.Assignment):
+                            type = getTypeAtFlowAssignment(<FlowAssignment>flow);
+                            if (!type) {
+                                flow = (<FlowAssignment>flow).antecedent;
+                                continue;
+                            }
+                            break;
+                        case !!(flags & FlowFlags.Call):
+                            type = getTypeAtFlowCall(<FlowCall>flow);
+                            if (!type) {
+                                flow = (<FlowCall>flow).antecedent;
+                                continue;
+                            }
+                            break;
+                        case !!(flags & FlowFlags.Condition):
+                            type = getTypeAtFlowCondition(<FlowCondition>flow);
+
+                            break;
+                        case !!(flags & FlowFlags.SwitchClause):
+                            type = getTypeAtSwitchClause(<FlowSwitchClause>flow);
+
+                            break;
+                        case !!(flags & FlowFlags.Label):
+                            if ((<FlowLabel>flow).antecedents!.length === 1) {
+                                flow = (<FlowLabel>flow).antecedents![0];
+                                continue;
+                            }
+                            type = flags & FlowFlags.BranchLabel ?
+                                getTypeAtFlowBranchLabel(<FlowLabel>flow) :
+                                getTypeAtFlowLoopLabel(<FlowLabel>flow);
+                            break;
+                        case !!(flags & FlowFlags.ArrayMutation):
+                            type = getTypeAtFlowArrayMutation(<FlowArrayMutation>flow);
+                            if (!type) {
+                                flow = (<FlowArrayMutation>flow).antecedent;
+                                continue;
+                            }
+                            break;
+                        case !!(flags & FlowFlags.ReduceLabel):
+                            const target = (<FlowReduceLabel>flow).target;
+                            const saveAntecedents = target.antecedents;
+                            target.antecedents = (<FlowReduceLabel>flow).antecedents;
+                            type = getTypeAtFlowNode((<FlowReduceLabel>flow).antecedent);
+                            target.antecedents = saveAntecedents;
+                            break;
+                        case !!(flags & FlowFlags.Start):
+                            // Check if we should continue with the control flow of the containing function.
+                            const container = (<FlowStart>flow).node;
+                            if (container && container !== flowContainer &&
+                                reference.kind !== SyntaxKind.PropertyAccessExpression &&
+                                reference.kind !== SyntaxKind.ElementAccessExpression &&
+                                reference.kind !== SyntaxKind.ThisKeyword) {
+                                flow = container.flowNode!;
+                                continue;
+                            }
+                            // At the top of the flow we have the initial type.
+                            type = initialType;
+                            break;
+                        default:
+                            // Unreachable code errors are reported in the binding phase. Here we
+                            // simply return the non-auto declared type to reduce follow-on errors.
+                            type = convertAutoToAny(declaredType);
                     }
                     if (sharedFlow) {
                         // Record visited node and the associated type in the cache.
@@ -28822,7 +28816,7 @@ namespace ts {
                         if (symbol && symbol.flags & SymbolFlags.Alias) {
                             symbol = resolveAlias(symbol);
                         }
-                        return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
+                        return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.StringLiteral);
                     }
             }
             return false;
@@ -30505,7 +30499,6 @@ namespace ts {
                             checkAssignmentOperator(resultType);
                         }
 
-                        // try check bitflags enum.
                         if (compilerOptions.bitEnum && (leftType.flags & TypeFlags.EnumLike || rightType.flags & TypeFlags.EnumLike)) {
                             const isBitFlagEnumType = (t: Type) => {
                                 // or use `isBitflagsEnumSymbol(t?.symbol)`, which way is better?
@@ -36121,7 +36114,7 @@ namespace ts {
             const enumKind = getEnumKind(getSymbolOfNode(member.parent));
             const isConstEnum = isEnumConst(member.parent);
             const initializer = member.initializer!;
-            const value = enumKind === EnumKind.Literal && !isLiteralEnumMember(member) ? undefined : evaluate(initializer);
+            const value = enumKind === EnumKind.StringLiteral && !isStringLiteralEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
                 if (isConstEnum && typeof value === "number" && !isFinite(value)) {
                     error(initializer, isNaN(value) ?
@@ -36129,7 +36122,7 @@ namespace ts {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
                 }
             }
-            else if (enumKind === EnumKind.Literal) {
+            else if (enumKind === EnumKind.StringLiteral) {
                 error(initializer, Diagnostics.Computed_values_are_not_permitted_in_an_enum_with_string_valued_members);
                 return 0;
             }

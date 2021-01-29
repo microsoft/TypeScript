@@ -1,8 +1,8 @@
 tests/cases/compiler/bitflagsEnum.ts(14,5): error TS18037: An enum member can only set one bit witout operator in bitflags enum.
 tests/cases/compiler/bitflagsEnum.ts(18,5): error TS18036: An enum member can only be number in bitflags enum.
-tests/cases/compiler/bitflagsEnum.ts(22,5): error TS18038: An enum member initializer can only use bitwise operator in bitflags enum.
-tests/cases/compiler/bitflagsEnum.ts(23,5): error TS18038: An enum member initializer can only use bitwise operator in bitflags enum.
-tests/cases/compiler/bitflagsEnum.ts(24,5): error TS18038: An enum member initializer can only use bitwise operator in bitflags enum.
+tests/cases/compiler/bitflagsEnum.ts(22,5): error TS18038: An enum member initializer can only use bitwise or shift operator in bitflags enum.
+tests/cases/compiler/bitflagsEnum.ts(23,5): error TS18038: An enum member initializer can only use bitwise or shift operator in bitflags enum.
+tests/cases/compiler/bitflagsEnum.ts(24,5): error TS18038: An enum member initializer can only use bitwise or shift operator in bitflags enum.
 tests/cases/compiler/bitflagsEnum.ts(33,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'string'. If you do not need exhaustiveness checks, consider using an object literal instead.
 tests/cases/compiler/bitflagsEnum.ts(38,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/bitflagsEnum.ts(38,10): error TS2623: Bit operation is only allowed for enum with 'bitflags' modifier
@@ -37,13 +37,13 @@ tests/cases/compiler/bitflagsEnum.ts(39,1): error TS2623: Bit operation is only 
     bitflags enum BitEnum3 {
         FOO = 1 + 2,
         ~~~
-!!! error TS18038: An enum member initializer can only use bitwise operator in bitflags enum.
+!!! error TS18038: An enum member initializer can only use bitwise or shift operator in bitflags enum.
         Foo2 = 1 + 2 | 7,
         ~~~~
-!!! error TS18038: An enum member initializer can only use bitwise operator in bitflags enum.
+!!! error TS18038: An enum member initializer can only use bitwise or shift operator in bitflags enum.
         Foo3 = 7 | 1 + 2
         ~~~~
-!!! error TS18038: An enum member initializer can only use bitwise operator in bitflags enum.
+!!! error TS18038: An enum member initializer can only use bitwise or shift operator in bitflags enum.
     }
     
     enum NormalEnum {
