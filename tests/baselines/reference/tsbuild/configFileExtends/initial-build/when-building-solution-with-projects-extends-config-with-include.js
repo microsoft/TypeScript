@@ -55,17 +55,10 @@ Output::
 
 [[90m12:00:00 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
-[96msrc/webpack/index.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Unrestricted'.
-
-[7m1[0m export const b: Unrestricted = 1;
-[7m [0m [91m                ~~~~~~~~~~~~[0m
-
 /lib/lib.d.ts
 /src/webpack/index.ts
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+/src/shared/typings-base/globals.d.ts
+exitCode:: ExitStatus.Success
 
 
 //// [/src/target-tsc-build/shared/index.d.ts]
@@ -117,6 +110,17 @@ exports.a = 1;
   "version": "FakeTSVersion"
 }
 
+//// [/src/target-tsc-build/webpack/index.d.ts]
+export declare const b: Unrestricted;
+
+
+//// [/src/target-tsc-build/webpack/index.js]
+"use strict";
+exports.__esModule = true;
+exports.b = void 0;
+exports.b = 1;
+
+
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -130,6 +134,11 @@ exports.a = 1;
         "version": "-14405273073-export const b: Unrestricted = 1;",
         "signature": "-5074241048-export declare const b: Unrestricted;\r\n",
         "affectsGlobalScope": false
+      },
+      "../../shared/typings-base/globals.d.ts": {
+        "version": "4725476611-type Unrestricted = any;",
+        "signature": "4725476611-type Unrestricted = any;",
+        "affectsGlobalScope": true
       }
     },
     "options": {
@@ -143,25 +152,8 @@ exports.a = 1;
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
-      [
-        "../../webpack/index.ts",
-        [
-          {
-            "file": "../../webpack/index.ts",
-            "start": 16,
-            "length": 12,
-            "messageText": "Cannot find name 'Unrestricted'.",
-            "category": 1,
-            "code": 2304
-          }
-        ]
-      ]
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "../../webpack/index.ts",
-        1
-      ]
+      "../../shared/typings-base/globals.d.ts",
+      "../../webpack/index.ts"
     ]
   },
   "version": "FakeTSVersion"
