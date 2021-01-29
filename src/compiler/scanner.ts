@@ -2073,7 +2073,7 @@ namespace ts {
                 return token = identifierKind;
             }
             pos += charSize(ch);
-            return token = SyntaxKind.Unknown;
+            return token; // Still `SyntaKind.Unknown`
         }
 
         function scanIdentifier(startCharacter: number, languageVersion: ScriptTarget) {
