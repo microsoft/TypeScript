@@ -47,14 +47,12 @@ _A_foo = new WeakMap(), _A_foo_1 = new WeakMap();
 class A2 {
     constructor() {
         _A2_instances.add(this);
-        this.#foo = "foo";
     }
 }
 _A2_foo = new WeakMap(), _A2_instances = new WeakSet(), _A2_foo_1 = function _A2_foo_1() { };
 class A3 {
     constructor() {
         _A3_instances.add(this);
-        this.#foo = "foo";
     }
 }
 _A3_foo = new WeakMap(), _A3_instances = new WeakSet(), _A3_foo_get = function _A3_foo_get() { return ""; };
@@ -73,7 +71,6 @@ _A5_instances = new WeakSet(), _A5_foo_get = function _A5_foo_get() { return "";
 class A6 {
     constructor() {
         _A6_instances.add(this);
-        this.#foo = "foo";
     }
 }
 _A6_foo = new WeakMap(), _A6_instances = new WeakSet(), _A6_foo_get = function _A6_foo_get() { return ""; };
