@@ -2,39 +2,91 @@
 bitflags enum BitEnum {
 >BitEnum : BitEnum
 
-    TS = 3,
->TS : BitEnum.TS
->3 : 3
+    TS = 1,
+>TS : BitEnum
+>1 : 1
 
-    TSX = 4,
->TSX : BitEnum.TSX
->4 : 4
-}
-
-var q = BitEnum.TS;
->q : BitEnum
->BitEnum.TS : BitEnum.TS
->BitEnum : typeof BitEnum
->TS : BitEnum.TS
-
-var w = BitEnum.TSX;
->w : BitEnum
->BitEnum.TSX : BitEnum.TSX
->BitEnum : typeof BitEnum
->TSX : BitEnum.TSX
-
-var e = "123" | w;
->e : number
->"123" | w : number
->"123" : "123"
->w : BitEnum.TSX
-
-q |= 2;
->q |= 2 : number
->q : BitEnum
+    TSX = 2,
+>TSX : BitEnum
 >2 : 2
 
-enum NormalEnum{
+    All = TS | TSX,
+>All : BitEnum
+>TS | TSX : number
+>TS : BitEnum
+>TSX : BitEnum
+}
+
+var foo1 = BitEnum.TS;
+>foo1 : BitEnum
+>BitEnum.TS : BitEnum
+>BitEnum : typeof BitEnum
+>TS : BitEnum
+
+var foo2 = BitEnum.TSX;
+>foo2 : BitEnum
+>BitEnum.TSX : BitEnum
+>BitEnum : typeof BitEnum
+>TSX : BitEnum
+
+var foo3 = foo1 | foo2; // foo3 is possiable to be BitEnum.All?
+>foo3 : number
+>foo1 | foo2 : number
+>foo1 : BitEnum
+>foo2 : BitEnum
+
+declare var foo4: BitEnum;
+>foo4 : BitEnum
+
+var foo5 = foo4 & foo1; // foo5 is possiable to be BitEnum.TS?
+>foo5 : number
+>foo4 & foo1 : number
+>foo4 : BitEnum
+>foo1 : BitEnum
+
+bitflags enum BitEnum1 {
+>BitEnum1 : BitEnum1
+
+    FOO = 3
+>FOO : BitEnum1.FOO
+>3 : 3
+}
+
+bitflags enum BitEnum2 {
+>BitEnum2 : BitEnum2
+
+    FOO = "foo"
+>FOO : BitEnum2.FOO
+>"foo" : "foo"
+}
+
+bitflags enum BitEnum3 {
+>BitEnum3 : BitEnum3
+
+    FOO = 1 + 2,
+>FOO : BitEnum3
+>1 + 2 : number
+>1 : 1
+>2 : 2
+
+    Foo2 = 1 + 2 | 7,
+>Foo2 : BitEnum3
+>1 + 2 | 7 : number
+>1 + 2 : number
+>1 : 1
+>2 : 2
+>7 : 7
+
+    Foo3 = 7 | 1 + 2
+>Foo3 : BitEnum3
+>7 | 1 + 2 : number
+>7 : 7
+>1 + 2 : number
+>1 : 1
+>2 : 2
+}
+
+enum NormalEnum {
 >NormalEnum : NormalEnum
 
     Black,
@@ -42,6 +94,16 @@ enum NormalEnum{
 
     White
 >White : NormalEnum.White
+}
+
+enum Q{
+>Q : Q
+
+    q = "2"+1
+>q : Q
+>"2"+1 : string
+>"2" : "2"
+>1 : 1
 }
 
 var q1 = NormalEnum.Black;

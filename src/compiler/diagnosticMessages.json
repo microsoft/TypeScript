@@ -6289,5 +6289,17 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "An enum member can only be number in bitflags enum.": {
+        "category": "Error",
+        "code": 18036
+    },
+    "An enum member can only set one bit witout operator in bitflags enum.": {
+        "category": "Error",
+        "code": 18037
+    },
+    "An enum member initializer can only use bitwise operator in bitflags enum.": {
+        "category": "Error",
+        "code": 18038
     }
 }

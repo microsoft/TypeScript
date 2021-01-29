@@ -9584,10 +9584,6 @@ namespace ts {
                         for (const member of (<EnumDeclaration>declaration).members) {
                             const value = getEnumMemberValue(member);
                             const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
-                            // if(hasEffectiveModifier(declaration, ModifierFlags.BitFlags)){
-                            //     // Should we add falgs here? What is fresh type and regular type? Should we change their typeFlags too?
-                            //     memberType.flags |= TypeFlags
-                            // }
                             getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
                             memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                         }
@@ -36312,8 +36308,72 @@ namespace ts {
         }
 
         function checkEnumMember(node: EnumMember) {
+            const isBitFlagEnum = isEnumBitFlags(node.parent);
+            if (compilerOptions.bitEnum && isBitFlagEnum) {
+                const value = getEnumMemberValue(node);
+                if (typeof value === "string") {
+                    error(node, Diagnostics.An_enum_member_can_only_be_number_in_bitflags_enum);
+                }
+                else if (typeof value === "number") {
+                    if (node?.initializer) {
+                        if (!isBinaryExpression(node.initializer)) {
+                            if (!isBitFlagNumber(value)) {
+                                error(node, Diagnostics.An_enum_member_can_only_set_one_bit_witout_operator_in_bitflags_enum);
+                            }
+                        }
+                        else {
+                            // where should we report this error? on the whole initializer or more accurate?
+                            if (!isAllOperatorBitwiseOrShiftOperator(node.initializer)) {
+                                error(node, Diagnostics.An_enum_member_initializer_can_only_use_bitwise_operator_in_bitflags_enum);
+                            }
+                        }
+                    }
+                }
+                // `undefined` would be check in other places.
+            }
             if (isPrivateIdentifier(node.name)) {
                 error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
+            }
+
+            function isBitFlagNumber(num: number) {
+                let result = false;
+                let bitMask = 1;
+                while (num !== 0) {
+                    const bit = num & bitMask;
+                    if (bit !== 0) {
+                        if (!result) {
+                            result = true;
+                        }
+                        else {
+                            // if number has two or more bit, return false
+                            return false;
+                        }
+                    }
+                    num ^= bit;    // set this bit to zero
+                    bitMask <<= 1;
+                }
+                return result;
+            }
+
+            function isAllOperatorBitwiseOrShiftOperator(initializer: BinaryExpression):boolean {
+                const leftRes = isBinaryExpression(initializer.left) ? isAllOperatorBitwiseOrShiftOperator(initializer.left) : true;
+                const rightRes = isBinaryExpression(initializer.right) ? isAllOperatorBitwiseOrShiftOperator(initializer.right) : true;
+                const operatorRes = isBitwiseOrShiftOperator(initializer.operatorToken.kind);
+                return leftRes && rightRes && operatorRes;
+
+                function isBitwiseOrShiftOperator(syntaxKind: SyntaxKind): syntaxKind is BitwiseOperator | ShiftOperator {
+                    switch (syntaxKind) {
+                        case SyntaxKind.AmpersandToken:
+                        case SyntaxKind.BarToken:
+                        case SyntaxKind.CaretToken:
+                        case SyntaxKind.LessThanLessThanToken:
+                        case SyntaxKind.GreaterThanGreaterThanToken:
+                        case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
             }
         }
 

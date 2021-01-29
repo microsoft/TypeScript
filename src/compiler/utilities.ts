@@ -1136,6 +1136,10 @@ namespace ts {
         return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
     }
 
+    export function isEnumBitFlags(node: EnumDeclaration): boolean {
+        return !!(getCombinedModifierFlags(node) & ModifierFlags.BitFlags);
+    }
+
     export function isDeclarationReadonly(declaration: Declaration): boolean {
         return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration, declaration.parent));
     }
