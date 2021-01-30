@@ -119,3 +119,17 @@ const withinExtendedConstraint = <T extends ExtendedConstraint>(foo: T['foo'], b
 >bar : T["bar"]
 }
 
+function shouldReject<T, K extends keyof T>(key: K, v: T[K]): {[k in keyof T]?: T[k]} {
+>shouldReject : <T, K extends keyof T>(key: K, v: T[K]) => { [k in keyof T]?: T[k]; }
+>key : K
+>v : T[K]
+
+	return { [key]: v }
+>{ [key]: v } : { [x: string]: T[K]; }
+>[key] : T[K]
+>key : K
+>v : T[K]
+
+    // Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k] | undefined; }'.(2322)
+}
+

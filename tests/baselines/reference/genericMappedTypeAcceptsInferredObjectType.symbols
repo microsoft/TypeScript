@@ -131,3 +131,26 @@ const withinExtendedConstraint = <T extends ExtendedConstraint>(foo: T['foo'], b
 >bar : Symbol(bar, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 34, 19))
 }
 
+function shouldReject<T, K extends keyof T>(key: K, v: T[K]): {[k in keyof T]?: T[k]} {
+>shouldReject : Symbol(shouldReject, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 35, 1))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 22))
+>K : Symbol(K, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 24))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 22))
+>key : Symbol(key, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 44))
+>K : Symbol(K, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 24))
+>v : Symbol(v, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 51))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 22))
+>K : Symbol(K, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 24))
+>k : Symbol(k, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 64))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 22))
+>T : Symbol(T, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 22))
+>k : Symbol(k, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 64))
+
+	return { [key]: v }
+>[key] : Symbol([key], Decl(genericMappedTypeAcceptsInferredObjectType.ts, 38, 9))
+>key : Symbol(key, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 44))
+>v : Symbol(v, Decl(genericMappedTypeAcceptsInferredObjectType.ts, 37, 51))
+
+    // Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k] | undefined; }'.(2322)
+}
+

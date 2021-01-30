@@ -34,3 +34,8 @@ const withinExtendedConstraint = <T extends ExtendedConstraint>(foo: T['foo'], b
 	optional<T>({ bar }) // no error as { bar: T['bar'] } <: OptionalGenericMap<T>
 	optional<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>
 }
+
+function shouldReject<T, K extends keyof T>(key: K, v: T[K]): {[k in keyof T]?: T[k]} {
+	return { [key]: v }
+    // Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k] | undefined; }'.(2322)
+}

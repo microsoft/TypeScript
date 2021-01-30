@@ -6,9 +6,10 @@ tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts(29,31): error
 tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts(31,14): error TS2345: Argument of type '{ foo: T["foo"]; bar: T["bar"]; }' is not assignable to parameter of type 'GenericMap<T>'.
 tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts(33,14): error TS2345: Argument of type '{ foo: T["foo"]; }' is not assignable to parameter of type 'OptionalGenericMap<T>'.
 tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts(34,14): error TS2345: Argument of type '{ bar: T["bar"]; }' is not assignable to parameter of type 'OptionalGenericMap<T>'.
+tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts(39,2): error TS2322: Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k]; }'.
 
 
-==== tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts (6 errors) ====
+==== tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts (7 errors) ====
     interface Constraint {
     	foo: string
     }
@@ -60,5 +61,12 @@ tests/cases/compiler/genericMappedTypeAcceptsInferredObjectType.ts(34,14): error
     	            ~~~~~~~
 !!! error TS2345: Argument of type '{ bar: T["bar"]; }' is not assignable to parameter of type 'OptionalGenericMap<T>'.
     	optional<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>
+    }
+    
+    function shouldReject<T, K extends keyof T>(key: K, v: T[K]): {[k in keyof T]?: T[k]} {
+    	return { [key]: v }
+    	~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k]; }'.
+        // Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k] | undefined; }'.(2322)
     }
     

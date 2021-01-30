@@ -36,6 +36,11 @@ const withinExtendedConstraint = <T extends ExtendedConstraint>(foo: T['foo'], b
 	optional<T>({ foo, bar }) // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>
 }
 
+function shouldReject<T, K extends keyof T>(key: K, v: T[K]): {[k in keyof T]?: T[k]} {
+	return { [key]: v }
+    // Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k] | undefined; }'.(2322)
+}
+
 
 //// [genericMappedTypeAcceptsInferredObjectType.js]
 var required = function (x) { return x; };
@@ -56,3 +61,8 @@ var withinExtendedConstraint = function (foo, bar) {
     optional({ bar: bar }); // no error as { bar: T['bar'] } <: OptionalGenericMap<T>
     optional({ foo: foo, bar: bar }); // no error as { foo: T['foo'], bar: T['bar'] } <: OptionalGenericMap<T>
 };
+function shouldReject(key, v) {
+    var _a;
+    return _a = {}, _a[key] = v, _a;
+    // Type '{ [x: string]: T[K]; }' is not assignable to type '{ [k in keyof T]?: T[k] | undefined; }'.(2322)
+}
