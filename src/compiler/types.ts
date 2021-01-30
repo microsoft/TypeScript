@@ -4806,8 +4806,10 @@ namespace ts {
         HasNeverType      = 1 << 17,        // Synthetic property with at least one never type in constituents
         Mapped            = 1 << 18,        // Property of mapped type
         StripOptional     = 1 << 19,        // Strip optionality in mapped property
+        OnlyUnitTypes     = 1 << 20,        // Synthetic property where property in every constituent has a unit type
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
+        UnitDiscriminant = HasNonUniformType | OnlyUnitTypes,
         Partial = ReadPartial | WritePartial
     }
 
@@ -5303,6 +5305,10 @@ namespace ts {
         regularType?: UnionType;
         /* @internal */
         origin?: Type;  // Denormalized union, intersection, or index type in which union originates
+        /* @internal */
+        unitTypeProperties?: Symbol[] | undefined;
+        /* @internal */
+        constituentMap?: Map<Type | undefined>;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
