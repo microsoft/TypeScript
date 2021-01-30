@@ -10463,7 +10463,7 @@ namespace ts {
                 if (isFunctionType(longestParamType) && isFunctionType(shorterParamType)) {
                     // If both parameters are callbacks, but only one of them is uncallable,
                     // use the type of the other one in the resulting union signature.
-                    
+
                     // This improves inference around higher-order functions, like .map
                     // one a (T[] | never[]) value, since (never[]).map asks for a function
                     // (item: never, index: number) => R which it cannot actually call.
