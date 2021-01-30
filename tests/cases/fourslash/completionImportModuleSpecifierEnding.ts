@@ -6,7 +6,7 @@
 ////}
 
 //@Filename:module.js
-////import { f } from "/**/"
+////import { f } from ".//**/"
 
 
-verify.completions({ marker: "", includes:{name:"false"}, preferences: {importModuleSpecifierEnding: "js" }, isNewIdentifierLocation: true})
+verify.completions({ marker: "", includes:{name:"test.js"}, preferences: {importModuleSpecifierEnding: "js" }, isNewIdentifierLocation: true})
