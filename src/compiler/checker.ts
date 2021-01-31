@@ -17533,13 +17533,11 @@ namespace ts {
                     if (containsType(targetTypes, source)) {
                         return Ternary.True;
                     }
-                    if (targetTypes.length >= 4) {
-                        const match = getMatchingUnionConstituentForType(<UnionType>target, source);
-                        if (match) {
-                            const related = isRelatedTo(source, match, /*reportErrors*/ false);
-                            if (related) {
-                                return related;
-                            }
+                    const match = getMatchingUnionConstituentForType(<UnionType>target, source);
+                    if (match) {
+                        const related = isRelatedTo(source, match, /*reportErrors*/ false);
+                        if (related) {
+                            return related;
                         }
                     }
                 }
@@ -21378,21 +21376,32 @@ namespace ts {
             return result;
         }
 
-        function getUnitTypeProperties(unionType: UnionType): Symbol[] {
-            return unionType.unitTypeProperties || (unionType.unitTypeProperties =
-                filter(getPropertiesOfUnionOrIntersectionType(unionType), prop => !!(
-                    getCheckFlags(prop) & CheckFlags.SyntheticProperty &&
-                    ((<TransientSymbol>prop).checkFlags & CheckFlags.UnitDiscriminant) === CheckFlags.UnitDiscriminant)));
+        function getKeyPropertyNames(unionType: UnionType): __String[] | undefined {
+            const types = unionType.types;
+            if (types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion) {
+                return undefined;
+            }
+            let keyPropertyNames = unionType.keyPropertyNames;
+            if (!keyPropertyNames) {
+                keyPropertyNames = unionType.keyPropertyNames = [];
+                const propType = find(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection)) && getPropertiesOfType(t).length !== 0) || unknownType;
+                for (const name of map(getPropertiesOfType(propType), prop => prop.escapedName)) {
+                    if (every(types, t => !(t.flags & (TypeFlags.Object | TypeFlags.Intersection)) || isUnitType(getTypeOfPropertyOfType(t, name) || unknownType))) {
+                        keyPropertyNames.push(name);
+                    }
+                }
+            }
+            return keyPropertyNames.length ? keyPropertyNames : undefined;
         }
 
         function getUnionConstituentKeyForType(unionType: UnionType, type: Type) {
-            const unitTypeProperties = getUnitTypeProperties(unionType);
-            if (unitTypeProperties.length === 0) {
+            const keyPropertyNames = getKeyPropertyNames(unionType);
+            if (!keyPropertyNames) {
                 return undefined;
             }
             const propTypes = [];
-            for (const prop of unitTypeProperties) {
-                const propType = getTypeOfPropertyOfType(type, prop.escapedName);
+            for (const name of keyPropertyNames) {
+                const propType = getTypeOfPropertyOfType(type, name);
                 if (!(propType && isUnitType(propType))) {
                     return undefined;
                 }
@@ -21402,14 +21411,14 @@ namespace ts {
         }
 
         function getUnionConstituentKeyForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression) {
-            const unitTypeProperties = getUnitTypeProperties(unionType);
-            if (unitTypeProperties.length === 0) {
+            const keyPropertyNames = getKeyPropertyNames(unionType);
+            if (!keyPropertyNames) {
                 return undefined;
             }
             const propTypes = [];
-            for (const prop of unitTypeProperties) {
+            for (const name of keyPropertyNames) {
                 const propNode = find(node.properties, p => p.symbol && p.kind === SyntaxKind.PropertyAssignment &&
-                    p.symbol.escapedName === prop.escapedName && isPossiblyDiscriminantValue(p.initializer));
+                    p.symbol.escapedName === name && isPossiblyDiscriminantValue(p.initializer));
                 const propType = propNode && getTypeOfExpression((<PropertyAssignment>propNode).initializer);
                 if (!(propType && isUnitType(propType))) {
                     return undefined;
@@ -24717,16 +24726,10 @@ namespace ts {
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
             if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
-                const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
-                if (apparentType.flags & TypeFlags.Union) {
-                    if (isObjectLiteralExpression(node)) {
-                        return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
-                    }
-                    else if (isJsxAttributes(node)) {
-                        return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
-                    }
-                }
-                return apparentType;
+                const discriminatedType = instantiatedType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, instantiatedType as UnionType) :
+                    instantiatedType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, instantiatedType as UnionType) :
+                    instantiatedType;
+                return mapType(discriminatedType, getApparentType, /*noReductions*/ true);
             }
         }
 
