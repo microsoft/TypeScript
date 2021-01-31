@@ -4431,24 +4431,25 @@ namespace ts {
                     return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
-                    const parentSymbol = getParentOfSymbol(type.symbol)!;
-                    const parentName = symbolToTypeNode(parentSymbol, context, SymbolFlags.Type);
-                    if (getDeclaredTypeOfSymbol(parentSymbol) === type) {
-                        return parentName;
+                    const isEnumDeclaration = type.symbol.exports && type.symbol.exports.size > 0;
+                    const symbol = isEnumDeclaration ? type.symbol : getParentOfSymbol(type.symbol)!;
+                    const name = symbolToTypeNode(symbol, context, SymbolFlags.Type);
+                    if (getDeclaredTypeOfSymbol(symbol) === type) {
+                        return name;
                     }
                     const memberName = symbolName(type.symbol);
                     if (isIdentifierText(memberName, ScriptTarget.ES3)) {
                         return appendReferenceToType(
-                            parentName as TypeReferenceNode | ImportTypeNode,
+                            name as TypeReferenceNode | ImportTypeNode,
                             factory.createTypeReferenceNode(memberName, /*typeArguments*/ undefined)
                         );
                     }
-                    if (isImportTypeNode(parentName)) {
-                        (parentName as any).isTypeOf = true; // mutably update, node is freshly manufactured anyhow
-                        return factory.createIndexedAccessTypeNode(parentName, factory.createLiteralTypeNode(factory.createStringLiteral(memberName)));
+                    if (isImportTypeNode(name)) {
+                        (name as any).isTypeOf = true; // mutably update, node is freshly manufactured anyhow
+                        return factory.createIndexedAccessTypeNode(name, factory.createLiteralTypeNode(factory.createStringLiteral(memberName)));
                     }
-                    else if (isTypeReferenceNode(parentName)) {
-                        return factory.createIndexedAccessTypeNode(factory.createTypeQueryNode(parentName.typeName), factory.createLiteralTypeNode(factory.createStringLiteral(memberName)));
+                    else if (isTypeReferenceNode(name)) {
+                        return factory.createIndexedAccessTypeNode(factory.createTypeQueryNode(name.typeName), factory.createLiteralTypeNode(factory.createStringLiteral(memberName)));
                     }
                     else {
                         return Debug.fail("Unhandled type node kind returned from `symbolToTypeNode`.");
@@ -9524,7 +9525,7 @@ namespace ts {
             return false;
         }
 
-        function isStringLiteralEnumMember(member: EnumMember) {
+        function isStringLiteralLikeEnumMember(member: EnumMember) {
             const expr = member.initializer;
             if (!expr) {
                 return !(member.flags & NodeFlags.Ambient);
@@ -9558,7 +9559,7 @@ namespace ts {
                         if (member.initializer && isStringLiteralLike(member.initializer)) {
                             return links.enumKind = EnumKind.StringLiteral;
                         }
-                        if (!isStringLiteralEnumMember(member)) {
+                        if (!isStringLiteralLikeEnumMember(member)) {
                             hasNonLiteralMember = true;
                         }
                     }
@@ -9580,15 +9581,26 @@ namespace ts {
             const memberTypeList: Type[] = [];
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
+                    const isInAmbient = hasEffectiveModifier(declaration, ModifierFlags.Ambient);
+                    let uninitializedAmbientEnumMemberId = 0;
                     for (const member of (<EnumDeclaration>declaration).members) {
                         const value = getEnumMemberValue(member);
-                        const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
+                        if(value === undefined && isInAmbient){
+                            uninitializedAmbientEnumMemberId +=1;
+                        }
+                        const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount + parseFloat("0." + uninitializedAmbientEnumMemberId.toString()), getSymbolOfNode(member)));
                         getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
                         memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                     }
                 }
             }
-            const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
+            let enumType: Type | undefined;
+            if (memberTypeList.length) {
+                enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
+            }
+            if (!enumType) {
+                enumType = createType(0);
+            }
             enumType.flags |= getEnumKind(symbol) === EnumKind.StringLiteral ? TypeFlags.EnumLiteral : TypeFlags.Enum;
             enumType.symbol = symbol;
             return links.declaredType = enumType;
@@ -36114,7 +36126,7 @@ namespace ts {
             const enumKind = getEnumKind(getSymbolOfNode(member.parent));
             const isConstEnum = isEnumConst(member.parent);
             const initializer = member.initializer!;
-            const value = enumKind === EnumKind.StringLiteral && !isStringLiteralEnumMember(member) ? undefined : evaluate(initializer);
+            const value = enumKind === EnumKind.StringLiteral && !isStringLiteralLikeEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
                 if (isConstEnum && typeof value === "number" && !isFinite(value)) {
                     error(initializer, isNaN(value) ?
