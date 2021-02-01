@@ -908,7 +908,7 @@ namespace ts {
         scoped: false,
         text: `
             var __classPrivateWriteonly = (this && this.__classPrivateWriteonly) || function () {
-                throw new TypeError("private element was defined without a getter");
+                throw new TypeError("private setter was defined without a getter");
             };`
     };
 

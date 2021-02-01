@@ -11,7 +11,7 @@ console.log(new C().m());
 
 //// [privateNameSetterNoGetter.js]
 var __classPrivateWriteonly = (this && this.__classPrivateWriteonly) || function () {
-    throw new TypeError("private element was defined without a getter");
+    throw new TypeError("private setter was defined without a getter");
 };
 var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || function (receiver, instances, fn, value) {
     if (!instances.has(receiver)) {
