@@ -262,7 +262,7 @@ namespace ts.codefix {
             }
 
             const defaultInfo = getDefaultLikeExportInfo(importingFile, moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && getNameForExportedSymbol(defaultInfo.symbol, compilerOptions.target) === symbolName && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
                 result.push({ moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(defaultInfo.symbol, checker) });
             }
 
@@ -581,7 +581,7 @@ namespace ts.codefix {
 
             const compilerOptions = program.getCompilerOptions();
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && getNameForExportedSymbol(defaultInfo.symbol, compilerOptions.target) === symbolName && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
                 addSymbol(moduleSymbol, defaultInfo.symbol, defaultInfo.kind, checker);
             }
 
@@ -600,7 +600,7 @@ namespace ts.codefix {
         const exported = getDefaultLikeExportWorker(importingFile, moduleSymbol, checker, compilerOptions);
         if (!exported) return undefined;
         const { symbol, kind } = exported;
-        const info = getDefaultExportInfoWorker(symbol, moduleSymbol, checker, compilerOptions);
+        const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
         return info && { symbol, kind, ...info };
     }
 
@@ -636,7 +636,7 @@ namespace ts.codefix {
         return allowSyntheticDefaults ? ImportKind.Default : ImportKind.CommonJS;
     }
 
-    function getDefaultExportInfoWorker(defaultExport: Symbol, _moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
+    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
         if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
 
@@ -650,7 +650,7 @@ namespace ts.codefix {
                 //    but we can still offer completions for it.
                 // - `aliased.parent` will be undefined if the module is exporting `globalThis.something`,
                 //    or another expression that resolves to a global.
-                return getDefaultExportInfoWorker(aliased, aliased.parent, checker, compilerOptions);
+                return getDefaultExportInfoWorker(aliased, checker, compilerOptions);
             }
         }
 
