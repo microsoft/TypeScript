@@ -32315,7 +32315,7 @@ namespace ts {
             }
 
             // Private named methods are only allowed in class declarations
-            if (isPrivateIdentifier(node.name) && !isClassDeclaration(node.parent)) {
+            if (isPrivateIdentifier(node.name) && !getContainingClass(node)) {
                 error(node, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
             }
         }

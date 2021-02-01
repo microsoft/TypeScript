@@ -1,14 +1,11 @@
-tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts(3,5): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts(9,17): error TS18013: Property '#method' is not accessible outside class '(anonymous)' because it has a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts(10,17): error TS18013: Property '#field' is not accessible outside class '(anonymous)' because it has a private identifier.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts (3 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts (2 errors) ====
     const C = class {
         #field = this.#method();
         #method() { return 42; }
-        ~~~~~~~
-!!! error TS18016: Private identifiers are not allowed outside class bodies.
         static getInstance() { return new C(); }
         getField() { return this.#field };
     }
