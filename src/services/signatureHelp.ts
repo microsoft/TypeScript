@@ -543,9 +543,9 @@ namespace ts.SignatureHelp {
         const help = { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
         const selected = help.items[selectedItemIndex];
         if (selected.isVariadic) {
-            const firstVariadic = findIndex(selected.parameters, p => !!p.isVariadic);
-            if (firstVariadic > -1 && help.argumentIndex > firstVariadic) {
-                help.argumentIndex = firstVariadic;
+            const firstRest = findIndex(selected.parameters, p => !!p.isRest);
+            if (firstRest > -1 && help.argumentIndex > firstRest) {
+                help.argumentIndex = firstRest;
             }
         }
         return help;
@@ -646,7 +646,7 @@ namespace ts.SignatureHelp {
         });
         const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
         const isVariadic = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
-        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isVariadic };
+        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
     }
 
     function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
@@ -654,6 +654,6 @@ namespace ts.SignatureHelp {
             const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isVariadic: false };
+        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isRest: false };
     }
 }

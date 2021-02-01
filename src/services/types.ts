@@ -1078,7 +1078,7 @@ namespace ts {
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
-        isVariadic?: boolean;
+        isRest?: boolean;
     }
 
     export interface SelectionRange {
