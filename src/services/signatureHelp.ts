@@ -645,7 +645,7 @@ namespace ts.SignatureHelp {
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
         const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
-        const isVariadic = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        const isRest = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
         return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
     }
 
