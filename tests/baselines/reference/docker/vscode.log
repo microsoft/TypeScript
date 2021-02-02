@@ -11,12 +11,12 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 Standard error:
 [XX:XX:XX] 'compile' errored after ?s
 [XX:XX:XX] Error: monaco.d.ts is no longer up to date. Please run gulp watch and commit the new file.
-    at formatError (/vscode/node_modules/gulp-cli/lib/versioned/^4.0.0/format-error.js:20:10)
-    at Gulp.<anonymous> (/vscode/node_modules/gulp-cli/lib/versioned/^4.0.0/log/events.js:31:15)
+    at formatError (/vscode/node_modules/gulp-cli/lib/versioned/^4.0.0/format-error.js:21:10)
+    at Gulp.<anonymous> (/vscode/node_modules/gulp-cli/lib/versioned/^4.0.0/log/events.js:33:15)
     at Gulp.emit (events.js:203:15)
     at Gulp.EventEmitter.emit (domain.js:448:20)
     at Object.error (/vscode/node_modules/undertaker/lib/helpers/createExtensions.js:61:10)
-    at handler (/vscode/node_modules/now-and-later/lib/map.js:46:14)
+    at handler (/vscode/node_modules/now-and-later/lib/map.js:50:14)
     at f (/vscode/node_modules/once/once.js:25:25)
     at f (/vscode/node_modules/once/once.js:25:25)
     at tryCatch (/vscode/node_modules/async-done/index.js:24:15)
