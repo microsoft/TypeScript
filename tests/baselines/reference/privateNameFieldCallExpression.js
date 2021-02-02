@@ -38,7 +38,7 @@ class A {
         var _a;
         var _b;
         __classPrivateFieldGet(this, _fieldFunc).call(this);
-        (_a = __classPrivateFieldGet(this, _fieldFunc)) === null || _a === void 0 ? void 0 : _a(this);
+        (_a = __classPrivateFieldGet(this, _fieldFunc)) === null || _a === void 0 ? void 0 : _a.call(this);
         const func = __classPrivateFieldGet(this, _fieldFunc);
         func();
         new (__classPrivateFieldGet(this, _fieldFunc))();
