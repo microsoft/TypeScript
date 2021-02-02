@@ -1,0 +1,17 @@
+tests/cases/compiler/outOfBoundTupleIndexTypeIsUndefined.ts(9,7): error TS2322: Type '0' is not assignable to type 'undefined'.
+
+
+==== tests/cases/compiler/outOfBoundTupleIndexTypeIsUndefined.ts (1 errors) ====
+    type T = [number, boolean] & { x: number };
+    type U = [number, boolean] & { [2]: number };
+    
+    declare const t: T;
+    const a = t[0]; // number
+    const b = t[1]; // boolean
+    const c = t[2]; // undefined
+    
+    const x: T[2] = 0 // error
+          ~
+!!! error TS2322: Type '0' is not assignable to type 'undefined'.
+    const y: U[2] = 0 // no error
+    

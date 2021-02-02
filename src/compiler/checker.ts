@@ -14221,6 +14221,7 @@ namespace ts {
                         return noUncheckedIndexedAccessCandidate ? getUnionType([restType, undefinedType]) : restType;
                     });
                 }
+                if (someType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) return undefinedType;
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
@@ -21740,6 +21741,10 @@ namespace ts {
 
         function everyType(type: Type, f: (t: Type) => boolean): boolean {
             return type.flags & TypeFlags.Union ? every((<UnionType>type).types, f) : f(type);
+        }
+
+        function someType(type: Type, f: (t: Type) => boolean): boolean {
+            return type.flags & (TypeFlags.Union | TypeFlags.Intersection) ? some((<UnionType | IntersectionType>type).types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/outOfBoundTupleIndexTypeIsUndefined.ts ===
+type T = [number, boolean] & { x: number };
+>T : T
+>x : number
+
+type U = [number, boolean] & { [2]: number };
+>U : U
+>[2] : number
+>2 : 2
+
+declare const t: T;
+>t : T
+
+const a = t[0]; // number
+>a : number
+>t[0] : number
+>t : T
+>0 : 0
+
+const b = t[1]; // boolean
+>b : boolean
+>t[1] : boolean
+>t : T
+>1 : 1
+
+const c = t[2]; // undefined
+>c : undefined
+>t[2] : undefined
+>t : T
+>2 : 2
+
+const x: T[2] = 0 // error
+>x : undefined
+>0 : 0
+
+const y: U[2] = 0 // no error
+>y : number
+>0 : 0
+
