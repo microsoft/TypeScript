@@ -214,7 +214,6 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
-
         {
             name: "traceResolution",
             type: "boolean",
