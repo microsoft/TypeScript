@@ -24924,16 +24924,101 @@ namespace ts {
             }
         }
 
+        function getIntersectedSignatures(signatures: readonly Signature[]) {
+            return !getStrictOptionValue(compilerOptions, "noImplicitAny") ? undefined : reduceLeft(signatures, (left, right) => left === right || !left ? left : (!!left.typeParameters && !!right.typeParameters && compareTypeParametersIdentical(left.typeParameters, right.typeParameters)) || (!left.typeParameters && !right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right) : undefined, signatures[0]);
+        }
+
+        function combineIntersectionThisParam(left: Symbol | undefined, right: Symbol | undefined, mapper: TypeMapper | undefined): Symbol | undefined {
+            if (!left || !right) {
+                return left || right;
+            }
+            // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
+            // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
+            // pessimistic when contextual typing, for now, we'll union the `this` types.
+            const thisType = getUnionType([getTypeOfSymbol(left), instantiateType(getTypeOfSymbol(right), mapper)]);
+            return createSymbolWithType(left, thisType);
+        }
+
+        function combineIntersectionParameters(left: Signature, right: Signature, mapper: TypeMapper | undefined) {
+            const leftCount = getParameterCount(left);
+            const rightCount = getParameterCount(right);
+            const longest = leftCount >= rightCount ? left : right;
+            const shorter = longest === left ? right : left;
+            const longestCount = longest === left ? leftCount : rightCount;
+            const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
+            const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
+            const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
+            for (let i = 0; i < longestCount; i++) {
+                let longestParamType = tryGetTypeAtPosition(longest, i)!;
+                if (longest === right) {
+                    longestParamType = instantiateType(longestParamType, mapper);
+                }
+                let shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                if (shorter === right) {
+                    shorterParamType = instantiateType(shorterParamType, mapper);
+                }
+                const unionParamType = getUnionType([longestParamType, shorterParamType]);
+                const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
+                const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
+                const leftName = i >= leftCount ? undefined : getParameterNameAtPosition(left, i);
+                const rightName = i >= rightCount ? undefined : getParameterNameAtPosition(right, i);
+
+                const paramName = leftName === rightName ? leftName :
+                    !leftName ? rightName :
+                    !rightName ? leftName :
+                    undefined;
+                const paramSymbol = createSymbol(
+                    SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
+                    paramName || `arg${i}` as __String
+                );
+                paramSymbol.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
+                params[i] = paramSymbol;
+            }
+            if (needsExtraRestElement) {
+                const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
+                restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, longestCount));
+                if (shorter === right) {
+                    restParamSymbol.type = instantiateType(restParamSymbol.type, mapper);
+                }
+                params[longestCount] = restParamSymbol;
+            }
+            return params;
+        }
+
+        function combineSignaturesOfIntersectionMembers(left: Signature, right: Signature): Signature {
+            const typeParams = left.typeParameters || right.typeParameters;
+            let paramMapper: TypeMapper | undefined;
+            if (left.typeParameters && right.typeParameters) {
+                paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
+                // We just use the type parameter defaults from the first signature
+            }
+            const declaration = left.declaration;
+            const params = combineIntersectionParameters(left, right, paramMapper);
+            const thisParam = combineIntersectionThisParam(left.thisParameter, right.thisParameter, paramMapper);
+            const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
+            const result = createSignature(
+                declaration,
+                typeParams,
+                thisParam,
+                params,
+                /*resolvedReturnType*/ undefined,
+                /*resolvedTypePredicate*/ undefined,
+                minArgCount,
+                (left.flags | right.flags) & SignatureFlags.PropagatingFlags
+            );
+            result.unionSignatures = concatenate(left.unionSignatures || [left], [right]);
+            if (paramMapper) {
+                result.mapper = left.mapper && left.unionSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
+            }
+            return result;
+        }
+
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
         function getContextualCallSignature(type: Type, node: SignatureDeclaration): Signature | undefined {
             const signatures = getSignaturesOfType(type, SignatureKind.Call);
-            if (signatures.length === 1) {
-                const signature = signatures[0];
-                if (!isAritySmaller(signature, node)) {
-                    return signature;
-                }
-            }
+            const applicableByArity = filter(signatures, s => !isAritySmaller(s, node));
+            return applicableByArity.length === 1 ? applicableByArity[0] : getIntersectedSignatures(applicableByArity);
         }
 
         /** If the contextual signature has fewer parameters than the function expression, do not use it */
