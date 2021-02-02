@@ -3537,6 +3537,10 @@
         "category": "Error",
         "code": 4083
     },
+    "Exported type alias '{0}' has or is using private name '{1}' from module {2}.": {
+        "category": "Error",
+        "code": 4084
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
         "code": 4090

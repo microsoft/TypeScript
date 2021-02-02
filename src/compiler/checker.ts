@@ -4183,7 +4183,8 @@ namespace ts {
                         return {
                             accessibility: SymbolAccessibility.CannotBeNamed,
                             errorSymbolName: symbolToString(symbol, enclosingDeclaration, meaning),
-                            errorModuleName: symbolToString(symbolExternalModule)
+                            errorModuleName: symbolToString(symbolExternalModule),
+                            errorNode: isInJSFile(enclosingDeclaration) ? enclosingDeclaration : undefined,
                         };
                     }
                 }
@@ -4699,7 +4700,7 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyToken | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
+                    const readonlyToken = type.declaration.readonlyToken ? <ReadonlyKeyword | PlusToken | MinusToken>factory.createToken(type.declaration.readonlyToken.kind) : undefined;
                     const questionToken = type.declaration.questionToken ? <QuestionToken | PlusToken | MinusToken>factory.createToken(type.declaration.questionToken.kind) : undefined;
                     let appropriateConstraintTypeNode: TypeNode;
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
@@ -6183,7 +6184,7 @@ namespace ts {
                     tracker: {
                         ...oldcontext.tracker,
                         trackSymbol: (sym, decl, meaning) => {
-                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeALiases*/ false);
+                            const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeAliases*/ false);
                             if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
                                 // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
                                 const chain = lookupSymbolChainWorker(sym, context, meaning);
@@ -6625,16 +6626,17 @@ namespace ts {
                 function addResult(node: Statement, additionalModifierFlags: ModifierFlags) {
                     if (canHaveModifiers(node)) {
                         let newModifierFlags: ModifierFlags = ModifierFlags.None;
+                        const enclosingDeclaration = context.enclosingDeclaration &&
+                            (isJSDocTypeAlias(context.enclosingDeclaration) ? getSourceFileOfNode(context.enclosingDeclaration) : context.enclosingDeclaration);
                         if (additionalModifierFlags & ModifierFlags.Export &&
-                            context.enclosingDeclaration &&
-                            (isExportingScope(context.enclosingDeclaration) || isModuleDeclaration(context.enclosingDeclaration)) &&
+                            enclosingDeclaration && (isExportingScope(enclosingDeclaration) || isModuleDeclaration(enclosingDeclaration)) &&
                             canHaveExportModifier(node)
                         ) {
                             // Classes, namespaces, variables, functions, interfaces, and types should all be `export`ed in a module context if not private
                             newModifierFlags |= ModifierFlags.Export;
                         }
                         if (addingDeclare && !(newModifierFlags & ModifierFlags.Export) &&
-                            (!context.enclosingDeclaration || !(context.enclosingDeclaration.flags & NodeFlags.Ambient)) &&
+                            (!enclosingDeclaration || !(enclosingDeclaration.flags & NodeFlags.Ambient)) &&
                             (isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node) || isModuleDeclaration(node))) {
                             // Classes, namespaces, variables, enums, and functions all need `declare` modifiers to be valid in a declaration file top-level scope
                             newModifierFlags |= ModifierFlags.Ambient;
@@ -6657,6 +6659,8 @@ namespace ts {
                     const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
                     const oldFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
+                    const oldEnclosingDecl = context.enclosingDeclaration;
+                    context.enclosingDeclaration = jsdocAliasDecl;
                     const typeNode = jsdocAliasDecl && jsdocAliasDecl.typeExpression
                         && isJSDocTypeExpression(jsdocAliasDecl.typeExpression)
                         && serializeExistingTypeNode(context, jsdocAliasDecl.typeExpression.type, includePrivateSymbol, bundled)
@@ -6666,6 +6670,7 @@ namespace ts {
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
                     ), modifierFlags);
                     context.flags = oldFlags;
+                    context.enclosingDeclaration = oldEnclosingDecl;
                 }
 
                 function serializeInterface(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
@@ -13868,11 +13873,18 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
+        function instantiateTypeAsMappedNameType(nameType: Type, type: MappedType, t: Type) {
+            return instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t));
+        }
+
         function getIndexTypeForMappedType(type: MappedType, noIndexSignatures: boolean | undefined) {
             const constraint = filterType(getConstraintTypeFromMappedType(type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String)));
             const nameType = type.declaration.nameType && getTypeFromTypeNode(type.declaration.nameType);
+            // If the constraint is exclusively string/number/never type(s), we need to pull the property names from the modified type and run them through the `nameType` mapper as well
+            // since they won't appear in the constraint, due to subtype reducing with the string/number index types
+            const properties = nameType && everyType(constraint, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Never))) && getPropertiesOfType(getApparentType(getModifiersTypeFromMappedType(type)));
             return nameType ?
-                mapType(constraint, t => instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t))) :
+                getUnionType([mapType(constraint, t => instantiateTypeAsMappedNameType(nameType, type, t)), mapType(getUnionType(map(properties || emptyArray, p => getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique))), t => instantiateTypeAsMappedNameType(nameType, type, t))]):
                 constraint;
         }
 
@@ -14635,6 +14647,7 @@ namespace ts {
             // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
             // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
             while (true) {
+                const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.checkType), mapper);
                 const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
@@ -14660,9 +14673,9 @@ namespace ts {
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
                     // then no instantiations will be and we can just return the false branch type.
-                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && ((checkType.flags & TypeFlags.Any && root.isDistributive) || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
+                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && ((checkType.flags & TypeFlags.Any && !isUnwrapped) || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                         // Return union of trueType and falseType for 'any' since it matches anything
-                        if (checkType.flags & TypeFlags.Any && root.isDistributive) {
+                        if (checkType.flags & TypeFlags.Any && !isUnwrapped) {
                             (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                         }
                         // If falseType is an immediately nested conditional type that isn't distributive or has an
@@ -21277,8 +21290,12 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     return isAccessExpression(target) &&
-                        getAccessedPropertyName(<AccessExpression>source) === getAccessedPropertyName(target) &&
-                        isMatchingReference((<AccessExpression>source).expression, target.expression);
+                        getAccessedPropertyName(source as AccessExpression) === getAccessedPropertyName(target) &&
+                        isMatchingReference((source as AccessExpression).expression, target.expression);
+                case SyntaxKind.QualifiedName:
+                    return isAccessExpression(target) &&
+                        (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
+                        isMatchingReference((source as QualifiedName).left, target.expression);
                 case SyntaxKind.BinaryExpression:
                     return (isBinaryExpression(source) && source.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source.right, target));
             }
@@ -22624,13 +22641,13 @@ namespace ts {
                 if (propName === undefined) {
                     return type;
                 }
-                const includesUndefined = strictNullChecks && maybeTypeOfKind(type, TypeFlags.Undefined);
-                const removeOptional = includesUndefined && isOptionalChain(access);
-                let propType = getTypeOfPropertyOfType(removeOptional ? getTypeWithFacts(type, TypeFacts.NEUndefined) : type, propName);
+                const includesNullable = strictNullChecks && maybeTypeOfKind(type, TypeFlags.Nullable);
+                const removeNullable = includesNullable && isOptionalChain(access);
+                let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type, propName);
                 if (!propType) {
                     return type;
                 }
-                propType = removeOptional ? getOptionalType(propType) : propType;
+                propType = removeNullable ? getOptionalType(propType) : propType;
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
@@ -24745,6 +24762,8 @@ namespace ts {
                     const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
                     return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(<ParenthesizedExpression>parent, contextFlags);
                 }
+                case SyntaxKind.NonNullExpression:
+                    return getContextualType(parent as NonNullExpression, contextFlags);
                 case SyntaxKind.JsxExpression:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
                 case SyntaxKind.JsxAttribute:
@@ -26407,8 +26426,7 @@ namespace ts {
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
-            if (!isAccessExpression(node) ||
-                assignmentKind === AssignmentKind.Definite ||
+            if (assignmentKind === AssignmentKind.Definite ||
                 prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
                 return propType;
             }
@@ -26420,7 +26438,7 @@ namespace ts {
             // and if we are in a constructor of the same class as the property declaration, assume that
             // the property is uninitialized at the top of the control flow.
             let assumeUninitialized = false;
-            if (strictNullChecks && strictPropertyInitialization && node.expression.kind === SyntaxKind.ThisKeyword) {
+            if (strictNullChecks && strictPropertyInitialization && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
                 const declaration = prop && prop.valueDeclaration;
                 if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
                     const flowContainer = getControlFlowContainer(node);
