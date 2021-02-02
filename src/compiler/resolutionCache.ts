@@ -16,6 +16,8 @@ namespace ts {
         setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
         hasChangedAutomaticTypeDirectiveNames(): boolean;
+        isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean;
+
 
         startCachingPerDirectoryResolution(): void;
         finishCachingPerDirectoryResolution(): void;
@@ -208,6 +210,7 @@ namespace ts {
             invalidateResolutionsOfFailedLookupLocations,
             setFilesWithInvalidatedNonRelativeUnresolvedImports,
             createHasInvalidatedResolution,
+            isFileWithInvalidatedNonRelativeUnresolvedImports,
             updateTypeRootsWatch,
             closeTypeRootsWatch,
             clear

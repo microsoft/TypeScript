@@ -124,3 +124,30 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         assert.equal(type.flags, ts.TypeFlags.Any);
     });
 });
+
+describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
+    let savedUILocale: string | undefined;
+    beforeEach(() => savedUILocale = ts.getUILocale());
+    afterEach(() => ts.setUILocale(savedUILocale));
+
+    function verifyValidateLocale(locale: string, expectedToReadFile: boolean) {
+        it(`Verifying ${locale} ${expectedToReadFile ? "reads" : "does not read"} file`, () => {
+            const errors: ts.Diagnostic[] = [];
+            ts.validateLocaleAndSetLanguage(locale, {
+                getExecutingFilePath: () => "/tsc.js",
+                resolvePath: ts.identity,
+                fileExists: fileName => {
+                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} check if ${fileName} exists.`);
+                    return expectedToReadFile;
+                },
+                readFile: fileName => {
+                    assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
+                    // Throw error here so that actual change to localized diagnostics messages doesnt take place
+                    throw new Error("cannot read file");
+                }
+            }, errors);
+        });
+    }
+    ts.supportedLocaleDirectories.forEach(locale => verifyValidateLocale(locale, /*expctedToReadFile*/ true));
+    ["en", "en-us"].forEach(locale => verifyValidateLocale(locale, /*expctedToReadFile*/ false));
+});
