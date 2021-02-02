@@ -18988,9 +18988,15 @@ namespace ts {
                 findMostOverlappyType(source, target);
         }
 
-        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: undefined, skipPartial?: boolean): Type | undefined;
-        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type, skipPartial?: boolean): Type;
-        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type, skipPartial?: boolean) {
+        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: undefined, skipPartial?: boolean, allowMultiples?: boolean): Type | undefined;
+        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type, skipPartial?: boolean, allowMultiples?: boolean): Type;
+        function discriminateTypeByDiscriminableItems(
+            target: UnionType,
+            discriminators: [() => Type, __String][],
+            related: (source: Type, target: Type) => boolean | Ternary,
+            defaultValue?: Type,
+            skipPartial?: boolean,
+            allowMultiples?: boolean) {
             // undefined=unknown, true=discriminated, false=not discriminated
             // The state of each type progresses from left to right. Discriminated types stop at 'true'.
             const discriminable = target.types.map(_ => undefined) as (boolean | undefined)[];
@@ -19015,13 +19021,16 @@ namespace ts {
             if (match === -1) {
                 return defaultValue;
             }
+
             // make sure exactly 1 matches before returning it
-            let nextMatch = discriminable.indexOf(/*searchElement*/ true, match + 1);
-            while (nextMatch !== -1) {
-                if (!isTypeIdenticalTo(target.types[match], target.types[nextMatch])) {
-                    return defaultValue;
+            if (!allowMultiples) {
+                let nextMatch = discriminable.indexOf(/*searchElement*/ true, match + 1);
+                while (nextMatch !== -1) {
+                    if (!isTypeIdenticalTo(target.types[match], target.types[nextMatch])) {
+                        return defaultValue;
+                    }
+                    nextMatch = discriminable.indexOf(/*searchElement*/ true, nextMatch + 1);
                 }
-                nextMatch = discriminable.indexOf(/*searchElement*/ true, nextMatch + 1);
             }
             return target.types[match];
         }
@@ -41039,10 +41048,11 @@ namespace ts {
                     if (sourcePropertiesFiltered) {
                         return discriminateTypeByDiscriminableItems(
                             <UnionType>target,
-                            map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName])),
-                            isRelatedTo, /*defaultValue*/ undefined,
-                            skipPartial
-                        );
+                            map(sourcePropertiesFiltered, p => [() => getTypeOfSymbol(p), p.escapedName]),
+                            isRelatedTo,
+                            /*defaultValue*/ undefined,
+                            skipPartial,
+                            /**/ true);
                     }
                 }
             }
