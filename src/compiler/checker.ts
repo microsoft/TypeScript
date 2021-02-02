@@ -21376,80 +21376,65 @@ namespace ts {
             return result;
         }
 
-        function getKeyPropertyNames(unionType: UnionType): __String[] | undefined {
+        function getMapByKeyProperty(types: Type[], name: __String) {
+            let map: ESMap<TypeId, Type> | undefined;
+            for (const type of types) {
+                if (type.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
+                    const discriminant = getTypeOfPropertyOfType(type, name);
+                    if (!discriminant || !isLiteralType(discriminant)) {
+                        return undefined;
+                    }
+                    forEachType(discriminant, t => {
+                        const id = getTypeId(getRegularTypeOfLiteralType(t));
+                        const existing = (map || (map = new Map<TypeId, Type>())).get(id);
+                        if (existing && existing.flags & TypeFlags.Union && (<UnionType>existing).types.length >= 10) {
+                            return undefined;
+                        }
+                        map.set(id, existing ? getUnionType([existing, type]) : type);
+                    });
+                }
+            }
+            return map && map.size >= 10 ? map : undefined;
+        }
+
+        function hasConstituentMap(unionType: UnionType): boolean {
             const types = unionType.types;
             if (types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion) {
-                return undefined;
+                return false;
             }
-            let keyPropertyNames = unionType.keyPropertyNames;
-            if (!keyPropertyNames) {
-                keyPropertyNames = unionType.keyPropertyNames = [];
+            let keyPropertyName = unionType.keyPropertyName;
+            if (keyPropertyName === undefined) {
+                unionType.keyPropertyName = keyPropertyName = "" as __String;
                 const propType = find(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection)) && getPropertiesOfType(t).length !== 0) || unknownType;
-                for (const name of map(getPropertiesOfType(propType), prop => prop.escapedName)) {
-                    if (every(types, t => !(t.flags & (TypeFlags.Object | TypeFlags.Intersection)) || isUnitType(getTypeOfPropertyOfType(t, name) || unknownType))) {
-                        keyPropertyNames.push(name);
+                const propNames = map(getPropertiesOfType(propType), p => p.escapedName);
+                for (const name of propNames) {
+                    const mapByKeyProperty = getMapByKeyProperty(types, name);
+                    if (mapByKeyProperty) {
+                        unionType.keyPropertyName = keyPropertyName = name;
+                        unionType.constituentMap = mapByKeyProperty;
+                        break;
                     }
                 }
             }
-            return keyPropertyNames.length ? keyPropertyNames : undefined;
-        }
-
-        function getUnionConstituentKeyForType(unionType: UnionType, type: Type) {
-            const keyPropertyNames = getKeyPropertyNames(unionType);
-            if (!keyPropertyNames) {
-                return undefined;
-            }
-            const propTypes = [];
-            for (const name of keyPropertyNames) {
-                const propType = getTypeOfPropertyOfType(type, name);
-                if (!(propType && isUnitType(propType))) {
-                    return undefined;
-                }
-                propTypes.push(getRegularTypeOfLiteralType(propType));
-            }
-            return getTypeListId(propTypes);
-        }
-
-        function getUnionConstituentKeyForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression) {
-            const keyPropertyNames = getKeyPropertyNames(unionType);
-            if (!keyPropertyNames) {
-                return undefined;
-            }
-            const propTypes = [];
-            for (const name of keyPropertyNames) {
-                const propNode = find(node.properties, p => p.symbol && p.kind === SyntaxKind.PropertyAssignment &&
-                    p.symbol.escapedName === name && isPossiblyDiscriminantValue(p.initializer));
-                const propType = propNode && getTypeOfExpression((<PropertyAssignment>propNode).initializer);
-                if (!(propType && isUnitType(propType))) {
-                    return undefined;
-                }
-                propTypes.push(getRegularTypeOfLiteralType(propType));
-            }
-            return getTypeListId(propTypes);
-        }
-
-        function getUnionConstituentMap(unionType: UnionType) {
-            if (!unionType.constituentMap) {
-                const map = unionType.constituentMap = new Map<string, Type | undefined>();
-                for (const t of unionType.types) {
-                    const key = getUnionConstituentKeyForType(unionType, t);
-                    if (key) {
-                        const duplicate = map.has(key);
-                        map.set(key, duplicate ? undefined : t);
-                    }
-                }
-            }
-            return unionType.constituentMap;
+            return !!(keyPropertyName as string).length;
         }
 
         function getMatchingUnionConstituentForType(unionType: UnionType, type: Type) {
-            const key = getUnionConstituentKeyForType(unionType, type);
-            return key && getUnionConstituentMap(unionType).get(key);
+            if (!hasConstituentMap(unionType)) {
+                return undefined;
+            }
+            const propType = getTypeOfPropertyOfType(type, unionType.keyPropertyName!);
+            return propType && unionType.constituentMap!.get(getTypeId(getRegularTypeOfLiteralType(propType)));
         }
 
         function getMatchingUnionConstituentForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression) {
-            const key = getUnionConstituentKeyForObjectLiteral(unionType, node);
-            return key && getUnionConstituentMap(unionType).get(key);
+            if (!hasConstituentMap(unionType)) {
+                return undefined;
+            }
+            const propNode = find(node.properties, p => p.symbol && p.kind === SyntaxKind.PropertyAssignment &&
+                p.symbol.escapedName === unionType.keyPropertyName! && isPossiblyDiscriminantValue(p.initializer));
+            const propType = propNode && getTypeOfExpression((<PropertyAssignment>propNode).initializer);
+            return propType && unionType.constituentMap!.get(getTypeId(getRegularTypeOfLiteralType(propType)));
         }
 
         function isOrContainsMatchingReference(source: Node, target: Node) {
@@ -22743,6 +22728,19 @@ namespace ts {
                 });
             }
 
+            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
+                if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union &&
+                    hasConstituentMap(<UnionType>type) && (<UnionType>type).keyPropertyName === getAccessedPropertyName(access)) {
+                    const candidate = (<UnionType>type).constituentMap!.get(getTypeId(getRegularTypeOfLiteralType(getTypeOfExpression(value))));
+                    if (candidate) {
+                        return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ?
+                        candidate :
+                        filterType(type, t => candidate.flags & TypeFlags.Union ? !contains((<UnionType>candidate).types, t) : t !== candidate);
+                    }
+                }
+                return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
+            }
+
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
                     return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
@@ -22812,10 +22810,10 @@ namespace ts {
                             }
                         }
                         if (isMatchingReferenceDiscriminant(left, type)) {
-                            return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
+                            return narrowTypeByDiscriminantProperty(type, <AccessExpression>left, operator, right, assumeTrue);
                         }
                         if (isMatchingReferenceDiscriminant(right, type)) {
-                            return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
+                            return narrowTypeByDiscriminantProperty(type, <AccessExpression>right, operator, left, assumeTrue);
                         }
                         if (isMatchingConstructorReference(left)) {
                             return narrowTypeByConstructor(type, operator, right, assumeTrue);

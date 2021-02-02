@@ -5306,9 +5306,9 @@ namespace ts {
         /* @internal */
         origin?: Type;  // Denormalized union, intersection, or index type in which union originates
         /* @internal */
-        keyPropertyNames?: __String[] | undefined;  // Unit type properties that exist in every object/intersection in union type
+        keyPropertyName?: __String;  // Property with unique unit type that exists in every object/intersection in union type
         /* @internal */
-        constituentMap?: ESMap<string, Type | undefined>;  // Constituents keyed by unit type discriminants
+        constituentMap?: ESMap<TypeId, Type>;  // Constituents keyed by unit type discriminants
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
