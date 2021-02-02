@@ -13173,8 +13173,15 @@ namespace ts {
                         addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                     }
                     else if (isTupleType(type)) {
+                        const elements = getTypeArguments(type);
+                        if (elements.length + expandedTypes.length >= 10_000) {
+                            error(currentNode, isPartOfTypeNode(currentNode!)
+                                ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent
+                                : Diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent);
+                            return errorType;
+                        }
                         // Spread variadic elements with tuple types into the resulting tuple.
-                        forEach(getTypeArguments(type), (t, n) => addElement(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
+                        forEach(elements, (t, n) => addElement(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
                     }
                     else {
                         // Treat everything else as an array type and create a rest element.
