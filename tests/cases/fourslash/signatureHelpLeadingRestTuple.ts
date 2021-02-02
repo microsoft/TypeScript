@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////export function leading(...args: [...names: string[], allCaps: boolean]): void {
+////export function leading(...args: [...names: string[], x: boolean, y: number]): void {
 ////}
 ////
 ////leading(/*1*/);
@@ -10,29 +10,25 @@
 verify.signatureHelp(
     {
         marker: "1",
-        text: "leading(...names: string[], allCaps: boolean): void",
+        text: "leading(...args: [...names: string[], x: boolean, y: number]): void",
         overloadsCount: 1,
-        parameterCount: 2,
-        parameterName: "names",
-        parameterSpan: "...names: string[]",
+        parameterCount: 1,
+        parameterName: "args",
+        parameterSpan: "...args: [...names: string[], x: boolean, y: number]",
         isVariadic: true,
     },
     {
         marker: "2",
-        text: "leading(...names: string[], allCaps: boolean): void",
+        text: "leading(...args: [...names: string[], x: boolean, y: number]): void",
         overloadsCount: 1,
-        parameterCount: 2,
-        parameterName: "names",
-        parameterSpan: "...names: string[]",
+        parameterCount: 1,
         isVariadic: true,
     },
     {
         marker: "3",
-        text: "leading(...names: string[], allCaps: boolean): void",
+        text: "leading(...args: [...names: string[], x: boolean, y: number]): void",
         overloadsCount: 1,
-        parameterCount: 2,
-        parameterName: "names",
-        parameterSpan: "...names: string[]",
+        parameterCount: 1,
         isVariadic: true,
     },
 );

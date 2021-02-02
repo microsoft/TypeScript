@@ -540,15 +540,7 @@ namespace ts.SignatureHelp {
         }
 
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
-        const help = { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
-        const selected = help.items[selectedItemIndex];
-        if (selected.isVariadic) {
-            const firstRest = findIndex(selected.parameters, p => !!p.isRest);
-            if (firstRest > -1 && help.argumentIndex > firstRest) {
-                help.argumentIndex = firstRest;
-            }
-        }
-        return help;
+        return { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
     }
 
     function createTypeHelpItems(
@@ -628,10 +620,12 @@ namespace ts.SignatureHelp {
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });
-        const lists = checker.getExpandedParameters(candidateSignature);
-        return lists.map(parameterList => {
+        const expansions = checker.getExpandedParameters(candidateSignature);
+        const hasNonTrailingRest = expansions.some(e => e.some((p,i) => (p as TransientSymbol).checkFlags & CheckFlags.RestParameter && i !== e.length - 1));
+        const hasTupleExpansion = expansions.length > 1;
+        return (hasNonTrailingRest ? [candidateSignature.parameters] : expansions).map(parameterList => {
             return {
-                isVariadic: isVariadic && (lists.length === 1 || !!((parameterList[parameterList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter)),
+                isVariadic: isVariadic && (!hasTupleExpansion || !!((parameterList[parameterList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter)),
                 parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
                 prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
                 suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
@@ -645,8 +639,7 @@ namespace ts.SignatureHelp {
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
         const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
-        const isRest = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
-        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
+        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional };
     }
 
     function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
@@ -654,6 +647,6 @@ namespace ts.SignatureHelp {
             const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isRest: false };
+        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
     }
 }
