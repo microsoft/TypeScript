@@ -44,6 +44,8 @@
 //// f15({f/*15*/});
 //// f16({f/*16*/});
 
+//// f1({ f1, /*17*/ });
+
 const locals = [
     ...(() => {
         const symbols = [];
@@ -63,4 +65,6 @@ verify.completions(
     { marker: ["14"], exact: "prop", isNewIdentifierLocation: true },
     // NumberIndexType
     { marker: ["15", "16"], exact: [], isNewIdentifierLocation: true },
+    // After comma
+    { marker: ["17"], exact: completion.globalsPlus(locals), isNewIdentifierLocation: true },
 );
