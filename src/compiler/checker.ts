@@ -13173,8 +13173,15 @@ namespace ts {
                         addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                     }
                     else if (isTupleType(type)) {
+                        const elements = getTypeArguments(type);
+                        if (elements.length + expandedTypes.length >= 10_000) {
+                            error(currentNode, isPartOfTypeNode(currentNode!)
+                                ? Diagnostics.Type_produces_a_tuple_type_that_is_too_large_to_represent
+                                : Diagnostics.Expression_produces_a_tuple_type_that_is_too_large_to_represent);
+                            return errorType;
+                        }
                         // Spread variadic elements with tuple types into the resulting tuple.
-                        forEach(getTypeArguments(type), (t, n) => addElement(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
+                        forEach(elements, (t, n) => addElement(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
                     }
                     else {
                         // Treat everything else as an array type and create a rest element.
@@ -22726,12 +22733,12 @@ namespace ts {
                 if (propName === undefined) {
                     return type;
                 }
-                const removeOptional = strictNullChecks && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Undefined);
-                let propType = getTypeOfPropertyOfType(removeOptional ? getTypeWithFacts(type, TypeFacts.NEUndefined) : type, propName);
+                const removeNullable = strictNullChecks && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Nullable);
+                let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type, propName);
                 if (!propType) {
                     return type;
                 }
-                propType = removeOptional ? getOptionalType(propType) : propType;
+                propType = removeNullable ? getOptionalType(propType) : propType;
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);

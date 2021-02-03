@@ -662,7 +662,7 @@ namespace ts {
 
     function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
         if (canReportDiagnostics(system, compilerOptions)) {
-            performance.enable();
+            performance.enable(system);
         }
 
         if (canTrace(system, compilerOptions)) {
