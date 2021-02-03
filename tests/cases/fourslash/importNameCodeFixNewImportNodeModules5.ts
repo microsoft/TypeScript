@@ -18,5 +18,6 @@
 ////   "types": "bin/lib/libfile.d.ts"
 //// }
 
-// No fix because this accesses a nested node_modules
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([
+    { description: "Add missing function declaration 'f1'" }
+]);

@@ -31,6 +31,14 @@ module.exports = BaseFactory;
 
 === tests/cases/conformance/jsdoc/declarations/file.js ===
 /** @typedef {import('./base')} BaseFactory */
+/**
+ * @callback BaseFactoryFactory
+ * @param {import('./base')} factory
+ */
+/** @enum {import('./base')} */
+const couldntThinkOfAny = {}
+>couldntThinkOfAny : {}
+>{} : {}
 
 /**
  *

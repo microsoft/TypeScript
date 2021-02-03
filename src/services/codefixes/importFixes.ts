@@ -215,7 +215,7 @@ namespace ts.codefix {
             : getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program, /*useAutoImportProvider*/ true);
         const useRequire = shouldUseRequire(sourceFile, program);
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && !isSourceFileJS(sourceFile) && isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
-        const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences)).moduleSpecifier;
+        const moduleSpecifier = getBestFix(getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences), sourceFile, program, host).moduleSpecifier;
         const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, position, preferTypeOnlyImport, useRequire, host, preferences);
         return { moduleSpecifier, codeAction: codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences))) };
     }
@@ -223,7 +223,7 @@ namespace ts.codefix {
     function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, symbolName: string, program: Program, position: number | undefined, preferTypeOnlyImport: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
         // We sort the best codefixes first, so taking `first` is best.
-        return first(getFixForImport(exportInfos, symbolName, position, preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences));
+        return getBestFix(getFixForImport(exportInfos, symbolName, position, preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences), sourceFile, program, host);
     }
 
     function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -424,28 +424,13 @@ namespace ts.codefix {
     ): readonly (FixAddNewImport | FixUseImportType)[] {
         const isJs = isSourceFileJS(sourceFile);
         const compilerOptions = program.getCompilerOptions();
-        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
-
-        const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
+        return flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getTypeChecker(), compilerOptions, sourceFile, createModuleSpecifierResolutionHost(program, host), preferences)
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                     // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                     exportedSymbolIsTypeOnly && isJs
                         ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.checkDefined(position, "position should be defined") }
                         : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind, useRequire, typeOnly: preferTypeOnlyImport }));
-
-        // Sort by presence in package.json, then shortest paths first
-        return sort(choicesForEachExportingModule, (a, b) => {
-            const allowsImportingA = allowsImportingSpecifier(a.moduleSpecifier);
-            const allowsImportingB = allowsImportingSpecifier(b.moduleSpecifier);
-            if (allowsImportingA && !allowsImportingB) {
-                return -1;
-            }
-            if (allowsImportingB && !allowsImportingA) {
-                return 1;
-            }
-            return a.moduleSpecifier.length - b.moduleSpecifier.length;
-        });
     }
 
     function getFixesForAddImport(
@@ -479,7 +464,31 @@ namespace ts.codefix {
         const info = errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getFixesInfoForUMDImport(context, symbolToken)
             : isIdentifier(symbolToken) ? getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider) : undefined;
-        return info && { ...info, fixes: sort(info.fixes, (a, b) => a.kind - b.kind) };
+        return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, context.host) };
+    }
+
+    function sortFixes(fixes: readonly ImportFix[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost): readonly ImportFix[] {
+        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
+        return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, allowsImportingSpecifier));
+    }
+
+    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost): T {
+        // These will always be placed first if available, and are better than other kinds
+        if (fixes[0].kind === ImportFixKind.UseNamespace || fixes[0].kind === ImportFixKind.AddToExisting) {
+            return fixes[0];
+        }
+        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
+        return fixes.reduce((best, fix) =>
+            compareModuleSpecifiers(fix, best, allowsImportingSpecifier) === Comparison.LessThan ? fix : best
+        );
+    }
+
+    function compareModuleSpecifiers(a: ImportFix, b: ImportFix, allowsImportingSpecifier: (specifier: string) => boolean): Comparison {
+        if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
+            return compareBooleans(allowsImportingSpecifier(a.moduleSpecifier), allowsImportingSpecifier(b.moduleSpecifier))
+                || compareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier);
+        }
+        return Comparison.EqualTo;
     }
 
     function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: CodeFixContextBase, token: Node): FixesInfo | undefined {

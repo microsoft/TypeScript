@@ -762,7 +762,7 @@ namespace ts {
      * Determines whether `fileName` starts with the specified `directoryName` using the provided path canonicalization callback.
      * Comparison is case-sensitive between the canonical paths.
      *
-     * @deprecated Use `containsPath` if possible.
+     * Use `containsPath` if file names are not already reduced and absolute.
      */
     export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
         const canonicalFileName = getCanonicalFileName(fileName);

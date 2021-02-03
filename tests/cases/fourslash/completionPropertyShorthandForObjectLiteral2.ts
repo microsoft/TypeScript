@@ -12,6 +12,11 @@
 //// };
 
 verify.completions({
-    marker: test.markers(),
-    exact: completion.globalsPlus(["foo", "bar", "obj1", "obj2"]),
+    marker: ["1"],
+    exact: completion.globalsPlus(["foo", "bar", "obj2"]),
+});
+
+verify.completions({
+    marker: ["2"],
+    exact: completion.globalsPlus(["foo", "bar", "obj1"]),
 });

@@ -89,9 +89,9 @@ const x = {};
 
 Object.defineProperty(x, "name", { value: "Charles", writable: true });
 >Object.defineProperty(x, "name", { value: "Charles", writable: true }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >x : typeof x
 >"name" : "name"
 >{ value: "Charles", writable: true } : { value: string; writable: true; }
@@ -102,9 +102,9 @@ Object.defineProperty(x, "name", { value: "Charles", writable: true });
 
 Object.defineProperty(x, "middleInit", { value: "H" });
 >Object.defineProperty(x, "middleInit", { value: "H" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >x : typeof x
 >"middleInit" : "middleInit"
 >{ value: "H" } : { value: string; }
@@ -113,9 +113,9 @@ Object.defineProperty(x, "middleInit", { value: "H" });
 
 Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 >Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >x : typeof x
 >"lastName" : "lastName"
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
@@ -126,9 +126,9 @@ Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 
 Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
 >Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >x : typeof x
 >"zip" : "zip"
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
@@ -139,9 +139,9 @@ Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } 
 
 Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 >Object.defineProperty(x, "houseNumber", { get() { return 21.75 } }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >x : typeof x
 >"houseNumber" : "houseNumber"
 >{ get() { return 21.75 } } : { get(): number; }
@@ -150,9 +150,9 @@ Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 
 Object.defineProperty(x, "zipStr", {
 >Object.defineProperty(x, "zipStr", {    /** @param {string} str */    set(str) {        this.zip = Number(str)     }}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >x : typeof x
 >"zipStr" : "zipStr"
 >{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
