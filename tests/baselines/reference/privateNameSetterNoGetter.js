@@ -17,7 +17,8 @@ var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || func
     if (!instances.has(receiver)) {
         throw new TypeError("attempted to set private accessor on non-instance");
     }
-    return fn.call(receiver, value);
+    fn.call(receiver, value);
+    return value;
 };
 var _C_x_set, _C_instances, _a;
 const C = (_a = class {

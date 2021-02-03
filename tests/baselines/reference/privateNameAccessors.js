@@ -20,7 +20,8 @@ var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || func
     if (!instances.has(receiver)) {
         throw new TypeError("attempted to set private accessor on non-instance");
     }
-    return fn.call(receiver, value);
+    fn.call(receiver, value);
+    return value;
 };
 var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
     throw new TypeError("private element is not writable");
