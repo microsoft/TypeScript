@@ -34,3 +34,20 @@ class A6 {
     #foo() { return ""}
     get #foo() { return ""}
 }
+
+class A7 {
+    get #foo() { return ""; }
+    get #foo() { return ""; }
+}
+
+class A8 {
+    set #foo(a: string) {}
+    set #foo(a: string) {}
+}
+
+class A9 {
+    get #foo() { return ""; }
+    set #foo(a: string) {}
+    get #foo() { return ""; }
+    set #foo(a: string) {}
+}

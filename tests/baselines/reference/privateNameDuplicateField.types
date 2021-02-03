@@ -77,3 +77,47 @@ class A6 {
 >"" : ""
 }
 
+class A7 {
+>A7 : A7
+
+    get #foo() { return ""; }
+>#foo : string
+>"" : ""
+
+    get #foo() { return ""; }
+>#foo : string
+>"" : ""
+}
+
+class A8 {
+>A8 : A8
+
+    set #foo(a: string) {}
+>#foo : string
+>a : string
+
+    set #foo(a: string) {}
+>#foo : string
+>a : string
+}
+
+class A9 {
+>A9 : A9
+
+    get #foo() { return ""; }
+>#foo : string
+>"" : ""
+
+    set #foo(a: string) {}
+>#foo : string
+>a : string
+
+    get #foo() { return ""; }
+>#foo : string
+>"" : ""
+
+    set #foo(a: string) {}
+>#foo : string
+>a : string
+}
+

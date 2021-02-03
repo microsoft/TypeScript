@@ -65,3 +65,43 @@ class A6 {
 >#foo : Symbol(A6.#foo, Decl(privateNameDuplicateField.ts, 30, 23))
 }
 
+class A7 {
+>A7 : Symbol(A7, Decl(privateNameDuplicateField.ts, 32, 1))
+
+    get #foo() { return ""; }
+>#foo : Symbol(A7.#foo, Decl(privateNameDuplicateField.ts, 34, 10))
+
+    get #foo() { return ""; }
+>#foo : Symbol(A7.#foo, Decl(privateNameDuplicateField.ts, 35, 29))
+}
+
+class A8 {
+>A8 : Symbol(A8, Decl(privateNameDuplicateField.ts, 37, 1))
+
+    set #foo(a: string) {}
+>#foo : Symbol(A8.#foo, Decl(privateNameDuplicateField.ts, 39, 10))
+>a : Symbol(a, Decl(privateNameDuplicateField.ts, 40, 13))
+
+    set #foo(a: string) {}
+>#foo : Symbol(A8.#foo, Decl(privateNameDuplicateField.ts, 40, 26))
+>a : Symbol(a, Decl(privateNameDuplicateField.ts, 41, 13))
+}
+
+class A9 {
+>A9 : Symbol(A9, Decl(privateNameDuplicateField.ts, 42, 1))
+
+    get #foo() { return ""; }
+>#foo : Symbol(A9.#foo, Decl(privateNameDuplicateField.ts, 44, 10), Decl(privateNameDuplicateField.ts, 45, 29))
+
+    set #foo(a: string) {}
+>#foo : Symbol(A9.#foo, Decl(privateNameDuplicateField.ts, 44, 10), Decl(privateNameDuplicateField.ts, 45, 29))
+>a : Symbol(a, Decl(privateNameDuplicateField.ts, 46, 13))
+
+    get #foo() { return ""; }
+>#foo : Symbol(A9.#foo, Decl(privateNameDuplicateField.ts, 46, 26))
+
+    set #foo(a: string) {}
+>#foo : Symbol(A9.#foo, Decl(privateNameDuplicateField.ts, 47, 29))
+>a : Symbol(a, Decl(privateNameDuplicateField.ts, 48, 13))
+}
+
