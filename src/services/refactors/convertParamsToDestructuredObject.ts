@@ -123,12 +123,21 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     continue;
                 }
 
-                //
-                if (isValidMethodSignature(entry.node.parent) && contains(interfaceSymbols, getSymbolTargetAtLocation(entry.node))) {
-                    groupedReferences.signature = entry.node.parent;
-                    continue;
+                /* Calls and declarations of implemented interface methods should point to the symbol of the method signature */
+                if (contains(interfaceSymbols, getSymbolTargetAtLocation(entry.node))) {
+                    if (isValidMethodSignature(entry.node.parent)) {
+                        groupedReferences.signature = entry.node.parent;
+                        continue;
+                    }
+                    const call = entryToFunctionCall(entry);
+                    if (call) {
+                        groupedReferences.functionCalls.push(call);
+                        continue;
+                    }
                 }
 
+                /* Declarations in interface implementations have their own symbol so we need to go to the interface declaration
+                to get the type from the method signature. */
                 const interfaceSymbol = getSymbolForInterfaceSignature(entry.node);
                 if (interfaceSymbol && contains(interfaceSymbols, interfaceSymbol)) {
                     const decl = entryToDeclaration(entry);
