@@ -34554,8 +34554,11 @@ namespace ts {
                 : isPropertyAccessExpression(location) ? location.name
                 : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
                 : undefined;
+            const isPropertyExpressionCast = isPropertyAccessExpression(location)
+                && isParenthesizedExpression(location.expression)
+                && isAssertionExpression(location.expression.expression);
 
-            if (!testedNode) {
+            if (!testedNode || isPropertyExpressionCast) {
                 return;
             }
 
