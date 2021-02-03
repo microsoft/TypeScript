@@ -11390,7 +11390,7 @@ namespace ts {
             // Flags we want to propagate to the result if they exist in all source symbols
             let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
             let syntheticFlag = CheckFlags.SyntheticMethod;
-            let checkFlags = CheckFlags.OnlyUnitTypes;
+            let checkFlags = 0;
             for (const current of containingType.types) {
                 const type = getApparentType(current);
                 if (!(type === errorType || type.flags & TypeFlags.Never)) {
@@ -11477,9 +11477,6 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Never) {
                     checkFlags |= CheckFlags.HasNeverType;
-                }
-                if (!isUnitType(type)) {
-                    checkFlags &= ~CheckFlags.OnlyUnitTypes;
                 }
                 propTypes.push(type);
             }
@@ -21376,10 +21373,16 @@ namespace ts {
             return result;
         }
 
-        function getMapByKeyProperty(types: Type[], name: __String) {
+        // Given a set of types and a property name, if all non-primitive types in the set have a discriminant
+        // property by that name of a literal type or a union of literal types, create and return a map keyed by
+        // the literal types of those properties, provided the map has at least 10 unique keys and no more than
+        // 25% duplicates. When the key property is a union of literal types, multiple map entries are created
+        // for that type. Duplicate keys have entries with unknownType as the value.
+        function mapTypesByKeyProperty(types: Type[], name: __String) {
             let map: ESMap<TypeId, Type> | undefined;
+            let duplicateCount = 0;
             for (const type of types) {
-                if (type.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
+                if (type.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive)) {
                     const discriminant = getTypeOfPropertyOfType(type, name);
                     if (!discriminant || !isLiteralType(discriminant)) {
                         return undefined;
@@ -21387,54 +21390,64 @@ namespace ts {
                     forEachType(discriminant, t => {
                         const id = getTypeId(getRegularTypeOfLiteralType(t));
                         const existing = (map || (map = new Map<TypeId, Type>())).get(id);
-                        if (existing && existing.flags & TypeFlags.Union && (<UnionType>existing).types.length >= 10) {
-                            return undefined;
+                        if (!existing) {
+                            map.set(id, type);
                         }
-                        map.set(id, existing ? getUnionType([existing, type]) : type);
+                        else if (existing !== unknownType) {
+                            map.set(id, unknownType);
+                            duplicateCount++;
+                        }
                     });
                 }
             }
-            return map && map.size >= 10 ? map : undefined;
+            return map && map.size >= 10 && map.size >= duplicateCount * 4 ? map : undefined;
         }
 
-        function hasConstituentMap(unionType: UnionType): boolean {
+        // Return the name of a discriminant property that exists and has a literal type in every non-primitive
+        // constituent of the given union type.
+        function getKeyPropertyName(unionType: UnionType): __String | undefined {
             const types = unionType.types;
             if (types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion) {
-                return false;
+                return undefined;
             }
             let keyPropertyName = unionType.keyPropertyName;
             if (keyPropertyName === undefined) {
                 unionType.keyPropertyName = keyPropertyName = "" as __String;
-                const propType = find(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection)) && getPropertiesOfType(t).length !== 0) || unknownType;
-                const propNames = map(getPropertiesOfType(propType), p => p.escapedName);
+                // Obtain the list of candidate key property names from the first non-primitive type in the union.
+                const propType = find(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive)));
+                const propNames = propType ? map(getPropertiesOfType(propType), p => p.escapedName) : emptyArray;
+                // Find the first property for which it is feasible to construct a constituent map.
                 for (const name of propNames) {
-                    const mapByKeyProperty = getMapByKeyProperty(types, name);
-                    if (mapByKeyProperty) {
+                    const mapByKeyProperty = mapTypesByKeyProperty(types, name);
+                    if (mapByKeyProperty && mapByKeyProperty.size >= 10) {
                         unionType.keyPropertyName = keyPropertyName = name;
                         unionType.constituentMap = mapByKeyProperty;
                         break;
                     }
                 }
             }
-            return !!(keyPropertyName as string).length;
+            return (keyPropertyName as string).length ? keyPropertyName : undefined;
+        }
+
+        // Given a union type for which getKeyPropertyName returned a non-undefined result, return the constituent
+        // that corresponds to the given key type for that property name.
+        function getConstituentTypeForKeyType(unionType: UnionType, keyType: Type) {
+            const result = unionType.constituentMap?.get(getTypeId(getRegularTypeOfLiteralType(keyType)));
+            return result !== unknownType ? result : undefined;
         }
 
         function getMatchingUnionConstituentForType(unionType: UnionType, type: Type) {
-            if (!hasConstituentMap(unionType)) {
-                return undefined;
-            }
-            const propType = getTypeOfPropertyOfType(type, unionType.keyPropertyName!);
-            return propType && unionType.constituentMap!.get(getTypeId(getRegularTypeOfLiteralType(propType)));
+            const keyPropertyName = getKeyPropertyName(unionType);
+            const propType = keyPropertyName && getTypeOfPropertyOfType(type, keyPropertyName);
+            return propType && getConstituentTypeForKeyType(unionType, propType);
         }
 
         function getMatchingUnionConstituentForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression) {
-            if (!hasConstituentMap(unionType)) {
-                return undefined;
-            }
-            const propNode = find(node.properties, p => p.symbol && p.kind === SyntaxKind.PropertyAssignment &&
-                p.symbol.escapedName === unionType.keyPropertyName! && isPossiblyDiscriminantValue(p.initializer));
+            const keyPropertyName = getKeyPropertyName(unionType);
+            const propNode = keyPropertyName && find(node.properties, p => p.symbol && p.kind === SyntaxKind.PropertyAssignment &&
+                p.symbol.escapedName === keyPropertyName && isPossiblyDiscriminantValue(p.initializer));
             const propType = propNode && getTypeOfExpression((<PropertyAssignment>propNode).initializer);
-            return propType && unionType.constituentMap!.get(getTypeId(getRegularTypeOfLiteralType(propType)));
+            return propType && getConstituentTypeForKeyType(unionType, propType);
         }
 
         function isOrContainsMatchingReference(source: Node, target: Node) {
@@ -22539,8 +22552,7 @@ namespace ts {
                         }
                     }
                     if (isMatchingReferenceDiscriminant(expr, type)) {
-                        type = narrowTypeByDiscriminant(type, expr as AccessExpression,
-                            t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
+                        type = narrowTypeBySwitchOnDiscriminantProperty(type, expr as AccessExpression, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                     }
                 }
                 return createFlowType(type, isIncomplete(flowType));
@@ -22714,8 +22726,7 @@ namespace ts {
                 if (propName === undefined) {
                     return type;
                 }
-                const includesUndefined = strictNullChecks && maybeTypeOfKind(type, TypeFlags.Undefined);
-                const removeOptional = includesUndefined && isOptionalChain(access);
+                const removeOptional = strictNullChecks && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Undefined);
                 let propType = getTypeOfPropertyOfType(removeOptional ? getTypeWithFacts(type, TypeFacts.NEUndefined) : type, propName);
                 if (!propType) {
                     return type;
@@ -22730,15 +22741,24 @@ namespace ts {
 
             function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
                 if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union &&
-                    hasConstituentMap(<UnionType>type) && (<UnionType>type).keyPropertyName === getAccessedPropertyName(access)) {
-                    const candidate = (<UnionType>type).constituentMap!.get(getTypeId(getRegularTypeOfLiteralType(getTypeOfExpression(value))));
+                    getKeyPropertyName(<UnionType>type) === getAccessedPropertyName(access)) {
+                    const candidate = getConstituentTypeForKeyType(<UnionType>type, getTypeOfExpression(value));
                     if (candidate) {
-                        return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ?
-                        candidate :
-                        filterType(type, t => candidate.flags & TypeFlags.Union ? !contains((<UnionType>candidate).types, t) : t !== candidate);
+                        return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ? candidate : filterType(type, t => t !== candidate);
                     }
                 }
                 return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
+            }
+
+            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+                if (clauseStart < clauseEnd && type.flags & TypeFlags.Union && getKeyPropertyName(<UnionType>type) === getAccessedPropertyName(access)) {
+                    const clauseTypes = getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd);
+                    const candidate = getUnionType(map(clauseTypes, t => getConstituentTypeForKeyType(<UnionType>type, t) || unknownType));
+                    if (candidate !== unknownType) {
+                        return candidate;
+                    }
+                }
+                return narrowTypeByDiscriminant(type, access, t => narrowTypeBySwitchOnDiscriminant(t, switchStatement, clauseStart, clauseEnd));
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
@@ -22886,7 +22906,7 @@ namespace ts {
                 }
                 if (assumeTrue) {
                     const filterFn: (t: Type) => boolean = operator === SyntaxKind.EqualsEqualsToken ?
-                        (t => areTypesComparable(t, valueType) || isCoercibleUnderDoubleEquals(t, valueType)) :
+                        t => areTypesComparable(t, valueType) || isCoercibleUnderDoubleEquals(t, valueType) :
                         t => areTypesComparable(t, valueType);
                     return replacePrimitivesWithLiterals(filterType(type, filterFn), valueType);
                 }
