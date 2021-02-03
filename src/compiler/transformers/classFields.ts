@@ -981,6 +981,7 @@ namespace ts {
         /**
          * Generates brand-check initializer for private methods.
          *
+         * @param statements Statement list that should be used to append new statements.
          * @param methods An array of method declarations.
          * @param receiver The receiver on which each method should be assigned.
          */
