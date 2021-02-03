@@ -934,7 +934,8 @@ namespace ts {
                 if (!instances.has(receiver)) {
                     throw new TypeError("attempted to set private accessor on non-instance");
                 }
-                return fn.call(receiver, value);
+                fn.call(receiver, value);
+                return value;
             };`
     };
 
