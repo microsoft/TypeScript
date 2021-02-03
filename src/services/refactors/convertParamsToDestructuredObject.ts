@@ -51,7 +51,23 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         changes: textChanges.ChangeTracker,
         functionDeclaration: ValidFunctionDeclaration,
         groupedReferences: GroupedReferences): void {
-        const newParamDeclaration = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+        const signature = groupedReferences.signature;
+        const newParamDeclaration = map(createNewParameters(signature ?? functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+
+        if(signature) {
+            changes.replaceNodeRangeWithNodes(
+                sourceFile,
+                first(signature.parameters),
+                last(signature.parameters),
+                newParamDeclaration,
+                {   joiner: ", ",
+                    // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
+                    indentation: 0,
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include
+                });
+        }
+
         changes.replaceNodeRangeWithNodes(
             sourceFile,
             first(functionDeclaration.parameters),
@@ -99,11 +115,27 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
             const classSymbols = map(classNames, getSymbolTargetAtLocation);
             const isConstructor = isConstructorDeclaration(functionDeclaration);
+            const interfaceSymbols = map(functionNames, getSymbolForInterfaceSignature);
 
             for (const entry of referenceEntries) {
-                if (entry.kind !== FindAllReferences.EntryKind.Node) {
+                if (entry.kind === FindAllReferences.EntryKind.Span) {
                     groupedReferences.valid = false;
                     continue;
+                }
+
+                //
+                if (isValidMethodSignature(entry.node.parent) && contains(interfaceSymbols, getSymbolTargetAtLocation(entry.node))) {
+                    groupedReferences.signature = entry.node.parent;
+                    continue;
+                }
+
+                const interfaceSymbol = getSymbolForInterfaceSignature(entry.node);
+                if (interfaceSymbol && contains(interfaceSymbols, interfaceSymbol)) {
+                    const decl = entryToDeclaration(entry);
+                    if (decl) {
+                        groupedReferences.declarations.push(decl);
+                        continue;
+                    }
                 }
 
                 /* We compare symbols because in some cases find all references wil return a reference that may or may not be to the refactored function.
@@ -172,6 +204,21 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         function getSymbolTargetAtLocation(node: Node) {
             const symbol = checker.getSymbolAtLocation(node);
             return symbol && getSymbolTarget(symbol, checker);
+        }
+
+        function getSymbolForInterfaceSignature(node: Node): Symbol | undefined {
+            const element = getContainingObjectLiteralElement(node);
+            if (element) {
+                const contextualType = element && checker.getContextualType(element.parent);
+                if (contextualType) {
+                    const name = getNameFromPropertyName(element.name);
+                    if (!name) return;
+                    if (!contextualType.isUnion()) {
+                        return contextualType.getProperty(name);
+                    }
+                }
+            }
+            return undefined;
         }
     }
 
@@ -292,6 +339,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return false;
     }
 
+    function isValidMethodSignature(node: Node): node is ValidMethodSignature {
+        return isMethodSignature(node) && isInterfaceDeclaration(node.parent);
+    }
+
     function isValidFunctionDeclaration(
         functionDeclaration: FunctionLikeDeclaration,
         checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
@@ -398,7 +449,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return objectLiteral;
     }
 
-    function createNewParameters(functionDeclaration: ValidFunctionDeclaration, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
+    function createNewParameters(functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
         const checker = program.getTypeChecker();
         const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
         const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
@@ -584,6 +635,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         parameters: NodeArray<ValidParameterDeclaration>;
     }
 
+    interface ValidMethodSignature extends MethodSignature {
+        parameters: NodeArray<ValidParameterDeclaration>;
+    }
+
     type ValidFunctionDeclaration = ValidConstructor | ValidFunction | ValidMethod | ValidArrowFunction | ValidFunctionExpression;
 
     interface ValidParameterDeclaration extends ParameterDeclaration {
@@ -595,6 +650,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     interface GroupedReferences {
         functionCalls: (CallExpression | NewExpression)[];
         declarations: Node[];
+        signature?: ValidMethodSignature;
         classReferences?: ClassReferences;
         valid: boolean;
     }
