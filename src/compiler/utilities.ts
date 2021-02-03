@@ -6586,6 +6586,18 @@ namespace ts {
         return false;
     }
 
+    function numberOfDirectorySeparators(str: string) {
+        const match = str.match(/\//g);
+        return match ? match.length : 0;
+    }
+
+    export function compareNumberOfDirectorySeparators(path1: string, path2: string) {
+        return compareValues(
+            numberOfDirectorySeparators(path1),
+            numberOfDirectorySeparators(path2)
+        );
+    }
+
     /**
      * Extension boundaries by priority. Lower numbers indicate higher priorities, and are
      * aligned to the offset of the highest priority extension in the
