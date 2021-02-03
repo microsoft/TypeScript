@@ -4488,15 +4488,15 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (siblingNodePositionsAreComparable(previousNode, nextNode)) {
-                    if (preserveSourceNewlines) {
-                        return getEffectiveLines(
-                            includeComments => getLinesBetweenRangeEndAndRangeStart(
-                                previousNode,
-                                nextNode,
-                                currentSourceFile!,
-                                includeComments));
-                    }
+                else if (preserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode)) {
+                    return getEffectiveLines(
+                        includeComments => getLinesBetweenRangeEndAndRangeStart(
+                            previousNode,
+                            nextNode,
+                            currentSourceFile!,
+                            includeComments));
+                }
+                else if (!preserveSourceNewlines && !nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
                     return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
@@ -4523,9 +4523,8 @@ namespace ts {
                 return previousParent && previousParent === getOriginalNode(nextNode).parent;
             }
 
-            // Get the next specifier and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
             if (!nodeIsFirstNodeAtOrAfterPosition(currentSourceFile!, getOriginalNode(nextNode), previousNode.end)) {
-            return false;
+                return false;
             }
 
             return true;
