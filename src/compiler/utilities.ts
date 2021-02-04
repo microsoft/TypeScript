@@ -6071,6 +6071,10 @@ namespace ts {
         return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
     }
 
+    export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.useDefineForClassFields === undefined ? compilerOptions.target === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+    }
+
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
