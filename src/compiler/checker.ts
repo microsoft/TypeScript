@@ -6899,7 +6899,7 @@ namespace ts {
                         ...!length(baseTypes) ? [] : [factory.createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))],
                         ...!length(implementsExpressions) ? [] : [factory.createHeritageClause(SyntaxKind.ImplementsKeyword, implementsExpressions)]
                     ];
-                    const symbolProps = getNonInterhitedProperties(classType, baseTypes, getPropertiesOfType(classType));
+                    const symbolProps = getNonInheritedProperties(classType, baseTypes, getPropertiesOfType(classType));
                     const publicSymbolProps = filter(symbolProps, s => {
                         // `valueDeclaration` could be undefined if inherited from
                         // a union/intersection base type, but inherited properties
@@ -36242,9 +36242,8 @@ namespace ts {
                     const derivedPropertyFlags = derived.flags & SymbolFlags.PropertyOrAccessor;
                     if (basePropertyFlags && derivedPropertyFlags) {
                         // property/accessor is overridden with property/accessor
-                        if (baseDeclarationFlags & ModifierFlags.Abstract && !(base.valueDeclaration && isPropertyDeclaration(base.valueDeclaration) && base.valueDeclaration.initializer)
-                            || base.valueDeclaration && base.valueDeclaration.parent.kind === SyntaxKind.InterfaceDeclaration
-                            || getCheckFlags(base) & CheckFlags.Synthetic
+                        if (base.valueDeclaration && isPropertyAbstractOrFromInterface(base.valueDeclaration, baseDeclarationFlags)
+                            || getCheckFlags(base) & CheckFlags.Synthetic && base.declarations.some(d => isPropertyAbstractOrFromInterface(d, baseDeclarationFlags))
                             || derived.valueDeclaration && isBinaryExpression(derived.valueDeclaration)) {
                             // when the base property is abstract, from an interface or from an intersection, base/derived flags don't need to match
                             // same when the derived property is from an assignment
@@ -36304,7 +36303,12 @@ namespace ts {
             }
         }
 
-        function getNonInterhitedProperties(type: InterfaceType, baseTypes: BaseType[], properties: Symbol[]) {
+        function isPropertyAbstractOrFromInterface(declaration: Declaration, baseDeclarationFlags: ModifierFlags) {
+            return baseDeclarationFlags & ModifierFlags.Abstract && (!isPropertyDeclaration(declaration) || !declaration.initializer)
+                || declaration.parent.kind === SyntaxKind.InterfaceDeclaration;
+        }
+
+        function getNonInheritedProperties(type: InterfaceType, baseTypes: BaseType[], properties: Symbol[]) {
             if (!length(baseTypes)) {
                 return properties;
             }
