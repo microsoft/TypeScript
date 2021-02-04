@@ -1016,7 +1016,7 @@ namespace ts {
             for (const oldSourceFile of oldSourceFiles) {
                 const newFile = getSourceFileByPath(oldSourceFile.resolvedPath);
                 if (shouldCreateNewSourceFile || !newFile ||
-                    // old file wasnt redirect but new file is
+                    // old file wasn't redirect but new file is
                     (oldSourceFile.resolvedPath === oldSourceFile.path && newFile.resolvedPath !== oldSourceFile.path)) {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
@@ -3157,6 +3157,10 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
                 }
 
+                if (options.preserveConstEnums === false) {
+                    createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_isolatedModules_is_enabled, "preserveConstEnums", "isolatedModules");
+                }
+
                 const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
@@ -3756,7 +3760,7 @@ namespace ts {
         }
 
         function handleDirectoryCouldBeSymlink(directory: string) {
-            if (!host.getResolvedProjectReferences()) return;
+            if (!host.getResolvedProjectReferences() || containsIgnoredPath(directory)) return;
 
             // Because we already watch node_modules, handle symlinks in there
             if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
@@ -3773,7 +3777,7 @@ namespace ts {
                 return;
             }
 
-            symlinkCache.setSymlinkedDirectory(directoryPath, {
+            symlinkCache.setSymlinkedDirectory(directory, {
                 real: ensureTrailingDirectorySeparator(real),
                 realPath
             });

@@ -1,0 +1,7 @@
+=== tests/cases/compiler/spellingSuggestionGlobal3.ts ===
+const global = { x: true }
+>global : Symbol(global, Decl(spellingSuggestionGlobal3.ts, 0, 5))
+>x : Symbol(x, Decl(spellingSuggestionGlobal3.ts, 0, 16))
+
+globals.x // should suggest `global` (GH#42209)
+

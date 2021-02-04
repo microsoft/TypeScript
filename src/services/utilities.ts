@@ -2880,10 +2880,10 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
-    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget) {
-        if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
+    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined) {
+        if (!(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default)) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
+            return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
         }
         return symbol.name;
