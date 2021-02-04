@@ -183,6 +183,17 @@ namespace ts.NavigationBar {
         endNode();
     }
 
+    function addNodeWithRecursiveInitializer(node: VariableDeclaration | PropertyAssignment | BindingElement | PropertyDeclaration): void {
+        if (node.initializer && isFunctionOrClassExpression(node.initializer)) {
+            startNode(node);
+            forEachChild(node.initializer, addChildrenRecursively);
+            endNode();
+        }
+        else {
+            addNodeWithRecursiveChild(node, node.initializer);
+        }
+    }
+
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
     function addChildrenRecursively(node: Node | undefined): void {
         curCancellationToken.throwIfCancellationRequested();
@@ -215,8 +226,12 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.PropertyDeclaration:
+                if (!hasDynamicName(<ClassElement>node)) {
+                    addNodeWithRecursiveInitializer(<PropertyDeclaration>node);
+                }
+                break;
             case SyntaxKind.PropertySignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
+                if (!hasDynamicName(<TypeElement>node)) {
                     addLeafNode(node);
                 }
                 break;
@@ -255,22 +270,16 @@ namespace ts.NavigationBar {
                 break;
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.VariableDeclaration:
-                const { name, initializer } = <VariableDeclaration | PropertyAssignment | BindingElement>node;
-                if (isBindingPattern(name)) {
-                    addChildrenRecursively(name);
-                }
-                else if (initializer && isFunctionOrClassExpression(initializer)) {
-                    // Add a node for the VariableDeclaration, but not for the initializer.
-                    startNode(node);
-                    forEachChild(initializer, addChildrenRecursively);
-                    endNode();
+            case SyntaxKind.VariableDeclaration: {
+                const child = <VariableDeclaration | PropertyAssignment | BindingElement>node;
+                if (isBindingPattern(child.name)) {
+                    addChildrenRecursively(child.name);
                 }
                 else {
-                    addNodeWithRecursiveChild(node, initializer);
+                    addNodeWithRecursiveInitializer(child);
                 }
                 break;
-
+            }
             case SyntaxKind.FunctionDeclaration:
                 const nameNode = (<FunctionLikeDeclaration>node).name;
                 // If we see a function declaration track as a possible ES5 class

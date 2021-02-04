@@ -51,9 +51,9 @@ F.prototype.defsAClass = true;
 
 Object.defineProperty(F.prototype, _str, {value: "ok"});
 >Object.defineProperty(F.prototype, _str, {value: "ok"}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >F.prototype : any
 >F : typeof F
 >prototype : any
@@ -64,9 +64,9 @@ Object.defineProperty(F.prototype, _str, {value: "ok"});
 
 Object.defineProperty(F.prototype, _sym, {value: "ok"});
 >Object.defineProperty(F.prototype, _sym, {value: "ok"}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >F.prototype : any
 >F : typeof F
 >prototype : any

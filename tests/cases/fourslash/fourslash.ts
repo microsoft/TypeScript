@@ -244,6 +244,7 @@ declare namespace FourSlashInterface {
 
         refactorAvailable(name: string, actionName?: string): void;
         refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
+        refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;

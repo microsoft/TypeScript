@@ -146,7 +146,7 @@ function callExpression4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, x.apply(void 0, __spreadArrays(y, [z]))];
+                case 0: return [4 /*yield*/, x.apply(void 0, __spreadArray(__spreadArray([], y), [z]))];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -160,7 +160,7 @@ function callExpression5() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    (_a.sent()).apply(void 0, __spreadArrays(y, [z]));
+                    (_a.sent()).apply(void 0, __spreadArray(__spreadArray([], y), [z]));
                     return [2 /*return*/];
             }
         });
@@ -168,15 +168,16 @@ function callExpression5() {
 }
 function callExpression6() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     _b = (_a = x).apply;
                     _c = [void 0];
+                    _d = [[]];
                     return [4 /*yield*/, y];
                 case 1:
-                    _b.apply(_a, _c.concat([__spreadArrays.apply(void 0, [(_d.sent()), [z]])]));
+                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, [__spreadArray.apply(void 0, _d.concat([(_e.sent())])), [z]])]));
                     return [2 /*return*/];
             }
         });
@@ -190,10 +191,10 @@ function callExpression7() {
                 case 0:
                     _b = (_a = x).apply;
                     _c = [void 0];
-                    _d = [y];
+                    _d = [__spreadArray([], y)];
                     return [4 /*yield*/, z];
                 case 1:
-                    _b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([[_e.sent()]]))]));
+                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, _d.concat([[_e.sent()]]))]));
                     return [2 /*return*/];
             }
         });
@@ -209,7 +210,7 @@ function callExpression8() {
                     _c = [void 0];
                     return [4 /*yield*/, y];
                 case 1:
-                    _b.apply(_a, _c.concat([__spreadArrays.apply(void 0, [[_d.sent()], z])]));
+                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, [[_d.sent()], z])]));
                     return [2 /*return*/];
             }
         });
@@ -226,7 +227,7 @@ function callExpression9() {
                     _d = [[y]];
                     return [4 /*yield*/, z];
                 case 1:
-                    _b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([(_e.sent())]))]));
+                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, _d.concat([(_e.sent())]))]));
                     return [2 /*return*/];
             }
         });

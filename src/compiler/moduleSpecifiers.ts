@@ -104,8 +104,21 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
-
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
+
+        const existingSpecifier = forEach(modulePaths, modulePath => forEach(
+            host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
+            reason => {
+                if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
+                const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
+                // If the preference is for non relative and the module specifier is relative, ignore it
+                return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
+                    specifier :
+                    undefined;
+            }
+        ));
+        if (existingSpecifier) return [existingSpecifier];
+
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
 
         // Module specifier priority:
@@ -163,7 +176,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
-        const { baseUrl, paths, rootDirs, bundledPackageName } = compilerOptions;
+        const { baseUrl, paths, rootDirs } = compilerOptions;
         const { sourceDirectory, getCanonicalFileName } = info;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
@@ -178,9 +191,8 @@ namespace ts.moduleSpecifiers {
             return relativePath;
         }
 
-        const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
         if (!nonRelative) {
             return relativePath;
@@ -243,16 +255,8 @@ namespace ts.moduleSpecifiers {
         return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text) : undefined) || false;
     }
 
-    function numberOfDirectorySeparators(str: string) {
-        const match = str.match(/\//g);
-        return match ? match.length : 0;
-    }
-
     function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: ModulePath) {
-        return compareBooleans(b.isRedirect, a.isRedirect) || compareValues(
-            numberOfDirectorySeparators(a.path),
-            numberOfDirectorySeparators(b.path)
-        );
+        return compareBooleans(b.isRedirect, a.isRedirect) || compareNumberOfDirectorySeparators(a.path, b.path);
     }
 
     function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string) {
@@ -274,40 +278,47 @@ namespace ts.moduleSpecifiers {
         const getCanonicalFileName = hostGetCanonicalFileName(host);
         const cwd = host.getCurrentDirectory();
         const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
-        const redirects = host.redirectTargetsMap.get(toPath(importedFileName, cwd, getCanonicalFileName)) || emptyArray;
+        const importedPath = toPath(importedFileName, cwd, getCanonicalFileName);
+        const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
-            const result = forEach(targets, p => cb(p, referenceRedirect === p));
+            // Symlinks inside ignored paths are already filtered out of the symlink cache,
+            // so we only need to remove them from the realpath filenames.
+            const result = forEach(targets, p => !containsIgnoredPath(p) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
         const links = host.getSymlinkCache
             ? host.getSymlinkCache()
             : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
-        const symlinkedDirectories = links.getSymlinkedDirectories();
-        const useCaseSensitiveFileNames = !host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames();
-        const result = symlinkedDirectories && forEachEntry(symlinkedDirectories, (resolved, path) => {
-            if (resolved === false) return undefined;
-            if (startsWithDirectory(importingFileName, resolved.realPath, getCanonicalFileName)) {
-                return undefined; // Don't want to a package to globally import from itself
+        const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
+        const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
+        const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {
+            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
+            if (!symlinkDirectories) return undefined; // Continue to ancestor directory
+
+            // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
+            if (startsWithDirectory(importingFileName, realPathDirectory, getCanonicalFileName)) {
+                return false; // Stop search, each ancestor directory will also hit this condition
             }
 
             return forEach(targets, target => {
-                if (!containsPath(resolved.real, target, !useCaseSensitiveFileNames)) {
+                if (!startsWithDirectory(target, realPathDirectory, getCanonicalFileName)) {
                     return;
                 }
 
-                const relative = getRelativePathFromDirectory(resolved.real, target, getCanonicalFileName);
-                const option = resolvePath(path, relative);
-                if (!host.fileExists || host.fileExists(option)) {
+                const relative = getRelativePathFromDirectory(realPathDirectory, target, getCanonicalFileName);
+                for (const symlinkDirectory of symlinkDirectories) {
+                    const option = resolvePath(symlinkDirectory, relative);
                     const result = cb(option, target === referenceRedirect);
                     if (result) return result;
                 }
             });
         });
-        return result ||
-            (preferSymlinks ? forEach(targets, p => cb(p, p === referenceRedirect)) : undefined);
+        return result || (preferSymlinks
+            ? forEach(targets, p => containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
+            : undefined);
     }
 
     interface ModulePath {

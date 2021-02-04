@@ -45,7 +45,7 @@ let pair1: Pair<FooBar> = {
 
 // Error expected here
 let pair2: Pairs<FooBar>[keyof FooBar] = {
->pair2 : Pair<FooBar>
+>pair2 : { key: "foo"; value: string; } | { key: "bar"; value: number; }
 >{    key: "foo",    value: 3} : { key: "foo"; value: number; }
 
     key: "foo",

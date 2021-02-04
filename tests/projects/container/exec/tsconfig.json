@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "outFile": "../built/local/exec.js",
-        "bundledPackageName": "exec"
     },
     "files": [
         "index.ts"

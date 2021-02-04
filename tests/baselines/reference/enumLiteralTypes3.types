@@ -15,12 +15,12 @@ type YesNo = Choice.Yes | Choice.No;
 >Choice : any
 
 type NoYes = Choice.No | Choice.Yes;
->NoYes : YesNo
+>NoYes : NoYes
 >Choice : any
 >Choice : any
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
->UnknownYesNo : Choice
+>UnknownYesNo : UnknownYesNo
 >Choice : any
 >Choice : any
 >Choice : any
@@ -29,7 +29,7 @@ function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f1 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     a = a;
@@ -43,9 +43,9 @@ function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >b : YesNo
 
     a = c;
->a = c : Choice
+>a = c : UnknownYesNo
 >a : Choice.Yes
->c : Choice
+>c : UnknownYesNo
 
     a = d;
 >a = d : Choice
@@ -57,7 +57,7 @@ function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f2 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     b = a;
@@ -71,9 +71,9 @@ function f2(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >b : Choice.Yes
 
     b = c;
->b = c : Choice
+>b = c : UnknownYesNo
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 
     b = d;
 >b = d : Choice
@@ -85,27 +85,27 @@ function f3(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f3 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     c = a;
 >c = a : Choice.Yes
->c : Choice
+>c : UnknownYesNo
 >a : Choice.Yes
 
     c = b;
 >c = b : YesNo
->c : Choice
+>c : UnknownYesNo
 >b : YesNo
 
     c = c;
->c = c : YesNo
->c : Choice
->c : YesNo
+>c = c : Choice.Yes | Choice.No
+>c : UnknownYesNo
+>c : Choice.Yes | Choice.No
 
     c = d;
 >c = d : Choice
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 }
 
@@ -113,7 +113,7 @@ function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f4 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     d = a;
@@ -127,9 +127,9 @@ function f4(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >b : YesNo
 
     d = c;
->d = c : Choice
+>d = c : UnknownYesNo
 >d : Choice
->c : Choice
+>c : UnknownYesNo
 
     d = d;
 >d = d : Choice
@@ -141,7 +141,7 @@ function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f5 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     a = Choice.Unknown;
@@ -188,21 +188,21 @@ function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
     c = Choice.Unknown;
 >c = Choice.Unknown : Choice.Unknown
->c : Choice
+>c : UnknownYesNo
 >Choice.Unknown : Choice.Unknown
 >Choice : typeof Choice
 >Unknown : Choice.Unknown
 
     c = Choice.Yes;
 >c = Choice.Yes : Choice.Yes
->c : Choice
+>c : UnknownYesNo
 >Choice.Yes : Choice.Yes
 >Choice : typeof Choice
 >Yes : Choice.Yes
 
     c = Choice.No;
 >c = Choice.No : Choice.No
->c : Choice
+>c : UnknownYesNo
 >Choice.No : Choice.No
 >Choice : typeof Choice
 >No : Choice.No
@@ -233,7 +233,7 @@ function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f6 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     a === Choice.Unknown;
@@ -280,21 +280,21 @@ function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
     c === Choice.Unknown;
 >c === Choice.Unknown : boolean
->c : Choice
+>c : UnknownYesNo
 >Choice.Unknown : Choice.Unknown
 >Choice : typeof Choice
 >Unknown : Choice.Unknown
 
     c === Choice.Yes;
 >c === Choice.Yes : boolean
->c : Choice
+>c : UnknownYesNo
 >Choice.Yes : Choice.Yes
 >Choice : typeof Choice
 >Yes : Choice.Yes
 
     c === Choice.No;
 >c === Choice.No : boolean
->c : Choice
+>c : UnknownYesNo
 >Choice.No : Choice.No
 >Choice : typeof Choice
 >No : Choice.No
@@ -325,7 +325,7 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f7 : (a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) => void
 >a : Choice.Yes
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     a === a;
@@ -341,7 +341,7 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
     a === c;
 >a === c : boolean
 >a : Choice.Yes
->c : Choice
+>c : UnknownYesNo
 
     a === d;
 >a === d : boolean
@@ -361,7 +361,7 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
     b === c;
 >b === c : boolean
 >b : YesNo
->c : Choice
+>c : UnknownYesNo
 
     b === d;
 >b === d : boolean
@@ -370,22 +370,22 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 
     c === a;
 >c === a : boolean
->c : Choice
+>c : UnknownYesNo
 >a : Choice.Yes
 
     c === b;
 >c === b : boolean
->c : Choice
+>c : UnknownYesNo
 >b : YesNo
 
     c === c;
 >c === c : boolean
->c : Choice
->c : Choice
+>c : UnknownYesNo
+>c : UnknownYesNo
 
     c === d;
 >c === d : boolean
->c : Choice
+>c : UnknownYesNo
 >d : Choice
 
     d === a;
@@ -401,7 +401,7 @@ function f7(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
     d === c;
 >d === c : boolean
 >d : Choice
->c : Choice
+>c : UnknownYesNo
 
     d === d;
 >d === d : boolean
@@ -469,10 +469,10 @@ function f11(x: YesNo): YesNo {
 
 function f12(x: UnknownYesNo): UnknownYesNo {
 >f12 : (x: UnknownYesNo) => UnknownYesNo
->x : Choice
+>x : UnknownYesNo
 
     switch (x) {
->x : Choice
+>x : UnknownYesNo
 
         case Choice.Unknown: return x;
 >Choice.Unknown : Choice.Unknown

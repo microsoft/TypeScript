@@ -419,7 +419,7 @@ namespace ts.projectSystem {
                 unresolvedImports: response.unresolvedImports,
             });
 
-            host.checkTimeoutQueueLengthAndRun(1);
+            host.checkTimeoutQueueLength(0);
             assert.isUndefined(request);
         });
 

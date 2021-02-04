@@ -16,10 +16,10 @@ var p = new Proxy(t, {});
 >{} : {}
 
 Reflect.ownKeys({});
->Reflect.ownKeys({}) : (string | number | symbol)[]
->Reflect.ownKeys : (target: object) => (string | number | symbol)[]
+>Reflect.ownKeys({}) : (string | symbol)[]
+>Reflect.ownKeys : (target: object) => (string | symbol)[]
 >Reflect : typeof Reflect
->ownKeys : (target: object) => (string | number | symbol)[]
+>ownKeys : (target: object) => (string | symbol)[]
 >{} : {}
 
 function* idGen() {

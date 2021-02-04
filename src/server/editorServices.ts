@@ -922,13 +922,12 @@ namespace ts.server {
                 case ActionSet:
                     // Update the typing files and update the project
                     project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
-                    break;
+                    return;
                 case ActionInvalidate:
                     // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
                     this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
                     return;
             }
-            this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
 
         /*@internal*/
@@ -1982,28 +1981,17 @@ namespace ts.server {
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension: ts.hasTSFileExtension, host: this.host }, totalNonTsFileSize)); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                    const top5LargestFiles = fileNames.map(f => propertyReader.getFileName(f))
+                        .filter(name => !hasTSFileExtension(name))
+                        .map(name => ({ name, size: this.host.getFileSize!(name) }))
+                        .sort((a, b) => b.size - a.size)
+                        .slice(0, 5);
+                    this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
             }
-
             this.projectToSizeMap.set(name, totalNonTsFileSize);
-
-            return;
-
-            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
-                const files = getTop5LargestFiles(context);
-
-                return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
-            }
-            function getTop5LargestFiles({ propertyReader, hasTSFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }) {
-                return fileNames.map(f => propertyReader.getFileName(f))
-                    .filter(name => hasTSFileExtension(name))
-                    .map(name => ({ name, size: host.getFileSize!(name) })) // TODO: GH#18217
-                    .sort((a, b) => b.size - a.size)
-                    .slice(0, 5);
-            }
         }
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
