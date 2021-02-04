@@ -360,6 +360,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             case SyntaxKind.FunctionDeclaration:
                 return hasNameOrDefault(functionDeclaration) && isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.MethodDeclaration:
+                if (isObjectLiteralExpression(functionDeclaration.parent)) {
+                    const contextualType = checker.getContextualType(functionDeclaration.parent);
+                    return !contextualType?.isUnion() && isSingleImplementation(functionDeclaration, checker);
+                }
                 return isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
