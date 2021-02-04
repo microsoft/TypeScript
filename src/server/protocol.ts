@@ -843,7 +843,6 @@ namespace ts.server.protocol {
     /**
      * A request to get encoded semantic classifications for a span in the file
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequest extends FileRequest {
         arguments: EncodedSemanticClassificationsRequestArgs;
     }
@@ -851,7 +850,6 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
