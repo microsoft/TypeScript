@@ -1,5 +1,5 @@
-# node-pty doesn't build on node 12 right now, so we lock to 8 - the version xterm itself tests against :(
-FROM node:8
+# node-pty doesn't build on node 12 right now, so we lock to 10
+FROM node:10
 RUN git clone https://github.com/xtermjs/xterm.js.git /xtermjs
 WORKDIR /xtermjs
 RUN git pull

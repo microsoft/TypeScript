@@ -2540,6 +2540,11 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkContextualIdentifier(<Identifier>node);
+                case SyntaxKind.QualifiedName:
+                    if (currentFlow && parent.kind === SyntaxKind.TypeQuery) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
@@ -3435,7 +3440,7 @@ namespace ts {
 
         function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
             const instanceState = getModuleInstanceState(node);
-            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && !!options.preserveConstEnums);
+            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && shouldPreserveConstEnums(options));
         }
 
         function checkUnreachable(node: Node): boolean {

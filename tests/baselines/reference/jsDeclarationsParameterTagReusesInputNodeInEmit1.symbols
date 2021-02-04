@@ -27,6 +27,13 @@ module.exports = BaseFactory;
 
 === tests/cases/conformance/jsdoc/declarations/file.js ===
 /** @typedef {import('./base')} BaseFactory */
+/**
+ * @callback BaseFactoryFactory
+ * @param {import('./base')} factory
+ */
+/** @enum {import('./base')} */
+const couldntThinkOfAny = {}
+>couldntThinkOfAny : Symbol(couldntThinkOfAny, Decl(file.js, 6, 5), Decl(file.js, 5, 4))
 
 /**
  *
@@ -34,11 +41,11 @@ module.exports = BaseFactory;
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
 const test = (base) => {
->test : Symbol(test, Decl(file.js, 7, 5))
->base : Symbol(base, Decl(file.js, 7, 14))
+>test : Symbol(test, Decl(file.js, 13, 5))
+>base : Symbol(base, Decl(file.js, 13, 14))
 
     return base;
->base : Symbol(base, Decl(file.js, 7, 14))
+>base : Symbol(base, Decl(file.js, 13, 14))
 
 };
 

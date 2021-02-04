@@ -2430,7 +2430,7 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -2441,6 +2441,8 @@ namespace ts {
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
             case SyntaxKind.CallExpression:
                 return node.arguments[0];
+            case SyntaxKind.ModuleDeclaration:
+                return node.name.kind === SyntaxKind.StringLiteral ? node.name : undefined;
             default:
                 return Debug.assertNever(node);
         }
@@ -4112,16 +4114,25 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
-        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
+    function getCanonicalAbsolutePath(host: ResolveModuleNameResolutionHost, path: string) {
+        return host.getCanonicalFileName(getNormalizedAbsolutePath(path, host.getCurrentDirectory()));
+    }
+
     export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
+            return undefined;
+        }
+        // If the declaration already uses a non-relative name, and is outside the common source directory, continue to use it
+        const specifier = getExternalModuleName(declaration);
+        if (specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
+            getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1) {
             return undefined;
         }
         return getResolvedExternalModuleName(host, file);
@@ -4136,16 +4147,7 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        if (referencePath) {
-            return ensurePathIsNonModuleName(extensionless);
-        }
-        const options = host.getCompilerOptions();
-        const rootPkgName = options.bundledPackageName || "";
-        const newPath = combinePaths(rootPkgName, extensionless);
-        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
-            return newPath.slice(0, newPath.length - "/index".length);
-        }
-        return newPath;
+        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4764,7 +4766,7 @@ namespace ts {
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -4894,6 +4896,12 @@ namespace ts {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
             if (baseStr !== undefined) {
                 return baseStr + "." + entityNameToString(expr.name);
+            }
+        }
+        else if (isElementAccessExpression(expr)) {
+            const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
+            if (baseStr !== undefined && isPropertyName(expr.argumentExpression)) {
+                return baseStr + "." + getPropertyNameForPropertyNameNode(expr.argumentExpression);
             }
         }
         else if (isIdentifier(expr)) {
@@ -5470,11 +5478,6 @@ namespace ts {
         });
     }
 
-    // Return true if the given type is the constructor type for an abstract class
-    export function isAbstractConstructorType(type: Type): boolean {
-        return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
-    }
-
     export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
         if (symbol.flags & SymbolFlags.Class) {
             const declaration = getClassLikeDeclarationOfSymbol(symbol);
@@ -6034,6 +6037,10 @@ namespace ts {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
+    export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
+        return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    }
+
     export function isIncrementalCompilation(options: CompilerOptions) {
         return !!(options.incremental || options.composite);
     }
@@ -6112,25 +6119,43 @@ namespace ts {
     }
 
     export interface SymlinkCache {
+        /** Gets a map from symlink to realpath. Keys have trailing directory separators. */
         getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+        /** Gets a map from realpath to symlinks. Keys have trailing directory separators. */
+        getSymlinkedDirectoriesByRealpath(): MultiMap<Path, string> | undefined;
+        /** Gets a map from symlink to realpath */
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
-        setSymlinkedDirectory(path: Path, directory: SymlinkedDirectory | false): void;
-        setSymlinkedFile(path: Path, real: string): void;
+        setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
+        setSymlinkedFile(symlinkPath: Path, real: string): void;
     }
 
-    export function createSymlinkCache(): SymlinkCache {
+    export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
+            getSymlinkedDirectoriesByRealpath: () => symlinkedDirectoriesByRealpath,
             setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
-            setSymlinkedDirectory: (path, directory) => (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory),
+            setSymlinkedDirectory: (symlink, real) => {
+                // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
+                // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
+                // this path is never a candidate for a module specifier, we can ignore it entirely.
+                let symlinkPath = toPath(symlink, cwd, getCanonicalFileName);
+                if (!containsIgnoredPath(symlinkPath)) {
+                    symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
+                    if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
+                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                    }
+                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
+                }
+            }
         };
     }
 
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
-        const cache = createSymlinkCache();
+        const cache = createSymlinkCache(cwd, getCanonicalFileName);
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
@@ -6138,7 +6163,7 @@ namespace ts {
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
-                    toPath(commonOriginal, cwd, getCanonicalFileName),
+                    commonOriginal,
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }
@@ -6146,8 +6171,8 @@ namespace ts {
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
-        const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
-        const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        const aParts = getPathComponents(getNormalizedAbsolutePath(a, cwd));
+        const bParts = getPathComponents(getNormalizedAbsolutePath(b, cwd));
         let isDirectory = false;
         while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
@@ -6577,6 +6602,18 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    function numberOfDirectorySeparators(str: string) {
+        const match = str.match(/\//g);
+        return match ? match.length : 0;
+    }
+
+    export function compareNumberOfDirectorySeparators(path1: string, path2: string) {
+        return compareValues(
+            numberOfDirectorySeparators(path1),
+            numberOfDirectorySeparators(path2)
+        );
     }
 
     /**
@@ -7098,5 +7135,9 @@ namespace ts {
             }
             return false;
         }
+    }
+
+    export function containsIgnoredPath(path: string) {
+        return some(ignoredPaths, p => stringContains(path, p));
     }
 }
