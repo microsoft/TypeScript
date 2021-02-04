@@ -179,8 +179,8 @@ namespace ts.moduleSpecifiers {
         const { baseUrl, paths, rootDirs } = compilerOptions;
         const { sourceDirectory, getCanonicalFileName } = info;
 
-        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
-            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
+        const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions, host) ||
+            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions, host);
         if (!baseUrl && !paths || relativePreference === RelativePreference.Relative) {
             return relativePath;
         }
@@ -191,7 +191,7 @@ namespace ts.moduleSpecifiers {
             return relativePath;
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host);
         const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
         if (!nonRelative) {
@@ -449,7 +449,7 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: Ending, compilerOptions: CompilerOptions): string | undefined {
+    function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: Ending, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost): string | undefined {
         const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
         if (normalizedTargetPath === undefined) {
             return undefined;
@@ -458,7 +458,7 @@ namespace ts.moduleSpecifiers {
         const normalizedSourcePath = getPathRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
         const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePathFromDirectory(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
         return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
-            ? removeExtensionAndIndexPostFix(relativePath, ending, compilerOptions)
+            ? removeExtensionAndIndexPostFix(relativePath, ending, compilerOptions, host)
             : removeFileExtension(relativePath);
     }
 
@@ -528,7 +528,7 @@ namespace ts.moduleSpecifiers {
                     const subModuleName = path.slice(packageRootPath.length + 1);
                     const fromPaths = tryGetModuleNameFromPaths(
                         removeFileExtension(subModuleName),
-                        removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
+                        removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options, host),
                         versionPaths.paths
                     );
                     if (fromPaths !== undefined) {
@@ -645,12 +645,20 @@ namespace ts.moduleSpecifiers {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions): string {
+    function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions, host: ModuleSpecifierResolutionHost): string {
         if (fileExtensionIs(fileName, Extension.Json)) return fileName;
         const noExtension = removeFileExtension(fileName);
         switch (ending) {
             case Ending.Minimal:
-                return removeSuffix(noExtension, "/index");
+                const noIndex = removeSuffix(noExtension, "/index");
+                // Can't provide ./foo/index if ./foo.ts exists
+                return host.fileExists(noIndex + Extension.Ts)
+                    || host.fileExists(noIndex + Extension.Dts)
+                    || options.jsx && host.fileExists(noIndex + Extension.Tsx)
+                    || getAllowJSCompilerOption(options) && host.fileExists(noIndex + Extension.Js)
+                    || getAllowJSCompilerOption(options) && options.jsx && host.fileExists(noIndex + Extension.Jsx)
+                    ? noExtension
+                    : noIndex;
             case Ending.Index:
                 return noExtension;
             case Ending.JsExtension:
