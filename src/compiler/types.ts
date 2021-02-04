@@ -3886,6 +3886,7 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
+        /*@internal*/ inlineHintsCallExpressionHintableCache?: ESMap<CallExpression, boolean>
     }
 
     /*@internal*/

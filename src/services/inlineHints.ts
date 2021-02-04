@@ -8,7 +8,7 @@ namespace ts.InlineHints {
 
         const checker = program.getTypeChecker();
         const result: InlineHint[] = [];
-        const callExpressionHintableCache = new Map<CallExpression, boolean>();
+        const callExpressionHintableCache = program.inlineHintsCallExpressionHintableCache ??= new Map<CallExpression, boolean>();
 
         visitor(file);
         return result;
