@@ -8,10 +8,10 @@ const { SomeClass, SomeClass: Another } = require('./lib');
 >'./lib' : "./lib"
 
 module.exports = {
->module.exports = {    SomeClass,    Another} : typeof import("tests/cases/conformance/jsdoc/declarations/main")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/main")
->module : { "\"tests/cases/conformance/jsdoc/declarations/main\"": typeof import("tests/cases/conformance/jsdoc/declarations/main"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/main")
+>module.exports = {    SomeClass,    Another} : typeof import("tests/cases/conformance/jsdoc/declarations/main.js")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/main.js")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/main.js"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/main.js")
 >{    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
 
     SomeClass,
@@ -46,10 +46,10 @@ class SomeClass {
 }
 
 module.exports = {
->module.exports = {    bar,    SomeClass} : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
->module : { "\"tests/cases/conformance/jsdoc/declarations/lib\"": typeof import("tests/cases/conformance/jsdoc/declarations/lib"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
+>module.exports = {    bar,    SomeClass} : typeof import("tests/cases/conformance/jsdoc/declarations/lib.js")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/lib.js")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/lib.js"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/lib.js")
 >{    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
 
     bar,

@@ -1,17 +1,17 @@
 === tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js ===
 var middlewarify = module.exports = {};
->middlewarify : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag")
->module.exports = {} : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag")
->module.exports : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag")
->module : { "\"tests/cases/conformance/jsdoc/exportedAliasedEnumTag\"": typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag"); }
->exports : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag")
+>middlewarify : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js")
+>module.exports = {} : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js")
 >{} : {}
 
 /** @enum */
 middlewarify.Type = {
 >middlewarify.Type = {  BEFORE: 'before'} : { BEFORE: string; }
 >middlewarify.Type : { BEFORE: string; }
->middlewarify : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag")
+>middlewarify : typeof import("tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js")
 >Type : { BEFORE: string; }
 >{  BEFORE: 'before'} : { BEFORE: string; }
 
