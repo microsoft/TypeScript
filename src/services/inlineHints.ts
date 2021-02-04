@@ -166,7 +166,8 @@ namespace ts.InlineHints {
         }
 
         function visitCallOrNewExpression(expr: CallExpression | NewExpression) {
-            if (!expr.arguments || !expr.arguments.length) {
+            const args = expr.arguments;
+            if (!args || !args.length) {
                 return;
             }
 
@@ -176,8 +177,8 @@ namespace ts.InlineHints {
                 return;
             }
 
-            for (let i = 0; i < expr.arguments.length; ++i) {
-                const arg = expr.arguments[i];
+            for (let i = 0; i < args.length; ++i) {
+                const arg = args[i];
                 if (!preferences.includeInlineNonLiteralParameterNameHints && !isHintableExpression(arg)) {
                     continue;
                 }
@@ -185,7 +186,7 @@ namespace ts.InlineHints {
                 const parameterName = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (parameterName) {
                     if (preferences.includeInlineDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName) {
-                        addNameHints(unescapeLeadingUnderscores(parameterName), makeEmptyRange(expr.arguments[i].getStart()));
+                        addNameHints(unescapeLeadingUnderscores(parameterName), makeEmptyRange(args[i].getStart()));
                     }
                 }
             }
