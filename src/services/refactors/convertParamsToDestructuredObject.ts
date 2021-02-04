@@ -54,7 +54,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const signature = groupedReferences.signature;
         const newParamDeclaration = map(createNewParameters(signature ?? functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
 
-        if(signature) {
+        if (signature) {
             changes.replaceNodeRangeWithNodes(
                 sourceFile,
                 first(signature.parameters),
