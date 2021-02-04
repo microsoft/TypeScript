@@ -1790,7 +1790,26 @@ namespace ts {
             return returnValue ? {} : undefined;
         }
 
-        return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
+        const rootExpression: Expression = sourceFile.statements[0].expression;
+        if (rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
+            errors.push(createDiagnosticForNodeInSourceFile(
+                sourceFile,
+                rootExpression,
+                Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                getBaseFileName(sourceFile.fileName) === "jsconfig.json" ? "jsconfig.json" : "tsconfig.json"
+            ));
+            // Last-ditch error recovery. Somewhat useful because the JSON parser will recover from some parse errors by
+            // synthesizing a top-level array literal expression. There's a reasonable chance the first element of that
+            // array is a well-formed configuration object, made into an array element by stray characters.
+            if (isArrayLiteralExpression(rootExpression)) {
+                const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
+                if (firstObject) {
+                    return convertPropertyValueToJson(firstObject, knownRootOptions);
+                }
+            }
+            return returnValue ? {} : undefined;
+        }
+        return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
         function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
             return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
