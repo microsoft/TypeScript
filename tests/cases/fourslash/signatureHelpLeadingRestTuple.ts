@@ -13,8 +13,6 @@ verify.signatureHelp(
         text: "leading(...names: string[], allCaps: boolean): void",
         overloadsCount: 1,
         parameterCount: 2,
-        parameterName: "names",
-        parameterSpan: "...names: string[]",
         isVariadic: true,
     },
     {
@@ -22,8 +20,6 @@ verify.signatureHelp(
         text: "leading(...names: string[], allCaps: boolean): void",
         overloadsCount: 1,
         parameterCount: 2,
-        parameterName: "names",
-        parameterSpan: "...names: string[]",
         isVariadic: true,
     },
     {
@@ -31,8 +27,6 @@ verify.signatureHelp(
         text: "leading(...names: string[], allCaps: boolean): void",
         overloadsCount: 1,
         parameterCount: 2,
-        parameterName: "names",
-        parameterSpan: "...names: string[]",
         isVariadic: true,
     },
 );

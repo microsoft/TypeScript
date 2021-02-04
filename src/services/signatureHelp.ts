@@ -544,8 +544,12 @@ namespace ts.SignatureHelp {
         const selected = help.items[selectedItemIndex];
         if (selected.isVariadic) {
             const firstRest = findIndex(selected.parameters, p => !!p.isRest);
-            if (firstRest > -1 && help.argumentIndex > firstRest) {
-                help.argumentIndex = firstRest;
+            if (-1 < firstRest && firstRest < selected.parameters.length - 1) {
+                // We don't have any code to get this correct; instead, don't highlight a current parameter AT ALL
+                help.argumentIndex = selected.parameters.length;
+            }
+            else {
+                help.argumentIndex = Math.min(help.argumentIndex, selected.parameters.length - 1);
             }
         }
         return help;
