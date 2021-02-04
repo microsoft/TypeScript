@@ -2495,7 +2495,7 @@ namespace ts {
         // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
         const quotePreference = getQuotePreference(sourceFile, preferences);
         const quoted = JSON.stringify(text);
-        return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'` : quoted;
+        return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
     }
 
     export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
