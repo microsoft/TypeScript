@@ -60,7 +60,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 
     // ok
     optional && console.log('optional');
->optional && console.log('optional') : void | undefined
+>optional && console.log('optional') : void
 >optional : (() => boolean) | undefined
 >console.log('optional') : void
 >console.log : (...data: any[]) => void
@@ -70,7 +70,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 
     // ok
     1 && optional && console.log('optional');
->1 && optional && console.log('optional') : void | undefined
+>1 && optional && console.log('optional') : void
 >1 && optional : (() => boolean) | undefined
 >1 : 1
 >optional : (() => boolean) | undefined
@@ -441,7 +441,7 @@ class Foo {
 
         // ok
         1 && this.optional && console.log('optional');
->1 && this.optional && console.log('optional') : void | undefined
+>1 && this.optional && console.log('optional') : void
 >1 && this.optional : (() => boolean) | undefined
 >1 : 1
 >this.optional : (() => boolean) | undefined
