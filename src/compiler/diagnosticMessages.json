@@ -3312,6 +3312,14 @@
         "category": "Error",
         "code": 2809
     },
+    "Property '{0}' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'": {
+        "category": "Error",
+        "code": 2810
+    },
+    "Initializer for property '{0}'": {
+        "category": "Error",
+        "code": 2811
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
