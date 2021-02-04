@@ -21380,60 +21380,59 @@ namespace ts {
             return result;
         }
 
-        // Given a set of types and a property name, if all non-primitive types in the set have a discriminant
-        // property by that name of a literal type or a union of literal types, create and return a map keyed by
-        // the literal types of those properties, provided the map has at least 10 unique keys and no more than
-        // 25% duplicates. When the key property is a union of literal types, multiple map entries are created
-        // for that type. Duplicate keys have entries with unknownType as the value.
+        // Given a set of constituent types and a property name, create and return a map keyed by the literal
+        // types of the property by that name in each constituent type. No map is returned if some key property
+        // has a non-literal type or if less than 10 or less than 50% of the constituents have a unique key.
+        // Entries with duplicate keys have unknownType as the value.
         function mapTypesByKeyProperty(types: Type[], name: __String) {
-            let map: ESMap<TypeId, Type> | undefined;
-            let duplicateCount = 0;
+            const map = new Map<TypeId, Type>();
+            let count = 0;
             for (const type of types) {
                 if (type.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive)) {
                     const discriminant = getTypeOfPropertyOfType(type, name);
-                    if (!discriminant || !isLiteralType(discriminant)) {
-                        return undefined;
+                    if (discriminant) {
+                        if (!isLiteralType(discriminant)) {
+                            return undefined;
+                        }
+                        let duplicate = false;
+                        forEachType(discriminant, t => {
+                            const id = getTypeId(getRegularTypeOfLiteralType(t));
+                            const existing = map.get(id);
+                            if (!existing) {
+                                map.set(id, type);
+                            }
+                            else if (existing !== unknownType) {
+                                map.set(id, unknownType);
+                                duplicate = true;
+                            }
+                        });
+                        if (!duplicate) count++;
                     }
-                    forEachType(discriminant, t => {
-                        const id = getTypeId(getRegularTypeOfLiteralType(t));
-                        const existing = (map || (map = new Map<TypeId, Type>())).get(id);
-                        if (!existing) {
-                            map.set(id, type);
-                        }
-                        else if (existing !== unknownType) {
-                            map.set(id, unknownType);
-                            duplicateCount++;
-                        }
-                    });
                 }
             }
-            return map && map.size >= 10 && map.size >= duplicateCount * 4 ? map : undefined;
+            return count >= 10 && count * 2 >= types.length ? map : undefined;
         }
 
-        // Return the name of a discriminant property that exists and has a literal type in every non-primitive
-        // constituent of the given union type.
+        // Return the name of a discriminant property for which it was possible and feasible to construct a map of
+        // constituent types keyed by the literal types of the property by that name in each constituent type.
         function getKeyPropertyName(unionType: UnionType): __String | undefined {
             const types = unionType.types;
+            // We only construct maps for large unions with non-primitive constituents.
             if (types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion) {
                 return undefined;
             }
-            let keyPropertyName = unionType.keyPropertyName;
-            if (keyPropertyName === undefined) {
-                unionType.keyPropertyName = keyPropertyName = "" as __String;
-                // Obtain the list of candidate key property names from the first non-primitive type in the union.
-                const propType = find(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive)));
-                const propNames = propType ? map(getPropertiesOfType(propType), p => p.escapedName) : emptyArray;
-                // Find the first property for which it is feasible to construct a constituent map.
-                for (const name of propNames) {
-                    const mapByKeyProperty = mapTypesByKeyProperty(types, name);
-                    if (mapByKeyProperty && mapByKeyProperty.size >= 10) {
-                        unionType.keyPropertyName = keyPropertyName = name;
-                        unionType.constituentMap = mapByKeyProperty;
-                        break;
-                    }
-                }
+            if (unionType.keyPropertyName === undefined) {
+                // The candidate key property name is the name of the first property with a unit type in one of the
+                // constituent types.
+                const keyPropertyName = forEach(types, t =>
+                    t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive) ?
+                        forEach(getPropertiesOfType(t), p => isUnitType(getTypeOfSymbol(p)) ? p.escapedName : undefined) :
+                        undefined);
+                const mapByKeyProperty = keyPropertyName && mapTypesByKeyProperty(types, keyPropertyName);
+                unionType.keyPropertyName = mapByKeyProperty ? keyPropertyName : "" as __String;
+                unionType.constituentMap = mapByKeyProperty;
             }
-            return (keyPropertyName as string).length ? keyPropertyName : undefined;
+            return (unionType.keyPropertyName as string).length ? unionType.keyPropertyName : undefined;
         }
 
         // Given a union type for which getKeyPropertyName returned a non-undefined result, return the constituent
@@ -24751,10 +24750,10 @@ namespace ts {
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
             if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
-                const discriminatedType = instantiatedType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, instantiatedType as UnionType) :
-                    instantiatedType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, instantiatedType as UnionType) :
-                    instantiatedType;
-                return mapType(discriminatedType, getApparentType, /*noReductions*/ true);
+                const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
+                return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
+                    apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
+                    apparentType;
             }
         }
 
