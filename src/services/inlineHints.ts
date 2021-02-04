@@ -18,7 +18,8 @@ namespace ts.InlineHints {
                 return;
             }
 
-            switch(node.kind) {
+            switch (node.kind) {
+
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
