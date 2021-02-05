@@ -11,20 +11,20 @@ class Derived extends Base {
 >Base : Base
 
     method() {
->method : () => void | undefined
+>method : () => void
 
         return super.method?.();
->super.method?.() : void | undefined
+>super.method?.() : void
 >super.method : (() => void) | undefined
 >super : Base
 >method : (() => void) | undefined
     }
 
     async asyncMethod() {
->asyncMethod : () => Promise<void | undefined>
+>asyncMethod : () => Promise<void>
 
         return super.method?.();
->super.method?.() : void | undefined
+>super.method?.() : void
 >super.method : (() => void) | undefined
 >super : Base
 >method : (() => void) | undefined

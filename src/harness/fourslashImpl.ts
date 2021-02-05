@@ -2802,7 +2802,7 @@ namespace FourSlash {
                 const matchingName = completions?.filter(e => e.name === options.name);
                 const detailMessage = matchingName?.length
                     ? `\n  Found ${matchingName.length} with name '${options.name}' from source(s) ${matchingName.map(e => `'${e.source}'`).join(", ")}.`
-                    : "";
+                    : ` (In fact, there were no completions with name '${options.name}' at all.)`;
                 return this.raiseError(`No completions were found for the given name, source, and preferences.` + detailMessage);
             }
             const codeActions = details.codeActions;
