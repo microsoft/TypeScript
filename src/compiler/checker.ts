@@ -8768,8 +8768,15 @@ namespace ts {
             }
             if (symbol.flags & SymbolFlags.ModuleExports) {
                 const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
+                const result = createSymbol(fileSymbol.flags, "exports" as __String);
+                result.declarations = fileSymbol.declarations ? fileSymbol.declarations.slice() : [];
+                result.parent = symbol;
+                result.target = fileSymbol;
+                if (fileSymbol.valueDeclaration) result.valueDeclaration = fileSymbol.valueDeclaration;
+                if (fileSymbol.members) result.members = new Map(fileSymbol.members);
+                if (fileSymbol.exports) result.exports = new Map(fileSymbol.exports);
                 const members = createSymbolTable();
-                members.set("exports" as __String, fileSymbol);
+                members.set("exports" as __String, result);
                 return createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
             }
             // Handle catch clause variables

@@ -7,10 +7,10 @@ const errors = require("./errors");
 >"./errors" : "./errors"
 
 module.exports = {
->module.exports = {    errors} : typeof import("tests/cases/conformance/jsdoc/declarations/utils/index")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/utils/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/utils/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/index")
+>module.exports = {    errors} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{    errors} : { errors: typeof errors; }
 
     errors
@@ -34,10 +34,10 @@ class FancyError extends Error {
 }
 
 module.exports = {
->module.exports = {    FancyError} : typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors")
->module : { "\"tests/cases/conformance/jsdoc/declarations/utils/errors\"": typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors")
+>module.exports = {    FancyError} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{    FancyError} : { FancyError: typeof FancyError; }
 
     FancyError
