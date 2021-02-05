@@ -7157,6 +7157,13 @@ declare namespace ts.server.protocol {
          */
         format?: "original" | "2020";
     }
+    /** The response for a EncodedSemanticClassificationsRequest */
+    interface EncodedSemanticClassificationsResponse extends Response {
+        body?: {
+            endOfLineState: EndOfLineState;
+            spans: number[];
+        };
+    }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
