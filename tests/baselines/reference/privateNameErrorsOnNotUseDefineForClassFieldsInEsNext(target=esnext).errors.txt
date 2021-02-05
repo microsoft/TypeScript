@@ -1,0 +1,48 @@
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(3,17): error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(7,13): error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(11,17): error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(12,17): error TS2801: Property '#foo' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(19,21): error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts (5 errors) ====
+    class Test {
+        #prop = 0 
+        static dd = new Test().#prop; // Err
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+!!! related TS2802 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:3:12: Initializer for property 'dd'
+        static ["X_ z_ zz"] = class Inner {
+            #foo  = 10   
+            m() {
+                new Test().#prop // Err
+                ~~~~~~~~~~~~~~~~
+!!! error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+!!! related TS2802 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:4:12: Initializer for property 'X_ z_ zz'
+            }
+            static C = class InnerInner {
+                m() {
+                    new Test().#prop // Err
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+!!! related TS2802 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:4:12: Initializer for property 'X_ z_ zz'
+                    new Inner().#foo; // Err
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2801: Property '#foo' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+!!! related TS2802 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:9:16: Initializer for property 'C'
+                }
+            }
+    
+            static M(){
+                return class {
+                    m() {
+                        new Test().#prop // Err
+                        ~~~~~~~~~~~~~~~~
+!!! error TS2801: Property '#prop' has a private name but is used in a static initializer in its declaring class. This is only supported for an ESNext target if 'useDefineForClassFields' is set to 'true'
+!!! related TS2802 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:4:12: Initializer for property 'X_ z_ zz'
+                        new Inner().#foo; // OK
+                    }
+                }
+            } 
+        }
+    }

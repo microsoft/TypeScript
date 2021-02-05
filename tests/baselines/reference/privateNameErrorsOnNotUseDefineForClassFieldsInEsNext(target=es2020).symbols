@@ -1,0 +1,63 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts ===
+class Test {
+>Test : Symbol(Test, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+    #prop = 0 
+>#prop : Symbol(Test.#prop, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 12))
+
+    static dd = new Test().#prop; // Err
+>dd : Symbol(Test.dd, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 1, 13))
+>new Test().#prop : Symbol(Test.#prop, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 12))
+>Test : Symbol(Test, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+    static ["X_ z_ zz"] = class Inner {
+>["X_ z_ zz"] : Symbol(Test["X_ z_ zz"], Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 2, 33))
+>"X_ z_ zz" : Symbol(Test["X_ z_ zz"], Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 2, 33))
+>Inner : Symbol(Inner, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
+
+        #foo  = 10   
+>#foo : Symbol(Inner.#foo, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 3, 39))
+
+        m() {
+>m : Symbol(Inner.m, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 4, 18))
+
+            new Test().#prop // Err
+>new Test().#prop : Symbol(Test.#prop, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 12))
+>Test : Symbol(Test, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+        }
+        static C = class InnerInner {
+>C : Symbol(Inner.C, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 7, 9))
+>InnerInner : Symbol(InnerInner, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 8, 18))
+
+            m() {
+>m : Symbol(InnerInner.m, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 8, 37))
+
+                new Test().#prop // Err
+>new Test().#prop : Symbol(Test.#prop, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 12))
+>Test : Symbol(Test, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+                new Inner().#foo; // Err
+>new Inner().#foo : Symbol(Inner.#foo, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 3, 39))
+>Inner : Symbol(Inner, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
+            }
+        }
+
+        static M(){
+>M : Symbol(Inner.M, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 13, 9))
+
+            return class {
+                m() {
+>m : Symbol((Anonymous class).m, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 16, 26))
+
+                    new Test().#prop // Err
+>new Test().#prop : Symbol(Test.#prop, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 12))
+>Test : Symbol(Test, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 0, 0))
+
+                    new Inner().#foo; // OK
+>new Inner().#foo : Symbol(Inner.#foo, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 3, 39))
+>Inner : Symbol(Inner, Decl(privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts, 3, 25))
+                }
+            }
+        } 
+    }
+}

@@ -1,0 +1,75 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts ===
+class Test {
+>Test : Test
+
+    #prop = 0 
+>#prop : number
+>0 : 0
+
+    static dd = new Test().#prop; // Err
+>dd : number
+>new Test().#prop : number
+>new Test() : Test
+>Test : typeof Test
+
+    static ["X_ z_ zz"] = class Inner {
+>["X_ z_ zz"] : typeof Inner
+>"X_ z_ zz" : "X_ z_ zz"
+>class Inner {        #foo  = 10           m() {            new Test().#prop // Err        }        static C = class InnerInner {            m() {                new Test().#prop // Err                new Inner().#foo; // Err            }        }        static M(){            return class {                m() {                    new Test().#prop // Err                    new Inner().#foo; // OK                }            }        }     } : typeof Inner
+>Inner : typeof Inner
+
+        #foo  = 10   
+>#foo : number
+>10 : 10
+
+        m() {
+>m : () => void
+
+            new Test().#prop // Err
+>new Test().#prop : number
+>new Test() : Test
+>Test : typeof Test
+        }
+        static C = class InnerInner {
+>C : typeof InnerInner
+>class InnerInner {            m() {                new Test().#prop // Err                new Inner().#foo; // Err            }        } : typeof InnerInner
+>InnerInner : typeof InnerInner
+
+            m() {
+>m : () => void
+
+                new Test().#prop // Err
+>new Test().#prop : number
+>new Test() : Test
+>Test : typeof Test
+
+                new Inner().#foo; // Err
+>new Inner().#foo : number
+>new Inner() : Inner
+>Inner : typeof Inner
+            }
+        }
+
+        static M(){
+>M : () => typeof (Anonymous class)
+
+            return class {
+>class {                m() {                    new Test().#prop // Err                    new Inner().#foo; // OK                }            } : typeof (Anonymous class)
+
+                m() {
+>m : () => void
+
+                    new Test().#prop // Err
+>new Test().#prop : number
+>new Test() : Test
+>Test : typeof Test
+
+                    new Inner().#foo; // OK
+>new Inner().#foo : number
+>new Inner() : Inner
+>Inner : typeof Inner
+                }
+            }
+        } 
+    }
+}
