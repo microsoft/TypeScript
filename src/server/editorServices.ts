@@ -641,6 +641,17 @@ namespace ts.server {
         errors: Diagnostic[] | undefined;
     }
 
+    /*@internal*/
+    export interface CachedCommandLine{
+        configFile?: TsConfigSourceFile;
+        parsedCommandLine?: ParsedCommandLine;
+        cachedDirectoryStructureHost: CachedDirectoryStructureHost;
+        watchedDirectories?: Map<WildcardDirectoryWatcher>;
+        watchedDirectoriesStale?: boolean;
+        projects?: Set<NormalizedPath>;
+        reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -757,6 +768,8 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
+        readonly commandLineCache = new Map<NormalizedPath, CachedCommandLine>();
+        /*@internal*/
         private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
 
         /*@internal*/
@@ -766,6 +779,7 @@ namespace ts.server {
 
 
         private performanceEventHandler?: PerformanceEventHandler;
+
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -1261,20 +1275,20 @@ namespace ts.server {
          * This is to watch whenever files are added or removed to the wildcard directories
          */
         /*@internal*/
-        watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
-            const watchOptions = this.getWatchOptions(project);
+        watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, configFileName: NormalizedPath, cachedCommandLine: CachedCommandLine) {
             return this.watchFactory.watchDirectory(
                 directory,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
-                    const fsResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
-                    const configFileName = project.getConfigFilePath();
+                    const fsResult = cachedCommandLine.cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
                     if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
-                        this.logger.info(`Project: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
+                        this.logger.info(`Detected new package.json: ${fileOrDirectory}`);
                         this.onAddPackageJson(fileOrDirectoryPath);
                     }
+
+                    const configuredProjectForConfig = this.findConfiguredProjectByProjectName(configFileName);
 
                     if (isIgnoredFileFromWildCardWatching({
                         watchedDirPath: directory,
@@ -1283,37 +1297,48 @@ namespace ts.server {
                         configFileName,
                         extraFileExtensions: this.hostConfiguration.extraFileExtensions,
                         currentDirectory: this.currentDirectory,
-                        options: project.getCompilationSettings(),
-                        program: project.getCurrentProgram(),
+                        options: cachedCommandLine.parsedCommandLine!.options,
+                        program: configuredProjectForConfig?.getCurrentProgram() || cachedCommandLine.parsedCommandLine!.fileNames,
                         useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
-                        writeLog: s => this.logger.info(s)
+                        writeLog: s => this.logger.info(s),
+                        toPath: s => this.toPath(s)
                     })) return;
 
-                    // don't trigger callback on open, existing files
-                    if (project.fileIsOpen(fileOrDirectoryPath)) {
-                        if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
+                    if (cachedCommandLine.reloadLevel !== ConfigFileProgramReloadLevel.Full) {
+                        cachedCommandLine.reloadLevel = ConfigFileProgramReloadLevel.Partial;
+                    }
+
+                    cachedCommandLine.projects?.forEach(canonicalFileName => {
+                        const project = this.getConfiguredProjectByCanonicalConfigFilePath(canonicalFileName);
+                        if (!project) return;
+
+                        // Load root file names for configured project with the config file name
+                        // But only schedule update if project references config file
+                        const reloadLevel = configuredProjectForConfig === project ? ConfigFileProgramReloadLevel.Partial : ConfigFileProgramReloadLevel.None;
+                        if (project.pendingReload !== undefined && project.pendingReload > reloadLevel) return;
+
+                        // don't trigger callback on open, existing files
+                        if (this.openFiles.has(fileOrDirectoryPath)) {
                             const info = Debug.checkDefined(this.getScriptInfoForPath(fileOrDirectoryPath));
                             if (info.isAttached(project)) {
-                                project.openFileWatchTriggered.set(fileOrDirectoryPath, true);
+                                const loadLevelToSet = Math.max(reloadLevel, project.openFileWatchTriggered.get(fileOrDirectoryPath) || ConfigFileProgramReloadLevel.None) as ConfigFileProgramReloadLevel;
+                                project.openFileWatchTriggered.set(fileOrDirectoryPath, loadLevelToSet);
                             }
                             else {
-                                project.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                                project.pendingReload = reloadLevel;
                                 this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
                             }
                         }
-                        return;
-                    }
-
-                    // Reload is pending, do the reload
-                    if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
-                        project.pendingReload = ConfigFileProgramReloadLevel.Partial;
-                        this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
-                    }
+                        else {
+                            // Reload is pending, do the reload
+                            project.pendingReload = reloadLevel;
+                            this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
+                        }
+                    });
                 },
                 flags,
-                watchOptions,
+                this.getWatchOptionsFromProjectWatchOptions(cachedCommandLine.parsedCommandLine!.watchOptions),
                 WatchType.WildcardDirectory,
-                project
             );
         }
 
@@ -1343,6 +1368,7 @@ namespace ts.server {
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
                 // Skip refresh if project is not yet loaded
                 if (project.isInitialLoadPending()) return;
+                // TODO:: sheetal:: handle full reload
                 project.pendingReload = ConfigFileProgramReloadLevel.Full;
                 project.pendingReloadReason = "Change in config file detected";
                 this.delayUpdateProjectGraph(project);
@@ -1546,10 +1572,11 @@ namespace ts.server {
 
                     // If project had open file affecting
                     // Reload the root Files from config if its not already scheduled
-                    if (p.openFileWatchTriggered.has(info.path)) {
+                    const reloadLevel = p.openFileWatchTriggered.get(info.path);
+                    if (reloadLevel !== undefined) {
                         p.openFileWatchTriggered.delete(info.path);
                         if (!p.pendingReload) {
-                            p.pendingReload = ConfigFileProgramReloadLevel.Partial;
+                            p.pendingReload = reloadLevel;
                             p.markFileAsDirty(info.path);
                         }
                     }
@@ -2072,13 +2099,21 @@ namespace ts.server {
 
         /* @internal */
         createConfiguredProject(configFileName: NormalizedPath) {
-            const cachedDirectoryStructureHost = createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!; // TODO: GH#18217
+            const canonicalFileName = asNormalizedPath(this.toCanonicalFileName(configFileName));
+            let entry = this.commandLineCache.get(canonicalFileName);
+            if (!entry) {
+                entry = {
+                    cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
+                    reloadLevel: ConfigFileProgramReloadLevel.Full
+                };
+                this.commandLineCache.set(canonicalFileName, entry);
+            }
             this.logger.info(`Opened configuration file ${configFileName}`);
             const project = new ConfiguredProject(
                 configFileName,
                 this,
                 this.documentRegistry,
-                cachedDirectoryStructureHost);
+                entry.cachedDirectoryStructureHost);
             project.createConfigFileWatcher();
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
@@ -2115,33 +2150,9 @@ namespace ts.server {
             this.sendProjectLoadingStartEvent(project, reason);
 
             // Read updated contents from disk
-            const configFilename = normalizePath(project.getConfigFilePath());
-
-            const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
-            const result = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "");
-            const configFileErrors = result.parseDiagnostics as Diagnostic[];
-            if (!isString(configFileContent)) configFileErrors.push(configFileContent);
-            const parsedCommandLine = parseJsonSourceFileConfigFileContent(
-                result,
-                project.getCachedDirectoryStructureHost(),
-                getDirectoryPath(configFilename),
-                /*existingOptions*/ {},
-                configFilename,
-                /*resolutionStack*/[],
-                this.hostConfiguration.extraFileExtensions,
-                /*extendedConfigCache*/ undefined,
-            );
-
-            if (parsedCommandLine.errors.length) {
-                configFileErrors.push(...parsedCommandLine.errors);
-            }
-
-            this.logger.info(`Config: ${configFilename} : ${JSON.stringify({
-                rootNames: parsedCommandLine.fileNames,
-                options: parsedCommandLine.options,
-                projectReferences: parsedCommandLine.projectReferences
-            }, /*replacer*/ undefined, " ")}`);
-
+            const configFilename = asNormalizedPath(normalizePath(project.getConfigFilePath()));
+            const cachedCommandLine = this.parseTsconfigFile(configFilename, project.canonicalConfigFilePath);
+            const parsedCommandLine = cachedCommandLine.parsedCommandLine!;
             Debug.assert(!!parsedCommandLine.fileNames);
             const compilerOptions = parsedCommandLine.options;
 
@@ -2155,24 +2166,105 @@ namespace ts.server {
                 };
             }
             project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
-            project.setProjectErrors(configFileErrors);
+            project.setProjectErrors(cachedCommandLine.configFile!.parseDiagnostics);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
-                project.stopWatchingWildCards();
+                this.stopWatchingWildCards(project, project.canonicalConfigFilePath);
                 this.removeProjectFromSharedExtendedConfigFileMap(project);
             }
             else {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
-                project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
+                this.watchWildcards(project, configFilename, project.canonicalConfigFilePath); // TODO: GH#18217
                 this.updateSharedExtendedConfigFileMap(project, parsedCommandLine);
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
+        }
+
+        /*@internal*/
+        private parseTsconfigFile(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath): CachedCommandLine {
+            const existingCachedCommandLine = this.commandLineCache.get(canonicalConfigFilePath);
+            const cachedDirectoryStructureHost = existingCachedCommandLine?.cachedDirectoryStructureHost ||
+                createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!;
+            if (existingCachedCommandLine) {
+                if (!existingCachedCommandLine.reloadLevel) return existingCachedCommandLine;
+                if (existingCachedCommandLine.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                    this.reloadFileNamesOfTsconfigFile(configFilename, canonicalConfigFilePath);
+                    return existingCachedCommandLine;
+                }
+            }
+
+            // Read updated contents from disk
+            const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
+            const configFile = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "") as TsConfigSourceFile;
+            const configFileErrors = configFile.parseDiagnostics as Diagnostic[];
+            if (!isString(configFileContent)) configFileErrors.push(configFileContent);
+            const parsedCommandLine = parseJsonSourceFileConfigFileContent(
+                configFile,
+                cachedDirectoryStructureHost,
+                getDirectoryPath(configFilename),
+                /*existingOptions*/ {},
+                configFilename,
+                /*resolutionStack*/[],
+                this.hostConfiguration.extraFileExtensions,
+                /*extendedConfigCache*/ undefined, // TODO:: sheetal:: Add extendedCache now that we watch extended config files
+            );
+
+            if (parsedCommandLine.errors.length) {
+                configFileErrors.push(...parsedCommandLine.errors);
+            }
+
+            this.logger.info(`Config: ${configFilename} : ${JSON.stringify({
+                rootNames: parsedCommandLine.fileNames,
+                options: parsedCommandLine.options,
+                watchOptions: parsedCommandLine.watchOptions,
+                projectReferences: parsedCommandLine.projectReferences
+            }, /*replacer*/ undefined, " ")}`);
+
+            if (existingCachedCommandLine) {
+                existingCachedCommandLine.configFile = configFile;
+                existingCachedCommandLine.parsedCommandLine = parsedCommandLine;
+                existingCachedCommandLine.watchedDirectoriesStale = true;
+                existingCachedCommandLine.reloadLevel = undefined;
+                return existingCachedCommandLine;
+            }
+
+            const cachedCommandLine: CachedCommandLine = { configFile, parsedCommandLine, cachedDirectoryStructureHost };
+            this.commandLineCache.set(canonicalConfigFilePath, cachedCommandLine);
+            return cachedCommandLine;
+        }
+
+        /*@internal*/
+        private watchWildcards(project: ConfiguredProject, configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath) {
+            const cachedCommandLine = Debug.checkDefined(this.commandLineCache.get(canonicalConfigFilePath));
+            (cachedCommandLine.projects ||= new Set()).add(project.canonicalConfigFilePath);
+            if (cachedCommandLine.watchedDirectories && !cachedCommandLine.watchedDirectoriesStale) return;
+
+            updateWatchingWildcardDirectories(
+                cachedCommandLine.watchedDirectories ||= new Map(),
+                new Map(getEntries(cachedCommandLine.parsedCommandLine!.wildcardDirectories!)),
+                // Create new directory watcher
+                (directory, flags) => this.watchWildcardDirectory(directory as Path, flags, configFileName, cachedCommandLine),
+            );
+        }
+
+        /*@internal*/
+        stopWatchingWildCards(project: ConfiguredProject, canonicalConfigFilePath: NormalizedPath) {
+            const cachedCommandLine = this.commandLineCache.get(canonicalConfigFilePath);
+            if (!cachedCommandLine?.projects) return;
+
+            cachedCommandLine.projects.delete(project.canonicalConfigFilePath);
+            if (cachedCommandLine.projects.size !== 0) return;
+
+            clearMap(cachedCommandLine.watchedDirectories!, closeFileWatcherOf);
+            cachedCommandLine.projects = undefined;
+            cachedCommandLine.watchedDirectories = undefined;
+            cachedCommandLine.watchedDirectoriesStale = undefined;
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
@@ -2264,12 +2356,31 @@ namespace ts.server {
          */
         /*@internal*/
         reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
-            const configFileSpecs = project.getCompilerOptions().configFile!.configFileSpecs!;
-            const configFileName = project.getConfigFilePath();
-            const fileNames = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
+            const fileNames = this.reloadFileNamesOfTsconfigFile(asNormalizedPath(normalizePath(project.getConfigFilePath())), project.canonicalConfigFilePath);
             project.updateErrorOnNoInputFiles(fileNames);
             this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
+        }
+
+        /*@internal*/
+        private reloadFileNamesOfTsconfigFile(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath) {
+            const cachedCommandLine = Debug.checkDefined(this.commandLineCache.get(canonicalConfigFilePath));
+            if (cachedCommandLine.reloadLevel === undefined) return cachedCommandLine.parsedCommandLine!.fileNames;
+            if (cachedCommandLine.reloadLevel === ConfigFileProgramReloadLevel.Full) {
+                this.parseTsconfigFile(configFileName, canonicalConfigFilePath);
+                return cachedCommandLine.parsedCommandLine!.fileNames;
+            }
+
+            const configFileSpecs = cachedCommandLine.configFile!.configFileSpecs!;
+            const fileNames = getFileNamesFromConfigSpecs(
+                configFileSpecs,
+                getDirectoryPath(configFileName),
+                cachedCommandLine.parsedCommandLine!.options,
+                cachedCommandLine.cachedDirectoryStructureHost,
+                this.hostConfiguration.extraFileExtensions
+            );
+            cachedCommandLine.parsedCommandLine!.fileNames = fileNames;
+            return fileNames;
         }
 
         /*@internal*/
@@ -2865,7 +2976,11 @@ namespace ts.server {
 
         /*@internal*/
         getWatchOptions(project: Project) {
-            const projectOptions = project.getWatchOptions();
+            return this.getWatchOptionsFromProjectWatchOptions(project.getWatchOptions());
+        }
+
+        /*@internal*/
+        private getWatchOptionsFromProjectWatchOptions(projectOptions: WatchOptions | undefined) {
             return projectOptions && this.hostConfiguration.watchOptions ?
                 { ...this.hostConfiguration.watchOptions, ...projectOptions } :
                 projectOptions || this.hostConfiguration.watchOptions;

@@ -356,6 +356,11 @@ namespace ts {
         return !!(entry as ParsedCommandLine).options;
     }
 
+    function getCachedParsedConfigFile(state: SolutionBuilderState, configFilePath: ResolvedConfigFilePath): ParsedCommandLine | undefined {
+        const value = state.configFileCache.get(configFilePath);
+        return value && isParsedCommandLine(value) ? value : undefined;
+    }
+
     function parseConfigFile(state: SolutionBuilderState, configFileName: ResolvedConfigFileName, configFilePath: ResolvedConfigFilePath): ParsedCommandLine | undefined {
         const { configFileCache } = state;
         const value = configFileCache.get(configFilePath);
@@ -1834,9 +1839,10 @@ namespace ts {
                         configFileName: resolved,
                         currentDirectory: state.currentDirectory,
                         options: parsed.options,
-                        program: state.builderPrograms.get(resolvedPath),
+                        program: state.builderPrograms.get(resolvedPath) || getCachedParsedConfigFile(state, resolvedPath)?.fileNames,
                         useCaseSensitiveFileNames: state.parseConfigFileHost.useCaseSensitiveFileNames,
-                        writeLog: s => state.writeLog(s)
+                        writeLog: s => state.writeLog(s),
+                        toPath: fileName => toPath(state, fileName)
                     })) return;
 
                     invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);

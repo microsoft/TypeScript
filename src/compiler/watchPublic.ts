@@ -769,10 +769,11 @@ namespace ts {
                         configFileName,
                         extraFileExtensions,
                         options: compilerOptions,
-                        program: getCurrentBuilderProgram(),
+                        program: getCurrentBuilderProgram() || rootFileNames,
                         currentDirectory,
                         useCaseSensitiveFileNames,
-                        writeLog
+                        writeLog,
+                        toPath,
                     })) return;
 
                     // Reload is pending, do the reload

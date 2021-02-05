@@ -2065,7 +2065,6 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
-        private directoriesWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
@@ -2074,7 +2073,7 @@ namespace ts.server {
         pendingReloadReason: string | undefined;
 
         /* @internal */
-        openFileWatchTriggered = new Map<string, true>();
+        openFileWatchTriggered = new Map<string, ConfigFileProgramReloadLevel>();
 
         /*@internal*/
         canConfigFileJsonReportNoInputFiles = false;
@@ -2275,31 +2274,13 @@ namespace ts.server {
             this.projectErrors = projectErrors;
         }
 
-        /*@internal*/
-        watchWildcards(wildcardDirectories: ESMap<string, WatchDirectoryFlags>) {
-            updateWatchingWildcardDirectories(
-                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = new Map()),
-                wildcardDirectories,
-                // Create new directory watcher
-                (directory, flags) => this.projectService.watchWildcardDirectory(directory as Path, flags, this),
-            );
-        }
-
-        /*@internal*/
-        stopWatchingWildCards() {
-            if (this.directoriesWatchedForWildcards) {
-                clearMap(this.directoriesWatchedForWildcards, closeFileWatcherOf);
-                this.directoriesWatchedForWildcards = undefined;
-            }
-        }
-
         close() {
             if (this.configFileWatcher) {
                 this.configFileWatcher.close();
                 this.configFileWatcher = undefined;
             }
 
-            this.stopWatchingWildCards();
+            this.projectService.stopWatchingWildCards(this, this.canonicalConfigFilePath);
             this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();

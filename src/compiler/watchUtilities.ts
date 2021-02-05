@@ -381,18 +381,19 @@ namespace ts {
         fileOrDirectoryPath: Path;
         configFileName: string;
         options: CompilerOptions;
-        program: BuilderProgram | Program | undefined;
+        program: BuilderProgram | Program | readonly string[] | undefined;
         extraFileExtensions?: readonly FileExtensionInfo[];
         currentDirectory: string;
         useCaseSensitiveFileNames: boolean;
         writeLog: (s: string) => void;
+        toPath: (fileName: string) => Path;
     }
     /* @internal */
     export function isIgnoredFileFromWildCardWatching({
         watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
         configFileName, options, program, extraFileExtensions,
         currentDirectory, useCaseSensitiveFileNames,
-        writeLog,
+        writeLog, toPath,
     }: IsIgnoredFileFromWildCardWatchingInput): boolean {
         const newPath = removeIgnoredPath(fileOrDirectoryPath);
         if (!newPath) {
@@ -432,7 +433,8 @@ namespace ts {
 
         // just check if sourceFile with the name exists
         const filePathWithoutExtension = removeFileExtension(fileOrDirectoryPath);
-        const realProgram = isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+        const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+        const builderProgram = !realProgram && !isArray(program) ? program as BuilderProgram : undefined;
         if (hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
             hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)) {
             writeLog(`Project: ${configFileName} Detected output file: ${fileOrDirectory}`);
@@ -440,10 +442,12 @@ namespace ts {
         }
         return false;
 
-        function hasSourceFile(file: Path) {
+        function hasSourceFile(file: Path): boolean {
             return realProgram ?
                 !!realProgram.getSourceFileByPath(file) :
-                (program as BuilderProgram).getState().fileInfos.has(file);
+                builderProgram ?
+                    builderProgram.getState().fileInfos.has(file) :
+                    !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
         }
     }
 
