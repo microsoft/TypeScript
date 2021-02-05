@@ -26982,17 +26982,17 @@ namespace ts {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
 
-                if(lexicallyScopedSymbol && (compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields === false)) {
+                if (lexicallyScopedSymbol && (compilerOptions.target === ScriptTarget.ESNext && !useDefineForClassFields)) {
                     const lexicalValueDecl = lexicallyScopedSymbol.valueDeclaration;
                     const lexicalClass = lexicalValueDecl && getContainingClass(lexicalValueDecl);
                     const parentStaticFieldInitializer = findAncestor(node, (n) => {
-                        if(n === lexicalClass) return "quit";
-                        if(isPropertyDeclaration(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
+                        if (n === lexicalClass) return "quit";
+                        if (isPropertyDeclaration(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
                             return true;
                         }
                         return false;
                     });
-                    if(parentStaticFieldInitializer) {
+                    if (parentStaticFieldInitializer) {
                         const parentStaticFieldInitializerSymbol = getSymbolOfNode(parentStaticFieldInitializer.parent);
                         Debug.assert(parentStaticFieldInitializerSymbol, "Initializer without declaration symbol");
                         const diagnostic = error(node,
