@@ -1603,7 +1603,7 @@ namespace ts {
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
-            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*optionsIterator*/ undefined),
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1767,7 +1767,7 @@ namespace ts {
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
-    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, optionsIterator: JsonConversionNotifier): any {
+    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, optionsIterator: JsonConversionNotifier | undefined): any {
         const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
         const knownRootOptions = getTsconfigRootOptionsMap();
         if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
