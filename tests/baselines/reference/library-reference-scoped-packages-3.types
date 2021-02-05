@@ -1,0 +1,10 @@
+=== /foo/a.ts ===
+/// <reference types="@beep/boop" />
+No type information for this code.
+No type information for this code.=== /types/beep__boop/index.d.ts ===
+// @currentDirectory /foo
+
+export const y = 0;
+>y : 0
+>0 : 0
+

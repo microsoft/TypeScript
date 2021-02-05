@@ -1,0 +1,15 @@
+[
+    "======== Resolving type reference directive '@beep/boop', containing file '/a.ts', root directory '/types'. ========",
+    "Resolving with primary search path '/types'.",
+    "Scoped package detected, looking in 'beep__boop'",
+    "File '/types/beep__boop/package.json' does not exist.",
+    "File '/types/beep__boop/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/types/beep__boop/index.d.ts', result '/types/beep__boop/index.d.ts'.",
+    "======== Type reference directive '@beep/boop' was successfully resolved to '/types/beep__boop/index.d.ts', primary: true. ========",
+    "======== Resolving type reference directive 'beep__boop', containing file '__inferred type names__.ts', root directory '/types'. ========",
+    "Resolving with primary search path '/types'.",
+    "File '/types/beep__boop/package.json' does not exist.",
+    "File '/types/beep__boop/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/types/beep__boop/index.d.ts', result '/types/beep__boop/index.d.ts'.",
+    "======== Type reference directive 'beep__boop' was successfully resolved to '/types/beep__boop/index.d.ts', primary: true. ========"
+]
