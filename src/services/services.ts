@@ -2004,8 +2004,8 @@ namespace ts {
                 : Promise.reject("Host does not implement `installPackage`");
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
-            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
+        function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
+            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

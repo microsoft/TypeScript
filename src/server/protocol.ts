@@ -3273,6 +3273,8 @@ namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+
+        readonly generateReturnInDocTemplate?: boolean;
     }
 
     export interface CompilerOptions {
