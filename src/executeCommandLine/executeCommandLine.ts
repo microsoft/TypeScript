@@ -501,7 +501,7 @@ namespace ts {
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
-        tracing?.dumpLegend();
+        tracing.on && tracing.dumpLegend();
         return sys.exit(exitStatus);
     }
 
@@ -666,8 +666,8 @@ namespace ts {
         }
 
         if (canTrace(system, compilerOptions)) {
-            startTracing(isBuildMode ? tracingEnabled.Mode.Build : tracingEnabled.Mode.Project,
-                         compilerOptions.generateTrace!, compilerOptions.configFilePath);
+            tracing.start(isBuildMode ? tracing.Mode.Build : tracing.Mode.Project,
+                          compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
     }
 
@@ -675,7 +675,7 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
 
         if (canTrace(sys, compilerOptions)) {
-            tracing?.stopTracing(program.getTypeCatalog());
+            tracing.stop(program.getTypeCatalog());
         }
 
         let statistics: Statistic[];

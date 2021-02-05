@@ -5643,7 +5643,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging || tracing) {
+        if (Debug.isDebugging || tracing.on) {
             this.checker = checker;
         }
     }

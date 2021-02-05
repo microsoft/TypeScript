@@ -833,7 +833,7 @@ namespace ts.server {
             exit() {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
-                tracing?.stopTracing(ts.emptyArray);
+                tracing.on && tracing.stop(ts.emptyArray);
                 process.exit(0);
             }
 
@@ -861,7 +861,7 @@ namespace ts.server {
             ? stripQuotes(commandLineTraceDir)
             : process.env.TSS_TRACE;
         if (traceDir) {
-            startTracing(tracingEnabled.Mode.Server, traceDir);
+            tracing.start(tracing.Mode.Server, traceDir);
         }
 
         const ioSession = new IOSession();

@@ -1,15 +1,10 @@
 /* Tracing events for the compiler. */
-
-/*@internal*/
-namespace ts { // eslint-disable-line one-namespace-per-file
-    // should be used as tracing?.___
-    export let tracing: typeof tracingEnabled | undefined;
-    // enable the above using startTracing()
-}
-
-// `tracingEnabled` should never be used directly, only through the above
 /* @internal */
-namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
+
+namespace ts.tracing {
+
+    export let on = false;
+
     export const enum Mode {
         Project,
         Build,
@@ -32,8 +27,8 @@ namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
     };
 
     /** Starts tracing for the given project. */
-    export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
-        Debug.assert(!tracing, "Tracing already started");
+    export function start(tracingMode: Mode, traceDir: string, configFilePath?: string) {
+        Debug.assert(!on, "Tracing already started");
 
         if (fs === undefined) {
             try {
@@ -69,7 +64,7 @@ namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
         });
 
         traceFd = fs.openSync(tracePath, "w");
-        tracing = tracingEnabled; // only when traceFd is properly set
+        on = true; // only when traceFd is properly set, used to test if enabled
 
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
         const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
@@ -82,13 +77,13 @@ namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog. */
-    export function stopTracing(typeCatalog?: readonly Type[]) {
-        Debug.assert(tracing, "Tracing is not in progress");
+    export function stop(typeCatalog?: readonly Type[]) {
+        Debug.assert(on, "Tracing is not in progress");
         Debug.assert(!!typeCatalog === (mode !== Mode.Server)); // Have a type catalog iff not in server mode
 
         fs.writeSync(traceFd, `\n]\n`);
         fs.closeSync(traceFd);
-        tracing = undefined;
+        on = false;
 
         if (typeCatalog) {
             dumpTypes(typeCatalog);
@@ -279,7 +274,7 @@ namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
     }
 
     export function dumpLegend() {
-        if (!legendPath) {
+        if (!legendPath || !on) {
             return;
         }
 
@@ -291,10 +286,4 @@ namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
         tracePath: string;
         typesPath?: string;
     }
-}
-
-/*@internal*/
-namespace ts { // eslint-disable-line one-namespace-per-file
-    // define after tracingEnabled is initialized
-    export const startTracing = tracingEnabled.startTracing;
 }
