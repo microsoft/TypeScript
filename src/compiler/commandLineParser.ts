@@ -1767,31 +1767,10 @@ namespace ts {
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
-    /**
-     * Convert the json syntax tree into the json value
-     */
-    export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
-        return convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
-    }
-
-    /**
-     * Convert the json syntax tree into the json value and report errors
-     * This returns the json value (apart from checking errors) only if returnValue provided is true.
-     * Otherwise it just checks the errors and returns undefined
-     */
-    /*@internal*/
-    export function convertToObjectWorker(
-        sourceFile: JsonSourceFile,
-        errors: Push<Diagnostic>,
-        returnValue: boolean,
-        knownRootOptions: CommandLineOption | undefined,
-        jsonConversionNotifier: JsonConversionNotifier | undefined): any {
-        if (!sourceFile.statements.length) {
-            return returnValue ? {} : undefined;
-        }
-
-        const rootExpression: Expression = sourceFile.statements[0].expression;
-        if (rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
+    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, optionsIterator: JsonConversionNotifier): any {
+        const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
+        const knownRootOptions = getTsconfigRootOptionsMap();
+        if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
             errors.push(createDiagnosticForNodeInSourceFile(
                 sourceFile,
                 rootExpression,
@@ -1804,11 +1783,38 @@ namespace ts {
             if (isArrayLiteralExpression(rootExpression)) {
                 const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
                 if (firstObject) {
-                    return convertPropertyValueToJson(firstObject, knownRootOptions);
+                    return convertToObjectWorker(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
                 }
             }
+            return {};
+        }
+        return convertToObjectWorker(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+    }
+
+    /**
+     * Convert the json syntax tree into the json value
+     */
+    export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
+        return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+    }
+
+    /**
+     * Convert the json syntax tree into the json value and report errors
+     * This returns the json value (apart from checking errors) only if returnValue provided is true.
+     * Otherwise it just checks the errors and returns undefined
+     */
+    /*@internal*/
+    export function convertToObjectWorker(
+        sourceFile: JsonSourceFile,
+        rootExpression: Expression | undefined,
+        errors: Push<Diagnostic>,
+        returnValue: boolean,
+        knownRootOptions: CommandLineOption | undefined,
+        jsonConversionNotifier: JsonConversionNotifier | undefined): any {
+        if (!rootExpression) {
             return returnValue ? {} : undefined;
         }
+
         return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
         function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
@@ -2752,7 +2758,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertConfigFileToObject(sourceFile, errors, optionsIterator);
 
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
