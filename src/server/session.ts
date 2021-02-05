@@ -1641,7 +1641,7 @@ namespace ts.server {
         private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            return languageService.getDocCommentTemplateAtPosition(file, position);
+            return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file));
         }
 
         private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
