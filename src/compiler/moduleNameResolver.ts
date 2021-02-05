@@ -343,7 +343,7 @@ namespace ts {
                     trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
                 }
                 return firstDefined(typeRoots, typeRoot => {
-                    const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
+                    const candidate = combinePaths(typeRoot, mangleScopedPackageNameWithTrace(typeReferenceDirectiveName, moduleResolutionState));
                     const candidateDirectory = getDirectoryPath(candidate);
                     const directoryExists = directoryProbablyExists(candidateDirectory, host);
                     if (!directoryExists && traceEnabled) {

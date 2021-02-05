@@ -1388,6 +1388,11 @@ import b = require("./moduleB");
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/src/types/lib__xyz/index.d.ts" };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"@lib/xyz", /*primary*/ true, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/types/lib/typings/lib.d.ts" };
                 const packageFile = { name: "/root/src/types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
                 test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ true, f1, f2, packageFile);
@@ -1407,6 +1412,11 @@ import b = require("./moduleB");
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/node_modules/@types/lib/index.d.ts" };
                 test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/src/node_modules/@types/lib__xyz/index.d.ts" };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"@lib/xyz", /*primary*/ false, f1, f2);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -1442,6 +1452,11 @@ import b = require("./moduleB");
                 const f2 = { name: "/root/node_modules/@types/lib/typings/lib.d.ts" };
                 const packageFile = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
                 test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
+            }
+            {
+                const f1 = { name: "/root/src/app.ts" };
+                const f2 = { name: "/root/node_modules/@types/lib__xyz/index.d.ts" };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"@lib/xyz", /*primary*/ false, f1, f2);
             }
         });
         it("Primary resolution overrides secondary resolutions", () => {
