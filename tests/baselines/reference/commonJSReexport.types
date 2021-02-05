@@ -20,10 +20,10 @@ const hardline = { type: "hard" }
 >"hard" : "hard"
 
 module.exports = {
->module.exports = {  hardline} : typeof import("tests/cases/conformance/salsa/first.js")
->module.exports : typeof import("tests/cases/conformance/salsa/first.js")
->module : { exports: typeof import("tests/cases/conformance/salsa/first.js"); }
->exports : typeof import("tests/cases/conformance/salsa/first.js")
+>module.exports = {  hardline} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{  hardline} : { hardline: { type: string; }; }
 
   hardline

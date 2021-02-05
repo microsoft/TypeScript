@@ -86,10 +86,10 @@ const taskNameToGroup = {};
 >{} : {}
 
 module.exports = {
->module.exports = {    taskGroups,    taskNameToGroup,} : typeof import("tests/cases/conformance/jsdoc/declarations/module.js")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/module.js")
->module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/module.js"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/module.js")
+>module.exports = {    taskGroups,    taskNameToGroup,} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 
     taskGroups,

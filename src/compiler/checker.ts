@@ -8770,7 +8770,7 @@ namespace ts {
                 const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
                 const result = createSymbol(fileSymbol.flags, "exports" as __String);
                 result.declarations = fileSymbol.declarations ? fileSymbol.declarations.slice() : [];
-                result.parent = fileSymbol.parent;
+                result.parent = symbol;
                 result.target = fileSymbol;
                 if (fileSymbol.valueDeclaration) result.valueDeclaration = fileSymbol.valueDeclaration;
                 if (fileSymbol.members) result.members = new Map(fileSymbol.members);

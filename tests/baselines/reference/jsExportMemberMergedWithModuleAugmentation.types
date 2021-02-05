@@ -8,10 +8,10 @@ class Abcde {
 }
 
 module.exports = {
->module.exports = {  Abcde} : typeof import("/test.js")
->module.exports : typeof import("/test.js")
->module : { exports: typeof import("/test.js"); }
->exports : typeof import("/test.js")
+>module.exports = {  Abcde} : typeof module."./test"
+>module.exports : typeof module."./test"
+>module : { exports: typeof module."./test"; }
+>exports : typeof module."./test"
 >{  Abcde} : { Abcde: typeof Abcde; }
 
   Abcde
