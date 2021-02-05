@@ -4520,16 +4520,18 @@ namespace ts {
                 return false;
             }
 
+            // If nodes haven't been transformed, they should always be real siblings
+            if (!previousNode.original && !nextNode.original) {
+                return true;
+            }
+
             if (!previousNode.parent || !nextNode.parent) {
                 const previousParent = getOriginalNode(previousNode).parent;
                 return previousParent && previousParent === getOriginalNode(nextNode).parent;
             }
 
-            if (!nodeIsFirstNodeAtOrAfterPosition(currentSourceFile!, getOriginalNode(nextNode), previousNode.end)) {
-                return false;
-            }
-
-            return true;
+            // This check is most expensive, so everything preceding is avoiding it when possible
+            return nodeIsFirstNodeAtOrAfterPosition(getOriginalNode(nextNode), previousNode.end);
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {

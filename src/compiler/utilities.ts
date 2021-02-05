@@ -7119,10 +7119,11 @@ namespace ts {
         }
     }
 
-    export function nodeIsFirstNodeAtOrAfterPosition(sourceFile: SourceFile, node: Node, position: number): boolean {
+    export function nodeIsFirstNodeAtOrAfterPosition(node: Node, position: number): boolean {
         if (node.pos === position) return true;
         if (node.pos < position) return false;
-        let current: Node = sourceFile;
+        let current = findAncestor(node.parent, p => textRangeContainsPositionInclusive(p, position));
+        if (!current) return false;
         let next: Node | undefined;
         const getContainingChild = (child: Node) => {
             if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
@@ -7133,7 +7134,9 @@ namespace ts {
             }
         };
         while (true) {
-            const child = isSourceFileJS(sourceFile) && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+            const child: Node | undefined =
+                isInJSFile(current) && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) ||
+                forEachChild(current, getContainingChild);
             if (child === node || next === node) {
                 return true;
             }
