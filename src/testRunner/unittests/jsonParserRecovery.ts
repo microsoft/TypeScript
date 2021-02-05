@@ -4,6 +4,13 @@ namespace ts {
             it(name, () => {
                 const file = parseJsonText(name, text);
                 assert(file.parseDiagnostics.length, "Should have parse errors");
+                Harness.Baseline.runBaseline(
+                    `jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`,
+                    Harness.Compiler.getErrorBaseline([{
+                        content: text,
+                        unitName: name
+                    }], file.parseDiagnostics));
+
                 // Will throw if parse tree does not cover full input text
                 file.getChildren();
             });

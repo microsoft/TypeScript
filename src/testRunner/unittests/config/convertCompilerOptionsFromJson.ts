@@ -675,5 +675,12 @@ namespace ts {
                 }]
             });
         });
+
+        it("Allow trailing comments", () => {
+            assertCompilerOptionsWithJsonText(`{} // no options`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: []
+            });
+        });
     });
 }
