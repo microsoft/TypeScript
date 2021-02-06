@@ -2647,6 +2647,7 @@ namespace ts {
         }
 
         function emitDoExpression(node: DoExpression) {
+            if (node.async) emitTokenWithComment(SyntaxKind.AsyncKeyword, node.pos, writeKeyword, node);
             emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
             emitBlock(node.block);
         }

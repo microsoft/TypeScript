@@ -2860,8 +2860,9 @@ namespace ts {
         }
 
         // @api
-        function createDoExpression(block: Block) {
+        function createDoExpression(isAsync: boolean, block: Block) {
             const node = createBaseExpression<DoExpression>(SyntaxKind.DoExpression);
+            node.async = isAsync;
             node.block = block;
             node.transformFlags |=
                 propagateChildFlags(node.block) |
@@ -2870,9 +2871,9 @@ namespace ts {
         }
 
         // @api
-        function updateDoExpression(node: DoExpression, block: Block) {
+        function updateDoExpression(node: DoExpression, isAsync:boolean , block: Block) {
             return node.block !== block
-                ? update(createDoExpression(block), node)
+                ? update(createDoExpression(isAsync, block), node)
                 : node;
         }
 

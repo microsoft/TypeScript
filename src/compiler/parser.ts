@@ -2593,10 +2593,11 @@ namespace ts {
             );
         }
 
-        function parseDoExpression() {
+        function parseDoExpression(isAsync: boolean) {
             const pos = getNodePos();
+            if (isAsync) parseExpectedToken(SyntaxKind.AsyncKeyword);
             parseExpectedToken(SyntaxKind.DoKeyword);
-            return finishNode(factory.createDoExpression(parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
+            return finishNode(factory.createDoExpression(isAsync, parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
         }
 
         function parseTemplateType(): TemplateLiteralTypeNode {
@@ -5338,6 +5339,7 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
                 case SyntaxKind.AsyncKeyword:
+                    if (lookAhead(nextTokenIsDoKeywordOnSameLine)) return parseDoExpression(/** isAsync */ true);
                     // Async arrow functions are parsed earlier in parseAssignmentExpressionOrHigher.
                     // If we encounter `async [no LineTerminator here] function` then this is an async
                     // function; otherwise, its an identifier.
@@ -5361,7 +5363,7 @@ namespace ts {
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
                 case SyntaxKind.DoKeyword:
-                    return parseDoExpression();
+                    return parseDoExpression(/** isAsync */ false);
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
@@ -5865,6 +5867,11 @@ namespace ts {
         function nextTokenIsFunctionKeywordOnSameLine() {
             nextToken();
             return token() === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak();
+        }
+
+        function nextTokenIsDoKeywordOnSameLine() {
+            nextToken();
+            return token() === SyntaxKind.DoKeyword && !scanner.hasPrecedingLineBreak();
         }
 
         function nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine() {

@@ -2169,6 +2169,7 @@ namespace ts {
     }
 
     export interface DoExpression extends PrimaryExpression {
+        readonly async: boolean
         readonly kind: SyntaxKind.DoExpression;
         readonly block: Block;
     }
@@ -6991,8 +6992,8 @@ namespace ts {
         updateConditionalExpression(node: ConditionalExpression, condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
         createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression;
         updateTemplateExpression(node: TemplateExpression, head: TemplateHead, templateSpans: readonly TemplateSpan[]): TemplateExpression;
-        createDoExpression(block: Block): DoExpression;
-        updateDoExpression(node: DoExpression, block: Block): DoExpression;
+        createDoExpression(async: boolean, block: Block): DoExpression;
+        updateDoExpression(node: DoExpression, async: boolean, block: Block): DoExpression;
         createTemplateHead(text: string, rawText?: string, templateFlags?: TokenFlags): TemplateHead;
         createTemplateHead(text: string | undefined, rawText: string, templateFlags?: TokenFlags): TemplateHead;
         createTemplateMiddle(text: string, rawText?: string, templateFlags?: TokenFlags): TemplateMiddle;

@@ -733,7 +733,7 @@ namespace ts {
                     nodeVisitor((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.DoExpression:
-                return factory.updateDoExpression(<DoExpression>node,
+                return factory.updateDoExpression(<DoExpression>node, (<DoExpression>node).async,
                     nodeVisitor((<DoExpression>node).block, visitor, isBlock));
 
             case SyntaxKind.SpreadElement:
