@@ -1529,6 +1529,11 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
+ * Get a string representation of a type
+ */
+type TypeToString<T> = intrinsic;
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> { }

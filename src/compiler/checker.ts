@@ -260,14 +260,16 @@ namespace ts {
         Uppercase,
         Lowercase,
         Capitalize,
-        Uncapitalize
+        Uncapitalize,
+        TypeToString
     }
 
     const intrinsicTypeKinds: ReadonlyESMap<string, IntrinsicTypeKind> = new Map(getEntries({
         Uppercase: IntrinsicTypeKind.Uppercase,
         Lowercase: IntrinsicTypeKind.Lowercase,
         Capitalize: IntrinsicTypeKind.Capitalize,
-        Uncapitalize: IntrinsicTypeKind.Uncapitalize
+        Uncapitalize: IntrinsicTypeKind.Uncapitalize,
+        TypeToString: IntrinsicTypeKind.TypeToString
     }));
 
     function SymbolLinks(this: SymbolLinks) {
@@ -13828,18 +13830,21 @@ namespace ts {
         }
 
         function getStringMappingType(symbol: Symbol, type: Type): Type {
-            return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
-                isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
-                type.flags & TypeFlags.StringLiteral ? getLiteralType(applyStringMapping(symbol, (<StringLiteralType>type).value)) :
-                type;
+            if (type.flags & (TypeFlags.Union | TypeFlags.Never)) return mapType(type, t => getStringMappingType(symbol, t));
+            if (isGenericIndexType(type)) return getStringMappingTypeForGenericType(symbol, type);
+            const kind = intrinsicTypeKinds.get(symbol.escapedName as string);
+            if (kind === IntrinsicTypeKind.TypeToString || (type.flags & TypeFlags.StringLiteral)) return getLiteralType(applyStringMapping(kind, (<StringLiteralType>type)));
+            return type;
         }
 
-        function applyStringMapping(symbol: Symbol, str: string) {
-            switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
+        function applyStringMapping(kind: IntrinsicTypeKind | undefined, type: Type) {
+            let str = kind === IntrinsicTypeKind.TypeToString ? typeToString(type) : (<StringLiteralType>type).value;
+            switch (kind) {
                 case IntrinsicTypeKind.Uppercase: return str.toUpperCase();
                 case IntrinsicTypeKind.Lowercase: return str.toLowerCase();
                 case IntrinsicTypeKind.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
                 case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
+                case IntrinsicTypeKind.TypeToString: return str;
             }
             return str;
         }
