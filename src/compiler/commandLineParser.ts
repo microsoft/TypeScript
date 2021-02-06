@@ -1603,7 +1603,7 @@ namespace ts {
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
-            config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*optionsIterator*/ undefined),
+            config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*reportOptionsErrors*/ false, /*optionsIterator*/ undefined),
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1767,9 +1767,9 @@ namespace ts {
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
-    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, optionsIterator: JsonConversionNotifier | undefined): any {
+    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, reportOptionsErrors: boolean, optionsIterator: JsonConversionNotifier | undefined): any {
         const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
-        const knownRootOptions = getTsconfigRootOptionsMap();
+        const knownRootOptions = reportOptionsErrors ? getTsconfigRootOptionsMap() : undefined;
         if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
             errors.push(createDiagnosticForNodeInSourceFile(
                 sourceFile,
@@ -2758,7 +2758,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertConfigFileToObject(sourceFile, errors, optionsIterator);
+        const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
 
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
