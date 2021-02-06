@@ -31300,10 +31300,12 @@ namespace ts {
             // grammar check
             checkEndsInIterationOrDeclaration(node.block.statements, [], /** isLast */ true);
 
-            return startRequireStatementTypeContext(() => {
+            const type = startRequireStatementTypeContext(() => {
                 requiresStatementType = true;
                 return checkBlock(node.block);
             });
+            if (node.async) return createPromiseType(type);
+            return type;
         }
 
         function isVoidLikeType(type: Type | undefined | void) {

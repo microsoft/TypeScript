@@ -2597,7 +2597,9 @@ namespace ts {
             const pos = getNodePos();
             if (isAsync) parseExpectedToken(SyntaxKind.AsyncKeyword);
             parseExpectedToken(SyntaxKind.DoKeyword);
-            return finishNode(factory.createDoExpression(isAsync, parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
+            const createDo = () => finishNode(factory.createDoExpression(isAsync, parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
+            if (isAsync) return doOutsideOfContext(NodeFlags.YieldContext, () => doInAwaitContext(createDo));
+            return createDo();
         }
 
         function parseTemplateType(): TemplateLiteralTypeNode {
