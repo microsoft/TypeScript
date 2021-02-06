@@ -6,7 +6,7 @@ function Installer () {
     this.arg = 0
 >this.arg = 0 : 0
 >this.arg : any
->this : any
+>this : this
 >arg : any
 >0 : 0
 
@@ -14,7 +14,7 @@ function Installer () {
     this.unknown = null
 >this.unknown = null : null
 >this.unknown : any
->this : any
+>this : this
 >unknown : any
 >null : null
 
@@ -22,14 +22,14 @@ function Installer () {
     this.twice = undefined
 >this.twice = undefined : undefined
 >this.twice : any
->this : any
+>this : this
 >twice : any
 >undefined : undefined
 
     this.twice = 'hi'
 >this.twice = 'hi' : "hi"
 >this.twice : any
->this : any
+>this : this
 >twice : any
 >'hi' : "hi"
 
@@ -37,14 +37,14 @@ function Installer () {
     this.twices = []
 >this.twices = [] : never[]
 >this.twices : any
->this : any
+>this : this
 >twices : any
 >[] : never[]
 
     this.twices = null
 >this.twices = null : null
 >this.twices : any
->this : any
+>this : this
 >twices : any
 >null : null
 }

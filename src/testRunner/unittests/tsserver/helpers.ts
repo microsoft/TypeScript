@@ -101,7 +101,7 @@ namespace ts.projectSystem {
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
             installTypingHost: server.ServerHost,
-            readonly typesRegistry = createMap<MapLike<string>>(),
+            readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
             super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
         }
@@ -165,7 +165,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",
@@ -177,7 +177,7 @@ namespace ts.projectSystem {
             "ts2.6": "1.3.0",
             "ts2.7": "1.3.0"
         };
-        const map = createMap<MapLike<string>>();
+        const map = new Map<string, MapLike<string>>();
         for (const l of list) {
             map.set(l, versionMap);
         }
@@ -204,6 +204,7 @@ namespace ts.projectSystem {
         category: DiagnosticCategory;
         code: number;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -382,17 +383,9 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface CreateProjectServiceParameters {
-        cancellationToken?: HostCancellationToken;
-        logger?: server.Logger;
-        useSingleInferredProject?: boolean;
-        typingsInstaller?: server.ITypingsInstaller;
-        eventHandler?: server.ProjectServiceEventHandler;
-    }
-
     export class TestProjectService extends server.ProjectService {
         constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-            typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler, opts: Partial<server.ProjectServiceOptions> = {}) {
+            typingsInstaller: server.ITypingsInstaller, opts: Partial<server.ProjectServiceOptions> = {}) {
             super({
                 host,
                 logger,
@@ -401,7 +394,6 @@ namespace ts.projectSystem {
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
                 typesMapLocation: customTypesMap.path,
-                eventHandler,
                 ...opts
             });
         }
@@ -410,11 +402,12 @@ namespace ts.projectSystem {
             checkNumberOfProjects(this, count);
         }
     }
-    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
-        const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || createHasErrorMessageLogger().logger;
-        const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
+
+    export function createProjectService(host: server.ServerHost, options?: Partial<server.ProjectServiceOptions>) {
+        const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
+        const logger = options?.logger || createHasErrorMessageLogger().logger;
+        const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
@@ -448,11 +441,11 @@ namespace ts.projectSystem {
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }
 
     export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -699,8 +692,39 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
+    interface DiagnosticChainText {
+        message: DiagnosticMessage;
+        args?: readonly string[];
+        next?: DiagnosticChainText[];
+    }
+
+    function isDiagnosticMessage(diagnostic: DiagnosticMessage | DiagnosticChainText): diagnostic is DiagnosticMessage {
+        return !!diagnostic && isString((diagnostic as DiagnosticMessage).message);
+    }
+    function getTextForDiagnostic(diag: DiagnosticMessage | DiagnosticChainText | undefined, args?: readonly string[], indent = 0) {
+        if (diag === undefined) return "";
+        if (isDiagnosticMessage(diag)) return formatStringFromArgs(diag.message, args || emptyArray);
+        let result = "";
+        if (indent) {
+            result += "\n";
+
+            for (let i = 0; i < indent; i++) {
+                result += "  ";
+            }
+        }
+        result += formatStringFromArgs(diag.message.message, diag.args || emptyArray);
+        indent++;
+        if (diag.next) {
+            for (const kid of diag.next) {
+                result += getTextForDiagnostic(kid, /*args*/ undefined, indent);
+            }
+        }
+        return result;
+    }
+
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage | DiagnosticChainText, args?: readonly string[], category?: string, reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
+        const diag = isDiagnosticMessage(message) ? message : message.message;
+        return { start, end, text: getTextForDiagnostic(message, args), code: diag.code, category: category || diagnosticCategoryName(diag), reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
     }
 
     export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {

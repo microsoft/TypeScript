@@ -148,6 +148,7 @@ export { default as bar } from './bar';
 //// [/src/obj/lazyIndex.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = void 0;
 var bar_1 = require("./bar");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");
@@ -410,6 +411,7 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 //// [/src/obj/lazyIndex.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = void 0;
 var bar_1 = require("./bar");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");

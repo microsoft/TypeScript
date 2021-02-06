@@ -6,7 +6,7 @@ class Alias {
 >bar : Symbol(Alias.bar, Decl(mod1.js, 0, 13))
 }
 module.exports = Alias;
->module.exports : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 2, 1))
 >exports : Symbol(export=, Decl(mod1.js, 2, 1))
 >Alias : Symbol(Alias, Decl(mod1.js, 0, 0))

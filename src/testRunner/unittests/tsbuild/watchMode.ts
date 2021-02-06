@@ -875,6 +875,7 @@ export function gfoo() {
 
                         interface VerifyScenario {
                             edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void;
+                            schedulesFailedWatchUpdate?: boolean;
                             expectedEditErrors: readonly string[];
                             expectedProgramFiles: readonly string[];
                             expectedProjectFiles: readonly string[];
@@ -886,20 +887,20 @@ export function gfoo() {
                             orphanInfosAfterEdit?: readonly string[];
                             orphanInfosAfterRevert?: readonly string[];
                         }
-                        function verifyScenario({ edit, expectedEditErrors, expectedProgramFiles, expectedProjectFiles, expectedWatchedFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, revert, orphanInfosAfterEdit, orphanInfosAfterRevert }: VerifyScenario) {
+                        function verifyScenario({ edit, schedulesFailedWatchUpdate, expectedEditErrors, expectedProgramFiles, expectedProjectFiles, expectedWatchedFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, revert, orphanInfosAfterEdit, orphanInfosAfterRevert }: VerifyScenario) {
                             it("with tsc-watch", () => {
                                 const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
 
                                 edit(host, solutionBuilder);
 
-                                host.checkTimeoutQueueLengthAndRun(1);
+                                host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 2 : 1);
                                 checkOutputErrorsIncremental(host, expectedEditErrors);
                                 verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, expectedWatchedDirectories);
 
                                 if (revert) {
                                     revert(host);
 
-                                    host.checkTimeoutQueueLengthAndRun(1);
+                                    host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 2 : 1);
                                     checkOutputErrorsIncremental(host, emptyArray);
                                     verifyProgram(host, watch);
                                 }
@@ -912,13 +913,13 @@ export function gfoo() {
 
                                 edit(host, solutionBuilder);
 
-                                host.checkTimeoutQueueLengthAndRun(2);
+                                host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 3 : 2);
                                 verifyServerState({ host, service, expectedProjectFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos: orphanInfosAfterEdit });
 
                                 if (revert) {
                                     revert(host);
 
-                                    host.checkTimeoutQueueLengthAndRun(2);
+                                    host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 3 : 2);
                                     verifyProject(host, service, orphanInfosAfterRevert);
                                 }
                             });
@@ -1033,6 +1034,7 @@ export function gfoo() {
                             // Should map to b.ts instead with options from our own config
                             verifyScenario({
                                 edit: host => host.deleteFile(bTsconfig.path),
+                                schedulesFailedWatchUpdate: multiFolder,
                                 expectedEditErrors: [
                                     `${multiFolder ? "c/tsconfig.json" : "tsconfig.c.json"}(9,21): error TS6053: File '/user/username/projects/transitiveReferences/${multiFolder ? "b" : "tsconfig.b.json"}' not found.\n`
                                 ],
@@ -1056,6 +1058,7 @@ export function gfoo() {
                         describe("deleting transitively referenced config file", () => {
                             verifyScenario({
                                 edit: host => host.deleteFile(aTsconfig.path),
+                                schedulesFailedWatchUpdate: multiFolder,
                                 expectedEditErrors: [
                                     `${multiFolder ? "b/tsconfig.json" : "tsconfig.b.json"}(10,21): error TS6053: File '/user/username/projects/transitiveReferences/${multiFolder ? "a" : "tsconfig.a.json"}' not found.\n`
                                 ],
@@ -1178,6 +1181,205 @@ export function someFn() { }`),
                     })),
                     timeouts: runQueuedTimeoutCallbacks,
                 },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "should not trigger recompilation because of program emit",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.core}`, "-verbose"],
+            sys: () => createWatchedSystem([libFile, ...core], { currentDirectory: projectsLocation }),
+            changes: [
+                noopChange,
+                {
+                    caption: "Add new file",
+                    change: sys => sys.writeFile(`${project}/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                noopChange,
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "should not trigger recompilation because of program emit with outDir specified",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.core}`, "-verbose"],
+            sys: () => {
+                const [coreConfig, ...rest] = core;
+                const newCoreConfig: File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
+                return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: projectsLocation });
+            },
+            changes: [
+                noopChange,
+                {
+                    caption: "Add new file",
+                    change: sys => sys.writeFile(`${project}/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                noopChange
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works with extended source files",
+            commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json"],
+            sys: () => {
+                const alphaExtendedConfigFile: File = {
+                    path: "/a/b/alpha.tsconfig.json",
+                    content: "{}"
+                };
+                const project1Config: File = {
+                    path: "/a/b/project1.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [commonFile1.path, commonFile2.path]
+                    })
+                };
+                const bravoExtendedConfigFile: File = {
+                    path: "/a/b/bravo.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json"
+                    })
+                };
+                const otherFile: File = {
+                    path: "/a/b/other.ts",
+                    content: "let z = 0;",
+                };
+                const project2Config: File = {
+                    path: "/a/b/project2.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./bravo.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [otherFile.path]
+                    })
+                };
+                return createWatchedSystem([
+                    libFile,
+                    alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                    bravoExtendedConfigFile, project2Config, otherFile
+                ], { currentDirectory: "/a/b" });
+            },
+            changes: [
+                {
+                    caption: "Modify alpha config",
+                    change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
+                        compilerOptions: { strict: true }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build project1
+                },
+                {
+                    caption: "Build project 2",
+                    change: noop,
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "change bravo config",
+                    change: sys => sys.writeFile("/a/b/bravo.tsconfig.json", JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: { strict: false }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "project 2 extends alpha",
+                    change: sys => sys.writeFile("/a/b/project2.tsconfig.json", JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "update aplha config",
+                    change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", "{}"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun, // build project1
+                },
+                {
+                    caption: "Build project 2",
+                    change: noop,
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works correctly when project with extended config is removed",
+            commandLineArgs: ["-b", "-w", "-v"],
+            sys: () => {
+                const alphaExtendedConfigFile: File = {
+                    path: "/a/b/alpha.tsconfig.json",
+                    content: JSON.stringify({
+                        strict: true
+                    })
+                };
+                const project1Config: File = {
+                    path: "/a/b/project1.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [commonFile1.path, commonFile2.path]
+                    })
+                };
+                const bravoExtendedConfigFile: File = {
+                    path: "/a/b/bravo.tsconfig.json",
+                    content: JSON.stringify({
+                        strict: true
+                    })
+                };
+                const otherFile: File = {
+                    path: "/a/b/other.ts",
+                    content: "let z = 0;",
+                };
+                const project2Config: File = {
+                    path: "/a/b/project2.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./bravo.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [otherFile.path]
+                    })
+                };
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        references: [
+                            {
+                                path: "./project1.tsconfig.json",
+                            },
+                            {
+                                path: "./project2.tsconfig.json",
+                            },
+                        ],
+                        files: [],
+                    })
+                };
+                return createWatchedSystem([
+                    libFile, configFile,
+                    alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                    bravoExtendedConfigFile, project2Config, otherFile
+                ], { currentDirectory: "/a/b" });
+            },
+            changes: [
+                {
+                    caption: "Remove project2 from base config",
+                    change: sys => sys.modifyFile("/a/b/tsconfig.json", JSON.stringify({
+                        references: [
+                            {
+                                path: "./project1.tsconfig.json",
+                            },
+                        ],
+                        files: [],
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                }
             ]
         });
     });

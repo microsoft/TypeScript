@@ -1,6 +1,6 @@
 tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(8,9): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(11,5): error TS18019: 'static' modifier cannot be used with a private identifier
-tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(12,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(11,5): error TS18019: 'static' modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(12,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts (3 errors) ====
@@ -18,10 +18,10 @@ tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(
         }
         static #m = "test";
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         static #x;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         static test() {
             console.log(this.#m);
             console.log(this.#x = "test");

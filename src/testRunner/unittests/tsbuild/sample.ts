@@ -316,7 +316,7 @@ namespace ts {
                 tick();
                 appendText(fs, "/src/logic/index.ts", "function foo() {}");
                 const originalWriteFile = fs.writeFileSync;
-                const writtenFiles = createMap<true>();
+                const writtenFiles = new Map<string, true>();
                 fs.writeFileSync = (path, data, encoding) => {
                     writtenFiles.set(path, true);
                     originalWriteFile.call(fs, path, data, encoding);
@@ -384,6 +384,13 @@ class someClass2 { }`),
                 subScenario: "listEmittedFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
+                incrementalScenarios: coreChanges
+            });
+            verifyTscSerializedIncrementalEdits({
+                scenario: "sample1",
+                subScenario: "explainFiles",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--explainFiles", "--v"],
                 incrementalScenarios: coreChanges
             });
         });

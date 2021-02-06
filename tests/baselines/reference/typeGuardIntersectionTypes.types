@@ -166,12 +166,12 @@ function identifyBeast(beast: Beast) {
         if (hasWings(beast)) {
 >hasWings(beast) : boolean
 >hasWings : (x: Beast) => x is Winged
->beast : Legged
+>beast : Beast & Legged
 
             if (beast.legs === 4) {
 >beast.legs === 4 : boolean
 >beast.legs : number
->beast : Legged & Winged
+>beast : Beast & Legged & Winged
 >legs : number
 >4 : 4
 
@@ -183,7 +183,7 @@ function identifyBeast(beast: Beast) {
             else if (beast.legs === 2) {
 >beast.legs === 2 : boolean
 >beast.legs : number
->beast : Legged & Winged
+>beast : Beast & Legged & Winged
 >legs : number
 >2 : 2
 
@@ -198,7 +198,7 @@ function identifyBeast(beast: Beast) {
 >log : (s: string) => void
 >`unknown - ${beast.legs} legs, wings` : string
 >beast.legs : number
->beast : Legged & Winged
+>beast : Beast & Legged & Winged
 >legs : number
             }
         }
@@ -210,7 +210,7 @@ function identifyBeast(beast: Beast) {
 >log : (s: string) => void
 >`manbearpig - ${beast.legs} legs, no wings` : string
 >beast.legs : number
->beast : Legged
+>beast : Beast & Legged
 >legs : number
         }
     }

@@ -14,6 +14,7 @@ namespace ts {
         /*@internal*/ preserveWatchOutput?: boolean;
         /*@internal*/ listEmittedFiles?: boolean;
         /*@internal*/ listFiles?: boolean;
+        /*@internal*/ explainFiles?: boolean;
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
@@ -23,6 +24,7 @@ namespace ts {
         /* @internal */ extendedDiagnostics?: boolean;
         /* @internal */ locale?: string;
         /* @internal */ generateCpuProfile?: string;
+        /* @internal */ generateTrace?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -51,24 +53,8 @@ namespace ts {
 
     /*@internal*/
     export type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
-    interface FileMap<T, U extends Path = Path> extends Map<T> {
-        get(key: U): T | undefined;
-        has(key: U): boolean;
-        forEach(action: (value: T, key: U) => void): void;
-        readonly size: number;
-        keys(): Iterator<U>;
-        values(): Iterator<T>;
-        entries(): Iterator<[U, T]>;
-        set(key: U, value: T): this;
-        delete(key: U): boolean;
-        clear(): void;
-    }
-    type ConfigFileMap<T> = FileMap<T, ResolvedConfigFilePath>;
-    function createConfigFileMap<T>(): ConfigFileMap<T> {
-        return createMap() as ConfigFileMap<T>;
-    }
 
-    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
+    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
         const existingValue = configFileMap.get(resolved);
         let newValue: T | undefined;
         if (!existingValue) {
@@ -78,8 +64,8 @@ namespace ts {
         return existingValue || newValue!;
     }
 
-    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<T>>, resolved: ResolvedConfigFilePath): Map<T> {
-        return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, ESMap<string, T>>, resolved: ResolvedConfigFilePath): ESMap<string, T> {
+        return getOrCreateValueFromConfigFileMap<ESMap<string, T>>(configFileMap, resolved, () => new Map());
     }
 
     function newer(date1: Date, date2: Date): Date {
@@ -224,13 +210,13 @@ namespace ts {
         originalGetSourceFile: CompilerHost["getSourceFile"];
     }
 
-    interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> {
+    interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
         readonly host: SolutionBuilderHost<T>;
         readonly hostWithWatch: SolutionBuilderWithWatchHost<T>;
         readonly currentDirectory: string;
         readonly getCanonicalFileName: GetCanonicalFileName;
         readonly parseConfigFileHost: ParseConfigFileHost;
-        readonly writeFileName: ((s: string) => void) | undefined;
+        readonly write: ((s: string) => void) | undefined;
 
         // State of solution
         readonly options: BuildOptions;
@@ -238,17 +224,17 @@ namespace ts {
         readonly rootNames: readonly string[];
         readonly baseWatchOptions: WatchOptions | undefined;
 
-        readonly resolvedConfigFilePaths: Map<ResolvedConfigFilePath>;
-        readonly configFileCache: ConfigFileMap<ConfigFileCacheEntry>;
+        readonly resolvedConfigFilePaths: ESMap<string, ResolvedConfigFilePath>;
+        readonly configFileCache: ESMap<ResolvedConfigFilePath, ConfigFileCacheEntry>;
         /** Map from config file name to up-to-date status */
-        readonly projectStatus: ConfigFileMap<UpToDateStatus>;
-        readonly buildInfoChecked: ConfigFileMap<true>;
-        readonly extendedConfigCache: Map<ExtendedConfigCacheEntry>;
+        readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
+        readonly buildInfoChecked: ESMap<ResolvedConfigFilePath, true>;
+        readonly extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>;
 
-        readonly builderPrograms: ConfigFileMap<T>;
-        readonly diagnostics: ConfigFileMap<readonly Diagnostic[]>;
-        readonly projectPendingBuild: ConfigFileMap<ConfigFileProgramReloadLevel>;
-        readonly projectErrorsReported: ConfigFileMap<true>;
+        readonly builderPrograms: ESMap<ResolvedConfigFilePath, T>;
+        readonly diagnostics: ESMap<ResolvedConfigFilePath, readonly Diagnostic[]>;
+        readonly projectPendingBuild: ESMap<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
+        readonly projectErrorsReported: ESMap<ResolvedConfigFilePath, true>;
 
         readonly compilerHost: CompilerHost;
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
@@ -265,15 +251,13 @@ namespace ts {
 
         // Watch state
         readonly watch: boolean;
-        readonly allWatchedWildcardDirectories: ConfigFileMap<Map<WildcardDirectoryWatcher>>;
-        readonly allWatchedInputFiles: ConfigFileMap<Map<FileWatcher>>;
-        readonly allWatchedConfigFiles: ConfigFileMap<FileWatcher>;
+        readonly allWatchedWildcardDirectories: ESMap<ResolvedConfigFilePath, ESMap<string, WildcardDirectoryWatcher>>;
+        readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
+        readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
+        readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
-        watchFile: WatchFile<WatchType, ResolvedConfigFileName>;
-        watchFilePath: WatchFilePath<WatchType, ResolvedConfigFileName>;
-        watchDirectory: WatchDirectory<WatchType, ResolvedConfigFileName>;
         writeLog: (s: string) => void;
     }
 
@@ -297,7 +281,7 @@ namespace ts {
                 loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
 
-        const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
+        const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
 
         const state: SolutionBuilderState<T> = {
             host,
@@ -305,7 +289,7 @@ namespace ts {
             currentDirectory,
             getCanonicalFileName,
             parseConfigFileHost: parseConfigHostFromCompilerHostLike(host),
-            writeFileName: host.trace ? (s: string) => host.trace!(s) : undefined,
+            write: maybeBind(host, host.trace),
 
             // State of solution
             options,
@@ -313,16 +297,16 @@ namespace ts {
             rootNames,
             baseWatchOptions,
 
-            resolvedConfigFilePaths: createMap(),
-            configFileCache: createConfigFileMap(),
-            projectStatus: createConfigFileMap(),
-            buildInfoChecked: createConfigFileMap(),
-            extendedConfigCache: createMap(),
+            resolvedConfigFilePaths: new Map(),
+            configFileCache: new Map(),
+            projectStatus: new Map(),
+            buildInfoChecked: new Map(),
+            extendedConfigCache: new Map(),
 
-            builderPrograms: createConfigFileMap(),
-            diagnostics: createConfigFileMap(),
-            projectPendingBuild: createConfigFileMap(),
-            projectErrorsReported: createConfigFileMap(),
+            builderPrograms: new Map(),
+            diagnostics: new Map(),
+            projectPendingBuild: new Map(),
+            projectErrorsReported: new Map(),
 
             compilerHost,
             moduleResolutionCache,
@@ -339,14 +323,14 @@ namespace ts {
 
             // Watch state
             watch,
-            allWatchedWildcardDirectories: createConfigFileMap(),
-            allWatchedInputFiles: createConfigFileMap(),
-            allWatchedConfigFiles: createConfigFileMap(),
+            allWatchedWildcardDirectories: new Map(),
+            allWatchedInputFiles: new Map(),
+            allWatchedConfigFiles: new Map(),
+            allWatchedExtendedConfigFiles: new Map(),
 
             timerToBuildInvalidatedProject: undefined,
             reportFileChangeDetected: false,
             watchFile,
-            watchFilePath,
             watchDirectory,
             writeLog,
         };
@@ -400,8 +384,8 @@ namespace ts {
     }
 
     function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): AnyBuildOrder {
-        const temporaryMarks = createMap() as ConfigFileMap<true>;
-        const permanentMarks = createMap() as ConfigFileMap<true>;
+        const temporaryMarks = new Map<ResolvedConfigFilePath, true>();
+        const permanentMarks = new Map<ResolvedConfigFilePath, true>();
         const circularityReportStack: string[] = [];
         let buildOrder: ResolvedConfigFileName[] | undefined;
         let circularDiagnostics: Diagnostic[] | undefined;
@@ -455,10 +439,12 @@ namespace ts {
 
         // Clear all to ResolvedConfigFilePaths cache to start fresh
         state.resolvedConfigFilePaths.clear();
-        const currentProjects = arrayToSet(
-            getBuildOrderFromAnyBuildOrder(buildOrder),
-            resolved => toResolvedConfigFilePath(state, resolved)
-        ) as ConfigFileMap<true>;
+
+        // TODO(rbuckton): Should be a `Set`, but that requires changing the code below that uses `mutateMapSkippingNewValues`
+        const currentProjects = new Map(
+            getBuildOrderFromAnyBuildOrder(buildOrder).map(
+                resolved => [toResolvedConfigFilePath(state, resolved), true as true])
+        );
 
         const noopOnDelete = { onDeleteValue: noop };
         // Config file cache
@@ -477,6 +463,15 @@ namespace ts {
                 currentProjects,
                 { onDeleteValue: closeFileWatcher }
             );
+
+            state.allWatchedExtendedConfigFiles.forEach(watcher => {
+                watcher.projects.forEach(project => {
+                    if (!currentProjects.has(project)) {
+                        watcher.projects.delete(project);
+                    }
+                });
+                watcher.close();
+            });
 
             mutateMapSkippingNewValues(
                 state.allWatchedWildcardDirectories,
@@ -853,6 +848,9 @@ namespace ts {
                 getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
+            if (state.watch) {
+                state.builderPrograms.set(projectPath, program);
+            }
             step++;
         }
 
@@ -906,7 +904,7 @@ namespace ts {
             const { emitResult } = emitFilesAndReportErrors(
                 program,
                 reportDeclarationDiagnostics,
-                /*writeFileName*/ undefined,
+                /*write*/ undefined,
                 /*reportSummary*/ undefined,
                 (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
                 cancellationToken,
@@ -937,7 +935,7 @@ namespace ts {
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createMap() as FileMap<string>;
+            const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
@@ -979,17 +977,17 @@ namespace ts {
                 buildResult = BuildResultFlags.EmitErrors & buildResult!;
             }
 
-            if (emitResult.emittedFiles && state.writeFileName) {
+            if (emitResult.emittedFiles && state.write) {
                 emitResult.emittedFiles.forEach(name => listEmittedFile(state, config, name));
             }
-            afterProgramDone(state, projectPath, program, config);
+            afterProgramDone(state, program, config);
             step = BuildStep.QueueReferencingProjects;
             return emitResult;
         }
 
         function finishEmit(
             emitterDiagnostics: DiagnosticCollection,
-            emittedOutputs: FileMap<string>,
+            emittedOutputs: ESMap<Path, string>,
             priorNewestUpdateTime: Date,
             newestDeclarationFileContentChangedTimeIsMaximumDate: boolean,
             oldestOutputFileName: string,
@@ -1009,7 +1007,7 @@ namespace ts {
                 return emitDiagnostics;
             }
 
-            if (state.writeFileName) {
+            if (state.write) {
                 emittedOutputs.forEach(name => listEmittedFile(state, config, name));
             }
 
@@ -1023,7 +1021,7 @@ namespace ts {
                     newestDeclarationFileContentChangedTime,
                 oldestOutputFileName
             });
-            afterProgramDone(state, projectPath, program, config);
+            afterProgramDone(state, program, config);
             step = BuildStep.QueueReferencingProjects;
             buildResult = resultFlags;
             return emitDiagnostics;
@@ -1070,7 +1068,7 @@ namespace ts {
             // Actual Emit
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createMap() as FileMap<string>;
+            const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 emittedOutputs.set(toPath(state, name), name);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
@@ -1178,14 +1176,14 @@ namespace ts {
 
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
                 watchConfigFile(state, project, projectPath, config);
+                watchExtendedConfigFiles(state, projectPath, config);
                 watchWildCardDirectories(state, project, projectPath, config);
                 watchInputFiles(state, project, projectPath, config);
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
-                const result = getFileNamesFromConfigSpecs(config.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
-                updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInutFiles(config.raw));
-                config.fileNames = result.fileNames;
+                config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
+                updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
                 watchInputFiles(state, project, projectPath, config);
             }
 
@@ -1254,9 +1252,9 @@ namespace ts {
         return undefined;
     }
 
-    function listEmittedFile({ writeFileName }: SolutionBuilderState, proj: ParsedCommandLine, file: string) {
-        if (writeFileName && proj.options.listEmittedFiles) {
-            writeFileName(`TSFILE: ${file}`);
+    function listEmittedFile({ write }: SolutionBuilderState, proj: ParsedCommandLine, file: string) {
+        if (write && proj.options.listEmittedFiles) {
+            write(`TSFILE: ${file}`);
         }
     }
 
@@ -1269,19 +1267,15 @@ namespace ts {
 
     function afterProgramDone<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
-        proj: ResolvedConfigFilePath,
         program: T | undefined,
         config: ParsedCommandLine
     ) {
         if (program) {
-            if (program && state.writeFileName) listFiles(program, state.writeFileName);
+            if (program && state.write) listFiles(program, state.write);
             if (state.host.afterProgramEmitAndDiagnostics) {
                 state.host.afterProgramEmitAndDiagnostics(program);
             }
-            if (state.watch) {
-                program.releaseProgram();
-                state.builderPrograms.set(proj, program);
-            }
+            program.releaseProgram();
         }
         else if (state.host.afterEmitBundle) {
             state.host.afterEmitBundle(config);
@@ -1301,10 +1295,9 @@ namespace ts {
         const canEmitBuildInfo = !(buildResult & BuildResultFlags.SyntaxErrors) && program && !outFile(program.getCompilerOptions());
 
         reportAndStoreErrors(state, resolvedPath, diagnostics);
-        // List files if any other build error using program (emit errors already report files)
         state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
         if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
-        afterProgramDone(state, resolvedPath, program, config);
+        afterProgramDone(state, program, config);
         return { buildResult, step: BuildStep.QueueReferencingProjects };
     }
 
@@ -1372,7 +1365,7 @@ namespace ts {
         }
 
         // Container if no files are specified in the project
-        if (!project.fileNames.length && !canJsonReportNoInutFiles(project.raw)) {
+        if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
             return {
                 type: UpToDateStatusType.ContainerOnly
             };
@@ -1561,7 +1554,7 @@ namespace ts {
         return actual;
     }
 
-    function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<string>) {
+    function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: ESMap<Path, string>) {
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
@@ -1797,7 +1790,6 @@ namespace ts {
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
         if (!state.watch || state.allWatchedConfigFiles.has(resolvedPath)) return;
         state.allWatchedConfigFiles.set(resolvedPath, state.watchFile(
-            state.hostWithWatch,
             resolved,
             () => {
                 invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full);
@@ -1809,57 +1801,43 @@ namespace ts {
         ));
     }
 
-    function isSameFile(state: SolutionBuilderState, file1: string, file2: string) {
-        return comparePaths(file1, file2, state.currentDirectory, !state.host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
-    }
-
-    function isOutputFile(state: SolutionBuilderState, fileName: string, configFile: ParsedCommandLine) {
-        if (configFile.options.noEmit) return false;
-
-        // ts or tsx files are not output
-        if (!fileExtensionIs(fileName, Extension.Dts) &&
-            (fileExtensionIs(fileName, Extension.Ts) || fileExtensionIs(fileName, Extension.Tsx))) {
-            return false;
-        }
-
-        // If options have --outFile or --out, check if its that
-        const out = outFile(configFile.options);
-        if (out && (isSameFile(state, fileName, out) || isSameFile(state, fileName, removeFileExtension(out) + Extension.Dts))) {
-            return true;
-        }
-
-        // If declarationDir is specified, return if its a file in that directory
-        if (configFile.options.declarationDir && containsPath(configFile.options.declarationDir, fileName, state.currentDirectory, !state.host.useCaseSensitiveFileNames())) {
-            return true;
-        }
-
-        // If --outDir, check if file is in that directory
-        if (configFile.options.outDir && containsPath(configFile.options.outDir, fileName, state.currentDirectory, !state.host.useCaseSensitiveFileNames())) {
-            return true;
-        }
-
-        return !forEach(configFile.fileNames, inputFile => isSameFile(state, fileName, inputFile));
+    function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+        updateSharedExtendedConfigFileWatcher(
+            resolvedPath,
+            parsed,
+            state.allWatchedExtendedConfigFiles,
+            (extendedConfigFileName, extendedConfigFilePath) => state.watchFile(
+                extendedConfigFileName,
+                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath =>
+                    invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)
+                ),
+                PollingInterval.High,
+                parsed?.watchOptions,
+                WatchType.ExtendedConfigFile,
+            ),
+            fileName => toPath(state, fileName),
+        );
     }
 
     function watchWildCardDirectories(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
         if (!state.watch) return;
         updateWatchingWildcardDirectories(
             getOrCreateValueMapFromConfigFileMap(state.allWatchedWildcardDirectories, resolvedPath),
-            createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
+            new Map(getEntries(parsed.wildcardDirectories!)),
             (dir, flags) => state.watchDirectory(
-                state.hostWithWatch,
                 dir,
                 fileOrDirectory => {
-                    const fileOrDirectoryPath = toPath(state, fileOrDirectory);
-                    if (fileOrDirectoryPath !== toPath(state, dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
-                        state.writeLog(`Project: ${resolved} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                        return;
-                    }
-
-                    if (isOutputFile(state, fileOrDirectory, parsed)) {
-                        state.writeLog(`${fileOrDirectory} is output file`);
-                        return;
-                    }
+                    if (isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: toPath(state, dir),
+                        fileOrDirectory,
+                        fileOrDirectoryPath: toPath(state, fileOrDirectory),
+                        configFileName: resolved,
+                        currentDirectory: state.currentDirectory,
+                        options: parsed.options,
+                        program: state.builderPrograms.get(resolvedPath),
+                        useCaseSensitiveFileNames: state.parseConfigFileHost.useCaseSensitiveFileNames,
+                        writeLog: s => state.writeLog(s)
+                    })) return;
 
                     invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
                 },
@@ -1877,13 +1855,11 @@ namespace ts {
             getOrCreateValueMapFromConfigFileMap(state.allWatchedInputFiles, resolvedPath),
             arrayToMap(parsed.fileNames, fileName => toPath(state, fileName)),
             {
-                createNewValue: (path, input) => state.watchFilePath(
-                    state.hostWithWatch,
+                createNewValue: (_path, input) => state.watchFile(
                     input,
                     () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
                     PollingInterval.Low,
                     parsed?.watchOptions,
-                    path as Path,
                     WatchType.SourceFile,
                     resolved
                 ),
@@ -1900,6 +1876,7 @@ namespace ts {
             const cfg = parseConfigFile(state, resolved, resolvedPath);
             // Watch this file
             watchConfigFile(state, resolved, resolvedPath, cfg);
+            watchExtendedConfigFiles(state, resolvedPath, cfg);
             if (cfg) {
                 // Update watchers for wildcard directories
                 watchWildCardDirectories(state, resolved, resolvedPath, cfg);
@@ -1912,6 +1889,10 @@ namespace ts {
 
     function stopWatching(state: SolutionBuilderState) {
         clearMap(state.allWatchedConfigFiles, closeFileWatcher);
+        clearMap(state.allWatchedExtendedConfigFiles, watcher => {
+            watcher.projects.clear();
+            watcher.close();
+        });
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
     }
@@ -1958,9 +1939,7 @@ namespace ts {
     }
 
     function reportWatchStatus(state: SolutionBuilderState, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
-        if (state.hostWithWatch.onWatchStatusChange) {
-            state.hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), state.host.getNewLine(), state.baseCompilerOptions);
-        }
+        state.hostWithWatch.onWatchStatusChange?.(createCompilerDiagnostic(message, ...args), state.host.getNewLine(), state.baseCompilerOptions);
     }
 
     function reportErrors({ host }: SolutionBuilderState, errors: readonly Diagnostic[]) {

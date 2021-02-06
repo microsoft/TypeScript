@@ -27,17 +27,17 @@ namespace ts.codefix {
             return;
         }
         const importClause = Debug.checkDefined(importDeclaration.importClause);
-        changes.replaceNode(context.sourceFile, importDeclaration, updateImportDeclaration(
+        changes.replaceNode(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
             importDeclaration,
             importDeclaration.decorators,
             importDeclaration.modifiers,
-            updateImportClause(importClause, importClause.name, /*namedBindings*/ undefined, importClause.isTypeOnly),
+            factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
             importDeclaration.moduleSpecifier));
 
-        changes.insertNodeAfter(context.sourceFile, importDeclaration, createImportDeclaration(
+        changes.insertNodeAfter(context.sourceFile, importDeclaration, factory.createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
-            updateImportClause(importClause, /*name*/ undefined, importClause.namedBindings, importClause.isTypeOnly),
+            factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
             importDeclaration.moduleSpecifier));
     }
 }

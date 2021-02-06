@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
-        const reference = getReferenceAtPosition(sourceFile, position, program);
-        if (reference) {
-            return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
+        const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
+        if (resolvedRef) {
+            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.file.fileName)];
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -34,9 +34,7 @@ namespace ts.GoToDefinition {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
-            if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration)) ||
-                // TODO: GH#25533 Following check shouldn't be necessary if 'require' is an alias
-                symbol.declarations && symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
+            if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration))) {
                 return [sigInfo];
             }
             else {
@@ -94,6 +92,7 @@ namespace ts.GoToDefinition {
                     getDefinitionFromSymbol(typeChecker, propertySymbol, node));
             }
         }
+
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
@@ -109,24 +108,24 @@ namespace ts.GoToDefinition {
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { fileName: referencePath.fileName, file };
+            return file && { reference: referencePath, file };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { fileName: typeReferenceDirective.fileName, file };
+            return file && { reference: typeReferenceDirective, file };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { fileName: libReferenceDirective.fileName, file };
+            return file && { reference: libReferenceDirective, file };
         }
 
         return undefined;
@@ -210,15 +209,6 @@ namespace ts.GoToDefinition {
                 return aliased;
             }
         }
-        if (symbol && isInJSFile(node)) {
-            const requireCall = forEach(symbol.declarations, d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true) ? d.initializer : undefined);
-            if (requireCall) {
-                const moduleSymbol = checker.getSymbolAtLocation(requireCall.arguments[0]);
-                if (moduleSymbol) {
-                    return checker.resolveExternalModuleSymbol(moduleSymbol);
-                }
-            }
-        }
         return symbol;
     }
 
@@ -240,6 +230,9 @@ namespace ts.GoToDefinition {
                 return true;
             case SyntaxKind.ImportSpecifier:
                 return declaration.parent.kind === SyntaxKind.NamedImports;
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.VariableDeclaration:
+                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration, /*requireStringLiteralLikeArgument*/ true);
             default:
                 return false;
         }

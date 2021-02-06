@@ -29,9 +29,10 @@ define("conditional_directive_field", ["require", "exports"], function (require,
     "use strict";
     exports.__esModule = true;
     exports.build = void 0;
-    exports.build = function () {
+    var build = function () {
         return null;
     };
+    exports.build = build;
 });
 
 

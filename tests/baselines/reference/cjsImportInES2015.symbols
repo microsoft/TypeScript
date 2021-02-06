@@ -1,0 +1,17 @@
+=== /project/index.ts ===
+import type SpecialError = require("cjs-dep");
+>SpecialError : Symbol(SpecialError, Decl(index.ts, 0, 0))
+
+function handleError(err: SpecialError) {}
+>handleError : Symbol(handleError, Decl(index.ts, 0, 46))
+>err : Symbol(err, Decl(index.ts, 1, 21))
+>SpecialError : Symbol(SpecialError, Decl(index.ts, 0, 0))
+
+=== /project/node_modules/cjs-dep/index.d.ts ===
+declare class SpecialError extends Error {}
+>SpecialError : Symbol(SpecialError, Decl(index.d.ts, 0, 0))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export = SpecialError;
+>SpecialError : Symbol(SpecialError, Decl(index.d.ts, 0, 0))
+

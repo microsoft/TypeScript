@@ -2,8 +2,17 @@
 namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const refactorName = "Convert overload list to single signature";
     const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
+    const functionOverloadAction = {
+        name: refactorName,
+        description: refactorDescription,
+        kind: "refactor.rewrite.function.overloadList",
+    };
+    registerRefactor(refactorName, {
+        kinds: [functionOverloadAction.kind],
+        getEditsForAction,
+        getAvailableActions
+    });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
@@ -13,10 +22,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [{
-                name: refactorName,
-                description: refactorDescription
-            }]
+            actions: [functionOverloadAction]
         }];
     }
 
@@ -31,18 +37,19 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         let updated = lastDeclaration;
         switch (lastDeclaration.kind) {
             case SyntaxKind.MethodSignature: {
-                updated = updateMethodSignature(
+                updated = factory.updateMethodSignature(
                     lastDeclaration,
+                    lastDeclaration.modifiers,
+                    lastDeclaration.name,
+                    lastDeclaration.questionToken,
                     lastDeclaration.typeParameters,
                     getNewParametersForCombinedSignature(signatureDecls),
                     lastDeclaration.type,
-                    lastDeclaration.name,
-                    lastDeclaration.questionToken
                 );
                 break;
             }
             case SyntaxKind.MethodDeclaration: {
-                updated = updateMethod(
+                updated = factory.updateMethodDeclaration(
                     lastDeclaration,
                     lastDeclaration.decorators,
                     lastDeclaration.modifiers,
@@ -57,7 +64,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 break;
             }
             case SyntaxKind.CallSignature: {
-                updated = updateCallSignature(
+                updated = factory.updateCallSignature(
                     lastDeclaration,
                     lastDeclaration.typeParameters,
                     getNewParametersForCombinedSignature(signatureDecls),
@@ -66,7 +73,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 break;
             }
             case SyntaxKind.Constructor: {
-                updated = updateConstructor(
+                updated = factory.updateConstructorDeclaration(
                     lastDeclaration,
                     lastDeclaration.decorators,
                     lastDeclaration.modifiers,
@@ -76,7 +83,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 break;
             }
             case SyntaxKind.ConstructSignature: {
-                updated = updateConstructSignature(
+                updated = factory.updateConstructSignature(
                     lastDeclaration,
                     lastDeclaration.typeParameters,
                     getNewParametersForCombinedSignature(signatureDecls),
@@ -85,7 +92,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 break;
             }
             case SyntaxKind.FunctionDeclaration: {
-                updated = updateFunctionDeclaration(
+                updated = factory.updateFunctionDeclaration(
                     lastDeclaration,
                     lastDeclaration.decorators,
                     lastDeclaration.modifiers,
@@ -117,30 +124,30 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 // Trim away implementation signature arguments (they should already be compatible with overloads, but are likely less precise to guarantee compatability with the overloads)
                 signatureDeclarations = signatureDeclarations.slice(0, signatureDeclarations.length - 1);
             }
-            return createNodeArray([
-                createParameter(
+            return factory.createNodeArray([
+                factory.createParameterDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    createToken(SyntaxKind.DotDotDotToken),
+                    factory.createToken(SyntaxKind.DotDotDotToken),
                     "args",
                     /*questionToken*/ undefined,
-                    createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple))
+                    factory.createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple))
                 )
             ]);
         }
 
         function convertSignatureParametersToTuple(decl: MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration): TupleTypeNode {
             const members = map(decl.parameters, convertParameterToNamedTupleMember);
-            return setEmitFlags(createTupleTypeNode(members), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
+            return setEmitFlags(factory.createTupleTypeNode(members), some(members, m => !!length(getSyntheticLeadingComments(m))) ? EmitFlags.None : EmitFlags.SingleLine);
         }
 
         function convertParameterToNamedTupleMember(p: ParameterDeclaration): NamedTupleMember {
             Debug.assert(isIdentifier(p.name)); // This is checked during refactoring applicability checking
-            const result = setTextRange(createNamedTupleMember(
+            const result = setTextRange(factory.createNamedTupleMember(
                 p.dotDotDotToken,
                 p.name,
                 p.questionToken,
-                p.type || createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                p.type || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
             ), p);
             const parameterDocComment = p.symbol && p.symbol.getDocumentationComment(checker);
             if (parameterDocComment) {

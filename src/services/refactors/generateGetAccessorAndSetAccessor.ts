@@ -2,12 +2,19 @@
 namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionName = "Generate 'get' and 'set' accessors";
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
+
+    const generateGetSetAction = {
+        name: actionName,
+        description: actionDescription,
+        kind: "refactor.rewrite.property.generateAccessors",
+    };
     registerRefactor(actionName, {
+        kinds: [generateGetSetAction.kind],
         getEditsForAction(context, actionName) {
             if (!context.endPosition) return undefined;
-            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition);
-            if (!info) return undefined;
-            const edits = codefix.generateAccessorFromProperty(context.file, context.startPosition, context.endPosition, context, actionName);
+            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
+            Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
+            const edits = codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
             if (!edits) return undefined;
 
             const renameFilename = context.file.fileName;
@@ -19,18 +26,26 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         },
         getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
             if (!context.endPosition) return emptyArray;
-            if (!codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition, context.triggerReason === "invoked")) return emptyArray;
+            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
+            if (!info) return emptyArray;
 
-            return [{
-                name: actionName,
-                description: actionDescription,
-                actions: [
-                    {
-                        name: actionName,
-                        description: actionDescription
-                    }
-                ]
-            }];
+            if (!isRefactorErrorInfo(info)) {
+                return [{
+                    name: actionName,
+                    description: actionDescription,
+                    actions: [generateGetSetAction],
+                }];
+            }
+
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [{
+                    name: actionName,
+                    description: actionDescription,
+                    actions: [{ ...generateGetSetAction, notApplicableReason: info.error }],
+                }];
+            }
+
+            return emptyArray;
         }
     });
 }

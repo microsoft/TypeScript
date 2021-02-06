@@ -1,17 +1,18 @@
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(14,10): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(15,15): error TS2554: Expected 2 arguments, but got 5.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(16,15): error TS2556: Expected 2 arguments, but got 4 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(17,15): error TS2556: Expected 2 arguments, but got 5 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(18,12): error TS2556: Expected 2 arguments, but got 1 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(16,15): error TS2554: Expected 2 arguments, but got 5.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(17,15): error TS2554: Expected 2 arguments, but got 6.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(18,12): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(19,5): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(20,6): error TS2557: Expected at least 2 arguments, but got 0 or more.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(21,6): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(22,13): error TS2557: Expected at least 2 arguments, but got 1 or more.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(23,13): error TS2557: Expected at least 2 arguments, but got 2 or more.
 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(31,13): error TS2557: Expected at least 2 arguments, but got 4 or more.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (11 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts (12 errors) ====
     declare const s2: [string, string];
     declare const s3: [string, string, string];
     declare const s2_: [string, string, ...string[]];
@@ -33,14 +34,13 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): erro
 !!! error TS2554: Expected 2 arguments, but got 5.
     fs2('a', 'b', ...s2, 'c'); // error on ...s2 and 'c'
                   ~~~~~~~~~~
-!!! error TS2556: Expected 2 arguments, but got 4 or more.
+!!! error TS2554: Expected 2 arguments, but got 5.
     fs2('a', 'b', 'c', ...s2, 'd'); // error on 'c', ...s2 and 'd'
                   ~~~~~~~~~~~~~~~
-!!! error TS2556: Expected 2 arguments, but got 5 or more.
+!!! error TS2554: Expected 2 arguments, but got 6.
     fs2(...s2, 'a'); // error on 'a'
                ~~~
-!!! error TS2556: Expected 2 arguments, but got 1 or more.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts:8:33: An argument for 'b' was not provided.
+!!! error TS2554: Expected 2 arguments, but got 3.
     fs2(...s3); // error on ...s3
         ~~~~~
 !!! error TS2554: Expected 2 arguments, but got 3.
@@ -68,6 +68,8 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread3.ts(25,7): erro
     fs2_(...s2_, ...s_);
     fs2_(...s2_, ...s2_);
     fs2_(...s_, ...s2_);
+                ~~~~~~
+!!! error TS2557: Expected at least 2 arguments, but got 4 or more.
     fs2n_(...s2n_);
     fs2n_(...s2);
     // fs2n_(...s2, ...n_); // FIXME: should compile

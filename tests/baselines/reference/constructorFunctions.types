@@ -6,7 +6,7 @@ function C1() {
 >!(this instanceof C1) : boolean
 >(this instanceof C1) : boolean
 >this instanceof C1 : boolean
->this : any
+>this : this
 >C1 : typeof C1
 >new C1() : C1
 >C1 : typeof C1
@@ -14,7 +14,7 @@ function C1() {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 }
@@ -37,7 +37,7 @@ var C2 = function () {
 >!(this instanceof C2) : boolean
 >(this instanceof C2) : boolean
 >this instanceof C2 : boolean
->this : any
+>this : this
 >C2 : typeof C2
 >new C2() : C2
 >C2 : typeof C2
@@ -45,7 +45,7 @@ var C2 = function () {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 

@@ -1,6 +1,6 @@
 === tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
->Omit : Pick<T, Exclude<keyof T, K>>
+>Omit : Omit<T, K>
 
 type Shared< // Circularly self constraining type, defered thanks to mapping
 >Shared : Shared<InjectedProps, DecorationTargetProps>

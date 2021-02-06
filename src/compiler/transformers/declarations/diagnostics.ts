@@ -27,7 +27,10 @@ namespace ts {
         | TypeAliasDeclaration
         | ConstructorDeclaration
         | IndexSignatureDeclaration
-        | PropertyAccessExpression;
+        | PropertyAccessExpression
+        | JSDocTypedefTag
+        | JSDocCallbackTag
+        | JSDocEnumTag;
 
     export function canProduceDiagnostics(node: Node): node is DeclarationDiagnosticProducing {
         return isVariableDeclaration(node) ||
@@ -48,7 +51,8 @@ namespace ts {
             isTypeAliasDeclaration(node) ||
             isConstructorDeclaration(node) ||
             isIndexSignatureDeclaration(node) ||
-            isPropertyAccessExpression(node);
+            isPropertyAccessExpression(node) ||
+            isJSDocTypeAlias(node);
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
@@ -124,7 +128,7 @@ namespace ts {
         }
     }
 
-    export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
+    export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): GetSymbolAccessibilityDiagnostic {
         if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
             return getVariableDeclarationTypeVisibilityError;
         }
@@ -149,7 +153,7 @@ namespace ts {
         else if (isImportEqualsDeclaration(node)) {
             return getImportEntityNameVisibilityError;
         }
-        else if (isTypeAliasDeclaration(node)) {
+        else if (isTypeAliasDeclaration(node) || isJSDocTypeAlias(node)) {
             return getTypeAliasDeclarationVisibilityError;
         }
         else {
@@ -447,11 +451,12 @@ namespace ts {
         function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
             let diagnosticMessage: DiagnosticMessage;
             // Heritage clause is written by user so it can always be named
-            if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
+            if (isClassDeclaration(node.parent.parent)) {
                 // Class or Interface implemented/extended is inaccessible
                 diagnosticMessage = isHeritageClause(node.parent) && node.parent.token === SyntaxKind.ImplementsKeyword ?
                     Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
-                    Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
+                        node.parent.parent.name ? Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1 :
+                            Diagnostics.extends_clause_of_exported_class_has_or_is_using_private_name_0;
             }
             else {
                 // interface is inaccessible
@@ -473,11 +478,13 @@ namespace ts {
             };
         }
 
-        function getTypeAliasDeclarationVisibilityError(): SymbolAccessibilityDiagnostic {
+        function getTypeAliasDeclarationVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
             return {
-                diagnosticMessage: Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
-                errorNode: (node as TypeAliasDeclaration).type,
-                typeName: (node as TypeAliasDeclaration).name
+                diagnosticMessage: symbolAccessibilityResult.errorModuleName
+                    ? Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1_from_module_2
+                    : Diagnostics.Exported_type_alias_0_has_or_is_using_private_name_1,
+                errorNode: isJSDocTypeAlias(node) ? Debug.checkDefined(node.typeExpression) : (node as TypeAliasDeclaration).type,
+                typeName: isJSDocTypeAlias(node) ? getNameOfDeclaration(node) : (node as TypeAliasDeclaration).name,
             };
         }
     }

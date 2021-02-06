@@ -24,8 +24,8 @@ export default {
 
 //// [index.d.ts]
 declare namespace _default {
-    export namespace computed {
-        export const panels: import("./helper").Computed;
+    namespace computed {
+        const panels: import("./helper").Computed;
     }
 }
 export default _default;

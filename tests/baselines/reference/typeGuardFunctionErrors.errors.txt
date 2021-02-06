@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(14,5): error TS2322: Type '""' is not assignable to type 'boolean'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(14,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,60): error TS1005: ';' expected.
@@ -86,7 +86,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     function hasANonBooleanReturnStatement(x): x is A {
         return '';
         ~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'boolean'.
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
     }
     
     function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {

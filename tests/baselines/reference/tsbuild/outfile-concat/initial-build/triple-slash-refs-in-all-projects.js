@@ -52,7 +52,7 @@ declare class firstfirst_part2 { }
     "sourceMap": true,
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "first_PART1.ts",
@@ -130,7 +130,7 @@ declare class thirdthird_part1 { }
     "declarationMap": true,
     "declaration": true,
     "outFile": "./thirdjs/output/third-output.js",
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "third_part1.ts"

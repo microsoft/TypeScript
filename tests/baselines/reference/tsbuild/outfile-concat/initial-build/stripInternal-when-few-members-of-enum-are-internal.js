@@ -69,7 +69,7 @@ function f() {
     "sourceMap": true,
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "first_PART1.ts",
@@ -138,7 +138,7 @@ c.doSomething();
     "declaration": true,
     "stripInternal": true,
     "outFile": "./thirdjs/output/third-output.js",
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "third_part1.ts"

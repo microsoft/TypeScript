@@ -27,10 +27,6 @@ interface SharedArrayBuffer {
      */
     readonly byteLength: number;
 
-    /*
-     * The SharedArrayBuffer constructor's length property whose value is 1.
-     */
-    length: number;
     /**
      * Returns a section of an SharedArrayBuffer.
      */
@@ -122,8 +118,11 @@ interface Atomics {
     /**
      * Wakes up sleeping agents that are waiting on the given index of the array, returning the
      * number of agents that were awoken.
+     * @param typedArray A shared Int32Array.
+     * @param index The position in the typedArray to wake up on.
+     * @param count The number of sleeping agents to notify. Defaults to +Infinity.
      */
-    notify(typedArray: Int32Array, index: number, count: number): number;
+    notify(typedArray: Int32Array, index: number, count?: number): number;
 
     /**
      * Stores the bitwise XOR of a value with the value at the given position in the array,

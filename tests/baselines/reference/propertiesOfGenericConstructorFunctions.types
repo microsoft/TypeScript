@@ -13,16 +13,16 @@ function Multimap(ik, iv) {
     /** @type {{ [s: string]: V }} */
     this._map = {};
 >this._map = {} : {}
->this._map : any
->this : any
->_map : any
+>this._map : { [s: string]: V; }
+>this : this
+>_map : { [s: string]: V; }
 >{} : {}
 
     // without type annotation
     this._map2 = { [ik]: iv };
 >this._map2 = { [ik]: iv } : { [x: string]: V; }
 >this._map2 : any
->this : any
+>this : this
 >_map2 : any
 >{ [ik]: iv } : { [x: string]: V; }
 >[ik] : V

@@ -14,7 +14,13 @@
 ////    }
 ////}
 
-verify.completions({ marker: "1", includes: ["f", "foo"] });
+verify.completions({
+    marker: "1",
+    includes: [
+        { name: "f", sortText: completion.SortText.LocationPriority },
+        { name: "foo", sortText: completion.SortText.LocalDeclarationPriority }
+    ]
+});
 edit.insert('foo(1);');
 
 verify.completions({ marker: "2", includes: "x" });

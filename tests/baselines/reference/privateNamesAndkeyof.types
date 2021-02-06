@@ -16,5 +16,5 @@ class A {
 }
 
 type T = keyof A     // should not include '#foo'
->T : "bar" | "baz"
+>T : keyof A
 

@@ -42,17 +42,19 @@ namespace ts {
             }
         }
 
-        const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
+        const helperCall = context.getEmitHelperFactory().createTemplateObjectHelper(
+            factory.createArrayLiteralExpression(cookedStrings),
+            factory.createArrayLiteralExpression(rawStrings));
 
         // Create a variable to cache the template object if we're in a module.
         // Do not do this in the global scope, as any variable we currently generate could conflict with
         // variables from outside of the current compilation. In the future, we can revisit this behavior.
         if (isExternalModule(currentSourceFile)) {
-            const tempVar = createUniqueName("templateObject");
+            const tempVar = factory.createUniqueName("templateObject");
             recordTaggedTemplateString(tempVar);
-            templateArguments[0] = createLogicalOr(
+            templateArguments[0] = factory.createLogicalOr(
                 tempVar,
-                createAssignment(
+                factory.createAssignment(
                     tempVar,
                     helperCall)
             );
@@ -61,11 +63,11 @@ namespace ts {
             templateArguments[0] = helperCall;
         }
 
-        return createCall(tag, /*typeArguments*/ undefined, templateArguments);
+        return factory.createCallExpression(tag, /*typeArguments*/ undefined, templateArguments);
     }
 
     function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
-        return template.templateFlags ? createVoidZero() : createLiteral(template.text);
+        return template.templateFlags ? factory.createVoidZero() : factory.createStringLiteral(template.text);
     }
 
     /**
@@ -93,30 +95,6 @@ namespace ts {
         // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
         // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
         text = text.replace(/\r\n?/g, "\n");
-        return setTextRange(createLiteral(text), node);
+        return setTextRange(factory.createStringLiteral(text), node);
     }
-
-    function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
-        context.requestEmitHelper(templateObjectHelper);
-        return createCall(
-            getUnscopedHelperName("__makeTemplateObject"),
-            /*typeArguments*/ undefined,
-            [
-                cooked,
-                raw
-            ]
-        );
-    }
-
-    export const templateObjectHelper: UnscopedEmitHelper = {
-        name: "typescript:makeTemplateObject",
-        importName: "__makeTemplateObject",
-        scoped: false,
-        priority: 0,
-        text: `
-            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-                if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-                return cooked;
-            };`
-    };
 }

@@ -506,19 +506,19 @@ var bigModule;
         return constructor;
     }());
     var implements = /** @class */ (function () {
-        function implements() {
+        function implements_1() {
         }
-        return implements;
+        return implements_1;
     }());
     var interface = /** @class */ (function () {
-        function interface() {
+        function interface_1() {
         }
-        return interface;
+        return interface_1;
     }());
     var let = /** @class */ (function () {
-        function let() {
+        function let_1() {
         }
-        return let;
+        return let_1;
     }());
     var module = /** @class */ (function () {
         function module() {
@@ -526,24 +526,24 @@ var bigModule;
         return module;
     }());
     var package = /** @class */ (function () {
-        function package() {
+        function package_1() {
         }
-        return package;
+        return package_1;
     }());
     var private = /** @class */ (function () {
-        function private() {
+        function private_1() {
         }
-        return private;
+        return private_1;
     }());
     var protected = /** @class */ (function () {
-        function protected() {
+        function protected_1() {
         }
-        return protected;
+        return protected_1;
     }());
     var public = /** @class */ (function () {
-        function public() {
+        function public_1() {
         }
-        return public;
+        return public_1;
     }());
     var set = /** @class */ (function () {
         function set() {
@@ -551,9 +551,9 @@ var bigModule;
         return set;
     }());
     var static = /** @class */ (function () {
-        function static() {
+        function static_1() {
         }
-        return static;
+        return static_1;
     }());
     var get = /** @class */ (function () {
         function get() {
@@ -561,9 +561,9 @@ var bigModule;
         return get;
     }());
     var yield = /** @class */ (function () {
-        function yield() {
+        function yield_1() {
         }
-        return yield;
+        return yield_1;
     }());
     var declare = /** @class */ (function () {
         function declare() {

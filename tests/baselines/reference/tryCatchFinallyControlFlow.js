@@ -258,6 +258,76 @@ function t1() {
     x;  // Reachable
 }
 
+// Repro from #39043
+
+type State = { tag: "one" } | { tag: "two" } | { tag: "three" };
+
+function notallowed(arg: number) {
+    let state: State = { tag: "one" };
+    try {
+        state = { tag: "two" };
+        try {
+            state = { tag: "three" };
+        }
+        finally { }
+    }
+    catch (err) {
+        state.tag;
+        if (state.tag !== "one" && state.tag !== "two") {
+            console.log(state.tag);
+        }
+    }
+}
+
+function f20() {
+    let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
+    try {
+        x = 1;
+        try {
+            x = 2;
+            try {
+                x = 3;
+            }
+            finally {
+                if (!!true) x = 4;
+            }
+            x;  // 3 | 4
+        }
+        finally {
+            if (!!true) x = 5;
+        }
+        x;  // 3 | 4 | 5
+    }
+    finally {
+        if (!!true) x = 6;
+    }
+    x;  // 3 | 4 | 5 | 6
+}
+
+function f21() {
+    let x: 0 | 1 | 2 | 3 | 4 | 5 = 0;
+    try {
+        x = 1;
+        try {
+            x = 2;
+            try {
+                x = 3;
+            }
+            finally {
+                if (!!true) x = 4;
+            }
+            x;  // 3 | 4
+        }
+        finally {
+            if (!!true) x = 5;
+        }
+        x;  // 3 | 4 | 5
+    }
+    catch (e) {
+        x;  // 0 | 1 | 2 | 3 | 4 | 5
+    }
+}
+
 
 //// [tryCatchFinallyControlFlow.js]
 "use strict";
@@ -502,4 +572,72 @@ function t1() {
         x; // Unreachable
     })();
     x; // Reachable
+}
+function notallowed(arg) {
+    var state = { tag: "one" };
+    try {
+        state = { tag: "two" };
+        try {
+            state = { tag: "three" };
+        }
+        finally { }
+    }
+    catch (err) {
+        state.tag;
+        if (state.tag !== "one" && state.tag !== "two") {
+            console.log(state.tag);
+        }
+    }
+}
+function f20() {
+    var x = 0;
+    try {
+        x = 1;
+        try {
+            x = 2;
+            try {
+                x = 3;
+            }
+            finally {
+                if (!!true)
+                    x = 4;
+            }
+            x; // 3 | 4
+        }
+        finally {
+            if (!!true)
+                x = 5;
+        }
+        x; // 3 | 4 | 5
+    }
+    finally {
+        if (!!true)
+            x = 6;
+    }
+    x; // 3 | 4 | 5 | 6
+}
+function f21() {
+    var x = 0;
+    try {
+        x = 1;
+        try {
+            x = 2;
+            try {
+                x = 3;
+            }
+            finally {
+                if (!!true)
+                    x = 4;
+            }
+            x; // 3 | 4
+        }
+        finally {
+            if (!!true)
+                x = 5;
+        }
+        x; // 3 | 4 | 5
+    }
+    catch (e) {
+        x; // 0 | 1 | 2 | 3 | 4 | 5
+    }
 }

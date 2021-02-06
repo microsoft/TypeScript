@@ -68,6 +68,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
     Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v1; } });
     Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f1; } });
     Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C1; } });

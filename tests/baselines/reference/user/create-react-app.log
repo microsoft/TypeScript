@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 test/fixtures/issue-5176-flow-class-properties/src/App.js(5,8): error TS8010: Type annotations can only be used in TypeScript files.
 test/fixtures/issue-5176-flow-class-properties/src/App.js(5,13): error TS1005: ';' expected.

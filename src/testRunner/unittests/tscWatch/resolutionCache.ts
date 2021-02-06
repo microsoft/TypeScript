@@ -170,7 +170,8 @@ namespace ts.tscWatch {
 
             fileExistsCalledForBar = false;
             host.writeFile(imported.path, imported.content);
-            host.checkTimeoutQueueLengthAndRun(1);
+            host.checkTimeoutQueueLengthAndRun(1); // Scheduled invalidation of resolutions
+            host.checkTimeoutQueueLengthAndRun(1); // Actual update
             checkOutputErrorsIncremental(host, emptyArray);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
         });
@@ -391,7 +392,10 @@ declare namespace myapp {
 }`
                         });
                     },
-                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(2); // Scheduled invalidation of resolutions, update that gets cancelled and rescheduled by actual invalidation of resolution
+                        sys.checkTimeoutQueueLengthAndRun(1); // Actual update
+                    },
                 },
                 {
                     caption: "No change, just check program",

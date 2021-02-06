@@ -66,9 +66,44 @@ stringVal = bigintVal.toLocaleString();
 >stringVal = bigintVal.toLocaleString() : string
 >stringVal : string
 >bigintVal.toLocaleString() : string
->bigintVal.toLocaleString : () => string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : () => string
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+
+stringVal = bigintVal.toLocaleString('de-DE');
+>stringVal = bigintVal.toLocaleString('de-DE') : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE') : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
+>stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+>{ style: 'currency' } : { style: string; }
+>style : string
+>'currency' : "currency"
+
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
+>stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+>{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
+>style : string
+>'currency' : "currency"
+>currency : string
+>'EUR' : "EUR"
 
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
@@ -349,4 +384,27 @@ const y: 12n = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
 >z : bigint
 >12n : 12n
+
+// Test Intl methods with new parameter type
+new Intl.NumberFormat("fr").format(3000n);
+>new Intl.NumberFormat("fr").format(3000n) : string
+>new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>"fr" : "fr"
+>format : { (value: number): string; (value: number | bigint): string; }
+>3000n : 3000n
+
+new Intl.NumberFormat("fr").format(bigintVal);
+>new Intl.NumberFormat("fr").format(bigintVal) : string
+>new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>"fr" : "fr"
+>format : { (value: number): string; (value: number | bigint): string; }
+>bigintVal : bigint
 

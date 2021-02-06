@@ -1,0 +1,48 @@
+=== tests/cases/compiler/jsxNamespacePrefixIntrinsics.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxNamespacePrefixIntrinsics.tsx, 0, 0))
+
+  interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxNamespacePrefixIntrinsics.tsx, 0, 23))
+
+    "ns:element": {
+>"ns:element" : Symbol(IntrinsicElements["ns:element"], Decl(jsxNamespacePrefixIntrinsics.tsx, 1, 31))
+
+      "ns:attribute": string;
+>"ns:attribute" : Symbol("ns:attribute", Decl(jsxNamespacePrefixIntrinsics.tsx, 2, 19))
+
+    },
+    "ns:NamespacedUpcaseAlsoIntrinsic": any,
+>"ns:NamespacedUpcaseAlsoIntrinsic" : Symbol(IntrinsicElements["ns:NamespacedUpcaseAlsoIntrinsic"], Decl(jsxNamespacePrefixIntrinsics.tsx, 4, 6))
+
+    "NS:NamespacedUpcaseAlsoIntrinsic": any
+>"NS:NamespacedUpcaseAlsoIntrinsic" : Symbol(IntrinsicElements["NS:NamespacedUpcaseAlsoIntrinsic"], Decl(jsxNamespacePrefixIntrinsics.tsx, 5, 44))
+  }
+}
+
+const valid = <ns:element ns:attribute="yep" />;
+>valid : Symbol(valid, Decl(jsxNamespacePrefixIntrinsics.tsx, 10, 5))
+>ns:element : Symbol(JSX.IntrinsicElements["ns:element"], Decl(jsxNamespacePrefixIntrinsics.tsx, 1, 31))
+>ns:attribute : Symbol(ns:attribute, Decl(jsxNamespacePrefixIntrinsics.tsx, 10, 25))
+
+const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
+>validUpcase1 : Symbol(validUpcase1, Decl(jsxNamespacePrefixIntrinsics.tsx, 11, 5))
+>ns:NamespacedUpcaseAlsoIntrinsic : Symbol(JSX.IntrinsicElements["ns:NamespacedUpcaseAlsoIntrinsic"], Decl(jsxNamespacePrefixIntrinsics.tsx, 4, 6))
+
+const validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;
+>validUpcase2 : Symbol(validUpcase2, Decl(jsxNamespacePrefixIntrinsics.tsx, 12, 5))
+>NS:NamespacedUpcaseAlsoIntrinsic : Symbol(JSX.IntrinsicElements["NS:NamespacedUpcaseAlsoIntrinsic"], Decl(jsxNamespacePrefixIntrinsics.tsx, 5, 44))
+
+const invalid1 = <element />;
+>invalid1 : Symbol(invalid1, Decl(jsxNamespacePrefixIntrinsics.tsx, 14, 5))
+
+const invalid2 = <ns:element attribute="nope" />;
+>invalid2 : Symbol(invalid2, Decl(jsxNamespacePrefixIntrinsics.tsx, 15, 5))
+>ns:element : Symbol(JSX.IntrinsicElements["ns:element"], Decl(jsxNamespacePrefixIntrinsics.tsx, 1, 31))
+>attribute : Symbol(attribute, Decl(jsxNamespacePrefixIntrinsics.tsx, 15, 28))
+
+const invalid3 = <ns:element ns:invalid="nope" />;
+>invalid3 : Symbol(invalid3, Decl(jsxNamespacePrefixIntrinsics.tsx, 16, 5))
+>ns:element : Symbol(JSX.IntrinsicElements["ns:element"], Decl(jsxNamespacePrefixIntrinsics.tsx, 1, 31))
+>ns:invalid : Symbol(ns:invalid, Decl(jsxNamespacePrefixIntrinsics.tsx, 16, 28))
+

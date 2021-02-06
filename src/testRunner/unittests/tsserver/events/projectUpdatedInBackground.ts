@@ -2,7 +2,7 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
-            const seen = createMap<true>();
+            const seen = new Map<string, true>();
             forEach(actual, f => {
                 assert.isFalse(seen.has(f), `${caption}: Found duplicate ${f}. Actual: ${actual} Expected: ${expected}`);
                 seen.set(f, true);
@@ -185,6 +185,7 @@ namespace ts.projectSystem {
 
                     // Since this is first event, it will have all the files
                     filesToReload.forEach(f => host.ensureFileOrFolder(f));
+                    if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     return {
@@ -463,7 +464,8 @@ namespace ts.projectSystem {
 
                     projectFiles.push(file2);
                     host.writeFile(file2.path, file2.content);
-                    host.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks(); // For invalidation
+                    host.runQueuedTimeoutCallbacks(); // For actual update
                     if (useSlashRootAsSomeNotRootFolderInUserDirectory) {
                         watchedRecursiveDirectories.length = 3;
                     }

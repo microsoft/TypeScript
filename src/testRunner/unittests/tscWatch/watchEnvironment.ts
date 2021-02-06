@@ -12,7 +12,7 @@ namespace ts.tscWatch {
                     path: `${projectFolder}/typescript.ts`,
                     content: "var z = 10;"
                 };
-                const environmentVariables = createMap<string>();
+                const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHFILE", TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
                 return createWatchedSystem([file1, libFile], { environmentVariables });
             },
@@ -88,7 +88,7 @@ namespace ts.tscWatch {
                     commandLineArgs: ["--w", "-p", configFile.path],
                     sys: () => {
                         const files = [file, configFile, libFile];
-                        const environmentVariables = createMap<string>();
+                        const environmentVariables = new Map<string, string>();
                         environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                         return createWatchedSystem(files, { environmentVariables });
                     },
@@ -156,7 +156,7 @@ namespace ts.tscWatch {
                         symLink: `${cwd}/node_modules/a`
                     };
                     const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                    const environmentVariables = createMap<string>();
+                    const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
                 },
@@ -185,11 +185,10 @@ namespace ts.tscWatch {
                 },
                 changes: [
                     {
-                        caption: "Pending updates because of file1.js creation",
+                        caption: "Directory watch updates because of file1.js creation",
                         change: noop,
                         timeouts: sys => {
                             sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
-                            sys.checkTimeoutQueueLengthAndRun(1); // Update program again
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
@@ -198,7 +197,7 @@ namespace ts.tscWatch {
                         // Remove directory node_modules
                         change: sys => sys.deleteFolder(`${projectRoot}/node_modules`, /*recursive*/ true),
                         timeouts: sys => {
-                            sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
+                            sys.checkTimeoutQueueLength(3); // 1. Failed lookup invalidation 2. For updating program and 3. for updating child watches
                             sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2); // Update program
                         },
                     },
@@ -207,7 +206,8 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
-                            sys.checkTimeoutQueueLengthAndRun(1); // To Update program
+                            sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
@@ -232,7 +232,15 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.runQueuedTimeoutCallbacks();
-                            sys.checkTimeoutQueueLength(1); // To Update the program
+                            sys.checkTimeoutQueueLength(2); // To Update program and failed lookup update
+                        },
+                    },
+                    {
+                        caption: "Invalidates module resolution cache",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(1); // To Update program
                         },
                     },
                     {
@@ -240,6 +248,90 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(0);
+                        },
+                    },
+                ],
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchDirectories/with non synchronous watch directory with outDir and declaration enabled",
+                commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
+                sys: () => {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { outDir: "dist", declaration: true } })
+                    };
+                    const file1: File = {
+                        path: `${projectRoot}/src/file1.ts`,
+                        content: `import { x } from "file2";`
+                    };
+                    const file2: File = {
+                        path: `${projectRoot}/node_modules/file2/index.d.ts`,
+                        content: `export const x = 10;`
+                    };
+                    const files = [libFile, file1, file2, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: [
+                    noopChange,
+                    {
+                        caption: "Add new file, should schedule and run timeout to update directory watcher",
+                        change: sys => sys.writeFile(`${projectRoot}/src/file3.ts`, `export const y = 10;`),
+                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    },
+                    {
+                        caption: "Actual program update to include new file",
+                        change: noop,
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // Scheduling failed lookup update and program update
+                    },
+                    {
+                        caption: "After program emit with new file, should schedule and run timeout to update directory watcher",
+                        change: noop,
+                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    },
+                    noopChange,
+                ],
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchDirectories/with non synchronous watch directory renaming a file",
+                commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
+                sys: () => {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { outDir: "dist" } })
+                    };
+                    const file1: File = {
+                        path: `${projectRoot}/src/file1.ts`,
+                        content: `import { x } from "./file2";`
+                    };
+                    const file2: File = {
+                        path: `${projectRoot}/src/file2.ts`,
+                        content: `export const x = 10;`
+                    };
+                    const files = [libFile, file1, file2, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: [
+                    noopChange,
+                    {
+                        caption: "rename the file",
+                        change: sys => sys.renameFile(`${projectRoot}/src/file2.ts`, `${projectRoot}/src/renamed.ts`),
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
+                            sys.runQueuedTimeoutCallbacks(1); // Update program
+                        },
+                    },
+                    {
+                        caption: "Pending directory watchers and program update",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
+                            sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
@@ -318,6 +410,91 @@ namespace ts.tscWatch {
                     return createWatchedSystem(files);
                 },
                 changes: emptyArray
+            });
+
+            describe("exclude options", () => {
+                function sys(watchOptions: WatchOptions, runWithoutRecursiveWatches?: boolean): WatchedSystem {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ exclude: ["node_modules"], watchOptions })
+                    };
+                    const main: File = {
+                        path: `${projectRoot}/src/main.ts`,
+                        content: `import { foo } from "bar"; foo();`
+                    };
+                    const bar: File = {
+                        path: `${projectRoot}/node_modules/bar/index.d.ts`,
+                        content: `export { foo } from "./foo";`
+                    };
+                    const foo: File = {
+                        path: `${projectRoot}/node_modules/bar/foo.d.ts`,
+                        content: `export function foo(): string;`
+                    };
+                    const fooBar: File = {
+                        path: `${projectRoot}/node_modules/bar/fooBar.d.ts`,
+                        content: `export function fooBar(): string;`
+                    };
+                    const temp: File = {
+                        path: `${projectRoot}/node_modules/bar/temp/index.d.ts`,
+                        content: "export function temp(): string;"
+                    };
+                    const files = [libFile, main, bar, foo, fooBar, temp, configFile];
+                    return createWatchedSystem(files, { currentDirectory: projectRoot, runWithoutRecursiveWatches });
+                }
+
+                function verifyWorker(...additionalFlags: string[]) {
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeFiles option${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeFiles: ["node_modules/*"] }),
+                        changes: [
+                            {
+                                caption: "Change foo",
+                                change: sys => replaceFileText(sys, `${projectRoot}/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            }
+                        ]
+                    });
+
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeDirectories option${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeDirectories: ["node_modules"] }),
+                        changes: [
+                            {
+                                caption: "delete fooBar",
+                                change: sys => sys.deleteFile(`${projectRoot}/node_modules/bar/fooBar.d.ts`),
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),                            }
+                        ]
+                    });
+
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
+                        changes: [
+                            {
+                                caption: "Directory watch updates because of main.js creation",
+                                change: noop,
+                                timeouts: sys => {
+                                    sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for main.js output
+                                    sys.checkTimeoutQueueLength(0);
+                                },
+                            },
+                            {
+                                caption: "add new folder to temp",
+                                change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            }
+                        ]
+                    });
+                }
+
+                verifyWorker();
+                verifyWorker("-extendedDiagnostics");
             });
         });
     });

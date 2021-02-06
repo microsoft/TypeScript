@@ -1,9 +1,12 @@
 /*@internal*/
 namespace ts {
     export function transformES2016(context: TransformationContext) {
-        const { hoistVariableDeclaration } = context;
+        const {
+            factory,
+            hoistVariableDeclaration
+        } = context;
 
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -43,17 +46,17 @@ namespace ts {
             const right = visitNode(node.right, visitor, isExpression);
             if (isElementAccessExpression(left)) {
                 // Transforms `a[x] **= b` into `(_a = a)[_x = x] = Math.pow(_a[_x], b)`
-                const expressionTemp = createTempVariable(hoistVariableDeclaration);
-                const argumentExpressionTemp = createTempVariable(hoistVariableDeclaration);
+                const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
+                const argumentExpressionTemp = factory.createTempVariable(hoistVariableDeclaration);
                 target = setTextRange(
-                    createElementAccess(
-                        setTextRange(createAssignment(expressionTemp, left.expression), left.expression),
-                        setTextRange(createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
+                    factory.createElementAccessExpression(
+                        setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
+                        setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
                     ),
                     left
                 );
                 value = setTextRange(
-                    createElementAccess(
+                    factory.createElementAccessExpression(
                         expressionTemp,
                         argumentExpressionTemp
                     ),
@@ -62,16 +65,16 @@ namespace ts {
             }
             else if (isPropertyAccessExpression(left)) {
                 // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
-                const expressionTemp = createTempVariable(hoistVariableDeclaration);
+                const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
                 target = setTextRange(
-                    createPropertyAccess(
-                        setTextRange(createAssignment(expressionTemp, left.expression), left.expression),
+                    factory.createPropertyAccessExpression(
+                        setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
                         left.name
                     ),
                     left
                 );
                 value = setTextRange(
-                    createPropertyAccess(
+                    factory.createPropertyAccessExpression(
                         expressionTemp,
                         left.name
                     ),
@@ -84,9 +87,9 @@ namespace ts {
                 value = left;
             }
             return setTextRange(
-                createAssignment(
+                factory.createAssignment(
                     target,
-                    createMathPow(value, right, /*location*/ node)
+                    setTextRange(factory.createGlobalMethodCall("Math", "pow", [value, right]), node)
                 ),
                 node
             );
@@ -96,7 +99,7 @@ namespace ts {
             // Transforms `a ** b` into `Math.pow(a, b)`
             const left = visitNode(node.left, visitor, isExpression);
             const right = visitNode(node.right, visitor, isExpression);
-            return createMathPow(left, right, /*location*/ node);
+            return setTextRange(factory.createGlobalMethodCall("Math", "pow", [left, right]), node);
         }
     }
 }

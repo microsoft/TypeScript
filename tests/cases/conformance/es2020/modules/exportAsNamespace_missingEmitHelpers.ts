@@ -1,5 +1,6 @@
 // @module: commonjs
 // @importHelpers: true
+// @esModuleInterop: true
 // @noTypesAndSymbols: true
 
 // @Filename: a.ts

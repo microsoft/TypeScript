@@ -207,6 +207,8 @@ namespace ts.server {
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,
+                CommandNames.FileReferences,
+                CommandNames.FileReferencesFull,
                 CommandNames.Format,
                 CommandNames.Formatonkey,
                 CommandNames.FormatFull,
@@ -272,6 +274,10 @@ namespace ts.server {
                 CommandNames.PrepareCallHierarchy,
                 CommandNames.ProvideCallHierarchyIncomingCalls,
                 CommandNames.ProvideCallHierarchyOutgoingCalls,
+                CommandNames.ToggleLineComment,
+                CommandNames.ToggleMultilineComment,
+                CommandNames.CommentSelection,
+                CommandNames.UncommentSelection,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -621,7 +627,7 @@ namespace ts.server {
             private server: InProcSession | undefined;
             private seq = 0;
             private callbacks: ((resp: protocol.Response) => void)[] = [];
-            private eventHandlers = createMap<(args: any) => void>();
+            private eventHandlers = new Map<string, (args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {

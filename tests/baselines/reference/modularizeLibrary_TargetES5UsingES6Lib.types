@@ -124,9 +124,9 @@ var o = {
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : (v: string | number | symbol) => boolean
+>o.hasOwnProperty : (v: PropertyKey) => boolean
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
@@ -138,8 +138,8 @@ async function out() {
     return new Promise(function (resolve, reject) {});
 >new Promise(function (resolve, reject) {}) : Promise<unknown>
 >Promise : PromiseConstructor
->function (resolve, reject) {} : (resolve: (value?: unknown) => void, reject: (reason?: any) => void) => void
->resolve : (value?: unknown) => void
+>function (resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
 >reject : (reason?: any) => void
 }
 

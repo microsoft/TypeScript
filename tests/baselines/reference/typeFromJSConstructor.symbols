@@ -4,25 +4,37 @@ function Installer () {
 
     // arg: number
     this.arg = 0
+>this.arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
 >arg : Symbol(Installer.arg, Decl(a.js, 0, 23), Decl(a.js, 12, 41), Decl(a.js, 19, 42))
 
     // unknown: string | boolean | null
     this.unknown = null
+>this.unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
 >unknown : Symbol(Installer.unknown, Decl(a.js, 2, 16), Decl(a.js, 13, 19), Decl(a.js, 20, 20))
 
     // twice: string | undefined
     this.twice = undefined
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
 >twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
 >undefined : Symbol(undefined)
 
     this.twice = 'hi'
+>this.twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
+>this : Symbol(Installer, Decl(a.js, 0, 0))
 >twice : Symbol(Installer.twice, Decl(a.js, 4, 23), Decl(a.js, 6, 26), Decl(a.js, 15, 24), Decl(a.js, 16, 26), Decl(a.js, 22, 28) ... and 1 more)
 
     // twices: any[] | null
     this.twices = []
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
 >twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
 
     this.twices = null
+>this.twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
+>this : Symbol(Installer, Decl(a.js, 0, 0))
 >twices : Symbol(Installer.twices, Decl(a.js, 7, 21), Decl(a.js, 9, 20))
 }
 Installer.prototype.first = function () {

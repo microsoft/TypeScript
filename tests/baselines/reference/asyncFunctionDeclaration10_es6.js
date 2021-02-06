@@ -3,8 +3,7 @@ async function foo(a = await => await): Promise<void> {
 }
 
 //// [asyncFunctionDeclaration10_es6.js]
-function foo(a = yield ) {
-    return __awaiter(this, void 0, void 0, function* () { });
+function foo(a = yield , await) {
+    return __awaiter(this, void 0, void 0, function* () {
+    });
 }
-await;
-Promise < void  > {};

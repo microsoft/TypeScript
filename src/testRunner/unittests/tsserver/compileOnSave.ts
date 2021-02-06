@@ -868,6 +868,7 @@ namespace ts.projectSystem {
                             code: Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.code,
                             category: diagnosticCategoryName(Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file),
                             reportsUnnecessary: undefined,
+                            reportsDeprecated: undefined,
                             relatedInformation: undefined,
                             source: undefined
                         }]

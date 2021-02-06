@@ -13,8 +13,7 @@ async function f(){
         const i_1 = await fetch("https://typescriptlang.org");
         const res = i_1.ok;
         return i + 1;
-    }
-    catch (err) {
+    } catch (err) {
         return i - 1;
     }
 }

@@ -6,10 +6,10 @@ namespace ts {
             context.onSubstituteNode = (hint, node) => {
                 node = previousOnSubstituteNode(hint, node);
                 if (hint === EmitHint.Expression && isIdentifier(node) && node.escapedText === "undefined") {
-                    node = createPartiallyEmittedExpression(
+                    node = factory.createPartiallyEmittedExpression(
                         addSyntheticTrailingComment(
                             setTextRange(
-                                createVoidZero(),
+                                factory.createVoidZero(),
                                 node),
                             SyntaxKind.MultiLineCommentTrivia, "undefined"));
                 }
@@ -20,7 +20,7 @@ namespace ts {
         function replaceNumberWith2(context: TransformationContext) {
             function visitor(node: Node): Node {
                 if (isNumericLiteral(node)) {
-                    return createNumericLiteral("2");
+                    return factory.createNumericLiteral("2");
                 }
                 return visitEachChild(node, visitor, context);
             }
@@ -33,7 +33,7 @@ namespace ts {
             context.onSubstituteNode = (hint, node) => {
                 node = previousOnSubstituteNode(hint, node);
                 if (isIdentifier(node) && node.escapedText === "oldName") {
-                    node = setTextRange(createIdentifier("newName"), node);
+                    node = setTextRange(factory.createIdentifier("newName"), node);
                 }
                 return node;
             };
@@ -43,7 +43,7 @@ namespace ts {
         function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
             const visitor: Visitor = (node) => {
                 if (isIdentifier(node) && node.text === "oldName") {
-                    return createIdentifier("newName");
+                    return factory.createIdentifier("newName");
                 }
                 return visitEachChild(node, visitor, context);
             };
@@ -51,11 +51,12 @@ namespace ts {
         }
 
         function createTaggedTemplateLiteral(): Transformer<SourceFile> {
-            return sourceFile => updateSourceFileNode(sourceFile, [
-                createStatement(
-                    createTaggedTemplate(
-                        createIdentifier("$tpl"),
-                        createNoSubstitutionTemplateLiteral("foo", "foo")))
+            return sourceFile => factory.updateSourceFile(sourceFile, [
+                factory.createExpressionStatement(
+                    factory.createTaggedTemplateExpression(
+                        factory.createIdentifier("$tpl"),
+                        /*typeArguments*/ undefined,
+                        factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
             ]);
         }
 
@@ -65,7 +66,7 @@ namespace ts {
                 onEmitNode: transformed.emitNodeWithNotification,
                 substituteNode: transformed.substituteNode
             });
-            const result = printer.printBundle(createBundle(transformed.transformed));
+            const result = printer.printBundle(factory.createBundle(transformed.transformed));
             transformed.dispose();
             return result;
         }
@@ -110,7 +111,7 @@ namespace ts {
             return transformSourceFile(`let a!: () => void`, [
                 context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
                     if (node.kind === SyntaxKind.VoidKeyword) {
-                        return createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+                        return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
                     }
                     return visitEachChild(node, visitor, context);
                 })
@@ -206,11 +207,14 @@ namespace ts {
 
             function replaceWithClassAndNamespace() {
                 return (sourceFile: SourceFile) => {
-                    const result = getMutableClone(sourceFile);
-                    result.statements = createNodeArray([
-                        createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                        createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createIdentifier("Foo"), createModuleBlock([createEmptyStatement()]))
-                    ]);
+                    // TODO(rbuckton): Does this need to be parented?
+                    const result = factory.updateSourceFile(
+                        sourceFile,
+                        factory.createNodeArray([
+                            factory.createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
+                            factory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createIdentifier("Foo"), factory.createModuleBlock([factory.createEmptyStatement()]))
+                        ])
+                    );
                     return result;
                 };
             }
@@ -223,8 +227,8 @@ namespace ts {
                 function visitNode<T extends Node>(node: T): T {
                     if (node.kind === SyntaxKind.ModuleBlock) {
                         const block = node as T & ModuleBlock;
-                        const statements = createNodeArray([...block.statements]);
-                        return updateModuleBlock(block, statements) as typeof block;
+                        const statements = factory.createNodeArray([...block.statements]);
+                        return factory.updateModuleBlock(block, statements) as typeof block;
                     }
                     return visitEachChild(node, visitNode, context);
                 }
@@ -250,9 +254,9 @@ namespace ts {
                         if (node.kind === SyntaxKind.ExportDeclaration) {
                             const ed = node as Node as ExportDeclaration;
                             const exports = [{ name: "x" }];
-                            const exportSpecifiers = exports.map(e => createExportSpecifier(e.name, e.name));
-                            const exportClause = createNamedExports(exportSpecifiers);
-                            const newEd = updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier, ed.isTypeOnly);
+                            const exportSpecifiers = exports.map(e => factory.createExportSpecifier(e.name, e.name));
+                            const exportClause = factory.createNamedExports(exportSpecifiers);
+                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier);
 
                             return newEd as Node as T;
                         }
@@ -281,15 +285,16 @@ namespace ts {
                 };
                 function visitNode(sf: SourceFile) {
                     // produce `import * as i0 from './comp';
-                    const importStar = createImportDeclaration(
+                    const importStar = factory.createImportDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
-                        /*importClause*/ createImportClause(
+                        /*importClause*/ factory.createImportClause(
+                            /*isTypeOnly*/ false,
                             /*name*/ undefined,
-                            createNamespaceImport(createIdentifier("i0"))
+                            factory.createNamespaceImport(factory.createIdentifier("i0"))
                         ),
-                        /*moduleSpecifier*/ createLiteral("./comp1"));
-                    return updateSourceFileNode(sf, [importStar]);
+                        /*moduleSpecifier*/ factory.createStringLiteral("./comp1"));
+                    return factory.updateSourceFile(sf, [importStar]);
                 }
             }
         });
@@ -312,10 +317,10 @@ namespace ts {
                 };
                 function visitNode(sf: SourceFile) {
                     // produce `class Foo { @Bar baz() {} }`;
-                    const classDecl = createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                        createMethod([createDecorator(createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, createBlock([]))
+                    const classDecl = factory.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        factory.createMethodDeclaration([factory.createDecorator(factory.createIdentifier("Bar"))], [], /**/ undefined, "baz", /**/ undefined, /**/ undefined, [], /**/ undefined, factory.createBlock([]))
                     ]);
-                    return updateSourceFileNode(sf, [classDecl]);
+                    return factory.updateSourceFile(sf, [classDecl]);
                 }
             }
         });
@@ -351,11 +356,11 @@ namespace ts {
                 function visitNode(sf: SourceFile) {
                     // produce `class Foo { constructor(@Dec private x) {} }`;
                     // The decorator is required to trigger ts.ts transformations.
-                    const classDecl = createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                        createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, [
-                            createParameter(/*decorators*/ [createDecorator(createIdentifier("Dec"))], /*modifiers*/ [createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], createBlock([]))
+                    const classDecl = factory.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                        factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, [
+                            factory.createParameterDeclaration(/*decorators*/ [factory.createDecorator(factory.createIdentifier("Dec"))], /*modifiers*/ [factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], factory.createBlock([]))
                     ]);
-                    return updateSourceFileNode(sf, [classDecl]);
+                    return factory.updateSourceFile(sf, [classDecl]);
                 }
             }
         });
@@ -501,7 +506,7 @@ module MyModule {
                     };
                     function rootTransform<T extends Node>(node: T): Node {
                         if (isVariableDeclaration(node)) {
-                            return updateVariableDeclaration(node, createIdentifier("newName"), /* type */ undefined, node.initializer);
+                            return factory.updateVariableDeclaration(node, factory.createIdentifier("newName"), /*exclamationToken*/ undefined, /*type*/ undefined, node.initializer);
                         }
                         return visitEachChild(node, rootTransform, context);
                     }
@@ -527,12 +532,12 @@ module MyModule {
             function transformSourceFile(context: TransformationContext) {
                 const visitor: Visitor = (node) => {
                     if (isMethodDeclaration(node)) {
-                        return updateMethod(
+                        return factory.updateMethodDeclaration(
                             node,
                             node.decorators,
                             node.modifiers,
                             node.asteriskToken,
-                            createIdentifier("foobar"),
+                            factory.createIdentifier("foobar"),
                             node.questionToken,
                             node.typeParameters,
                             node.parameters,
@@ -561,7 +566,7 @@ module MyModule {
             function transformSourceFile(context: TransformationContext): Transformer<SourceFile> {
                 function visitor(node: Node): VisitResult<Node> {
                     if (isNoSubstitutionTemplateLiteral(node)) {
-                        return createNoSubstitutionTemplateLiteral(node.text, node.rawText);
+                        return factory.createNoSubstitutionTemplateLiteral(node.text, node.rawText);
                     }
                     else {
                         return visitEachChild(node, visitor, context);

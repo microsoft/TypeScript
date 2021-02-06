@@ -12,6 +12,7 @@ namespace ts.formatting {
         getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
+        skipToStartOf(node: Node): void;
     }
 
     const enum ScanAction {
@@ -47,6 +48,7 @@ namespace ts.formatting {
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
+            skipToStartOf,
         });
 
         lastTokenInfo = undefined;
@@ -291,6 +293,16 @@ namespace ts.formatting {
 
         function skipToEndOf(node: Node): void {
             scanner.setTextPos(node.end);
+            savedPos = scanner.getStartPos();
+            lastScanAction = undefined;
+            lastTokenInfo = undefined;
+            wasNewLine = false;
+            leadingTrivia = undefined;
+            trailingTrivia = undefined;
+        }
+
+        function skipToStartOf(node: Node): void {
+            scanner.setTextPos(node.pos);
             savedPos = scanner.getStartPos();
             lastScanAction = undefined;
             lastTokenInfo = undefined;

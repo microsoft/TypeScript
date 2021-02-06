@@ -1,0 +1,396 @@
+=== tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty2.ts ===
+({
+    x: class {
+>x : Symbol(x, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 0, 2))
+
+        constructor() { }
+    },
+    y: class {
+>y : Symbol(y, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 3, 6))
+
+        constructor() { }
+    },
+
+    // keywords
+    break: class {
+>break : Symbol(break, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 6, 6))
+
+        constructor() { }
+    },
+    case: class {
+>case : Symbol(case, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 11, 6))
+
+        constructor() { }
+    },
+    catch: class {
+>catch : Symbol(catch, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 14, 6))
+
+        constructor() { }
+    },
+    class: class {
+>class : Symbol(class, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 17, 6))
+
+        constructor() { }
+    },
+    const: class {
+>const : Symbol(const, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 20, 6))
+
+        constructor() { }
+    },
+    continue: class {
+>continue : Symbol(continue, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 23, 6))
+
+        constructor() { }
+    },
+    debugger: class {
+>debugger : Symbol(debugger, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 26, 6))
+
+        constructor() { }
+    },
+    default: class {
+>default : Symbol(default, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 29, 6))
+
+        constructor() { }
+    },
+    delete: class {
+>delete : Symbol(delete, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 32, 6))
+
+        constructor() { }
+    },
+    do: class {
+>do : Symbol(do, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 35, 6))
+
+        constructor() { }
+    },
+    else: class {
+>else : Symbol(else, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 38, 6))
+
+        constructor() { }
+    },
+    enum: class {
+>enum : Symbol(enum, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 41, 6))
+
+        constructor() { }
+    },
+    export: class {
+>export : Symbol(export, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 44, 6))
+
+        constructor() { }
+    },
+    extends: class {
+>extends : Symbol(extends, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 47, 6))
+
+        constructor() { }
+    },
+    false: class {
+>false : Symbol(false, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 50, 6))
+
+        constructor() { }
+    },
+    finally: class {
+>finally : Symbol(finally, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 53, 6))
+
+        constructor() { }
+    },
+    for: class {
+>for : Symbol(for, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 56, 6))
+
+        constructor() { }
+    },
+    function: class {
+>function : Symbol(function, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 59, 6))
+
+        constructor() { }
+    },
+    if: class {
+>if : Symbol(if, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 62, 6))
+
+        constructor() { }
+    },
+    import: class {
+>import : Symbol(import, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 65, 6))
+
+        constructor() { }
+    },
+    in: class {
+>in : Symbol(in, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 68, 6))
+
+        constructor() { }
+    },
+    instanceof: class {
+>instanceof : Symbol(instanceof, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 71, 6))
+
+        constructor() { }
+    },
+    new: class {
+>new : Symbol(new, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 74, 6))
+
+        constructor() { }
+    },
+    null: class {
+>null : Symbol(null, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 77, 6))
+
+        constructor() { }
+    },
+    return: class {
+>return : Symbol(return, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 80, 6))
+
+        constructor() { }
+    },
+    super: class {
+>super : Symbol(super, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 83, 6))
+
+        constructor() { }
+    },
+    switch: class {
+>switch : Symbol(switch, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 86, 6))
+
+        constructor() { }
+    },
+    this: class {
+>this : Symbol(this, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 89, 6))
+
+        constructor() { }
+    },
+    throw: class {
+>throw : Symbol(throw, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 92, 6))
+
+        constructor() { }
+    },
+    true: class {
+>true : Symbol(true, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 95, 6))
+
+        constructor() { }
+    },
+    try: class {
+>try : Symbol(try, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 98, 6))
+
+        constructor() { }
+    },
+    typeof: class {
+>typeof : Symbol(typeof, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 101, 6))
+
+        constructor() { }
+    },
+    var: class {
+>var : Symbol(var, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 104, 6))
+
+        constructor() { }
+    },
+    void: class {
+>void : Symbol(void, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 107, 6))
+
+        constructor() { }
+    },
+    while: class {
+>while : Symbol(while, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 110, 6))
+
+        constructor() { }
+    },
+    with: class {
+>with : Symbol(with, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 113, 6))
+
+        constructor() { }
+    },
+    implements: class {
+>implements : Symbol(implements, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 116, 6))
+
+        constructor() { }
+    },
+    interface: class {
+>interface : Symbol(interface, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 119, 6))
+
+        constructor() { }
+    },
+    let: class {
+>let : Symbol(let, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 122, 6))
+
+        constructor() { }
+    },
+    package: class {
+>package : Symbol(package, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 125, 6))
+
+        constructor() { }
+    },
+    private: class {
+>private : Symbol(private, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 128, 6))
+
+        constructor() { }
+    },
+    protected: class {
+>protected : Symbol(protected, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 131, 6))
+
+        constructor() { }
+    },
+    public: class {
+>public : Symbol(public, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 134, 6))
+
+        constructor() { }
+    },
+    static: class {
+>static : Symbol(static, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 137, 6))
+
+        constructor() { }
+    },
+    yield: class {
+>yield : Symbol(yield, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 140, 6))
+
+        constructor() { }
+    },
+    abstract: class {
+>abstract : Symbol(abstract, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 143, 6))
+
+        constructor() { }
+    },
+    as: class {
+>as : Symbol(as, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 146, 6))
+
+        constructor() { }
+    },
+    asserts: class {
+>asserts : Symbol(asserts, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 149, 6))
+
+        constructor() { }
+    },
+    any: class {
+>any : Symbol(any, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 152, 6))
+
+        constructor() { }
+    },
+    async: class {
+>async : Symbol(async, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 155, 6))
+
+        constructor() { }
+    },
+    await: class {
+>await : Symbol(await, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 158, 6))
+
+        constructor() { }
+    },
+    boolean: class {
+>boolean : Symbol(boolean, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 161, 6))
+
+        constructor() { }
+    },
+    constructor: class {
+>constructor : Symbol(constructor, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 164, 6))
+
+        constructor() { }
+    },
+    declare: class {
+>declare : Symbol(declare, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 167, 6))
+
+        constructor() { }
+    },
+    get: class {
+>get : Symbol(get, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 170, 6))
+
+        constructor() { }
+    },
+    infer: class {
+>infer : Symbol(infer, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 173, 6))
+
+        constructor() { }
+    },
+    is: class {
+>is : Symbol(is, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 176, 6))
+
+        constructor() { }
+    },
+    keyof: class {
+>keyof : Symbol(keyof, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 179, 6))
+
+        constructor() { }
+    },
+    module: class {
+>module : Symbol(module, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 182, 6))
+
+        constructor() { }
+    },
+    namespace: class {
+>namespace : Symbol(namespace, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 185, 6))
+
+        constructor() { }
+    },
+    never: class {
+>never : Symbol(never, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 188, 6))
+
+        constructor() { }
+    },
+    readonly: class {
+>readonly : Symbol(readonly, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 191, 6))
+
+        constructor() { }
+    },
+    require: class {
+>require : Symbol(require, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 194, 6))
+
+        constructor() { }
+    },
+    number: class {
+>number : Symbol(number, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 197, 6))
+
+        constructor() { }
+    },
+    object: class {
+>object : Symbol(object, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 200, 6))
+
+        constructor() { }
+    },
+    set: class {
+>set : Symbol(set, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 203, 6))
+
+        constructor() { }
+    },
+    string: class {
+>string : Symbol(string, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 206, 6))
+
+        constructor() { }
+    },
+    symbol: class {
+>symbol : Symbol(symbol, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 209, 6))
+
+        constructor() { }
+    },
+    type: class {
+>type : Symbol(type, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 212, 6))
+
+        constructor() { }
+    },
+    undefined: class {
+>undefined : Symbol(undefined, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 215, 6))
+
+        constructor() { }
+    },
+    unique: class {
+>unique : Symbol(unique, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 218, 6))
+
+        constructor() { }
+    },
+    unknown: class {
+>unknown : Symbol(unknown, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 221, 6))
+
+        constructor() { }
+    },
+    from: class {
+>from : Symbol(from, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 224, 6))
+
+        constructor() { }
+    },
+    global: class {
+>global : Symbol(global, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 227, 6))
+
+        constructor() { }
+    },
+    bigint: class {
+>bigint : Symbol(bigint, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 230, 6))
+
+        constructor() { }
+    },
+    of: class {
+>of : Symbol(of, Decl(convertClassExpressionToFunctionFromObjectProperty2.ts, 233, 6))
+
+        constructor() { }
+    }
+})
+

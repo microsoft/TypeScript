@@ -596,7 +596,9 @@ namespace vfs {
             if (existingNode) {
                 if (isDirectory(node)) {
                     if (!isDirectory(existingNode)) throw createIOError("ENOTDIR");
-                    if (this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
+                    // if both old and new arguments point to the same directory, just pass. So we could rename /src/a/1 to /src/A/1 in Win.
+                    // if not and the directory pointed by the new path is not empty, throw an error.
+                    if (this.stringComparer(oldpath, newpath) !== 0 && this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
                 }
                 else {
                     if (isDirectory(existingNode)) throw createIOError("EISDIR");
@@ -1034,8 +1036,12 @@ namespace vfs {
             while (true) {
                 if (depth >= 40) throw createIOError("ELOOP");
                 const lastStep = step === components.length - 1;
-                const basename = components[step];
-                const node = links.get(basename);
+                let basename = components[step];
+                const linkEntry = links.getEntry(basename);
+                if (linkEntry) {
+                    components[step] = basename = linkEntry[0];
+                }
+                const node = linkEntry?.[1];
                 if (lastStep && (noFollow || !isSymlink(node))) {
                     return { realpath: vpath.format(components), basename, parent, links, node };
                 }

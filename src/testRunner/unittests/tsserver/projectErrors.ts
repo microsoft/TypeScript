@@ -409,7 +409,7 @@ namespace ts.projectSystem {
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
-                verifyGetErrRequestNoErrors({ session, host, files: openFiles, existingTimeouts: 2 });
+                verifyGetErrRequestNoErrors({ session, host, files: openFiles });
             }
         });
 
@@ -534,7 +534,8 @@ declare module '@custom/plugin' {
                 messageText: formatStringFromArgs(d.message, didYouMean ? [prop, didYouMean] : [prop]),
                 category: d.category,
                 code: d.code,
-                reportsUnnecessary: undefined
+                reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             };
         }
 
@@ -549,7 +550,8 @@ declare module '@custom/plugin' {
                 messageText: formatStringFromArgs(d.message, [`${getDirectoryPath(configFile.path)}/${relativeFileName}`]),
                 category: d.category,
                 code: d.code,
-                reportsUnnecessary: undefined
+                reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             };
         }
 
@@ -908,6 +910,7 @@ declare module '@custom/plugin' {
                     code: Diagnostics.Unused_label.code,
                     relatedInformation: undefined,
                     reportsUnnecessary: true,
+                    reportsDeprecated: undefined,
                     source: undefined,
                 },
             ]);
@@ -1018,7 +1021,7 @@ console.log(blabla);`
                 { path: `${tscWatch.projectRoot}/node_modules/.staging/@babel/helper-plugin-utils-a06c629f` },
                 { path: `${tscWatch.projectRoot}/node_modules/.staging/core-js-db53158d` },
             ];
-            verifyWhileNpmInstall({ timeouts: 2, semantic: moduleNotFoundErr });
+            verifyWhileNpmInstall({ timeouts: 3, semantic: moduleNotFoundErr });
 
             filesAndFoldersToAdd = [
                 { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
@@ -1039,18 +1042,21 @@ console.log(blabla);`
             projectFiles.push(moduleFile);
             // Additional watch for watching script infos from node_modules
             expectedRecursiveWatches.set(`${tscWatch.projectRoot}/node_modules`, 2);
-            verifyWhileNpmInstall({ timeouts: 2, semantic: [] });
+            verifyWhileNpmInstall({ timeouts: 3, semantic: [] });
 
             function verifyWhileNpmInstall({ timeouts, semantic }: { timeouts: number; semantic: protocol.Diagnostic[] }) {
                 filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                 if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                    host.checkTimeoutQueueLengthAndRun(timeouts);
+                    host.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
+                    if (timeouts) {
+                        host.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
+                    }
                 }
                 else {
-                    host.checkTimeoutQueueLength(2);
+                    host.checkTimeoutQueueLength(timeouts ? 3 : 2);
                 }
                 verifyProject();
-                verifyErrors(semantic, !npmInstallComplete && !timeoutDuringPartialInstallation ? 2 : undefined);
+                verifyErrors(semantic, !npmInstallComplete && !timeoutDuringPartialInstallation ? timeouts ? 3 : 2 : undefined);
             }
 
             function verifyProject() {

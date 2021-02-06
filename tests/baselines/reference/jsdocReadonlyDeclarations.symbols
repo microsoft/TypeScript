@@ -37,6 +37,8 @@ function F() {
 
     /** @readonly */
     this.z = 1
+>this.z : Symbol(F.z, Decl(jsdocReadonlyDeclarations.js, 15, 14))
+>this : Symbol(F, Decl(jsdocReadonlyDeclarations.js, 13, 9))
 >z : Symbol(F.z, Decl(jsdocReadonlyDeclarations.js, 15, 14))
 }
 

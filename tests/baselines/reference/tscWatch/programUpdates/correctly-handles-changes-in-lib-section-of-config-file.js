@@ -28,12 +28,10 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
-[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
+[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 
 [7m1[0m var x: Promise<string>;
 [7m [0m [91m       ~~~~~~~[0m
-
 
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
@@ -41,6 +39,7 @@ Output::
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /compiler/lib.es5.d.ts
 /src/app.ts
@@ -83,13 +82,13 @@ Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts","lib.es2015.promise.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /compiler/lib.es5.d.ts
 /compiler/lib.es2015.promise.d.ts
