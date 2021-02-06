@@ -3210,11 +3210,11 @@ namespace ts {
         }
     }
     export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
-        return isIdentifierOrPrivateIdentifier(node) ? idText(node) : node.text;
+        return isMemberName(node) ? idText(node) : node.text;
     }
 
     export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-        return isIdentifierOrPrivateIdentifier(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+        return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForUniqueESSymbol(symbol: Symbol): __String {
@@ -3602,6 +3602,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.MetaProperty:
                 return OperatorPrecedence.Member;
 
             case SyntaxKind.AsExpression:

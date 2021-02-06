@@ -13,7 +13,7 @@ namespace ts {
         }
         else {
             const expression = setTextRange(
-                isIdentifierOrPrivateIdentifier(memberName)
+                isMemberName(memberName)
                     ? factory.createPropertyAccessExpression(target, memberName)
                     : factory.createElementAccessExpression(target, memberName),
                 memberName
@@ -412,7 +412,7 @@ namespace ts {
                     const helperNames: string[] = [];
                     for (const helper of helpers) {
                         if (!helper.scoped) {
-                            const importName = (helper as UnscopedEmitHelper).importName;
+                            const importName = helper.importName;
                             if (importName) {
                                 pushIfUnique(helperNames, importName);
                             }
@@ -815,18 +815,118 @@ namespace ts {
             || kind === SyntaxKind.ExportDeclaration;
     }
 
-    /* @internal */
-    export function isExportModifier(node: Modifier): node is ExportKeyword {
-        return node.kind === SyntaxKind.ExportKeyword;
+    export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;
+    export const isQuestionOrExclamationToken = or(isQuestionToken, isExclamationToken) as (node: Node) => node is QuestionToken | ExclamationToken;
+    export const isIdentifierOrThisTypeNode = or(isIdentifier, isThisTypeNode) as (node: Node) => node is Identifier | ThisTypeNode;
+    export const isReadonlyKeywordOrPlusOrMinusToken = or(isReadonlyKeyword, isPlusToken, isMinusToken) as (node: Node) => node is ReadonlyKeyword | PlusToken | MinusToken;
+    export const isQuestionOrPlusOrMinusToken = or(isQuestionToken, isPlusToken, isMinusToken) as (node: Node) => node is QuestionToken | PlusToken | MinusToken;
+    export const isModuleName = or(isIdentifier, isStringLiteral) as (node: Node) => node is ModuleName;
+
+    export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
+        const kind = node.kind;
+        return kind === SyntaxKind.NullKeyword
+            || kind === SyntaxKind.TrueKeyword
+            || kind === SyntaxKind.FalseKeyword
+            || isLiteralExpression(node)
+            || isPrefixUnaryExpression(node);
     }
 
-    /* @internal */
-    export function isAsyncModifier(node: Modifier): node is AsyncKeyword {
-        return node.kind === SyntaxKind.AsyncKeyword;
+    function isExponentiationOperator(kind: SyntaxKind): kind is ExponentiationOperator {
+        return kind === SyntaxKind.AsteriskAsteriskToken;
     }
 
-    /* @internal */
-    export function isStaticModifier(node: Modifier): node is StaticKeyword {
-        return node.kind === SyntaxKind.StaticKeyword;
+    function isMultiplicativeOperator(kind: SyntaxKind): kind is MultiplicativeOperator {
+        return kind === SyntaxKind.AsteriskToken
+            || kind === SyntaxKind.SlashToken
+            || kind === SyntaxKind.PercentToken;
+    }
+
+    function isMultiplicativeOperatorOrHigher(kind: SyntaxKind): kind is MultiplicativeOperatorOrHigher {
+        return isExponentiationOperator(kind)
+            || isMultiplicativeOperator(kind);
+    }
+
+    function isAdditiveOperator(kind: SyntaxKind): kind is AdditiveOperator {
+        return kind === SyntaxKind.PlusToken
+            || kind === SyntaxKind.MinusToken;
+    }
+
+    function isAdditiveOperatorOrHigher(kind: SyntaxKind): kind is AdditiveOperatorOrHigher {
+        return isAdditiveOperator(kind)
+            || isMultiplicativeOperatorOrHigher(kind);
+    }
+
+    function isShiftOperator(kind: SyntaxKind): kind is ShiftOperator {
+        return kind === SyntaxKind.LessThanLessThanToken
+            || kind === SyntaxKind.GreaterThanGreaterThanToken
+            || kind === SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+    }
+
+    function isShiftOperatorOrHigher(kind: SyntaxKind): kind is ShiftOperatorOrHigher {
+        return isShiftOperator(kind)
+            || isAdditiveOperatorOrHigher(kind);
+    }
+
+    function isRelationalOperator(kind: SyntaxKind): kind is RelationalOperator {
+        return kind === SyntaxKind.LessThanToken
+            || kind === SyntaxKind.LessThanEqualsToken
+            || kind === SyntaxKind.GreaterThanToken
+            || kind === SyntaxKind.GreaterThanEqualsToken
+            || kind === SyntaxKind.InstanceOfKeyword
+            || kind === SyntaxKind.InKeyword;
+    }
+
+    function isRelationalOperatorOrHigher(kind: SyntaxKind): kind is RelationalOperatorOrHigher {
+        return isRelationalOperator(kind)
+            || isShiftOperatorOrHigher(kind);
+    }
+
+    function isEqualityOperator(kind: SyntaxKind): kind is EqualityOperator {
+        return kind === SyntaxKind.EqualsEqualsToken
+            || kind === SyntaxKind.EqualsEqualsEqualsToken
+            || kind === SyntaxKind.ExclamationEqualsToken
+            || kind === SyntaxKind.ExclamationEqualsEqualsToken;
+    }
+
+    function isEqualityOperatorOrHigher(kind: SyntaxKind): kind is EqualityOperatorOrHigher {
+        return isEqualityOperator(kind)
+            || isRelationalOperatorOrHigher(kind);
+    }
+
+    function isBitwiseOperator(kind: SyntaxKind): kind is BitwiseOperator {
+        return kind === SyntaxKind.AmpersandToken
+            || kind === SyntaxKind.BarToken
+            || kind === SyntaxKind.CaretToken;
+    }
+
+    function isBitwiseOperatorOrHigher(kind: SyntaxKind): kind is BitwiseOperatorOrHigher {
+        return isBitwiseOperator(kind)
+            || isEqualityOperatorOrHigher(kind);
+    }
+
+    // NOTE: The version in utilities includes ExclamationToken, which is not a binary operator.
+    function isLogicalOperator(kind: SyntaxKind): kind is LogicalOperator {
+        return kind === SyntaxKind.AmpersandAmpersandToken
+            || kind === SyntaxKind.BarBarToken;
+    }
+
+    function isLogicalOperatorOrHigher(kind: SyntaxKind): kind is LogicalOperatorOrHigher {
+        return isLogicalOperator(kind)
+            || isBitwiseOperatorOrHigher(kind);
+    }
+
+    function isAssignmentOperatorOrHigher(kind: SyntaxKind): kind is AssignmentOperatorOrHigher {
+        return kind === SyntaxKind.QuestionQuestionToken
+            || isLogicalOperatorOrHigher(kind)
+            || isAssignmentOperator(kind);
+    }
+
+    function isBinaryOperator(kind: SyntaxKind): kind is BinaryOperator {
+        return isAssignmentOperatorOrHigher(kind)
+            || kind === SyntaxKind.CommaToken;
+    }
+
+    export function isBinaryOperatorToken(node: Node): node is BinaryOperatorToken {
+        return isBinaryOperator(node.kind);
     }
 }
