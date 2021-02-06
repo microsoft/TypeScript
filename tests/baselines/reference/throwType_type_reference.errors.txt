@@ -1,5 +1,5 @@
 tests/cases/compiler/throwType_type_reference.ts(1,89): error TS2693: 'T' only refers to a type, but is being used as a value here.
-tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2797: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2801: Type instantiated results in a throw type saying: 
     `Expected number, but found "${any}"`
 
 
@@ -10,6 +10,6 @@ tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2797: Type insta
     type A = MustNumber<1>
     type B = MustNumber<typeof window>
              ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2797: Type instantiated results in a throw type saying: 
-!!! error TS2797:     `Expected number, but found "${any}"`
+!!! error TS2801: Type instantiated results in a throw type saying: 
+!!! error TS2801:     `Expected number, but found "${any}"`
     
