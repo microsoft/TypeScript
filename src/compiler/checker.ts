@@ -14189,7 +14189,7 @@ namespace ts {
         }
 
         function applyStringMapping(kind: IntrinsicTypeKind | undefined, type: Type) {
-            let str = kind === IntrinsicTypeKind.TypeToString ? typeToString(type) : (<StringLiteralType>type).value;
+            const str = kind === IntrinsicTypeKind.TypeToString ? typeToString(type) : (<StringLiteralType>type).value;
             switch (kind) {
                 case IntrinsicTypeKind.Uppercase: return str.toUpperCase();
                 case IntrinsicTypeKind.Lowercase: return str.toLowerCase();
