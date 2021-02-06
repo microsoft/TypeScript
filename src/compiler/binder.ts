@@ -2543,6 +2543,11 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkContextualIdentifier(<Identifier>node);
+                case SyntaxKind.QualifiedName:
+                    if (currentFlow && parent.kind === SyntaxKind.TypeQuery) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;

@@ -331,7 +331,7 @@ namespace ts {
  *   Comments
  * @author Early Close Caret > <a@b>
  * @author No Line Breaks:
- *   <the.email@address> must be on the same line to parse
+ *   <the email @address> must be on the same line to parse
  * @author Long Comment <long@comment.org> I
  *  want to keep commenting down here, I dunno.
  */`);
@@ -340,6 +340,22 @@ namespace ts {
                     `/**
  * @example
  * Some\n\n * text\r\n * with newlines.
+ */`);
+                parsesCorrectly("Chained tags, no leading whitespace", `/**@a @b @c@d*/`);
+                parsesCorrectly("Initial star is not a tag", `/***@a*/`);
+                parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
+                parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);
+                parsesCorrectly("no space before @ is not a new tag",
+                    `/**
+ * @param this (@is@)
+ * @param fine its@fine
+@zerowidth
+*@singlestar
+**@doublestar
+ */`);
+                parsesCorrectly("@@ does not start a new tag",
+                    `/**
+ * @param this is (@@fine@@and) is one comment
  */`);
             });
         });

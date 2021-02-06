@@ -2348,6 +2348,132 @@ declare module "react" {
              */
             componentStack: string;
         }
+
+        // Exotic components and their APIs
+        // ----------------------------------------------------------------------
+        interface MutableRefObject<T> {
+            current: T;
+        }
+
+        type ForwardedRef<T> = ((instance: T | null) => void) | MutableRefObject<T | null> | null;
+
+        interface ForwardRefRenderFunction<T, P = {}> {
+            (props: PropsWithChildren<P>, ref: ForwardedRef<T>): ReactElement<any> | null;
+            displayName?: string;
+            // explicit rejected with `never` required due to
+            // https://github.com/microsoft/TypeScript/issues/36826
+            /**
+             * defaultProps are not supported on render functions
+             */
+            defaultProps?: never;
+            /**
+             * propTypes are not supported on render functions
+             */
+            propTypes?: never;
+        }
+
+        function createRef<T>(): RefObject<T>;
+
+        type WeakValidationMap<T> = {
+            [K in keyof T]?: null extends T[K]
+                ? Validator<T[K] | null | undefined>
+                : undefined extends T[K]
+                ? Validator<T[K] | null | undefined>
+                : Validator<T[K]>
+        };
+
+        // will show `ForwardRef(${Component.displayName || Component.name})` in devtools by default,
+        // but can be given its own specific name
+        interface ForwardRefExoticComponent<P> extends NamedExoticComponent<P> {
+            defaultProps?: Partial<P>;
+            propTypes?: WeakValidationMap<P>;
+        }
+    
+        function forwardRef<T, P = {}>(render: ForwardRefRenderFunction<T, P>): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T>>;
+    
+        /** Ensures that the props do not include ref at all */
+        type PropsWithoutRef<P> =
+            // Just Pick would be sufficient for this, but I'm trying to avoid unnecessary mapping over union types
+            // https://github.com/Microsoft/TypeScript/issues/28339
+            'ref' extends keyof P
+                ? Pick<P, Exclude<keyof P, 'ref'>>
+                : P;
+        /** Ensures that the props do not include string ref, which cannot be forwarded */
+        type PropsWithRef<P> =
+            // Just "P extends { ref?: infer R }" looks sufficient, but R will infer as {} if P is {}.
+            'ref' extends keyof P
+                ? P extends { ref?: infer R }
+                    ? string extends R
+                        ? PropsWithoutRef<P> & { ref?: Exclude<R, string> }
+                        : P
+                    : P
+                : P;
+    
+        type PropsWithChildren<P> = P & { children?: ReactNode };
+        type JSXElementConstructor<P> =
+        | ((props: P) => ReactElement<any> | null)
+        | (new (props: P) => Component<P, any>);
+        type ElementType<P = any> =
+        {
+            [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K] ? K : never
+        }[keyof JSX.IntrinsicElements] |
+        ComponentType<P>;
+
+        interface RefAttributes<T> extends Attributes {
+            ref?: Ref<T>;
+        }
+
+        /**
+         * NOTE: prefer ComponentPropsWithRef, if the ref is forwarded,
+         * or ComponentPropsWithoutRef when refs are not supported.
+         */
+        type ComponentProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> =
+            T extends JSXElementConstructor<infer P>
+                ? P
+                : T extends keyof JSX.IntrinsicElements
+                    ? JSX.IntrinsicElements[T]
+                    : {};
+        type ComponentPropsWithRef<T extends ElementType> =
+            T extends ComponentClass<infer P>
+                ? PropsWithoutRef<P> & RefAttributes<InstanceType<T>>
+                : PropsWithRef<ComponentProps<T>>;
+        type ComponentPropsWithoutRef<T extends ElementType> =
+            PropsWithoutRef<ComponentProps<T>>;
+    
+        // will show `Memo(${Component.displayName || Component.name})` in devtools by default,
+        // but can be given its own specific name
+        type MemoExoticComponent<T extends ComponentType<any>> = NamedExoticComponent<ComponentPropsWithRef<T>> & {
+            readonly type: T;
+        };
+    
+        function memo<P extends object>(
+            Component: SFC<P>,
+            propsAreEqual?: (prevProps: Readonly<PropsWithChildren<P>>, nextProps: Readonly<PropsWithChildren<P>>) => boolean
+        ): NamedExoticComponent<P>;
+        function memo<T extends ComponentType<any>>(
+            Component: T,
+            propsAreEqual?: (prevProps: Readonly<ComponentProps<T>>, nextProps: Readonly<ComponentProps<T>>) => boolean
+        ): MemoExoticComponent<T>;
+    
+        type LazyExoticComponent<T extends ComponentType<any>> = ExoticComponent<ComponentPropsWithRef<T>> & {
+            readonly _result: T;
+        };
+    
+        function lazy<T extends ComponentType<any>>(
+            factory: () => Promise<{ default: T }>
+        ): LazyExoticComponent<T>;
+
+        interface ExoticComponent<P = {}> {
+            /**
+             * **NOTE**: Exotic components are not callable.
+             */
+            (props: P): (ReactElement<any>|null);
+            readonly $$typeof: symbol;
+        }
+    
+        interface NamedExoticComponent<P = {}> extends ExoticComponent<P> {
+            displayName?: string;
+        }
     }
 
     // Declared props take priority over inferred props

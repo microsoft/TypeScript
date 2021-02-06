@@ -318,6 +318,9 @@ namespace ts {
         return getCombinedFlags(node, n => n.flags);
     }
 
+    /* @internal */
+    export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -326,7 +329,8 @@ namespace ts {
         locale: string,
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
         errors?: Push<Diagnostic>) {
-        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
+        const lowerCaseLocale = locale.toLowerCase();
+        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
 
         if (!matchResult) {
             if (errors) {
@@ -340,7 +344,7 @@ namespace ts {
 
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
-        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+        if (contains(supportedLocaleDirectories, lowerCaseLocale) && !trySetLanguageAndTerritory(language, territory, errors)) {
             trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
 

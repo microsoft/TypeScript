@@ -118,9 +118,9 @@ exports.x
 module.exports.y = {
 >module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 >module.exports.y : DoneStatus
->module.exports : typeof import("tests/cases/conformance/salsa/test")
->module : { "\"tests/cases/conformance/salsa/test\"": typeof import("tests/cases/conformance/salsa/test"); }
->exports : typeof import("tests/cases/conformance/salsa/test")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >y : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
@@ -134,9 +134,9 @@ module.exports.y = {
 }
 module.exports.y
 >module.exports.y : DoneStatus
->module.exports : typeof import("tests/cases/conformance/salsa/test")
->module : { "\"tests/cases/conformance/salsa/test\"": typeof import("tests/cases/conformance/salsa/test"); }
->exports : typeof import("tests/cases/conformance/salsa/test")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >y : DoneStatus
 
 // prototype-property assignment
@@ -192,7 +192,7 @@ F.prototype = {
 module.exports = {
 >module.exports = {    status: "done",    m(n) { }} : { status: 'done'; m(n: number): void; }
 >module.exports : { status: "done"; m(n: number): void; }
->module : { "\"tests/cases/conformance/salsa/mod\"": { status: "done"; m(n: number): void; }; }
+>module : { exports: { status: "done"; m(n: number): void; }; }
 >exports : { status: "done"; m(n: number): void; }
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 

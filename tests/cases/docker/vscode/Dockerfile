@@ -10,6 +10,7 @@ COPY --from=typescript/typescript /typescript/typescript-*.tgz /typescript.tgz
 WORKDIR /vscode/build
 RUN yarn add typescript@/typescript.tgz
 WORKDIR /vscode/extensions
+RUN yarn add rimraf
 RUN yarn add typescript@/typescript.tgz
 WORKDIR /vscode
 RUN yarn add typescript@/typescript.tgz

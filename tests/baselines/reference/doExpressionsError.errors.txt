@@ -1,20 +1,20 @@
 tests/cases/compiler/doExpressionsError.ts(2,10): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/doExpressionsError.ts(7,9): error TS1432: A return statement cannot be used within a do expression
-tests/cases/compiler/doExpressionsError.ts(16,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(16,10): error TS1433: A var declaration cannot be used within a do expression unless the target is ESNext.
+tests/cases/compiler/doExpressionsError.ts(7,9): error TS1434: A return statement cannot be used within a do expression
+tests/cases/compiler/doExpressionsError.ts(16,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(16,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
 tests/cases/compiler/doExpressionsError.ts(16,14): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/doExpressionsError.ts(17,19): error TS1431: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(17,19): error TS1433: Declaration or iteration cannot present at end of the do expression
 tests/cases/compiler/doExpressionsError.ts(17,19): error TS2393: Duplicate function implementation.
-tests/cases/compiler/doExpressionsError.ts(18,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(19,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(20,16): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(21,15): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(25,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(26,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(27,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(28,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(29,10): error TS1431: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(36,10): error TS1433: A var declaration cannot be used within a do expression unless the target is ESNext.
+tests/cases/compiler/doExpressionsError.ts(18,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(19,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(20,16): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(21,15): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(25,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(26,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(27,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(28,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(29,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(36,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
 tests/cases/compiler/doExpressionsError.ts(36,14): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate function implementation.
 
@@ -30,7 +30,7 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
             }
             return 2; // error on this node
             ~~~~~~
-!!! error TS1432: A return statement cannot be used within a do expression
+!!! error TS1434: A return statement cannot be used within a do expression
         };
     }
     // No break / continue across do expr
@@ -41,46 +41,46 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
     ;[
         do { var a = 1 },
              ~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
              ~~~~~~~~~
-!!! error TS1433: A var declaration cannot be used within a do expression unless the target is ESNext.
+!!! error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
                  ~
 !!! error TS2300: Duplicate identifier 'a'.
         do { function x() { } },
                       ~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
                       ~
 !!! error TS2393: Duplicate function implementation.
         do { const a = 1 },
              ~~~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { let a = 1 },
              ~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { class T {} },
                    ~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { enum T {} },
                   ~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
     ]
     
     ;[
         do { for (const x of []) {} },
              ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { for (const x in {}) {} },
              ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { for (let i = 0; i < [].length; i++) {} },
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { while(true) {} },
              ~~~~~~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
         do { do {} while(true) }
              ~~~~~~~~~~~~~~~~~
-!!! error TS1431: Declaration or iteration cannot present at end of the do expression
+!!! error TS1433: Declaration or iteration cannot present at end of the do expression
     ]
     ;
     
@@ -89,7 +89,7 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
     ;[
         do { var a = 1; a },
              ~~~~~~~~~~
-!!! error TS1433: A var declaration cannot be used within a do expression unless the target is ESNext.
+!!! error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
                  ~
 !!! error TS2300: Duplicate identifier 'a'.
         do { function x() { }; x },

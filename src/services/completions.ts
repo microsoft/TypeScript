@@ -732,7 +732,7 @@ namespace ts.Completions {
             exportedSymbol,
             moduleSymbol,
             sourceFile,
-            getNameForExportedSymbol(symbol, compilerOptions.target!),
+            getNameForExportedSymbol(symbol, compilerOptions.target),
             host,
             program,
             formatContext,
@@ -855,6 +855,7 @@ namespace ts.Completions {
         host: LanguageServiceHost
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
 
         let start = timestamp();
         let currentToken = getTokenAtPosition(sourceFile, position); // TODO: GH#15853
@@ -1386,7 +1387,7 @@ namespace ts.Completions {
 
             // Get all entities in the current scope.
             completionKind = CompletionKind.Global;
-            isNewIdentifierLocation = isNewIdentifierDefinitionLocation(contextToken);
+            isNewIdentifierLocation = isNewIdentifierDefinitionLocation();
 
             if (previousToken !== contextToken) {
                 Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
@@ -1519,7 +1520,22 @@ namespace ts.Completions {
                         return false;
                     }
 
-                    symbol = skipAlias(symbol, typeChecker);
+                    // External modules can have global export declarations that will be
+                    // available as global keywords in all scopes. But if the external module
+                    // already has an explicit export and user only wants to user explicit
+                    // module imports then the global keywords will be filtered out so auto
+                    // import suggestions will win in the completion
+                    const symbolOrigin = skipAlias(symbol, typeChecker);
+                    // We only want to filter out the global keywords
+                    // Auto Imports are not available for scripts so this conditional is always false
+                    if (!!sourceFile.externalModuleIndicator
+                        && !compilerOptions.allowUmdGlobalAccess
+                        && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
+                        && symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions) {
+                        return false;
+                    }
+                    // Continue with origin symbol
+                    symbol = symbolOrigin;
 
                     // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
                     if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
@@ -1833,18 +1849,19 @@ namespace ts.Completions {
             return false;
         }
 
-        function isNewIdentifierDefinitionLocation(previousToken: Node | undefined): boolean {
-            if (previousToken) {
-                const containingNodeKind = previousToken.parent.kind;
+        function isNewIdentifierDefinitionLocation(): boolean {
+            if (contextToken) {
+                const containingNodeKind = contextToken.parent.kind;
                 // Previous token may have been a keyword that was converted to an identifier.
-                switch (keywordForNode(previousToken)) {
+                switch (keywordForNode(contextToken)) {
                     case SyntaxKind.CommaToken:
                         return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
                             || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
                             || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
                             || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
                             || containingNodeKind === SyntaxKind.BinaryExpression             // const x = (a, |
-                            || containingNodeKind === SyntaxKind.FunctionType;                // var x: (s: string, list|
+                            || containingNodeKind === SyntaxKind.FunctionType                 // var x: (s: string, list|
+                            || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { x, |
 
                     case SyntaxKind.OpenParenToken:
                         return containingNodeKind === SyntaxKind.CallExpression               // func( |
@@ -1866,7 +1883,8 @@ namespace ts.Completions {
                         return containingNodeKind === SyntaxKind.ModuleDeclaration;           // module A.|
 
                     case SyntaxKind.OpenBraceToken:
-                        return containingNodeKind === SyntaxKind.ClassDeclaration;            // class A{ |
+                        return containingNodeKind === SyntaxKind.ClassDeclaration             // class A { |
+                            || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { |
 
                     case SyntaxKind.EqualsToken:
                         return containingNodeKind === SyntaxKind.VariableDeclaration          // const x = a|
