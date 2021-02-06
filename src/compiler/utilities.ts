@@ -1377,6 +1377,9 @@ namespace ts {
                     // These are not allowed inside a generator now, but eventually they may be allowed
                     // as local types. Regardless, skip them to avoid the work.
                     return;
+                case SyntaxKind.DoExpression:
+                    if ((<DoExpression>node).async) return;
+                    // falls through
                 default:
                     if (isFunctionLike(node)) {
                         if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
