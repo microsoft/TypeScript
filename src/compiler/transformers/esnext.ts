@@ -131,12 +131,16 @@ namespace ts {
                 return visitEachChild(visitEachChild(node, do_visit, context), visitor, context);
             }
             const block = visitEachChild(expr.block, do_visit, context);
-            const f = createDoBlockFunction(block, hasAsync, hasYield);
+            if (expr.async) return createAsyncDoExpressionResult(block, temp);
+            const f = functionOf(block, hasAsync, hasYield);
             const exec = createDoBlockExecutor(f, hasAsync, hasYield);
             return factory.createCommaListExpression([exec, temp]);
         }
 
-        function createDoBlockFunction(block: Block, hasAsync: boolean, hasYield: boolean) {
+        /**
+         * Try to generate arrow function if possible.
+         */
+        function functionOf(block: ConciseBody, hasAsync: boolean, hasYield: boolean) {
             const modifiers = hasAsync ? [factory.createModifier(SyntaxKind.AsyncKeyword)] : undefined;
             if (!hasYield) {
                 return factory.createArrowFunction(
@@ -151,7 +155,7 @@ namespace ts {
                 modifiers,
                 hasYield ? star : undefined,
                 /* name */ undefined, /* typeParam */ undefined, /** param */[], /** type */ undefined,
-                block
+                isBlock(block) ? block : factory.createBlock([factory.createReturnStatement(block)])
             );
         }
         function createDoBlockExecutor(f: ArrowFunction | FunctionExpression, hasAsync: boolean, hasYield: boolean) {
@@ -161,6 +165,17 @@ namespace ts {
             if (hasAsync) return factory.createAwaitExpression(call(f, []));
             // expr()
             return call(f, []);
+        }
+        /**
+         * For async do expression, we generate code like this:
+         * (async () => { _block })().then(() => _completion_value_container_)
+         */
+        function createAsyncDoExpressionResult(block: Block, completionValueContainer: Identifier) {
+            const f = functionOf(block, /** await */ true, /** yield */ false);
+            const invoke = call(f, []);
+            const then = factory.createPropertyAccessExpression(invoke, "then");
+            const thenBody = functionOf(completionValueContainer, /** await */ false, /** yield */ false);
+            return call(then, [thenBody]);
         }
         function call(expr: Expression, args: Expression[]) {
             return factory.createCallExpression(expr, /** generics */ undefined, args);
