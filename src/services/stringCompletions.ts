@@ -163,7 +163,7 @@ namespace ts.Completions.StringCompletions {
                     //      foo({
                     //          '/*completion position*/'
                     //      });
-                    return stringLiteralCompletionsFromProperties(typeChecker.getContextualType(parent.parent));
+                    return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
                 }
                 return fromContextualType();
 
@@ -254,6 +254,25 @@ namespace ts.Completions.StringCompletions {
         };
     }
 
+    function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): StringLiteralCompletionsFromProperties | undefined {
+        const contextualType = checker.getContextualType(objectLiteralExpression);
+        if (!contextualType) return undefined;
+
+        const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.Completions);
+        const symbols = getPropertiesForObjectExpression(
+            contextualType,
+            completionsType,
+            objectLiteralExpression,
+            checker
+        );
+
+        return {
+            kind: StringLiteralCompletionKind.Properties,
+            symbols,
+            hasIndexSignature: hasIndexSignature(contextualType)
+        };
+    }
+
     function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
         if (!type) return emptyArray;
         type = skipConstraint(type);
@@ -279,7 +298,9 @@ namespace ts.Completions.StringCompletions {
 
     function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[]): readonly PathCompletion[] {
         const span = getDirectoryFragmentTextSpan(text, textStart);
-        return names.map(({ name, kind, extension }): PathCompletion => ({ name, kind, extension, span }));
+        const wholeSpan = text.length === 0 ? undefined : createTextSpan(textStart, text.length);
+        return names.map(({ name, kind, extension }): PathCompletion =>
+            Math.max(name.indexOf(directorySeparator), name.indexOf(altDirectorySeparator)) !== -1 ? { name, kind, extension, span: wholeSpan } : { name, kind, extension, span });
     }
 
     function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly PathCompletion[] {
@@ -683,7 +704,7 @@ namespace ts.Completions.StringCompletions {
 
     // Replace everything after the last directory separator that appears
     function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan | undefined {
-        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf("\\"));
+        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf(altDirectorySeparator));
         const offset = index !== -1 ? index + 1 : 0;
         // If the range is an identifier, span is unnecessary.
         const length = text.length - offset;

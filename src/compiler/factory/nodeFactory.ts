@@ -1700,7 +1700,14 @@ namespace ts {
         }
 
         // @api
-        function createConstructorTypeNode(
+        function createConstructorTypeNode(...args: Parameters<typeof createConstructorTypeNode1 | typeof createConstructorTypeNode2>) {
+            return args.length === 4 ? createConstructorTypeNode1(...args) :
+                args.length === 3 ? createConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function createConstructorTypeNode1(
+            modifiers: readonly Modifier[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
@@ -1708,7 +1715,7 @@ namespace ts {
             const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
                 SyntaxKind.ConstructorType,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 /*name*/ undefined,
                 typeParameters,
                 parameters,
@@ -1718,18 +1725,45 @@ namespace ts {
             return node;
         }
 
+        /** @deprecated */
+        function createConstructorTypeNode2(
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined
+        ): ConstructorTypeNode {
+            return createConstructorTypeNode1(/*modifiers*/ undefined, typeParameters, parameters, type);
+        }
+
         // @api
-        function updateConstructorTypeNode(
+        function updateConstructorTypeNode(...args: Parameters<typeof updateConstructorTypeNode1 | typeof updateConstructorTypeNode2>) {
+            return args.length === 5 ? updateConstructorTypeNode1(...args) :
+                args.length === 4 ? updateConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function updateConstructorTypeNode1(
+            node: ConstructorTypeNode,
+            modifiers: readonly Modifier[] | undefined,
+            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+            parameters: NodeArray<ParameterDeclaration>,
+            type: TypeNode | undefined
+        ) {
+            return node.modifiers !== modifiers
+                || node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? updateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
+                : node;
+        }
+
+        /** @deprecated */
+        function updateConstructorTypeNode2(
             node: ConstructorTypeNode,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
             parameters: NodeArray<ParameterDeclaration>,
             type: TypeNode | undefined
         ) {
-            return node.typeParameters !== typeParameters
-                || node.parameters !== parameters
-                || node.type !== type
-                ? updateBaseSignatureDeclaration(createConstructorTypeNode(typeParameters, parameters, type), node)
-                : node;
+            return updateConstructorTypeNode1(node, node.modifiers, typeParameters, parameters, type);
         }
 
         // @api
@@ -3776,6 +3810,7 @@ namespace ts {
         function createImportEqualsDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
+            isTypeOnly: boolean,
             name: string | Identifier,
             moduleReference: ModuleReference
         ) {
@@ -3785,6 +3820,7 @@ namespace ts {
                 modifiers,
                 name
             );
+            node.isTypeOnly = isTypeOnly;
             node.moduleReference = moduleReference;
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
@@ -3797,14 +3833,16 @@ namespace ts {
             node: ImportEqualsDeclaration,
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
+            isTypeOnly: boolean,
             name: Identifier,
             moduleReference: ModuleReference
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
+                || node.isTypeOnly !== isTypeOnly
                 || node.name !== name
                 || node.moduleReference !== moduleReference
-                ? update(createImportEqualsDeclaration(decorators, modifiers, name, moduleReference), node)
+                ? update(createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, name, moduleReference), node)
                 : node;
         }
 
@@ -5798,7 +5836,7 @@ namespace ts {
                 isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
                 isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
                 isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.name, node.moduleReference) :
                 isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
                 isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
                 isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :

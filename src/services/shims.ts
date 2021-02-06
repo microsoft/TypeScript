@@ -209,6 +209,12 @@ namespace ts {
         findReferences(fileName: string, position: number): string;
 
         /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
+         */
+        getFileReferences(fileName: string): string;
+
+        /**
          * @deprecated
          * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
@@ -257,7 +263,7 @@ namespace ts {
         /**
          * Returns JSON-encoded value of the type TextInsertion.
          */
-        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string;
 
         /**
          * Returns JSON-encoded boolean to indicate whether we should support brace location
@@ -916,6 +922,13 @@ namespace ts {
             );
         }
 
+        public getFileReferences(fileName: string) {
+            return this.forwardJSONCall(
+                `getFileReferences('${fileName})`,
+                () => this.languageService.getFileReferences(fileName)
+            );
+        }
+
         public getOccurrencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getOccurrencesAtPosition('${fileName}', ${position})`,
@@ -986,10 +999,10 @@ namespace ts {
                 });
         }
 
-        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+        public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
             return this.forwardJSONCall(
                 `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
             );
         }
 

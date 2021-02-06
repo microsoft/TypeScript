@@ -17,7 +17,7 @@ class Q {
 module.exports = class Q {
 >module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >class Q {    constructor() {        this.x = new A();    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >Q : typeof import("tests/cases/conformance/jsdoc/declarations/index")
@@ -36,7 +36,7 @@ module.exports.Another = Q;
 >module.exports.Another = Q : typeof Q
 >module.exports.Another : typeof Q
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >Another : typeof Q
 >Q : typeof Q

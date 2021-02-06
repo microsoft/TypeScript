@@ -102,7 +102,7 @@ namespace ts.server {
 
     /**
      * The project root can be script info - if root is present,
-     * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
+     * or it could be just normalized path if root wasn't present on the host(only for non inferred project)
      */
     /* @internal */
     export interface ProjectRootFile {
@@ -147,7 +147,8 @@ namespace ts.server {
         /*@internal*/
         private hasAddedorRemovedFiles = false;
 
-        private lastFileExceededProgramSize: string | undefined;
+        /*@internal*/
+        lastFileExceededProgramSize: string | undefined;
 
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
@@ -1057,13 +1058,16 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
-            enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 /*inserted*/ noop,
                 removed => this.detachScriptInfoFromProject(removed)
-            );
-            this.typingFiles = typingFiles;
-            // Invalidate files with unresolved imports
-            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+            )) {
+                // If typing files changed, then only schedule project update
+                this.typingFiles = typingFiles;
+                // Invalidate files with unresolved imports
+                this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+                this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+            }
         }
 
         /* @internal */
@@ -1188,8 +1192,8 @@ namespace ts.server {
                 // by the host for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
-                    scriptInfo.attachToProject(this);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
+                    scriptInfo?.attachToProject(this);
                 },
                 removed => this.detachScriptInfoFromProject(removed)
             );
@@ -1375,6 +1379,8 @@ namespace ts.server {
                 for (const file of sourceFiles) {
                     strBuilder += `\t${file.fileName}\n`;
                 }
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
             }
             return strBuilder;
         }
@@ -2067,9 +2073,6 @@ namespace ts.server {
         openFileWatchTriggered = new Map<string, true>();
 
         /*@internal*/
-        configFileSpecs: ConfigFileSpecs | undefined;
-
-        /*@internal*/
         canConfigFileJsonReportNoInputFiles = false;
 
         /** Ref count to the project when opened from external project */
@@ -2293,7 +2296,8 @@ namespace ts.server {
             }
 
             this.stopWatchingWildCards();
-            this.configFileSpecs = undefined;
+            this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
+            this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;
             super.close();
@@ -2376,8 +2380,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
-            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
+        updateErrorOnNoInputFiles(fileNames: string[]) {
+            updateErrorForNoInputFiles(fileNames, this.getConfigFilePath(), this.getCompilerOptions().configFile!.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 

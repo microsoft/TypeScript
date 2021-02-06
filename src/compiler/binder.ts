@@ -2147,8 +2147,8 @@ namespace ts {
             const saveCurrentFlow = currentFlow;
             for (const typeAlias of delayedTypeAliases) {
                 const host = getJSDocHost(typeAlias);
-                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
-                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
+                container = (host && findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer))) || file;
+                blockScopeContainer = (host && getEnclosingBlockScopeContainer(host)) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
@@ -2540,6 +2540,11 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkContextualIdentifier(<Identifier>node);
+                case SyntaxKind.QualifiedName:
+                    if (currentFlow && parent.kind === SyntaxKind.TypeQuery) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
@@ -3435,7 +3440,7 @@ namespace ts {
 
         function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
             const instanceState = getModuleInstanceState(node);
-            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && !!options.preserveConstEnums);
+            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && shouldPreserveConstEnums(options));
         }
 
         function checkUnreachable(node: Node): boolean {

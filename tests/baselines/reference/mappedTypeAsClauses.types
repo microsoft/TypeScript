@@ -5,7 +5,7 @@ type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P]
 >Getters : Getters<T>
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
->TG1 : Getters<{ foo: string; bar: number; baz: {    z: boolean;}; }>
+>TG1 : TG1
 >foo : string
 >bar : number
 >baz : { z: boolean; }
@@ -22,7 +22,7 @@ type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: 
 >TypeFromDefs : TypeFromDefs<T>
 
 type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
->TP1 : TypeFromDefs<{ name: 'a'; type: string; } | { name: 'b'; type: number; } | { name: 'a'; type: boolean; }>
+>TP1 : TP1
 >name : "a"
 >type : string
 >name : "b"
@@ -33,10 +33,10 @@ type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number 
 // No array or tuple type mapping when 'as N' clause present
 
 type TA1 = Getters<string[]>;
->TA1 : Getters<string[]>
+>TA1 : TA1
 
 type TA2 = Getters<[number, boolean]>;
->TA2 : Getters<[number, boolean]>
+>TA2 : TA2
 
 // Filtering using 'as N' clause
 
@@ -56,7 +56,7 @@ type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 >DoubleProp : DoubleProp<T>
 
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
->TD1 : DoubleProp<{ a: string; b: number; }>
+>TD1 : TD1
 >a : string
 >b : number
 
@@ -169,4 +169,59 @@ type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
 
 let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
 >carKeys : "name" | "seats"
+
+// Repro from #41453
+
+type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
+>Equal : Equal<A, B>
+>true : true
+>false : false
+
+type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
+>If : If<Cond, Then, Else>
+>true : true
+
+type GetKey<S, V> = keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any };
+>GetKey : keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any; }
+>true : true
+
+type GetKeyWithIf<S, V> = keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
+>GetKeyWithIf : keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any; }
+
+type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
+>GetObjWithIf : GetObjWithIf<S, V>
+
+type Task = {
+>Task : Task
+
+  isDone: boolean;
+>isDone : boolean
+
+};
+
+type Schema = {
+>Schema : Schema
+
+  root: {
+>root : { title: string; task: Task; }
+
+    title: string;
+>title : string
+
+    task: Task;
+>task : Task
+  }
+  Task: Task;
+>Task : Task
+
+};
+
+type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
+>Res1 : "Task"
+
+type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
+>Res2 : "Task"
+
+type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
+>Res3 : "Task"
 

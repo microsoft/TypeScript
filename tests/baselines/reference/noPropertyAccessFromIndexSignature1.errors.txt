@@ -1,6 +1,6 @@
-tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(24,1): error TS4111: Property 'foo' comes from an index signature, so it must be accessed with ['foo'].
-tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(32,1): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
-tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(40,1): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
+tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(24,3): error TS4111: Property 'foo' comes from an index signature, so it must be accessed with ['foo'].
+tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(32,3): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
+tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(40,4): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
 
 
 ==== tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts (3 errors) ====
@@ -28,7 +28,7 @@ tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(
     
     // access index signature
     b.foo;
-    ~~~~~
+      ~~~
 !!! error TS4111: Property 'foo' comes from an index signature, so it must be accessed with ['foo'].
     b["foo"];
     
@@ -38,7 +38,7 @@ tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(
     
     // access index signature
     c.bar;
-    ~~~~~
+      ~~~
 !!! error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
     c["bar"];
     
@@ -48,7 +48,7 @@ tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(
     
     // optional access index signature
     d?.bar;
-    ~~~~~~
+       ~~~
 !!! error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
     d?.["bar"];
     

@@ -142,11 +142,11 @@ type NeededInfo<MyNamespaceSchema = {}> = {
 };
 
 export type MyInfo = NeededInfo<ToB<{ initialize: any }>>;
->MyInfo : NeededInfo<ToB<{ initialize: any; }>>
+>MyInfo : MyInfo
 >initialize : any
 
 const tmp1: MyInfo = null!;
->tmp1 : NeededInfo<ToB<{ initialize: any; }>>
+>tmp1 : MyInfo
 >null! : never
 >null : null
 
@@ -157,12 +157,12 @@ function tmp2<N extends NeededInfo>(n: N) {}
 tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
 >tmp2(tmp1) : void
 >tmp2 : <N extends NeededInfo<{}>>(n: N) => void
->tmp1 : NeededInfo<ToB<{ initialize: any; }>>
+>tmp1 : MyInfo
 
 class Server<X extends NeededInfo> {}
 >Server : Server<X>
 
 export class MyServer extends Server<MyInfo> {} // not assignable error at `MyInfo`
 >MyServer : MyServer
->Server : Server<NeededInfo<ToB<{ initialize: any; }>>>
+>Server : Server<MyInfo>
 
