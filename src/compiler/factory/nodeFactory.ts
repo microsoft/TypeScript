@@ -2871,7 +2871,7 @@ namespace ts {
         }
 
         // @api
-        function updateDoExpression(node: DoExpression, isAsync:boolean , block: Block) {
+        function updateDoExpression(node: DoExpression, isAsync: boolean , block: Block) {
             return node.block !== block
                 ? update(createDoExpression(isAsync, block), node)
                 : node;
