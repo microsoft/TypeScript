@@ -1197,7 +1197,7 @@ namespace ts {
                     addAntecedent(currentReturnTarget, currentFlow);
                 }
             }
-            if (node.kind === SyntaxKind.ReturnStatement && hasDirectDoExpressionAncestor(node)) {
+            if (node.kind === SyntaxKind.ReturnStatement && findDirectDoExpressionAncestorUnderFunctionBoundary(node)) {
                 // DoExpression should not affect the control flow by return
             }
             else currentFlow = unreachableFlow;
@@ -1214,7 +1214,7 @@ namespace ts {
 
         function bindBreakOrContinueFlow(node: BreakOrContinueStatement, breakTarget: FlowLabel | undefined, continueTarget: FlowLabel | undefined) {
             const flowLabel = node.kind === SyntaxKind.BreakStatement ? breakTarget : continueTarget;
-            if (flowLabel) {
+            if (flowLabel && !findDirectDoExpressionAncestorUnderBreakableContinuableOrFunctionBoundary(node)) {
                 addAntecedent(flowLabel, currentFlow);
                 currentFlow = unreachableFlow;
             }

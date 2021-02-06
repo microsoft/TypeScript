@@ -1395,11 +1395,19 @@ namespace ts {
         }
     }
 
-    export function hasDirectDoExpressionAncestor(node: Node) {
+    export function findDirectDoExpressionAncestorUnderFunctionBoundary(node: Node) {
+        return findDirectDoExpressionAncestor(node, isFunctionLike);
+    }
+
+    export function findDirectDoExpressionAncestorUnderBreakableContinuableOrFunctionBoundary(node: Node) {
+        return findDirectDoExpressionAncestor(node, node => isFunctionLike(node) || isLabeledStatement(node) || isIterationStatement(node, /** lookInLabeledStatements */ false));
+    }
+
+    export function findDirectDoExpressionAncestor(node: Node, guard: (node: Node) => boolean) {
         return findAncestor(node, x => {
-            if (isFunctionLike(x)) return "quit";
+            if (guard(x)) return "quit";
             return isDoExpression(x);
-        }) !== undefined;
+        }) as DoExpression | undefined;
     }
 
     /**
