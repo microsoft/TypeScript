@@ -2,14 +2,15 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 15.5.1 (unstable)
+Node.js version is 15.7.0 (unstable)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
-==[ @azure/eslint-plugin-azure-sdk ]==============================[ 1 of 58 ]==
+==[ @azure/eslint-plugin-azure-sdk ]==============================[ 1 of 61 ]==
 "@azure/abort-controller" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/communication-administration" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/communication-chat" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/communication-common" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-identity" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/communication-sms" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-amqp" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/event-hubs" is blocked by "@azure/eslint-plugin-azure-sdk".
@@ -22,6 +23,7 @@ Executing a maximum of ?simultaneous processes...
 "@azure/ai-metrics-advisor" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/ai-text-analytics" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-client" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/data-tables" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-http" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/app-configuration" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/attestation" is blocked by "@azure/eslint-plugin-azure-sdk".
@@ -34,9 +36,10 @@ Executing a maximum of ?simultaneous processes...
 "@azure/storage-blob-changefeed" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/storage-file-datalake" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/synapse-artifacts" is blocked by "@azure/eslint-plugin-azure-sdk".
-"@azure/data-tables" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/digital-twins-core" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/identity" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/cosmos" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/quantum-jobs" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/schema-registry" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/schema-registry-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/storage-queue" is blocked by "@azure/eslint-plugin-azure-sdk".
@@ -54,16 +57,16 @@ Executing a maximum of ?simultaneous processes...
 "@azure/storage-internal-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/test-utils-multi-version" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-https" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-crypto" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-asynciterator-polyfill" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-paging" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-tracing" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/core-xml" is blocked by "@azure/eslint-plugin-azure-sdk".
-"@azure/cosmos" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/dev-tool" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/event-processor-host" is blocked by "@azure/eslint-plugin-azure-sdk".
 "testhub" is blocked by "@azure/eslint-plugin-azure-sdk".
 "@azure/logger" is blocked by "@azure/eslint-plugin-azure-sdk".
-==[ BLOCKED: 57 projects ]=====================================================
+==[ BLOCKED: 60 projects ]=====================================================
 These projects were blocked by dependencies that failed:
   @azure/abort-controller
   @azure/ai-anomaly-detector
@@ -75,11 +78,13 @@ These projects were blocked by dependencies that failed:
   @azure/communication-administration
   @azure/communication-chat
   @azure/communication-common
+  @azure/communication-identity
   @azure/communication-sms
   @azure/core-amqp
   @azure/core-asynciterator-polyfill
   @azure/core-auth
   @azure/core-client
+  @azure/core-crypto
   @azure/core-http
   @azure/core-https
   @azure/core-lro
@@ -102,6 +107,7 @@ These projects were blocked by dependencies that failed:
   @azure/keyvault-secrets
   @azure/logger
   @azure/opentelemetry-exporter-azure-monitor
+  @azure/quantum-jobs
   @azure/schema-registry
   @azure/schema-registry-avro
   @azure/search-documents
@@ -141,8 +147,7 @@ rush rebuild (? seconds)
 
 
 Standard error:
-Your version of Node.js (X.X.X) has not been tested with this release of Rush. Please consider installing a newer version of the "@microsoft/rush" package, or downgrading Node.js.
-Your version of Node.js (X.X.X) is an odd-numbered release. These releases frequently have bugs. Please consider installing a Long Term Support (LTS) version instead.
+Your version of Node.js (X.X.X) has not been tested with this release of the Rush engine. Please consider upgrading the "rushVersion" setting in rush.json, or downgrading Node.js.
 Returned error code: 2
 "@azure/eslint-plugin-azure-sdk" failed to build.
 Projects failed to build.

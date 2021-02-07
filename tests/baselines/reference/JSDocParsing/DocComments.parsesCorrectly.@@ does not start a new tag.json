@@ -1,0 +1,42 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 54,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 7,
+            "end": 52,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 13,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": "is (@@fine@@and) is one comment",
+            "name": {
+                "kind": "Identifier",
+                "pos": 14,
+                "end": 18,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "originalKeywordKind": "ThisKeyword",
+                "escapedText": "this"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "length": 1,
+        "pos": 7,
+        "end": 52,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

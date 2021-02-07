@@ -861,6 +861,11 @@ namespace ts.server.protocol {
          * Length of the span.
          */
         length: number;
+        /**
+         * Optional parameter for the semantic highlighting response, if absent it
+         * defaults to "original".
+         */
+        format?: "original" | "2020"
     }
 
     /**
@@ -3268,6 +3273,8 @@ namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+
+        readonly generateReturnInDocTemplate?: boolean;
     }
 
     export interface CompilerOptions {

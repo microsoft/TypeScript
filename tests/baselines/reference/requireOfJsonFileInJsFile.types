@@ -55,7 +55,7 @@ js1.b;
 module.exports = { a: 0 };
 >module.exports = { a: 0 } : { a: number; }
 >module.exports : { a: number; }
->module : { "\"/js\"": { a: number; }; }
+>module : { exports: { a: number; }; }
 >exports : { a: number; }
 >{ a: 0 } : { a: number; }
 >a : number

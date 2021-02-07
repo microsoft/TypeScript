@@ -1115,7 +1115,8 @@ namespace ts.server {
 
         private getEncodedSemanticClassifications(args: protocol.EncodedSemanticClassificationsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEncodedSemanticClassifications(file, args);
+            const format = args.format === "2020" ? SemanticClassificationFormat.TwentyTwenty : SemanticClassificationFormat.Original;
+            return project.getLanguageService().getEncodedSemanticClassifications(file, args, format);
         }
 
         private getProject(projectFileName: string | undefined): Project | undefined {
@@ -1640,7 +1641,7 @@ namespace ts.server {
         private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            return languageService.getDocCommentTemplateAtPosition(file, position);
+            return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file));
         }
 
         private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
