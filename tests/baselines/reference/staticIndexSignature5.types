@@ -38,16 +38,16 @@ type TE = keyof typeof B;
 >B : typeof B
 
 type TF = Pick<typeof B, number>
->TF : Pick<typeof B, number>
+>TF : TF
 >B : typeof B
 
 type TFI = Pick<I, number>
->TFI : Pick<I, number>
+>TFI : TFI
 
 type TG = Omit<typeof B, number>
->TG : Pick<typeof B, string>
+>TG : TG
 >B : typeof B
 
 type TGI = Omit<I, number>
->TGI : Pick<I, string>
+>TGI : TGI
 
