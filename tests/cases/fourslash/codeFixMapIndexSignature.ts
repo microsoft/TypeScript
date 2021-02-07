@@ -6,7 +6,7 @@
 // target and lib do not actually work in four slash tests, so we define Map manually
 //// declare class Map<K, V> { get(key: string): V; }
 ////[|let map = new Map<string, string>();
-////map['a'] = map['b']|];
+////const x = map['af123'];|]
 
 verify.rangeAfterCodeFix(`let map = new Map<string, string>();
-map.set('a', map.get('b'))`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);
+const x = map.get('af123');`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);

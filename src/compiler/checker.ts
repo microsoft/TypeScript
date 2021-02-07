@@ -26695,7 +26695,7 @@ namespace ts {
         function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression, keyedType: Type): string | undefined {
             const suggestedMethod = getSuggestionForNonexistentIndexSignatureMethod(objectType, expr, keyedType);
             if(suggestedMethod === undefined) {
-                return undefined
+                return undefined;
             }
             let suggestion = tryGetPropertyAccessOrIdentifierToString(expr.expression);
             if (suggestion === undefined) {
