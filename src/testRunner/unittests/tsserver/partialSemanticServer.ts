@@ -172,5 +172,36 @@ function fooB() { }`
             openFilesForSession([file2], session);
             checkProjectActualFiles(project, [libFile.path, file2.path, file3.path]);
         });
+
+        it("should not create autoImportProvider or handle package jsons", () => {
+            const angularFormsDts: File = {
+                path: "/node_modules/@angular/forms/forms.d.ts",
+                content: "export declare class PatternValidator {}",
+            };
+            const angularFormsPackageJson: File = {
+                path: "/node_modules/@angular/forms/package.json",
+                content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: `{ "compilerOptions": { "module": "commonjs" } }`,
+            };
+            const packageJson: File = {
+                path: "/package.json",
+                content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`
+            };
+            const indexTs: File = {
+                path: "/index.ts",
+                content: ""
+            };
+            const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+            const service = session.getProjectService();
+            openFilesForSession([indexTs], session);
+            const project = service.inferredProjects[0];
+            assert.isFalse(project.autoImportProviderHost);
+            assert.isUndefined(project.getPackageJsonAutoImportProvider());
+            assert.deepEqual(project.getPackageJsonsForAutoImport(), emptyArray);
+        });
     });
 }

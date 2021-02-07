@@ -1,0 +1,37 @@
+tests/cases/conformance/classes/mixinAbstractClasses.2.ts(7,11): error TS2797: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+tests/cases/conformance/classes/mixinAbstractClasses.2.ts(21,7): error TS2515: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
+tests/cases/conformance/classes/mixinAbstractClasses.2.ts(25,1): error TS2511: Cannot create an instance of an abstract class.
+
+
+==== tests/cases/conformance/classes/mixinAbstractClasses.2.ts (3 errors) ====
+    interface Mixin {
+        mixinMethod(): void;
+    }
+    
+    function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
+        // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+        class MixinClass extends baseClass implements Mixin {
+              ~~~~~~~~~~
+!!! error TS2797: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+            mixinMethod() {
+            }
+        }
+        return MixinClass;
+    }
+    
+    abstract class AbstractBase {
+        abstract abstractBaseMethod(): void;
+    }
+    
+    const MixedBase = Mixin(AbstractBase);
+    
+    // error expected: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
+    class DerivedFromAbstract extends MixedBase {
+          ~~~~~~~~~~~~~~~~~~~
+!!! error TS2515: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
+    }
+    
+    // error expected: Cannot create an instance of an abstract class.
+    new MixedBase();
+    ~~~~~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.

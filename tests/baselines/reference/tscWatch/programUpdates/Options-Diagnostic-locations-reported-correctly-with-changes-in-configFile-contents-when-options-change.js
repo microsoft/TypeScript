@@ -32,24 +32,20 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
 [96ma/b/tsconfig.json[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS5053: [0mOption 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 
 [7m6[0m         "inlineSourceMap": true,
 [7m [0m [91m        ~~~~~~~~~~~~~~~~~[0m
-
 
 [96ma/b/tsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS5053: [0mOption 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 
 [7m7[0m         "mapRoot": "./"
 [7m [0m [91m        ~~~~~~~~~[0m
 
-
 [96ma/b/tsconfig.json[0m:[93m7[0m:[93m9[0m - [91merror[0m[90m TS5069: [0mOption 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
 
 [7m7[0m         "mapRoot": "./"
 [7m [0m [91m        ~~~~~~~~~[0m
-
 
 [[90m12:00:18 AM[0m] Found 3 errors. Watching for file changes.
 
@@ -57,6 +53,7 @@ Output::
 
 Program root files: ["/a/b/app.ts"]
 Program options: {"inlineSourceMap":true,"mapRoot":"./","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/app.ts
@@ -103,24 +100,20 @@ Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/tsconfig.json[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS5053: [0mOption 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 
 [7m4[0m         "inlineSourceMap": true,
 [7m [0m [91m        ~~~~~~~~~~~~~~~~~[0m
-
 
 [96ma/b/tsconfig.json[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS5053: [0mOption 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 
 [7m5[0m         "mapRoot": "./"
 [7m [0m [91m        ~~~~~~~~~[0m
 
-
 [96ma/b/tsconfig.json[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS5069: [0mOption 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
 
 [7m5[0m         "mapRoot": "./"
 [7m [0m [91m        ~~~~~~~~~[0m
-
 
 [[90m12:00:23 AM[0m] Found 3 errors. Watching for file changes.
 
@@ -128,6 +121,7 @@ Output::
 
 Program root files: ["/a/b/app.ts"]
 Program options: {"inlineSourceMap":true,"mapRoot":"./","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/app.ts

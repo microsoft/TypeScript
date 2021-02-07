@@ -1,27 +1,31 @@
-tests/cases/conformance/types/conditional/inferTypes1.ts(31,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(32,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(36,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(37,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
   Type 'Function' provides no match for the signature '(...args: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(38,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(39,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(43,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(44,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
   Type 'Function' provides no match for the signature 'new (...args: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(47,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(48,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(45,25): error TS2344: Type 'typeof Abstract' does not satisfy the constraint 'new (...args: any) => any'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(47,42): error TS2344: Type 'abstract new (x: string, ...args: T) => T[]' does not satisfy the constraint 'new (...args: any) => any'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(55,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(56,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
   Type 'Function' provides no match for the signature '(x: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(74,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,41): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,51): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(76,15): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(76,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(76,43): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(76,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(83,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(82,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,41): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,51): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(84,15): error TS2304: Cannot find name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(84,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(84,43): error TS2304: Cannot find name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(84,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(91,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
   Type 'T' is not assignable to type 'symbol'.
 
 
-==== tests/cases/conformance/types/conditional/inferTypes1.ts (16 errors) ====
+==== tests/cases/conformance/types/conditional/inferTypes1.ts (18 errors) ====
     type Unpacked<T> =
         T extends (infer U)[] ? U :
         T extends (...args: any[]) => infer U ? U :
@@ -41,6 +45,11 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
     }
     
     class C {
+        x = 0;
+        y = 0;
+    }
+    
+    abstract class Abstract {
         x = 0;
         y = 0;
     }
@@ -71,6 +80,15 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
                             ~~~~~~~~
 !!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
 !!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any): any'.
+    type U15 = InstanceType<typeof Abstract>;  // Abstract
+                            ~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'typeof Abstract' does not satisfy the constraint 'new (...args: any) => any'.
+!!! error TS2344:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+    type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
+    type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'abstract new (x: string, ...args: T) => T[]' does not satisfy the constraint 'new (...args: any) => any'.
+!!! error TS2344:   Cannot assign an abstract constructor type to a non-abstract constructor type.
     
     type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
     

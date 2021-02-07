@@ -33,8 +33,8 @@ tests/cases/compiler/destructuringTuple.ts(11,60): error TS2769: No overload mat
 !!! error TS2769:   Overload 2 of 3, '(callbackfn: (previousValue: [], currentValue: number, currentIndex: number, array: number[]) => [], initialValue: []): []', gave the following error.
 !!! error TS2769:     Type 'never[]' is not assignable to type '[]'.
 !!! error TS2769:       Target allows only 0 element(s) but source may have more.
-!!! related TS6502 /.ts/lib.es5.d.ts:1368:24: The expected type comes from the return type of this signature.
-!!! related TS6502 /.ts/lib.es5.d.ts:1374:27: The expected type comes from the return type of this signature.
+!!! related TS6502 /.ts/lib.es5.d.ts:1380:24: The expected type comes from the return type of this signature.
+!!! related TS6502 /.ts/lib.es5.d.ts:1386:27: The expected type comes from the return type of this signature.
                                                                ~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.

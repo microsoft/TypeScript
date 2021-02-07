@@ -43,6 +43,7 @@ namespace ts {
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
+        reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -111,6 +112,7 @@ namespace ts {
         infer: SyntaxKind.InferKeyword,
         instanceof: SyntaxKind.InstanceOfKeyword,
         interface: SyntaxKind.InterfaceKeyword,
+        intrinsic: SyntaxKind.IntrinsicKeyword,
         is: SyntaxKind.IsKeyword,
         keyof: SyntaxKind.KeyOfKeyword,
         let: SyntaxKind.LetKeyword,
@@ -151,10 +153,6 @@ namespace ts {
         yield: SyntaxKind.YieldKeyword,
         async: SyntaxKind.AsyncKeyword,
         await: SyntaxKind.AwaitKeyword,
-        uppercase: SyntaxKind.UppercaseKeyword,
-        lowercase: SyntaxKind.LowercaseKeyword,
-        capitalize: SyntaxKind.CapitalizeKeyword,
-        uncapitalize: SyntaxKind.UncapitalizeKeyword,
         of: SyntaxKind.OfKeyword,
     };
 
@@ -969,6 +967,7 @@ namespace ts {
             reScanJsxToken,
             reScanLessThanToken,
             reScanQuestionToken,
+            reScanInvalidIdentifier,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -2044,14 +2043,9 @@ namespace ts {
                         }
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
-                        if (isIdentifierStart(ch, languageVersion)) {
-                            pos += charSize(ch);
-                            while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
-                            tokenValue = text.substring(tokenPos, pos);
-                            if (ch === CharacterCodes.backslash) {
-                                tokenValue += scanIdentifierParts();
-                            }
-                            return token = getIdentifierToken();
+                        const identifierKind = scanIdentifier(ch, languageVersion);
+                        if (identifierKind) {
+                            return token = identifierKind;
                         }
                         else if (isWhiteSpaceSingleLine(ch)) {
                             pos += charSize(ch);
@@ -2066,6 +2060,32 @@ namespace ts {
                         pos += charSize(ch);
                         return token = SyntaxKind.Unknown;
                 }
+            }
+        }
+
+        function reScanInvalidIdentifier(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+            pos = tokenPos = startPos;
+            tokenFlags = 0;
+            const ch = codePointAt(text, pos);
+            const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
+            if (identifierKind) {
+                return token = identifierKind;
+            }
+            pos += charSize(ch);
+            return token; // Still `SyntaKind.Unknown`
+        }
+
+        function scanIdentifier(startCharacter: number, languageVersion: ScriptTarget) {
+            let ch = startCharacter;
+            if (isIdentifierStart(ch, languageVersion)) {
+                pos += charSize(ch);
+                while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
+                tokenValue = text.substring(tokenPos, pos);
+                if (ch === CharacterCodes.backslash) {
+                    tokenValue += scanIdentifierParts();
+                }
+                return getIdentifierToken();
             }
         }
 
@@ -2305,9 +2325,11 @@ namespace ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (tokenIsIdentifierOrKeyword(token)) {
-                // An identifier or keyword has already been parsed - check for a `-` and then append it and everything after it to the token
+                // An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
+                // everything after it to the token
                 // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
                 // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
+                let namespaceSeparator = false;
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
                     if (ch === CharacterCodes.minus) {
@@ -2315,11 +2337,22 @@ namespace ts {
                         pos++;
                         continue;
                     }
+                    else if (ch === CharacterCodes.colon && !namespaceSeparator) {
+                        tokenValue += ":";
+                        pos++;
+                        namespaceSeparator = true;
+                        continue;
+                    }
                     const oldPos = pos;
                     tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
                     if (pos === oldPos) {
                         break;
                     }
+                }
+                // Do not include a trailing namespace separator in the token, since this is against the spec.
+                if (tokenValue.slice(-1) === ":") {
+                    tokenValue = tokenValue.slice(0, -1);
+                    pos--;
                 }
             }
             return token;

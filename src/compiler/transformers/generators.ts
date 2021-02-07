@@ -397,6 +397,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     return visitBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.CommaListExpression:
+                    return visitCommaListExpression(<CommaListExpression>node);
                 case SyntaxKind.ConditionalExpression:
                     return visitConditionalExpression(<ConditionalExpression>node);
                 case SyntaxKind.YieldExpression:
@@ -773,6 +775,65 @@ namespace ts {
         }
 
         /**
+         * Visits a comma expression containing `yield`.
+         *
+         * @param node The node to visit.
+         */
+        function visitCommaExpression(node: BinaryExpression) {
+            // [source]
+            //      x = a(), yield, b();
+            //
+            // [intermediate]
+            //      a();
+            //  .yield resumeLabel
+            //  .mark resumeLabel
+            //      x = %sent%, b();
+
+            let pendingExpressions: Expression[] = [];
+            visit(node.left);
+            visit(node.right);
+            return factory.inlineExpressions(pendingExpressions);
+
+            function visit(node: Expression) {
+                if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
+                    visit(node.left);
+                    visit(node.right);
+                }
+                else {
+                    if (containsYield(node) && pendingExpressions.length > 0) {
+                        emitWorker(OpCode.Statement, [factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))]);
+                        pendingExpressions = [];
+                    }
+
+                    pendingExpressions.push(visitNode(node, visitor, isExpression));
+                }
+            }
+        }
+
+        /**
+         * Visits a comma-list expression.
+         *
+         * @param node The node to visit.
+         */
+        function visitCommaListExpression(node: CommaListExpression) {
+            // flattened version of `visitCommaExpression`
+            let pendingExpressions: Expression[] = [];
+            for (const elem of node.elements) {
+                if (isBinaryExpression(elem) && elem.operatorToken.kind === SyntaxKind.CommaToken) {
+                    pendingExpressions.push(visitCommaExpression(elem));
+                }
+                else {
+                    if (containsYield(elem) && pendingExpressions.length > 0) {
+                        emitWorker(OpCode.Statement, [factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))]);
+                        pendingExpressions = [];
+                    }
+                    pendingExpressions.push(visitNode(elem, visitor, isExpression));
+                }
+            }
+            return factory.inlineExpressions(pendingExpressions);
+        }
+
+        /**
          * Visits a logical binary expression containing `yield`.
          *
          * @param node A node to visit.
@@ -823,42 +884,6 @@ namespace ts {
             emitAssignment(resultLocal, visitNode(node.right, visitor, isExpression), /*location*/ node.right);
             markLabel(resultLabel);
             return resultLocal;
-        }
-
-        /**
-         * Visits a comma expression containing `yield`.
-         *
-         * @param node The node to visit.
-         */
-        function visitCommaExpression(node: BinaryExpression) {
-            // [source]
-            //      x = a(), yield, b();
-            //
-            // [intermediate]
-            //      a();
-            //  .yield resumeLabel
-            //  .mark resumeLabel
-            //      x = %sent%, b();
-
-            let pendingExpressions: Expression[] = [];
-            visit(node.left);
-            visit(node.right);
-            return factory.inlineExpressions(pendingExpressions);
-
-            function visit(node: Expression) {
-                if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
-                    visit(node.left);
-                    visit(node.right);
-                }
-                else {
-                    if (containsYield(node) && pendingExpressions.length > 0) {
-                        emitWorker(OpCode.Statement, [factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))]);
-                        pendingExpressions = [];
-                    }
-
-                    pendingExpressions.push(visitNode(node, visitor, isExpression));
-                }
-            }
         }
 
         /**

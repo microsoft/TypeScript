@@ -10,6 +10,7 @@ verify.docCommentTemplateAt("", /*newTextOffset*/ 8,
 `/**
  * 
  * @param p
+ * @returns
  */`);
 
 verify.noDocCommentTemplateAt("1");

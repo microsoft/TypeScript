@@ -236,7 +236,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 >f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
 >obj : T
 >k1 : string
->k2 : "a" | "b"
+>k2 : keyof Item
 >k3 : keyof T
 >k4 : K
 
@@ -251,7 +251,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 >obj[k2] = 123 : 123
 >obj[k2] : never
 >obj : T
->k2 : "a" | "b"
+>k2 : keyof Item
 >123 : 123
 
   obj[k3] = 123;  // Error
@@ -270,38 +270,38 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 }
 
 type Dict = Record<string, number>;
->Dict : Record<string, number>
+>Dict : Dict
 
 function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 >f11 : <K extends string>(obj: Dict, k1: keyof Dict, k2: K) => void
->obj : Record<string, number>
+>obj : Dict
 >k1 : string
 >k2 : K
 
   obj.foo = 123;
 >obj.foo = 123 : 123
 >obj.foo : number
->obj : Record<string, number>
+>obj : Dict
 >foo : number
 >123 : 123
 
   obj[k1] = 123;
 >obj[k1] = 123 : 123
 >obj[k1] : number
->obj : Record<string, number>
+>obj : Dict
 >k1 : string
 >123 : 123
 
   obj[k2] = 123;
 >obj[k2] = 123 : 123
 >obj[k2] : number
->obj : Record<string, number>
+>obj : Dict
 >k2 : K
 >123 : 123
 }
 
 function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
->f12 : <T extends Readonly<Record<string, number>>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
+>f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
 >obj : T
 >k1 : string
 >k2 : keyof T
@@ -417,7 +417,7 @@ interface Type {
 }
 
 function get123<K extends keyof Type>(): Type[K] {
->get123 : <K extends "a" | "b">() => Type[K]
+>get123 : <K extends keyof Type>() => Type[K]
 
     return 123;  // Error
 >123 : 123
@@ -435,7 +435,7 @@ type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 >A : A<T>
 
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
->B : A<{ [Q in keyof T]: StrictExclude<A<{ [Q in keyof T[Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<{ [Q in keyof T[Q][Q][Q][Q][Q][Q][Q][Q][Q][Q]]: StrictExclude<A<any>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>, {}>; }>
+>B : B<T, V>
 
 // Repros from #30938
 

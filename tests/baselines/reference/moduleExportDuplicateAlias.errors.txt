@@ -1,0 +1,16 @@
+tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(1,1): error TS2323: Cannot redeclare exported variable 'apply'.
+tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(3,1): error TS2322: Type '() => void' is not assignable to type 'undefined'.
+tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(3,1): error TS2323: Cannot redeclare exported variable 'apply'.
+
+
+==== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js (3 errors) ====
+    exports.apply = undefined;
+    ~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
+    function a() { }
+    exports.apply = a;
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'undefined'.
+    ~~~~~~~~~~~~~
+!!! error TS2323: Cannot redeclare exported variable 'apply'.
+    

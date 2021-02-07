@@ -788,7 +788,7 @@ namespace ts {
     }
 
     function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
-        const { baseUrl, paths, pathsBasePath } = state.compilerOptions;
+        const { baseUrl, paths } = state.compilerOptions;
         if (paths && !pathIsRelative(moduleName)) {
             if (state.traceEnabled) {
                 if (baseUrl) {
@@ -796,7 +796,7 @@ namespace ts {
                 }
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            const baseDirectory = baseUrl ?? Debug.checkDefined(pathsBasePath || state.host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
+            const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
             return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
         }
     }
@@ -1023,7 +1023,7 @@ namespace ts {
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
-     * (Not neeeded for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
+     * (Not needed for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
      *
      * packageDirectory is the directory of the package itself.
      *   For `blah/node_modules/foo/index.d.ts` this is packageDirectory: "foo"
@@ -1377,7 +1377,7 @@ namespace ts {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
                 // A path mapping may have an extension, in contrast to an import, which should omit it.
-                const extension = tryGetExtensionFromPath(candidate);
+                const extension = tryGetExtensionFromPath(subst);
                 if (extension !== undefined) {
                     const path = tryFile(candidate, onlyRecordFailures, state);
                     if (path !== undefined) {

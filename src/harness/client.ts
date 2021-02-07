@@ -343,9 +343,11 @@ namespace ts.server {
             }));
         }
 
-        findReferences(_fileName: string, _position: number): ReferencedSymbol[] {
-            // Not yet implemented.
-            return [];
+        findReferences(fileName: string, position: number): ReferencedSymbol[] {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.ReferencesFull, args);
+            const response = this.processResponse(request);
+            return response.body;
         }
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
@@ -353,6 +355,18 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.References, args);
             const response = this.processResponse<protocol.ReferencesResponse>(request);
+
+            return response.body!.refs.map(entry => ({ // TODO: GH#18217
+                fileName: entry.file,
+                textSpan: this.decodeSpan(entry),
+                isWriteAccess: entry.isWriteAccess,
+                isDefinition: entry.isDefinition,
+            }));
+        }
+
+        getFileReferences(fileName: string): ReferenceEntry[] {
+            const request = this.processRequest<protocol.FileReferencesRequest>(CommandNames.FileReferences, { file: fileName });
+            const response = this.processResponse<protocol.FileReferencesResponse>(request);
 
             return response.body!.refs.map(entry => ({ // TODO: GH#18217
                 fileName: entry.file,
@@ -591,7 +605,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getDocCommentTemplateAtPosition(_fileName: string, _position: number): TextInsertion {
+        getDocCommentTemplateAtPosition(_fileName: string, _position: number, _options?: DocCommentTemplateOptions): TextInsertion {
             return notImplemented();
         }
 

@@ -17,6 +17,6 @@
 
 goTo.file("/c.js");
 verify.importFixAtPosition([
-`import { foo } from "./b";
+`const { foo } = require("./b");
 
 foo`]);

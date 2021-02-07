@@ -90,8 +90,6 @@ namespace ts {
                     return visitPropertyDeclaration(node as PropertyDeclaration);
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(node as VariableStatement);
-                case SyntaxKind.ComputedPropertyName:
-                    return visitComputedPropertyName(node as ComputedPropertyName);
                 case SyntaxKind.PropertyAccessExpression:
                     return visitPropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -184,7 +182,7 @@ namespace ts {
             let node = visitEachChild(name, visitor, context);
             if (some(pendingExpressions)) {
                 const expressions = pendingExpressions;
-                expressions.push(name.expression);
+                expressions.push(node.expression);
                 pendingExpressions = [];
                 node = factory.updateComputedPropertyName(
                     node,
@@ -339,6 +337,15 @@ namespace ts {
             if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.expression)) {
                 // Transform call expressions of private names to properly bind the `this` parameter.
                 const { thisArg, target } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
+                if (isCallChain(node)) {
+                    return factory.updateCallChain(
+                        node,
+                        factory.createPropertyAccessChain(visitNode(target, visitor), node.questionDotToken, "call"),
+                        /*questionDotToken*/ undefined,
+                        /*typeArguments*/ undefined,
+                        [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                    );
+                }
                 return factory.updateCallExpression(
                     node,
                     factory.createPropertyAccessExpression(visitNode(target, visitor), "call"),
@@ -579,7 +586,7 @@ namespace ts {
         }
 
         function isPropertyDeclarationThatRequiresConstructorStatement(member: ClassElement): member is PropertyDeclaration {
-            if (!isPropertyDeclaration(member) || hasStaticModifier(member)) {
+            if (!isPropertyDeclaration(member) || hasStaticModifier(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
                 return false;
             }
             if (context.getCompilerOptions().useDefineForClassFields) {
@@ -779,6 +786,9 @@ namespace ts {
             }
 
             const propertyOriginalNode = getOriginalNode(property);
+            if (hasSyntacticModifier(propertyOriginalNode, ModifierFlags.Abstract)) {
+                return undefined;
+            }
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) ?? factory.createVoidZero()
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : factory.createVoidZero();

@@ -301,6 +301,8 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
+        /* @internal */
         getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
@@ -466,6 +468,7 @@ namespace ts {
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
+        getFileReferences(fileName: string): ReferenceEntry[];
 
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
@@ -487,7 +490,7 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
-        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         /**
@@ -517,7 +520,7 @@ namespace ts {
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -789,6 +792,11 @@ namespace ts {
          * the current context.
          */
         notApplicableReason?: string;
+
+        /**
+         * The hierarchical dotted name of the refactor action.
+         */
+        kind?: string;
     }
 
     /**
@@ -1065,11 +1073,16 @@ namespace ts {
         readonly allowRenameOfImportPath?: boolean;
     }
 
+    export interface DocCommentTemplateOptions {
+        readonly generateReturnInDocTemplate?: boolean;
+    }
+
     export interface SignatureHelpParameter {
         name: string;
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+        isRest?: boolean;
     }
 
     export interface SelectionRange {
@@ -1461,6 +1474,10 @@ namespace ts {
 
     /** @internal */
     export interface Refactor {
+        /** List of action kinds a refactor can provide.
+         * Used to skip unnecessary calculation when specific refactors are requested. */
+        kinds?: string[];
+
         /** Compute the associated code actions */
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
@@ -1477,5 +1494,6 @@ namespace ts {
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
         triggerReason?: RefactorTriggerReason;
+        kind?: string;
     }
 }

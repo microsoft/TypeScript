@@ -21,6 +21,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}
+        fetch-depth: 0
     # This does a test post-merge and only pushes the result if the test succeeds
     # required client_payload members:
     # branch_name - the target branch

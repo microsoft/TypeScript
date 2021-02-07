@@ -38,4 +38,4 @@ export declare const o: {
     m: number;
 };
 //// [index.d.ts]
-export const thing: any;
+export const thing: number;

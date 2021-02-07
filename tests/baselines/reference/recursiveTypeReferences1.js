@@ -132,12 +132,10 @@ function level(h: HTMLHeadingElement): number {
 
 //// [recursiveTypeReferences1.js]
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var a0 = 1;
 var a1 = [1, [2, 3], [4, [5, [6, 7]]]];
@@ -187,7 +185,7 @@ function parse(node, index) {
     if (index === void 0) { index = []; }
     return html('ul', node.map(function (_a, i) {
         var el = _a[0], children = _a[1];
-        var idx = __spreadArrays(index, [i + 1]);
+        var idx = __spreadArray(__spreadArray([], index), [i + 1]);
         return html('li', [
             html('a', { href: "#" + el.id, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
             children.length > 0 ? parse(children, idx) : frag()

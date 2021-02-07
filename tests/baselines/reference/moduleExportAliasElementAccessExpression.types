@@ -9,3 +9,11 @@ exports["D"] = D;
 >"D" : "D"
 >D : () => void
 
+ // (the only package I could find that uses spaces in identifiers is webidl-conversions)
+exports["Does not work yet"] = D;
+>exports["Does not work yet"] = D : () => void
+>exports["Does not work yet"] : () => void
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression")
+>"Does not work yet" : "Does not work yet"
+>D : () => void
+

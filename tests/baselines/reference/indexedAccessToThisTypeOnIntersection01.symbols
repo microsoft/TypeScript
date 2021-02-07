@@ -1,0 +1,16 @@
+=== tests/cases/compiler/indexedAccessToThisTypeOnIntersection01.ts ===
+interface A {
+>A : Symbol(A, Decl(indexedAccessToThisTypeOnIntersection01.ts, 0, 0))
+
+  a: string;
+>a : Symbol(A.a, Decl(indexedAccessToThisTypeOnIntersection01.ts, 0, 13))
+
+  getA: this['a'];
+>getA : Symbol(A.getA, Decl(indexedAccessToThisTypeOnIntersection01.ts, 1, 12))
+}
+
+type T = (A & { a: number })['getA'];
+>T : Symbol(T, Decl(indexedAccessToThisTypeOnIntersection01.ts, 3, 1))
+>A : Symbol(A, Decl(indexedAccessToThisTypeOnIntersection01.ts, 0, 0))
+>a : Symbol(a, Decl(indexedAccessToThisTypeOnIntersection01.ts, 5, 15))
+

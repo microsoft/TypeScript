@@ -5,8 +5,8 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(8,11): error TS2313
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(20,19): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(66,25): error TS2313: Type parameter 'P' has a circular constraint.
-tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(79,1): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ type: never; minimum_count: never; maximum_count: never; collapsable?: never; each: never; }'.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(73,5): error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(73,13): error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
 
 
 ==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (9 errors) ====
@@ -91,9 +91,6 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(79,1): error TS2615
     
     type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
     type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
-                            ~~~~~~~~~~~~~~~~~~
-!!! error TS2313: Type parameter 'P' has a circular constraint.
-!!! related TS2751 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts:79:1: Circularity originates in type at this location.
     
     export interface ListWidget {
         "type": "list",
@@ -101,12 +98,26 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(79,1): error TS2615
         "maximum_count": number,
         "collapsable"?: boolean, //default to false, means all expanded
         "each": Child<ListWidget>;
+        ~~~~~~
+!!! error TS2502: '"each"' is referenced directly or indirectly in its own type annotation.
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2615: Type of property '"each"' circularly references itself in mapped type '{ [P in keyof ListWidget]: undefined extends ListWidget[P] ? never : P; }'.
     }
     
     type ListChild = Child<ListWidget>
     
     declare let x: ListChild;
     x.type;
-    ~~~~~~
-!!! error TS2615: Type of property '"each"' circularly references itself in mapped type '{ type: never; minimum_count: never; maximum_count: never; collapsable?: never; each: never; }'.
+    
+    // Repros from #41790
+    
+    export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
+    
+    export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
+    export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
+        ThemeType[K] extends TVal[] ? number :
+        ThemeType[K] extends Record<infer E, TVal> ? E :
+        ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
+    
+    export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
     

@@ -53,18 +53,18 @@ F[_str] = "ok";
 module.exports.F = F;
 >module.exports.F = F : typeof F
 >module.exports.F : typeof F
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >F : typeof F
 >F : typeof F
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7")
->module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7"); }
->exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >S : unique symbol
 >_sym : unique symbol
 
