@@ -101,7 +101,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift(inspect == "" ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.unshift((inspect == "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
             args.push("-t", "0");
         }
         else if (debug) {

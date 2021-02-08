@@ -454,7 +454,7 @@ task("runtests").flags = {
     "   --failed": "Runs tests listed in '.failed-tests'.",
     "-r --reporter=<reporter>": "The mocha reporter to use.",
     "-d --debug": "Runs tests in debug mode (NodeJS 6 and earlier)",
-    "-i --inspect": "Runs tests in inspector mode (NodeJS 8 and later)",
+    "-i": "Runs tests in inspector mode (NodeJS 8 and later)",
     "   --keepFailed": "Keep tests in .failed-tests even if they pass",
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster)",
     "   --dirty": "Run tests without first cleaning test output directories",

@@ -58,7 +58,7 @@ if (module.exports.built) {
  * @property {boolean} fix
  * @property {string} browser
  * @property {string} tests
- * @property {string} inspect
+ * @property {string | boolean} inspect
  * @property {string} runners
  * @property {string|number} workers
  * @property {string} host
