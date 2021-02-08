@@ -140,12 +140,15 @@ namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
         }
         eventStack.length = 0;
     }
+    // sample every 10ms
+    const sampleInterval = 1000 * 10;
     function writeStackEvent(index: number, endTime: number) {
         const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
         if (separateBeginAndEnd) {
             writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
         }
-        else {
+        // test if [time,endTime) straddles a sampling point
+        else if (sampleInterval - (time % sampleInterval) <= endTime - time) {
             writeEvent("X", phase, name, args, `"dur":${endTime - time}`, time);
         }
     }
