@@ -10395,7 +10395,7 @@ namespace ts {
                     if (signatures !== masterList) {
                         const signature = signatures[0];
                         Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                        results = signature.typeParameters && some(results, s => !!s.typeParameters && !compareTypeParametersIdentical(signature.typeParameters!, s.typeParameters)) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
+                        results = !!signature.typeParameters && some(results, s => !!s.typeParameters && !compareTypeParametersIdentical(signature.typeParameters, s.typeParameters)) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
                         if (!results) {
                             break;
                         }
@@ -10406,9 +10406,12 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function compareTypeParametersIdentical(sourceParams: readonly TypeParameter[], targetParams: readonly TypeParameter[]): boolean {
-            if (sourceParams.length !== targetParams.length) {
+        function compareTypeParametersIdentical(sourceParams: readonly TypeParameter[] | undefined, targetParams: readonly TypeParameter[] | undefined): boolean {
+            if (length(sourceParams) !== length(targetParams)) {
                 return false;
+            }
+            if (!sourceParams || !targetParams) {
+                return true;
             }
 
             const mapper = createTypeMapper(targetParams, sourceParams);
@@ -13518,7 +13521,7 @@ namespace ts {
                 // No signatures had a type predicate.
                 return undefined;
             }
-            const compositeType = kind !== TypeFlags.Intersection ? getUnionType(types) : getIntersectionType(types);
+            const compositeType = getUnionOrIntersectionType(types, kind);
             return createTypePredicate(first.kind, first.parameterName, first.parameterIndex, compositeType);
         }
 
@@ -24932,7 +24935,14 @@ namespace ts {
         }
 
         function getIntersectedSignatures(signatures: readonly Signature[]) {
-            return !getStrictOptionValue(compilerOptions, "noImplicitAny") ? undefined : reduceLeft(signatures, (left, right) => left === right || !left ? left : (!!left.typeParameters && !!right.typeParameters && compareTypeParametersIdentical(left.typeParameters, right.typeParameters)) || (!left.typeParameters && !right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right) : undefined, signatures[0]);
+            return getStrictOptionValue(compilerOptions, "noImplicitAny")
+                ? reduceLeft(
+                    signatures,
+                    (left, right) =>
+                        left === right || !left ? left
+                        : compareTypeParametersIdentical(left.typeParameters, right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right)
+                        : undefined)
+                : undefined;
         }
 
         function combineIntersectionThisParam(left: Symbol | undefined, right: Symbol | undefined, mapper: TypeMapper | undefined): Symbol | undefined {
