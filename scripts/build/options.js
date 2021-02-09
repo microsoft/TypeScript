@@ -8,7 +8,7 @@ module.exports = minimist(process.argv.slice(2), {
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         "b": "browser",
-        "i": ["inspect", "inspect-brk", "break"],
+        "i": ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
         "t": ["tests", "test"],
         "ru": ["runners", "runner"],
         "r": "reporter",
