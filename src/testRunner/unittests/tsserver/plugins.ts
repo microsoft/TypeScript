@@ -42,7 +42,7 @@ namespace ts.projectSystem {
                 content: "{}"
             };
             const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
-            const service = createProjectService(host, /*parameters*/ undefined, { globalPlugins: [...expectedToLoad, ...notToLoad] });
+            const service = createProjectService(host, { globalPlugins: [...expectedToLoad, ...notToLoad] });
             service.openClientFile(aTs.path);
             assert.deepEqual(pluginsLoaded, expectedToLoad);
         });
