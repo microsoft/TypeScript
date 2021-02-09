@@ -1,11 +1,11 @@
 === tests/cases/conformance/types/literal/booleanLiteralTypes1.ts ===
 type A1 = true | false;
->A1 : boolean
+>A1 : A1
 >true : true
 >false : false
 
 type A2 = false | true;
->A2 : boolean
+>A2 : A2
 >false : false
 >true : true
 
@@ -13,18 +13,18 @@ function f1() {
 >f1 : () => void
 
     var a: A1;
->a : boolean
+>a : A1
 
     var a: A2;
->a : boolean
+>a : A1
 
     var a: true | false;
->a : boolean
+>a : A1
 >true : true
 >false : false
 
     var a: false | true;
->a : boolean
+>a : A1
 >false : false
 >true : true
 }

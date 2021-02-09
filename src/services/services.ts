@@ -550,9 +550,8 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations([this.declaration]) : [];
+                this.jsDocTags = this.declaration ? getJsDocTags([this.declaration], this.checker) : [];
             }
-
             return this.jsDocTags;
         }
     }
@@ -566,13 +565,26 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
+    function getJsDocTags(declarations: Declaration[], checker: TypeChecker): JSDocTagInfo[] {
+        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations);
+        if (tags.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
+            forEachUnique(declarations, declaration => {
+                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.getJsDocTags());
+                if (inheritedTags) {
+                    tags = [...inheritedTags, ...tags];
+                }
+            });
+        }
+        return tags;
+    }
+
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
-        if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
+        if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
             forEachUnique(declarations, declaration => {
-                const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker!); // TODO: GH#18217
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
             });
@@ -580,20 +592,10 @@ namespace ts {
         return doc;
     }
 
-    /**
-     * Attempts to find JSDoc comments for possibly-inherited properties.  Checks superclasses then traverses
-     * implemented interfaces until a symbol is found with the same name and with documentation.
-     * @param declaration The possibly-inherited declaration to find comments for.
-     * @param propertyName The name of the possibly-inherited property.
-     * @param typeChecker A TypeChecker, used to find inherited properties.
-     * @returns A filled array of documentation comments if any were found, otherwise an empty array.
-     */
-    function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): readonly SymbolDisplayPart[] | undefined {
+    function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[]): T[] | undefined {
         return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
-            const superType = typeChecker.getTypeAtLocation(superTypeNode);
-            const baseProperty = superType && typeChecker.getPropertyOfType(superType, propertyName);
-            const inheritedDocs = baseProperty && baseProperty.getDocumentationComment(typeChecker);
-            return inheritedDocs && inheritedDocs.length ? inheritedDocs : undefined;
+            const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
+            return symbol ? cb(symbol) : undefined;
         });
     }
 
@@ -1141,7 +1143,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
+                tracing?.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
                 throw new OperationCanceledException();
             }
         }
@@ -1172,7 +1174,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
+                tracing?.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
                 throw new OperationCanceledException();
             }
         }
@@ -2002,8 +2004,8 @@ namespace ts {
                 : Promise.reject("Host does not implement `installPackage`");
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
-            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
+        function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
+            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -2451,7 +2453,7 @@ namespace ts {
             return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
         }
 
-        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason): RefactorContext {
+        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason, kind?: string): RefactorContext {
             const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
             return {
                 file,
@@ -2463,6 +2465,7 @@ namespace ts {
                 cancellationToken,
                 preferences,
                 triggerReason,
+                kind
             };
         }
 
@@ -2470,10 +2473,10 @@ namespace ts {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason, kind: string): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason));
+            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason, kind));
         }
 
         function getEditsForRefactor(
@@ -2694,7 +2697,7 @@ namespace ts {
             return symbol ? [symbol] : emptyArray;
         }
 
-        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => isObjectLiteralExpression(node.parent) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
         if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
             const symbol = contextualType.getProperty(name);
             if (symbol) return [symbol];

@@ -1070,13 +1070,6 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
         },
-        {
-            name: "bundledPackageName",
-            type: "string",
-            affectsEmit: true,
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Provides_a_root_package_name_when_using_outFile_with_declarations,
-        },
 
         {
             name: "keyofStringsOnly",
@@ -2624,14 +2617,17 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors, extendedConfigCache);
+            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, resolutionStack, errors, extendedConfigCache);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
                 const baseRaw = extendedConfig.raw;
                 const raw = ownConfig.raw;
+                let relativeDifference: string | undefined ;
                 const setPropertyInRawIfNotUndefined = (propertyName: string) => {
-                    const value = raw[propertyName] || baseRaw[propertyName];
-                    if (value) {
-                        raw[propertyName] = value;
+                    if (!raw[propertyName] && baseRaw[propertyName]) {
+                        raw[propertyName] = map(baseRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
+                            relativeDifference ||= convertToRelativePath(getDirectoryPath(ownConfig.extendedConfigPath!), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                            path
+                        ));
                     }
                 };
                 setPropertyInRawIfNotUndefined("include");
@@ -2793,7 +2789,6 @@ namespace ts {
         sourceFile: TsConfigSourceFile | undefined,
         extendedConfigPath: string,
         host: ParseConfigHost,
-        basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
         extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
@@ -2808,25 +2803,8 @@ namespace ts {
         else {
             extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
             if (!extendedResult.parseDiagnostics.length) {
-                const extendedDirname = getDirectoryPath(extendedConfigPath);
-                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
+                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, getDirectoryPath(extendedConfigPath),
                     getBaseFileName(extendedConfigPath), resolutionStack, errors, extendedConfigCache);
-
-                if (isSuccessfulParsedTsconfig(extendedConfig)) {
-                    // Update the paths to reflect base path
-                    const relativeDifference = convertToRelativePath(extendedDirname, basePath, identity);
-                    const updatePath = (path: string) => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
-                    const mapPropertiesInRawIfNotUndefined = (propertyName: string) => {
-                        if (raw[propertyName]) {
-                            raw[propertyName] = map(raw[propertyName], updatePath);
-                        }
-                    };
-
-                    const { raw } = extendedConfig;
-                    mapPropertiesInRawIfNotUndefined("include");
-                    mapPropertiesInRawIfNotUndefined("exclude");
-                    mapPropertiesInRawIfNotUndefined("files");
-                }
             }
             if (extendedConfigCache) {
                 extendedConfigCache.set(path, { extendedResult, extendedConfig });

@@ -307,7 +307,7 @@
         "category": "Error",
         "code": 1102
     },
-    "A 'for-await-of' statement is only allowed within an async function or async generator.": {
+    "'for await' loops are only allowed within async functions and at the top levels of modules.": {
         "category": "Error",
         "code": 1103
     },
@@ -843,10 +843,6 @@
         "category": "Error",
         "code": 1255
     },
-    "A rest element must be last in a tuple type.": {
-        "category": "Error",
-        "code": 1256
-    },
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257
@@ -874,6 +870,14 @@
     "Declarations with definite assignment assertions must also have type annotations.": {
         "category": "Error",
         "code": 1264
+    },
+    "A rest element cannot follow another rest element.": {
+        "category": "Error",
+        "code": 1265
+    },
+    "An optional element cannot follow a rest element.": {
+        "category": "Error",
+        "code": 1266
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1348,6 +1352,15 @@
         "category": "Message",
         "code": 1430
     },
+    "'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
+        "category": "Error",
+        "code": 1431
+    },
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1432
+    },
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1621,7 +1634,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of an 'in' expression must not be a primitive.": {
         "category": "Error",
         "code": 2361
     },
@@ -2621,9 +2634,25 @@
         "category": "Error",
         "code": 2621
     },
-    "Element at index {0} is variadic in one type but not in the other.": {
+    "Source provides no match for required element at position {0} in target.": {
         "category": "Error",
-        "code": 2622
+        "code": 2623
+    },
+    "Source provides no match for variadic element at position {0} in target.": {
+        "category": "Error",
+        "code": 2624
+    },
+    "Variadic element at position {0} in source does not match element at position {1} in target.": {
+        "category": "Error",
+        "code": 2625
+    },
+    "Type at position {0} in source is not compatible with type at position {1} in target.": {
+        "category": "Error",
+        "code": 2626
+    },
+    "Type at positions {0} through {1} in source is not compatible with type at position {2} in target.": {
+        "category": "Error",
+        "code": 2627
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -3211,6 +3240,22 @@
         "category": "Error",
         "code": 2796
     },
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+        "category": "Error",
+        "code": 2797
+    },
+    "The declaration was marked as deprecated here.": {
+        "category": "Error",
+        "code": 2798
+    },
+    "Type produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2799
+    },
+    "Expression produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2800
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3500,6 +3545,10 @@
         "category": "Error",
         "code": 4083
     },
+    "Exported type alias '{0}' has or is using private name '{1}' from module {2}.": {
+        "category": "Error",
+        "code": 4084
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
         "code": 4090
@@ -3788,6 +3837,10 @@
     "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090
+    },
+    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 5091
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4870,7 +4923,7 @@
         "category": "Message",
         "code": 6384
     },
-    "'{0}' is deprecated": {
+    "'{0}' is deprecated.": {
         "category": "Suggestion",
         "code": 6385,
         "reportsDeprecated": true
@@ -4878,6 +4931,11 @@
     "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
         "category": "Message",
         "code": 6386
+    },
+    "The signature '{0}' of '{1}' is deprecated.": {
+        "category": "Suggestion",
+        "code": 6387,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -5111,6 +5169,10 @@
     "The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.": {
         "category": "Error",
         "code": 7056
+    },
+    "'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.": {
+        "category": "Error",
+        "code": 7057
     },
 
     "You cannot rename this element.": {
@@ -6139,6 +6201,51 @@
         "category": "Message",
         "code": 95148
     },
+    "Return type must be inferred from a function": {
+        "category": "Message",
+        "code": 95149
+    },
+    "Could not determine function return type": {
+        "category": "Message",
+        "code": 95150
+    },
+    "Could not convert to arrow function": {
+        "category": "Message",
+        "code": 95151
+    },
+    "Could not convert to named function": {
+        "category": "Message",
+        "code": 95152
+    },
+    "Could not convert to anonymous function": {
+        "category": "Message",
+        "code": 95153
+    },
+    "Can only convert string concatenation": {
+        "category": "Message",
+        "code": 95154
+    },
+    "Selection is not a valid statement or statements": {
+        "category": "Message",
+        "code": 95155
+    },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95156
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95157
+    },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95158
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95159
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

@@ -19,7 +19,7 @@ import(getSpecifier());
 var p0 = import(`${directory}\\${moduleFile}`);
 >p0 : Promise<any>
 >import(`${directory}\\${moduleFile}`) : Promise<any>
->`${directory}\\${moduleFile}` : `${string}\\${number}`
+>`${directory}\\${moduleFile}` : string
 >directory : string
 >moduleFile : number
 

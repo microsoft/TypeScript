@@ -31,7 +31,7 @@ exports.Bar = class { }
 
 /** @typedef {number} Baz */
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 >exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 
@@ -53,7 +53,7 @@ exports.Quid = 2;
 
 /** @typedef {number} Quack */
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 >exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 

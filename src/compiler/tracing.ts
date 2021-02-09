@@ -1,16 +1,25 @@
+/* Tracing events for the compiler. */
+
 /*@internal*/
-/** Tracing events for the compiler. */
-namespace ts.tracing {
+namespace ts { // eslint-disable-line one-namespace-per-file
+    // should be used as tracing?.___
+    export let tracing: typeof tracingEnabled | undefined;
+    // enable the above using startTracing()
+}
+
+// `tracingEnabled` should never be used directly, only through the above
+/* @internal */
+namespace ts.tracingEnabled { // eslint-disable-line one-namespace-per-file
     export const enum Mode {
         Project,
         Build,
         Server,
     }
 
-    let fs: typeof import("fs") | false | undefined;
+    let fs: typeof import("fs");
 
     let traceCount = 0;
-    let traceFd: number | undefined;
+    let traceFd = 0;
 
     let mode: Mode;
 
@@ -22,21 +31,17 @@ namespace ts.tracing {
         [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
     };
 
-    /** Starts tracing for the given project (unless the `fs` module is unavailable). */
+    /** Starts tracing for the given project. */
     export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
-        Debug.assert(!traceFd, "Tracing already started");
+        Debug.assert(!tracing, "Tracing already started");
 
         if (fs === undefined) {
             try {
                 fs = require("fs");
             }
-            catch {
-                fs = false;
+            catch (e) {
+                throw new Error(`tracing requires having fs\n(original error: ${e.message || e})`);
             }
-        }
-
-        if (!fs) {
-            return;
         }
 
         mode = tracingMode;
@@ -51,9 +56,9 @@ namespace ts.tracing {
         }
 
         const countPart =
-            mode === Mode.Build ? `.${process.pid}-${++traceCount}` :
-                mode === Mode.Server ? `.${process.pid}` :
-                    ``;
+            mode === Mode.Build ? `.${process.pid}-${++traceCount}`
+            : mode === Mode.Server ? `.${process.pid}`
+            : ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
         const typesPath = combinePaths(traceDir, `types${countPart}.json`);
 
@@ -64,6 +69,7 @@ namespace ts.tracing {
         });
 
         traceFd = fs.openSync(tracePath, "w");
+        tracing = tracingEnabled; // only when traceFd is properly set
 
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
         const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
@@ -75,19 +81,14 @@ namespace ts.tracing {
                 .map(v => JSON.stringify(v)).join(",\n"));
     }
 
-    /** Stops tracing for the in-progress project and dumps the type catalog (unless the `fs` module is unavailable). */
+    /** Stops tracing for the in-progress project and dumps the type catalog. */
     export function stopTracing(typeCatalog?: readonly Type[]) {
-        if (!traceFd) {
-            Debug.assert(!fs, "Tracing is not in progress");
-            return;
-        }
-
-        Debug.assert(fs);
+        Debug.assert(tracing, "Tracing is not in progress");
         Debug.assert(!!typeCatalog === (mode !== Mode.Server)); // Have a type catalog iff not in server mode
 
         fs.writeSync(traceFd, `\n]\n`);
         fs.closeSync(traceFd);
-        traceFd = undefined;
+        tracing = undefined;
 
         if (typeCatalog) {
             dumpTypes(typeCatalog);
@@ -97,10 +98,6 @@ namespace ts.tracing {
             // now that the file won't be created.
             legend[legend.length - 1].typesPath = undefined;
         }
-    }
-
-    export function isTracing() {
-        return !!traceFd;
     }
 
     export const enum Phase {
@@ -114,7 +111,6 @@ namespace ts.tracing {
     }
 
     export function instant(phase: Phase, name: string, args?: Args) {
-        if (!traceFd) return;
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
@@ -127,40 +123,38 @@ namespace ts.tracing {
      * these operations.
      */
     export function push(phase: Phase, name: string, args?: Args, separateBeginAndEnd = false) {
-        if (!traceFd) return;
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
         }
         eventStack.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
     }
     export function pop() {
-        if (!traceFd) return;
         Debug.assert(eventStack.length > 0);
         writeStackEvent(eventStack.length - 1, 1000 * timestamp());
         eventStack.length--;
     }
     export function popAll() {
-        if (!traceFd) return;
         const endTime = 1000 * timestamp();
         for (let i = eventStack.length - 1; i >= 0; i--) {
             writeStackEvent(i, endTime);
         }
         eventStack.length = 0;
     }
+    // sample every 10ms
+    const sampleInterval = 1000 * 10;
     function writeStackEvent(index: number, endTime: number) {
         const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
         if (separateBeginAndEnd) {
             writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
         }
-        else {
+        // test if [time,endTime) straddles a sampling point
+        else if (sampleInterval - (time % sampleInterval) <= endTime - time) {
             writeEvent("X", phase, name, args, `"dur":${endTime - time}`, time);
         }
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
         time: number = 1000 * timestamp()) {
-        Debug.assert(traceFd);
-        Debug.assert(fs);
 
         // In server mode, there's no easy way to dump type information, so we drop events that would require it.
         if (mode === Mode.Server && phase === Phase.CheckTypes) return;
@@ -182,8 +176,6 @@ namespace ts.tracing {
     }
 
     function dumpTypes(types: readonly Type[]) {
-        Debug.assert(fs);
-
         performance.mark("beginDumpTypes");
 
         const typesPath = legend[legend.length - 1].typesPath!;
@@ -293,7 +285,6 @@ namespace ts.tracing {
         if (!legendPath) {
             return;
         }
-        Debug.assert(fs);
 
         fs.writeFileSync(legendPath, JSON.stringify(legend));
     }
@@ -303,4 +294,10 @@ namespace ts.tracing {
         tracePath: string;
         typesPath?: string;
     }
+}
+
+/*@internal*/
+namespace ts { // eslint-disable-line one-namespace-per-file
+    // define after tracingEnabled is initialized
+    export const startTracing = tracingEnabled.startTracing;
 }

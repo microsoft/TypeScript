@@ -340,17 +340,17 @@ namespace ts {
                     sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
-            tracing.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
+            tracing?.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
-            tracing.pop();
+            tracing?.pop();
 
-            tracing.push(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
+            tracing?.push(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
-            tracing.pop();
+            tracing?.pop();
 
-            tracing.push(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
+            tracing?.push(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
-            tracing.pop();
+            tracing?.pop();
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -849,7 +849,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
-            redirectTargetsMap: createMultiMap()
+            redirectTargetsMap: createMultiMap(),
+            getFileIncludeReasons: notImplemented,
         };
         emitFiles(
             notImplementedResolver,
@@ -2131,6 +2132,7 @@ namespace ts {
 
         function emitConstructorType(node: ConstructorTypeNode) {
             pushNameGenerationScope(node);
+            emitModifiers(node, node.modifiers);
             writeKeyword("new");
             writeSpace();
             emitTypeParameters(node, node.typeParameters);
@@ -2864,7 +2866,8 @@ namespace ts {
             }
             pos = writeTokenText(token, writer, pos);
             if (isSimilarNode && contextNode.end !== pos) {
-                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+                const isJsxExprContext = contextNode.kind === SyntaxKind.JsxExpression;
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContext, /*forceNoNewline*/ isJsxExprContext);
             }
             return pos;
         }
@@ -3421,12 +3424,35 @@ namespace ts {
             writePunctuation("}");
         }
 
+        function hasTrailingCommentsAtPosition(pos: number) {
+            let result = false;
+            forEachTrailingCommentRange(currentSourceFile?.text || "", pos + 1, () => result = true);
+            return result;
+        }
+
+        function hasLeadingCommentsAtPosition(pos: number) {
+            let result = false;
+            forEachLeadingCommentRange(currentSourceFile?.text || "", pos + 1, () => result = true);
+            return result;
+        }
+
+        function hasCommentsAtPosition(pos: number) {
+            return hasTrailingCommentsAtPosition(pos) || hasLeadingCommentsAtPosition(pos);
+        }
+
         function emitJsxExpression(node: JsxExpression) {
-            if (node.expression) {
-                writePunctuation("{");
+            if (node.expression || (!commentsDisabled && !nodeIsSynthesized(node) && hasCommentsAtPosition(node.pos))) { // preserve empty expressions if they contain comments!
+                const isMultiline = currentSourceFile && !nodeIsSynthesized(node) && getLineAndCharacterOfPosition(currentSourceFile, node.pos).line !== getLineAndCharacterOfPosition(currentSourceFile, node.end).line;
+                if (isMultiline) {
+                    writer.increaseIndent();
+                }
+                const end = emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
                 emit(node.dotDotDotToken);
                 emitExpression(node.expression);
-                writePunctuation("}");
+                emitTokenWithComment(SyntaxKind.CloseBraceToken, node.expression?.end || end, writePunctuation, node);
+                if (isMultiline) {
+                    writer.decreaseIndent();
+                }
             }
         }
 
@@ -5274,13 +5300,25 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean, forceNoNewline?: boolean) {
             if (commentsDisabled) {
                 return;
             }
             enterComment();
-            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition);
             exitComment();
+        }
+
+        function emitTrailingCommentOfPositionNoNewline(commentPos: number, commentEnd: number, kind: SyntaxKind) {
+            // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+
+            emitPos(commentPos);
+            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine(); // still write a newline for single-line comments, so closing tokens aren't written on the same line
+            }
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {

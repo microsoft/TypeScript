@@ -14,13 +14,13 @@ const [r0, r1] = test.ranges();
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
-        "message": "'foo' is deprecated",
+        "message": "'foo' is deprecated.",
         "reportsDeprecated": true,
         "range": r0
     },
     {
         "code": 6385,
-        "message": "'foo' is deprecated",
+        "message": "'foo' is deprecated.",
         "reportsDeprecated": true,
         "range": r1
     }
