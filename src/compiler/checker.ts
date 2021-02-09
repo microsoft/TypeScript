@@ -36226,10 +36226,9 @@ namespace ts {
                     if (basePropertyFlags && derivedPropertyFlags) {
                         // property/accessor is overridden with property/accessor
                         if (baseDeclarationFlags & ModifierFlags.Abstract && !(base.valueDeclaration && isPropertyDeclaration(base.valueDeclaration) && base.valueDeclaration.initializer)
-                            || base.valueDeclaration && base.valueDeclaration.parent.kind === SyntaxKind.InterfaceDeclaration
-                            || getCheckFlags(base) & CheckFlags.Mapped
+                            || !base.declarations?.some(decl => isClassLike(decl.parent))
                             || derived.valueDeclaration && isBinaryExpression(derived.valueDeclaration)) {
-                            // when the base property is abstract or from an interface or mapped type, base/derived flags don't need to match
+                            // when the base property is abstract or not from a class, base/derived flags don't need to match
                             // same when the derived property is from an assignment
                             continue;
                         }
