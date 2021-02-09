@@ -1569,8 +1569,8 @@ namespace ts.server {
 
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-            if (parsePackageName(pluginConfigEntry.name).rest) {
-                this.projectService.logger.info(`kipped loading plugin ${pluginConfigEntry.name} because only package name is allowed plugin name`);
+            if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
+                this.projectService.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
                 return;
             }
 

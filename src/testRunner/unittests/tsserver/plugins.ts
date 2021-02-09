@@ -24,7 +24,12 @@ namespace ts.projectSystem {
             const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: JSON.stringify({
-                    compilerOptions: { plugins: [...expectedToLoad, ...notToLoad].map(name => ({ name })) }
+                    compilerOptions: {
+                        plugins: [
+                            ...[...expectedToLoad, ...notToLoad].map(name => ({ name })),
+                            { transform: "some-transform" }
+                        ]
+                    }
                 })
             };
             const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
