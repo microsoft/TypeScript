@@ -1,8 +1,8 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(31,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(36,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
   Property 'onChanges' does not exist on type 'C'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(32,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(37,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
   Property 'onChanges' does not exist on type 'C'.
 
 
@@ -40,6 +40,11 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(32,11
             v // Validator & Partial<OnChanges> & C
         }
         v // Validator & Partial<OnChanges> via subtype reduction
+    
+        // In 4.1, we introduced a change which _fixed_ a bug with CFA
+        // correctly setting this to be the right object. With 4.2,
+        // we reverted that fix in #42231 which brought behavior back to
+        // before 4.1.
         if (v.onChanges) {
               ~~~~~~~~~
 !!! error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
