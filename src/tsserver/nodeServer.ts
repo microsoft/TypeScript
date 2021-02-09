@@ -861,7 +861,7 @@ namespace ts.server {
             ? stripQuotes(commandLineTraceDir)
             : process.env.TSS_TRACE;
         if (traceDir) {
-            startTracing(tracingEnabled.Mode.Server, traceDir);
+            startTracing("server", traceDir);
         }
 
         const ioSession = new IOSession();
