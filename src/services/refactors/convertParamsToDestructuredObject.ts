@@ -79,7 +79,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 first(declarationOrSignature.parameters),
                 last(declarationOrSignature.parameters),
                 parameterDeclarations,
-                {   joiner: ", ",
+                {
+                    joiner: ", ",
                     // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
                     indentation: 0,
                     leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
