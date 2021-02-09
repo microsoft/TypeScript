@@ -27,8 +27,7 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
 async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
     let testTimeout = cmdLineOptions.timeout;
     let tests = cmdLineOptions.tests;
-    const debug = cmdLineOptions.debug;
-    const inspect = cmdLineOptions.inspect;
+    const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
@@ -102,10 +101,6 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         }
         if (inspect !== undefined) {
             args.unshift((inspect == "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
-            args.push("-t", "0");
-        }
-        else if (debug) {
-            args.unshift("--debug-brk");
             args.push("-t", "0");
         }
         else {
