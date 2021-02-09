@@ -251,7 +251,7 @@ namespace ts.JsDoc {
      * @param position The (character-indexed) position in the file where the check should
      * be performed.
      */
-    export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion | undefined {
+    export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
         const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const existingDocComment = findAncestor(tokenAtPos, isJSDoc);
         if (existingDocComment && (existingDocComment.comment !== undefined || length(existingDocComment.tags))) {
@@ -265,7 +265,7 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const commentOwnerInfo = getCommentOwnerInfo(tokenAtPos);
+        const commentOwnerInfo = getCommentOwnerInfo(tokenAtPos, options);
         if (!commentOwnerInfo) {
             return undefined;
         }
@@ -325,10 +325,10 @@ namespace ts.JsDoc {
         readonly parameters?: readonly ParameterDeclaration[];
         readonly hasReturn?: boolean;
     }
-    function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
-        return forEachAncestor(tokenAtPos, getCommentOwnerInfoWorker);
+    function getCommentOwnerInfo(tokenAtPos: Node, options: DocCommentTemplateOptions | undefined): CommentOwnerInfo | undefined {
+        return forEachAncestor(tokenAtPos, n => getCommentOwnerInfoWorker(n, options));
     }
-    function getCommentOwnerInfoWorker(commentOwner: Node): CommentOwnerInfo | undefined | "quit" {
+    function getCommentOwnerInfoWorker(commentOwner: Node, options: DocCommentTemplateOptions | undefined): CommentOwnerInfo | undefined | "quit" {
         switch (commentOwner.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -337,10 +337,10 @@ namespace ts.JsDoc {
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ArrowFunction:
                 const host = commentOwner as ArrowFunction | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
-                return { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host) };
+                return { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host, options) };
 
             case SyntaxKind.PropertyAssignment:
-                return getCommentOwnerInfoWorker((commentOwner as PropertyAssignment).initializer);
+                return getCommentOwnerInfoWorker((commentOwner as PropertyAssignment).initializer, options);
 
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
@@ -357,7 +357,7 @@ namespace ts.JsDoc {
                     ? getRightHandSideOfAssignment(varDeclarations[0].initializer)
                     : undefined;
                 return host
-                    ? { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host) }
+                    ? { commentOwner, parameters: host.parameters, hasReturn: hasReturn(host, options) }
                     : { commentOwner };
             }
 
@@ -371,27 +371,28 @@ namespace ts.JsDoc {
                 return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
             case SyntaxKind.ExpressionStatement:
-                return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression);
+                return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression, options);
             case SyntaxKind.BinaryExpression: {
                 const be = commentOwner as BinaryExpression;
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
                     return "quit";
                 }
                 return isFunctionLike(be.right)
-                    ? { commentOwner, parameters: be.right.parameters, hasReturn: hasReturn(be.right) }
+                    ? { commentOwner, parameters: be.right.parameters, hasReturn: hasReturn(be.right, options) }
                     : { commentOwner };
             }
             case SyntaxKind.PropertyDeclaration:
                 const init = (commentOwner as PropertyDeclaration).initializer;
                 if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
-                    return { commentOwner, parameters: init.parameters, hasReturn: hasReturn(init) };
+                    return { commentOwner, parameters: init.parameters, hasReturn: hasReturn(init, options) };
                 }
         }
     }
 
-    function hasReturn(node: Node) {
-        return isArrowFunction(node) && isExpression(node.body)
-            || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n);
+    function hasReturn(node: Node, options: DocCommentTemplateOptions | undefined) {
+        return !!options?.generateReturnInDocTemplate &&
+            (isArrowFunction(node) && isExpression(node.body)
+                || isFunctionLikeDeclaration(node) && node.body && isBlock(node.body) && !!forEachReturnStatement(node.body, n => n));
     }
 
     function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {

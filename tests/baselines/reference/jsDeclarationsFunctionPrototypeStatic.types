@@ -2,7 +2,7 @@
 module.exports = MyClass;
 >module.exports = MyClass : typeof MyClass
 >module.exports : typeof MyClass
->module : { "\"tests/cases/conformance/jsdoc/declarations/source\"": typeof MyClass; }
+>module : { exports: typeof MyClass; }
 >exports : typeof MyClass
 >MyClass : typeof MyClass
 

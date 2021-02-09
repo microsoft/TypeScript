@@ -13,7 +13,7 @@ mod() // should be callable from here too
 module.exports = function x() { }
 >module.exports = function x() { } : () => void
 >module.exports : () => void
->module : { "\"tests/cases/conformance/salsa/mod\"": () => void; }
+>module : { exports: () => void; }
 >exports : () => void
 >function x() { } : () => void
 >x : () => void
@@ -21,6 +21,6 @@ module.exports = function x() { }
 module.exports() // should be callable
 >module.exports() : void
 >module.exports : () => void
->module : { "\"tests/cases/conformance/salsa/mod\"": () => void; }
+>module : { exports: () => void; }
 >exports : () => void
 

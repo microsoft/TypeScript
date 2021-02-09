@@ -263,7 +263,7 @@ namespace ts {
         /**
          * Returns JSON-encoded value of the type TextInsertion.
          */
-        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string;
 
         /**
          * Returns JSON-encoded boolean to indicate whether we should support brace location
@@ -999,10 +999,10 @@ namespace ts {
                 });
         }
 
-        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+        public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
             return this.forwardJSONCall(
                 `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
             );
         }
 

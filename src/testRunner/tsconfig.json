@@ -112,6 +112,7 @@
         "unittests/services/transpile.ts",
         "unittests/tsbuild/amdModulesWithOut.ts",
         "unittests/tsbuild/configFileErrors.ts",
+        "unittests/tsbuild/configFileExtends.ts",
         "unittests/tsbuild/containerOnlyReferenced.ts",
         "unittests/tsbuild/declarationEmit.ts",
         "unittests/tsbuild/demo.ts",
