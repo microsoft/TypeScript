@@ -110,7 +110,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
             const classSymbols = map(classNames, getSymbolTargetAtLocation);
             const isConstructor = isConstructorDeclaration(functionDeclaration);
-            const contextualSymbols = map(functionNames, (name) => (getSymbolForContextualType(name, checker)));
+            const contextualSymbols = map(functionNames, name => getSymbolForContextualType(name, checker));
 
             for (const entry of referenceEntries) {
                 if (entry.kind === FindAllReferences.EntryKind.Span) {
