@@ -1,54 +1,62 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Convert export";
-    const actionNameDefaultToNamed = "Convert default export to named export";
-    const actionNameNamedToDefault = "Convert named export to default export";
+
+    const defaultToNamedAction = {
+        name: "Convert default export to named export",
+        description: Diagnostics.Convert_default_export_to_named_export.message,
+        kind: "refactor.rewrite.export.named"
+    };
+    const namedToDefaultAction = {
+        name: "Convert named export to default export",
+        description: Diagnostics.Convert_named_export_to_default_export.message,
+        kind: "refactor.rewrite.export.default"
+    };
 
     registerRefactor(refactorName, {
+        kinds: [
+            defaultToNamedAction.kind,
+            namedToDefaultAction.kind
+        ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
-            if (info.error === undefined) {
-                const description = info.info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
-                const actionName = info.info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
-                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            if (!isRefactorErrorInfo(info)) {
+                const action = info.wasDefault ? defaultToNamedAction : namedToDefaultAction;
+                return [{ name: refactorName, description: action.description, actions: [action] }];
             }
 
             if (context.preferences.provideRefactorNotApplicableReason) {
                 return [
-                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, notApplicableReason: info.error }] },
-                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, notApplicableReason: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [
+                        { ...defaultToNamedAction, notApplicableReason: info.error },
+                        { ...namedToDefaultAction, notApplicableReason: info.error },
+                    ]}
                 ];
             }
 
             return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
-            Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.checkDefined(getInfo(context)?.info, "context must have info"), t, context.cancellationToken));
+            Debug.assert(actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name, "Unexpected action name");
+            const info = getInfo(context);
+            Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, info, t, context.cancellationToken));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         },
     });
 
     // If a VariableStatement, will have exactly one VariableDeclaration, with an Identifier for a name.
     type ExportToConvert = FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | NamespaceDeclaration | TypeAliasDeclaration | VariableStatement;
-    interface Info {
+    interface ExportInfo {
         readonly exportNode: ExportToConvert;
         readonly exportName: Identifier; // This is exportNode.name except for VariableStatement_s.
         readonly wasDefault: boolean;
         readonly exportingModuleSymbol: Symbol;
-    }
-
-    type InfoOrError = {
-        info: Info,
-        error?: never
-    } | {
-        info?: never,
-        error: string
     };
 
-    function getInfo(context: RefactorContext, considerPartialSpans = true): InfoOrError | undefined {
+    function getInfo(context: RefactorContext, considerPartialSpans = true): ExportInfo | RefactorErrorInfo | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
@@ -74,7 +82,7 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ModuleDeclaration: {
                 const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
-                return node.name && isIdentifier(node.name) ? { info: { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } } : undefined;
+                return node.name && isIdentifier(node.name) ? { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } : undefined;
             }
             case SyntaxKind.VariableStatement: {
                 const vs = exportNode as VariableStatement;
@@ -85,19 +93,19 @@ namespace ts.refactor {
                 const decl = first(vs.declarationList.declarations);
                 if (!decl.initializer) return undefined;
                 Debug.assert(!wasDefault, "Can't have a default flag here");
-                return isIdentifier(decl.name) ? { info: { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } } : undefined;
+                return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
             }
             default:
                 return undefined;
         }
     }
 
-    function doChange(exportingSourceFile: SourceFile, program: Program, info: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+    function doChange(exportingSourceFile: SourceFile, program: Program, info: ExportInfo, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         changeExport(exportingSourceFile, info, changes, program.getTypeChecker());
         changeImports(program, info, changes, cancellationToken);
     }
 
-    function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
+    function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: ExportInfo, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
             changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
         }
@@ -131,7 +139,7 @@ namespace ts.refactor {
         }
     }
 
-    function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+    function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: ExportInfo, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         const checker = program.getTypeChecker();
         const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
         FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {

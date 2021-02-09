@@ -1,0 +1,10 @@
+Exit Code: 2
+Standard output:
+test/Either.ts(244,33): error TS2345: Argument of type 'Either<string, never>' is not assignable to parameter of type 'Either<`invalid color ${string}`, string>'.
+  Type 'Left<string>' is not assignable to type 'Either<`invalid color ${string}`, string>'.
+    Type 'Left<string>' is not assignable to type 'Left<`invalid color ${string}`>'.
+      Type 'string' is not assignable to type '`invalid color ${string}`'.
+
+
+
+Standard error:

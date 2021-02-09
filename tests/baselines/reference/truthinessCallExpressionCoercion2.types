@@ -13,10 +13,11 @@ declare class B {
 >from : () => string
 }
 
-function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
->test : (required1: () => boolean, required2: () => boolean, optional?: (() => boolean) | undefined) => void
+function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
+>test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: (() => boolean) | undefined) => void
 >required1 : () => boolean
 >required2 : () => boolean
+>b : boolean
 >optional : (() => boolean) | undefined
 
     // error
@@ -145,6 +146,46 @@ function test(required1: () => boolean, required2: () => boolean, optional?: () 
 >console : Console
 >log : (...data: any[]) => void
 >'foo' : "foo"
+
+    // error
+    if (required1 && b) {
+>required1 && b : boolean
+>required1 : () => boolean
+>b : boolean
+    }
+
+    // error
+    if (((required1 && b))) {
+>((required1 && b)) : boolean
+>(required1 && b) : boolean
+>required1 && b : boolean
+>required1 : () => boolean
+>b : boolean
+    }
+
+    // ok
+    if (required1 && b) {
+>required1 && b : boolean
+>required1 : () => boolean
+>b : boolean
+
+        required1();
+>required1() : boolean
+>required1 : () => boolean
+    }
+
+    // ok
+    if (((required1 && b))) {
+>((required1 && b)) : boolean
+>(required1 && b) : boolean
+>required1 && b : boolean
+>required1 : () => boolean
+>b : boolean
+
+        required1();
+>required1() : boolean
+>required1 : () => boolean
+    }
 }
 
 function checksConsole() {

@@ -83,10 +83,10 @@ type K08 = keyof unknown; // never
 >K08 : never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
->K10 : "name" | "width" | "height" | "visible"
+>K10 : keyof Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : number | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : number | keyof Shape[]
 
 type K12 = keyof Dictionary<Shape>;  // string
 >K12 : string | number
@@ -95,13 +95,13 @@ type K13 = keyof {};  // never
 >K13 : never
 
 type K14 = keyof Object;  // "constructor" | "toString" | ...
->K14 : "toString" | "toLocaleString" | "valueOf" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>K14 : keyof Object
 
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K16 : number | keyof [string, number]
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"
@@ -116,7 +116,7 @@ type KeyOf<T> = keyof T;
 >KeyOf : keyof T
 
 type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
->K20 : "name" | "width" | "height" | "visible"
+>K20 : keyof Shape
 
 type K21 = KeyOf<Dictionary<Shape>>;  // string
 >K21 : string | number
@@ -225,14 +225,14 @@ function f10(shape: Shape) {
 >getProperty(shape, cond ? "width" : "height") : number
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
->cond ? "width" : "height" : WIDTH_OR_HEIGHT
+>cond ? "width" : "height" : "width" | "height"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
 
     let nameOrVisible = getProperty(shape, cond ? "name" : "visible");  // string | boolean
->nameOrVisible : Q12
->getProperty(shape, cond ? "name" : "visible") : Q12
+>nameOrVisible : string | boolean
+>getProperty(shape, cond ? "name" : "visible") : string | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >cond ? "name" : "visible" : "name" | "visible"
@@ -251,7 +251,7 @@ function f10(shape: Shape) {
 >setProperty(shape, cond ? "width" : "height", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
->cond ? "width" : "height" : WIDTH_OR_HEIGHT
+>cond ? "width" : "height" : "width" | "height"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -380,28 +380,28 @@ function f20(component: Component<Shape>) {
     let name = component.getProperty("name");  // string
 >name : string
 >component.getProperty("name") : string
->component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
->getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >"name" : "name"
 
     let widthOrHeight = component.getProperty(cond ? "width" : "height");  // number
 >widthOrHeight : number
 >component.getProperty(cond ? "width" : "height") : number
->component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
->getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
->cond ? "width" : "height" : WIDTH_OR_HEIGHT
+>getProperty : <K extends keyof Shape>(key: K) => Shape[K]
+>cond ? "width" : "height" : "width" | "height"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
 
     let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
->nameOrVisible : Q12
->component.getProperty(cond ? "name" : "visible") : Q12
->component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>nameOrVisible : string | boolean
+>component.getProperty(cond ? "name" : "visible") : string | boolean
+>component.getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >component : Component<Shape>
->getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>getProperty : <K extends keyof Shape>(key: K) => Shape[K]
 >cond ? "name" : "visible" : "name" | "visible"
 >cond : boolean
 >"name" : "name"
@@ -409,18 +409,18 @@ function f20(component: Component<Shape>) {
 
     component.setProperty("name", "rectangle");
 >component.setProperty("name", "rectangle") : void
->component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
->setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >"name" : "name"
 >"rectangle" : "rectangle"
 
     component.setProperty(cond ? "width" : "height", 10)
 >component.setProperty(cond ? "width" : "height", 10) : void
->component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
->setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
->cond ? "width" : "height" : WIDTH_OR_HEIGHT
+>setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
+>cond ? "width" : "height" : "width" | "height"
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -428,9 +428,9 @@ function f20(component: Component<Shape>) {
 
     component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
 >component.setProperty(cond ? "name" : "visible", true) : void
->component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component.setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >component : Component<Shape>
->setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>setProperty : <K extends keyof Shape>(key: K, value: Shape[K]) => void
 >cond ? "name" : "visible" : "name" | "visible"
 >cond : boolean
 >"name" : "name"
@@ -474,8 +474,8 @@ function f30(shapes: Shape[]) {
 >"width" : "width"
 
     let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");  // (string | boolean)[]
->nameOrVisibles : Q12[]
->pluck(shapes, cond ? "name" : "visible") : Q12[]
+>nameOrVisibles : (string | boolean)[]
+>pluck(shapes, cond ? "name" : "visible") : (string | boolean)[]
 >pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
 >shapes : Shape[]
 >cond ? "name" : "visible" : "name" | "visible"
@@ -485,7 +485,7 @@ function f30(shapes: Shape[]) {
 }
 
 function f31<K extends keyof Shape>(key: K) {
->f31 : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>f31 : <K extends keyof Shape>(key: K) => Shape[K]
 >key : K
 
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
@@ -507,7 +507,7 @@ function f31<K extends keyof Shape>(key: K) {
 }
 
 function f32<K extends "width" | "height">(key: K) {
->f32 : <K extends WIDTH_OR_HEIGHT>(key: K) => Shape[K]
+>f32 : <K extends "width" | "height">(key: K) => Shape[K]
 >key : K
 
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
@@ -959,8 +959,8 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >'a' : "a"
 
     let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
->b : Q12
->func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : Q12
+>b : string | boolean
+>func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : string | boolean
 >func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number
@@ -1207,15 +1207,15 @@ type S2 = {
 };
 
 function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
->f90 : <T extends S2, K extends "a" | "b">(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) => void
+>f90 : <T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) => void
 >x1 : string
->x2 : T["a" | "b"]
+>x2 : T[keyof S2]
 >x3 : S2[K]
 
     x1 = x2;
->x1 = x2 : T["a" | "b"]
+>x1 = x2 : T[keyof S2]
 >x1 : string
->x2 : T["a" | "b"]
+>x2 : T[keyof S2]
 
     x1 = x3;
 >x1 = x3 : S2[K]
@@ -1224,12 +1224,12 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 
     x2 = x1;
 >x2 = x1 : string
->x2 : T["a" | "b"]
+>x2 : T[keyof S2]
 >x1 : string
 
     x2 = x3;
 >x2 = x3 : S2[K]
->x2 : T["a" | "b"]
+>x2 : T[keyof S2]
 >x3 : S2[K]
 
     x3 = x1;
@@ -1238,9 +1238,9 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x1 : string
 
     x3 = x2;
->x3 = x2 : T["a" | "b"]
+>x3 = x2 : T[keyof S2]
 >x3 : S2[K]
->x2 : T["a" | "b"]
+>x2 : T[keyof S2]
 
     x1.length;
 >x1.length : number
@@ -1249,7 +1249,7 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 
     x2.length;
 >x2.length : number
->x2 : T["a" | "b"]
+>x2 : T[keyof S2]
 >length : number
 
     x3.length;
@@ -1688,13 +1688,13 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 // Repro from #13073
 
 type KeyTypes = "a" | "b"
->KeyTypes : "a" | "b"
+>KeyTypes : KeyTypes
 
 let MyThingy: { [key in KeyTypes]: string[] };
 >MyThingy : { a: string[]; b: string[]; }
 
 function addToMyThingy<S extends KeyTypes>(key: S) {
->addToMyThingy : <S extends "a" | "b">(key: S) => void
+>addToMyThingy : <S extends KeyTypes>(key: S) => void
 >key : S
 
     MyThingy[key].push("a");

@@ -76,7 +76,7 @@ type B0 = Flatten<string[][][]>;
 >B0 : string[]
 
 type B1 = Flatten<string[][] | readonly (number[] | boolean[][])[]>;
->B1 : string[] | readonly (number | boolean)[]
+>B1 : B1
 
 type B2 = Flatten<InfiniteArray<string>>;
 >B2 : any[]
@@ -96,7 +96,7 @@ type TT0 = TupleOf<string, 4>;
 >TT0 : [string, string, string, string]
 
 type TT1 = TupleOf<number, 0 | 2 | 4>;
->TT1 : [] | [number, number] | [number, number, number, number]
+>TT1 : TT1
 
 type TT2 = TupleOf<number, number>;
 >TT2 : number[]
@@ -230,7 +230,7 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >value : { readonly value: { readonly value: any; }; }
 >{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
 >value : { readonly value: any; }
->this : { readonly value: any; } | { readonly value: { readonly value: any; }; } | Box<RecBox<{ readonly value: { readonly value: any; }; }>>
+>this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
 
 // Inference from nested instantiations of same generic types
 
@@ -309,4 +309,36 @@ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >y : Grow2<[], T>
 >x : Grow1<[], T>
 }
+
+// Repros from #41756
+
+type ParseSuccess<R extends string> = { rest: R };
+>ParseSuccess : ParseSuccess<R>
+>rest : R
+
+type ParseManyWhitespace<S extends string> =
+>ParseManyWhitespace : ParseManyWhitespace<S>
+
+    S extends ` ${infer R0}` ?
+        ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
+>null : null
+
+        ParseSuccess<S>;
+
+type TP1 = ParseManyWhitespace<" foo">;
+>TP1 : ParseSuccess<"foo">
+
+type ParseManyWhitespace2<S extends string> =
+>ParseManyWhitespace2 : ParseManyWhitespace2<S>
+
+    S extends ` ${infer R0}` ?
+        Helper<ParseManyWhitespace2<R0>> :
+        ParseSuccess<S>;
+
+type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+>Helper : Helper<T>
+>null : null
+
+type TP2 = ParseManyWhitespace2<" foo">;
+>TP2 : ParseSuccess<"foo">
 

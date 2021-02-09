@@ -10,7 +10,7 @@ namespace ts.formatting {
         kind: T;
     }
 
-    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaKind>;
+    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaSyntaxKind>;
 
     export interface TokenInfo {
         leadingTrivia: TextRangeWithTriviaKind[] | undefined;
@@ -498,10 +498,11 @@ namespace ts.formatting {
                     // - we need to get the indentation on last line and the delta of parent
                     return { indentation: indentationOnLastIndentedLine, delta: parentDynamicIndentation.getDelta(node) };
                 }
-                else if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                    return { indentation: parentDynamicIndentation.getIndentation(), delta };
-                }
-                else if (SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)) {
+                else if (
+                    SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile) ||
+                    SmartIndenter.childIsUnindentedBranchOfConditionalExpression(parent, node, startLine, sourceFile) ||
+                    SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)
+                ) {
                     return { indentation: parentDynamicIndentation.getIndentation(), delta };
                 }
                 else {
@@ -592,6 +593,7 @@ namespace ts.formatting {
                             case SyntaxKind.JsxOpeningElement:
                             case SyntaxKind.JsxClosingElement:
                             case SyntaxKind.JsxSelfClosingElement:
+                            case SyntaxKind.ExpressionWithTypeArguments:
                                 return false;
                         }
                         break;

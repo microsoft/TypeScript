@@ -367,6 +367,10 @@ namespace ts {
             return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
         }
 
+        export function formatSignatureFlags(flags: SignatureFlags | undefined): string {
+            return formatEnum(flags, (<any>ts).SignatureFlags, /*isFlags*/ true);
+        }
+
         export function formatObjectFlags(flags: ObjectFlags | undefined): string {
             return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
         }
@@ -571,6 +575,11 @@ namespace ts {
                         return text;
                     }
                 },
+            });
+
+            Object.defineProperties(objectAllocator.getSignatureConstructor().prototype, {
+                __debugFlags: { get(this: Signature) { return formatSignatureFlags(this.flags); } },
+                __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } }
             });
 
             const nodeConstructors = [

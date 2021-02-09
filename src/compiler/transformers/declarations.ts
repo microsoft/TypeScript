@@ -217,12 +217,12 @@ namespace ts {
 
         function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
             const oldDiag = getSymbolAccessibilityDiagnostic;
-            getSymbolAccessibilityDiagnostic = (s) => ({
+            getSymbolAccessibilityDiagnostic = (s) => (s.errorNode && canProduceDiagnostics(s.errorNode) ? createGetSymbolAccessibilityDiagnosticForNode(s.errorNode)(s) : ({
                 diagnosticMessage: s.errorModuleName
                     ? Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
                     : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
                 errorNode: s.errorNode || sourceFile
-            });
+            }));
             const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
             getSymbolAccessibilityDiagnostic = oldDiag;
             return result;
@@ -681,6 +681,7 @@ namespace ts {
                     decl,
                     /*decorators*/ undefined,
                     decl.modifiers,
+                    decl.isTypeOnly,
                     decl.name,
                     factory.updateExternalModuleReference(decl.moduleReference, rewriteModuleSpecifier(decl, specifier))
                 );
@@ -1016,7 +1017,7 @@ namespace ts {
                         return cleanup(factory.updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
                     }
                     case SyntaxKind.ConstructorType: {
-                        return cleanup(factory.updateConstructorTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                        return cleanup(factory.updateConstructorTypeNode(input, ensureModifiers(input), visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
                     }
                     case SyntaxKind.ImportType: {
                         if (!isLiteralImportTypeNode(input)) return cleanup(input);

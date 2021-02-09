@@ -116,6 +116,7 @@
         "refactors/extractSymbol.ts",
         "refactors/extractType.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
+        "refactors/helpers.ts",
         "refactors/moveToNewFile.ts",
         "refactors/addOrRemoveBracesToArrowFunction.ts",
         "refactors/convertParamsToDestructuredObject.ts",

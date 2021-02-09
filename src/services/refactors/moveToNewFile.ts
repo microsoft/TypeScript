@@ -1,11 +1,26 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Move to a new file";
+    const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
+
+    const moveToNewFileAction = {
+        name: refactorName,
+        description,
+        kind: "refactor.move.newFile",
+    };
     registerRefactor(refactorName, {
+        kinds: [moveToNewFileAction.kind],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
-            const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
-            return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
+            const statements = getStatementsToMove(context);
+            if (context.preferences.allowTextChangesInNewFiles && statements) {
+                return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
+            }
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [{ name: refactorName, description, actions:
+                    [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
+                }];
+            }
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
@@ -245,7 +260,7 @@ namespace ts.refactor {
                     factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
                     newModuleString);
             case SyntaxKind.ImportEqualsDeclaration:
-                return factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newNamespaceId, factory.createExternalModuleReference(newModuleString));
+                return factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, newNamespaceId, factory.createExternalModuleReference(newModuleString));
             case SyntaxKind.VariableDeclaration:
                 return factory.createVariableDeclaration(newNamespaceId, /*exclamationToken*/ undefined, /*type*/ undefined, createRequireCall(newModuleString));
             default:
@@ -782,7 +797,7 @@ namespace ts.refactor {
             case SyntaxKind.InterfaceDeclaration:
                 return factory.updateInterfaceDeclaration(d, d.decorators, modifiers, d.name, d.typeParameters, d.heritageClauses, d.members);
             case SyntaxKind.ImportEqualsDeclaration:
-                return factory.updateImportEqualsDeclaration(d, d.decorators, modifiers, d.name, d.moduleReference);
+                return factory.updateImportEqualsDeclaration(d, d.decorators, modifiers, d.isTypeOnly, d.name, d.moduleReference);
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail(); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:
