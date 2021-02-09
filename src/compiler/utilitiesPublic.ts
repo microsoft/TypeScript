@@ -1046,7 +1046,7 @@ namespace ts {
     // All node tests in the following list should *not* reference parent pointers so that
     // they may be used with transformations.
     /* @internal */
-    export function isNode(node: any): node is Node {
+    export function isNode(node: Node) {
         return isNodeKind(node.kind);
     }
 
