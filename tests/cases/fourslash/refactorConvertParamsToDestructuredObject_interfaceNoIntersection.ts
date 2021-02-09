@@ -6,7 +6,7 @@
 ////interface IBar {
 ////    method(x: number): void;
 ////}
-////const x: IFoo | IBar = {
+////const x: IFoo & IBar = {
 ////    method(/*a*/x: string, y: string/*b*/): void {},
 ////};
 

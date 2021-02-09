@@ -4,9 +4,16 @@
 ////    method(x: string, y: string): void;
 ////}
 ////const x: IFoo = {
-////    method(/*a*/x: string, y: string/*b*/): void {},
+////    method(/*a*/x, y/*b*/): void {},
 ////};
 
+/*
+When there are no type annotations on the params in the implementation, we ultimately
+would like to handle them like we do for calls resulting in `method({x, y}) {}`.
+
+Note that simply adding the annotations from the signature can fail as the implementation 
+can take more paramters than the signatures.
+*/
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
@@ -16,6 +23,6 @@ edit.applyRefactor({
     method({ x, y }: { x: string; y: string; }): void;
 }
 const x: IFoo = {
-    method({ x, y }: { x: string; y: string; }): void {},
+    method({ x, y }: { x; y; }): void {},
 };`
 });

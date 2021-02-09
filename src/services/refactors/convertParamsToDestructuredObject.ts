@@ -52,33 +52,13 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         functionDeclaration: ValidFunctionDeclaration,
         groupedReferences: GroupedReferences): void {
         const signature = groupedReferences.signature;
-        const newParamDeclaration = map(createNewParameters(signature ?? functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+        const newFunctionDeclarationParams = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
 
         if (signature) {
-            changes.replaceNodeRangeWithNodes(
-                sourceFile,
-                first(signature.parameters),
-                last(signature.parameters),
-                newParamDeclaration,
-                {   joiner: ", ",
-                    // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
-                    indentation: 0,
-                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include
-                });
+            const newSignatureParams = map(createNewParameters(signature, program, host), param => getSynthesizedDeepClone(param));
+            replaceParameters(signature, newSignatureParams);
         }
-
-        changes.replaceNodeRangeWithNodes(
-            sourceFile,
-            first(functionDeclaration.parameters),
-            last(functionDeclaration.parameters),
-            newParamDeclaration,
-            {   joiner: ", ",
-                // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
-                indentation: 0,
-                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
-            });
+        replaceParameters(functionDeclaration, newFunctionDeclarationParams);
 
         const functionCalls = sortAndDeduplicate(groupedReferences.functionCalls, /*comparer*/ (a, b) => compareValues(a.pos, b.pos));
         for (const call of functionCalls) {
@@ -91,6 +71,20 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     newArgument,
                     { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
             }
+        }
+
+        function replaceParameters(declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature, parameterDeclarations: ParameterDeclaration[]) {
+            changes.replaceNodeRangeWithNodes(
+                sourceFile,
+                first(declarationOrSignature.parameters),
+                last(declarationOrSignature.parameters),
+                parameterDeclarations,
+                {   joiner: ", ",
+                    // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
+                    indentation: 0,
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include
+                });
         }
     }
 
@@ -115,7 +109,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
             const classSymbols = map(classNames, getSymbolTargetAtLocation);
             const isConstructor = isConstructorDeclaration(functionDeclaration);
-            const interfaceSymbols = map(functionNames, getSymbolForInterfaceSignature);
+            const contextualSymbols = map(functionNames, (name) => (getSymbolForContextualType(name, checker)));
 
             for (const entry of referenceEntries) {
                 if (entry.kind === FindAllReferences.EntryKind.Span) {
@@ -123,8 +117,13 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     continue;
                 }
 
-                /* Calls and declarations of implemented interface methods should point to the symbol of the method signature */
-                if (contains(interfaceSymbols, getSymbolTargetAtLocation(entry.node))) {
+                /* Declarations in object literals may be implementations of method signatures which have a different symbol from the declaration
+                For example:
+                    interface IFoo { m(a: number): void }
+                    const foo: IFoo = { m(a: number): void {} }
+                In these cases we get the symbol for the signature from the contextual type.
+                */
+                if (contains(contextualSymbols, getSymbolTargetAtLocation(entry.node))) {
                     if (isValidMethodSignature(entry.node.parent)) {
                         groupedReferences.signature = entry.node.parent;
                         continue;
@@ -136,10 +135,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     }
                 }
 
-                /* Declarations in interface implementations have their own symbol so we need to go to the interface declaration
-                to get the type from the method signature. */
-                const interfaceSymbol = getSymbolForInterfaceSignature(entry.node);
-                if (interfaceSymbol && contains(interfaceSymbols, interfaceSymbol)) {
+                const contextualSymbol = getSymbolForContextualType(entry.node, checker);
+                if (contextualSymbol && contains(contextualSymbols, contextualSymbol)) {
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
@@ -214,20 +211,19 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const symbol = checker.getSymbolAtLocation(node);
             return symbol && getSymbolTarget(symbol, checker);
         }
+    }
 
-        function getSymbolForInterfaceSignature(node: Node): Symbol | undefined {
-            const element = getContainingObjectLiteralElement(node);
-            if (element) {
-                const contextualType = element && checker.getContextualType(element.parent);
-                if (contextualType) {
-                    const name = getNameFromPropertyName(element.name);
-                    if (!name) return;
-                    if (!contextualType.isUnion()) {
-                        return contextualType.getProperty(name);
-                    }
-                }
+    /**
+     * Gets the symbol for the contextual type of the node if it is not a union or intersection.
+     */
+    function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | undefined {
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            const contextualType = checker.getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>element);
+            const symbol = contextualType?.getSymbol();
+            if (symbol && !(getCheckFlags(symbol) & CheckFlags.Synthetic)) {
+                return symbol;
             }
-            return undefined;
         }
     }
 
@@ -349,7 +345,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     function isValidMethodSignature(node: Node): node is ValidMethodSignature {
-        return isMethodSignature(node) && isInterfaceDeclaration(node.parent);
+        return isMethodSignature(node) && (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent));
     }
 
     function isValidFunctionDeclaration(
@@ -361,8 +357,9 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 return hasNameOrDefault(functionDeclaration) && isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.MethodDeclaration:
                 if (isObjectLiteralExpression(functionDeclaration.parent)) {
-                    const contextualType = checker.getContextualType(functionDeclaration.parent);
-                    return !contextualType?.isUnion() && isSingleImplementation(functionDeclaration, checker);
+                    const contextualSymbol = getSymbolForContextualType(functionDeclaration.name, checker);
+                    // don't offer the refactor when there are multiple signatures since we won't know which ones the user wants to change
+                    return contextualSymbol?.declarations.length === 1 && isSingleImplementation(functionDeclaration, checker);
                 }
                 return isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.Constructor:

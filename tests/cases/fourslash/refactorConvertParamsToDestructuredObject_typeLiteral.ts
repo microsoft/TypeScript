@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-////interface IFoo {
+////type Foo = {
 ////    method(x: string, y: string): void;
 ////}
-////const x: IFoo = {
+////const x: Foo = {
 ////    method(/*a*/x: string, y: string/*b*/): void {},
 ////};
 
@@ -12,10 +12,10 @@ edit.applyRefactor({
     refactorName: "Convert parameters to destructured object",
     actionName: "Convert parameters to destructured object",
     actionDescription: "Convert parameters to destructured object",
-    newContent: `interface IFoo {
+    newContent: `type Foo = {
     method({ x, y }: { x: string; y: string; }): void;
 }
-const x: IFoo = {
+const x: Foo = {
     method({ x, y }: { x: string; y: string; }): void {},
 };`
 });
