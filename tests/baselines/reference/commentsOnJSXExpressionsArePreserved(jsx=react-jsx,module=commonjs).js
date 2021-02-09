@@ -25,7 +25,7 @@ var Component = /** @class */ (function () {
     function Component() {
     }
     Component.prototype.render = function () {
-        return _a.jsx("div", { children: null /* preserved */ }, void 0);
+        return (0, _a.jsx)("div", { children: null /* preserved */ }, void 0);
     };
     return Component;
 }());

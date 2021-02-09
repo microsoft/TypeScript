@@ -1,5 +1,24 @@
 /*@internal*/
 namespace ts {
+
+    const enum ImportOrExportBindingReferenceKind {
+        None,
+        ImportedHelper,
+        TopLevelExportBinding,
+        ImportClause,
+        ImportSpecifier,
+    }
+
+    type ImportOrExportBindingReferenceResult =
+        | { kind: ImportOrExportBindingReferenceKind.None, node: undefined }
+        | { kind: ImportOrExportBindingReferenceKind.ImportedHelper, node: Identifier }
+        | { kind: ImportOrExportBindingReferenceKind.TopLevelExportBinding, node: undefined }
+        | { kind: ImportOrExportBindingReferenceKind.ImportClause, node: ImportClause }
+        | { kind: ImportOrExportBindingReferenceKind.ImportSpecifier, node: ImportSpecifier };
+
+    const noReferenceResult: ImportOrExportBindingReferenceResult = { kind: ImportOrExportBindingReferenceKind.None, node: undefined };
+    const topLevelExportReferenceResult: ImportOrExportBindingReferenceResult = { kind: ImportOrExportBindingReferenceKind.TopLevelExportBinding, node: undefined };
+
     export function transformModule(context: TransformationContext) {
         interface AsynchronousDependencies {
             aliasedModuleNames: Expression[];
@@ -48,6 +67,7 @@ namespace ts {
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
+        let bindingReferenceCache: ESMap<Node, ImportOrExportBindingReferenceResult> | undefined;
 
         return chainBundle(context, transformSourceFile);
 
@@ -1756,24 +1776,70 @@ namespace ts {
             return node;
         }
 
-        function substituteCallExpression(node: CallExpression) {
-            if (!isIdentifier(node.expression)) {
-                return node;
+        function getImportOrExportBindingReferenceWorker(node: Identifier): ImportOrExportBindingReferenceResult {
+            if (getEmitFlags(node) & EmitFlags.HelperName) {
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
+                if (externalHelpersModuleName) {
+                    return { kind: ImportOrExportBindingReferenceKind.ImportedHelper, node: externalHelpersModuleName };
+                }
             }
-            const newExpression = substituteExpressionIdentifier(node.expression);
-            if (newExpression !== node.expression) {
-                return updateCall(node, setTextRange(createBinary(createNumericLiteral("0"), SyntaxKind.CommaToken, newExpression), node.expression), /*typeArguments*/ undefined, node.arguments);
+            else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
+                const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
+                if (exportContainer?.kind === SyntaxKind.SourceFile) {
+                    return topLevelExportReferenceResult;
+                }
+                const importDeclaration = resolver.getReferencedImportDeclaration(node);
+                if (importDeclaration) {
+                    if (isImportClause(importDeclaration)) return { kind: ImportOrExportBindingReferenceKind.ImportClause, node: importDeclaration };
+                    if (isImportSpecifier(importDeclaration)) return { kind: ImportOrExportBindingReferenceKind.ImportSpecifier, node: importDeclaration };
+                }
+            }
+            return noReferenceResult;
+        }
+
+        function getImportOrExportBindingReference(node: Identifier, removeEntry: boolean): ImportOrExportBindingReferenceResult {
+            bindingReferenceCache ||= new Map();
+            let result = bindingReferenceCache.get(node);
+            if (!result) {
+                result = getImportOrExportBindingReferenceWorker(node);
+                if (!removeEntry) {
+                    switch (result.kind) {
+                        case ImportOrExportBindingReferenceKind.ImportedHelper:
+                        case ImportOrExportBindingReferenceKind.ImportClause:
+                        case ImportOrExportBindingReferenceKind.ImportSpecifier:
+                            bindingReferenceCache.set(node, result);
+                    }
+                }
+            }
+            else if (removeEntry) {
+                bindingReferenceCache.delete(node);
+            }
+            return result;
+        }
+
+        function substituteCallExpression(node: CallExpression) {
+            if (isIdentifier(node.expression) && getImportOrExportBindingReference(node.expression, /*removeEntry*/ false).kind !== ImportOrExportBindingReferenceKind.None) {
+                return isCallChain(node) ?
+                    factory.updateCallChain(node,
+                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
+                        node.questionDotToken,
+                        /*typeArguments*/ undefined,
+                        node.arguments) :
+                    factory.updateCallExpression(node,
+                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
+                        /*typeArguments*/ undefined,
+                        node.arguments);
             }
             return node;
         }
 
         function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            if (!isIdentifier(node.tag)) {
-                return node;
-            }
-            const newTag = substituteExpressionIdentifier(node.tag);
-            if (newTag !== node.tag) {
-                return updateTaggedTemplate(node, setTextRange(createBinary(createNumericLiteral("0"), SyntaxKind.CommaToken, newTag), node.tag), /*typeArguments*/ undefined, node.template);
+            if (isIdentifier(node.tag) && getImportOrExportBindingReference(node.tag, /*removeEntry*/ false).kind !== ImportOrExportBindingReferenceKind.None) {
+                return factory.updateTaggedTemplateExpression(
+                    node,
+                    setTextRange(factory.createComma(factory.createNumericLiteral(0), node.tag), node.tag),
+                    /*typeArguments*/ undefined,
+                    node.template);
             }
             return node;
         }
@@ -1785,18 +1851,11 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            if (getEmitFlags(node) & EmitFlags.HelperName) {
-                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
-                if (externalHelpersModuleName) {
-                    return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
-                }
-
-                return node;
-            }
-
-            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
-                const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
-                if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
+            const result = getImportOrExportBindingReference(node, /*removeEntry*/ true);
+            switch (result.kind) {
+                case ImportOrExportBindingReferenceKind.ImportedHelper:
+                    return factory.createPropertyAccessExpression(result.node, node);
+                case ImportOrExportBindingReferenceKind.TopLevelExportBinding:
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.createIdentifier("exports"),
@@ -1804,32 +1863,26 @@ namespace ts {
                         ),
                         /*location*/ node
                     );
-                }
-
-                const importDeclaration = resolver.getReferencedImportDeclaration(node);
-                if (importDeclaration) {
-                    if (isImportClause(importDeclaration)) {
-                        return setTextRange(
-                            factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent),
-                                factory.createIdentifier("default")
-                            ),
-                            /*location*/ node
-                        );
-                    }
-                    else if (isImportSpecifier(importDeclaration)) {
-                        const name = importDeclaration.propertyName || importDeclaration.name;
-                        return setTextRange(
-                            factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(name)
-                            ),
-                            /*location*/ node
-                        );
-                    }
-                }
+                case ImportOrExportBindingReferenceKind.ImportClause:
+                    return setTextRange(
+                        factory.createPropertyAccessExpression(
+                            factory.getGeneratedNameForNode(result.node.parent),
+                            factory.createIdentifier("default")
+                        ),
+                        /*location*/ node
+                    );
+                case ImportOrExportBindingReferenceKind.ImportSpecifier:
+                    const name = result.node.propertyName || result.node.name;
+                    return setTextRange(
+                        factory.createPropertyAccessExpression(
+                            factory.getGeneratedNameForNode(result.node.parent?.parent?.parent || result.node),
+                            factory.cloneNode(name)
+                        ),
+                        /*location*/ node
+                    );
+                default:
+                    return node;
             }
-            return node;
         }
 
         /**
