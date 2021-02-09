@@ -1,0 +1,249 @@
+=== tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts ===
+type A = {
+>A : Symbol(A, Decl(controlFlowOptionalChain2.ts, 0, 0))
+
+  type: 'A';
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10))
+
+  name: string;
+>name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+}
+
+type B = {
+>B : Symbol(B, Decl(controlFlowOptionalChain2.ts, 3, 1))
+
+  type: 'B';
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 5, 10))
+}
+
+function funcTwo(arg: A | B | undefined) {
+>funcTwo : Symbol(funcTwo, Decl(controlFlowOptionalChain2.ts, 7, 1))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+>A : Symbol(A, Decl(controlFlowOptionalChain2.ts, 0, 0))
+>B : Symbol(B, Decl(controlFlowOptionalChain2.ts, 3, 1))
+
+  if (arg?.type === 'B') {
+>arg?.type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
+
+    arg; // `B`
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+
+    return;
+  }
+
+  arg;
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+
+  arg?.name;
+>arg?.name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 9, 17))
+>name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+}
+
+function funcThree(arg: A | B | null) {
+>funcThree : Symbol(funcThree, Decl(controlFlowOptionalChain2.ts, 17, 1))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 19, 19))
+>A : Symbol(A, Decl(controlFlowOptionalChain2.ts, 0, 0))
+>B : Symbol(B, Decl(controlFlowOptionalChain2.ts, 3, 1))
+
+  if (arg?.type === 'B') {
+>arg?.type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 19, 19))
+>type : Symbol(type, Decl(controlFlowOptionalChain2.ts, 0, 10), Decl(controlFlowOptionalChain2.ts, 5, 10))
+
+    arg; // `B`
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 19, 19))
+
+    return;
+  }
+
+  arg;
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 19, 19))
+
+  arg?.name;
+>arg?.name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+>arg : Symbol(arg, Decl(controlFlowOptionalChain2.ts, 19, 19))
+>name : Symbol(name, Decl(controlFlowOptionalChain2.ts, 1, 12))
+}
+
+type U = { kind: undefined, u: 'u' }
+>U : Symbol(U, Decl(controlFlowOptionalChain2.ts, 27, 1))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10))
+>u : Symbol(u, Decl(controlFlowOptionalChain2.ts, 29, 27))
+
+type N = { kind: null, n: 'n' }
+>N : Symbol(N, Decl(controlFlowOptionalChain2.ts, 29, 36))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10))
+>n : Symbol(n, Decl(controlFlowOptionalChain2.ts, 30, 22))
+
+type X = { kind: 'X', x: 'x' }
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 31, 21))
+
+function f1(x: X | U | undefined) {
+>f1 : Symbol(f1, Decl(controlFlowOptionalChain2.ts, 31, 30))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 33, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>U : Symbol(U, Decl(controlFlowOptionalChain2.ts, 27, 1))
+
+    if (x?.kind === undefined) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 33, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>undefined : Symbol(undefined)
+
+        x; // U | undefined
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 33, 12))
+    }
+    else {
+        x; // X
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 33, 12))
+    }
+}
+
+function f2(x: X | N | undefined) {
+>f2 : Symbol(f2, Decl(controlFlowOptionalChain2.ts, 40, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 42, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>N : Symbol(N, Decl(controlFlowOptionalChain2.ts, 29, 36))
+
+    if (x?.kind === undefined) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 42, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>undefined : Symbol(undefined)
+
+        x; // undefined
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 42, 12))
+    }
+    else {
+        x; // X | N
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 42, 12))
+    }
+}
+
+function f3(x: X | U | null) {
+>f3 : Symbol(f3, Decl(controlFlowOptionalChain2.ts, 49, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 51, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>U : Symbol(U, Decl(controlFlowOptionalChain2.ts, 27, 1))
+
+    if (x?.kind === undefined) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 51, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>undefined : Symbol(undefined)
+
+        x; // U | null
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 51, 12))
+    }
+    else {
+        x; // X
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 51, 12))
+    }
+}
+
+function f4(x: X | N | null) {
+>f4 : Symbol(f4, Decl(controlFlowOptionalChain2.ts, 58, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 60, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>N : Symbol(N, Decl(controlFlowOptionalChain2.ts, 29, 36))
+
+    if (x?.kind === undefined) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 60, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>undefined : Symbol(undefined)
+
+        x; // null
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 60, 12))
+    }
+    else {
+        x; // X | N
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 60, 12))
+    }
+}
+
+function f5(x: X | U | undefined) {
+>f5 : Symbol(f5, Decl(controlFlowOptionalChain2.ts, 67, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 69, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>U : Symbol(U, Decl(controlFlowOptionalChain2.ts, 27, 1))
+
+    if (x?.kind === null) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 69, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+
+        x; // never
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 69, 12))
+    }
+    else {
+        x; // X | U | undefined
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 69, 12))
+    }
+}
+
+function f6(x: X | N | undefined) {
+>f6 : Symbol(f6, Decl(controlFlowOptionalChain2.ts, 76, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 78, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>N : Symbol(N, Decl(controlFlowOptionalChain2.ts, 29, 36))
+
+    if (x?.kind === null) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 78, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+
+        x; // N
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 78, 12))
+    }
+    else {
+        x; // X | undefined
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 78, 12))
+    }
+}
+
+function f7(x: X | U | null) {
+>f7 : Symbol(f7, Decl(controlFlowOptionalChain2.ts, 85, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 87, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>U : Symbol(U, Decl(controlFlowOptionalChain2.ts, 27, 1))
+
+    if (x?.kind === null) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 87, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 29, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+
+        x; // never
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 87, 12))
+    }
+    else {
+        x; // X | U | null
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 87, 12))
+    }
+}
+
+function f8(x: X | N | null) {
+>f8 : Symbol(f8, Decl(controlFlowOptionalChain2.ts, 94, 1))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 96, 12))
+>X : Symbol(X, Decl(controlFlowOptionalChain2.ts, 30, 31))
+>N : Symbol(N, Decl(controlFlowOptionalChain2.ts, 29, 36))
+
+    if (x?.kind === null) {
+>x?.kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 96, 12))
+>kind : Symbol(kind, Decl(controlFlowOptionalChain2.ts, 30, 10), Decl(controlFlowOptionalChain2.ts, 31, 10))
+
+        x; // N
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 96, 12))
+    }
+    else {
+        x; // X | null
+>x : Symbol(x, Decl(controlFlowOptionalChain2.ts, 96, 12))
+    }
+}
+

@@ -43,6 +43,7 @@ namespace ts {
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
+        reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -966,6 +967,7 @@ namespace ts {
             reScanJsxToken,
             reScanLessThanToken,
             reScanQuestionToken,
+            reScanInvalidIdentifier,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -2041,14 +2043,9 @@ namespace ts {
                         }
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
-                        if (isIdentifierStart(ch, languageVersion)) {
-                            pos += charSize(ch);
-                            while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
-                            tokenValue = text.substring(tokenPos, pos);
-                            if (ch === CharacterCodes.backslash) {
-                                tokenValue += scanIdentifierParts();
-                            }
-                            return token = getIdentifierToken();
+                        const identifierKind = scanIdentifier(ch, languageVersion);
+                        if (identifierKind) {
+                            return token = identifierKind;
                         }
                         else if (isWhiteSpaceSingleLine(ch)) {
                             pos += charSize(ch);
@@ -2063,6 +2060,32 @@ namespace ts {
                         pos += charSize(ch);
                         return token = SyntaxKind.Unknown;
                 }
+            }
+        }
+
+        function reScanInvalidIdentifier(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+            pos = tokenPos = startPos;
+            tokenFlags = 0;
+            const ch = codePointAt(text, pos);
+            const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
+            if (identifierKind) {
+                return token = identifierKind;
+            }
+            pos += charSize(ch);
+            return token; // Still `SyntaKind.Unknown`
+        }
+
+        function scanIdentifier(startCharacter: number, languageVersion: ScriptTarget) {
+            let ch = startCharacter;
+            if (isIdentifierStart(ch, languageVersion)) {
+                pos += charSize(ch);
+                while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
+                tokenValue = text.substring(tokenPos, pos);
+                if (ch === CharacterCodes.backslash) {
+                    tokenValue += scanIdentifierParts();
+                }
+                return getIdentifierToken();
             }
         }
 

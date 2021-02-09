@@ -89,7 +89,7 @@ function foo() {
 module.exports = {
 >module.exports = {    color: "red"} : MyComponentProps
 >module.exports : MyComponentProps
->module : { "\"tests/cases/compiler/input\"": MyComponentProps; }
+>module : { exports: MyComponentProps; }
 >exports : MyComponentProps
 >{    color: "red"} : { color: "red"; }
 
@@ -104,6 +104,6 @@ expectLiteral({ props: module.exports });
 >{ props: module.exports } : { props: MyComponentProps; }
 >props : MyComponentProps
 >module.exports : MyComponentProps
->module : { "\"tests/cases/compiler/input\"": MyComponentProps; }
+>module : { exports: MyComponentProps; }
 >exports : MyComponentProps
 

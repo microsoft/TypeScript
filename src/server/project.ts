@@ -102,7 +102,7 @@ namespace ts.server {
 
     /**
      * The project root can be script info - if root is present,
-     * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
+     * or it could be just normalized path if root wasn't present on the host(only for non inferred project)
      */
     /* @internal */
     export interface ProjectRootFile {
@@ -147,7 +147,8 @@ namespace ts.server {
         /*@internal*/
         private hasAddedorRemovedFiles = false;
 
-        private lastFileExceededProgramSize: string | undefined;
+        /*@internal*/
+        lastFileExceededProgramSize: string | undefined;
 
         // wrapper over the real language service that will suppress all semantic operations
         protected languageService: LanguageService;
@@ -1057,13 +1058,16 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
-            enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 /*inserted*/ noop,
                 removed => this.detachScriptInfoFromProject(removed)
-            );
-            this.typingFiles = typingFiles;
-            // Invalidate files with unresolved imports
-            this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+            )) {
+                // If typing files changed, then only schedule project update
+                this.typingFiles = typingFiles;
+                // Invalidate files with unresolved imports
+                this.resolutionCache.setFilesWithInvalidatedNonRelativeUnresolvedImports(this.cachedUnresolvedImportsPerFile);
+                this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+            }
         }
 
         /* @internal */
@@ -1577,6 +1581,10 @@ namespace ts.server {
 
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
+            if (parsePackageName(pluginConfigEntry.name).rest) {
+                this.projectService.logger.info(`Skipped loading plugin ${pluginConfigEntry.name} because only package name is allowed plugin name`);
+                return;
+            }
 
             const log = (message: string) => this.projectService.logger.info(message);
             let errorLogs: string[] | undefined;

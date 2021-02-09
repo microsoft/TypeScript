@@ -8,7 +8,7 @@ function alias() { }
 >alias : Symbol(alias, Decl(bug28014.js, 0, 19))
 
 module.exports = alias
->module.exports : Symbol("tests/cases/conformance/salsa/bug28014", Decl(bug28014.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(bug28014.js, 0, 0))
 >module : Symbol(export=, Decl(bug28014.js, 1, 20))
 >exports : Symbol(export=, Decl(bug28014.js, 1, 20))
 >alias : Symbol(alias, Decl(bug28014.js, 0, 19))

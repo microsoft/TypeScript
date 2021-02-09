@@ -16,7 +16,7 @@ class A<P extends Partial<Foo>> {
 >doSomething : () => void
 
         this.props.foo && this.props.foo()
->this.props.foo && this.props.foo() : void | undefined
+>this.props.foo && this.props.foo() : void
 >this.props.foo : P["foo"] | undefined
 >this.props : Readonly<P>
 >this : this

@@ -216,7 +216,7 @@ namespace ts {
 
             // if not using old state, every file is changed
             if (!useOldState ||
-                // File wasnt present in old state
+                // File wasn't present in old state
                 !(oldInfo = oldState!.fileInfos.get(sourceFilePath)) ||
                 // versions dont match
                 oldInfo.version !== info.version ||

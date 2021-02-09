@@ -35,19 +35,19 @@ node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot f
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(53,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2769: No overload matches this call.
-  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: HexBase64BinaryEncoding): string', gave the following error.
+  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: BinaryToTextEncoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'undefined'.
-  Overload 2 of 4, '(data: string, input_encoding: "utf8" | "ascii" | "binary" | undefined, output_encoding: HexBase64BinaryEncoding): string', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type '"utf8" | "ascii" | "binary" | undefined'.
+  Overload 2 of 4, '(data: string, input_encoding: Encoding | undefined, output_encoding: BinaryToTextEncoding): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Encoding | undefined'.
 node_modules/adonis-framework/src/Encryption/index.js(77,27): error TS2322: Type 'string' is not assignable to type 'Buffer'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Encryption/index.js(85,23): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Encryption/index.js(101,62): error TS2769: No overload matches this call.
-  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: "base64" | "binary" | "hex" | undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
-  Overload 2 of 4, '(data: string, input_encoding: "base64" | "binary" | "hex" | undefined, output_encoding: Utf8AsciiBinaryEncoding): string', gave the following error.
-    Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
+node_modules/adonis-framework/src/Encryption/index.js(101,21): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: Encoding): string', gave the following error.
+    Argument of type '"base64"' is not assignable to parameter of type 'undefined'.
+  Overload 2 of 4, '(data: string, input_encoding: BinaryToTextEncoding | undefined, output_encoding: Encoding): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'Encoding'.
 node_modules/adonis-framework/src/Encryption/index.js(102,5): error TS2322: Type 'string' is not assignable to type 'Buffer & string'.
   Type 'string' is not assignable to type 'Buffer'.
 node_modules/adonis-framework/src/Encryption/index.js(102,33): error TS2345: Argument of type 'string' is not assignable to parameter of type 'BufferEncoding'.
@@ -72,8 +72,8 @@ node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot f
 node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
 node_modules/adonis-framework/src/Event/index.js(264,28): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
-node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: string, name: any, handler: TimerHandler]'.
-node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: string, name: any, handler: TimerHandler]'.
+node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: string, name: any, handler: string | Function]'.
+node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: string, name: any, handler: string | Function]'.
 node_modules/adonis-framework/src/Event/index.js(294,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Exceptions/index.js(13,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Exceptions/index.js(27,21): error TS2554: Expected 0 arguments, but got 3.
@@ -125,7 +125,7 @@ node_modules/adonis-framework/src/Request/index.js(466,15): error TS2304: Cannot
 node_modules/adonis-framework/src/Request/index.js(468,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(480,14): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(482,15): error TS2304: Cannot find name 'Mixed'.
-node_modules/adonis-framework/src/Request/index.js(499,17): error TS2551: Property '_params' does not exist on type 'Request'. Did you mean 'param'?
+node_modules/adonis-framework/src/Request/index.js(499,17): error TS2551: Property '_params' does not exist on type 'Request'. Did you mean 'params'?
 node_modules/adonis-framework/src/Request/index.js(523,15): error TS2304: Cannot find name 'Objecr'.
 node_modules/adonis-framework/src/Request/index.js(572,23): error TS8029: JSDoc '@param' tag has name 'pattern', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(600,17): error TS2554: Expected 2 arguments, but got 1.

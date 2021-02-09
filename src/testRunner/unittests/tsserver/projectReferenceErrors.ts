@@ -149,7 +149,7 @@ fnErr();
                             { line: 4, offset: 5 },
                             { line: 4, offset: 10 },
                             Diagnostics.Module_0_has_no_exported_member_1,
-                            [`"../dependency/fns"`, "fnErr"],
+                            [`"../decls/fns"`, "fnErr"],
                             "error",
                         )
                     ],
@@ -193,7 +193,7 @@ let x: string = 10;`
             };
             const dependencyConfig: File = {
                 path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js", bundledPackageName: "dep" } })
+                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js" } })
             };
             const usageTs: File = {
                 path: `${usageLocation}/usage.ts`,
@@ -205,7 +205,7 @@ fnErr();
             const usageConfig: File = {
                 path: `${usageLocation}/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { composite: true, outFile: "../usage.js", bundledPackageName: "usage" },
+                    compilerOptions: { composite: true, outFile: "../usage.js" },
                     references: [{ path: "../dependency" }]
                 })
             };

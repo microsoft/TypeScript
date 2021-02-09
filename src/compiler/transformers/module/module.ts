@@ -1874,9 +1874,8 @@ namespace ts {
                     for (const exportName of exportedNames) {
                         // Mark the node to prevent triggering this rule again.
                         noSubstitution[getNodeId(expression)] = true;
-                        expression = createExportExpression(exportName, expression);
+                        expression = factory.createParenthesizedExpression(createExportExpression(exportName, expression));
                     }
-
                     return expression;
                 }
             }

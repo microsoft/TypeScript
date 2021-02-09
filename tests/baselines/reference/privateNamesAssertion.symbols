@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAssertion.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(privateNamesAssertion.ts, 0, 0))
+
+    #p1: (v: any) => asserts v is string = (v) => {
+>#p1 : Symbol(Foo.#p1, Decl(privateNamesAssertion.ts, 0, 11))
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 10))
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 10))
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 44))
+
+        if (typeof v !== "string") {
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 1, 44))
+
+            throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+    }
+    m1(v: unknown) {
+>m1 : Symbol(Foo.m1, Decl(privateNamesAssertion.ts, 5, 5))
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 6, 7))
+
+        this.#p1(v);
+>this.#p1 : Symbol(Foo.#p1, Decl(privateNamesAssertion.ts, 0, 11))
+>this : Symbol(Foo, Decl(privateNamesAssertion.ts, 0, 0))
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 6, 7))
+
+        v;
+>v : Symbol(v, Decl(privateNamesAssertion.ts, 6, 7))
+    }
+}
+

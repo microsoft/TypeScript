@@ -605,7 +605,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getDocCommentTemplateAtPosition(_fileName: string, _position: number): TextInsertion {
+        getDocCommentTemplateAtPosition(_fileName: string, _position: number, _options?: DocCommentTemplateOptions): TextInsertion {
             return notImplemented();
         }
 

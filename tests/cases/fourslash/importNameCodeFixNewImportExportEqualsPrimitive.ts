@@ -6,4 +6,6 @@
 ////declare var x: number;
 ////export = x;
 
-verify.not.codeFixAvailable(); // See GH#20191
+verify.codeFixAvailable([
+    { description: "Add missing function declaration 'valueOf'" }
+]);
