@@ -17699,9 +17699,16 @@ namespace ts {
                     targetStack = [];
                 }
                 else {
+                    // generate a key where all type parameter id positions are replaced with unconstrained type parameter ids
+                    // this isn't perfect - nested type references passed as type arguments will muck up the indexes and thus
+                    // prevent finding matches- but it should hit up the common cases
+                    const broadestEquivalentId = id.split(",").map(i => i.replace(/-\d+/g, (_match, offset: number) => {
+                        const index = length(id.slice(0, offset).match(/[-=]/g) || undefined);
+                        return `=${index}`;
+                    })).join(",");
                     for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (id === maybeKeys[i]) {
+                        if (id === maybeKeys[i] || broadestEquivalentId === maybeKeys[i]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -17771,13 +17778,6 @@ namespace ts {
                 const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
                 tracing?.pop();
                 return result;
-            }
-
-            function getInstanceOfAliasOrReferenceWithMarker(input: Type, typeArguments: readonly Type[]) {
-                const s = input.aliasSymbol ? getTypeAliasInstantiation(input.aliasSymbol, typeArguments) : createTypeReference((<TypeReference>input).target, typeArguments);
-                if (s.aliasSymbol) s.aliasTypeArgumentsContainsMarker = true;
-                else (<TypeReference>s).objectFlags |= ObjectFlags.MarkerType;
-                return s;
             }
 
             function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
@@ -17865,67 +17865,6 @@ namespace ts {
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
                     if (varianceResult !== undefined) {
                         return varianceResult;
-                    }
-                }
-
-                // If a more _general_ version of the source and target are being compared, consider them related with assumptions
-                // eg, if { x: Q } and { x: Q, y: A } are being compared and we're about to look at { x: Q' } and { x: Q', y: A } where Q'
-                // is some specialization or subtype of Q
-                // This is difficult to detect generally, so we scan for prior comparisons of the same instantiated type, and match up matching
-                // type arguments into sets to create a canonicalization based on those matches
-                if (relation !== identityRelation && ((source.aliasSymbol && !source.aliasTypeArgumentsContainsMarker && source.aliasTypeArguments) || (getObjectFlags(source) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>source).length && !(getObjectFlags(source) & ObjectFlags.MarkerType))) &&
-                ((target.aliasSymbol && !target.aliasTypeArgumentsContainsMarker && target.aliasTypeArguments) || (getObjectFlags(target) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>target).length && !(getObjectFlags(target) & ObjectFlags.MarkerType)))) {
-                    if (source.aliasSymbol || target.aliasSymbol || (<TypeReference>source).target !== (<TypeReference>target).target) { // ensure like symbols are just handled by standard variance analysis
-                        const sourceTypeArguments = source.aliasTypeArguments || getTypeArguments(<TypeReference>source);
-                        const sourceHasMarker = some(sourceTypeArguments, a => a === markerOtherType);
-                        const targetTypeArguments = target.aliasTypeArguments || getTypeArguments(<TypeReference>target);
-                        const targetHasMarker = some(targetTypeArguments, a => a === markerOtherType);
-                        // We're using `markerOtherType` as an existential, so we can't use it again if it's already in use,
-                        // as we'd get spurious equivalencies - we'd need to use a second existential type, and once we're doing
-                        // that we lose a lot of the benefit of canonicalizing back to a single-existential comparison, since then
-                        // we'd need to manufacture new type identities for every new existential we make
-                        // The above checks don't catch all cases this can occur, as they can only detect when the containing type
-                        // was flagged during construction as containing a marker; however if a marker enters a type through instantiation
-                        // we need to catch that here.
-                        // We only do this when there's a handful of possible ways to match the type parameters up, as otherwise we manufacture
-                        // an inordinate quantity of types just to calculate their IDs!
-                        if (!sourceHasMarker && !targetHasMarker && sourceTypeArguments.length * targetTypeArguments.length < 10) {
-                            const originalKey = getRelationKey(source, target, intersectionState, relation);
-                            for (let i = 0; i < sourceTypeArguments.length; i++) {
-                                for (let j = 0; j < targetTypeArguments.length; j++) {
-                                    if ((!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && !isTypeAny(sourceTypeArguments[i]) && sourceTypeArguments[i] === targetTypeArguments[j]) ||
-                                    // Similarly, if we're comparing X<Q> to Z<any>, X<Q> is assignable to Z<any> trivially if X<?> is assignable to Z<?>
-                                    (!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && isTypeAny(targetTypeArguments[j])) ||
-                                    // Again, but for `X<any>` vs `Z<Q>`
-                                    (isTypeAny(sourceTypeArguments[i]) && !(targetTypeArguments[j].flags & TypeFlags.TypeParameter)) ||
-                                    // Likewise, if we're comparing X<U> to Z<U> and are already comparing X<T> to Z<T>, we can assume it to be true
-                                    !!(sourceTypeArguments[i].flags & TypeFlags.TypeParameter) && sourceTypeArguments[i] === targetTypeArguments[j]) {
-                                        const sourceClone = sourceTypeArguments.slice();
-                                        sourceClone[i] = markerOtherType;
-                                        const s = getInstanceOfAliasOrReferenceWithMarker(source, sourceClone);
-                                        const targetClone = targetTypeArguments.slice();
-                                        targetClone[j] = markerOtherType;
-                                        const t = getInstanceOfAliasOrReferenceWithMarker(target, targetClone);
-                                        // If the marker-instantiated form looks "the same" as the type we already have (eg,
-                                        // because we replace unconstrained generics with unconstrained generics), skip the check
-                                        // since we'll otherwise deliver a spurious `Maybe` result from the key _just_ set upon
-                                        // entry into `recursiveTypeRelatedTo`
-                                        const existentialKey = getRelationKey(s, t, intersectionState, relation);
-                                        if (existentialKey !== originalKey) {
-                                            // We don't actually trigger the comparison, since we'd rather not do an extra comparison
-                                            // if we haven't already started that more general comparison; instead we just look for the
-                                            // key in the maybeKeys stack
-                                            for (let i = 0; i < maybeCount; i++) {
-                                                // If source and target are already being compared, consider them related with assumptions
-                                                if (existentialKey === maybeKeys[i]) {
-                                                    return Ternary.Maybe;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
 
@@ -19209,7 +19148,7 @@ namespace ts {
         }
 
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
-            return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
+            return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => !!(t.flags & TypeFlags.TypeParameter) || isTypeReferenceWithGenericArguments(t));
         }
 
         /**
