@@ -184,6 +184,7 @@
         "unittests/tsserver/openFile.ts",
         "unittests/tsserver/packageJsonInfo.ts",
         "unittests/tsserver/partialSemanticServer.ts",
+        "unittests/tsserver/plugins.ts",
         "unittests/tsserver/projectErrors.ts",
         "unittests/tsserver/projectReferenceCompileOnSave.ts",
         "unittests/tsserver/projectReferenceErrors.ts",
