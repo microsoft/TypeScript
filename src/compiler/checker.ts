@@ -12199,9 +12199,20 @@ namespace ts {
         function getBaseSignature(signature: Signature) {
             const typeParameters = signature.typeParameters;
             if (typeParameters) {
+                if (signature.baseSignatureCache) {
+                    return signature.baseSignatureCache;
+                }
                 const typeEraser = createTypeEraser(typeParameters);
-                const baseConstraints = map(typeParameters, tp => instantiateType(getBaseConstraintOfType(tp), typeEraser) || unknownType);
-                return instantiateSignature(signature, createTypeMapper(typeParameters, baseConstraints), /*eraseTypeParameters*/ true);
+                const baseConstraintMapper = createTypeMapper(typeParameters, map(typeParameters, tp => getConstraintOfTypeParameter(tp) || unknownType));
+                let baseConstraints: readonly Type[] = map(typeParameters, tp => instantiateType(tp, baseConstraintMapper) || unknownType);
+                // Run N type params thru the immediate constraint mapper up to N times
+                // This way any noncircular interdependent type parameters are definitely resolved to their external dependencies
+                for (let i = 0; i < typeParameters.length - 1; i++) {
+                    baseConstraints = instantiateTypes(baseConstraints, baseConstraintMapper);
+                }
+                // and then apply a type eraser to remove any remaining circularly dependent type parameters
+                baseConstraints = instantiateTypes(baseConstraints, typeEraser);
+                return signature.baseSignatureCache = instantiateSignature(signature, createTypeMapper(typeParameters, baseConstraints), /*eraseTypeParameters*/ true);
             }
             return signature;
         }
