@@ -4512,7 +4512,7 @@ namespace ts {
         }
 
         function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
-            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode) || previousNode.parent !== nextNode.parent) {
+            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
                 return false;
             }
 
@@ -4520,18 +4520,16 @@ namespace ts {
                 return false;
             }
 
-            // If nodes haven't been transformed, they should always be real siblings
-            if (!previousNode.original && !nextNode.original) {
-                return true;
+            previousNode = getOriginalNode(previousNode);
+            nextNode = getOriginalNode(nextNode);
+            const parent = previousNode.parent;
+            if (!parent || parent !== nextNode.parent) {
+                return false;
             }
 
-            if (!previousNode.parent || !nextNode.parent) {
-                const previousParent = getOriginalNode(previousNode).parent;
-                return previousParent && previousParent === getOriginalNode(nextNode).parent;
-            }
-
-            // This check is most expensive, so everything preceding is avoiding it when possible
-            return nodeIsFirstNodeAtOrAfterPosition(getOriginalNode(nextNode), previousNode.end);
+            const parentNodeArray = getContainingNodeArray(previousNode);
+            const prevNodeIndex = parentNodeArray?.indexOf(previousNode);
+            return prevNodeIndex !== undefined && prevNodeIndex > -1 && parentNodeArray!.indexOf(nextNode) === prevNodeIndex + 1;
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
