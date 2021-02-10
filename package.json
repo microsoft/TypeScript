@@ -127,5 +127,8 @@
         "source-map-support": false,
         "inspector": false
     },
+    "volta": {
+        "node": "14.15.5"
+    },
     "dependencies": {}
 }
