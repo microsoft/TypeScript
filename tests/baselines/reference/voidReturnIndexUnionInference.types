@@ -51,7 +51,7 @@ function bad<P extends Props>(props: Readonly<P>) {
     // ERROR HERE!!!
     // Type R in signature of safeInvoke incorrectly inferred as {} instead of void!
     safeInvoke(props.onBar, "blah");
->safeInvoke(props.onBar, "blah") : void | undefined
+>safeInvoke(props.onBar, "blah") : void
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
 >props.onBar : P["onBar"] | undefined
 >props : Readonly<P>

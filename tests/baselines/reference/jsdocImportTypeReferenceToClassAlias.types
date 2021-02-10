@@ -8,9 +8,9 @@ class C {
 module.exports.C = C
 >module.exports.C = C : typeof C
 >module.exports.C : typeof C
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof import("tests/cases/conformance/jsdoc/mod1"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >C : typeof C
 >C : typeof C
 

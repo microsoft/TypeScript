@@ -13,8 +13,6 @@ node_modules/npmlog/log.js(162,12): error TS2339: Property 'progressEnabled' doe
 node_modules/npmlog/log.js(162,34): error TS2339: Property 'gauge' does not exist on type 'resume'.
 node_modules/npmlog/log.js(171,16): error TS2339: Property 'levels' does not exist on type '(Anonymous function)'.
 node_modules/npmlog/log.js(173,17): error TS2339: Property 'emit' does not exist on type '(Anonymous function)'.
-node_modules/npmlog/log.js(194,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[format: any, ...param: any[]]'.
-  Property '0' is optional in type 'any[]' but required in type '[format: any, ...param: any[]]'.
 node_modules/npmlog/log.js(202,8): error TS2339: Property 'emit' does not exist on type '(Anonymous function)'.
 node_modules/npmlog/log.js(203,8): error TS2339: Property 'emit' does not exist on type '(Anonymous function)'.
 node_modules/npmlog/log.js(204,22): error TS2339: Property 'emit' does not exist on type '(Anonymous function)'.
@@ -28,9 +26,8 @@ node_modules/npmlog/log.js(271,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buffer: string | Uint8Array, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | Uint8Array'.
       Type 'undefined' is not assignable to type 'string | Uint8Array'.
-  Overload 2 of 2, '(str: string | Uint8Array, encoding?: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" | undefined, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
+  Overload 2 of 2, '(str: string | Uint8Array, encoding?: BufferEncoding | undefined, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | Uint8Array'.
-      Type 'undefined' is not assignable to type 'string | Uint8Array'.
 
 
 

@@ -18,14 +18,12 @@ node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(143,18): error TS2769
       Type 'null' is not assignable to type 'Timeout'.
   Overload 2 of 2, '(handle?: number | undefined): void', gave the following error.
     Argument of type 'Timeout | null' is not assignable to parameter of type 'number | undefined'.
-      Type 'null' is not assignable to type 'number | undefined'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(162,18): error TS2769: No overload matches this call.
   Overload 1 of 2, '(intervalId: Timeout): void', gave the following error.
     Argument of type 'Timeout | null' is not assignable to parameter of type 'Timeout'.
       Type 'null' is not assignable to type 'Timeout'.
   Overload 2 of 2, '(handle?: number | undefined): void', gave the following error.
     Argument of type 'Timeout | null' is not assignable to parameter of type 'number | undefined'.
-      Type 'null' is not assignable to type 'number | undefined'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(192,20): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(197,24): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(202,23): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.

@@ -1,0 +1,43 @@
+=== tests/cases/compiler/conditionalEqualityTestingNullability.ts ===
+export type Equals<A1 extends any, A2 extends any> =
+>Equals : Symbol(Equals, Decl(conditionalEqualityTestingNullability.ts, 0, 0))
+>A1 : Symbol(A1, Decl(conditionalEqualityTestingNullability.ts, 0, 19))
+>A2 : Symbol(A2, Decl(conditionalEqualityTestingNullability.ts, 0, 34))
+
+    (<A>() => A extends A1 ? 1 : 0) extends (<A>() => A extends A2 ? 1 : 0)
+>A : Symbol(A, Decl(conditionalEqualityTestingNullability.ts, 1, 6))
+>A : Symbol(A, Decl(conditionalEqualityTestingNullability.ts, 1, 6))
+>A1 : Symbol(A1, Decl(conditionalEqualityTestingNullability.ts, 0, 19))
+>A : Symbol(A, Decl(conditionalEqualityTestingNullability.ts, 1, 46))
+>A : Symbol(A, Decl(conditionalEqualityTestingNullability.ts, 1, 46))
+>A2 : Symbol(A2, Decl(conditionalEqualityTestingNullability.ts, 0, 34))
+
+    ? 1
+    : 0
+
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(conditionalEqualityTestingNullability.ts, 3, 7))
+>T : Symbol(T, Decl(conditionalEqualityTestingNullability.ts, 5, 14))
+
+    x : () => T
+>x : Symbol(Foo.x, Decl(conditionalEqualityTestingNullability.ts, 5, 18))
+>T : Symbol(T, Decl(conditionalEqualityTestingNullability.ts, 5, 14))
+}
+
+declare const a: Foo<Date>;
+>a : Symbol(a, Decl(conditionalEqualityTestingNullability.ts, 9, 13))
+>Foo : Symbol(Foo, Decl(conditionalEqualityTestingNullability.ts, 3, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+declare const b: Foo<Date | null>;
+>b : Symbol(b, Decl(conditionalEqualityTestingNullability.ts, 10, 13))
+>Foo : Symbol(Foo, Decl(conditionalEqualityTestingNullability.ts, 3, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+//Expected 0, Actual 1
+type ShouldBe0 = Equals<typeof a, typeof b>;
+>ShouldBe0 : Symbol(ShouldBe0, Decl(conditionalEqualityTestingNullability.ts, 10, 34))
+>Equals : Symbol(Equals, Decl(conditionalEqualityTestingNullability.ts, 0, 0))
+>a : Symbol(a, Decl(conditionalEqualityTestingNullability.ts, 9, 13))
+>b : Symbol(b, Decl(conditionalEqualityTestingNullability.ts, 10, 13))
+
