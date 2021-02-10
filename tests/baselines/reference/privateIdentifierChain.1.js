@@ -6,9 +6,9 @@ class A {
         return new A();
     }
     constructor() {
-        this?.#b;           // Error
+        this?.#b;
         this?.a.#b;         // Error
-        this?.getA().#b;    // Error
+        this?.getA().#b;
     }
 }
 
@@ -17,9 +17,9 @@ class A {
 "use strict";
 class A {
     constructor() {
-        this?.#b; // Error
+        this?.#b;
         this?.a.#b; // Error
-        this?.getA().#b; // Error
+        this?.getA().#b;
     }
     #b;
     getA() {
