@@ -1,0 +1,111 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty9.ts ===
+// #41347, based on microsoft/rushstack
+
+// Mixin utilities
+export type Constructor<T = {}> = new (...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(accessorsOverrideProperty9.ts, 0, 0))
+>T : Symbol(T, Decl(accessorsOverrideProperty9.ts, 3, 24))
+>args : Symbol(args, Decl(accessorsOverrideProperty9.ts, 3, 39))
+>T : Symbol(T, Decl(accessorsOverrideProperty9.ts, 3, 24))
+
+export type PropertiesOf<T> = { [K in keyof T]: T[K] };
+>PropertiesOf : Symbol(PropertiesOf, Decl(accessorsOverrideProperty9.ts, 3, 60))
+>T : Symbol(T, Decl(accessorsOverrideProperty9.ts, 4, 25))
+>K : Symbol(K, Decl(accessorsOverrideProperty9.ts, 4, 33))
+>T : Symbol(T, Decl(accessorsOverrideProperty9.ts, 4, 25))
+>T : Symbol(T, Decl(accessorsOverrideProperty9.ts, 4, 25))
+>K : Symbol(K, Decl(accessorsOverrideProperty9.ts, 4, 33))
+
+interface IApiItemConstructor extends Constructor<ApiItem>, PropertiesOf<typeof ApiItem> {}
+>IApiItemConstructor : Symbol(IApiItemConstructor, Decl(accessorsOverrideProperty9.ts, 4, 55))
+>Constructor : Symbol(Constructor, Decl(accessorsOverrideProperty9.ts, 0, 0))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+>PropertiesOf : Symbol(PropertiesOf, Decl(accessorsOverrideProperty9.ts, 3, 60))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+
+// Base class
+class ApiItem {
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+
+  public get members(): ReadonlyArray<ApiItem> {
+>members : Symbol(ApiItem.members, Decl(accessorsOverrideProperty9.ts, 9, 15))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+
+    return [];
+  }
+}
+
+// Normal subclass
+class ApiEnumMember extends ApiItem {
+>ApiEnumMember : Symbol(ApiEnumMember, Decl(accessorsOverrideProperty9.ts, 13, 1))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+}
+
+// Mixin base class
+interface ApiItemContainerMixin extends ApiItem {
+>ApiItemContainerMixin : Symbol(ApiItemContainerMixin, Decl(accessorsOverrideProperty9.ts, 22, 1), Decl(accessorsOverrideProperty9.ts, 17, 1))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+
+  readonly members: ReadonlyArray<ApiItem>;
+>members : Symbol(ApiItemContainerMixin.members, Decl(accessorsOverrideProperty9.ts, 20, 49))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+}
+
+function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
+>ApiItemContainerMixin : Symbol(ApiItemContainerMixin, Decl(accessorsOverrideProperty9.ts, 22, 1), Decl(accessorsOverrideProperty9.ts, 17, 1))
+>TBaseClass : Symbol(TBaseClass, Decl(accessorsOverrideProperty9.ts, 24, 31))
+>IApiItemConstructor : Symbol(IApiItemConstructor, Decl(accessorsOverrideProperty9.ts, 4, 55))
+
+  baseClass: TBaseClass
+>baseClass : Symbol(baseClass, Decl(accessorsOverrideProperty9.ts, 24, 71))
+>TBaseClass : Symbol(TBaseClass, Decl(accessorsOverrideProperty9.ts, 24, 31))
+
+): TBaseClass & (new (...args: any[]) => ApiItemContainerMixin) {
+>TBaseClass : Symbol(TBaseClass, Decl(accessorsOverrideProperty9.ts, 24, 31))
+>args : Symbol(args, Decl(accessorsOverrideProperty9.ts, 26, 22))
+>ApiItemContainerMixin : Symbol(ApiItemContainerMixin, Decl(accessorsOverrideProperty9.ts, 22, 1), Decl(accessorsOverrideProperty9.ts, 17, 1))
+
+  abstract class MixedClass extends baseClass implements ApiItemContainerMixin {
+>MixedClass : Symbol(MixedClass, Decl(accessorsOverrideProperty9.ts, 26, 65))
+>baseClass : Symbol(baseClass, Decl(accessorsOverrideProperty9.ts, 24, 71))
+>ApiItemContainerMixin : Symbol(ApiItemContainerMixin, Decl(accessorsOverrideProperty9.ts, 22, 1), Decl(accessorsOverrideProperty9.ts, 17, 1))
+
+    public constructor(...args: any[]) {
+>args : Symbol(args, Decl(accessorsOverrideProperty9.ts, 28, 23))
+
+      super(...args);
+>super : Symbol(TBaseClass, Decl(accessorsOverrideProperty9.ts, 24, 31))
+>args : Symbol(args, Decl(accessorsOverrideProperty9.ts, 28, 23))
+    }
+
+    public get members(): ReadonlyArray<ApiItem> {
+>members : Symbol(MixedClass.members, Decl(accessorsOverrideProperty9.ts, 30, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+
+      return [];
+    }
+  }
+
+  return MixedClass;
+>MixedClass : Symbol(MixedClass, Decl(accessorsOverrideProperty9.ts, 26, 65))
+}
+
+// Subclass inheriting from mixin
+export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
+>ApiEnum : Symbol(ApiEnum, Decl(accessorsOverrideProperty9.ts, 38, 1))
+>ApiItemContainerMixin : Symbol(ApiItemContainerMixin, Decl(accessorsOverrideProperty9.ts, 22, 1), Decl(accessorsOverrideProperty9.ts, 17, 1))
+>ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
+
+  // This worked prior to TypeScript 4.0:
+  public get members(): ReadonlyArray<ApiEnumMember> {
+>members : Symbol(ApiEnum.members, Decl(accessorsOverrideProperty9.ts, 41, 61))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ApiEnumMember : Symbol(ApiEnumMember, Decl(accessorsOverrideProperty9.ts, 13, 1))
+
+    return [];
+  }
+}
+
