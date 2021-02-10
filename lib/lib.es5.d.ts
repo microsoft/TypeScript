@@ -4351,8 +4351,8 @@ declare namespace Intl {
 
     interface DateTimeFormatOptions {
         localeMatcher?: "best fit" | "lookup";
-        weekday?: "long" | "short" | "narrow";
-        era?: "long" | "short" | "narrow";
+        weekday?: "long" | "short" | "narrow";
+        era?: "long" | "short" | "narrow";
         year?: "numeric" | "2-digit";
         month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
         day?: "numeric" | "2-digit";
