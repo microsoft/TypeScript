@@ -17774,9 +17774,9 @@ namespace ts {
             }
 
             function getInstanceOfAliasOrReferenceWithMarker(input: Type, typeArguments: readonly Type[]) {
-                const s = input.aliasSymbol ? getTypeAliasInstantiation(input.aliasSymbol, typeArguments) : createTypeReference((<TypeReference>input).target, typeArguments);
+                const s = input.aliasSymbol && !(getObjectFlags(input) & ObjectFlags.Reference) ? getTypeAliasInstantiation(input.aliasSymbol, typeArguments) : createTypeReference((<TypeReference>input).target, typeArguments);
                 if (s.aliasSymbol) s.aliasTypeArgumentsContainsMarker = true;
-                else (<TypeReference>s).objectFlags |= ObjectFlags.MarkerType;
+                if (getObjectFlags(s) & ObjectFlags.Reference) (<TypeReference>s).objectFlags |= ObjectFlags.MarkerType;
                 return s;
             }
 
@@ -17873,12 +17873,12 @@ namespace ts {
                 // is some specialization or subtype of Q
                 // This is difficult to detect generally, so we scan for prior comparisons of the same instantiated type, and match up matching
                 // type arguments into sets to create a canonicalization based on those matches
-                if (relation !== identityRelation && ((source.aliasSymbol && !source.aliasTypeArgumentsContainsMarker && source.aliasTypeArguments) || (getObjectFlags(source) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>source).length && !(getObjectFlags(source) & ObjectFlags.MarkerType))) &&
-                ((target.aliasSymbol && !target.aliasTypeArgumentsContainsMarker && target.aliasTypeArguments) || (getObjectFlags(target) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>target).length && !(getObjectFlags(target) & ObjectFlags.MarkerType)))) {
+                if (relation !== identityRelation && ((source.aliasSymbol && !source.aliasTypeArgumentsContainsMarker && length(source.aliasTypeArguments)) || (getObjectFlags(source) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>source).length && !(getObjectFlags(source) & ObjectFlags.MarkerType))) &&
+                ((target.aliasSymbol && !target.aliasTypeArgumentsContainsMarker && length(target.aliasTypeArguments)) || (getObjectFlags(target) & ObjectFlags.Reference && !!getTypeArguments(<TypeReference>target).length && !(getObjectFlags(target) & ObjectFlags.MarkerType)))) {
                     if (source.aliasSymbol || target.aliasSymbol || (<TypeReference>source).target !== (<TypeReference>target).target) { // ensure like symbols are just handled by standard variance analysis
-                        const sourceTypeArguments = source.aliasTypeArguments || getTypeArguments(<TypeReference>source);
+                        const sourceTypeArguments = getObjectFlags(source) & ObjectFlags.Reference ? getTypeArguments(<TypeReference>source) : source.aliasTypeArguments!;
                         const sourceHasMarker = some(sourceTypeArguments, a => a === markerOtherType);
-                        const targetTypeArguments = target.aliasTypeArguments || getTypeArguments(<TypeReference>target);
+                        const targetTypeArguments = getObjectFlags(target) & ObjectFlags.Reference ? getTypeArguments(<TypeReference>target) : target.aliasTypeArguments!;
                         const targetHasMarker = some(targetTypeArguments, a => a === markerOtherType);
                         // We're using `markerOtherType` as an existential, so we can't use it again if it's already in use,
                         // as we'd get spurious equivalencies - we'd need to use a second existential type, and once we're doing
