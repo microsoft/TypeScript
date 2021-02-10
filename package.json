@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "3.7.6",
+    "version": "3.7.7",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -130,5 +130,8 @@
         "source-map-support": false,
         "inspector": false
     },
-    "dependencies": {}
+    "dependencies": {},
+    "volta": {
+        "node": "14.15.5"
+    }
 }
