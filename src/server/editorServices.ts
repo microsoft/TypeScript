@@ -359,16 +359,6 @@ namespace ts.server {
         }
     }
 
-    const enum ConfigFileWatcherStatus {
-        ReloadingFiles = "Reloading configured projects for files",
-        ReloadingInferredRootFiles = "Reloading configured projects for only inferred root files",
-        UpdatedCallback = "Updated the callback",
-        OpenFilesImpactedByConfigFileAdd = "File added to open files impacted by this config file",
-        OpenFilesImpactedByConfigFileRemove = "File removed from open files impacted by this config file",
-        RootOfInferredProjectTrue = "Open file was set as Inferred root",
-        RootOfInferredProjectFalse = "Open file was set as not inferred root",
-    }
-
     /*@internal*/
     interface ConfigFileExistenceInfo {
         /**
@@ -386,13 +376,21 @@ namespace ts.server {
          * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
-        openFilesImpactedByConfigFile: ESMap<Path, boolean>;
+        openFilesImpactedByConfigFile: ESMap<Path, boolean> | undefined;
         /**
          * The file watcher watching the config file because there is open script info that is root of
          * inferred project and will be impacted by change in the status of the config file
-         * The watcher is present only when there is no open configured project for the config file
+         * or
+         * Configured project for this config file is open
+         * or
+         * Configured project references this config file
          */
-        configFileWatcherForRootOfInferredProject?: FileWatcher;
+        watcher: FileWatcher | undefined;
+
+        /**
+         * cached pased command line and other related information like watched directories etc
+         */
+        cachedCommandLine: CachedCommandLine | undefined;
     }
 
     export interface ProjectServiceOptions {
@@ -648,7 +646,11 @@ namespace ts.server {
         cachedDirectoryStructureHost: CachedDirectoryStructureHost;
         watchedDirectories?: Map<WildcardDirectoryWatcher>;
         watchedDirectoriesStale?: boolean;
-        projects?: Set<NormalizedPath>;
+        /** The map contains
+         *   - true if project is watching config file as well as wild cards
+         *   - false if just config file is watched
+         */
+        projects: ESMap<NormalizedPath, boolean>;
         reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
     }
 
@@ -725,7 +727,7 @@ namespace ts.server {
          * - Or it is present if we have configured project open with config file at that location
          *   In this case the exists property is always true
          */
-        private readonly configFileExistenceInfoCache = new Map<string, ConfigFileExistenceInfo>();
+        /*@internal*/ readonly configFileExistenceInfoCache = new Map<NormalizedPath, ConfigFileExistenceInfo>();
         /*@internal*/ readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
@@ -767,8 +769,6 @@ namespace ts.server {
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
-        /*@internal*/
-        readonly commandLineCache = new Map<NormalizedPath, CachedCommandLine>();
         /*@internal*/
         private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
 
@@ -1308,7 +1308,8 @@ namespace ts.server {
                         cachedCommandLine.reloadLevel = ConfigFileProgramReloadLevel.Partial;
                     }
 
-                    cachedCommandLine.projects?.forEach(canonicalFileName => {
+                    cachedCommandLine.projects.forEach((watchWildcardDirectories, canonicalFileName) => {
+                        if (!watchWildcardDirectories) return;
                         const project = this.getConfiguredProjectByCanonicalConfigFilePath(canonicalFileName);
                         if (!project) return;
 
@@ -1342,40 +1343,64 @@ namespace ts.server {
             );
         }
 
-        /** Gets the config file existence info for the configured project */
         /*@internal*/
-        getConfigFileExistenceInfo(project: ConfiguredProject) {
-            return this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!;
-        }
-
-        /*@internal*/
-        onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
-            const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
+        private onConfigFileChanged(canonicalConfigFilePath: NormalizedPath, eventKind: FileWatcherEventKind) {
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
             if (eventKind === FileWatcherEventKind.Deleted) {
                 // Update the cached status
                 // We arent updating or removing the cached config file presence info as that will be taken care of by
-                // setConfigFilePresenceByClosedConfigFile when the project is closed (depending on tracking open files)
+                // setConfigFileExistenceInfoByClosedConfiguredProject when the project is closed (depending on tracking open files)
                 configFileExistenceInfo.exists = false;
-                this.removeProject(project);
 
-                // Reload the configured projects for the open files in the map as they are affected by this config file
-                // Since the configured project was deleted, we want to reload projects for all the open files including files
-                // that are not root of the inferred project
-                this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
-                this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ false);
+                // Remove the configured project for this config file
+                const project = configFileExistenceInfo.cachedCommandLine?.projects.has(canonicalConfigFilePath) ?
+                    this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath) :
+                    undefined;
+                if (project) this.removeProject(project);
             }
             else {
-                this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
-                // Skip refresh if project is not yet loaded
-                if (project.isInitialLoadPending()) return;
-                // TODO:: sheetal:: handle full reload
-                project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                project.pendingReloadReason = "Change in config file detected";
-                this.delayUpdateProjectGraph(project);
-                // As we scheduled the update on configured project graph,
-                // we would need to schedule the project reload for only the root of inferred projects
-                this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);
+                // Update the cached status
+                configFileExistenceInfo.exists = true;
             }
+
+            // Update projects watching cached command line
+            if (configFileExistenceInfo.cachedCommandLine) {
+                configFileExistenceInfo.cachedCommandLine.reloadLevel = ConfigFileProgramReloadLevel.Full;
+
+                configFileExistenceInfo.cachedCommandLine.projects.forEach((_watchWildcardDirectories, projectCanonicalPath) => {
+                    const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
+                    if (!project) return;
+
+                    if (projectCanonicalPath === canonicalConfigFilePath) {
+                        // Skip refresh if project is not yet loaded
+                        if (project.isInitialLoadPending()) return;
+                        project.pendingReload = ConfigFileProgramReloadLevel.Full;
+                        project.pendingReloadReason = "Change in config file detected";
+                        this.delayUpdateProjectGraph(project);
+                    }
+                    else {
+                        // Change in referenced project config file
+                        project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(this.toPath(canonicalConfigFilePath));
+                    }
+                });
+            }
+
+            // Reload the configured projects for the open files in the map as they are affected by this config file
+            // If the configured project was deleted, we want to reload projects for all the open files including files
+            // that are not root of the inferred project
+            // Otherwise, we scheduled the update on configured project graph,
+            // we would need to schedule the project reload for only the root of inferred projects
+            // Get open files to reload projects for
+            this.reloadConfiguredProjectForFiles(
+                configFileExistenceInfo.openFilesImpactedByConfigFile,
+                /*clearSemanticCache*/ false,
+                /*delayReload*/ true,
+                eventKind !== FileWatcherEventKind.Deleted ?
+                    identity : // Reload open files if they are root of inferred project
+                    returnTrue, // Reload all the open files impacted by config file
+                "Change in config file detected"
+            );
+            this.delayEnsureProjectForOpenFiles();
         }
 
         /*@internal*/
@@ -1391,6 +1416,7 @@ namespace ts.server {
                         this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
                             const project = this.configuredProjects.get(canonicalPath);
                             // Skip refresh if project is not yet loaded
+                            // TODO: sheetal:: instead of project this should be commandLineCache
                             if (!project || project.isInitialLoadPending()) return;
                             project.pendingReload = ConfigFileProgramReloadLevel.Full;
                             project.pendingReloadReason = `Change in extended config file ${extendedConfigFileName} detected`;
@@ -1413,24 +1439,6 @@ namespace ts.server {
                 watcher.projects.delete(project.canonicalConfigFilePath);
                 watcher.close();
             });
-        }
-
-        /**
-         * This is the callback function for the config file add/remove/change at any location
-         * that matters to open script info but doesnt have configured project open
-         * for the config file
-         */
-        private onConfigFileChangeForOpenScriptInfo(configFileName: NormalizedPath, eventKind: FileWatcherEventKind) {
-            // This callback is called only if we dont have config file project for this config file
-            const canonicalConfigPath = normalizedPathToPath(configFileName, this.currentDirectory, this.toCanonicalFileName);
-            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigPath)!;
-            configFileExistenceInfo.exists = (eventKind !== FileWatcherEventKind.Deleted);
-            this.logConfigFileWatchUpdate(configFileName, canonicalConfigPath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
-
-            // Because there is no configured project open for the config file, the tracking open files map
-            // will only have open files that need the re-detection of the project and hence
-            // reload projects for all the tracking open files in the map
-            this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ false);
         }
 
         private removeProject(project: Project) {
@@ -1469,7 +1477,6 @@ namespace ts.server {
                 case ProjectKind.Configured:
                     this.configuredProjects.delete((<ConfiguredProject>project).canonicalConfigFilePath);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
-                    this.setConfigFileExistenceInfoByClosedConfiguredProject(<ConfiguredProject>project);
                     break;
                 case ProjectKind.Inferred:
                     unorderedRemoveItem(this.inferredProjects, <InferredProject>project);
@@ -1632,14 +1639,13 @@ namespace ts.server {
             }
         }
 
-        private configFileExists(configFileName: NormalizedPath, canonicalConfigFilePath: string, info: OpenScriptInfoOrClosedOrConfigFileInfo) {
+        private configFileExists(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath, info: OpenScriptInfoOrClosedOrConfigFileInfo) {
             let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
             if (configFileExistenceInfo) {
                 // By default the info would get impacted by presence of config file since its in the detection path
                 // Only adding the info as a root to inferred project will need the existence to be watched by file watcher
-                if (isOpenScriptInfo(info) && !configFileExistenceInfo.openFilesImpactedByConfigFile.has(info.path)) {
-                    configFileExistenceInfo.openFilesImpactedByConfigFile.set(info.path, false);
-                    this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.OpenFilesImpactedByConfigFileAdd);
+                if (isOpenScriptInfo(info) && !configFileExistenceInfo.openFilesImpactedByConfigFile?.has(info.path)) {
+                    (configFileExistenceInfo.openFilesImpactedByConfigFile ||= new Map()).set(info.path, false);
                 }
                 return configFileExistenceInfo.exists;
             }
@@ -1655,88 +1661,76 @@ namespace ts.server {
 
             // Cache the host value of file exists and add the info to map of open files impacted by this config file
             const exists = this.host.fileExists(configFileName);
-            const openFilesImpactedByConfigFile = new Map<Path, boolean>();
+            let openFilesImpactedByConfigFile: ESMap<Path, boolean> | undefined;
             if (isOpenScriptInfo(info)) {
-                openFilesImpactedByConfigFile.set(info.path, false);
+                (openFilesImpactedByConfigFile ||= new Map()).set(info.path, false);
             }
-            configFileExistenceInfo = { exists, openFilesImpactedByConfigFile };
+            configFileExistenceInfo = { exists, openFilesImpactedByConfigFile, watcher: undefined, cachedCommandLine: undefined };
             this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
-            this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.OpenFilesImpactedByConfigFileAdd);
             return exists;
         }
 
-        private setConfigFileExistenceByNewConfiguredProject(project: ConfiguredProject) {
-            const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
-            if (configFileExistenceInfo) {
-                // The existence might not be set if the file watcher is not invoked by the time config project is created by external project
-                configFileExistenceInfo.exists = true;
-                // close existing watcher
-                if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
-                    const configFileName = project.getConfigFilePath();
-                    configFileExistenceInfo.configFileWatcherForRootOfInferredProject.close();
-                    configFileExistenceInfo.configFileWatcherForRootOfInferredProject = undefined;
-                    this.logConfigFileWatchUpdate(configFileName, project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
-                }
+        private createConfigFileWatcherForCommandLineCache(
+            configFileName: NormalizedPath,
+            canonicalConfigFilePath: NormalizedPath,
+            forProjectCanonicalPath: NormalizedPath
+        ) {
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
+            // The existence might not be set if the file watcher is not invoked by the time config project is created by external project
+            configFileExistenceInfo.exists = true;
+            if (!configFileExistenceInfo.watcher || configFileExistenceInfo.watcher === noopFileWatcher) {
+                configFileExistenceInfo.watcher = this.watchFactory.watchFile(
+                    configFileName,
+                    (_fileName, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
+                    PollingInterval.High,
+                    this.getWatchOptionsFromProjectWatchOptions(configFileExistenceInfo?.cachedCommandLine?.parsedCommandLine?.watchOptions),
+                    WatchType.ConfigFile,
+                );
             }
-            else {
-                // We could be in this scenario if project is the configured project tracked by external project
-                // Since that route doesnt check if the config file is present or not
-                this.configFileExistenceInfoCache.set(project.canonicalConfigFilePath, {
-                    exists: true,
-                    openFilesImpactedByConfigFile: new Map<Path, boolean>()
-                });
-            }
+            // Watching config file for project, update the map
+            const projects = configFileExistenceInfo.cachedCommandLine!.projects;
+            projects.set(forProjectCanonicalPath, projects.get(forProjectCanonicalPath) || false);
         }
 
         /**
          * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
          */
         private configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo: ConfigFileExistenceInfo) {
-            return forEachEntry(configFileExistenceInfo.openFilesImpactedByConfigFile, (isRootOfInferredProject) => isRootOfInferredProject);
+            return configFileExistenceInfo.openFilesImpactedByConfigFile &&
+                forEachEntry(configFileExistenceInfo.openFilesImpactedByConfigFile, identity);
         }
 
-        private setConfigFileExistenceInfoByClosedConfiguredProject(closedProject: ConfiguredProject) {
-            const configFileExistenceInfo = this.getConfigFileExistenceInfo(closedProject);
-            Debug.assert(!!configFileExistenceInfo);
-            if (configFileExistenceInfo.openFilesImpactedByConfigFile.size) {
-                const configFileName = closedProject.getConfigFilePath();
+        /* @internal */
+        setConfigFileExistenceInfoByClosedConfiguredProject(closedProject: ConfiguredProject) {
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(closedProject.canonicalConfigFilePath)!;
+            configFileExistenceInfo.cachedCommandLine?.projects.delete(closedProject.canonicalConfigFilePath);
+            // If there are still projects watching this config file existence and command line cache, there is nothing to do
+            if (configFileExistenceInfo.cachedCommandLine?.projects.size) return;
+
+            configFileExistenceInfo.cachedCommandLine = undefined;
+            Debug.checkDefined(configFileExistenceInfo.watcher);
+            if (configFileExistenceInfo.openFilesImpactedByConfigFile?.size) {
                 // If there are open files that are impacted by this config file existence
                 // but none of them are root of inferred project, the config file watcher will be
                 // created when any of the script infos are added as root of inferred project
                 if (this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
-                    Debug.assert(!configFileExistenceInfo.configFileWatcherForRootOfInferredProject);
-                    this.createConfigFileWatcherOfConfigFileExistence(configFileName, closedProject.canonicalConfigFilePath, configFileExistenceInfo);
+                    // If we cannot watch config file existence without configured project, close the configured file watcher
+                    if (!canWatchDirectory(getDirectoryPath(closedProject.canonicalConfigFilePath) as Path)) {
+                        configFileExistenceInfo.watcher!.close();
+                        configFileExistenceInfo.watcher = noopFileWatcher;
+                    }
+                }
+                else {
+                    // Close existing watcher
+                    configFileExistenceInfo.watcher!.close();
+                    configFileExistenceInfo.watcher = undefined;
                 }
             }
             else {
                 // There is not a single file open thats tracking the status of this config file. Remove from cache
+                configFileExistenceInfo.watcher!.close();
                 this.configFileExistenceInfoCache.delete(closedProject.canonicalConfigFilePath);
             }
-        }
-
-        private logConfigFileWatchUpdate(configFileName: NormalizedPath, canonicalConfigFilePath: string, configFileExistenceInfo: ConfigFileExistenceInfo, status: ConfigFileWatcherStatus) {
-            if (!this.logger.hasLevel(LogLevel.verbose)) {
-                return;
-            }
-            const inferredRoots: string[] = [];
-            const otherFiles: string[] = [];
-            configFileExistenceInfo.openFilesImpactedByConfigFile.forEach((isRootOfInferredProject, key) => {
-                const info = this.getScriptInfoForPath(key)!;
-                (isRootOfInferredProject ? inferredRoots : otherFiles).push(info.fileName);
-            });
-
-            const watches: WatchType[] = [];
-            if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
-                watches.push(
-                    configFileExistenceInfo.configFileWatcherForRootOfInferredProject === noopFileWatcher ?
-                        WatchType.NoopConfigFileForInferredRoot :
-                        WatchType.ConfigFileForInferredRoot
-                );
-            }
-            if (this.configuredProjects.has(canonicalConfigFilePath)) {
-                watches.push(WatchType.ConfigFile);
-            }
-            this.logger.info(`ConfigFilePresence:: Current Watches: ${watches}:: File: ${configFileName} Currently impacted open files: RootsOfInferredProjects: ${inferredRoots} OtherOpenFiles: ${otherFiles} Status: ${status}`);
         }
 
         /**
@@ -1744,32 +1738,33 @@ namespace ts.server {
          */
         private createConfigFileWatcherOfConfigFileExistence(
             configFileName: NormalizedPath,
-            canonicalConfigFilePath: string,
+            canonicalConfigFilePath: NormalizedPath,
             configFileExistenceInfo: ConfigFileExistenceInfo
         ) {
-            configFileExistenceInfo.configFileWatcherForRootOfInferredProject =
+            configFileExistenceInfo.watcher ||=
                 canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
                     this.watchFactory.watchFile(
                         configFileName,
-                        (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
+                        (_filename, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
                         PollingInterval.High,
                         this.hostConfiguration.watchOptions,
                         WatchType.ConfigFileForInferredRoot
                     ) :
                     noopFileWatcher;
-            this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.UpdatedCallback);
         }
 
         /**
          * Close the config file watcher in the cached ConfigFileExistenceInfo
          *   if there arent any open files that are root of inferred project
          */
-        private closeConfigFileWatcherOfConfigFileExistenceInfo(configFileExistenceInfo: ConfigFileExistenceInfo) {
+        private closeConfigFileWatcherIfNotNeeded(configFileExistenceInfo: ConfigFileExistenceInfo) {
             // Close the config file watcher if there are no more open files that are root of inferred project
-            if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject &&
+            // or if there are no projects that need to watch this config file existence info
+            if (configFileExistenceInfo.watcher &&
+                !configFileExistenceInfo.cachedCommandLine &&
                 !this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
-                configFileExistenceInfo.configFileWatcherForRootOfInferredProject.close();
-                configFileExistenceInfo.configFileWatcherForRootOfInferredProject = undefined;
+                configFileExistenceInfo.watcher.close();
+                configFileExistenceInfo.watcher = undefined;
             }
         }
 
@@ -1778,28 +1773,28 @@ namespace ts.server {
          */
         private stopWatchingConfigFilesForClosedScriptInfo(info: ScriptInfo) {
             Debug.assert(!info.isScriptOpen());
-            this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
+            this.forEachConfigFileLocation(info, canonicalConfigFilePath => {
                 const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (configFileExistenceInfo) {
-                    const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile.get(info.path);
+                    const infoIsRootOfInferredProject = configFileExistenceInfo.openFilesImpactedByConfigFile?.get(info.path);
 
                     // Delete the info from map, since this file is no more open
-                    configFileExistenceInfo.openFilesImpactedByConfigFile.delete(info.path);
-                    this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.OpenFilesImpactedByConfigFileRemove);
+                    configFileExistenceInfo.openFilesImpactedByConfigFile?.delete(info.path);
 
                     // If the script info was not root of inferred project,
                     // there wont be config file watch open because of this script info
                     if (infoIsRootOfInferredProject) {
                         // But if it is a root, it could be the last script info that is root of inferred project
                         // and hence we would need to close the config file watcher
-                        this.closeConfigFileWatcherOfConfigFileExistenceInfo(configFileExistenceInfo);
+                        this.closeConfigFileWatcherIfNotNeeded(configFileExistenceInfo);
                     }
 
                     // If there are no open files that are impacted by configFileExistenceInfo after closing this script info
-                    // there is no configured project present, remove the cached existence info
-                    if (!configFileExistenceInfo.openFilesImpactedByConfigFile.size &&
-                        !this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath)) {
-                        Debug.assert(!configFileExistenceInfo.configFileWatcherForRootOfInferredProject);
+                    // and there is are no projects that need the config file existence/command line cache,
+                    // remove the cached existence info
+                    if (!configFileExistenceInfo.openFilesImpactedByConfigFile?.size &&
+                        !configFileExistenceInfo.cachedCommandLine) {
+                        Debug.assert(!configFileExistenceInfo.watcher);
                         this.configFileExistenceInfoCache.delete(canonicalConfigFilePath);
                     }
                 }
@@ -1812,24 +1807,24 @@ namespace ts.server {
         /* @internal */
         startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
             Debug.assert(info.isScriptOpen());
-            this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
+            this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => {
                 let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (!configFileExistenceInfo) {
                     // Create the cache
                     configFileExistenceInfo = {
                         exists: this.host.fileExists(configFileName),
-                        openFilesImpactedByConfigFile: new Map<Path, boolean>()
+                        openFilesImpactedByConfigFile: undefined,
+                        watcher: undefined,
+                        cachedCommandLine: undefined,
                     };
                     this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
                 }
 
                 // Set this file as the root of inferred project
-                configFileExistenceInfo.openFilesImpactedByConfigFile.set(info.path, true);
-                this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.RootOfInferredProjectTrue);
+                (configFileExistenceInfo.openFilesImpactedByConfigFile ||= new Map()).set(info.path, true);
 
                 // If there is no configured project for this config file, add the file watcher
-                if (!configFileExistenceInfo.configFileWatcherForRootOfInferredProject &&
-                    !this.getConfiguredProjectByCanonicalConfigFilePath(canonicalConfigFilePath)) {
+                if (!configFileExistenceInfo.watcher) {
                     this.createConfigFileWatcherOfConfigFileExistence(configFileName, canonicalConfigFilePath, configFileExistenceInfo);
                 }
             });
@@ -1840,17 +1835,16 @@ namespace ts.server {
          */
         /* @internal */
         stopWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
-            this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) => {
+            this.forEachConfigFileLocation(info, canonicalConfigFilePath => {
                 const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
-                if (configFileExistenceInfo && configFileExistenceInfo.openFilesImpactedByConfigFile.has(info.path)) {
+                if (configFileExistenceInfo?.openFilesImpactedByConfigFile?.has(info.path)) {
                     Debug.assert(info.isScriptOpen());
 
                     // Info is not root of inferred project any more
                     configFileExistenceInfo.openFilesImpactedByConfigFile.set(info.path, false);
-                    this.logConfigFileWatchUpdate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.RootOfInferredProjectFalse);
 
                     // Close the config file watcher
-                    this.closeConfigFileWatcherOfConfigFileExistenceInfo(configFileExistenceInfo);
+                    this.closeConfigFileWatcherIfNotNeeded(configFileExistenceInfo);
                 }
             });
         }
@@ -1863,7 +1857,7 @@ namespace ts.server {
          * The server must start searching from the directory containing
          * the newly opened file.
          */
-        private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
+        private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (canonicalConfigFilePath: NormalizedPath, configFileName: NormalizedPath) => boolean | void) {
             if (this.serverMode !== LanguageServiceMode.Semantic) {
                 return undefined;
             }
@@ -1884,11 +1878,11 @@ namespace ts.server {
                 if (searchInDirectory) {
                     const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
                     const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                    let result = action(tsconfigFileName, combinePaths(canonicalSearchPath, "tsconfig.json"));
+                    let result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
                     if (result) return tsconfigFileName;
 
                     const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                    result = action(jsconfigFileName, combinePaths(canonicalSearchPath, "jsconfig.json"));
+                    result = action(combinePaths(canonicalSearchPath, "jsconfig.json") as NormalizedPath, jsconfigFileName);
                     if (result) return jsconfigFileName;
 
                     // If we started within node_modules, don't look outside node_modules.
@@ -1937,7 +1931,7 @@ namespace ts.server {
                 if (result !== undefined) return result || undefined;
             }
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
-            const configFileName = this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) =>
+            const configFileName = this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) =>
                 this.configFileExists(configFileName, canonicalConfigFilePath, info));
             if (configFileName) {
                 this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
@@ -2099,24 +2093,36 @@ namespace ts.server {
 
         /* @internal */
         createConfiguredProject(configFileName: NormalizedPath) {
-            const canonicalFileName = asNormalizedPath(this.toCanonicalFileName(configFileName));
-            let entry = this.commandLineCache.get(canonicalFileName);
-            if (!entry) {
-                entry = {
+            this.logger.info(`Creating configuration project ${configFileName}`);
+            const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
+            let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
+            if (!configFileExistenceInfo) {
+                // We could be in this scenario if project is the configured project tracked by external project
+                // Since that route doesnt check if the config file is present or not
+                configFileExistenceInfo = {
+                    exists: true,
+                    openFilesImpactedByConfigFile: undefined,
+                    watcher: undefined,
+                    cachedCommandLine: undefined
+                };
+                this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
+            }
+            if (!configFileExistenceInfo.cachedCommandLine) {
+                configFileExistenceInfo.cachedCommandLine = {
                     cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
+                    projects: new Map(),
                     reloadLevel: ConfigFileProgramReloadLevel.Full
                 };
-                this.commandLineCache.set(canonicalFileName, entry);
             }
-            this.logger.info(`Opened configuration file ${configFileName}`);
+            this.createConfigFileWatcherForCommandLineCache(configFileName, canonicalConfigFilePath, canonicalConfigFilePath);
+
             const project = new ConfiguredProject(
                 configFileName,
+                canonicalConfigFilePath,
                 this,
                 this.documentRegistry,
-                entry.cachedDirectoryStructureHost);
-            project.createConfigFileWatcher();
-            this.configuredProjects.set(project.canonicalConfigFilePath, project);
-            this.setConfigFileExistenceByNewConfiguredProject(project);
+                configFileExistenceInfo.cachedCommandLine.cachedDirectoryStructureHost);
+            this.configuredProjects.set(canonicalConfigFilePath, project);
             return project;
         }
 
@@ -2151,7 +2157,7 @@ namespace ts.server {
 
             // Read updated contents from disk
             const configFilename = asNormalizedPath(normalizePath(project.getConfigFilePath()));
-            const cachedCommandLine = this.parseTsconfigFile(configFilename, project.canonicalConfigFilePath);
+            const cachedCommandLine = this.parseTsconfigFile(configFilename, project.canonicalConfigFilePath, project.canonicalConfigFilePath);
             const parsedCommandLine = cachedCommandLine.parsedCommandLine!;
             Debug.assert(!!parsedCommandLine.fileNames);
             const compilerOptions = parsedCommandLine.options;
@@ -2178,7 +2184,7 @@ namespace ts.server {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
-                this.watchWildcards(project, configFilename, project.canonicalConfigFilePath); // TODO: GH#18217
+                this.watchWildcards(project, configFilename, cachedCommandLine);
                 this.updateSharedExtendedConfigFileMap(project, parsedCommandLine);
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
@@ -2187,17 +2193,18 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private parseTsconfigFile(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath): CachedCommandLine {
-            const existingCachedCommandLine = this.commandLineCache.get(canonicalConfigFilePath);
-            const cachedDirectoryStructureHost = existingCachedCommandLine?.cachedDirectoryStructureHost ||
-                createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!;
-            if (existingCachedCommandLine) {
-                if (!existingCachedCommandLine.reloadLevel) return existingCachedCommandLine;
-                if (existingCachedCommandLine.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
-                    this.reloadFileNamesOfTsconfigFile(configFilename, canonicalConfigFilePath);
-                    return existingCachedCommandLine;
+        private parseTsconfigFile(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath, forProjectCanonicalPath: NormalizedPath): CachedCommandLine {
+            const configFileExistenceInfo = Debug.checkDefined(this.configFileExistenceInfoCache.get(canonicalConfigFilePath));
+            if (configFileExistenceInfo.cachedCommandLine) {
+                if (!configFileExistenceInfo.cachedCommandLine.reloadLevel) return configFileExistenceInfo.cachedCommandLine;
+                if (configFileExistenceInfo.cachedCommandLine.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                    this.reloadFileNamesOfTsconfigFile(configFilename, canonicalConfigFilePath, forProjectCanonicalPath);
+                    return configFileExistenceInfo.cachedCommandLine;
                 }
             }
+
+            const cachedDirectoryStructureHost = configFileExistenceInfo.cachedCommandLine?.cachedDirectoryStructureHost ||
+                createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!;
 
             // Read updated contents from disk
             const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
@@ -2226,23 +2233,38 @@ namespace ts.server {
                 projectReferences: parsedCommandLine.projectReferences
             }, /*replacer*/ undefined, " ")}`);
 
-            if (existingCachedCommandLine) {
-                existingCachedCommandLine.configFile = configFile;
-                existingCachedCommandLine.parsedCommandLine = parsedCommandLine;
-                existingCachedCommandLine.watchedDirectoriesStale = true;
-                existingCachedCommandLine.reloadLevel = undefined;
-                return existingCachedCommandLine;
+            // TODO:: sheetal: exists could be false and we want to create watcher for that
+            const oldCommandLine = configFileExistenceInfo.cachedCommandLine?.parsedCommandLine;
+            if (!configFileExistenceInfo.cachedCommandLine) {
+                configFileExistenceInfo.cachedCommandLine = { configFile, parsedCommandLine, cachedDirectoryStructureHost, projects: new Map() };
+            }
+            else {
+                configFileExistenceInfo.cachedCommandLine.configFile = configFile;
+                configFileExistenceInfo.cachedCommandLine.parsedCommandLine = parsedCommandLine;
+                configFileExistenceInfo.cachedCommandLine.watchedDirectoriesStale = true;
+                configFileExistenceInfo.cachedCommandLine.reloadLevel = undefined;
             }
 
-            const cachedCommandLine: CachedCommandLine = { configFile, parsedCommandLine, cachedDirectoryStructureHost };
-            this.commandLineCache.set(canonicalConfigFilePath, cachedCommandLine);
-            return cachedCommandLine;
+            // If watch options different than older options when setting for the first time, update the config file watcher
+            if (!oldCommandLine && !isJsonEqual(
+                // Old options
+                this.getWatchOptionsFromProjectWatchOptions(/*projectOptions*/ undefined),
+                // New options
+                this.getWatchOptionsFromProjectWatchOptions(parsedCommandLine.watchOptions)
+            )) {
+                // Reset the config file watcher
+                configFileExistenceInfo.watcher?.close();
+                configFileExistenceInfo.watcher = undefined;
+            }
+
+            // Ensure there is watcher for this config file
+            this.createConfigFileWatcherForCommandLineCache(configFilename, canonicalConfigFilePath, forProjectCanonicalPath);
+            return configFileExistenceInfo.cachedCommandLine;
         }
 
         /*@internal*/
-        private watchWildcards(project: ConfiguredProject, configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath) {
-            const cachedCommandLine = Debug.checkDefined(this.commandLineCache.get(canonicalConfigFilePath));
-            (cachedCommandLine.projects ||= new Set()).add(project.canonicalConfigFilePath);
+        private watchWildcards(project: ConfiguredProject, configFileName: NormalizedPath, cachedCommandLine: CachedCommandLine) {
+            cachedCommandLine.projects.set(project.canonicalConfigFilePath, true);
             if (cachedCommandLine.watchedDirectories && !cachedCommandLine.watchedDirectoriesStale) return;
 
             updateWatchingWildcardDirectories(
@@ -2255,16 +2277,19 @@ namespace ts.server {
 
         /*@internal*/
         stopWatchingWildCards(project: ConfiguredProject, canonicalConfigFilePath: NormalizedPath) {
-            const cachedCommandLine = this.commandLineCache.get(canonicalConfigFilePath);
-            if (!cachedCommandLine?.projects) return;
+            const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!;
+            if (!configFileExistenceInfo.cachedCommandLine ||
+                !configFileExistenceInfo.cachedCommandLine.projects.get(project.canonicalConfigFilePath)) {
+                return;
+            }
 
-            cachedCommandLine.projects.delete(project.canonicalConfigFilePath);
-            if (cachedCommandLine.projects.size !== 0) return;
+            configFileExistenceInfo.cachedCommandLine.projects.set(project.canonicalConfigFilePath, false);
+            // If any of the project is still watching wild cards dont close the watcher
+            if (forEachEntry(configFileExistenceInfo.cachedCommandLine.projects, identity)) return;
 
-            clearMap(cachedCommandLine.watchedDirectories!, closeFileWatcherOf);
-            cachedCommandLine.projects = undefined;
-            cachedCommandLine.watchedDirectories = undefined;
-            cachedCommandLine.watchedDirectoriesStale = undefined;
+            clearMap(configFileExistenceInfo.cachedCommandLine.watchedDirectories!, closeFileWatcherOf);
+            configFileExistenceInfo.cachedCommandLine.watchedDirectories = undefined;
+            configFileExistenceInfo.cachedCommandLine.watchedDirectoriesStale = undefined;
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
@@ -2356,18 +2381,18 @@ namespace ts.server {
          */
         /*@internal*/
         reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
-            const fileNames = this.reloadFileNamesOfTsconfigFile(asNormalizedPath(normalizePath(project.getConfigFilePath())), project.canonicalConfigFilePath);
+            const fileNames = this.reloadFileNamesOfTsconfigFile(asNormalizedPath(normalizePath(project.getConfigFilePath())), project.canonicalConfigFilePath, project.canonicalConfigFilePath);
             project.updateErrorOnNoInputFiles(fileNames);
             this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
         }
 
         /*@internal*/
-        private reloadFileNamesOfTsconfigFile(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath) {
-            const cachedCommandLine = Debug.checkDefined(this.commandLineCache.get(canonicalConfigFilePath));
+        private reloadFileNamesOfTsconfigFile(configFileName: NormalizedPath, canonicalConfigFilePath: NormalizedPath, forProjectCanonicalPath: NormalizedPath) {
+            const cachedCommandLine = this.configFileExistenceInfoCache.get(canonicalConfigFilePath)!.cachedCommandLine!;
             if (cachedCommandLine.reloadLevel === undefined) return cachedCommandLine.parsedCommandLine!.fileNames;
             if (cachedCommandLine.reloadLevel === ConfigFileProgramReloadLevel.Full) {
-                this.parseTsconfigFile(configFileName, canonicalConfigFilePath);
+                this.parseTsconfigFile(configFileName, canonicalConfigFilePath, forProjectCanonicalPath);
                 return cachedCommandLine.parsedCommandLine!.fileNames;
             }
 
@@ -3016,6 +3041,11 @@ namespace ts.server {
             this.throttledOperations.cancel(ensureProjectForOpenFileSchedule);
             this.pendingEnsureProjectForOpenFiles = false;
 
+            // Ensure everything is reloaded for command line cache
+            this.configFileExistenceInfoCache.forEach(info => {
+                if (info.cachedCommandLine) info.cachedCommandLine.reloadLevel = ConfigFileProgramReloadLevel.Full;
+            });
+
             // Reload Projects
             this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
             this.externalProjects.forEach(project => {
@@ -3026,20 +3056,6 @@ namespace ts.server {
             this.ensureProjectForOpenFiles();
         }
 
-        private delayReloadConfiguredProjectForFiles(configFileExistenceInfo: ConfigFileExistenceInfo, ignoreIfNotRootOfInferredProject: boolean) {
-            // Get open files to reload projects for
-            this.reloadConfiguredProjectForFiles(
-                configFileExistenceInfo.openFilesImpactedByConfigFile,
-                /*clearSemanticCache*/ false,
-                /*delayReload*/ true,
-                ignoreIfNotRootOfInferredProject ?
-                    isRootOfInferredProject => isRootOfInferredProject : // Reload open files if they are root of inferred project
-                    returnTrue, // Reload all the open files impacted by config file
-                "Change in config file detected"
-            );
-            this.delayEnsureProjectForOpenFiles();
-        }
-
         /**
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately
@@ -3047,7 +3063,7 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T> | undefined, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = new Map<string, true>();
             const reloadChildProject = (child: ConfiguredProject) => {
                 if (!updatedProjects.has(child.canonicalConfigFilePath)) {
@@ -3056,7 +3072,7 @@ namespace ts.server {
                 }
             };
             // try to reload config file for all open files
-            openFiles.forEach((openFileValue, path) => {
+            openFiles?.forEach((openFileValue, path) => {
                 // Invalidate default config file name for open file
                 this.configFileForOpenFiles.delete(path);
                 // Filter out the files that need to be ignored

@@ -9687,14 +9687,6 @@ declare namespace ts.server {
          * Project size for configured or external projects
          */
         private readonly projectToSizeMap;
-        /**
-         * This is a map of config file paths existence that doesnt need query to disk
-         * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
-         *   In this case the exists could be true/false based on config file is present or not
-         * - Or it is present if we have configured project open with config file at that location
-         *   In this case the exists property is always true
-         */
-        private readonly configFileExistenceInfoCache;
         private readonly hostConfiguration;
         private safelist;
         private readonly legacySafelist;
@@ -9750,12 +9742,6 @@ declare namespace ts.server {
         private delayUpdateSourceInfoProjects;
         private delayUpdateProjectsOfScriptInfoPath;
         private handleDeletedFile;
-        /**
-         * This is the callback function for the config file add/remove/change at any location
-         * that matters to open script info but doesnt have configured project open
-         * for the config file
-         */
-        private onConfigFileChangeForOpenScriptInfo;
         private removeProject;
         private assignOrphanScriptInfosToInferredProject;
         /**
@@ -9765,13 +9751,11 @@ declare namespace ts.server {
         private closeOpenFile;
         private deleteScriptInfo;
         private configFileExists;
-        private setConfigFileExistenceByNewConfiguredProject;
+        private createConfigFileWatcherForCommandLineCache;
         /**
          * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
          */
         private configFileExistenceImpactsRootOfInferredProject;
-        private setConfigFileExistenceInfoByClosedConfiguredProject;
-        private logConfigFileWatchUpdate;
         /**
          * Create the watcher for the configFileExistenceInfo
          */
@@ -9780,7 +9764,7 @@ declare namespace ts.server {
          * Close the config file watcher in the cached ConfigFileExistenceInfo
          *   if there arent any open files that are root of inferred project
          */
-        private closeConfigFileWatcherOfConfigFileExistenceInfo;
+        private closeConfigFileWatcherIfNotNeeded;
         /**
          * This is called on file close, so that we stop watching the config file for this script info
          */
@@ -9846,7 +9830,6 @@ declare namespace ts.server {
          * This does not reload contents of open files from disk. But we could do that if needed
          */
         reloadProjects(): void;
-        private delayReloadConfiguredProjectForFiles;
         /**
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately

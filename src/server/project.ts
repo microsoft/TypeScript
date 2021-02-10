@@ -2064,10 +2064,6 @@ namespace ts.server {
      */
     export class ConfiguredProject extends Project {
         /* @internal */
-        configFileWatcher: FileWatcher | undefined;
-        readonly canonicalConfigFilePath: NormalizedPath;
-
-        /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
         /* @internal */
         pendingReloadReason: string | undefined;
@@ -2101,6 +2097,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(configFileName: NormalizedPath,
+            readonly canonicalConfigFilePath: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
@@ -2116,7 +2113,6 @@ namespace ts.server {
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
             );
-            this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
         /* @internal */
@@ -2132,31 +2128,6 @@ namespace ts.server {
         /* @internal */
         useSourceOfProjectReferenceRedirect() {
             return this.languageServiceEnabled;
-        }
-
-        /* @internal */
-        setWatchOptions(watchOptions: WatchOptions | undefined) {
-            const oldOptions = this.getWatchOptions();
-            super.setWatchOptions(watchOptions);
-            // If watch options different than older options
-            if (this.isInitialLoadPending() &&
-                !isJsonEqual(oldOptions, this.getWatchOptions())) {
-                const oldWatcher = this.configFileWatcher;
-                this.createConfigFileWatcher();
-                if (oldWatcher) oldWatcher.close();
-            }
-        }
-
-        /* @internal */
-        createConfigFileWatcher() {
-            this.configFileWatcher = this.projectService.watchFactory.watchFile(
-                this.getConfigFilePath(),
-                (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
-                PollingInterval.High,
-                this.projectService.getWatchOptions(this),
-                WatchType.ConfigFile,
-                this
-            );
         }
 
         /**
@@ -2275,13 +2246,9 @@ namespace ts.server {
         }
 
         close() {
-            if (this.configFileWatcher) {
-                this.configFileWatcher.close();
-                this.configFileWatcher = undefined;
-            }
-
             this.projectService.stopWatchingWildCards(this, this.canonicalConfigFilePath);
             this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
+            this.projectService.setConfigFileExistenceInfoByClosedConfiguredProject(this);
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;
@@ -2329,18 +2296,18 @@ namespace ts.server {
                 return false;
             }
 
-            const configFileExistenceInfo = this.projectService.getConfigFileExistenceInfo(this);
+            const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(this.canonicalConfigFilePath)!;
             if (this.projectService.hasPendingProjectUpdate(this)) {
                 // If there is pending update for this project,
                 // we dont know if this project would be needed by any of the open files impacted by this config file
                 // In that case keep the project alive if there are open files impacted by this project
-                return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
+                return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
             }
 
             // If there is no pending update for this project,
             // We know exact set of open files that get impacted by this configured project as the files in the project
             // The project is referenced only if open files impacted by this project are present in this project
-            return forEachEntry(
+            return !!configFileExistenceInfo.openFilesImpactedByConfigFile && forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
                 (_value, infoPath) => {
                     const info = this.projectService.getScriptInfoForPath(infoPath)!;
