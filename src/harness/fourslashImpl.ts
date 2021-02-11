@@ -3048,9 +3048,9 @@ namespace FourSlash {
             assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
         }
 
-        public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined) {
+        public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
             const name = "verifyDocCommentTemplate";
-            const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
+            const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true })!;
 
             if (expected === undefined) {
                 if (actual) {

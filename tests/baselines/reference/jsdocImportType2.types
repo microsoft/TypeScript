@@ -42,7 +42,7 @@ declare var module: { exports: any };
 module.exports = class Chunk {
 >module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("tests/cases/conformance/jsdoc/mod1")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/mod1"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod1")
 >class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("tests/cases/conformance/jsdoc/mod1")
 >Chunk : typeof import("tests/cases/conformance/jsdoc/mod1")

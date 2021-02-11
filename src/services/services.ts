@@ -1143,7 +1143,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
+                tracing?.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
                 throw new OperationCanceledException();
             }
         }
@@ -1174,7 +1174,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
+                tracing?.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
                 throw new OperationCanceledException();
             }
         }
@@ -2004,8 +2004,8 @@ namespace ts {
                 : Promise.reject("Host does not implement `installPackage`");
         }
 
-        function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
-            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
+        function getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined {
+            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position, options);
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {

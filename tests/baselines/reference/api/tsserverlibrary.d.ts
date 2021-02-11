@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.2";
+    const versionMajorMinor = "4.3";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -5555,7 +5555,7 @@ declare namespace ts {
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
-        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         /**
          * This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
@@ -6020,11 +6020,15 @@ declare namespace ts {
     interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }
+    interface DocCommentTemplateOptions {
+        readonly generateReturnInDocTemplate?: boolean;
+    }
     interface SignatureHelpParameter {
         name: string;
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+        isRest?: boolean;
     }
     interface SelectionRange {
         textSpan: TextSpan;
@@ -9045,6 +9049,7 @@ declare namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly generateReturnInDocTemplate?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;

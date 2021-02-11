@@ -8768,8 +8768,15 @@ namespace ts {
             }
             if (symbol.flags & SymbolFlags.ModuleExports) {
                 const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
+                const result = createSymbol(fileSymbol.flags, "exports" as __String);
+                result.declarations = fileSymbol.declarations ? fileSymbol.declarations.slice() : [];
+                result.parent = symbol;
+                result.target = fileSymbol;
+                if (fileSymbol.valueDeclaration) result.valueDeclaration = fileSymbol.valueDeclaration;
+                if (fileSymbol.members) result.members = new Map(fileSymbol.members);
+                if (fileSymbol.exports) result.exports = new Map(fileSymbol.exports);
                 const members = createSymbolTable();
-                members.set("exports" as __String, fileSymbol);
+                members.set("exports" as __String, result);
                 return createAnonymousType(symbol, members, emptyArray, emptyArray, undefined, undefined);
             }
             // Handle catch clause variables
@@ -13331,7 +13338,7 @@ namespace ts {
                                 // caps union types at 1000 unique object types.
                                 const estimatedCount = (count / (len - i)) * len;
                                 if (estimatedCount > 1000000) {
-                                    tracing.instant(tracing.Phase.CheckTypes, "removeSubtypes_DepthLimit", { typeIds: types.map(t => t.id) });
+                                    tracing?.instant(tracing.Phase.CheckTypes, "removeSubtypes_DepthLimit", { typeIds: types.map(t => t.id) });
                                     error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
                                     return false;
                                 }
@@ -13810,7 +13817,7 @@ namespace ts {
         function checkCrossProductUnion(types: readonly Type[]) {
             const size = getCrossProductUnionSize(types);
             if (size >= 100000) {
-                tracing.instant(tracing.Phase.CheckTypes, "checkCrossProductUnion_DepthLimit", { typeIds: types.map(t => t.id), size });
+                tracing?.instant(tracing.Phase.CheckTypes, "checkCrossProductUnion_DepthLimit", { typeIds: types.map(t => t.id), size });
                 error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
                 return false;
             }
@@ -15744,7 +15751,7 @@ namespace ts {
                 // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
                 // with a combination of infinite generic types that perpetually generate new type identities. We stop
                 // the recursion here by yielding the error type.
-                tracing.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+                tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
@@ -16874,7 +16881,7 @@ namespace ts {
                 reportIncompatibleStack();
             }
             if (overflow) {
-                tracing.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth });
+                tracing?.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth });
                 const diag = error(errorNode || currentNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
                 if (errorOutputContainer) {
                     (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
@@ -17361,7 +17368,7 @@ namespace ts {
             }
 
             function traceUnionsOrIntersectionsTooLarge(source: Type, target: Type): void {
-                if (!tracing.isTracing()) {
+                if (!tracing) {
                     return;
                 }
 
@@ -17723,7 +17730,7 @@ namespace ts {
                 }
 
                 if (expandingFlags === ExpandingFlags.Both) {
-                    tracing.instant(tracing.Phase.CheckTypes, "recursiveTypeRelatedTo_DepthLimit", {
+                    tracing?.instant(tracing.Phase.CheckTypes, "recursiveTypeRelatedTo_DepthLimit", {
                         sourceId: source.id,
                         sourceIdStack: sourceStack.map(t => t.id),
                         targetId: target.id,
@@ -17760,9 +17767,9 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                tracing.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
+                tracing?.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
                 const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                tracing.pop();
+                tracing?.pop();
                 return result;
             }
 
@@ -18287,7 +18294,7 @@ namespace ts {
                     numCombinations *= countTypes(getTypeOfSymbol(sourceProperty));
                     if (numCombinations > 25) {
                         // We've reached the complexity limit.
-                        tracing.instant(tracing.Phase.CheckTypes, "typeRelatedToDiscriminatedType_DepthLimit", { sourceId: source.id, targetId: target.id, numCombinations });
+                        tracing?.instant(tracing.Phase.CheckTypes, "typeRelatedToDiscriminatedType_DepthLimit", { sourceId: source.id, targetId: target.id, numCombinations });
                         return Ternary.False;
                     }
                 }
@@ -19066,7 +19073,7 @@ namespace ts {
         function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
-                tracing.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
+                tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
                 // The emptyArray singleton is used to signal a recursive invocation.
                 cache.variances = emptyArray;
                 variances = [];
@@ -19101,7 +19108,7 @@ namespace ts {
                     variances.push(variance);
                 }
                 cache.variances = variances;
-                tracing.pop();
+                tracing?.pop();
             }
             return variances;
         }
@@ -22192,7 +22199,7 @@ namespace ts {
                 if (flowDepth === 2000) {
                     // We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
                     // and disable further control flow analysis in the containing function or module body.
-                    tracing.instant(tracing.Phase.CheckTypes, "getTypeAtFlowNode_DepthLimit", { flowId: flow.id });
+                    tracing?.instant(tracing.Phase.CheckTypes, "getTypeAtFlowNode_DepthLimit", { flowId: flow.id });
                     flowAnalysisDisabled = true;
                     reportFlowControlError(reference);
                     return errorType;
@@ -23087,10 +23094,15 @@ namespace ts {
                     }
                 }
 
-                // If the candidate type is a subtype of the target type, narrow to the candidate type,
-                // if the target type is a subtype of the candidate type, narrow to the target type,
-                // otherwise, narrow to an intersection of the two types.
-                return isTypeSubtypeOf(candidate, type) ? candidate : isTypeSubtypeOf(type, candidate) ? type : getIntersectionType([type, candidate]);
+                // If the candidate type is a subtype of the target type, narrow to the candidate type.
+                // Otherwise, if the target type is assignable to the candidate type, keep the target type.
+                // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
+                // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
+                // two types.
+                return isTypeSubtypeOf(candidate, type) ? candidate :
+                     isTypeAssignableTo(type, candidate) ? type :
+                     isTypeAssignableTo(candidate, type) ? candidate :
+                     getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -31666,7 +31678,7 @@ namespace ts {
         }
 
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
-            tracing.push(tracing.Phase.Check, "checkExpression", { kind: node.kind, pos: node.pos, end: node.end });
+            tracing?.push(tracing.Phase.Check, "checkExpression", { kind: node.kind, pos: node.pos, end: node.end });
             const saveCurrentNode = currentNode;
             currentNode = node;
             instantiationCount = 0;
@@ -31676,7 +31688,7 @@ namespace ts {
                 checkConstEnumAccess(node, type);
             }
             currentNode = saveCurrentNode;
-            tracing.pop();
+            tracing?.pop();
             return type;
         }
 
@@ -34482,10 +34494,10 @@ namespace ts {
         }
 
         function checkVariableDeclaration(node: VariableDeclaration) {
-            tracing.push(tracing.Phase.Check, "checkVariableDeclaration", { kind: node.kind, pos: node.pos, end: node.end });
+            tracing?.push(tracing.Phase.Check, "checkVariableDeclaration", { kind: node.kind, pos: node.pos, end: node.end });
             checkGrammarVariableDeclaration(node);
             checkVariableLikeDeclaration(node);
-            tracing.pop();
+            tracing?.pop();
         }
 
         function checkBindingElement(node: BindingElement) {
@@ -37563,7 +37575,7 @@ namespace ts {
         }
 
         function checkDeferredNode(node: Node) {
-            tracing.push(tracing.Phase.Check, "checkDeferredNode", { kind: node.kind, pos: node.pos, end: node.end });
+            tracing?.push(tracing.Phase.Check, "checkDeferredNode", { kind: node.kind, pos: node.pos, end: node.end });
             const saveCurrentNode = currentNode;
             currentNode = node;
             instantiationCount = 0;
@@ -37599,16 +37611,16 @@ namespace ts {
                     break;
             }
             currentNode = saveCurrentNode;
-            tracing.pop();
+            tracing?.pop();
         }
 
         function checkSourceFile(node: SourceFile) {
-            tracing.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
+            tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
             performance.mark("beforeCheck");
             checkSourceFileWorker(node);
             performance.mark("afterCheck");
             performance.measure("Check", "beforeCheck", "afterCheck");
-            tracing.pop();
+            tracing?.pop();
         }
 
         function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
