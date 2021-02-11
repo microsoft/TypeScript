@@ -6959,7 +6959,11 @@ namespace ts {
                     // as something we need to serialize as a private declaration as well
                     const node = getDeclarationOfAliasSymbol(symbol);
                     if (!node) return Debug.fail();
-                    const target = getMergedSymbol(getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true));
+                    const firstTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
+                    const target = getMergedSymbol(
+                        isDuplicatedCommonJSExport(symbol.declarations, firstTarget)
+                            ? getMergedSymbol(getTargetOfAliasDeclaration(symbol.declarations[1], /*dontRecursivelyResolve*/ true))
+                            : firstTarget);
                     if (!target) {
                         return;
                     }
@@ -9039,15 +9043,19 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
-
-                // It only makes sense to get the type of a value symbol. If the result of resolving
-                // the alias is not a value, then it has no type. To get the type associated with a
-                // type symbol, call getDeclaredTypeOfSymbol.
-                // This check is important because without it, a call to getTypeOfSymbol could end
-                // up recursively calling getTypeOfAlias, causing a stack overflow.
-                links.type = targetSymbol.flags & SymbolFlags.Value
-                    ? getTypeOfSymbol(targetSymbol)
-                    : errorType;
+                if (isDuplicatedCommonJSExport(symbol.declarations, targetSymbol)) {
+                    links.type = getUnionType(symbol.declarations.map(node => getTypeOfExpression((node.parent as BinaryExpression).right)));
+                }
+                else {
+                    // It only makes sense to get the type of a value symbol. If the result of resolving
+                    // the alias is not a value, then it has no type. To get the type associated with a
+                    // type symbol, call getDeclaredTypeOfSymbol.
+                    // This check is important because without it, a call to getTypeOfSymbol could end
+                    // up recursively calling getTypeOfAlias, causing a stack overflow.
+                    links.type = targetSymbol.flags & SymbolFlags.Value
+                        ? getTypeOfSymbol(targetSymbol)
+                        : errorType;
+                }
             }
             return links.type;
         }
@@ -37276,9 +37284,11 @@ namespace ts {
                             return;
                         }
                         if (exportedDeclarationsCount > 1) {
-                            for (const declaration of declarations) {
-                                if (isNotOverload(declaration)) {
-                                    diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                            if (!isDuplicatedCommonJSExport(declarations)) {
+                                for (const declaration of declarations) {
+                                    if (isNotOverload(declaration)) {
+                                        diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                                    }
                                 }
                             }
                         }
@@ -37286,6 +37296,15 @@ namespace ts {
                 }
                 links.exportsChecked = true;
             }
+        }
+
+        function isDuplicatedCommonJSExport(declarations: Declaration[], resolvedFirstDeclaration?: Symbol) {
+            const first = declarations[0];
+            return declarations.length === 2
+                && declarations.every(d => isInJSFile(d) && isAccessExpression(d) && (isExportsIdentifier(d.expression) || isModuleExportsAccessExpression(d.expression)))
+                && isBinaryExpression(first.parent)
+                && isIdentifier(first.parent.right)
+                && undefinedSymbol === (resolvedFirstDeclaration || resolveName(first.parent.right, first.parent.right.escapedText, SymbolFlags.Value, undefined, undefined, /*isUse*/ true));
         }
 
         function checkSourceElement(node: Node | undefined): void {

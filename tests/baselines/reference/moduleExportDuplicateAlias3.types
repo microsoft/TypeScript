@@ -1,9 +1,16 @@
 === tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
 exports.apply = undefined;
 >exports.apply = undefined : undefined
->exports.apply : (() => void) | undefined
+>exports.apply : undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | undefined
+>apply : undefined
+>undefined : undefined
+
+exports.apply = undefined;
+>exports.apply = undefined : undefined
+>exports.apply : undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : undefined
 >undefined : undefined
 
 function a() { }
@@ -11,8 +18,8 @@ function a() { }
 
 exports.apply = a;
 >exports.apply = a : () => void
->exports.apply : (() => void) | undefined
+>exports.apply : undefined
 >exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
->apply : (() => void) | undefined
+>apply : undefined
 >a : () => void
 

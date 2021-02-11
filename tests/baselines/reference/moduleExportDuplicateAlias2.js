@@ -1,14 +1,14 @@
 //// [moduleExportAliasDuplicateAlias.js]
-exports.apply = undefined;
+module.exports.apply = undefined;
 function a() { }
-exports.apply = a;
+module.exports.apply = a;
 
 
 //// [moduleExportAliasDuplicateAlias.js]
 "use strict";
-exports.apply = undefined;
+module.exports.apply = undefined;
 function a() { }
-exports.apply = a;
+module.exports.apply = a;
 
 
 //// [moduleExportAliasDuplicateAlias.d.ts]
