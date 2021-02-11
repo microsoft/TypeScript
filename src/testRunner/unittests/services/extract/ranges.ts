@@ -50,13 +50,22 @@ namespace ts {
                 var y = 2;|]|]
             `);
             testExtractRange(`
-                [#|
-                var x = 1;
-                var y = 2|];
+                [$|[#|var x = 1;
+                var y = 2|];|]
             `);
             testExtractRange(`
-                [#|var x = 1|];
+                [#|var x = [$|1|]|];
                 var y = 2;
+            `);
+            testExtractRange(`
+                var x = [$|10[#|00|]|];
+            `);
+            testExtractRange(`
+                [$|va[#|r foo = 1;
+                var y = 200|]0;|]
+            `);
+            testExtractRange(`
+                var x = [$|fo[#|o.bar.baz()|]|];
             `);
             testExtractRange(`
                 if ([#|[#extracted|a && b && c && d|]|]) {
@@ -64,6 +73,10 @@ namespace ts {
             `);
             testExtractRange(`
                 if [#|(a && b && c && d|]) {
+                }
+            `);
+            testExtractRange(`
+                if ([$|a[#|a && b && c && d|]d|]) {
                 }
             `);
             testExtractRange(`
