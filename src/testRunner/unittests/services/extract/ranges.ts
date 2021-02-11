@@ -14,98 +14,100 @@ namespace ts {
         });
     }
 
-    function testExtractRange(s: string): void {
-        const t = extractTest(s);
-        const f = createSourceFile("a.ts", t.source, ScriptTarget.Latest, /*setParentNodes*/ true);
-        const selectionRange = t.ranges.get("selection");
-        if (!selectionRange) {
-            throw new Error(`Test ${s} does not specify selection range`);
-        }
-        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromRange(selectionRange));
-        const expectedRange = t.ranges.get("extracted");
-        if (expectedRange) {
-            let pos: number, end: number;
-            const targetRange = result.targetRange!;
-            if (isArray(targetRange.range)) {
-                pos = targetRange.range[0].getStart(f);
-                end = last(targetRange.range).getEnd();
+    function testExtractRange(caption: string, s: string) {
+        return it(caption, () => {
+            const t = extractTest(s);
+            const f = createSourceFile("a.ts", t.source, ScriptTarget.Latest, /*setParentNodes*/ true);
+            const selectionRange = t.ranges.get("selection");
+            if (!selectionRange) {
+                throw new Error(`Test ${s} does not specify selection range`);
+            }
+            const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromRange(selectionRange));
+            const expectedRange = t.ranges.get("extracted");
+            if (expectedRange) {
+                let pos: number, end: number;
+                const targetRange = result.targetRange!;
+                if (isArray(targetRange.range)) {
+                    pos = targetRange.range[0].getStart(f);
+                    end = last(targetRange.range).getEnd();
+                }
+                else {
+                    pos = targetRange.range.getStart(f);
+                    end = targetRange.range.getEnd();
+                }
+                assert.equal(pos, expectedRange.pos, "incorrect pos of range");
+                assert.equal(end, expectedRange.end, "incorrect end of range");
             }
             else {
-                pos = targetRange.range.getStart(f);
-                end = targetRange.range.getEnd();
+                assert.isTrue(!result.targetRange, `expected range to extract to be undefined`);
             }
-            assert.equal(pos, expectedRange.pos, "incorrect pos of range");
-            assert.equal(end, expectedRange.end, "incorrect end of range");
-        }
-        else {
-            assert.isTrue(!result.targetRange, `expected range to extract to be undefined`);
-        }
+        });
     }
 
     describe("unittests:: services:: extract:: extractRanges", () => {
-        it("get extract range from selection", () => {
-            testExtractRange(`
+        describe("get extract range from selection", () => {
+            testExtractRange("extractRange1", `
                 [#|
                 [$|var x = 1;
                 var y = 2;|]|]
             `);
-            testExtractRange(`
+            testExtractRange("extractRange2", `
                 [$|[#|var x = 1;
                 var y = 2|];|]
             `);
-            testExtractRange(`
+            testExtractRange("extractRange3", `
                 [#|var x = [$|1|]|];
                 var y = 2;
             `);
-            testExtractRange(`
+            testExtractRange("extractRange4", `
                 var x = [$|10[#|00|]|];
             `);
-            testExtractRange(`
+            testExtractRange("extractRange5", `
                 [$|va[#|r foo = 1;
                 var y = 200|]0;|]
             `);
-            testExtractRange(`
+            testExtractRange("extractRange6", `
                 var x = [$|fo[#|o.bar.baz()|]|];
             `);
-            testExtractRange(`
+            testExtractRange("extractRange7", `
                 if ([#|[#extracted|a && b && c && d|]|]) {
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange8", `
                 if [#|(a && b && c && d|]) {
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange9", `
                 if ([$|a[#|a && b && c && d|]d|]) {
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange10", `
                 if (a && b && c && d) {
                 [#|    [$|var x = 1;
                     console.log(x);|]    |]
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange11", `
                 [#|
                 if (a) {
                     return 100;
                 } |]
             `);
-            testExtractRange(`
+            testExtractRange("extractRange12", `
                 function foo() {
                 [#|    [$|if (a) {
                     }
                     return 100|] |]
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange13", `
                 [#|
                 [$|l1:
                 if (x) {
                     break l1;
                 }|]|]
             `);
-            testExtractRange(`
+            testExtractRange("extractRange14", `
                 [#|
                 [$|l2:
                 {
@@ -114,21 +116,21 @@ namespace ts {
                     break l2;
                 }|]|]
             `);
-            testExtractRange(`
+            testExtractRange("extractRange15", `
                 while (true) {
                 [#|    if(x) {
                     }
                     break;  |]
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange16", `
                 while (true) {
                 [#|    if(x) {
                     }
                     continue;  |]
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange17", `
                 l3:
                 {
                     [#|
@@ -137,7 +139,7 @@ namespace ts {
                     break l3; |]
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange18", `
                 function f() {
                     while (true) {
                 [#|
@@ -147,7 +149,7 @@ namespace ts {
                     }
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange19", `
                 function f() {
                     while (true) {
                 [#|
@@ -158,13 +160,13 @@ namespace ts {
                     }
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange20", `
                 function f() {
                     return [#|  [$|1 + 2|]  |]+ 3;
                     }
                 }
             `);
-            testExtractRange(`
+            testExtractRange("extractRange21", `
                 function f(x: number) {
                     [#|[$|try {
                         x++;
@@ -176,17 +178,17 @@ namespace ts {
             `);
 
             // Variable statements
-            testExtractRange(`[#|let x = [$|1|];|]`);
-            testExtractRange(`[#|let x = [$|1|], y;|]`);
-            testExtractRange(`[#|[$|let x = 1, y = 1;|]|]`);
+            testExtractRange("extractRange22", `[#|let x = [$|1|];|]`);
+            testExtractRange("extractRange23", `[#|let x = [$|1|], y;|]`);
+            testExtractRange("extractRange24", `[#|[$|let x = 1, y = 1;|]|]`);
 
             // Variable declarations
-            testExtractRange(`let [#|x = [$|1|]|];`);
-            testExtractRange(`let [#|x = [$|1|]|], y = 2;`);
-            testExtractRange(`let x = 1, [#|y = [$|2|]|];`);
+            testExtractRange("extractRange25", `let [#|x = [$|1|]|];`);
+            testExtractRange("extractRange26", `let [#|x = [$|1|]|], y = 2;`);
+            testExtractRange("extractRange27", `let x = 1, [#|y = [$|2|]|];`);
 
             // Return statements
-            testExtractRange(`[#|return [$|1|];|]`);
+            testExtractRange("extractRange28", `[#|return [$|1|];|]`);
         });
 
         testExtractRangeFailed("extractRangeFailed1",
