@@ -27717,6 +27717,10 @@ namespace ts {
                 max = Math.max(max, maxCount);
             }
 
+            if (min < argCount && argCount < max) {
+                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
+            }
+
             const hasRestParameter = some(signatures, hasEffectiveRestParameter);
             const paramRange = hasRestParameter ? min :
                 min < max ? min + "-" + max :
@@ -27749,9 +27753,6 @@ namespace ts {
                         !paramDecl.name ? argCount : !isBindingPattern(paramDecl.name) ? idText(getFirstIdentifier(paramDecl.name)) : undefined
                     );
                 }
-            }
-            if (min < argCount && argCount < max) {
-                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
 
             if (!hasSpreadArgument && argCount < min) {

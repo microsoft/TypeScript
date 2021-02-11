@@ -59,7 +59,9 @@ namespace ts.refactor.inferFunctionReturnType {
         if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.kind, context.kind)) return;
 
         const token = getTokenAtPosition(context.file, context.startPosition);
-        const declaration = findAncestor(token, isConvertibleDeclaration);
+        const declaration = findAncestor(token, n =>
+            isBlock(n) || n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ? "quit" :
+                isConvertibleDeclaration(n)) as ConvertibleDeclaration | undefined;
         if (!declaration || !declaration.body || declaration.type) {
             return { error: getLocaleSpecificMessage(Diagnostics.Return_type_must_be_inferred_from_a_function) };
         }
@@ -68,7 +70,7 @@ namespace ts.refactor.inferFunctionReturnType {
         const returnType = tryGetReturnType(typeChecker, declaration);
         if (!returnType) {
             return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
-        };
+        }
 
         const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation);
         if (returnTypeNode) {
