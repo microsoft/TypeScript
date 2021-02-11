@@ -3846,13 +3846,16 @@ namespace ts {
         }
 
         function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
-            (<ResolvedType>type).members = members;
-            (<ResolvedType>type).properties = members === emptySymbols ? emptyArray : getNamedMembers(members);
-            (<ResolvedType>type).callSignatures = callSignatures;
-            (<ResolvedType>type).constructSignatures = constructSignatures;
-            (<ResolvedType>type).stringIndexInfo = stringIndexInfo;
-            (<ResolvedType>type).numberIndexInfo = numberIndexInfo;
-            return <ResolvedType>type;
+            const resolved = <ResolvedType>type;
+            resolved.members = members;
+            resolved.properties = emptyArray;
+            resolved.callSignatures = callSignatures;
+            resolved.constructSignatures = constructSignatures;
+            resolved.stringIndexInfo = stringIndexInfo;
+            resolved.numberIndexInfo = numberIndexInfo;
+            // This can loop back to getPropertyOfType() which would crash if `callSignatures` & `constructSignatures` are not initialized.
+            if (members !== emptySymbols) resolved.properties = getNamedMembers(members);
+            return resolved;
         }
 
         function createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
