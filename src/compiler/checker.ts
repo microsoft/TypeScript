@@ -2439,10 +2439,30 @@ namespace ts {
 
         /* Starting from 'initial' node walk up the parent chain until 'stopAt' node is reached.
          * If at any point current node is equal to 'parent' node - return true.
+         * If current node is an IIFE, continue walking up.
          * Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
          */
         function isSameScopeDescendentOf(initial: Node, parent: Node | undefined, stopAt: Node): boolean {
-            return !!parent && !!findAncestor(initial, n => n === stopAt || isFunctionLike(n) ? "quit" : n === parent);
+            return !!parent && !!findAncestor(initial, n => {
+                if (n === stopAt) {
+                    return "quit";
+                }
+                else if (n === parent) {
+                    return true;
+                }
+                else if(isFunctionLike(n)) {
+                    const iife = getImmediatelyInvokedFunctionExpression(n);
+                    if (iife) {
+                        return isSameScopeDescendentOf(iife, parent, stopAt);
+                    }
+                    else {
+                        return "quit";
+                    }
+                }
+                else {
+                    return false;
+                }
+            });
         }
 
         function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {

@@ -2,9 +2,12 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(2,13): error TS2448: Bl
 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(58,20): error TS2448: Block-scoped variable 'x' used before its declaration.
 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(65,20): error TS2448: Block-scoped variable 'x' used before its declaration.
 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(111,28): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(112,21): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable 'a' used before its declaration.
 
 
-==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (4 errors) ====
+==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (7 errors) ====
     function foo0() {
         let a = x;
                 ~
@@ -119,5 +122,34 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: 
 !!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:102:9: 'x' is declared here.
         }
         let x
+    }
+    
+    function foo15() {
+        // https://github.com/microsoft/TypeScript/issues/42678
+        const [
+            a,
+            b,
+        ] = ((): [number, number] => {
+            (() => console.log(a))();  // should error
+                               ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:108:9: 'a' is declared here.
+            console.log(a);            // should error
+                        ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:108:9: 'a' is declared here.
+            const b = () => a;         // should be ok
+            return [
+                0,
+                0,
+            ];
+        })();    
+    }
+    
+    function foo16() {
+        let [a] = (() => a)();
+                         ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:122:10: 'a' is declared here.
     }
     
