@@ -189,6 +189,7 @@
         "unittests/tsserver/projectReferenceCompileOnSave.ts",
         "unittests/tsserver/projectReferenceErrors.ts",
         "unittests/tsserver/projectReferences.ts",
+        "unittests/tsserver/projectReferencesSourcemap.ts",
         "unittests/tsserver/projects.ts",
         "unittests/tsserver/refactors.ts",
         "unittests/tsserver/reload.ts",
