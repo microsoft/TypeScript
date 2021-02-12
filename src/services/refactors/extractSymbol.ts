@@ -268,18 +268,19 @@ namespace ts.refactor.extractSymbol {
      * users if they have the provideRefactorNotApplicableReason option set.
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, considerEmptySpans = true): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoked = true): RangeToExtract {
         const { length } = span;
-        if (length === 0 && !considerEmptySpans) {
+        if (length === 0 && !invoked) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
-        const cursorRequest = length === 0 && considerEmptySpans;
+        const cursorRequest = length === 0 && invoked;
 
         const startToken = getTokenAtPosition(sourceFile, span.start);
         const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
-        /* Users don't necessarily know the exact range they need to select to get this refactor so we adjust the
-        span to fully cover the start and end tokens. This improves discoverability and ease of use. */
-        const adjustedSpan = startToken && endToken ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
+        /* If the refactor command is invoked through a keyboard action it's safe to assume that the user is actively looking for
+        refactor actions at the span location. As they may not know the exact range that will trigger a refactor, we expand the 
+        searched span to cover a real node range making it more likely that something useful will show up. */
+        const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
