@@ -19489,8 +19489,8 @@ namespace ts {
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
-            const elementType = isArrayType(type) ? getTypeArguments(type)[0] : undefined;
-            return elementType === undefinedWideningType || elementType === implicitNeverType;
+            const elementType = getElementTypeOfArrayType(type);
+            return strictNullChecks ? elementType === implicitNeverType : elementType === undefinedWideningType;
         }
 
         function isTupleLikeType(type: Type): boolean {
