@@ -609,7 +609,7 @@ namespace ts.codefix {
         const exported = getDefaultLikeExportWorker(importingFile, moduleSymbol, checker, compilerOptions);
         if (!exported) return undefined;
         const { symbol, kind } = exported;
-        const info = getDefaultExportInfoWorker(symbol, moduleSymbol, checker, compilerOptions);
+        const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
         return info && { symbol, kind, ...info };
     }
 
@@ -645,7 +645,7 @@ namespace ts.codefix {
         return allowSyntheticDefaults ? ImportKind.Default : ImportKind.CommonJS;
     }
 
-    function getDefaultExportInfoWorker(defaultExport: Symbol, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
+    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
         if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
 
@@ -659,7 +659,7 @@ namespace ts.codefix {
                 //    but we can still offer completions for it.
                 // - `aliased.parent` will be undefined if the module is exporting `globalThis.something`,
                 //    or another expression that resolves to a global.
-                return getDefaultExportInfoWorker(aliased, aliased.parent, checker, compilerOptions);
+                return getDefaultExportInfoWorker(aliased, checker, compilerOptions);
             }
         }
 
@@ -667,15 +667,13 @@ namespace ts.codefix {
             defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
             return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
         }
-        return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) };
+        return { symbolForMeaning: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
     }
 
     function getNameForExportDefault(symbol: Symbol): string | undefined {
         return symbol.declarations && firstDefined(symbol.declarations, declaration => {
             if (isExportAssignment(declaration)) {
-                if (isIdentifier(declaration.expression)) {
-                    return declaration.expression.text;
-                }
+                return tryCast(skipOuterExpressions(declaration.expression), isIdentifier)?.text;
             }
             else if (isExportSpecifier(declaration)) {
                 Debug.assert(declaration.name.text === InternalSymbolName.Default, "Expected the specifier to be a default export");

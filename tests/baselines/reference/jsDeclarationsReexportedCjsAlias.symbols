@@ -7,9 +7,9 @@ const { SomeClass, SomeClass: Another } = require('./lib');
 >'./lib' : Symbol("tests/cases/conformance/jsdoc/declarations/lib", Decl(lib.js, 0, 0))
 
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/main", Decl(main.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(main.js, 0, 0))
 >module : Symbol(module, Decl(main.js, 0, 59))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/main", Decl(main.js, 0, 0))
+>exports : Symbol(module.exports, Decl(main.js, 0, 0))
 
     SomeClass,
 >SomeClass : Symbol(SomeClass, Decl(main.js, 2, 18))
@@ -41,9 +41,9 @@ class SomeClass {
 }
 
 module.exports = {
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/lib", Decl(lib.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(lib.js, 0, 0))
 >module : Symbol(module, Decl(lib.js, 11, 1))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/lib", Decl(lib.js, 0, 0))
+>exports : Symbol(module.exports, Decl(lib.js, 0, 0))
 
     bar,
 >bar : Symbol(bar, Decl(lib.js, 13, 18))
