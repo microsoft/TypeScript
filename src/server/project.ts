@@ -2247,7 +2247,6 @@ namespace ts.server {
 
         close() {
             this.projectService.stopWatchingWildCards(this, this.canonicalConfigFilePath);
-            this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
             this.projectService.setConfigFileExistenceInfoByClosedConfiguredProject(this);
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
