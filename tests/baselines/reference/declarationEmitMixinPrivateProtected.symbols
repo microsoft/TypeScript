@@ -1,0 +1,71 @@
+=== tests/cases/compiler/first.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : Symbol(mix, Decl(first.ts, 0, 0))
+>TMix : Symbol(TMix, Decl(first.ts, 0, 21))
+>mixin : Symbol(mixin, Decl(first.ts, 0, 27))
+>TMix : Symbol(TMix, Decl(first.ts, 0, 21))
+>TMix : Symbol(TMix, Decl(first.ts, 0, 21))
+
+const DisposableMixin = class {
+>DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+
+    protected _onDispose() {
+>_onDispose : Symbol(DisposableMixin._onDispose, Decl(first.ts, 2, 31))
+
+        this._assertIsStripped()
+>this._assertIsStripped : Symbol(DisposableMixin._assertIsStripped, Decl(first.ts, 5, 5))
+>this : Symbol(DisposableMixin, Decl(first.ts, 2, 23))
+>_assertIsStripped : Symbol(DisposableMixin._assertIsStripped, Decl(first.ts, 5, 5))
+    }
+    private _assertIsStripped() {
+>_assertIsStripped : Symbol(DisposableMixin._assertIsStripped, Decl(first.ts, 5, 5))
+    }
+};
+
+// No error, but definition is wrong. 
+export default mix(DisposableMixin);
+>mix : Symbol(mix, Decl(first.ts, 0, 0))
+>DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+
+export class Monitor extends mix(DisposableMixin) {
+>Monitor : Symbol(Monitor, Decl(first.ts, 11, 36))
+>mix : Symbol(mix, Decl(first.ts, 0, 0))
+>DisposableMixin : Symbol(DisposableMixin, Decl(first.ts, 2, 5))
+
+    protected _onDispose() {
+>_onDispose : Symbol(Monitor._onDispose, Decl(first.ts, 12, 51))
+    }
+}
+
+=== tests/cases/compiler/another.ts ===
+declare function mix<TMix>(mixin: TMix): TMix;
+>mix : Symbol(mix, Decl(another.ts, 0, 0))
+>TMix : Symbol(TMix, Decl(another.ts, 0, 21))
+>mixin : Symbol(mixin, Decl(another.ts, 0, 27))
+>TMix : Symbol(TMix, Decl(another.ts, 0, 21))
+>TMix : Symbol(TMix, Decl(another.ts, 0, 21))
+
+const DisposableMixin = class {
+>DisposableMixin : Symbol(DisposableMixin, Decl(another.ts, 2, 5))
+
+    protected _onDispose() {
+>_onDispose : Symbol(DisposableMixin._onDispose, Decl(another.ts, 2, 31))
+
+        this._assertIsStripped()
+>this._assertIsStripped : Symbol(DisposableMixin._assertIsStripped, Decl(another.ts, 5, 5))
+>this : Symbol(DisposableMixin, Decl(another.ts, 2, 23))
+>_assertIsStripped : Symbol(DisposableMixin._assertIsStripped, Decl(another.ts, 5, 5))
+    }
+    private _assertIsStripped() {
+>_assertIsStripped : Symbol(DisposableMixin._assertIsStripped, Decl(another.ts, 5, 5))
+    }
+};
+
+export default class extends mix(DisposableMixin) {
+>mix : Symbol(mix, Decl(another.ts, 0, 0))
+>DisposableMixin : Symbol(DisposableMixin, Decl(another.ts, 2, 5))
+
+    protected _onDispose() {
+>_onDispose : Symbol(default._onDispose, Decl(another.ts, 10, 51))
+    }
+}

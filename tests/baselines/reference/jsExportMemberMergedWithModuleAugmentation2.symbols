@@ -1,6 +1,6 @@
 === /test.js ===
 module.exports = {
->module.exports : Symbol("/test", Decl(test.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
 >module : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 27))
 >exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 27))
 

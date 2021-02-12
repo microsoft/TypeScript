@@ -1,0 +1,207 @@
+=== tests/cases/compiler/unionOfClassCalls.ts ===
+// from https://github.com/microsoft/TypeScript/issues/30717
+declare class Test<T> {
+>Test : Symbol(Test, Decl(unionOfClassCalls.ts, 0, 0))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 1, 19))
+
+    obj: T;
+>obj : Symbol(Test.obj, Decl(unionOfClassCalls.ts, 1, 23))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 1, 19))
+
+    get<K extends keyof T>(k: K): T[K];
+>get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 2, 11))
+>K : Symbol(K, Decl(unionOfClassCalls.ts, 3, 8))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 1, 19))
+>k : Symbol(k, Decl(unionOfClassCalls.ts, 3, 27))
+>K : Symbol(K, Decl(unionOfClassCalls.ts, 3, 8))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 1, 19))
+>K : Symbol(K, Decl(unionOfClassCalls.ts, 3, 8))
+}
+
+interface A { t: "A" }
+>A : Symbol(A, Decl(unionOfClassCalls.ts, 4, 1))
+>t : Symbol(A.t, Decl(unionOfClassCalls.ts, 6, 13))
+
+interface B { t: "B" }
+>B : Symbol(B, Decl(unionOfClassCalls.ts, 6, 22))
+>t : Symbol(B.t, Decl(unionOfClassCalls.ts, 7, 13))
+
+declare const tmp: Test<A> | Test<B>;
+>tmp : Symbol(tmp, Decl(unionOfClassCalls.ts, 9, 13))
+>Test : Symbol(Test, Decl(unionOfClassCalls.ts, 0, 0))
+>A : Symbol(A, Decl(unionOfClassCalls.ts, 4, 1))
+>Test : Symbol(Test, Decl(unionOfClassCalls.ts, 0, 0))
+>B : Symbol(B, Decl(unionOfClassCalls.ts, 6, 22))
+
+switch (tmp.get('t')) {
+>tmp.get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 2, 11), Decl(unionOfClassCalls.ts, 2, 11))
+>tmp : Symbol(tmp, Decl(unionOfClassCalls.ts, 9, 13))
+>get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 2, 11), Decl(unionOfClassCalls.ts, 2, 11))
+
+    case 'A': break;
+    case 'B': break;
+}
+
+// from https://github.com/microsoft/TypeScript/issues/36390
+
+const arr: number[] | string[] = [];  // Works with Array<number | string>
+>arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
+
+const arr1: number[]  = [];
+>arr1 : Symbol(arr1, Decl(unionOfClassCalls.ts, 19, 5))
+
+const arr2:  string[] = [];
+>arr2 : Symbol(arr2, Decl(unionOfClassCalls.ts, 20, 5))
+
+arr.map((a: number | string, index: number) => { 
+>arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 22, 9))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 22, 28))
+
+    return index
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 22, 28))
+
+})
+
+// This case still doesn't work because `reduce` has multiple overloads :(
+arr.reduce((acc: Array<string>, a: number | string, index: number) => { 
+>arr.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>acc : Symbol(acc, Decl(unionOfClassCalls.ts, 27, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 27, 31))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 27, 51))
+
+    return []
+}, [])
+
+arr.forEach((a: number | string, index: number) => { 
+>arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 31, 13))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 31, 32))
+
+    return index
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 31, 32))
+
+})
+
+arr1.map((a: number, index: number) => { 
+>arr1.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arr1 : Symbol(arr1, Decl(unionOfClassCalls.ts, 19, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 35, 10))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 35, 20))
+
+    return index
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 35, 20))
+
+})
+
+arr1.reduce((acc: number[], a: number, index: number) => { 
+>arr1.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr1 : Symbol(arr1, Decl(unionOfClassCalls.ts, 19, 5))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>acc : Symbol(acc, Decl(unionOfClassCalls.ts, 39, 13))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 39, 27))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 39, 38))
+
+    return [a]
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 39, 27))
+
+}, [])
+
+arr1.forEach((a: number, index: number) => { 
+>arr1.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>arr1 : Symbol(arr1, Decl(unionOfClassCalls.ts, 19, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 43, 14))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 43, 24))
+
+    return index
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 43, 24))
+
+})
+arr2.map((a:  string, index: number) => { 
+>arr2.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arr2 : Symbol(arr2, Decl(unionOfClassCalls.ts, 20, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 46, 10))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 46, 21))
+
+    return index
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 46, 21))
+
+})
+
+arr2.reduce((acc: string[], a: string, index: number) => { 
+>arr2.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr2 : Symbol(arr2, Decl(unionOfClassCalls.ts, 20, 5))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>acc : Symbol(acc, Decl(unionOfClassCalls.ts, 50, 13))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 50, 27))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 50, 38))
+
+    return []
+}, [])
+
+arr2.forEach((a: string, index: number) => { 
+>arr2.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>arr2 : Symbol(arr2, Decl(unionOfClassCalls.ts, 20, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 54, 14))
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 54, 24))
+
+    return index
+>index : Symbol(index, Decl(unionOfClassCalls.ts, 54, 24))
+
+})
+
+// from https://github.com/microsoft/TypeScript/issues/36307
+
+declare class Foo {
+>Foo : Symbol(Foo, Decl(unionOfClassCalls.ts, 56, 2))
+
+    doThing(): Promise<this>
+>doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+}
+
+declare class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(unionOfClassCalls.ts, 62, 1))
+>Foo : Symbol(Foo, Decl(unionOfClassCalls.ts, 56, 2))
+
+    bar: number;
+>bar : Symbol(Bar.bar, Decl(unionOfClassCalls.ts, 64, 31))
+}
+declare class Baz extends Foo {
+>Baz : Symbol(Baz, Decl(unionOfClassCalls.ts, 66, 1))
+>Foo : Symbol(Foo, Decl(unionOfClassCalls.ts, 56, 2))
+
+    baz: number;
+>baz : Symbol(Baz.baz, Decl(unionOfClassCalls.ts, 67, 31))
+}
+
+declare var a: Bar | Baz;
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 71, 11))
+>Bar : Symbol(Bar, Decl(unionOfClassCalls.ts, 62, 1))
+>Baz : Symbol(Baz, Decl(unionOfClassCalls.ts, 66, 1))
+
+// note, you must annotate `result` for now
+a.doThing().then((result: Bar | Baz) => {
+>a.doThing().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19), Decl(unionOfClassCalls.ts, 60, 19))
+>a : Symbol(a, Decl(unionOfClassCalls.ts, 71, 11))
+>doThing : Symbol(Foo.doThing, Decl(unionOfClassCalls.ts, 60, 19), Decl(unionOfClassCalls.ts, 60, 19))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(unionOfClassCalls.ts, 73, 18))
+>Bar : Symbol(Bar, Decl(unionOfClassCalls.ts, 62, 1))
+>Baz : Symbol(Baz, Decl(unionOfClassCalls.ts, 66, 1))
+
+	// whatever
+});
+

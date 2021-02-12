@@ -2743,11 +2743,11 @@ module Harness {
 
                     if (this.fileCollection.hasOwnProperty(p)) {
 >this.fileCollection.hasOwnProperty(p) : boolean
->this.fileCollection.hasOwnProperty : (v: string | number | symbol) => boolean
+>this.fileCollection.hasOwnProperty : (v: PropertyKey) => boolean
 >this.fileCollection : {}
 >this : this
 >fileCollection : {}
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >p : string
 
                         var current = <Harness.Compiler.WriterAggregator>this.fileCollection[p];
@@ -3068,13 +3068,13 @@ module Harness {
 >(Array.isArray && Array.isArray(arg)) || arg instanceof Array : boolean
 >(Array.isArray && Array.isArray(arg)) : boolean
 >Array.isArray && Array.isArray(arg) : boolean
->Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>isArray : (arg: any) => arg is any[]
 >Array.isArray(arg) : boolean
->Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>isArray : (arg: any) => arg is any[]
 >arg : any
 >arg instanceof Array : boolean
 >arg : any

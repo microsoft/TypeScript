@@ -695,12 +695,12 @@ function ff(o: O, k: K) {
     }
     k === 'c';  // Error
 >k === 'c' : boolean
->k : "a" | "b"
+>k : keyof O
 >'c' : "c"
 
     return o[k];
 >o[k] : number
 >o : O
->k : "a" | "b"
+>k : keyof O
 }
 

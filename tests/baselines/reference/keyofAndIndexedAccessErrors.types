@@ -23,7 +23,7 @@ type T00 = keyof K0;  // Error
 >T00 : string | number | symbol
 
 type T01 = keyof Object;
->T01 : "toString" | "valueOf" | "toLocaleString" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>T01 : keyof Object
 
 type T02 = keyof keyof Object;
 >T02 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"

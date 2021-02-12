@@ -270,11 +270,12 @@ interface Symbol {
         tick: () => void;
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
+        cleanBuildDiscrepancies: TscIncremental["cleanBuildDiscrepancies"];
     }
     function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number) {
         it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index}`, () => {
             const {
-                scenario, subScenario, commandLineArgs,
+                scenario, subScenario, commandLineArgs, cleanBuildDiscrepancies,
                 modifyFs, incrementalModifyFs,
                 tick, baseFs, newSys
             } = input();
@@ -289,47 +290,74 @@ interface Symbol {
                     incrementalModifyFs(fs);
                 },
             });
+            const discrepancies = cleanBuildDiscrepancies?.();
             for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
-                const expectedText = sys.readFile(outputFile);
-                const actualText = newSys.readFile(outputFile);
+                const cleanBuildText = sys.readFile(outputFile);
+                const incrementalBuildText = newSys.readFile(outputFile);
+                const descrepancyInClean = discrepancies?.get(outputFile);
                 if (!isBuildInfoFile(outputFile)) {
-                    assert.equal(actualText, expectedText, `File: ${outputFile}`);
+                    verifyTextEqual(incrementalBuildText, cleanBuildText, descrepancyInClean, `File: ${outputFile}`);
                 }
-                else if (actualText !== expectedText) {
+                else if (incrementalBuildText !== cleanBuildText) {
                     // Verify build info without affectedFilesPendingEmit
-                    const { buildInfo: actualBuildInfo, affectedFilesPendingEmit: actualAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(actualText);
-                    const { buildInfo: expectedBuildInfo, affectedFilesPendingEmit: expectedAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(expectedText);
-                    assert.deepEqual(actualBuildInfo, expectedBuildInfo, `TsBuild info text without affectedFilesPendingEmit: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                    const { buildInfo: incrementalBuildInfo, affectedFilesPendingEmit: incrementalBuildAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
+                    const { buildInfo: cleanBuildInfo, affectedFilesPendingEmit: incrementalAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
+                    verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, descrepancyInClean, `TsBuild info text without affectedFilesPendingEmit ${subScenario}:: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
                     // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
-                    if (actualAffectedFilesPendingEmit) {
-                        assert.isDefined(expectedAffectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                    if (incrementalBuildAffectedFilesPendingEmit && descrepancyInClean === undefined) {
+                        assert.isDefined(incrementalAffectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
                         let expectedIndex = 0;
-                        actualAffectedFilesPendingEmit.forEach(([actualFile]) => {
-                            expectedIndex = findIndex(expectedAffectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
-                            assert.notEqual(expectedIndex, -1, `Incremental build contains ${actualFile} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                        incrementalBuildAffectedFilesPendingEmit.forEach(([actualFile]) => {
+                            expectedIndex = findIndex(incrementalAffectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                            assert.notEqual(expectedIndex, -1, `Incremental build contains ${actualFile} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
                             expectedIndex++;
                         });
                     }
                 }
             }
+
+            function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, descrepancyInClean: CleanBuildDescrepancy | undefined, message: string) {
+                if (descrepancyInClean === undefined) {
+                    assert.equal(incrementalText, cleanText, message);
+                    return;
+                }
+                switch (descrepancyInClean) {
+                    case CleanBuildDescrepancy.CleanFileTextDifferent:
+                        assert.isDefined(incrementalText, `Incremental file should be present:: ${message}`);
+                        assert.isDefined(cleanText, `Clean file should be present present:: ${message}`);
+                        assert.notEqual(incrementalText, cleanText, message);
+                        return;
+                    case CleanBuildDescrepancy.CleanFilePresent:
+                        assert.isUndefined(incrementalText, `Incremental file should be absent:: ${message}`);
+                        assert.isDefined(cleanText, `Clean file should be present:: ${message}`);
+                        return;
+                    default:
+                        Debug.assertNever(descrepancyInClean);
+                }
+            }
         });
     }
 
-    function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): { buildInfo: BuildInfo | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
+    function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): { buildInfo: string | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
         const buildInfo = text ? getBuildInfo(text) : undefined;
-        if (!buildInfo?.program) return { buildInfo };
+        if (!buildInfo?.program) return { buildInfo: text };
         // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
         const { program: { affectedFilesPendingEmit, options: { noEmit, ...optionsRest}, ...programRest }, ...rest } = buildInfo;
         return {
-            buildInfo: {
+            buildInfo: getBuildInfoText({
                 ...rest,
                 program: {
                     options: optionsRest,
                     ...programRest
                 }
-            },
+            }),
             affectedFilesPendingEmit
         };
+    }
+
+    export enum CleanBuildDescrepancy {
+        CleanFileTextDifferent,
+        CleanFilePresent,
     }
 
     export interface TscIncremental {
@@ -337,6 +365,7 @@ interface Symbol {
         modifyFs: (fs: vfs.FileSystem) => void;
         subScenario?: string;
         commandLineArgs?: readonly string[];
+        cleanBuildDiscrepancies?: () => ESMap<string, CleanBuildDescrepancy>;
     }
 
     export interface VerifyTsBuildInput extends VerifyTsBuildInputWorker {
@@ -396,7 +425,8 @@ interface Symbol {
                 buildKind,
                 modifyFs: incrementalModifyFs,
                 subScenario: incrementalSubScenario,
-                commandLineArgs: incrementalCommandLineArgs
+                commandLineArgs: incrementalCommandLineArgs,
+                cleanBuildDiscrepancies,
             }, index) => {
                 describe(incrementalSubScenario || buildKind, () => {
                     let newSys: TscCompileSystem;
@@ -425,10 +455,11 @@ interface Symbol {
                     verifyTscBaseline(() => newSys);
                     verifyIncrementalCorrectness(() => ({
                         scenario,
-                        subScenario,
+                        subScenario: incrementalSubScenario || subScenario,
                         baseFs,
                         newSys,
                         commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                        cleanBuildDiscrepancies,
                         incrementalModifyFs,
                         modifyFs,
                         tick
@@ -520,12 +551,13 @@ interface Symbol {
                 }));
             });
             describe("incremental correctness", () => {
-                incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs }, index) => verifyIncrementalCorrectness(() => ({
+                incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs, subScenario, buildKind, cleanBuildDiscrepancies }, index) => verifyIncrementalCorrectness(() => ({
                     scenario,
-                    subScenario,
+                    subScenario: subScenario || buildKind,
                     baseFs,
                     newSys: incrementalSys[index],
                     commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                    cleanBuildDiscrepancies,
                     incrementalModifyFs: fs => {
                         for (let i = 0; i <= index; i++) {
                             incrementalScenarios[i].modifyFs(fs);
@@ -583,7 +615,8 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
         const content = fs.readFileSync(path, "utf8");
         fs.writeFileSync(path, `${content}
 function ${project}${file}Spread(...b: number[]) { }
-${project}${file}Spread(...[10, 20, 30]);`);
+const ${project}${file}_ar = [20, 30];
+${project}${file}Spread(10, ...${project}${file}_ar);`);
 
         replaceText(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
     "downlevelIteration": true,`);

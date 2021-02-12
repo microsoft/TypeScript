@@ -29,6 +29,11 @@ class A {
 >this.#fieldFunc : () => void
 >this : this
 
+        this.#fieldFunc?.();
+>this.#fieldFunc?.() : void
+>this.#fieldFunc : () => void
+>this : this
+
         const func = this.#fieldFunc;
 >func : () => void
 >this.#fieldFunc : () => void

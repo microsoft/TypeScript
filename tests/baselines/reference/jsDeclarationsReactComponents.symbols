@@ -12,7 +12,7 @@ const TabbedShowLayout = ({
 }) => {
     return (
         <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
     );
 };
@@ -56,13 +56,13 @@ const TabbedShowLayout = () => {
 
     return (
         <div className="" key="">
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >className : Symbol(className, Decl(jsDeclarationsReactComponents2.jsx, 6, 12))
 >key : Symbol(key, Decl(jsDeclarationsReactComponents2.jsx, 6, 25))
 
             ok
         </div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
     );
 };
@@ -92,13 +92,13 @@ const TabbedShowLayout = () => {
 
     return (
         <div className="" key="">
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >className : Symbol(className, Decl(jsDeclarationsReactComponents3.jsx, 6, 12))
 >key : Symbol(key, Decl(jsDeclarationsReactComponents3.jsx, 6, 25))
 
             ok
         </div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
     );
 };
@@ -126,7 +126,7 @@ const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
 
     return (
         <div className={prop.className} key="">
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 3, 12))
 >prop.className : Symbol(className, Decl(jsDeclarationsReactComponents4.jsx, 1, 38))
 >prop : Symbol(prop, Decl(jsDeclarationsReactComponents4.jsx, 1, 26))
@@ -135,7 +135,7 @@ const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
 
             ok
         </div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
     );
 };
@@ -165,7 +165,7 @@ function Tree({ allowDropOnRoot }) {
 >allowDropOnRoot : Symbol(allowDropOnRoot, Decl(jsDeclarationsReactComponents5.jsx, 3, 15))
 
   return <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 
 Tree.propTypes = {

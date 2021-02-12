@@ -168,9 +168,8 @@ module.exports = {};
 }
 
 //// [/lib/sub-project/index.d.ts]
-export type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
+export type MyNominal = Nominal<string, 'MyNominal'>;
+import { Nominal } from "../common/nominal";
 
 
 //// [/lib/sub-project/index.js]
@@ -197,7 +196,7 @@ exports.__esModule = true;
       },
       "../../src/sub-project/index.js": {
         "version": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n",
-        "signature": "-4500199036-export type MyNominal = string & {\r\n    [Symbol.species]: \"MyNominal\";\r\n};\r\n",
+        "signature": "-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n",
         "affectsGlobalScope": false
       }
     },
@@ -234,7 +233,7 @@ export function getVar(): keyof typeof variable;
 declare namespace variable {
     const key: MyNominal;
 }
-import { MyNominal } from "../sub-project";
+import { MyNominal } from "../sub-project/index";
 export {};
 
 
@@ -263,14 +262,19 @@ exports.getVar = getVar;
         "signature": "-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n",
         "affectsGlobalScope": true
       },
+      "../common/nominal.d.ts": {
+        "version": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
+        "signature": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
+        "affectsGlobalScope": false
+      },
       "../sub-project/index.d.ts": {
-        "version": "-4500199036-export type MyNominal = string & {\r\n    [Symbol.species]: \"MyNominal\";\r\n};\r\n",
-        "signature": "-4500199036-export type MyNominal = string & {\r\n    [Symbol.species]: \"MyNominal\";\r\n};\r\n",
+        "version": "-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n",
+        "signature": "-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n",
         "affectsGlobalScope": false
       },
       "../../src/sub-project-2/index.js": {
         "version": "9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n",
-        "signature": "-24091164549-/**\r\n * @return {keyof typeof variable}\r\n */\r\nexport function getVar(): keyof typeof variable;\r\ndeclare namespace variable {\r\n    const key: MyNominal;\r\n}\r\nimport { MyNominal } from \"../sub-project\";\r\nexport {};\r\n",
+        "signature": "-8647857726-/**\r\n * @return {keyof typeof variable}\r\n */\r\nexport function getVar(): keyof typeof variable;\r\ndeclare namespace variable {\r\n    const key: MyNominal;\r\n}\r\nimport { MyNominal } from \"../sub-project/index\";\r\nexport {};\r\n",
         "affectsGlobalScope": false
       }
     },
@@ -285,12 +289,20 @@ exports.getVar = getVar;
       "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
+      "../sub-project/index.d.ts": [
+        "../common/nominal.d.ts"
+      ],
       "../../src/sub-project-2/index.js": [
         "../sub-project/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "../sub-project/index.d.ts": [
+        "../common/nominal.d.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
+      "../common/nominal.d.ts",
       "../lib.d.ts",
       "../sub-project/index.d.ts",
       "../../src/sub-project-2/index.js"

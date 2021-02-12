@@ -9,7 +9,7 @@ declare class B {
     static from(): string;
 }
 
-function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
+function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
     // error
     required1 && console.log('required');
 
@@ -42,6 +42,24 @@ function test(required1: () => boolean, required2: () => boolean, optional?: () 
 
     // error
     required1 && required2 && required1() && console.log('foo');
+
+    // error
+    if (required1 && b) {
+    }
+
+    // error
+    if (((required1 && b))) {
+    }
+
+    // ok
+    if (required1 && b) {
+        required1();
+    }
+
+    // ok
+    if (((required1 && b))) {
+        required1();
+    }
 }
 
 function checksConsole() {

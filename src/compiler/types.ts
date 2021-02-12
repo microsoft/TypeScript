@@ -2925,6 +2925,7 @@ namespace ts {
         readonly kind: SyntaxKind.ImportEqualsDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly name: Identifier;
+        readonly isTypeOnly: boolean;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
         // module reference.
@@ -3037,6 +3038,7 @@ namespace ts {
 
     export type TypeOnlyCompatibleAliasDeclaration =
         | ImportClause
+        | ImportEqualsDeclaration
         | NamespaceImport
         | ImportOrExportSpecifier
         ;
@@ -3618,6 +3620,7 @@ namespace ts {
 
     export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
+        /*@internal*/ configFileSpecs?: ConfigFileSpecs;
     }
 
     export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
@@ -3687,19 +3690,93 @@ namespace ts {
     }
 
     /*@internal*/
-    export enum RefFileKind {
+    export enum FileIncludeKind {
+        RootFile,
+        SourceFromProjectReference,
+        OutputFromProjectReference,
         Import,
         ReferenceFile,
-        TypeReferenceDirective
+        TypeReferenceDirective,
+        LibFile,
+        LibReferenceDirective,
+        AutomaticTypeDirectiveFile
     }
 
     /*@internal*/
-    export interface RefFile {
-        referencedFileName: string;
-        kind: RefFileKind;
+    export interface RootFile {
+        kind: FileIncludeKind.RootFile,
         index: number;
-        file: Path;
     }
+
+    /*@internal*/
+    export interface LibFile {
+        kind: FileIncludeKind.LibFile;
+        index?: number;
+    }
+
+    /*@internal*/
+    export type ProjectReferenceFileKind = FileIncludeKind.SourceFromProjectReference |
+        FileIncludeKind.OutputFromProjectReference;
+
+    /*@internal*/
+    export interface ProjectReferenceFile {
+        kind: ProjectReferenceFileKind;
+        index: number;
+    }
+
+    /*@internal*/
+    export type ReferencedFileKind = FileIncludeKind.Import |
+        FileIncludeKind.ReferenceFile |
+        FileIncludeKind.TypeReferenceDirective |
+        FileIncludeKind.LibReferenceDirective;
+
+    /*@internal*/
+    export interface ReferencedFile {
+        kind: ReferencedFileKind;
+        file: Path;
+        index: number;
+    }
+
+    /*@internal*/
+    export interface AutomaticTypeDirectiveFile {
+        kind: FileIncludeKind.AutomaticTypeDirectiveFile;
+        typeReference: string;
+        packageId: PackageId | undefined;
+    }
+
+    /*@internal*/
+    export type FileIncludeReason =
+        RootFile |
+        LibFile |
+        ProjectReferenceFile |
+        ReferencedFile |
+        AutomaticTypeDirectiveFile;
+
+    /*@internal*/
+    export const enum FilePreprocessingDiagnosticsKind {
+        FilePreprocessingReferencedDiagnostic,
+        FilePreprocessingFileExplainingDiagnostic
+    }
+
+    /*@internal*/
+    export interface FilePreprocessingReferencedDiagnostic {
+        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
+        reason: ReferencedFile;
+        diagnostic: DiagnosticMessage;
+        args?: (string | number | undefined)[];
+    }
+
+    /*@internal*/
+    export interface FilePreprocessingFileExplainingDiagnostic {
+        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
+        file?: Path;
+        fileProcessingReason: FileIncludeReason;
+        diagnostic: DiagnosticMessage;
+        args?: (string | number | undefined)[];
+    }
+
+    /*@internal*/
+    export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
 
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
@@ -3719,8 +3796,6 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): readonly Path[];
-        /* @internal */
-        getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
@@ -3775,7 +3850,7 @@ namespace ts {
         getInstantiationCount(): number;
         getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
-        /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
+        /* @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
         /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
@@ -3793,6 +3868,8 @@ namespace ts {
         /* @internal */ redirectTargetsMap: MultiMap<string, string>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+        /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        /* @internal */ useCaseSensitiveFileNames(): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -4131,6 +4208,7 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
         /* @internal */ resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;
+        /* @internal */ getJsxFragmentFactory(location: Node): string | undefined;
 
         /**
          * Note that this will return undefined in the following case:
@@ -4529,7 +4607,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): SourceFile | undefined;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
@@ -4667,6 +4745,8 @@ namespace ts {
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
         instantiations?: ESMap<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
+        aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
+        aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
         inferredClassSymbol?: ESMap<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
         referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
@@ -4926,7 +5006,7 @@ namespace ts {
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         /* @internal */
-        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
+        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | Instantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
         IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral,
@@ -5088,6 +5168,7 @@ namespace ts {
         /* @internal */ constructSignatures?: readonly Signature[]; // Construct signatures of type
         /* @internal */ stringIndexInfo?: IndexInfo;      // String indexing info
         /* @internal */ numberIndexInfo?: IndexInfo;      // Numeric indexing info
+        /* @internal */ objectTypeWithoutAbstractConstructSignatures?: ObjectType;
     }
 
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
@@ -5167,18 +5248,21 @@ namespace ts {
     }
 
     export const enum ElementFlags {
-        Required  = 1 << 0,  // T
-        Optional  = 1 << 1,  // T?
-        Rest      = 1 << 2,  // ...T[]
-        Variadic  = 1 << 3,  // ...T
-        Variable  = Rest | Variadic,
+        Required    = 1 << 0,  // T
+        Optional    = 1 << 1,  // T?
+        Rest        = 1 << 2,  // ...T[]
+        Variadic    = 1 << 3,  // ...T
+        Fixed       = Required | Optional,
+        Variable    = Rest | Variadic,
+        NonRequired = Optional | Rest | Variadic,
+        NonRest     = Required | Optional | Variadic,
     }
 
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
-        minLength: number;
-        fixedLength: number;
-        hasRestElement: boolean;
+        minLength: number;  // Number of required or variadic elements
+        fixedLength: number;  // Number of initial required or optional elements
+        hasRestElement: boolean;  // True if tuple has any rest or variadic elements
         combinedFlags: ElementFlags;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
@@ -5208,9 +5292,11 @@ namespace ts {
 
     export interface UnionType extends UnionOrIntersectionType {
         /* @internal */
-        resolvedReducedType: Type;
+        resolvedReducedType?: Type;
         /* @internal */
-        regularType: UnionType;
+        regularType?: UnionType;
+        /* @internal */
+        origin?: Type;  // Denormalized union, intersection, or index type in which union originates
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -5416,16 +5502,21 @@ namespace ts {
     /* @internal */
     export const enum SignatureFlags {
         None = 0,
+
+        // Propagating flags
         HasRestParameter = 1 << 0,          // Indicates last parameter is rest parameter
         HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
-        IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
-        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
-        IsUntypedSignatureInJSFile = 1 << 4, // Indicates signature is from a js file and has no types
+        Abstract = 1 << 2,                  // Indicates signature comes from an abstract class, abstract construct signature, or abstract constructor type
 
-        // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
+        // Non-propagating flags
+        IsInnerCallChain = 1 << 3,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
+        IsOuterCallChain = 1 << 4,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
+        IsUntypedSignatureInJSFile = 1 << 5, // Indicates signature is from a js file and has no types
+
+        // We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
         // instantiating the return type.
-        PropagatingFlags = HasRestParameter | HasLiteralTypes | IsUntypedSignatureInJSFile,
+        PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile,
 
         CallChainFlags = IsInnerCallChain | IsOuterCallChain,
     }
@@ -5731,7 +5822,6 @@ namespace ts {
         /** An error if set - this should only go through the -b pipeline and not actually be observed */
         /*@internal*/
         build?: boolean;
-        bundledPackageName?: string;
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
@@ -5766,6 +5856,7 @@ namespace ts {
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
+        /*@internal*/explainFiles?: boolean;
         /*@internal*/listFilesOnly?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -5954,7 +6045,6 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
-        /* @internal */ configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -5976,13 +6066,6 @@ namespace ts {
         validatedFilesSpec: readonly string[] | undefined;
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
-    }
-
-    export interface ExpandResult {
-        fileNames: string[];
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
-        /* @internal */ spec: ConfigFileSpecs;
     }
 
     /* @internal */
@@ -6523,19 +6606,18 @@ namespace ts {
         Generator = 1 << 7,             // __generator (used by ES2015 generator transformation)
         Values = 1 << 8,                // __values (used by ES2015 for..of and yield* transformations)
         Read = 1 << 9,                  // __read (used by ES2015 iterator destructuring transformation)
-        Spread = 1 << 10,               // __spread (used by ES2015 array spread and argument list spread transformations)
-        SpreadArrays = 1 << 11,         // __spreadArrays (used by ES2015 array spread and argument list spread transformations)
-        Await = 1 << 12,                // __await (used by ES2017 async generator transformation)
-        AsyncGenerator = 1 << 13,       // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 14,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
-        ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
-        ImportStar = 1 << 17,           // __importStar (used by CommonJS/AMD/UMD module transformation)
-        ImportDefault = 1 << 18,        // __importStar (used by CommonJS/AMD/UMD module transformation)
-        MakeTemplateObject = 1 << 19,   // __makeTemplateObject (used for constructing template string array objects)
-        ClassPrivateFieldGet = 1 << 20, // __classPrivateFieldGet (used by the class private field transformation)
-        ClassPrivateFieldSet = 1 << 21, // __classPrivateFieldSet (used by the class private field transformation)
-        CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+        SpreadArray = 1 << 10,          // __spreadArray (used by ES2015 array spread and argument list spread transformations)
+        Await = 1 << 11,                // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,       // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        ImportStar = 1 << 16,           // __importStar (used by CommonJS/AMD/UMD module transformation)
+        ImportDefault = 1 << 17,        // __importStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 18,   // __makeTemplateObject (used for constructing template string array objects)
+        ClassPrivateFieldGet = 1 << 19, // __classPrivateFieldGet (used by the class private field transformation)
+        ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
+        CreateBinding = 1 << 21,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
         LastEmitHelper = CreateBinding,
 
@@ -6552,8 +6634,7 @@ namespace ts {
         AsyncDelegatorIncludes = Await | AsyncDelegator | AsyncValues,
 
         // Helpers included by ES2015 spread
-        SpreadIncludes = Read | Spread,
-
+        SpreadIncludes = Read | SpreadArray,
     }
 
     export const enum EmitHint {
@@ -6799,7 +6880,11 @@ namespace ts {
         updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined): TypeReferenceNode;
         createFunctionTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode;
         updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): FunctionTypeNode;
+        createConstructorTypeNode(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
+        /** @deprecated */
         createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
+        updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
+        /** @deprecated */
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         createTypeQueryNode(exprName: EntityName): TypeQueryNode;
         updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
@@ -7000,8 +7085,8 @@ namespace ts {
         updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock;
         createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
         updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
-        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
         createImportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression): ImportDeclaration;
         updateImportDeclaration(node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression): ImportDeclaration;
         createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
@@ -7516,8 +7601,8 @@ namespace ts {
     export type Visitor = (node: Node) => VisitResult<Node>;
 
     export interface NodeVisitor {
-        <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T;
-        <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
+        <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
+        <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
     }
 
     export interface NodesVisitor {
@@ -7864,7 +7949,7 @@ namespace ts {
         readonly redirectTargetsMap: RedirectTargetsMap;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        getCompilerOptions(): CompilerOptions;
+        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -7911,8 +7996,6 @@ namespace ts {
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(): Diagnostic[];
         getDiagnostics(fileName: string): DiagnosticWithLocation[];
-
-        reattachFileDiagnostics(newFile: SourceFile): void;
     }
 
     // SyntaxKind.SyntaxList

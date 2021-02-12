@@ -5,13 +5,14 @@ namespace ts.FindAllReferences {
         readonly references: readonly Entry[];
     }
 
-    export const enum DefinitionKind { Symbol, Label, Keyword, This, String }
+    export const enum DefinitionKind { Symbol, Label, Keyword, This, String, TripleSlashReference }
     export type Definition =
         | { readonly type: DefinitionKind.Symbol; readonly symbol: Symbol }
         | { readonly type: DefinitionKind.Label; readonly node: Identifier }
         | { readonly type: DefinitionKind.Keyword; readonly node: Node }
         | { readonly type: DefinitionKind.This; readonly node: Node }
-        | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike };
+        | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike }
+        | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: FileReference, readonly file: SourceFile };
 
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
@@ -298,17 +299,16 @@ namespace ts.FindAllReferences {
     }
 
     function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: TypeChecker, originalNode: Node): ReferencedSymbolDefinitionInfo {
-        const info = (() => {
+        const info = ((): { sourceFile: SourceFile, textSpan: TextSpan, name: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], context?: Node | ContextWithStartAndEndNode } => {
             switch (def.type) {
                 case DefinitionKind.Symbol: {
                     const { symbol } = def;
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
                     const name = displayParts.map(p => p.text).join("");
                     const declaration = symbol.declarations && firstOrUndefined(symbol.declarations);
+                    const node = declaration ? (getNameOfDeclaration(declaration) || declaration) : originalNode;
                     return {
-                        node: declaration ?
-                            getNameOfDeclaration(declaration) || declaration :
-                            originalNode,
+                        ...getFileAndTextSpanFromNode(node),
                         name,
                         kind,
                         displayParts,
@@ -317,32 +317,44 @@ namespace ts.FindAllReferences {
                 }
                 case DefinitionKind.Label: {
                     const { node } = def;
-                    return { node, name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
+                    return { ...getFileAndTextSpanFromNode(node), name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
                 }
                 case DefinitionKind.Keyword: {
                     const { node } = def;
                     const name = tokenToString(node.kind)!;
-                    return { node, name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
+                    return { ...getFileAndTextSpanFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
                 }
                 case DefinitionKind.This: {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
                     const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
                         checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
-                    return { node, name: "this", kind: ScriptElementKind.variableElement, displayParts };
+                    return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
                 case DefinitionKind.String: {
                     const { node } = def;
-                    return { node, name: node.text, kind: ScriptElementKind.variableElement, displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)] };
+                    return {
+                        ...getFileAndTextSpanFromNode(node),
+                        name: node.text,
+                        kind: ScriptElementKind.variableElement,
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
+                    };
+                }
+                case DefinitionKind.TripleSlashReference: {
+                    return {
+                        textSpan: createTextSpanFromRange(def.reference),
+                        sourceFile: def.file,
+                        name: def.reference.fileName,
+                        kind: ScriptElementKind.string,
+                        displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)]
+                    };
                 }
                 default:
                     return Debug.assertNever(def);
             }
         })();
 
-        const { node, name, kind, displayParts, context } = info;
-        const sourceFile = node.getSourceFile();
-        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
+        const { sourceFile, textSpan, name, kind, displayParts, context } = info;
         return {
             containerKind: ScriptElementKind.unknown,
             containerName: "",
@@ -352,6 +364,14 @@ namespace ts.FindAllReferences {
             textSpan,
             displayParts,
             ...toContextSpan(textSpan, sourceFile, context)
+        };
+    }
+
+    function getFileAndTextSpanFromNode(node: Node) {
+        const sourceFile = node.getSourceFile();
+        return {
+            sourceFile,
+            textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile)
         };
     }
 
@@ -603,9 +623,22 @@ namespace ts.FindAllReferences {
                 node = getAdjustedRenameLocation(node);
             }
             if (isSourceFile(node)) {
-                const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-                const moduleSymbol = reference && program.getTypeChecker().getMergedSymbol(reference.file.symbol);
-                return moduleSymbol && getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+                const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
+                if (!resolvedRef) {
+                    return undefined;
+                }
+                const moduleSymbol = program.getTypeChecker().getMergedSymbol(resolvedRef.file.symbol);
+                if (moduleSymbol) {
+                    return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+                }
+                const fileIncludeReasons = program.getFileIncludeReasons();
+                if (!fileIncludeReasons) {
+                    return undefined;
+                }
+                return [{
+                    definition: { type: DefinitionKind.TripleSlashReference, reference: resolvedRef.reference, file: node },
+                    references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray
+                }];
             }
 
             if (!options.implementations) {
@@ -622,7 +655,21 @@ namespace ts.FindAllReferences {
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
-                return !options.implementations && isStringLiteralLike(node) ? getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken) : undefined;
+                if (!options.implementations && isStringLiteralLike(node)) {
+                    if (isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ true) || isExternalModuleReference(node.parent) || isImportDeclaration(node.parent) || isImportCall(node.parent)) {
+                        const fileIncludeReasons = program.getFileIncludeReasons();
+                        const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
+                        const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
+                        if (referencedFile) {
+                            return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
+                        }
+                        // Fall through to string literal references. This is not very likely to return
+                        // anything useful, but I guess it's better than nothing, and there's an existing
+                        // test that expects this to happen (fourslash/cases/untypedModuleImport.ts).
+                    }
+                    return getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
+                }
+                return undefined;
             }
 
             if (symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -640,6 +687,35 @@ namespace ts.FindAllReferences {
 
             const references = getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
             return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
+        }
+
+        export function getReferencesForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly Entry[] {
+            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
+            if (moduleSymbol) {
+                return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references || emptyArray;
+            }
+            const fileIncludeReasons = program.getFileIncludeReasons();
+            const referencedFile = program.getSourceFile(fileName);
+            return referencedFile && fileIncludeReasons && getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray;
+        }
+
+        function getReferencesForNonModule(referencedFile: SourceFile, refFileMap: MultiMap<Path, FileIncludeReason>, program: Program): readonly SpanEntry[] | undefined {
+            let entries: SpanEntry[] | undefined;
+            const references = refFileMap.get(referencedFile.path) || emptyArray;
+            for (const ref of references) {
+                if (isReferencedFile(ref)) {
+                    const referencingFile = program.getSourceFileByPath(ref.file)!;
+                    const location = getReferencedFileLocation(program.getSourceFileByPath, ref);
+                    if (isReferenceFileLocation(location)) {
+                        entries = append(entries, {
+                            kind: EntryKind.Span,
+                            fileName: referencingFile.fileName,
+                            textSpan: createTextSpanFromRange(location)
+                        });
+                    }
+                }
+            }
+            return entries;
         }
 
         function getMergedAliasedSymbolOfNamespaceExportDeclaration(node: Node, symbol: Symbol, checker: TypeChecker) {
@@ -1206,8 +1282,13 @@ namespace ts.FindAllReferences {
                     return undefined;
                 }
 
-                // The search scope is the container node
                 scope = container;
+                if (isFunctionExpression(scope)) {
+                    let next: Node | undefined;
+                    while (next = getNextJSDocCommentLocation(scope)) {
+                        scope = next;
+                    }
+                }
             }
 
             // If symbol.parent, this means we are in an export of an external module. (Otherwise we would have returned `undefined` above.)

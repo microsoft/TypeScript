@@ -198,10 +198,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(service, { inferredProjects: 1 });
             session.clearMessages();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-
+            host.checkTimeoutQueueLength(0);
             verifyGetErrRequest({
                 session,
                 host,
@@ -240,10 +237,7 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(service, { inferredProjects: 1 });
             session.clearMessages();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-
+            host.checkTimeoutQueueLength(0);
             verifyGetErrRequest({
                 session,
                 host,

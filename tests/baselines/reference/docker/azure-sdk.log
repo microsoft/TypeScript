@@ -2,140 +2,152 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 15.1.0 (unstable)
+Node.js version is 15.7.0 (unstable)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
-BLOCKED (51)
-================================
-@azure/abort-controller
-@azure/core-auth
-@azure/logger
-@azure/core-http
-@azure/core-asynciterator-polyfill
-@azure/identity
-@azure/communication-common
-@azure/core-amqp
-@azure/core-lro
-@azure/core-paging
-@azure/dev-tool
-@azure/test-utils-recorder
-@azure/communication-administration
-@azure/core-https
-@azure/core-xml
-@azure/event-hubs
-@azure/event-processor-host
-@azure/keyvault-secrets
-@azure/schema-registry
-@azure/storage-blob
-@azure/ai-anomaly-detector
-@azure/ai-form-recognizer
-@azure/ai-metrics-advisor
-@azure/ai-text-analytics
-@azure/app-configuration
-@azure/communication-chat
-@azure/communication-sms
-@azure/core-arm
-@azure/core-client
-@azure/core-tracing
-@azure/cosmos
-@azure/data-tables
-@azure/digital-twins-core
-@azure/eventgrid
-@azure/eventhubs-checkpointstore-blob
-@azure/keyvault-admin
-@azure/keyvault-certificates
-@azure/keyvault-common
-@azure/keyvault-keys
-@azure/monitor-opentelemetry-exporter
-@azure/schema-registry-avro
-@azure/search-documents
-@azure/service-bus
-@azure/storage-blob-changefeed
-@azure/storage-file-datalake
-@azure/storage-file-share
-@azure/storage-internal-avro
-@azure/storage-queue
-@azure/template
-@azure/test-utils-perfstress
-testhub
-================================
-FAILURE (1)
-================================
-@azure/eslint-plugin-azure-sdk (? seconds)
->>> @azure/eslint-plugin-azure-sdk
-tsc -p tsconfig.build.json && prettier --write dist/**/*.{js,json,md}
-../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/dist/ts-eslint/Linter.d.ts:6:11 - error TS2300: Duplicate identifier 'Linter'.
-6 interface Linter {
-            ~~~~~~
-../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/dist/ts-eslint/Linter.d.ts:21:19 - error TS2300: Duplicate identifier 'Linter'.
-21 declare namespace Linter {
-                     ~~~~~~
-../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/dist/ts-eslint/Linter.d.ts:106:15 - error TS2300: Duplicate identifier 'Linter'.
-106 declare const Linter: new () => Linter;
-                  ~~~~~~
-../../temp/node_modules/.pnpm/@typescript-eslint/typescript-estree@X.X.X_typescript@X.X.X/node_modules/@typescript-eslint/typescript-estree/dist/ts-estree/ts-nodes.d.ts:3:3999 - error TS2694: Namespace 'ts' has no exported member 'JSDocAuthorTag'.
-3 export declare type TSNode = ts.Node & (ts.Modifier | ts.Identifier | ts.QualifiedName | ts.ComputedPropertyName | ts.Decorator | ts.TypeParameterDeclaration | ts.CallSignatureDeclaration | ts.ConstructSignatureDeclaration | ts.VariableDeclaration | ts.VariableDeclarationList | ts.ParameterDeclaration | ts.BindingElement | ts.PropertySignature | ts.PropertyDeclaration | ts.PropertyAssignment | ts.ShorthandPropertyAssignment | ts.SpreadAssignment | ts.ObjectBindingPattern | ts.ArrayBindingPattern | ts.FunctionDeclaration | ts.MethodSignature | ts.MethodDeclaration | ts.ConstructorDeclaration | ts.SemicolonClassElement | ts.GetAccessorDeclaration | ts.SetAccessorDeclaration | ts.IndexSignatureDeclaration | ts.KeywordTypeNode | ts.ImportTypeNode | ts.ThisTypeNode | ts.ConstructorTypeNode | ts.FunctionTypeNode | ts.TypeReferenceNode | ts.TypePredicateNode | ts.TypeQueryNode | ts.TypeLiteralNode | ts.ArrayTypeNode | ts.TupleTypeNode | ts.OptionalTypeNode | ts.RestTypeNode | ts.UnionTypeNode | ts.IntersectionTypeNode | ts.ConditionalTypeNode | ts.InferTypeNode | ts.ParenthesizedTypeNode | ts.TypeOperatorNode | ts.IndexedAccessTypeNode | ts.MappedTypeNode | ts.LiteralTypeNode | ts.StringLiteral | ts.OmittedExpression | ts.PartiallyEmittedExpression | ts.PrefixUnaryExpression | ts.PostfixUnaryExpression | ts.NullLiteral | ts.BooleanLiteral | ts.ThisExpression | ts.SuperExpression | ts.ImportExpression | ts.DeleteExpression | ts.TypeOfExpression | ts.VoidExpression | ts.AwaitExpression | ts.YieldExpression | ts.SyntheticExpression | ts.BinaryExpression | ts.ConditionalExpression | ts.FunctionExpression | ts.ArrowFunction | ts.RegularExpressionLiteral | ts.NoSubstitutionTemplateLiteral | ts.NumericLiteral | ts.BigIntLiteral | ts.TemplateHead | ts.TemplateMiddle | ts.TemplateTail | ts.TemplateExpression | ts.TemplateSpan | ts.ParenthesizedExpression | ts.ArrayLiteralExpression | ts.SpreadElement | ts.ObjectLiteralExpression | ts.PropertyAccessExpression | ts.ElementAccessExpression | ts.CallExpression | ts.ExpressionWithTypeArguments | ts.NewExpression | ts.TaggedTemplateExpression | ts.AsExpression | ts.TypeAssertion | ts.NonNullExpression | ts.MetaProperty | ts.JsxElement | ts.JsxOpeningElement | ts.JsxSelfClosingElement | ts.JsxFragment | ts.JsxOpeningFragment | ts.JsxClosingFragment | ts.JsxAttribute | ts.JsxSpreadAttribute | ts.JsxClosingElement | ts.JsxExpression | ts.JsxText | ts.NotEmittedStatement | ts.CommaListExpression | ts.EmptyStatement | ts.DebuggerStatement | ts.MissingDeclaration | ts.Block | ts.VariableStatement | ts.ExpressionStatement | ts.IfStatement | ts.DoStatement | ts.WhileStatement | ts.ForStatement | ts.ForInStatement | ts.ForOfStatement | ts.BreakStatement | ts.ContinueStatement | ts.ReturnStatement | ts.WithStatement | ts.SwitchStatement | ts.CaseBlock | ts.CaseClause | ts.DefaultClause | ts.LabeledStatement | ts.ThrowStatement | ts.TryStatement | ts.CatchClause | ts.ClassDeclaration | ts.ClassExpression | ts.InterfaceDeclaration | ts.HeritageClause | ts.TypeAliasDeclaration | ts.EnumMember | ts.EnumDeclaration | ts.ModuleDeclaration | ts.ModuleBlock | ts.ImportEqualsDeclaration | ts.ExternalModuleReference | ts.ImportDeclaration | ts.ImportClause | ts.NamespaceImport | ts.NamespaceExportDeclaration | ts.ExportDeclaration | ts.NamedImports | ts.NamedExports | ts.ImportSpecifier | ts.ExportSpecifier | ts.ExportAssignment | ts.CommentRange | ts.SourceFile | ts.Bundle | ts.InputFiles | ts.UnparsedSource | ts.JsonMinusNumericLiteral | ts.JSDoc | ts.JSDocTypeExpression | ts.JSDocUnknownTag | ts.JSDocAugmentsTag | ts.JSDocClassTag | ts.JSDocEnumTag | ts.JSDocThisTag | ts.JSDocTemplateTag | ts.JSDocReturnTag | ts.JSDocTypeTag | ts.JSDocTypedefTag | ts.JSDocCallbackTag | ts.JSDocSignature | ts.JSDocPropertyTag | ts.JSDocParameterTag | ts.JSDocTypeLiteral | ts.JSDocFunctionType | ts.JSDocAllType | ts.JSDocUnknownType | ts.JSDocNullableType | ts.JSDocNonNullableType | ts.JSDocOptionalType | ts.JSDocVariadicType | ts.JSDocAuthorTag);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ~~~~~~~~~~~~~~
-Found 4 errors.
-================================
-Error: Project(s) failed
-rush rebuild - Errors! (? seconds)
+==[ @azure/eslint-plugin-azure-sdk ]==============================[ 1 of 61 ]==
+"@azure/abort-controller" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-administration" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-chat" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-common" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-identity" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/communication-sms" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-amqp" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/event-hubs" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/eventhubs-checkpointstore-blob" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/service-bus" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/eventgrid" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-auth" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-anomaly-detector" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-form-recognizer" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-metrics-advisor" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/ai-text-analytics" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-client" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/data-tables" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-http" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/app-configuration" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/attestation" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-lro" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-admin" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-certificates" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-keys" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-secrets" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-blob" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-blob-changefeed" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-file-datalake" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-artifacts" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/digital-twins-core" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/identity" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/cosmos" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/quantum-jobs" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/schema-registry" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/schema-registry-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-queue" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/keyvault-common" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/opentelemetry-exporter-azure-monitor" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/search-documents" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-file-share" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-access-control" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-managed-private-endpoints" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-monitoring" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/synapse-spark" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/template" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/test-utils-perfstress" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/test-utils-recorder" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/storage-internal-avro" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/test-utils-multi-version" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-https" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-crypto" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-asynciterator-polyfill" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-paging" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-tracing" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/core-xml" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/dev-tool" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/event-processor-host" is blocked by "@azure/eslint-plugin-azure-sdk".
+"testhub" is blocked by "@azure/eslint-plugin-azure-sdk".
+"@azure/logger" is blocked by "@azure/eslint-plugin-azure-sdk".
+==[ BLOCKED: 60 projects ]=====================================================
+These projects were blocked by dependencies that failed:
+  @azure/abort-controller
+  @azure/ai-anomaly-detector
+  @azure/ai-form-recognizer
+  @azure/ai-metrics-advisor
+  @azure/ai-text-analytics
+  @azure/app-configuration
+  @azure/attestation
+  @azure/communication-administration
+  @azure/communication-chat
+  @azure/communication-common
+  @azure/communication-identity
+  @azure/communication-sms
+  @azure/core-amqp
+  @azure/core-asynciterator-polyfill
+  @azure/core-auth
+  @azure/core-client
+  @azure/core-crypto
+  @azure/core-http
+  @azure/core-https
+  @azure/core-lro
+  @azure/core-paging
+  @azure/core-tracing
+  @azure/core-xml
+  @azure/cosmos
+  @azure/data-tables
+  @azure/dev-tool
+  @azure/digital-twins-core
+  @azure/event-hubs
+  @azure/event-processor-host
+  @azure/eventgrid
+  @azure/eventhubs-checkpointstore-blob
+  @azure/identity
+  @azure/keyvault-admin
+  @azure/keyvault-certificates
+  @azure/keyvault-common
+  @azure/keyvault-keys
+  @azure/keyvault-secrets
+  @azure/logger
+  @azure/opentelemetry-exporter-azure-monitor
+  @azure/quantum-jobs
+  @azure/schema-registry
+  @azure/schema-registry-avro
+  @azure/search-documents
+  @azure/service-bus
+  @azure/storage-blob
+  @azure/storage-blob-changefeed
+  @azure/storage-file-datalake
+  @azure/storage-file-share
+  @azure/storage-internal-avro
+  @azure/storage-queue
+  @azure/synapse-access-control
+  @azure/synapse-artifacts
+  @azure/synapse-managed-private-endpoints
+  @azure/synapse-monitoring
+  @azure/synapse-spark
+  @azure/template
+  @azure/test-utils-multi-version
+  @azure/test-utils-perfstress
+  @azure/test-utils-recorder
+  testhub
+==[ FAILURE: 1 project ]=======================================================
+--[ FAILURE: @azure/eslint-plugin-azure-sdk ]----------------[ ? seconds ]--
+Invoking: tsc -p tsconfig.build.json && prettier --write dist/**/*.{js,json,md} 
+../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/_ts3.4/dist/ast-utils/eslint-utils/astUtilities.d.ts:22:136 - error TS2307: Cannot find module '@typescript-eslint/scope-manager/dist/scope/BlockScope'.
+22 declare const getPropertyName: (node: TSESTree.MemberExpression | TSESTree.Property | TSESTree.MethodDefinition, initialScope?: import("@typescript-eslint/scope-manager/dist/scope/BlockScope").BlockScope | import("@typescript-eslint/scope-manager/dist/scope/CatchScope").CatchScope | import("@typescript-eslint/scope-manager/dist/scope/ClassScope").ClassScope | import("@typescript-eslint/scope-manager/dist/scope/ConditionalTypeScope").ConditionalTypeScope | import("@typescript-eslint/scope-manager/dist/scope/ForScope").ForScope | import("@typescript-eslint/scope-manager/dist/scope/FunctionExpressionNameScope").FunctionExpressionNameScope | import("@typescript-eslint/scope-manager/dist/scope/FunctionScope").FunctionScope | import("@typescript-eslint/scope-manager/dist/scope/FunctionTypeScope").FunctionTypeScope | import("@typescript-eslint/scope-manager/dist/scope/GlobalScope").GlobalScope | import("@typescript-eslint/scope-manager/dist/scope/MappedTypeScope").MappedTypeScope | import("@typescript-eslint/scope-manager/dist/scope/ModuleScope").ModuleScope | import("@typescript-eslint/scope-manager/dist/scope/SwitchScope").SwitchScope | import("@typescript-eslint/scope-manager/dist/scope/TSEnumScope").TSEnumScope | import("@typescript-eslint/scope-manager/dist/scope/TSModuleScope").TSModuleScope | import("@typescript-eslint/scope-manager/dist/scope/TypeScope").TypeScope | import("@typescript-eslint/scope-manager/dist/scope/WithScope").WithScope | undefined) => string | null;
+                                                                                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../temp/node_modules/.pnpm/@typescript-eslint/experimental-utils@X.X.X_eslint@X.X.X+typescript@X.X.X/node_modules/@typescript-eslint/experimental-utils/_ts3.4/dist/ast-utils/eslint-utils/astUtilities.d.ts:22:214 - error TS2307: Cannot find module '@typescript-eslint/scope-manager/dist/scope/CatchScope'.
+22 declare const getPropertyName: (node: TSESTree.MemberExpression | TSESTree.Property | TSESTree.MethodDefinition, initialScope?: import("@typescript-eslint/scope-manager/dist/scope/BlockScope").BlockScope | import("@typescript-eslint/scope-manager/dist/scope/CatchScope").CatchScope | import("@typescript-eslint/scope-manager/dist/scope/ClassScope").ClassScope | import("@typescript-eslint/scope-manager/dist/scope/ConditionalTypeScope").ConditionalTypeScope | import("@typescript-eslint/scope-manager/dist/scope/ForScope").ForScope | import("@typescript-eslint/scope-manager/dist/scope/FunctionExpressionNameScope").FunctionExpressionNameScope | import("@typescript-eslint/scope-manager/dist/scope/FunctionScope").FunctionScope | import("@typescript-eslint/scope-manager/dist/scope/FunctionTypeScope").FunctionTypeScope | import("@typescript-eslint/scope-manager/dist/scope/GlobalScope").GlobalScope | import("@typescript-eslint/scope-manager/dist/scope/MappedTypeScope").MappedTypeScope | import("@typescript-eslint/scope-manager/dist/scope/ModuleScope").ModuleScope | import("@typescript-eslint/scope-manager/dist/scope/SwitchScope").SwitchScope | import("@typescript-eslint/scope-manager/dist/scope/TSEnumScope").TSEnumScope | import("@typescript-eslint/scope-manager/dist/scope/TSModuleScope").TSModuleScope | import("@typescript-eslint/scope-manager/dist/scope/TypeScope").TypeScope | import("@typescript-eslint/scope-manager/dist/scope/WithScope").WithScope | undefined) => string | null;
+  ...260 lines omitted...
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/rules/ts-use-interface-parameters.ts:13:8 - error TS2307: Cannot find module '@typescript-eslint/typescript-estree/dist/parser-options'.
+13 } from "@typescript-eslint/typescript-estree/dist/parser-options";
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Found 55 errors.
+rush rebuild (? seconds)
 
 
 
 Standard error:
-Your version of Node.js (X.X.X) has not been tested with this release of Rush. Please consider installing a newer version of the "@microsoft/rush" package, or downgrading Node.js.
-Your version of Node.js (X.X.X) is an odd-numbered release. These releases frequently have bugs. Please consider installing a Long Term Support (LTS) version instead.
-XX of XX: [@azure/eslint-plugin-azure-sdk] failed!
-XX of XX: [@azure/abort-controller] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/communication-administration] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/communication-chat] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/communication-common] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/communication-sms] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-amqp] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/event-hubs] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/service-bus] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-auth] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/ai-anomaly-detector] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/ai-form-recognizer] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/ai-metrics-advisor] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/ai-text-analytics] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-client] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-http] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/app-configuration] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-arm] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-lro] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-admin] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-certificates] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-keys] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-secrets] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-blob] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-blob-changefeed] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-file-datalake] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/data-tables] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/digital-twins-core] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/eventgrid] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/identity] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/schema-registry] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/schema-registry-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/search-documents] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-file-share] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/template] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/test-utils-perfstress] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/test-utils-recorder] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-internal-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-https] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-asynciterator-polyfill] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-paging] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-tracing] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/core-xml] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/cosmos] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/dev-tool] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/event-processor-host] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [testhub] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/logger] blocked by [@azure/eslint-plugin-azure-sdk]!
-[@azure/eslint-plugin-azure-sdk] Returned error code: 2
+Your version of Node.js (X.X.X) has not been tested with this release of the Rush engine. Please consider upgrading the "rushVersion" setting in rush.json, or downgrading Node.js.
+Returned error code: 2
+"@azure/eslint-plugin-azure-sdk" failed to build.
+Projects failed to build.
