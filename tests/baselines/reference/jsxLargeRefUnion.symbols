@@ -1,0 +1,234 @@
+=== tests/cases/compiler/jsxLargeRefUnion.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+
+const animated: {
+>animated : Symbol(animated, Decl(jsxLargeRefUnion.tsx, 4, 5))
+
+  [Tag in keyof JSX.IntrinsicElements]: React.ForwardRefExoticComponent<
+>Tag : Symbol(Tag, Decl(jsxLargeRefUnion.tsx, 5, 3))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ForwardRefExoticComponent : Symbol(React.ForwardRefExoticComponent, Decl(react16.d.ts, 2382, 10))
+
+    React.ComponentPropsWithRef<Tag>
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+>Tag : Symbol(Tag, Decl(jsxLargeRefUnion.tsx, 5, 3))
+
+  >
+} = {} as any;
+
+function makeAnimated<T extends React.ElementType<any>>(
+>makeAnimated : Symbol(makeAnimated, Decl(jsxLargeRefUnion.tsx, 8, 14))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 10, 22))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ElementType : Symbol(React.ElementType, Decl(react16.d.ts, 2414, 48))
+
+  comp: T
+>comp : Symbol(comp, Decl(jsxLargeRefUnion.tsx, 10, 56))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 10, 22))
+
+): React.ForwardRefExoticComponent<React.ComponentPropsWithRef<T>> {
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ForwardRefExoticComponent : Symbol(React.ForwardRefExoticComponent, Decl(react16.d.ts, 2382, 10))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentPropsWithRef : Symbol(React.ComponentPropsWithRef, Decl(react16.d.ts, 2434, 25))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 10, 22))
+
+  return null as any; // not important
+}
+
+export interface UpgradedProps {
+>UpgradedProps : Symbol(UpgradedProps, Decl(jsxLargeRefUnion.tsx, 14, 1))
+
+  show: boolean;
+>show : Symbol(UpgradedProps.show, Decl(jsxLargeRefUnion.tsx, 16, 32))
+}
+
+export function test<P>(
+>test : Symbol(test, Decl(jsxLargeRefUnion.tsx, 18, 1))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 20, 21))
+
+  component: React.ComponentType<P> | keyof React.ReactHTML
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 20, 24))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 20, 21))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ReactHTML : Symbol(React.ReactHTML, Decl(react16.d.ts, 2089, 9))
+
+): React.ComponentType<P & UpgradedProps> {
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 20, 21))
+>UpgradedProps : Symbol(UpgradedProps, Decl(jsxLargeRefUnion.tsx, 14, 1))
+
+  // changing to `const Comp: any` un-hangs tsserver
+  const Comp =
+>Comp : Symbol(Comp, Decl(jsxLargeRefUnion.tsx, 24, 7))
+
+    typeof component === "string"
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 20, 24))
+
+      ? animated[component]
+>animated : Symbol(animated, Decl(jsxLargeRefUnion.tsx, 4, 5))
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 20, 24))
+
+      : makeAnimated(component);
+>makeAnimated : Symbol(makeAnimated, Decl(jsxLargeRefUnion.tsx, 8, 14))
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 20, 24))
+
+  return React.forwardRef<any, P & UpgradedProps>((props, ref) => {
+>React.forwardRef : Symbol(React.forwardRef, Decl(react16.d.ts, 624, 46), Decl(react16.d.ts, 2389, 9))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>forwardRef : Symbol(React.forwardRef, Decl(react16.d.ts, 624, 46), Decl(react16.d.ts, 2389, 9))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 20, 21))
+>UpgradedProps : Symbol(UpgradedProps, Decl(jsxLargeRefUnion.tsx, 14, 1))
+>props : Symbol(props, Decl(jsxLargeRefUnion.tsx, 29, 51))
+>ref : Symbol(ref, Decl(jsxLargeRefUnion.tsx, 29, 57))
+
+    const { show, ...ownProps } = props;
+>show : Symbol(show, Decl(jsxLargeRefUnion.tsx, 30, 11))
+>ownProps : Symbol(ownProps, Decl(jsxLargeRefUnion.tsx, 30, 17))
+>props : Symbol(props, Decl(jsxLargeRefUnion.tsx, 29, 51))
+
+    return show ? <Comp {...ownProps} ref={ref} /> : null; // ref as currently defined is expression-too-complex
+>show : Symbol(show, Decl(jsxLargeRefUnion.tsx, 30, 11))
+>Comp : Symbol(Comp, Decl(jsxLargeRefUnion.tsx, 24, 7))
+>ownProps : Symbol(ownProps, Decl(jsxLargeRefUnion.tsx, 30, 17))
+>ref : Symbol(ref, Decl(jsxLargeRefUnion.tsx, 31, 37))
+>ref : Symbol(ref, Decl(jsxLargeRefUnion.tsx, 29, 57))
+
+  });
+}
+
+type FixedRef<T> = string | null | React.RefObject<T> | { bivarianceHack(instance: T | null): any }["bivarianceHack"] & {current?: undefined};
+>FixedRef : Symbol(FixedRef, Decl(jsxLargeRefUnion.tsx, 33, 1))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 35, 14))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>RefObject : Symbol(React.RefObject, Decl(react16.d.ts, 120, 35))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 35, 14))
+>bivarianceHack : Symbol(bivarianceHack, Decl(jsxLargeRefUnion.tsx, 35, 57))
+>instance : Symbol(instance, Decl(jsxLargeRefUnion.tsx, 35, 73))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 35, 14))
+>current : Symbol(current, Decl(jsxLargeRefUnion.tsx, 35, 121))
+
+declare module "react" {
+>"react" : Symbol(React, Decl(react16.d.ts, 110, 19), Decl(jsxLargeRefUnion.tsx, 35, 142))
+
+  interface DOMElement<P extends HTMLAttributes<T> | SVGAttributes<T>, T extends Element> extends ReactElement<P> {
+>DOMElement : Symbol(DOMElement, Decl(react16.d.ts, 153, 82), Decl(jsxLargeRefUnion.tsx, 36, 24))
+>P : Symbol(P, Decl(react16.d.ts, 156, 29), Decl(jsxLargeRefUnion.tsx, 37, 23))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(react16.d.ts, 1048, 9), Decl(react16.d.ts, 1105, 9))
+>T : Symbol(T, Decl(react16.d.ts, 156, 76), Decl(jsxLargeRefUnion.tsx, 37, 70))
+>SVGAttributes : Symbol(SVGAttributes, Decl(react16.d.ts, 1795, 9))
+>T : Symbol(T, Decl(react16.d.ts, 156, 76), Decl(jsxLargeRefUnion.tsx, 37, 70))
+>T : Symbol(T, Decl(react16.d.ts, 156, 76), Decl(jsxLargeRefUnion.tsx, 37, 70))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>ReactElement : Symbol(ReactElement, Decl(react16.d.ts, 135, 9))
+>P : Symbol(P, Decl(react16.d.ts, 156, 29), Decl(jsxLargeRefUnion.tsx, 37, 23))
+
+    customRef: FixedRef<T>;
+>customRef : Symbol(DOMElement.customRef, Decl(jsxLargeRefUnion.tsx, 37, 115))
+>FixedRef : Symbol(FixedRef, Decl(jsxLargeRefUnion.tsx, 33, 1))
+>T : Symbol(T, Decl(react16.d.ts, 156, 76), Decl(jsxLargeRefUnion.tsx, 37, 70))
+  }
+}
+interface ForwardCustomRefRenderFunction<T, P = {}> {
+>ForwardCustomRefRenderFunction : Symbol(ForwardCustomRefRenderFunction, Decl(jsxLargeRefUnion.tsx, 40, 1))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 41, 41))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 41, 43))
+
+  (props: React.PropsWithChildren<P>, ref: FixedRef<T>): React.ReactElement<any> | null;
+>props : Symbol(props, Decl(jsxLargeRefUnion.tsx, 42, 3))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>PropsWithChildren : Symbol(React.PropsWithChildren, Decl(react16.d.ts, 2409, 20))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 41, 43))
+>ref : Symbol(ref, Decl(jsxLargeRefUnion.tsx, 42, 37))
+>FixedRef : Symbol(FixedRef, Decl(jsxLargeRefUnion.tsx, 33, 1))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 41, 41))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+  displayName?: string;
+>displayName : Symbol(ForwardCustomRefRenderFunction.displayName, Decl(jsxLargeRefUnion.tsx, 42, 88))
+
+  defaultProps?: never;
+>defaultProps : Symbol(ForwardCustomRefRenderFunction.defaultProps, Decl(jsxLargeRefUnion.tsx, 43, 23))
+
+  propTypes?: never;
+>propTypes : Symbol(ForwardCustomRefRenderFunction.propTypes, Decl(jsxLargeRefUnion.tsx, 44, 23))
+}
+declare function forwardCustomRef<T, P = {}>(Component: ForwardCustomRefRenderFunction<T, P>): React.ComponentType<P & React.ClassAttributes<T>>;
+>forwardCustomRef : Symbol(forwardCustomRef, Decl(jsxLargeRefUnion.tsx, 46, 1))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 47, 34))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 47, 36))
+>Component : Symbol(Component, Decl(jsxLargeRefUnion.tsx, 47, 45))
+>ForwardCustomRefRenderFunction : Symbol(ForwardCustomRefRenderFunction, Decl(jsxLargeRefUnion.tsx, 40, 1))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 47, 34))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 47, 36))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 47, 36))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ClassAttributes : Symbol(React.ClassAttributes, Decl(react16.d.ts, 132, 9))
+>T : Symbol(T, Decl(jsxLargeRefUnion.tsx, 47, 34))
+
+export function test2<P>(
+>test2 : Symbol(test2, Decl(jsxLargeRefUnion.tsx, 47, 145))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 49, 22))
+
+  component: React.ComponentType<P> | keyof React.ReactHTML
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 49, 25))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 49, 22))
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ReactHTML : Symbol(React.ReactHTML, Decl(react16.d.ts, 2089, 9))
+
+): React.ComponentType<P & UpgradedProps> {
+>React : Symbol(React, Decl(jsxLargeRefUnion.tsx, 2, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 49, 22))
+>UpgradedProps : Symbol(UpgradedProps, Decl(jsxLargeRefUnion.tsx, 14, 1))
+
+  // changing to `const Comp: any` un-hangs tsserver
+  const Comp =
+>Comp : Symbol(Comp, Decl(jsxLargeRefUnion.tsx, 53, 7))
+
+    typeof component === "string"
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 49, 25))
+
+      ? animated[component]
+>animated : Symbol(animated, Decl(jsxLargeRefUnion.tsx, 4, 5))
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 49, 25))
+
+      : makeAnimated(component);
+>makeAnimated : Symbol(makeAnimated, Decl(jsxLargeRefUnion.tsx, 8, 14))
+>component : Symbol(component, Decl(jsxLargeRefUnion.tsx, 49, 25))
+
+  return forwardCustomRef<any, P & UpgradedProps>((props, ref) => {
+>forwardCustomRef : Symbol(forwardCustomRef, Decl(jsxLargeRefUnion.tsx, 46, 1))
+>P : Symbol(P, Decl(jsxLargeRefUnion.tsx, 49, 22))
+>UpgradedProps : Symbol(UpgradedProps, Decl(jsxLargeRefUnion.tsx, 14, 1))
+>props : Symbol(props, Decl(jsxLargeRefUnion.tsx, 58, 51))
+>ref : Symbol(ref, Decl(jsxLargeRefUnion.tsx, 58, 57))
+
+    const { show, ...ownProps } = props;
+>show : Symbol(show, Decl(jsxLargeRefUnion.tsx, 59, 11))
+>ownProps : Symbol(ownProps, Decl(jsxLargeRefUnion.tsx, 59, 17))
+>props : Symbol(props, Decl(jsxLargeRefUnion.tsx, 58, 51))
+
+    return show ? <Comp {...ownProps} customRef={ref} /> : null; // with the additional `current?: undefined` member on the signature, it now can resolve
+>show : Symbol(show, Decl(jsxLargeRefUnion.tsx, 59, 11))
+>Comp : Symbol(Comp, Decl(jsxLargeRefUnion.tsx, 53, 7))
+>ownProps : Symbol(ownProps, Decl(jsxLargeRefUnion.tsx, 59, 17))
+>customRef : Symbol(customRef, Decl(jsxLargeRefUnion.tsx, 60, 37))
+>ref : Symbol(ref, Decl(jsxLargeRefUnion.tsx, 58, 57))
+
+  });
+}

@@ -13728,7 +13728,7 @@ namespace ts {
         function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
             const typeMembershipMap: ESMap<string, Type> = new Map();
             const includes = addTypesToIntersection(typeMembershipMap, 0, types);
-            const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
+            let typeSet: Type[] = arrayFrom(typeMembershipMap.values());
             // An intersection type is considered empty if it contains
             // the type never, or
             // more than one unit type or,
@@ -13789,6 +13789,41 @@ namespace ts {
                         result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                     else {
+                        let runningResult: Type | undefined;
+                        const originalSet = typeSet;
+                        if (typeSet.length > 2 && getCrossProductUnionSize(typeSet) >= 100000 && every(typeSet, t => !!(t.flags & TypeFlags.Union) || !!(t.flags & TypeFlags.Primitive))) {
+                            // This type set is going to trigger an "expression too complex" error below. Rather than resort to that, as a last, best effort, when
+                            // the intersection looks like (A | B | C) & (D | E | F) & (G | H | I) - in the general case, this can result in a massive resulting
+                            // union, hence the check on the cross product size below, _however_ in some cases we can simplify the resulting type massively
+                            // - if we can recognize that upfront, we can still allow the type to form without creating innumerable intermediate types.
+                            // Specifically, in cases where almost all combinations are known to reduce to `never` (so the result is essentially sparse)
+                            // and we can recognize that quickly, we can use a simplified result without checking the worst-case size.
+                            // So we start with the assumption that the result _is_ sparse when the input looks like the above, and we assume the result
+                            // will take the form (A & D & G) | (B & E & H) | (C & F & I). To validate this, we reduce left, first combining
+                            // (A | B | C) & (D | E | F); if that combines into `(A & D) | (B & E) | (C & F)` like we want, which we make 9 intermediate
+                            // types to check, we can then combine the reduced `(A & D) | (B & E) | (C & F)` with (G | H | I), which again takes 9 intermediate types
+                            // to check, finally producing `(A & D & G) | (B & E & H) | (C & F & I)`. This required 18 intermediate types, while the standard method
+                            // of expanding (A | B | C) & (D | E | F) & (G | H | I) would produce 27 types and then perform reduction on the result.
+                            // By going elemnt-wise, and bailing if the result fails to reduce, we can allow these sparse expansions without doing undue work.
+                            runningResult = typeSet[0];
+                            for (let i = 1; i < typeSet.length; i++) {
+                                // for intersection reduction, here we're considering `undefined & (A | B)` as `never`. (ie, we're disallowing branded primitives)
+                                // This is relevant for, eg, when looking at `(HTMLElement | null) & (SVGElement | null) & ... & undefined` where _usually_
+                                // we'd allow for tons of garbage intermediate types like `null & SVGElement` to exist; but nobody ever really actually _wants_
+                                // that, IMO. Those types can still exist in the type system; just... not when working with unions and intersections with massive
+                                // cross-product growth potential.
+                                runningResult = typeSet[i].flags & TypeFlags.Primitive && everyType(runningResult, t => !!(t.flags & TypeFlags.Object)) ? neverType : getReducedType(intersectTypes(runningResult, typeSet[i]));
+                                if (i === typeSet.length - 1 || isTypeAny(runningResult) || runningResult.flags & TypeFlags.Never) {
+                                    return runningResult;
+                                }
+                                if (!(runningResult.flags & TypeFlags.Union) || (runningResult as UnionType).types.length > typeSet.length) {
+                                    // save work done by the accumulated result thus far, even if we're bailing on the heuristic
+                                    // (it may have saved us enough work already that we're willing to work with the type now)
+                                    typeSet = typeSet.slice(i + 1);
+                                    break;
+                                }
+                            }
+                        }
                         // We are attempting to construct a type of the form X & (A | B) & (C | D). Transform this into a type of
                         // the form X & A & C | X & A & D | X & B & C | X & B & D. If the estimated size of the resulting union type
                         // exceeds 100000 constituents, report an error.
@@ -13798,8 +13833,8 @@ namespace ts {
                         const constituents = getCrossProductIntersections(typeSet);
                         // We attach a denormalized origin type when at least one constituent of the cross-product union is an
                         // intersection (i.e. when the intersection didn't just reduce one or more unions to smaller unions).
-                        const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, typeSet) : undefined;
-                        result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
+                        const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) ? createOriginUnionOrIntersectionType(TypeFlags.Intersection, originalSet) : undefined;
+                        result = runningResult ? getIntersectionType([runningResult, getUnionType(constituents, UnionReduction.Literal)], aliasSymbol, aliasTypeArguments) : getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
                     }
                 }
                 else {
