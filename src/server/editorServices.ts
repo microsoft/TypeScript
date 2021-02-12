@@ -771,6 +771,8 @@ namespace ts.server {
 
         /*@internal*/
         private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
+        /*@internal*/
+        private readonly extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
 
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
@@ -1422,6 +1424,14 @@ namespace ts.server {
                 (extendedConfigFileName, extendedConfigFilePath) => this.watchFactory.watchFile(
                     extendedConfigFileName,
                     () => {
+                        // Update extended config cache
+                        this.extendedConfigCache.delete(extendedConfigFilePath);
+                        this.extendedConfigCache.forEach(({ extendedResult }, key) => {
+                            if (extendedResult.extendedSourceFiles?.some(extendedFile => this.toPath(extendedFile) === extendedConfigFilePath)) {
+                                this.extendedConfigCache.delete(key);
+                            }
+                        });
+                        // Update projects
                         let ensureProjectsForOpenFiles = false;
                         this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
                             ensureProjectsForOpenFiles = this.onChangeInCommandLineCache(canonicalPath, `Change in extended config file ${extendedConfigFileName} detected`) || ensureProjectsForOpenFiles;
@@ -2221,7 +2231,7 @@ namespace ts.server {
                 configFilename,
                 /*resolutionStack*/[],
                 this.hostConfiguration.extraFileExtensions,
-                /*extendedConfigCache*/ undefined, // TODO:: sheetal:: Add extendedCache now that we watch extended config files
+                this.extendedConfigCache,
             );
 
             if (parsedCommandLine.errors.length) {
