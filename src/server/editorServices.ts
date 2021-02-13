@@ -376,7 +376,7 @@ namespace ts.server {
          * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
-        openFilesImpactedByConfigFile: ESMap<Path, boolean> | undefined;
+        openFilesImpactedByConfigFile?: ESMap<Path, boolean>;
         /**
          * The file watcher watching the config file because there is open script info that is root of
          * inferred project and will be impacted by change in the status of the config file
@@ -385,12 +385,12 @@ namespace ts.server {
          * or
          * Configured project references this config file
          */
-        watcher: FileWatcher | undefined;
+        watcher?: FileWatcher;
 
         /**
          * cached pased command line and other related information like watched directories etc
          */
-        cachedCommandLine: CachedCommandLine | undefined;
+        cachedCommandLine?: CachedCommandLine;
     }
 
     export interface ProjectServiceOptions {
@@ -641,7 +641,6 @@ namespace ts.server {
 
     /*@internal*/
     export interface CachedCommandLine{
-        configFile?: TsConfigSourceFile;
         parsedCommandLine?: ParsedCommandLine;
         cachedDirectoryStructureHost: CachedDirectoryStructureHost;
         watchedDirectories?: Map<WildcardDirectoryWatcher>;
@@ -1678,7 +1677,7 @@ namespace ts.server {
             if (isOpenScriptInfo(info)) {
                 (openFilesImpactedByConfigFile ||= new Map()).set(info.path, false);
             }
-            configFileExistenceInfo = { exists, openFilesImpactedByConfigFile, watcher: undefined, cachedCommandLine: undefined };
+            configFileExistenceInfo = { exists, openFilesImpactedByConfigFile };
             this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
             return exists;
         }
@@ -1825,12 +1824,7 @@ namespace ts.server {
                 let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
                 if (!configFileExistenceInfo) {
                     // Create the cache
-                    configFileExistenceInfo = {
-                        exists: this.host.fileExists(configFileName),
-                        openFilesImpactedByConfigFile: undefined,
-                        watcher: undefined,
-                        cachedCommandLine: undefined,
-                    };
+                    configFileExistenceInfo = { exists: this.host.fileExists(configFileName) };
                     this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
                 }
 
@@ -2113,12 +2107,7 @@ namespace ts.server {
             if (!configFileExistenceInfo) {
                 // We could be in this scenario if project is the configured project tracked by external project
                 // Since that route doesnt check if the config file is present or not
-                configFileExistenceInfo = {
-                    exists: true,
-                    openFilesImpactedByConfigFile: undefined,
-                    watcher: undefined,
-                    cachedCommandLine: undefined
-                };
+                configFileExistenceInfo = { exists: true };
                 this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
             }
             if (!configFileExistenceInfo.cachedCommandLine) {
@@ -2186,7 +2175,7 @@ namespace ts.server {
                 };
             }
             project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
-            project.setProjectErrors(cachedCommandLine.configFile!.parseDiagnostics);
+            project.setProjectErrors(parsedCommandLine!.options.configFile!.parseDiagnostics);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
@@ -2205,7 +2194,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private parseTsconfigFile(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath, forProjectCanonicalPath: NormalizedPath): CachedCommandLine {
+        parseTsconfigFile(configFilename: NormalizedPath, canonicalConfigFilePath: NormalizedPath, forProjectCanonicalPath: NormalizedPath): CachedCommandLine {
             const configFileExistenceInfo = Debug.checkDefined(this.configFileExistenceInfoCache.get(canonicalConfigFilePath));
             if (configFileExistenceInfo.cachedCommandLine) {
                 if (!configFileExistenceInfo.cachedCommandLine.reloadLevel) return configFileExistenceInfo.cachedCommandLine;
@@ -2245,13 +2234,11 @@ namespace ts.server {
                 projectReferences: parsedCommandLine.projectReferences
             }, /*replacer*/ undefined, " ")}`);
 
-            // TODO:: sheetal: exists could be false and we want to create watcher for that
             const oldCommandLine = configFileExistenceInfo.cachedCommandLine?.parsedCommandLine;
             if (!configFileExistenceInfo.cachedCommandLine) {
-                configFileExistenceInfo.cachedCommandLine = { configFile, parsedCommandLine, cachedDirectoryStructureHost, projects: new Map() };
+                configFileExistenceInfo.cachedCommandLine = { parsedCommandLine, cachedDirectoryStructureHost, projects: new Map() };
             }
             else {
-                configFileExistenceInfo.cachedCommandLine.configFile = configFile;
                 configFileExistenceInfo.cachedCommandLine.parsedCommandLine = parsedCommandLine;
                 configFileExistenceInfo.cachedCommandLine.watchedDirectoriesStale = true;
                 configFileExistenceInfo.cachedCommandLine.reloadLevel = undefined;
@@ -2273,6 +2260,19 @@ namespace ts.server {
             this.createConfigFileWatcherForCommandLineCache(configFilename, canonicalConfigFilePath, forProjectCanonicalPath);
             this.watchExtendedConfigFileForCommandLineCache(canonicalConfigFilePath, parsedCommandLine);
             return configFileExistenceInfo.cachedCommandLine;
+        }
+
+        /*@internal*/
+        getParsedCommandLine(configFileName: NormalizedPath, forProjectCanonicalPath: NormalizedPath) {
+            const canonicalConfigFilePath = asNormalizedPath(this.toCanonicalFileName(configFileName));
+            let configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
+            if (!configFileExistenceInfo) {
+                // Create it
+                this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.host.fileExists(configFileName) });
+            }
+            const result = this.parseTsconfigFile(configFileName, canonicalConfigFilePath, forProjectCanonicalPath);
+            return configFileExistenceInfo.exists ? result.parsedCommandLine : undefined;
+            // TODO: sheetal: what happens in isUptoDate to check for config files?
         }
 
         /*@internal*/
@@ -2409,7 +2409,7 @@ namespace ts.server {
                 return cachedCommandLine.parsedCommandLine!.fileNames;
             }
 
-            const configFileSpecs = cachedCommandLine.configFile!.configFileSpecs!;
+            const configFileSpecs = cachedCommandLine.parsedCommandLine!.options.configFile!.configFileSpecs!;
             const fileNames = getFileNamesFromConfigSpecs(
                 configFileSpecs,
                 getDirectoryPath(configFileName),

@@ -1099,7 +1099,7 @@ namespace ts.server {
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            const hasNewProgram = this.program && (!oldProgram || (this.program !== oldProgram && !(this.program.structureIsReused & StructureIsReused.Completely)));
+            const hasNewProgram = this.program && (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely));
             if (hasNewProgram) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
@@ -1117,6 +1117,8 @@ namespace ts.server {
                         }
                     });
                 }
+
+                // TODO:: sheetal: Remove watches for project reference files watches no longer needed and wild cards
 
                 // Update the missing file paths watcher
                 updateMissingFilePathsWatch(
@@ -2130,6 +2132,12 @@ namespace ts.server {
         useSourceOfProjectReferenceRedirect() {
             return this.languageServiceEnabled;
         }
+
+        // TODO: sheetal:
+        // /* @internal */
+        // getParsedCommandLine(fileName: string) {
+        //     return this.projectService.getParsedCommandLine(asNormalizedPath(normalizePath(fileName)), this.canonicalConfigFilePath);
+        // }
 
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
