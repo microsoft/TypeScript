@@ -5424,6 +5424,7 @@ declare namespace ts {
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;

@@ -1335,7 +1335,7 @@ namespace ts {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
-                getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
+                getDefaultLibFileName: options => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
@@ -1359,6 +1359,7 @@ namespace ts {
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
+                getParsedCommandLine: maybeBind(host, host.getParsedCommandLine),
             };
             host.setCompilerHost?.(compilerHost);
 

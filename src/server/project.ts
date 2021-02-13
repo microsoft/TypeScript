@@ -211,6 +211,9 @@ namespace ts.server {
             return undefined;
         }
 
+        /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */ getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
@@ -1982,6 +1985,8 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
+            this.useSourceOfProjectReferenceRedirect = maybeBind(this.hostProject, this.hostProject.useSourceOfProjectReferenceRedirect);
+            this.getParsedCommandLine = maybeBind(this.hostProject, this.hostProject.getParsedCommandLine);
         }
 
         /*@internal*/
@@ -2036,10 +2041,6 @@ namespace ts.server {
 
         getProjectReferences() {
             return this.hostProject.getProjectReferences();
-        }
-
-        useSourceOfProjectReferenceRedirect() {
-            return true;
         }
 
         /*@internal*/
