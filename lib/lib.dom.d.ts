@@ -7104,6 +7104,10 @@ interface HTMLIFrameElement extends HTMLElement {
      */
     height: string;
     /**
+     * Sets or retrieves the loading strategy of the object.
+     */
+    loading: string;
+    /**
      * Sets or retrieves a URI to a long description of the object.
      */
     /** @deprecated */
@@ -7189,6 +7193,9 @@ interface HTMLImageElement extends HTMLElement {
      * Sets or retrieves whether the image is a server-side image map.
      */
     isMap: boolean;
+    /**
+     * Sets or retrieves the loading strategy of the object.
+     */
     loading: string;
     /**
      * Sets or retrieves a Uniform Resource Identifier (URI) to a long description of the object.
