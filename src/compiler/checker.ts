@@ -3846,13 +3846,16 @@ namespace ts {
         }
 
         function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
-            (<ResolvedType>type).members = members;
-            (<ResolvedType>type).properties = members === emptySymbols ? emptyArray : getNamedMembers(members);
-            (<ResolvedType>type).callSignatures = callSignatures;
-            (<ResolvedType>type).constructSignatures = constructSignatures;
-            (<ResolvedType>type).stringIndexInfo = stringIndexInfo;
-            (<ResolvedType>type).numberIndexInfo = numberIndexInfo;
-            return <ResolvedType>type;
+            const resolved = <ResolvedType>type;
+            resolved.members = members;
+            resolved.properties = emptyArray;
+            resolved.callSignatures = callSignatures;
+            resolved.constructSignatures = constructSignatures;
+            resolved.stringIndexInfo = stringIndexInfo;
+            resolved.numberIndexInfo = numberIndexInfo;
+            // This can loop back to getPropertyOfType() which would crash if `callSignatures` & `constructSignatures` are not initialized.
+            if (members !== emptySymbols) resolved.properties = getNamedMembers(members);
+            return resolved;
         }
 
         function createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
@@ -19486,8 +19489,8 @@ namespace ts {
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
-            const elementType = isArrayType(type) ? getTypeArguments(type)[0] : undefined;
-            return elementType === undefinedWideningType || elementType === implicitNeverType;
+            const elementType = getElementTypeOfArrayType(type);
+            return strictNullChecks ? elementType === implicitNeverType : elementType === undefinedWideningType;
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -27709,6 +27712,10 @@ namespace ts {
                 max = Math.max(max, maxCount);
             }
 
+            if (min < argCount && argCount < max) {
+                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
+            }
+
             const hasRestParameter = some(signatures, hasEffectiveRestParameter);
             const paramRange = hasRestParameter ? min :
                 min < max ? min + "-" + max :
@@ -27741,9 +27748,6 @@ namespace ts {
                         !paramDecl.name ? argCount : !isBindingPattern(paramDecl.name) ? idText(getFirstIdentifier(paramDecl.name)) : undefined
                     );
                 }
-            }
-            if (min < argCount && argCount < max) {
-                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
 
             if (!hasSpreadArgument && argCount < min) {
@@ -34542,8 +34546,9 @@ namespace ts {
                 : isPropertyAccessExpression(location) ? location.name
                 : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
                 : undefined;
-
-            if (!testedNode) {
+            const isPropertyExpressionCast = isPropertyAccessExpression(location)
+                && isAssertionExpression(skipParentheses(location.expression));
+            if (!testedNode || isPropertyExpressionCast) {
                 return;
             }
 
