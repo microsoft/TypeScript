@@ -1,11 +1,11 @@
 === tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
 module.exports.apply = undefined;
 >module.exports.apply = undefined : undefined
->module.exports.apply : (() => void) | undefined
+>module.exports.apply : any
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
->apply : (() => void) | undefined
+>apply : any
 >undefined : undefined
 
 function a() { }
@@ -13,10 +13,10 @@ function a() { }
 
 module.exports.apply = a;
 >module.exports.apply = a : () => void
->module.exports.apply : (() => void) | undefined
+>module.exports.apply : any
 >module.exports : typeof module.exports
 >module : { exports: typeof module.exports; }
 >exports : typeof module.exports
->apply : (() => void) | undefined
+>apply : any
 >a : () => void
 

@@ -14,4 +14,5 @@ exports.apply = a;
 
 
 //// [moduleExportAliasDuplicateAlias.d.ts]
-export { undefined as apply };
+export { a as apply };
+declare function a(): void;

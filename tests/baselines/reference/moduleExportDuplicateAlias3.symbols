@@ -3,13 +3,13 @@ exports.apply = undefined;
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16))
 >exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16))
 >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16))
->undefined : Symbol(apply)
+>undefined : Symbol(undefined)
 
 exports.apply = undefined;
 >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16))
 >exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16))
 >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16))
->undefined : Symbol(apply)
+>undefined : Symbol(undefined)
 
 function a() { }
 >a : Symbol(a, Decl(moduleExportAliasDuplicateAlias.js, 1, 26))

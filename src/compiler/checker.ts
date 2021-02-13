@@ -2461,7 +2461,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return find<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
+            return findLast<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         /**
@@ -6962,11 +6962,7 @@ namespace ts {
                     // as something we need to serialize as a private declaration as well
                     const node = getDeclarationOfAliasSymbol(symbol);
                     if (!node) return Debug.fail();
-                    const firstTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
-                    const target = getMergedSymbol(
-                        isDuplicatedCommonJSExport(symbol.declarations, firstTarget)
-                            ? getMergedSymbol(getTargetOfAliasDeclaration(symbol.declarations[1], /*dontRecursivelyResolve*/ true))
-                            : firstTarget);
+                    const target = getMergedSymbol(getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true));
                     if (!target) {
                         return;
                     }
@@ -8346,6 +8342,21 @@ namespace ts {
             }
         }
 
+        function getFlowTypeFromCommonJSExport(symbol: Symbol) {
+            // Just create a synthetic property access flow node after the last statement of the file
+            const file = getSourceFileOfNode(symbol.declarations[0])
+            const accessName = unescapeLeadingUnderscores(symbol.escapedName);
+            const reference = factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
+            setParent(reference.expression, reference);
+            setParent(reference, file);
+            const lastStatementFlow = file.statements[file.statements.length - 1].flowNode;
+            reference.flowNode = lastStatementFlow && {
+                antecedents: [lastStatementFlow],
+                flags: FlowFlags.BranchLabel
+            }
+            return getFlowTypeOfReference(reference, autoType, undefinedType);
+        }
+
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
             const accessName = startsWith(symbol.escapedName as string, "__#")
                 ? factory.createPrivateIdentifier((symbol.escapedName as string).split("@")[1])
@@ -8363,7 +8374,10 @@ namespace ts {
         }
 
         function getFlowTypeOfProperty(reference: Node, prop: Symbol | undefined) {
-            const initialType = prop && (!isAutoTypedProperty(prop) || getEffectiveModifierFlags(prop.valueDeclaration) & ModifierFlags.Ambient) && getTypeOfPropertyInBaseClass(prop) || undefinedType;
+            const initialType = prop
+                && (!isAutoTypedProperty(prop) || getEffectiveModifierFlags(prop.valueDeclaration) & ModifierFlags.Ambient)
+                && getTypeOfPropertyInBaseClass(prop)
+                || undefinedType;
             return getFlowTypeOfReference(reference, autoType, initialType);
         }
 
@@ -9046,19 +9060,16 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
-                if (isDuplicatedCommonJSExport(symbol.declarations, targetSymbol)) {
-                    links.type = getUnionType(symbol.declarations.map(node => getTypeOfExpression((node.parent as BinaryExpression).right)));
-                }
-                else {
-                    // It only makes sense to get the type of a value symbol. If the result of resolving
-                    // the alias is not a value, then it has no type. To get the type associated with a
-                    // type symbol, call getDeclaredTypeOfSymbol.
-                    // This check is important because without it, a call to getTypeOfSymbol could end
-                    // up recursively calling getTypeOfAlias, causing a stack overflow.
-                    links.type = targetSymbol.flags & SymbolFlags.Value
-                        ? getTypeOfSymbol(targetSymbol)
-                        : errorType;
-                }
+                const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true)
+                // It only makes sense to get the type of a value symbol. If the result of resolving
+                // the alias is not a value, then it has no type. To get the type associated with a
+                // type symbol, call getDeclaredTypeOfSymbol.
+                // This check is important because without it, a call to getTypeOfSymbol could end
+                // up recursively calling getTypeOfAlias, causing a stack overflow.
+                links.type = exportSymbol && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations.length ? getFlowTypeFromCommonJSExport(exportSymbol)
+                    : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
+                    : errorType;
             }
             return links.type;
         }
@@ -26437,7 +26448,10 @@ namespace ts {
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
             if (assignmentKind === AssignmentKind.Definite ||
-                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
+                prop &&
+                !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
+                && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)
+                && !isDuplicatedCommonJSExport(prop.declarations)) {
                 return propType;
             }
             if (propType === autoType) {
@@ -37305,13 +37319,10 @@ namespace ts {
             }
         }
 
-        function isDuplicatedCommonJSExport(declarations: Declaration[], resolvedFirstDeclaration?: Symbol) {
-            const first = declarations[0];
-            return declarations.length === 2
-                && declarations.every(d => isInJSFile(d) && isAccessExpression(d) && (isExportsIdentifier(d.expression) || isModuleExportsAccessExpression(d.expression)))
-                && isBinaryExpression(first.parent)
-                && isIdentifier(first.parent.right)
-                && undefinedSymbol === (resolvedFirstDeclaration || resolveName(first.parent.right, first.parent.right.escapedText, SymbolFlags.Value, undefined, undefined, /*isUse*/ true));
+        function isDuplicatedCommonJSExport(declarations: Declaration[]) {
+            return declarations
+                && declarations.length > 1
+                && declarations.every(d => isInJSFile(d) && isAccessExpression(d) && (isExportsIdentifier(d.expression) || isModuleExportsAccessExpression(d.expression)));
         }
 
         function checkSourceElement(node: Node | undefined): void {

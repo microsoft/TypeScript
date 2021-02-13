@@ -1,0 +1,16 @@
+tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js(3,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+
+
+==== tests/cases/conformance/salsa/test.js (0 errors) ====
+    const { apply } = require('./moduleExportAliasDuplicateAlias')
+    apply()
+    
+==== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js (1 errors) ====
+    exports.apply = undefined;
+    function a() { }
+    exports.apply()
+    ~~~~~~~~~~~~~
+!!! error TS2722: Cannot invoke an object which is possibly 'undefined'.
+    exports.apply = a;
+    exports.apply()
+    
