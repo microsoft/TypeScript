@@ -13,7 +13,8 @@
 
 goTo.file("/C.ts");
 verify.codeFix({
-    description: "Implement interface 'I'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I"],
+    index: 1,
     newFileContent:
 `import { I, J } from "./I";
 export class C implements I {

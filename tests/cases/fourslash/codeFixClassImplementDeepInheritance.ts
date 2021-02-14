@@ -49,7 +49,8 @@
  */
 
 verify.codeFix({
-    description: "Implement interface 'I6'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I6"],
+    index: 1,
     newFileContent:
 `// Referenced throughout the inheritance chain.
 interface I0 { a: number }

@@ -4,7 +4,8 @@
 ////class C<U> implements I<U> {}
 
 verify.codeFix({
-    description: "Implement interface 'I<U>'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I<U>"],
+    index: 1,
     newFileContent:
 `interface I<T> { x: T; }
 class C<U> implements I<U> {

@@ -11,8 +11,14 @@
 ////     |]x: number;
 //// }
 
-verify.rangeAfterCodeFix(`
-y: "𣋝ઢȴ¬⏊";
-`);
+verify.codeFix({
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I2"],
+    index: 1,
+    applyChanges: true,
+    newRangeContent:
+`
+    y: "𣋝ઢȴ¬⏊";
+    `
+});
 
 verify.not.codeFixAvailable();

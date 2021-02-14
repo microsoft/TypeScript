@@ -12,7 +12,13 @@
 ////     |]f2(){}
 //// }
 
-verify.rangeAfterCodeFix(`f1(): void{
-    throw new Error("Method not implemented.");
-}
-`);
+verify.codeFix({
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "C2"],
+    index: 1,
+    newRangeContent:
+`
+    f1(): void {
+        throw new Error("Method not implemented.");
+    } 
+    `
+})

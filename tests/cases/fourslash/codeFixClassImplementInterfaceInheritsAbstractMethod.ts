@@ -8,7 +8,8 @@
 ////class C3 implements I1 {[| |]}
 
 verify.codeFix({
-    description: "Implement interface 'I1'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I1"],
+    index: 1,
     newFileContent:
 `abstract class C1 { }
 abstract class C2 {

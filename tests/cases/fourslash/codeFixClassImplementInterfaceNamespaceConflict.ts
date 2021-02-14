@@ -9,7 +9,8 @@
 ////class C1 implements N1.I1 {}
 
 verify.codeFix({
-    description: "Implement interface 'N1.I1'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "N1.I1"],
+    index: 1,
     newFileContent:
 `namespace N1 {
     export interface I1 { x: number; }

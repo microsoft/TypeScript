@@ -5469,7 +5469,7 @@
         "category": "Message",
         "code": 90005
     },
-    "Implement interface '{0}'": {
+    "Implement required members of interface '{0}'": {
         "category": "Message",
         "code": 90006
     },
@@ -5480,6 +5480,10 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
+    },
+    "Implement all members of interface '{0}'": {
+        "category": "Message",
+        "code": 90009
     },
     "Remove variable statement": {
         "category": "Message",
@@ -5600,6 +5604,10 @@
     "Remove unused destructuring declaration": {
         "category": "Message",
         "code": 90039
+    },
+    "Implement required members of interfaces in all classes": {
+        "category": "Message",
+        "code": 90040
     },
     "Remove unused declarations for: '{0}'": {
         "category": "Message",

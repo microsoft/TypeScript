@@ -31,8 +31,8 @@
 ////}
 
 verify.codeFixAll({
-  fixAllDescription: ts.Diagnostics.Implement_all_unimplemented_interfaces.message,
-  fixId: "fixClassIncorrectlyImplementsInterface",
+  fixAllDescription: ts.Diagnostics.Implement_required_members_of_interfaces_in_all_classes.message,
+  fixId: "fixClassIncorrectlyImplementsInterface_required",
   newFileContent:
 `interface IFoo1 {
     parse(reviver: () => any): void;

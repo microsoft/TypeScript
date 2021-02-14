@@ -14,8 +14,8 @@
 ////class /*1*/X implements Foo {}
 goTo.marker("1");
 verify.codeFix({
-    index: 0,
-    description: "Implement interface 'Foo'",
+    index: 1,
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "Foo"],
     newFileContent: {
         "/tests/cases/fourslash/index.ts":
 `import { Class } from './class';

@@ -4,30 +4,46 @@ namespace ts.codefix {
         Diagnostics.Class_0_incorrectly_implements_interface_1.code,
         Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
     ];
-    const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
+    const fixIdRequired = "fixClassIncorrectlyImplementsInterface_required";
+    const fixIdAll = "fixClassIncorrectlyImplementsInterface_all";
+
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span } = context;
             const classDeclaration = getClass(sourceFile, span.start);
-            return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
-                const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
-                return changes.length === 0 ? undefined : createCodeFixAction(fixId, changes, [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)], fixId, Diagnostics.Implement_all_unimplemented_interfaces);
-            });
+            return concatenate(
+                map(getCodeChanges(context, classDeclaration, /*excludeOptional*/ true), ({ typeNode, changes }) =>
+                    createCodeFixAction(fixIdRequired, changes, [Diagnostics.Implement_required_members_of_interface_0, typeNode.getText(context.sourceFile)], fixIdRequired, Diagnostics.Implement_required_members_of_interfaces_in_all_classes)),
+                map(getCodeChanges(context, classDeclaration, /*excludeOptional*/ false), ({ typeNode, changes }) =>
+                    createCodeFixActionWithoutFixAll(fixIdAll, changes, [Diagnostics.Implement_all_members_of_interface_0, typeNode.getText(context.sourceFile)]))
+            );
         },
-        fixIds: [fixId],
+        fixIds: [fixIdRequired, fixIdAll],
         getAllCodeActions(context) {
             const seenClassDeclarations = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                     for (const implementedTypeNode of getEffectiveImplementsTypeNodes(classDeclaration)!) {
-                        addMissingDeclarations(context, implementedTypeNode, diag.file, classDeclaration, changes, context.preferences);
+                        addMissingDeclarations(context, implementedTypeNode, diag.file, classDeclaration, changes, context.preferences, /*excludeOptional*/ context.fixId === fixIdRequired);
                     }
                 }
             });
         },
     });
+
+    interface CodeChange {
+        typeNode: ExpressionWithTypeArguments;
+        changes: FileTextChanges[];
+    }
+
+    function getCodeChanges(context: CodeFixContext, classDeclaration: ClassLikeDeclaration, excludeOptional: boolean): CodeChange[] {
+        return mapDefined(getEffectiveImplementsTypeNodes(classDeclaration), typeNode => {
+            const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, typeNode, context.sourceFile, classDeclaration, t, context.preferences, excludeOptional));
+            return length(changes) ? { typeNode, changes } : undefined;
+        });
+    }
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
         return Debug.checkDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
@@ -44,14 +60,17 @@ namespace ts.codefix {
         classDeclaration: ClassLikeDeclaration,
         changeTracker: textChanges.ChangeTracker,
         preferences: UserPreferences,
+        excludeOptional: boolean
     ): void {
         const checker = context.program.getTypeChecker();
         const maybeHeritageClauseSymbol = getHeritageClauseSymbolTable(classDeclaration, checker);
+        const excludeFlags = excludeOptional ? SymbolFlags.Optional : SymbolFlags.None;
         // Note that this is ultimately derived from a map indexed by symbol names,
         // so duplicates cannot occur.
         const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
         const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-        const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
+        const nonPrivateAndNotExistedInHeritageClauseMembers = filter(implementedTypeSymbols,
+            and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName) && !(symbol.flags & excludeFlags)));
 
         const classType = checker.getTypeAtLocation(classDeclaration);
         const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));

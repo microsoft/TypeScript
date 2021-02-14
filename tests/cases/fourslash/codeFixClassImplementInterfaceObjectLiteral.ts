@@ -9,7 +9,8 @@
 //// class Person implements IPerson { }
 
 verify.codeFix({
-    description: "Implement interface 'IPerson'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "IPerson"],
+    index: 1,
     newFileContent:
 `interface IPerson {
     coordinate: {

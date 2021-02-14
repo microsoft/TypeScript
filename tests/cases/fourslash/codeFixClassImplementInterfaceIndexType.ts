@@ -6,7 +6,8 @@
 ////class C<Y> implements I<Y> {[| |]}
 
 verify.codeFix({
-    description: "Implement interface 'I<Y>'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I<Y>"],
+    index: 1,
     newFileContent:
 `interface I<X> {
     x: keyof X;

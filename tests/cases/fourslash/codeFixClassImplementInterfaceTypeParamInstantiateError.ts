@@ -9,4 +9,7 @@
 // TODO: (arozga) Don't know how to instantiate in codeFix
 // if instantiation is invalid.
 // Should be verify.codeFixAvailable([]);
-verify.codeFixAvailable([{ description: "Implement interface 'I<number>'" }]);
+verify.codeFixAvailable([
+    { description: "Implement required members of interface 'I<number>'" },
+    { description: "Implement all members of interface 'I<number>'" }
+]);

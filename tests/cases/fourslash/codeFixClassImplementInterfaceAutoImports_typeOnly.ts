@@ -27,7 +27,8 @@
 
 goTo.file('index.ts');
 verify.codeFix({
-  description: "Implement interface 'Base'",
+  description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "Base"],
+  index: 1,
   newFileContent:
 `import type { Base } from './interface';
 import type A from './types1';

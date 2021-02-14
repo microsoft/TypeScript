@@ -6,7 +6,8 @@
 ////class C1 implements N.I {}
 
 verify.codeFix({
-    description: "Implement interface 'N.I'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "N.I"],
+    index: 1,
     newFileContent:
 `namespace N {
     export interface I { y: I; }

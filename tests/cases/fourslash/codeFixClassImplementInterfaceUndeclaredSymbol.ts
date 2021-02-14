@@ -16,4 +16,7 @@
 
 // TODO: (aozgaa) Acknowledge other errors on class/implemented interface/extended abstract class.
 // Should be verify.codeFixAvailable([]);
-verify.codeFixAvailable([{ description: "Implement interface 'I'" }]);
+verify.codeFixAvailable([
+    { description: "Implement required members of interface 'I'" },
+    { description: "Implement all members of interface 'I'" }
+]);

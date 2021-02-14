@@ -12,8 +12,8 @@
 ////}
 
 verify.codeFix({
-  description: "Implement interface 'IFoo'",
-  index: 0,
+  description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "IFoo"],
+  index: 1,
   newFileContent:
 `interface IFoo {
   bar(): void;

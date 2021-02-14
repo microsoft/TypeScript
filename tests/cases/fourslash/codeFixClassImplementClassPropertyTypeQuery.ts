@@ -6,7 +6,8 @@
 ////class D implements A {[| |]}
 
 verify.codeFix({
-    description: "Implement interface 'A'",
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "A"],
+    index: 1,
     newFileContent:
 `class A {
     A: typeof A;

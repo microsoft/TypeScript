@@ -6,8 +6,8 @@
 ////class D implements J {}
 
 verify.codeFixAll({
-    fixId: "fixClassIncorrectlyImplementsInterface",
-    fixAllDescription: "Implement all unimplemented interfaces",
+    fixId: "fixClassIncorrectlyImplementsInterface_required",
+    fixAllDescription: ts.Diagnostics.Implement_required_members_of_interfaces_in_all_classes.message,
     newFileContent:
 `interface I { i(): void; }
 interface J { j(): void; }

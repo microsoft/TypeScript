@@ -11,8 +11,14 @@
 ////     |]y: number;
 //// }
 
-verify.rangeAfterCodeFix(`
-x: number;
-`);
+verify.codeFix({
+    description: [ts.Diagnostics.Implement_all_members_of_interface_0.message, "I1"],
+    index: 1,
+    applyChanges: true,
+    newRangeContent:
+`
+    x: number;
+    `
+});
 
 verify.not.codeFixAvailable();
