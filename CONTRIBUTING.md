@@ -88,7 +88,7 @@ Features (things that add new or improved functionality to TypeScript) may be ac
 
 ## Legal
 
-You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
+You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
 
 ## Housekeeping
 
@@ -97,7 +97,7 @@ Your pull request should:
 * Include a description of what your change intends to do
 * Be based on reasonably recent commit in the **master** branch
 * Include adequate tests
-    * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
+    * At least one test should fail in the absence of your non-test code changes. If your PR does not match these criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
 * Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
@@ -163,7 +163,7 @@ You can also use the [provided VS Code launch configuration](./.vscode/launch.te
 
 ## Adding a Test
 
-To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the your bug is now fixed, or your new feature now works.
+To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows that your bug is now fixed, or your new feature now works.
 
 These files support metadata tags in the format  `// @metaDataName: value`.
 The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
