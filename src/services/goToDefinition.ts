@@ -2,8 +2,9 @@
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-        if (resolvedRef) {
-            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName)];
+        if (resolvedRef?.file) {
+            // If `file` is missing, do a symbol-based lookup as well
+            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, /*unverified*/ false)];
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -93,7 +94,10 @@ namespace ts.GoToDefinition {
             }
         }
 
-        return getDefinitionFromSymbol(typeChecker, symbol, node);
+        return flatten([
+            resolvedRef && getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, /*unverified*/ true),
+            getDefinitionFromSymbol(typeChecker, symbol, node)
+        ]);
     }
 
     /**
@@ -332,7 +336,7 @@ namespace ts.GoToDefinition {
         return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
-    function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {
+    function getDefinitionInfoForFileReference(name: string, targetFileName: string, unverified: boolean): DefinitionInfo {
         return {
             fileName: targetFileName,
             textSpan: createTextSpanFromBounds(0, 0),
@@ -340,6 +344,7 @@ namespace ts.GoToDefinition {
             name,
             containerName: undefined!,
             containerKind: undefined!, // TODO: GH#18217
+            unverified,
         };
     }
 

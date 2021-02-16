@@ -989,6 +989,7 @@ namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+        unverified?: boolean;
         /* @internal */ isLocal?: boolean;
     }
 

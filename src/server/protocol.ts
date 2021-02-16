@@ -977,8 +977,15 @@ namespace ts.server.protocol {
     export interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
 
+    export interface DefinitionInfo extends FileSpanWithContext {
+        /**
+         * When true, the file may or may not exist.
+         */
+        unverified?: boolean;
+    }
+
     export interface DefinitionInfoAndBoundSpan {
-        definitions: readonly FileSpanWithContext[];
+        definitions: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
 
