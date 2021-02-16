@@ -20,4 +20,20 @@ function f(result: unknown) {
 >result : unknown
     }
 }
+function g(result: unknown) {
+>g : (result: unknown) => unknown
+>result : unknown
+
+    if (((result as I)).always) {
+>((result as I)).always : () => void
+>((result as I)) : I
+>(result as I) : I
+>result as I : I
+>result : unknown
+>always : () => void
+
+        return result
+>result : unknown
+    }
+}
 
