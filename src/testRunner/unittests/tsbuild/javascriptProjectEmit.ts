@@ -104,7 +104,8 @@ namespace ts {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true,
-                            "outFile": "common.js"
+                            "outFile": "common.js",
+                            
                         },
                         "include": ["nominal.js"]
                     }`,
@@ -119,7 +120,8 @@ namespace ts {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true,
-                            "outFile": "sub-project.js"
+                            "outFile": "sub-project.js",
+                            
                         },
                         "references": [
                             { "path": "../common", "prepend": true }
@@ -143,7 +145,8 @@ namespace ts {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
                             "composite": true,
-                            "outFile": "sub-project-2.js"
+                            "outFile": "sub-project-2.js",
+                            
                         },
                         "references": [
                             { "path": "../sub-project", "prepend": true }
@@ -183,7 +186,7 @@ namespace ts {
             fs: () => projFs,
             commandLineArgs: ["-b", "/src"]
         });
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "javascriptProjectEmit",
             subScenario: `modifies outfile js projects and concatenates them correctly`,
             fs: () => projFs,

@@ -1,4 +1,78 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/app/file3.ts]
+"myPrologue"
+export const z = 30;
+import { x } from "file1";
+
+//// [/src/app/file4.ts]
+"myPrologue2";
+const myVar = 30;
+
+//// [/src/app/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "strict": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"],
+    "references": [
+        { "path": "../lib", "prepend": true }
+    ]
+}
+
+//// [/src/lib/file0.ts]
+"myPrologue"
+const myGlob = 20;
+
+//// [/src/lib/file1.ts]
+export const x = 10;
+
+//// [/src/lib/file2.ts]
+"myPrologueFile"
+export const y = 20;
+
+//// [/src/lib/global.ts]
+"myPrologue3"
+const globalConst = 10;
+
+//// [/src/lib/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "strict": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"]
+
+}
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -14,15 +88,6 @@
 
 exitCode:: ExitStatus.Success
 
-
-//// [/src/app/file3.ts]
-"myPrologue"
-export const z = 30;
-import { x } from "file1";
-
-//// [/src/app/file4.ts]
-"myPrologue2";
-const myVar = 30;
 
 //// [/src/app/module.d.ts]
 declare const myGlob = 20;
@@ -677,35 +742,6 @@ declare const myVar = 30;
 
 ======================================================================
 
-//// [/src/app/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "strict": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"],
-    "references": [
-        { "path": "../lib", "prepend": true }
-    ]
-}
-
-//// [/src/lib/file0.ts]
-"myPrologue"
-const myGlob = 20;
-
-//// [/src/lib/file2.ts]
-"myPrologueFile"
-export const y = 20;
-
-//// [/src/lib/global.ts]
-"myPrologue3"
-const globalConst = 10;
-
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare module "file1" {
@@ -1166,19 +1202,4 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
-
-//// [/src/lib/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "strict": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"]
-
-}
 

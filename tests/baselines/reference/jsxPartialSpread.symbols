@@ -1,0 +1,28 @@
+=== tests/cases/compiler/jsxPartialSpread.tsx ===
+/// <reference path="react16.d.ts" />
+const Select = (p: {value?: unknown}) => <p></p>;
+>Select : Symbol(Select, Decl(jsxPartialSpread.tsx, 1, 5))
+>p : Symbol(p, Decl(jsxPartialSpread.tsx, 1, 16))
+>value : Symbol(value, Decl(jsxPartialSpread.tsx, 1, 20))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+
+import React from 'react';
+>React : Symbol(React, Decl(jsxPartialSpread.tsx, 2, 6))
+
+export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
+>Repro : Symbol(Repro, Decl(jsxPartialSpread.tsx, 2, 26))
+>SelectProps : Symbol(SelectProps, Decl(jsxPartialSpread.tsx, 4, 23))
+>SelectProps : Symbol(SelectProps, Decl(jsxPartialSpread.tsx, 4, 45))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Select : Symbol(Select, Decl(jsxPartialSpread.tsx, 1, 5))
+
+    return (
+        <Select value={'test'} {...SelectProps} />
+>Select : Symbol(Select, Decl(jsxPartialSpread.tsx, 1, 5))
+>value : Symbol(value, Decl(jsxPartialSpread.tsx, 6, 15))
+>SelectProps : Symbol(SelectProps, Decl(jsxPartialSpread.tsx, 4, 23))
+
+    );
+}

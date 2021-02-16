@@ -91,32 +91,32 @@ Outer.app.statische = function (k) {
 }
 === tests/cases/conformance/salsa/application.js ===
 Outer.app.Application = (function () {
->Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
->Outer.app.Application : () => void
+>Outer.app.Application = (function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
+>Outer.app.Application : typeof Application
 >Outer.app : typeof Outer.app
 >Outer : typeof Outer
 >app : typeof Outer.app
->Application : () => void
->(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
->(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => () => void
->function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;} : () => () => void
+>Application : typeof Application
+>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : typeof Application
+>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => typeof Application
+>function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;} : () => typeof Application
 
     /**
      * Application main class.
      * Will be instantiated & initialized by HTML page
      */
     var Application = function () {
->Application : () => void
->function () {        var me = this;        me.view = new Outer.app.SomeView();    } : () => void
+>Application : typeof Application
+>function () {        var me = this;        me.view = new Outer.app.SomeView();    } : typeof Application
 
         var me = this;
->me : any
->this : any
+>me : this
+>this : this
 
         me.view = new Outer.app.SomeView();
 >me.view = new Outer.app.SomeView() : any
 >me.view : any
->me : any
+>me : this
 >view : any
 >new Outer.app.SomeView() : any
 >Outer.app.SomeView : () => void
@@ -127,18 +127,18 @@ Outer.app.Application = (function () {
 
     };
     return Application;
->Application : () => void
+>Application : typeof Application
 
 })();
 === tests/cases/conformance/salsa/main.js ===
 var app = new Outer.app.Application();
->app : any
->new Outer.app.Application() : any
->Outer.app.Application : () => void
+>app : Application
+>new Outer.app.Application() : Application
+>Outer.app.Application : typeof Application
 >Outer.app : typeof Outer.app
 >Outer : typeof Outer
 >app : typeof Outer.app
->Application : () => void
+>Application : typeof Application
 
 var inner = new Outer.app.Inner();
 >inner : Inner

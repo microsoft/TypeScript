@@ -1,0 +1,1 @@
+import debug = require('debug');

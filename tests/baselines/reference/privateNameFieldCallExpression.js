@@ -5,6 +5,7 @@ class A {
     x = 1;
     test() {
         this.#fieldFunc();
+        this.#fieldFunc?.();
         const func = this.#fieldFunc;
         func();
         new this.#fieldFunc();
@@ -35,7 +36,9 @@ class A {
     }
     test() {
         var _a;
+        var _b;
         __classPrivateFieldGet(this, _fieldFunc).call(this);
+        (_a = __classPrivateFieldGet(this, _fieldFunc)) === null || _a === void 0 ? void 0 : _a.call(this);
         const func = __classPrivateFieldGet(this, _fieldFunc);
         func();
         new (__classPrivateFieldGet(this, _fieldFunc))();
@@ -43,7 +46,7 @@ class A {
         __classPrivateFieldGet(this, _fieldFunc2).call(this, 0, ...arr, 3);
         const b = new (__classPrivateFieldGet(this, _fieldFunc2))(0, ...arr, 3);
         const str = __classPrivateFieldGet(this, _fieldFunc2).bind(this) `head${1}middle${2}tail`;
-        __classPrivateFieldGet((_a = this.getInstance()), _fieldFunc2).bind(_a) `test${1}and${2}`;
+        __classPrivateFieldGet((_b = this.getInstance()), _fieldFunc2).bind(_b) `test${1}and${2}`;
     }
     getInstance() { return new A(); }
 }

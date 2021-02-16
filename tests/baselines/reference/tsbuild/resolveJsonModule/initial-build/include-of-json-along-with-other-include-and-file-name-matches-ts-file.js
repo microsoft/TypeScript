@@ -1,5 +1,71 @@
-//// [/lib/initial-buildOutput.txt]
-/lib/tsc --b /src/tsconfig_withIncludeOfJson.json
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/index.json]
+{"hello":"world"}
+
+//// [/src/src/index.ts]
+import hello from "./index.json"
+
+export default hello.hello
+
+//// [/src/tsconfig_withFiles.json]
+
+
+//// [/src/tsconfig_withInclude.json]
+
+
+//// [/src/tsconfig_withIncludeAndFiles.json]
+
+
+//// [/src/tsconfig_withIncludeOfJson.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*", "src/**/*.json"
+  ]
+}
+
+
+
+Output::
+/lib/tsc --b /src/tsconfig_withIncludeOfJson.json --v --explainFiles
+[[90m12:00:00 AM[0m] Projects in this build: 
+    * src/tsconfig_withIncludeOfJson.json
+
+[[90m12:00:00 AM[0m] Project 'src/tsconfig_withIncludeOfJson.json' is out of date because output file 'src/dist/src/index.js' does not exist
+
+[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
+
+lib/lib.d.ts
+  Default library
+src/src/index.json
+  Imported via "./index.json" from file 'src/src/index.ts'
+  Matched by include pattern 'src/**/*.json' in 'src/tsconfig_withIncludeOfJson.json'
+src/src/index.ts
+  Matched by include pattern 'src/**/*' in 'src/tsconfig_withIncludeOfJson.json'
 exitCode:: ExitStatus.Success
 
 
@@ -33,7 +99,7 @@ exports["default"] = index_json_1["default"].hello;
       },
       "../src/index.json": {
         "version": "-2379406821-{\"hello\":\"world\"}",
-        "signature": "-4341462827-export declare const hello: string;\r\n",
+        "signature": "-17173785019-export const hello: string;\r\n",
         "affectsGlobalScope": true
       },
       "../src/index.ts": {
@@ -51,6 +117,7 @@ exports["default"] = index_json_1["default"].hello;
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "explainFiles": true,
       "configFilePath": "../tsconfig_withIncludeOfJson.json"
     },
     "referencedMap": {
@@ -67,13 +134,4 @@ exports["default"] = index_json_1["default"].hello;
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/src/hello.json] unlink
-//// [/src/src/index.json]
-{"hello":"world"}
-
-//// [/src/src/index.ts]
-import hello from "./index.json"
-
-export default hello.hello
 

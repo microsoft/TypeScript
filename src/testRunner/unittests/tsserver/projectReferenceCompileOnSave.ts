@@ -58,7 +58,7 @@ fn2();
                         arguments: { file: dependencyTs.path }
                     });
                     const { file, insertString } = change();
-                    if (session.getProjectService().openFiles.has(file.path)) {
+                    if (session.getProjectService().openFiles.has(file.path as Path)) {
                         const toLocation = protocolToLocation(file.content);
                         const location = toLocation(file.content.length);
                         session.executeCommandSeq<protocol.ChangeRequest>({
@@ -95,7 +95,7 @@ fn2();
                 assert.equal(host.writtenFiles.size, expectedFiles.length);
                 for (const file of expectedFiles) {
                     assert.equal(host.readFile(file.path), file.content, `Expected to write ${file.path}`);
-                    assert.isTrue(host.writtenFiles.has(file.path), `${file.path} is newly written`);
+                    assert.isTrue(host.writtenFiles.has(file.path as Path), `${file.path} is newly written`);
                 }
 
                 // Verify EmitOutput

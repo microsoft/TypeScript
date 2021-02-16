@@ -1,0 +1,20 @@
+=== tests/cases/conformance/salsa/assignmentToVoidZero1.js ===
+// #38552
+exports.y = exports.x = void 0;
+>exports.y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
+>exports : Symbol("tests/cases/conformance/salsa/assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
+>y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
+>exports.x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
+>exports : Symbol("tests/cases/conformance/salsa/assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
+>x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
+
+exports.x = 1;
+>exports.x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
+>exports : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
+>x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
+
+exports.y = 2;
+>exports.y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
+>exports : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
+>y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
+

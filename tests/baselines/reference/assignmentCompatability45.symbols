@@ -1,0 +1,20 @@
+=== tests/cases/compiler/assignmentCompatability45.ts ===
+abstract class A {}
+>A : Symbol(A, Decl(assignmentCompatability45.ts, 0, 0))
+
+class B extends A {
+>B : Symbol(B, Decl(assignmentCompatability45.ts, 0, 19))
+>A : Symbol(A, Decl(assignmentCompatability45.ts, 0, 0))
+
+    constructor(x: number) {
+>x : Symbol(x, Decl(assignmentCompatability45.ts, 2, 16))
+
+        super();
+>super : Symbol(A, Decl(assignmentCompatability45.ts, 0, 0))
+    }
+}
+const b: typeof A = B;
+>b : Symbol(b, Decl(assignmentCompatability45.ts, 6, 5))
+>A : Symbol(A, Decl(assignmentCompatability45.ts, 0, 0))
+>B : Symbol(B, Decl(assignmentCompatability45.ts, 0, 19))
+

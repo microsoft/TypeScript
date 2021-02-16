@@ -1,0 +1,36 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment6.ts ===
+function foo1(results: number[] | undefined, results1: number[] | undefined) {
+>foo1 : Symbol(foo1, Decl(logicalAssignment6.ts, 0, 0))
+>results : Symbol(results, Decl(logicalAssignment6.ts, 0, 14))
+>results1 : Symbol(results1, Decl(logicalAssignment6.ts, 0, 44))
+
+    (results ||= (results1 ||= [])).push(100);
+>(results ||= (results1 ||= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment6.ts, 0, 14))
+>results1 : Symbol(results1, Decl(logicalAssignment6.ts, 0, 44))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo2(results: number[] | undefined, results1: number[] | undefined) {
+>foo2 : Symbol(foo2, Decl(logicalAssignment6.ts, 2, 1))
+>results : Symbol(results, Decl(logicalAssignment6.ts, 4, 14))
+>results1 : Symbol(results1, Decl(logicalAssignment6.ts, 4, 44))
+
+    (results ??= (results1 ??= [])).push(100);
+>(results ??= (results1 ??= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment6.ts, 4, 14))
+>results1 : Symbol(results1, Decl(logicalAssignment6.ts, 4, 44))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo3(results: number[] | undefined, results1: number[] | undefined) {
+>foo3 : Symbol(foo3, Decl(logicalAssignment6.ts, 6, 1))
+>results : Symbol(results, Decl(logicalAssignment6.ts, 8, 14))
+>results1 : Symbol(results1, Decl(logicalAssignment6.ts, 8, 44))
+
+    (results &&= (results1 &&= [])).push(100);
+>(results &&= (results1 &&= [])).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment6.ts, 8, 14))
+>results1 : Symbol(results1, Decl(logicalAssignment6.ts, 8, 44))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}

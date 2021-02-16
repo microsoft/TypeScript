@@ -16,9 +16,9 @@
 verify.codeFix({
     description: "Convert function to an ES2015 class",
     newFileContent:
-`/**\r
- * JSDoc Comment\r
- */\r
+`/**
+ * JSDoc Comment
+ */
 class fn {\r
     constructor() {\r
         this.baz = 10;\r
@@ -26,6 +26,6 @@ class fn {\r
     bar() {\r
         console.log('hello world');\r
     }\r
-}\r
+}
 `,
 });

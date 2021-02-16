@@ -4,9 +4,9 @@
 // Excess property error expected here
 Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >window : Window & typeof globalThis
 >"prop" : "prop"
 >{ value: "v1.0.0", readonly: false } : { value: string; readonly: boolean; }

@@ -19,7 +19,7 @@ verify.codeFix({
     description: [ts.Diagnostics.Declare_method_0.message, "foo"],
     index: 0,
     newFileContent:
-`import { create, A } from "./a";
+`import { A, create } from "./a";
 class B {
     bar() {
         create(args => this.foo(args));

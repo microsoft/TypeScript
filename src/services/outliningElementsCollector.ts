@@ -34,12 +34,12 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n) || n.kind === SyntaxKind.EndOfFileToken) {
+            if (isDeclaration(n) || isVariableStatement(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
-            if (isFunctionExpressionAssignedToVariable(n)) {
-                addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
+            if (isFunctionLike(n) && isBinaryExpression(n.parent) && isPropertyAccessExpression(n.parent.left)) {
+                addOutliningForLeadingCommentsForNode(n.parent.left, sourceFile, cancellationToken, out);
             }
 
             const span = getOutliningSpanForNode(n, sourceFile);
@@ -65,14 +65,6 @@ namespace ts.OutliningElementsCollector {
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
-        }
-
-        function isFunctionExpressionAssignedToVariable(n: Node) {
-            if (!isFunctionExpression(n) && !isArrowFunction(n)) {
-                return false;
-            }
-            const ancestor = findAncestor(n, isVariableStatement);
-            return !!ancestor && getSingleInitializerOfVariableStatementOrPropertyDeclaration(ancestor) === n;
         }
     }
 
@@ -223,6 +215,31 @@ namespace ts.OutliningElementsCollector {
                 return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
             case SyntaxKind.ArrayBindingPattern:
                 return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
+            case SyntaxKind.ArrowFunction:
+                return spanForArrowFunction(<ArrowFunction>n);
+            case SyntaxKind.CallExpression:
+                return spanForCallExpression(<CallExpression>n);
+        }
+
+        function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {
+            if (!node.arguments.length) {
+                return undefined;
+            }
+            const openToken = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
+            const closeToken = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
+            if (!openToken || !closeToken || positionsAreOnSameLine(openToken.pos, closeToken.pos, sourceFile)) {
+                return undefined;
+            }
+
+            return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ true);
+        }
+
+        function spanForArrowFunction(node: ArrowFunction): OutliningSpan | undefined {
+            if (isBlock(node.body) || positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)) {
+                return undefined;
+            }
+            const textSpan = createTextSpanFromBounds(node.body.getFullStart(), node.body.getEnd());
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(node));
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
@@ -271,10 +288,8 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
-    function functionSpan(node: FunctionLike, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
-        const openToken = isNodeArrayMultiLine(node.parameters, sourceFile)
-            ? findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)
-            : findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
+    function functionSpan(node: SignatureDeclaration, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
+        const openToken = tryGetFunctionOpenToken(node, body, sourceFile);
         const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
         return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
     }
@@ -286,5 +301,15 @@ namespace ts.OutliningElementsCollector {
 
     function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
         return { textSpan, kind, hintSpan, bannerText, autoCollapse };
+    }
+
+    function tryGetFunctionOpenToken(node: SignatureDeclaration, body: Block, sourceFile: SourceFile): Node | undefined {
+        if (isNodeArrayMultiLine(node.parameters, sourceFile)) {
+            const openParenToken = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
+            if (openParenToken) {
+                return openParenToken;
+            }
+        }
+        return findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
     }
 }

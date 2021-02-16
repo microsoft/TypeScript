@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts.codefix {
-    const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is_set_to_error.code];
+    const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
     const fixId = "convertToTypeOnlyImport";
     registerCodeFix({
         errorCodes,
@@ -38,14 +38,14 @@ namespace ts.codefix {
         // `import type foo, { Bar }` is not allowed, so move `foo` to new declaration
         if (importClause.name && importClause.namedBindings) {
             changes.deleteNodeRangeExcludingEnd(context.sourceFile, importClause.name, importDeclaration.importClause.namedBindings);
-            changes.insertNodeBefore(context.sourceFile, importDeclaration, updateImportDeclaration(
+            changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
                 importDeclaration,
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createImportClause(
+                factory.createImportClause(
+                    /*isTypeOnly*/ true,
                     importClause.name,
-                    /*namedBindings*/ undefined,
-                    /*isTypeOnly*/ true),
+                    /*namedBindings*/ undefined),
                 importDeclaration.moduleSpecifier));
         }
     }

@@ -1,35 +1,30 @@
-tests/cases/conformance/jsx/file1.tsx(3,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file1.tsx(3,1): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/file1.tsx(3,2): error TS2304: Cannot find name 'React'.
 tests/cases/conformance/jsx/file1.tsx(4,2): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file1.tsx(5,1): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/file2.tsx(1,9): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file2.tsx(1,9): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/file2.tsx(1,10): error TS2304: Cannot find name 'React'.
 tests/cases/conformance/jsx/file2.tsx(1,21): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file2.tsx(2,1): error TS2657: JSX expressions must have one parent element.
 
 
-==== tests/cases/conformance/jsx/file1.tsx (4 errors) ====
+==== tests/cases/conformance/jsx/file1.tsx (3 errors) ====
     declare namespace JSX { interface Element { } }
     
     <div></div>
     ~~~~~~~~~~~
-!!! error TS2695: Left side of comma operator is unused and has no side effects.
      ~~~
 !!! error TS2304: Cannot find name 'React'.
     <div></div>
+    ~~~~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
      ~~~
 !!! error TS2304: Cannot find name 'React'.
     
-    
-!!! error TS2657: JSX expressions must have one parent element.
-==== tests/cases/conformance/jsx/file2.tsx (4 errors) ====
+==== tests/cases/conformance/jsx/file2.tsx (3 errors) ====
     var x = <div></div><div></div>
-            ~~~~~~~~~~~
-!!! error TS2695: Left side of comma operator is unused and has no side effects.
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2657: JSX expressions must have one parent element.
              ~~~
 !!! error TS2304: Cannot find name 'React'.
                         ~~~
 !!! error TS2304: Cannot find name 'React'.
     
-    
-!!! error TS2657: JSX expressions must have one parent element.

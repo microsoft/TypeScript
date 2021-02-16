@@ -1,8 +1,35 @@
 === tests/cases/compiler/staticAsIdentifier.ts ===
-class C {
->C : C
+class C1 {
+>C1 : C1
 
     static static
+>static : any
+
     [x: string]: string;
 >x : string
 }
+
+class C2 {
+>C2 : C2
+
+    static static
+>static : any
+
+    m() {}
+>m : () => void
+}
+
+class C3 {
+>C3 : C3
+
+    static static p: string;
+>p : string
+}
+
+class C4 {
+>C4 : C4
+
+    static static foo() {}
+>foo : () => void
+}
+

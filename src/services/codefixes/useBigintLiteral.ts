@@ -28,6 +28,6 @@ namespace ts.codefix {
         // We use .getText to overcome parser inaccuracies: https://github.com/microsoft/TypeScript/issues/33298
         const newText = numericLiteral.getText(sourceFile) + "n";
 
-        changeTracker.replaceNode(sourceFile, numericLiteral, createBigIntLiteral(newText));
+        changeTracker.replaceNode(sourceFile, numericLiteral, factory.createBigIntLiteral(newText));
     }
 }

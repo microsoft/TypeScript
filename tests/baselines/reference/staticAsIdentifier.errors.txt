@@ -1,10 +1,27 @@
-tests/cases/compiler/staticAsIdentifier.ts(2,5): error TS1071: 'static' modifier cannot appear on an index signature.
+tests/cases/compiler/staticAsIdentifier.ts(12,12): error TS1030: 'static' modifier already seen.
+tests/cases/compiler/staticAsIdentifier.ts(16,12): error TS1030: 'static' modifier already seen.
 
 
-==== tests/cases/compiler/staticAsIdentifier.ts (1 errors) ====
-    class C {
+==== tests/cases/compiler/staticAsIdentifier.ts (2 errors) ====
+    class C1 {
         static static
-        ~~~~~~
-!!! error TS1071: 'static' modifier cannot appear on an index signature.
         [x: string]: string;
     }
+    
+    class C2 {
+        static static
+        m() {}
+    }
+    
+    class C3 {
+        static static p: string;
+               ~~~~~~
+!!! error TS1030: 'static' modifier already seen.
+    }
+    
+    class C4 {
+        static static foo() {}
+               ~~~~~~
+!!! error TS1030: 'static' modifier already seen.
+    }
+    

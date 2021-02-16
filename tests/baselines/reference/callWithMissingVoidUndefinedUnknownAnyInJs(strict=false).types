@@ -1,0 +1,119 @@
+=== tests/cases/conformance/expressions/functionCalls/defs.d.ts ===
+declare function f1(p: void): void;
+>f1 : (p: void) => void
+>p : void
+
+declare function f2(p: undefined): void;
+>f2 : (p: undefined) => void
+>p : undefined
+
+declare function f3(p: unknown): void;
+>f3 : (p: unknown) => void
+>p : unknown
+
+declare function f4(p: any): void;
+>f4 : (p: any) => void
+>p : any
+
+interface I<T> { m(p: T): void; }
+>m : (p: T) => void
+>p : T
+
+declare const o1: I<void>;
+>o1 : I<void>
+
+declare const o2: I<undefined>;
+>o2 : I<undefined>
+
+declare const o3: I<unknown>;
+>o3 : I<unknown>
+
+declare const o4: I<any>;
+>o4 : I<any>
+
+=== tests/cases/conformance/expressions/functionCalls/jsfile.js ===
+// current behavior: treat trailing `void` as optional
+f1();
+>f1() : void
+>f1 : (p: void) => void
+
+o1.m();
+>o1.m() : void
+>o1.m : (p: void) => void
+>o1 : I<void>
+>m : (p: void) => void
+
+// new behavior: treat 'undefined', 'unknown', and 'any' as optional in non-strict mode
+f2();
+>f2() : void
+>f2 : (p: undefined) => void
+
+f3();
+>f3() : void
+>f3 : (p: unknown) => void
+
+f4();
+>f4() : void
+>f4 : (p: any) => void
+
+o2.m();
+>o2.m() : void
+>o2.m : (p: undefined) => void
+>o2 : I<undefined>
+>m : (p: undefined) => void
+
+o3.m();
+>o3.m() : void
+>o3.m : (p: unknown) => void
+>o3 : I<unknown>
+>m : (p: unknown) => void
+
+o4.m();
+>o4.m() : void
+>o4.m : (p: any) => void
+>o4 : I<any>
+>m : (p: any) => void
+
+=== tests/cases/conformance/expressions/functionCalls/tsfile.ts ===
+// current behavior: treat trailing `void` as optional
+f1();
+>f1() : void
+>f1 : (p: void) => void
+
+o1.m();
+>o1.m() : void
+>o1.m : (p: void) => void
+>o1 : I<void>
+>m : (p: void) => void
+
+// no change in behavior
+f2();
+>f2() : void
+>f2 : (p: undefined) => void
+
+f3();
+>f3() : void
+>f3 : (p: unknown) => void
+
+f4();
+>f4() : void
+>f4 : (p: any) => void
+
+o2.m();
+>o2.m() : void
+>o2.m : (p: undefined) => void
+>o2 : I<undefined>
+>m : (p: undefined) => void
+
+o3.m();
+>o3.m() : void
+>o3.m : (p: unknown) => void
+>o3 : I<unknown>
+>m : (p: unknown) => void
+
+o4.m();
+>o4.m() : void
+>o4.m : (p: any) => void
+>o4 : I<any>
+>m : (p: any) => void
+

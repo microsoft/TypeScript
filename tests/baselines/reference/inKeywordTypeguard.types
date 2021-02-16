@@ -318,7 +318,27 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
     } else {
         let n: never = x;
 >n : never
->x : { a: string; } & { b: string; }
+>x : never
+    }
+}
+function negativeIntersectionTest() {
+>negativeIntersectionTest : () => void
+
+    if ("ontouchstart" in window) {
+>"ontouchstart" in window : boolean
+>"ontouchstart" : "ontouchstart"
+>window : Window & typeof globalThis
+
+        window.ontouchstart
+>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
+>window : Window & typeof globalThis
+>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
+
+    } else {
+        window.ontouchstart
+>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
+>window : Window & typeof globalThis
+>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
     }
 }
 

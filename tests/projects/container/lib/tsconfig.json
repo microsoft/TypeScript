@@ -2,7 +2,7 @@
     "compilerOptions": {
         "outFile": "../built/local/lib.js",
         "composite": true,
-        "declarationMap": true
+        "declarationMap": true,
     },
     "references": [],
     "files": [

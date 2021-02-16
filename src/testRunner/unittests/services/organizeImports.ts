@@ -592,6 +592,22 @@ import "lib1";
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
 
+                testOrganizeImports("SortComments",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib3";
+// Comment2
+import "lib2";
+// Comment1
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" },
+                { path: "/lib3.ts", content: "" });
+
             testOrganizeImports("AmbientModule",
                 {
                     path: "/test.ts",
@@ -737,6 +753,24 @@ export namespace React {
     interface FunctionComponent {
     }
 }
+`
+                }
+            );
+
+            testOrganizeImports("JsxFragmentPragmaTsx",
+                {
+                    path: "/test.tsx",
+                    content: `/** @jsx h */
+/** @jsxFrag frag */
+import { h, frag } from "@foo/core";
+
+const elem = <><div>Foo</div></>;
+`,
+                },
+                {
+                    path: "/@foo/core/index.d.ts",
+                    content: `export function h(): void;
+export function frag(): void;
 `
                 }
             );

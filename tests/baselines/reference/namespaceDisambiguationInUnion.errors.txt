@@ -2,7 +2,8 @@ tests/cases/compiler/namespaceDisambiguationInUnion.ts(10,7): error TS2322: Type
   Type '{ type: string; }' is not assignable to type 'Yep'.
     Types of property 'type' are incompatible.
       Type 'string' is not assignable to type '"bar.yep"'.
-tests/cases/compiler/namespaceDisambiguationInUnion.ts(13,7): error TS2739: Type '{ type: string; }[]' is missing the following properties from type '[Foo.Yep, Bar.Yep]': 0, 1
+tests/cases/compiler/namespaceDisambiguationInUnion.ts(13,7): error TS2322: Type '{ type: string; }[]' is not assignable to type '[Foo.Yep, Bar.Yep]'.
+  Target requires 2 element(s) but source may have fewer.
 
 
 ==== tests/cases/compiler/namespaceDisambiguationInUnion.ts (2 errors) ====
@@ -25,5 +26,6 @@ tests/cases/compiler/namespaceDisambiguationInUnion.ts(13,7): error TS2739: Type
     const y = [{ type: "a" }, { type: "b" }];
     const val2: [Foo.Yep, Bar.Yep] = y;
           ~~~~
-!!! error TS2739: Type '{ type: string; }[]' is missing the following properties from type '[Foo.Yep, Bar.Yep]': 0, 1
+!!! error TS2322: Type '{ type: string; }[]' is not assignable to type '[Foo.Yep, Bar.Yep]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
     

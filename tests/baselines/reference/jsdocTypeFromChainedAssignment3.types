@@ -393,8 +393,8 @@ exports.wrapSync = exports.selectSeries = exports.selectLimit = exports.select =
 >exports : typeof import("tests/cases/conformance/jsdoc/a")
 >applyEach : any
 >exports.apply = undefined : undefined
->exports.apply : any
+>exports.apply : undefined
 >exports : typeof import("tests/cases/conformance/jsdoc/a")
->apply : any
+>apply : undefined
 >undefined : undefined
 

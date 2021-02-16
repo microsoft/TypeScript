@@ -2,7 +2,7 @@
 module.exports = {
 >module.exports = {  a: "ok"} : { a: string | number; }
 >module.exports : { a: string | number; }
->module : { "\"/test\"": { a: string | number; }; }
+>module : { exports: { a: string | number; }; }
 >exports : { a: string | number; }
 >{  a: "ok"} : { a: string; }
 

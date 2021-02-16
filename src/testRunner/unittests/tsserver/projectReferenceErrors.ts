@@ -166,7 +166,7 @@ fnErr();
                             { line: 6, offset: 12 },
                             { line: 6, offset: 13 },
                             Diagnostics.Type_0_is_not_assignable_to_type_1,
-                            ["10", "string"],
+                            ["number", "string"],
                             "error",
                         )
                     ],
@@ -235,7 +235,7 @@ fnErr();
                             { line: 6, offset: 5 },
                             { line: 6, offset: 6 },
                             Diagnostics.Type_0_is_not_assignable_to_type_1,
-                            ["10", "string"],
+                            ["number", "string"],
                             "error",
                         )
                     ],

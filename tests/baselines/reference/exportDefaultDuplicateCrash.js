@@ -17,6 +17,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports["default"] = void 0;
 function default_1() { }
 exports["default"] = default_1;
 var hi_1 = require("./hi");

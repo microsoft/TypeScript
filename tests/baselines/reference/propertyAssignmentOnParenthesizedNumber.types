@@ -1,0 +1,14 @@
+=== tests/cases/conformance/salsa/bug38934.js ===
+var x = {};
+>x : {}
+>{} : {}
+
+// should not crash and also should not result in a property '0' on x.
+x[(0)] = 1;
+>x[(0)] = 1 : 1
+>x[(0)] : any
+>x : {}
+>(0) : 0
+>0 : 0
+>1 : 1
+

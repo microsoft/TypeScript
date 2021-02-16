@@ -15,8 +15,8 @@ goTo.file("/index.ts");
 verify.codeFixAll({
   fixId: "fixMissingImport",
   fixAllDescription: "Add all missing imports",
-  newFileContent: `import { join } from "./path";
-import { homedir } from "./os";
+  newFileContent: `import { homedir } from "./os";
+import { join } from "./path";
 
 join();
 homedir();`

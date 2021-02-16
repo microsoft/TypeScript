@@ -6,7 +6,7 @@ function Color(obj) {
     this.example = true
 >this.example = true : true
 >this.example : any
->this : any
+>this : this
 >example : any
 >true : true
 

@@ -1,4 +1,120 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+interface SymbolConstructor {
+    readonly species: symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+
+
+//// [/src/solution/common/nominal.ts]
+export declare type Nominal<T, Name extends string> = T & {
+    [Symbol.species]: Name;
+};
+
+
+//// [/src/solution/common/tsconfig.json]
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "include": ["nominal.ts"]
+}
+
+//// [/src/solution/sub-project/index.ts]
+import { Nominal } from '../common/nominal';
+
+export type MyNominal = Nominal<string, 'MyNominal'>;
+
+
+//// [/src/solution/sub-project/tsconfig.json]
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../common" }
+    ],
+    "include": ["./index.ts"]
+}
+
+//// [/src/solution/sub-project-2/index.ts]
+import { MyNominal } from '../sub-project/index';
+
+const variable = {
+    key: 'value' as MyNominal,
+};
+
+export function getVar(): keyof typeof variable {
+    return 'key';
+}
+
+
+//// [/src/solution/sub-project-2/tsconfig.json]
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../sub-project" }
+    ],
+    "include": ["./index.ts"]
+}
+
+//// [/src/solution/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "./sub-project" },
+        { "path": "./sub-project-2" }
+    ],
+    "include": []
+}
+
+//// [/src/tsconfig.base.json]
+{
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "rootDir": "./",
+        "outDir": "lib",
+    }
+}
+
+//// [/src/tsconfig.json]
+{
+                    "compilerOptions": {
+                        "composite": true
+                    },
+                    "references": [
+                        { "path": "./solution" }
+                    ],
+                    "include": []
+                }
+
+
+
+Output::
 /lib/tsc -b /src --verbose
 [[90m12:00:00 AM[0m] Projects in this build: 
     * src/solution/common/tsconfig.json
@@ -122,8 +238,9 @@ exports.__esModule = true;
 }
 
 //// [/src/lib/solution/sub-project-2/index.d.ts]
+import { MyNominal } from '../sub-project/index';
 declare const variable: {
-    key: import("../common/nominal").Nominal<string, "MyNominal">;
+    key: MyNominal;
 };
 export declare function getVar(): keyof typeof variable;
 export {};
@@ -163,7 +280,7 @@ exports.getVar = getVar;
       },
       "../../../solution/sub-project-2/index.ts": {
         "version": "-13939373533-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: 'value' as MyNominal,\n};\n\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}\n",
-        "signature": "-17233212183-declare const variable: {\r\n    key: import(\"../common/nominal\").Nominal<string, \"MyNominal\">;\r\n};\r\nexport declare function getVar(): keyof typeof variable;\r\nexport {};\r\n",
+        "signature": "881159974-import { MyNominal } from '../sub-project/index';\r\ndeclare const variable: {\r\n    key: MyNominal;\r\n};\r\nexport declare function getVar(): keyof typeof variable;\r\nexport {};\r\n",
         "affectsGlobalScope": false
       }
     },
@@ -187,7 +304,7 @@ exports.getVar = getVar;
         "../common/nominal.d.ts"
       ],
       "../../../solution/sub-project-2/index.ts": [
-        "../common/nominal.d.ts"
+        "../sub-project/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [

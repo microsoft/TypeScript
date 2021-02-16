@@ -1,4 +1,10 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/tsconfig.json]
+{"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.json
 exitCode:: ExitStatus.Success
 
@@ -26,9 +32,6 @@ exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
 
-
-//// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
 
 //// [/src/tsconfig.tsbuildinfo]
 {

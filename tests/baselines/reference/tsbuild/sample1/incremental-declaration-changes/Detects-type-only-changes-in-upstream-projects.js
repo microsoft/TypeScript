@@ -1,4 +1,13 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/core/index.ts]
+export const someString: string = "WELCOME PLANET";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:08:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -35,12 +44,6 @@ function leftPad(s, n) { return s + n; }
 exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
 exports.multiply = multiply;
-
-
-//// [/src/core/index.ts]
-export const someString: string = "WELCOME PLANET";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
 
 
 //// [/src/core/tsconfig.tsbuildinfo]

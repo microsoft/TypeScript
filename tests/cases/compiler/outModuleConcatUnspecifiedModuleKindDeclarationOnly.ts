@@ -1,6 +1,6 @@
 // @target: ES5
 // @outFile: out.js
-// @declaration: true
+// @declaration: true,
 // @emitDeclarationOnly: true
 
 // @Filename: a.ts

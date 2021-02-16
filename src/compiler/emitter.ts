@@ -25,10 +25,10 @@ namespace ts {
         includeBuildInfo?: boolean) {
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
         const options = host.getCompilerOptions();
-        if (options.outFile || options.out) {
+        if (outFile(options)) {
             const prepends = host.getPrependNodes();
             if (sourceFiles.length || prepends.length) {
-                const bundle = createBundle(sourceFiles, prepends);
+                const bundle = factory.createBundle(sourceFiles, prepends);
                 const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
                 if (result) {
                     return result;
@@ -45,7 +45,7 @@ namespace ts {
                 }
             }
             if (includeBuildInfo) {
-                const buildInfoPath = getTsBuildInfoEmitOutputFilePath(host.getCompilerOptions());
+                const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
                 if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
             }
         }
@@ -55,7 +55,7 @@ namespace ts {
         const configFile = options.configFilePath;
         if (!isIncrementalCompilation(options)) return undefined;
         if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
-        const outPath = options.outFile || options.out;
+        const outPath = outFile(options);
         let buildInfoExtensionLess: string;
         if (outPath) {
             buildInfoExtensionLess = removeFileExtension(outPath);
@@ -74,7 +74,7 @@ namespace ts {
 
     /*@internal*/
     export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
-        const outPath = options.outFile || options.out!;
+        const outPath = outFile(options)!;
         const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
@@ -130,36 +130,32 @@ namespace ts {
         return Extension.Js;
     }
 
-    function rootDirOfOptions(configFile: ParsedCommandLine) {
-        return configFile.options.rootDir || getDirectoryPath(Debug.checkDefined(configFile.options.configFilePath));
-    }
-
-    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined) {
+    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
         return outputDir ?
             resolvePath(
                 outputDir,
-                getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase)
+                getRelativePathFromDirectory(getCommonSourceDirectory ? getCommonSourceDirectory() : getCommonSourceDirectoryOfConfig(configFile, ignoreCase), inputFileName, ignoreCase)
             ) :
             inputFileName;
     }
 
     /* @internal */
-    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && !fileExtensionIs(inputFileName, Extension.Json));
         return changeExtension(
-            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
             Extension.Dts
         );
     }
 
-    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
         if (configFile.options.emitDeclarationOnly) return undefined;
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
-            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
             isJsonFile ?
                 Extension.Json :
-                fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
+                configFile.options.jsx === JsxEmit.Preserve && (fileExtensionIs(inputFileName, Extension.Tsx) || fileExtensionIs(inputFileName, Extension.Jsx)) ?
                     Extension.Jsx :
                     Extension.Js
         );
@@ -190,16 +186,16 @@ namespace ts {
         addOutput(buildInfoPath);
     }
 
-    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
+    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
         if (fileExtensionIs(inputFileName, Extension.Dts)) return;
-        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
         addOutput(js);
         if (fileExtensionIs(inputFileName, Extension.Json)) return;
         if (js && configFile.options.sourceMap) {
             addOutput(`${js}.map`);
         }
         if (getEmitDeclarations(configFile.options)) {
-            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             addOutput(dts);
             if (configFile.options.declarationMap) {
                 addOutput(`${dts}.map`);
@@ -208,14 +204,57 @@ namespace ts {
     }
 
     /*@internal*/
+    export function getCommonSourceDirectory(
+        options: CompilerOptions,
+        emittedFiles: () => readonly string[],
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        checkSourceFilesBelongToPath?: (commonSourceDirectory: string) => void
+    ): string {
+        let commonSourceDirectory;
+        if (options.rootDir) {
+            // If a rootDir is specified use it as the commonSourceDirectory
+            commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
+            checkSourceFilesBelongToPath?.(options.rootDir);
+        }
+        else if (options.composite && options.configFilePath) {
+            // Project compilations never infer their root from the input source paths
+            commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
+            checkSourceFilesBelongToPath?.(commonSourceDirectory);
+        }
+        else {
+            commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(emittedFiles(), currentDirectory, getCanonicalFileName);
+        }
+
+        if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+            // Make sure directory path ends with directory separator so this string can directly
+            // used to replace with "" to get the relative path of the source file and the relative path doesn't
+            // start with / making it rooted path
+            commonSourceDirectory += directorySeparator;
+        }
+        return commonSourceDirectory;
+    }
+
+    /*@internal*/
+    export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
+        return getCommonSourceDirectory(
+            options,
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensions)) && !fileExtensionIs(file, Extension.Dts)),
+            getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
+            createGetCanonicalFileName(!ignoreCase)
+        );
+    }
+
+    /*@internal*/
     export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): readonly string[] {
         const { addOutput, getOutputs } = createAddOutput();
-        if (configFile.options.outFile || configFile.options.out) {
+        if (outFile(configFile.options)) {
             getSingleOutputFileNames(configFile, addOutput);
         }
         else {
+            const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
             for (const inputFileName of configFile.fileNames) {
-                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput);
+                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput, getCommonSourceDirectory);
             }
             addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
         }
@@ -226,7 +265,7 @@ namespace ts {
         inputFileName = normalizePath(inputFileName);
         Debug.assert(contains(commandLine.fileNames, inputFileName), `Expected fileName to be present in command line`);
         const { addOutput, getOutputs } = createAddOutput();
-        if (commandLine.options.outFile || commandLine.options.out) {
+        if (outFile(commandLine.options)) {
             getSingleOutputFileNames(commandLine, addOutput);
         }
         else {
@@ -237,18 +276,19 @@ namespace ts {
 
     /*@internal*/
     export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase: boolean): string {
-        if (configFile.options.outFile || configFile.options.out) {
+        if (outFile(configFile.options)) {
             const { jsFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
             return Debug.checkDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
         }
 
+        const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
         for (const inputFileName of configFile.fileNames) {
             if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
-            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
             if (getEmitDeclarations(configFile.options)) {
-                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             }
         }
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(configFile.options);
@@ -300,9 +340,17 @@ namespace ts {
                     sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
+            tracing?.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
+            tracing?.pop();
+
+            tracing?.push(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
+            tracing?.pop();
+
+            tracing?.push(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
+            tracing?.pop();
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -333,7 +381,7 @@ namespace ts {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
-            if (host.isEmitBlocked(buildInfoPath) || compilerOptions.noEmit) {
+            if (host.isEmitBlocked(buildInfoPath)) {
                 emitSkipped = true;
                 return;
             }
@@ -356,7 +404,7 @@ namespace ts {
                 return;
             }
             // Transform the source files
-            const transform = transformNodes(resolver, host, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
+            const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
 
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
@@ -404,13 +452,13 @@ namespace ts {
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
-            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
+            const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
             if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
                 filesForEmit.forEach(collectLinkedAliases);
             }
-            const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
+            const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
             if (length(declarationTransform.diagnostics)) {
                 for (const diagnostic of declarationTransform.diagnostics!) {
                     emitterDiagnostics.add(diagnostic);
@@ -598,18 +646,19 @@ namespace ts {
                 if (getRootLength(sourceMapDir) === 0) {
                     // The relative paths are relative to the common directory
                     sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
-                    return getRelativePathToDirectoryOrUrl(
-                        getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
-                        combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
-                        host.getCurrentDirectory(),
-                        host.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/ true);
+                    return encodeURI(
+                        getRelativePathToDirectoryOrUrl(
+                            getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
+                            combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
+                            host.getCurrentDirectory(),
+                            host.getCanonicalFileName,
+                            /*isAbsolutePathAnUrl*/ true));
                 }
                 else {
-                    return combinePaths(sourceMapDir, sourceMapFile);
+                    return encodeURI(combinePaths(sourceMapDir, sourceMapFile));
                 }
             }
-            return sourceMapFile;
+            return encodeURI(sourceMapFile);
         }
     }
 
@@ -660,6 +709,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol: notImplemented,
         isLiteralConstDeclaration: notImplemented,
         getJsxFactoryEntity: notImplemented,
+        getJsxFragmentFactoryEntity: notImplemented,
         getAllAccessorDeclarations: notImplemented,
         getSymbolOfExternalModuleSpecifier: notImplemented,
         isBindingCapturedByNode: notImplemented,
@@ -680,30 +730,30 @@ namespace ts {
     }
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
-        const sourceFiles = bundle.sourceFiles.map(fileName => {
-            const sourceFile = createNode(SyntaxKind.SourceFile, 0, 0) as SourceFile;
+        const jsBundle = Debug.checkDefined(bundle.js);
+        const prologueMap = jsBundle.sources?.prologues && arrayToMap(jsBundle.sources.prologues, prologueInfo => prologueInfo.file);
+        return bundle.sourceFiles.map((fileName, index) => {
+            const prologueInfo = prologueMap?.get(index);
+            const statements = prologueInfo?.directives.map(directive => {
+                const literal = setTextRange(factory.createStringLiteral(directive.expression.text), directive.expression);
+                const statement = setTextRange(factory.createExpressionStatement(literal), directive);
+                setParent(literal, statement);
+                return statement;
+            });
+            const eofToken = factory.createToken(SyntaxKind.EndOfFileToken);
+            const sourceFile = factory.createSourceFile(statements ?? [], eofToken, NodeFlags.None);
             sourceFile.fileName = getRelativePathFromDirectory(
                 host.getCurrentDirectory(),
                 getNormalizedAbsolutePath(fileName, buildInfoDirectory),
                 !host.useCaseSensitiveFileNames()
             );
-            sourceFile.text = "";
-            sourceFile.statements = createNodeArray();
+            sourceFile.text = prologueInfo?.text ?? "";
+            setTextRangePosWidth(sourceFile, 0, prologueInfo?.text.length ?? 0);
+            setEachParent(sourceFile.statements, sourceFile);
+            setTextRangePosWidth(eofToken, sourceFile.end, 0);
+            setParent(eofToken, sourceFile);
             return sourceFile;
         });
-        const jsBundle = Debug.checkDefined(bundle.js);
-        forEach(jsBundle.sources && jsBundle.sources.prologues, prologueInfo => {
-            const sourceFile = sourceFiles[prologueInfo.file];
-            sourceFile.text = prologueInfo.text;
-            sourceFile.end = prologueInfo.text.length;
-            sourceFile.statements = createNodeArray(prologueInfo.directives.map(directive => {
-                const statement = createNode(SyntaxKind.ExpressionStatement, directive.pos, directive.end) as PrologueDirective;
-                statement.expression = createNode(SyntaxKind.StringLiteral, directive.expression.pos, directive.expression.end) as StringLiteral;
-                statement.expression.text = directive.expression.text;
-                return statement;
-            }));
-        });
-        return sourceFiles;
     }
 
     /*@internal*/
@@ -799,7 +849,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
-            redirectTargetsMap: createMultiMap()
+            redirectTargetsMap: createMultiMap(),
+            getFileIncludeReasons: notImplemented,
         };
         emitFiles(
             notImplementedResolver,
@@ -833,17 +884,18 @@ namespace ts {
         const extendedDiagnostics = !!printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
-        const bundledHelpers = createMap<boolean>();
+        const bundledHelpers = new Map<string, boolean>();
 
         let currentSourceFile: SourceFile | undefined;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
         let autoGeneratedIdToGeneratedName: string[]; // Map of generated names for temp and loop variables.
-        let generatedNames: Map<true>; // Set of names generated by the NameGenerator.
+        let generatedNames: Set<string>; // Set of names generated by the NameGenerator.
         let tempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
         let tempFlags: TempFlags; // TempFlags for the current name generation scope.
-        let reservedNamesStack: Map<true>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
-        let reservedNames: Map<true>; // TempFlags to reserve in nested name generation scopes.
+        let reservedNamesStack: Set<string>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
+        let reservedNames: Set<string>; // TempFlags to reserve in nested name generation scopes.
         let preserveSourceNewlines = printerOptions.preserveSourceNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
+        let nextListElementPos: number | undefined; // See comment in `getLeadingLineTerminatorCount`.
 
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
@@ -860,6 +912,8 @@ namespace ts {
         let sourceMapGenerator: SourceMapGenerator | undefined;
         let sourceMapSource: SourceMapSource;
         let sourceMapSourceIndex = -1;
+        let mostRecentlyAddedSourceMapSource: SourceMapSource;
+        let mostRecentlyAddedSourceMapSourceIndex = -1;
 
         // Comments
         let containerPos = -1;
@@ -1118,7 +1172,7 @@ namespace ts {
         function reset() {
             nodeIdToGeneratedName = [];
             autoGeneratedIdToGeneratedName = [];
-            generatedNames = createMap<true>();
+            generatedNames = new Set();
             tempFlagsStack = [];
             tempFlags = TempFlags.Auto;
             reservedNamesStack = [];
@@ -1309,6 +1363,8 @@ namespace ts {
                         return emitConstructSignature(<ConstructSignatureDeclaration>node);
                     case SyntaxKind.IndexSignature:
                         return emitIndexSignature(<IndexSignatureDeclaration>node);
+                    case SyntaxKind.TemplateLiteralTypeSpan:
+                        return emitTemplateTypeSpan(<TemplateLiteralTypeSpan>node);
 
                     // Types
                     case SyntaxKind.TypePredicate:
@@ -1353,6 +1409,8 @@ namespace ts {
                         return emitMappedType(<MappedTypeNode>node);
                     case SyntaxKind.LiteralType:
                         return emitLiteralType(<LiteralTypeNode>node);
+                    case SyntaxKind.TemplateLiteralType:
+                        return emitTemplateType(<TemplateLiteralTypeNode>node);
                     case SyntaxKind.ImportType:
                         return emitImportTypeNode(<ImportTypeNode>node);
                     case SyntaxKind.JSDocAllType:
@@ -1370,6 +1428,8 @@ namespace ts {
                     case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
+                    case SyntaxKind.NamedTupleMember:
+                        return emitNamedTupleMember(node as NamedTupleMember);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
@@ -1542,6 +1602,10 @@ namespace ts {
                     case SyntaxKind.JSDocClassTag:
                     case SyntaxKind.JSDocTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
+                    case SyntaxKind.JSDocSeeTag:
+                        return emitJSDocSeeTag(node as JSDocSeeTag);
+                    case SyntaxKind.JSDocNameReference:
+                        return emitJSDocNameReference(node as JSDocNameReference);
 
                     case SyntaxKind.JSDocComment:
                         return emitJSDoc(node as JSDoc);
@@ -1679,7 +1743,7 @@ namespace ts {
             if (moduleKind === ModuleKind.None || printerOptions.noEmitHelpers) {
                 return undefined;
             }
-            const bundledHelpers = createMap<boolean>();
+            const bundledHelpers = new Map<string, boolean>();
             for (const sourceFile of bundle.sourceFiles) {
                 const shouldSkip = getExternalHelpersModuleName(sourceFile) !== undefined;
                 const helpers = getSortedEmitHelpers(sourceFile);
@@ -2000,6 +2064,11 @@ namespace ts {
             writeTrailingSemicolon();
         }
 
+        function emitTemplateTypeSpan(node: TemplateLiteralTypeSpan) {
+            emit(node.type);
+            emit(node.literal);
+        }
+
         function emitSemicolonClassElement() {
             writeTrailingSemicolon();
         }
@@ -2063,6 +2132,7 @@ namespace ts {
 
         function emitConstructorType(node: ConstructorTypeNode) {
             pushNameGenerationScope(node);
+            emitModifiers(node, node.modifiers);
             writeKeyword("new");
             writeSpace();
             emitTypeParameters(node, node.typeParameters);
@@ -2099,9 +2169,19 @@ namespace ts {
         }
 
         function emitTupleType(node: TupleTypeNode) {
-            writePunctuation("[");
-            emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
-            writePunctuation("]");
+            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.pos, writePunctuation, node);
+            const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTupleTypeElements : ListFormat.MultiLineTupleTypeElements;
+            emitList(node, node.elements, flags | ListFormat.NoSpaceIfEmpty);
+            emitTokenWithComment(SyntaxKind.CloseBracketToken, node.elements.end, writePunctuation, node);
+        }
+
+        function emitNamedTupleMember(node: NamedTupleMember) {
+            emit(node.dotDotDotToken);
+            emit(node.name);
+            emit(node.questionToken);
+            emitTokenWithComment(SyntaxKind.ColonToken, node.name.end, writePunctuation, node);
+            writeSpace();
+            emit(node.type);
         }
 
         function emitOptionalType(node: OptionalTypeNode) {
@@ -2182,6 +2262,12 @@ namespace ts {
             writePunctuation("[");
 
             pipelineEmit(EmitHint.MappedTypeParameter, node.typeParameter);
+            if (node.nameType) {
+                writeSpace();
+                writeKeyword("as");
+                writeSpace();
+                emit(node.nameType);
+            }
 
             writePunctuation("]");
             if (node.questionToken) {
@@ -2206,6 +2292,11 @@ namespace ts {
 
         function emitLiteralType(node: LiteralTypeNode) {
             emitExpression(node.literal);
+        }
+
+        function emitTemplateType(node: TemplateLiteralTypeNode) {
+            emit(node.head);
+            emitList(node, node.templateSpans, ListFormat.TemplateExpressionSpans);
         }
 
         function emitImportTypeNode(node: ImportTypeNode) {
@@ -2280,7 +2371,7 @@ namespace ts {
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             const expression = cast(emitExpression(node.expression), isExpression);
-            const token = node.questionDotToken || createNode(SyntaxKind.DotToken, node.expression.end, node.name.pos) as DotToken;
+            const token = node.questionDotToken || setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken) as DotToken, node.expression.end, node.name.pos);
             const linesBeforeDot = getLinesBetweenNodes(node, node.expression, token);
             const linesAfterDot = getLinesBetweenNodes(node, token, node.name);
 
@@ -2654,7 +2745,7 @@ namespace ts {
             emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.thenStatement, node.elseStatement);
                 emitTokenWithComment(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     writeSpace();
@@ -2677,11 +2768,11 @@ namespace ts {
         function emitDoStatement(node: DoStatement) {
             emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
             emitEmbeddedStatement(node, node.statement);
-            if (isBlock(node.statement)) {
+            if (isBlock(node.statement) && !preserveSourceNewlines) {
                 writeSpace();
             }
             else {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.statement, node.expression);
             }
 
             emitWhileClause(node, node.statement.end);
@@ -2763,7 +2854,7 @@ namespace ts {
             if (isSimilarNode && currentSourceFile) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
+            if (isSimilarNode && contextNode.pos !== startPos) {
                 const needsIndent = indentLeading && currentSourceFile && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
@@ -2774,8 +2865,9 @@ namespace ts {
                 }
             }
             pos = writeTokenText(token, writer, pos);
-            if (emitTrailingCommentsOfPosition && isSimilarNode && contextNode.end !== pos) {
-                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+            if (isSimilarNode && contextNode.end !== pos) {
+                const isJsxExprContext = contextNode.kind === SyntaxKind.JsxExpression;
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContext, /*forceNoNewline*/ isJsxExprContext);
             }
             return pos;
         }
@@ -2823,11 +2915,11 @@ namespace ts {
             writeSpace();
             emit(node.tryBlock);
             if (node.catchClause) {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.tryBlock, node.catchClause);
                 emit(node.catchClause);
             }
             if (node.finallyBlock) {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.catchClause || node.tryBlock, node.finallyBlock);
                 emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause || node.tryBlock).end, writeKeyword, node);
                 writeSpace();
                 emit(node.finallyBlock);
@@ -3106,6 +3198,10 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
+            if (node.isTypeOnly) {
+                emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+                writeSpace();
+            }
             emit(node.name);
             writeSpace();
             emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
@@ -3328,12 +3424,35 @@ namespace ts {
             writePunctuation("}");
         }
 
+        function hasTrailingCommentsAtPosition(pos: number) {
+            let result = false;
+            forEachTrailingCommentRange(currentSourceFile?.text || "", pos + 1, () => result = true);
+            return result;
+        }
+
+        function hasLeadingCommentsAtPosition(pos: number) {
+            let result = false;
+            forEachLeadingCommentRange(currentSourceFile?.text || "", pos + 1, () => result = true);
+            return result;
+        }
+
+        function hasCommentsAtPosition(pos: number) {
+            return hasTrailingCommentsAtPosition(pos) || hasLeadingCommentsAtPosition(pos);
+        }
+
         function emitJsxExpression(node: JsxExpression) {
-            if (node.expression) {
-                writePunctuation("{");
+            if (node.expression || (!commentsDisabled && !nodeIsSynthesized(node) && hasCommentsAtPosition(node.pos))) { // preserve empty expressions if they contain comments!
+                const isMultiline = currentSourceFile && !nodeIsSynthesized(node) && getLineAndCharacterOfPosition(currentSourceFile, node.pos).line !== getLineAndCharacterOfPosition(currentSourceFile, node.end).line;
+                if (isMultiline) {
+                    writer.increaseIndent();
+                }
+                const end = emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
                 emit(node.dotDotDotToken);
                 emitExpression(node.expression);
-                writePunctuation("}");
+                emitTokenWithComment(SyntaxKind.CloseBraceToken, node.expression?.end || end, writePunctuation, node);
+                if (isMultiline) {
+                    writer.decreaseIndent();
+                }
             }
         }
 
@@ -3420,7 +3539,7 @@ namespace ts {
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
-            if (emitTrailingCommentsOfPosition && (getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
+            if ((getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
                 const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
@@ -3487,6 +3606,19 @@ namespace ts {
             emitJSDocComment(tag.comment);
         }
 
+        function emitJSDocSeeTag(tag: JSDocSeeTag) {
+            emitJSDocTagName(tag.tagName);
+            emit(tag.name);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocNameReference(node: JSDocNameReference) {
+            writeSpace();
+            writePunctuation("{");
+            emit(node.name);
+            writePunctuation("}");
+        }
+
         function emitJSDocHeritageTag(tag: JSDocImplementsTag | JSDocAugmentsTag) {
             emitJSDocTagName(tag.tagName);
             writeSpace();
@@ -3547,15 +3679,15 @@ namespace ts {
         }
 
         function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
-            emitList(lit, createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
+            emitList(lit, factory.createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
         }
 
         function emitJSDocSignature(sig: JSDocSignature) {
             if (sig.typeParameters) {
-                emitList(sig, createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
+                emitList(sig, factory.createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
             }
             if (sig.parameters) {
-                emitList(sig, createNodeArray(sig.parameters), ListFormat.JSDocComment);
+                emitList(sig, factory.createNodeArray(sig.parameters), ListFormat.JSDocComment);
             }
             if (sig.type) {
                 writeLine();
@@ -3705,7 +3837,7 @@ namespace ts {
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: readonly Node[], sourceFile?: SourceFile, seenPrologueDirectives?: Map<true>, recordBundleFileSection?: true): number {
+        function emitPrologueDirectives(statements: readonly Node[], sourceFile?: SourceFile, seenPrologueDirectives?: Set<string>, recordBundleFileSection?: true): number {
             let needsToSetSourceFile = !!sourceFile;
             for (let i = 0; i < statements.length; i++) {
                 const statement = statements[i];
@@ -3721,7 +3853,7 @@ namespace ts {
                         emit(statement);
                         if (recordBundleFileSection && bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: statement.expression.text });
                         if (seenPrologueDirectives) {
-                            seenPrologueDirectives.set(statement.expression.text, true);
+                            seenPrologueDirectives.add(statement.expression.text);
                         }
                     }
                 }
@@ -3734,7 +3866,7 @@ namespace ts {
             return statements.length;
         }
 
-        function emitUnparsedPrologues(prologues: readonly UnparsedPrologue[], seenPrologueDirectives: Map<true>) {
+        function emitUnparsedPrologues(prologues: readonly UnparsedPrologue[], seenPrologueDirectives: Set<string>) {
             for (const prologue of prologues) {
                 if (!seenPrologueDirectives.has(prologue.data)) {
                     writeLine();
@@ -3742,7 +3874,7 @@ namespace ts {
                     emit(prologue);
                     if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: prologue.data });
                     if (seenPrologueDirectives) {
-                        seenPrologueDirectives.set(prologue.data, true);
+                        seenPrologueDirectives.add(prologue.data);
                     }
                 }
             }
@@ -3753,7 +3885,7 @@ namespace ts {
                 emitPrologueDirectives(sourceFileOrBundle.statements, sourceFileOrBundle);
             }
             else {
-                const seenPrologueDirectives = createMap<true>();
+                const seenPrologueDirectives = new Set<string>();
                 for (const prepend of sourceFileOrBundle.prepends) {
                     emitUnparsedPrologues((prepend as UnparsedSource).prologues, seenPrologueDirectives);
                 }
@@ -3765,7 +3897,7 @@ namespace ts {
         }
 
         function getPrologueDirectivesFromBundledSourceFiles(bundle: Bundle): SourceFilePrologueInfo[] | undefined {
-            const seenPrologueDirectives = createMap<true>();
+            const seenPrologueDirectives = new Set<string>();
             let prologues: SourceFilePrologueInfo[] | undefined;
             for (let index = 0; index < bundle.sourceFiles.length; index++) {
                 const sourceFile = bundle.sourceFiles[index];
@@ -3774,7 +3906,7 @@ namespace ts {
                 for (const statement of sourceFile.statements) {
                     if (!isPrologueDirective(statement)) break;
                     if (seenPrologueDirectives.has(statement.expression.text)) continue;
-                    seenPrologueDirectives.set(statement.expression.text, true);
+                    seenPrologueDirectives.add(statement.expression.text);
                     (directives || (directives = [])).push({
                         pos: statement.pos,
                         end: statement.end,
@@ -4091,6 +4223,7 @@ namespace ts {
                         shouldEmitInterveningComments = mayEmitInterveningComments;
                     }
 
+                    nextListElementPos = child.pos;
                     emit(child);
 
                     if (shouldDecreaseIndentAfterEmit) {
@@ -4102,11 +4235,17 @@ namespace ts {
                 }
 
                 // Write a trailing comma, if requested.
-                const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children!.hasTrailingComma;
-                if (format & ListFormat.CommaDelimited && hasTrailingComma) {
-                    writePunctuation(",");
+                const emitFlags = previousSibling ? getEmitFlags(previousSibling) : 0;
+                const skipTrailingComments = commentsDisabled || !!(emitFlags & EmitFlags.NoTrailingComments);
+                const hasTrailingComma = children?.hasTrailingComma && (format & ListFormat.AllowTrailingComma) && (format & ListFormat.CommaDelimited);
+                if (hasTrailingComma) {
+                    if (previousSibling && !skipTrailingComments) {
+                        emitTokenWithComment(SyntaxKind.CommaToken, previousSibling.end, writePunctuation, previousSibling);
+                    }
+                    else {
+                        writePunctuation(",");
+                    }
                 }
-
 
                 // Emit any trailing comment of the last element in the list
                 // i.e
@@ -4114,8 +4253,8 @@ namespace ts {
                 //          2
                 //          /* end of element 2 */
                 //       ];
-                if (previousSibling && format & ListFormat.DelimitersMask && previousSibling.end !== parentNode.end && !(getEmitFlags(previousSibling) & EmitFlags.NoTrailingComments)) {
-                    emitLeadingCommentsOfPosition(previousSibling.end);
+                if (previousSibling && parentNode.end !== previousSibling.end && (format & ListFormat.DelimitersMask) && !skipTrailingComments) {
+                    emitLeadingCommentsOfPosition(hasTrailingComma && children?.end ? children.end : previousSibling.end);
                 }
 
                 // Decrease the indent, if requested.
@@ -4236,9 +4375,18 @@ namespace ts {
             return pos! < 0 ? pos! : pos! + tokenString.length;
         }
 
-        function writeLineOrSpace(node: Node) {
-            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+        function writeLineOrSpace(parentNode: Node, prevChildNode: Node, nextChildNode: Node) {
+            if (getEmitFlags(parentNode) & EmitFlags.SingleLine) {
                 writeSpace();
+            }
+            else if (preserveSourceNewlines) {
+                const lines = getLinesBetweenNodes(parentNode, prevChildNode, nextChildNode);
+                if (lines) {
+                    writeLine(lines);
+                }
+                else {
+                    writeSpace();
+                }
             }
             else {
                 writeLine();
@@ -4290,11 +4438,32 @@ namespace ts {
                 if (firstChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
+                if (firstChild.pos === nextListElementPos) {
+                    // If this child starts at the beginning of a list item in a parent list, its leading
+                    // line terminators have already been written as the separating line terminators of the
+                    // parent list. Example:
+                    //
+                    // class Foo {
+                    //   constructor() {}
+                    //   public foo() {}
+                    // }
+                    //
+                    // The outer list is the list of class members, with one line terminator between the
+                    // constructor and the method. The constructor is written, the separating line terminator
+                    // is written, and then we start emitting the method. Its modifiers ([public]) constitute an inner
+                    // list, so we look for its leading line terminators. If we didn't know that we had already
+                    // written a newline as part of the parent list, it would appear that we need to write a
+                    // leading newline to start the modifiers.
+                    return 0;
+                }
                 if (firstChild.kind === SyntaxKind.JsxText) {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && (!firstChild.parent || firstChild.parent === parentNode)) {
+                if (!positionIsSynthesized(parentNode.pos) &&
+                    !nodeIsSynthesized(firstChild) &&
+                    (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode as Node))
+                ) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
@@ -4354,9 +4523,10 @@ namespace ts {
                 }
                 if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
+                        const end = isNodeArray(children) && !positionIsSynthesized(children.end) ? children.end : lastChild.end;
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
-                                lastChild.end,
+                                end,
                                 parentNode.end,
                                 currentSourceFile!,
                                 includeComments));
@@ -4487,17 +4657,23 @@ namespace ts {
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
-                if (isIdentifier(textSourceNode)) {
-                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(getTextOfNode(textSourceNode))}"` :
-                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(getTextOfNode(textSourceNode))}"` :
-                        `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
+                if (isIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
+                    const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
+                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
+                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
+                        `"${escapeNonAsciiString(text)}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
+            const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
+                | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
+                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
+                | (printerOptions.target && printerOptions.target === ScriptTarget.ESNext ? GetLiteralTextFlags.AllowNumericSeparator : 0);
+
+            return getLiteralText(node, currentSourceFile!, flags);
         }
 
         /**
@@ -4525,9 +4701,9 @@ namespace ts {
 
         function reserveNameInNestedScopes(name: string) {
             if (!reservedNames || reservedNames === lastOrUndefined(reservedNamesStack)) {
-                reservedNames = createMap<true>();
+                reservedNames = new Set();
             }
-            reservedNames.set(name, true);
+            reservedNames.add(name);
         }
 
         function generateNames(node: Node | undefined) {
@@ -4744,7 +4920,7 @@ namespace ts {
                         reserveNameInNestedScopes(baseName);
                     }
                     else {
-                        generatedNames.set(baseName, true);
+                        generatedNames.add(baseName);
                     }
                     return baseName;
                 }
@@ -4761,7 +4937,7 @@ namespace ts {
                         reserveNameInNestedScopes(generatedName);
                     }
                     else {
-                        generatedNames.set(generatedName, true);
+                        generatedNames.add(generatedName);
                     }
                     return generatedName;
                 }
@@ -4968,7 +5144,7 @@ namespace ts {
         }
 
         function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
-            if (comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+            if (comment.hasLeadingNewline || comment.kind === SyntaxKind.SingleLineCommentTrivia) {
                 writer.writeLine();
             }
             writeSynthesizedComment(comment);
@@ -5037,7 +5213,12 @@ namespace ts {
             hasWrittenComment = false;
 
             if (isEmittedNode) {
-                forEachLeadingCommentToEmit(pos, emitLeadingComment);
+                if (pos === 0 && currentSourceFile?.isDeclarationFile) {
+                    forEachLeadingCommentToEmit(pos, emitNonTripleSlashLeadingComment);
+                }
+                else {
+                    forEachLeadingCommentToEmit(pos, emitLeadingComment);
+                }
             }
             else if (pos === 0) {
                 // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
@@ -5054,6 +5235,12 @@ namespace ts {
 
         function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (isTripleSlashComment(commentPos, commentEnd)) {
+                emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
+            }
+        }
+
+        function emitNonTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (!isTripleSlashComment(commentPos, commentEnd)) {
                 emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
             }
         }
@@ -5113,13 +5300,25 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean, forceNoNewline?: boolean) {
             if (commentsDisabled) {
                 return;
             }
             enterComment();
-            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition);
             exitComment();
+        }
+
+        function emitTrailingCommentOfPositionNoNewline(commentPos: number, commentEnd: number, kind: SyntaxKind) {
+            // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+
+            emitPos(commentPos);
+            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine(); // still write a newline for single-line comments, so closing tokens aren't written on the same line
+            }
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
@@ -5290,9 +5489,10 @@ namespace ts {
         function emitSourcePos(source: SourceMapSource, pos: number) {
             if (source !== sourceMapSource) {
                 const savedSourceMapSource = sourceMapSource;
+                const savedSourceMapSourceIndex = sourceMapSourceIndex;
                 setSourceMapSource(source);
                 emitPos(pos);
-                setSourceMapSource(savedSourceMapSource);
+                resetSourceMapSource(savedSourceMapSource, savedSourceMapSourceIndex);
             }
             else {
                 emitPos(pos);
@@ -5339,6 +5539,13 @@ namespace ts {
 
             sourceMapSource = source;
 
+            if (source === mostRecentlyAddedSourceMapSource) {
+                // Fast path for when the new source map is the most recently added, in which case
+                // we use its captured index without going through the source map generator.
+                sourceMapSourceIndex = mostRecentlyAddedSourceMapSourceIndex;
+                return;
+            }
+
             if (isJsonSourceMapSource(source)) {
                 return;
             }
@@ -5347,6 +5554,14 @@ namespace ts {
             if (printerOptions.inlineSources) {
                 sourceMapGenerator!.setSourceContent(sourceMapSourceIndex, source.text);
             }
+
+            mostRecentlyAddedSourceMapSource = source;
+            mostRecentlyAddedSourceMapSourceIndex = sourceMapSourceIndex;
+        }
+
+        function resetSourceMapSource(source: SourceMapSource, sourceIndex: number) {
+            sourceMapSource = source;
+            sourceMapSourceIndex = sourceIndex;
         }
 
         function isJsonSourceMapSource(sourceFile: SourceMapSource) {

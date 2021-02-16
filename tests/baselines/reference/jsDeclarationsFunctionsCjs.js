@@ -117,7 +117,7 @@ module.exports.j = function j() { };
 export function a(): void;
 export function b(): void;
 export namespace b {
-    export const cat: string;
+    const cat: string;
 }
 export function c(): void;
 export namespace c {
@@ -129,6 +129,10 @@ export function f<T>(a: T): T;
 export namespace f {
     import self = f;
     export { self };
+}
+export function i(): void;
+export function j(): void;
+declare class Cls {
 }
 /**
  * @param {{x: string}} a
@@ -146,7 +150,7 @@ export function g(a: {
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
  */
-export function h(a: {
+declare function hh(a: {
     x: string;
 }, b: {
     y: {
@@ -154,10 +158,4 @@ export function h(a: {
         cat: string;
     };
 }): void;
-export function i(): void;
-export function ii(): void;
-export function jj(): void;
-export function j(): void;
-declare class Cls {
-}
-export {};
+export { hh as h, i as ii, j as jj };

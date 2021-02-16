@@ -44,7 +44,7 @@ export const narrowToLiterals = (str: string) => {
 "use strict";
 exports.__esModule = true;
 exports.narrowToStringOrNumber = exports.narrowToString = exports.narrowToLiterals = void 0;
-exports.narrowToLiterals = function (str) {
+var narrowToLiterals = function (str) {
     switch (str) {
         case 'abc': {
             // inferred type as `abc`
@@ -54,7 +54,8 @@ exports.narrowToLiterals = function (str) {
             return 'defaultValue';
     }
 };
-exports.narrowToString = function (str, someOtherStr) {
+exports.narrowToLiterals = narrowToLiterals;
+var narrowToString = function (str, someOtherStr) {
     switch (str) {
         case 'abc': {
             // inferred type should be `abc`
@@ -68,7 +69,8 @@ exports.narrowToString = function (str, someOtherStr) {
             return 'defaultValue';
     }
 };
-exports.narrowToStringOrNumber = function (str, someNumber) {
+exports.narrowToString = narrowToString;
+var narrowToStringOrNumber = function (str, someNumber) {
     switch (str) {
         case 'abc': {
             // inferred type should be `abc`
@@ -82,3 +84,4 @@ exports.narrowToStringOrNumber = function (str, someNumber) {
             return 'defaultValue';
     }
 };
+exports.narrowToStringOrNumber = narrowToStringOrNumber;

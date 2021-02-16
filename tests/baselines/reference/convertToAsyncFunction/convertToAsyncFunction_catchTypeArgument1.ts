@@ -16,8 +16,7 @@ async function get() {
     try {
         return Promise
             .resolve<APIResponse<{ email: string; }>>({ success: true, data: { email: "" } });
-    }
-    catch (e) {
+    } catch (e) {
         const result: APIResponse<{ email: string; }> = ({ success: false });
         return result;
     }

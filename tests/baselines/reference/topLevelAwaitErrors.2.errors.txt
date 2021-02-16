@@ -1,0 +1,11 @@
+tests/cases/conformance/externalModules/topLevelAwaitErrors.2.ts(4,5): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+
+
+==== tests/cases/conformance/externalModules/topLevelAwaitErrors.2.ts (1 errors) ====
+    export {};
+    
+    // reparse variable name as await should fail
+    var await = 1;
+        ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    

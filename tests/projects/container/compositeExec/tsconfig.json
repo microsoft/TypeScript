@@ -2,7 +2,7 @@
     "compilerOptions": {
         "outFile": "../built/local/compositeExec.js",
         "composite": true,
-        "declarationMap": true
+        "declarationMap": true,
     },
     "files": [
         "index.ts"

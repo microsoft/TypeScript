@@ -2,14 +2,14 @@
 /// <reference lib="es2015.promise" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 import { Octokit } from "@octokit/rest";
-import {runSequence} from "./run-sequence";
+const {runSequence} = require("./run-sequence");
 
-const userName = process.env.GH_USERNAME;
+const userName = process.env.GH_USERNAME || "typescript-bot";
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
 const masterBranchname = `user-baseline-updates`;
 const targetBranch = process.env.TARGET_BRANCH || "master";
-const branchName = process.env.TARGET_FORK.toLowerCase() === "microsoft" && (targetBranch === "master" || targetBranch === "refs/heads/master")
+const branchName = process.env.TARGET_FORK?.toLowerCase() === "microsoft" && (targetBranch === "master" || targetBranch === "refs/heads/master")
     ? masterBranchname
     : `user-update-${process.env.TARGET_FORK}-${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
@@ -22,7 +22,7 @@ runSequence([
     ["node", ["./node_modules/gulp/bin/gulp.js", "baseline-accept"]], // accept baselines
     ["git", ["checkout", "-b", branchName]], // create a branch
     ["git", ["add", "."]], // Add all changes
-    ["git", ["commit", "-m", `"Update user baselines"`]], // Commit all changes
+    ["git", ["commit", "-m", `"Update user baselines${+process.env.SOURCE_ISSUE === 33716 ? " +cc @sandersn" : ""}"`]], // Commit all changes (ping nathan if we would post to CI thread)
     ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
 ]);
 
@@ -46,7 +46,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
     const num = r.data.number;
     console.log(`Pull request ${num} created.`);
     if (!process.env.SOURCE_ISSUE) {
-        await gh.pulls.createReviewRequest({
+        await gh.pulls.requestReviewers({
             owner: prOwner,
             repo: "TypeScript",
             pull_number: num,

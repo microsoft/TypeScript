@@ -129,6 +129,31 @@ namespace ts.CallHierarchy {
         return { text, pos: declName.getStart(), end: declName.getEnd() };
     }
 
+    function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): string | undefined {
+        if (isConstNamedExpression(node)) {
+            if (isModuleBlock(node.parent.parent.parent.parent) && isIdentifier(node.parent.parent.parent.parent.parent.name)) {
+                return node.parent.parent.parent.parent.parent.name.getText();
+            }
+            return;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    return getAssignedName(node.parent)?.getText();
+                }
+                return getNameOfDeclaration(node.parent)?.getText();
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+                if (isModuleBlock(node.parent) && isIdentifier(node.parent.parent.name)) {
+                    return node.parent.parent.name.getText();
+                }
+        }
+    }
+
     /** Finds the implementation of a function-like declaration, if one exists. */
     function findImplementation(typeChecker: TypeChecker, node: Extract<CallHierarchyDeclaration, FunctionLikeDeclaration>): Extract<CallHierarchyDeclaration, FunctionLikeDeclaration> | undefined;
     function findImplementation(typeChecker: TypeChecker, node: FunctionLikeDeclaration): FunctionLikeDeclaration | undefined;
@@ -224,6 +249,10 @@ namespace ts.CallHierarchy {
                 }
                 return undefined;
             }
+            // #39453
+            if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                return location.initializer;
+            }
             if (!followingSymbol) {
                 let symbol = typeChecker.getSymbolAtLocation(location);
                 if (symbol) {
@@ -245,10 +274,12 @@ namespace ts.CallHierarchy {
     export function createCallHierarchyItem(program: Program, node: CallHierarchyDeclaration): CallHierarchyItem {
         const sourceFile = node.getSourceFile();
         const name = getCallHierarchyItemName(program, node);
+        const containerName = getCallHierarchItemContainerName(node);
         const kind = getNodeKind(node);
+        const kindModifiers = getNodeModifiers(node);
         const span = createTextSpanFromBounds(skipTrivia(sourceFile.text, node.getFullStart(), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true), node.getEnd());
         const selectionSpan = createTextSpanFromBounds(name.pos, name.end);
-        return { file: sourceFile.fileName, kind, name: name.text, span, selectionSpan };
+        return { file: sourceFile.fileName, kind, kindModifiers, name: name.text, containerName, span, selectionSpan };
     }
 
     function isDefined<T>(x: T): x is NonNullable<T> {
@@ -277,7 +308,7 @@ namespace ts.CallHierarchy {
     }
 
     function getCallSiteGroupKey(entry: CallSite) {
-        return "" + getNodeId(entry.declaration);
+        return getNodeId(entry.declaration);
     }
 
     function createCallHierarchyIncomingCall(from: CallHierarchyItem, fromSpans: TextSpan[]): CallHierarchyIncomingCall {

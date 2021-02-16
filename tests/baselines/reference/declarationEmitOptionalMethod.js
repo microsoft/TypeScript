@@ -11,7 +11,8 @@ export const Foo = (opts: {
 "use strict";
 exports.__esModule = true;
 exports.Foo = void 0;
-exports.Foo = function (opts) { return ({}); };
+var Foo = function (opts) { return ({}); };
+exports.Foo = Foo;
 
 
 //// [declarationEmitOptionalMethod.d.ts]

@@ -320,7 +320,7 @@ function f3(m: Message) {
 >"X" : "X"
 
         m;  // never
->m : Message
+>m : never
     }
 }
 

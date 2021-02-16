@@ -49,9 +49,9 @@ new Elem('' as ElChildren.Text);
 >ElChildren : any
 
 new Elem('' as ElChildren.Void | ElChildren.Text); // error
->new Elem('' as ElChildren.Void | ElChildren.Text) : Elem<ElChildren>
+>new Elem('' as ElChildren.Void | ElChildren.Text) : Elem<string | undefined>
 >Elem : typeof Elem
->'' as ElChildren.Void | ElChildren.Text : ElChildren
+>'' as ElChildren.Void | ElChildren.Text : string | undefined
 >'' : ""
 >ElChildren : any
 >ElChildren : any

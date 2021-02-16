@@ -1,8 +1,8 @@
-tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(3,17): error TS2322: Type '0' is not assignable to type 'string'.
+tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(6,24): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
-tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(7,23): error TS2322: Type '0' is not assignable to type 'string'.
+tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(7,23): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(10,24): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
-tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(12,2): error TS2322: Type '0' is not assignable to type 'string'.
+tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(12,2): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(19,3): error TS2345: Argument of type '() => Promise<number>' is not assignable to parameter of type '() => string'.
   Type 'Promise<number>' is not assignable to type 'string'.
 
@@ -12,7 +12,7 @@ tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(19,3): error TS2
     /** @type {function(): string} */
     const a = () => 0
                     ~
-!!! error TS2322: Type '0' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     // Error (good)
     /** @type {function(): string} */
@@ -20,7 +20,7 @@ tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(19,3): error TS2
 !!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<string>'?
     const b = async () => 0
                           ~
-!!! error TS2322: Type '0' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     // No error (bad)
     /** @type {function(): string} */
@@ -29,7 +29,7 @@ tests/cases/conformance/async/es2017/asyncArrowFunction/file.js(19,3): error TS2
     const c = async () => {
     	return 0
     	~~~~~~~~
-!!! error TS2322: Type '0' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     }
     
     /** @type {function(function(): string): void} */

@@ -1,6 +1,29 @@
 namespace ts {
     import theory = Utils.theory;
     describe("unittests:: semver", () => {
+        describe("VersionRange", () => {
+            function assertVersionRange(version: string, good: string[], bad: string[]): () => void {
+                return () => {
+                    const range = VersionRange.tryParse(version)!;
+                    assert(range);
+                    for (const g of good) {
+                        assert.isTrue(range.test(g), g);
+                    }
+                    for (const b of bad) {
+                        assert.isFalse(range.test(b), b);
+                    }
+                };
+            }
+            it("< works", assertVersionRange("<3.8.0", ["3.6", "3.7"], ["3.8", "3.9", "4.0"]));
+            it("<= works", assertVersionRange("<=3.8.0", ["3.6", "3.7", "3.8"], ["3.9", "4.0"]));
+            it("> works", assertVersionRange(">3.8.0", ["3.9", "4.0"], ["3.6", "3.7", "3.8"]));
+            it(">= works", assertVersionRange(">=3.8.0", ["3.8", "3.9", "4.0"], ["3.6", "3.7"]));
+
+            it("< works with prerelease", assertVersionRange("<3.8.0-0", ["3.6", "3.7"], ["3.8", "3.9", "4.0"]));
+            it("<= works with prerelease", assertVersionRange("<=3.8.0-0", ["3.6", "3.7"], ["3.8", "3.9", "4.0"]));
+            it("> works with prerelease", assertVersionRange(">3.8.0-0", ["3.8", "3.9", "4.0"], ["3.6", "3.7"]));
+            it(">= works with prerelease", assertVersionRange(">=3.8.0-0", ["3.8", "3.9", "4.0"], ["3.6", "3.7"]));
+        });
         describe("Version", () => {
             function assertVersion(version: Version, [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?]) {
                 assert.strictEqual(version.major, major);

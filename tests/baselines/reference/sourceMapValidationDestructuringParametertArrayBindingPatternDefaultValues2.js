@@ -36,7 +36,7 @@ function foo1(_a) {
     console.log(skillA);
 }
 function foo2(_a) {
-    var _b = (_a === void 0 ? ["name", ["skill1", "skill2"]] : _a)[0], nameMB = _b === void 0 ? "noName" : _b;
+    var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[0], nameMB = _c === void 0 ? "noName" : _c;
     console.log(nameMB);
 }
 function foo3(_a) {

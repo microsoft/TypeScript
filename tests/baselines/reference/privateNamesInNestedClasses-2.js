@@ -24,25 +24,22 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-let A = /** @class */ (() => {
-    var _x;
-    class A {
-        constructor() {
-            var _x_1;
-            class B {
-                constructor() {
-                    _x_1.set(this, 5);
-                    class C {
-                        constructor() {
-                            __classPrivateFieldGet(A, _x_1); // error
-                        }
+var _x;
+class A {
+    constructor() {
+        var _x_1;
+        class B {
+            constructor() {
+                _x_1.set(this, 5);
+                class C {
+                    constructor() {
+                        __classPrivateFieldGet(A, _x_1); // error
                     }
                 }
             }
-            _x_1 = new WeakMap();
         }
+        _x_1 = new WeakMap();
     }
-    _x = new WeakMap();
-    _x.set(A, 5);
-    return A;
-})();
+}
+_x = new WeakMap();
+_x.set(A, 5);

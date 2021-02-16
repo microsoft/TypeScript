@@ -7,7 +7,7 @@ function C(x) {
     this.x = x
 >this.x = x : number
 >this.x : any
->this : any
+>this : this
 >x : any
 >x : number
 }
@@ -56,7 +56,7 @@ function A(x) {
 >!(this instanceof A) : boolean
 >(this instanceof A) : boolean
 >this instanceof A : boolean
->this : any
+>this : this
 >A : typeof A
 
         return new A(x)
@@ -67,7 +67,7 @@ function A(x) {
     this.x = x
 >this.x = x : number
 >this.x : any
->this : any
+>this : this
 >x : any
 >x : number
 }

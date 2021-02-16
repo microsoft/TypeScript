@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(13,24): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(31,15): error TS2345: Argument of type '42' is not assignable to parameter of type 'never'.
+tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(13,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(31,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts (2 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference
     const a6 = f1(true, false);  // boolean
     const a7 = f1("hello", 1);  // Error
                            ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     
     declare function f2<T>(value: [string, T]): T;
     
@@ -37,7 +37,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference
     const d2 = f4(s);
     const d3 = f4(42);  // Error
                   ~~
-!!! error TS2345: Argument of type '42' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
     
     export interface Foo<T> {
         then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;

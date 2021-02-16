@@ -12,11 +12,11 @@ namespace ts {
         // Current source map file and its index in the sources list
         const rawSources: string[] = [];
         const sources: string[] = [];
-        const sourceToSourceIndexMap = createMap<number>();
+        const sourceToSourceIndexMap = new Map<string, number>();
         let sourcesContent: (string | null)[] | undefined;
 
         const names: string[] = [];
-        let nameToNameIndexMap: Map<number> | undefined;
+        let nameToNameIndexMap: ESMap<string, number> | undefined;
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -84,7 +84,7 @@ namespace ts {
 
         function addName(name: string) {
             enter();
-            if (!nameToNameIndexMap) nameToNameIndexMap = createMap();
+            if (!nameToNameIndexMap) nameToNameIndexMap = new Map();
             let nameIndex = nameToNameIndexMap.get(name);
             if (nameIndex === undefined) {
                 nameIndex = names.length;
@@ -622,7 +622,7 @@ namespace ts {
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
         const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
+        const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
         let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
         let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;

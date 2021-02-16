@@ -3,28 +3,29 @@ module.exports.n = {};
 >module.exports.n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
 >module.exports : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
 >module : Symbol(module, Decl(mod.js, 0, 0))
->exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
 
 module.exports.n.K = function C() {
 >module.exports.n.K : Symbol(n.K, Decl(mod.js, 0, 22))
 >module.exports.n : Symbol(n.K, Decl(mod.js, 0, 22))
->module.exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >module : Symbol(module, Decl(mod.js, 0, 0))
->exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
 >K : Symbol(n.K, Decl(mod.js, 0, 22))
 >C : Symbol(C, Decl(mod.js, 1, 20))
 
     this.x = 10;
->this : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
+>this.x : Symbol(C.x, Decl(mod.js, 1, 35))
+>this : Symbol(C, Decl(mod.js, 1, 20))
 >x : Symbol(C.x, Decl(mod.js, 1, 35))
 }
 module.exports.Classic = class {
 >module.exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 >module.exports : Symbol(Classic, Decl(mod.js, 3, 1))
 >module : Symbol(module, Decl(mod.js, 0, 0))
->exports : Symbol("tests/cases/conformance/salsa/mod", Decl(mod.js, 0, 0))
+>exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 >Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 
     constructor() {
@@ -72,8 +73,8 @@ function f(c, classic) {
 >x : Symbol(C.x, Decl(mod.js, 1, 35))
 
     classic.p
->classic.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+>classic.p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
 >classic : Symbol(classic, Decl(use.js, 9, 13))
->p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+>p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
 }
 

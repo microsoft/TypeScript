@@ -261,4 +261,22 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 >x : Symbol(x, Decl(inKeywordTypeguard.ts, 98, 34))
     }
 }
+function negativeIntersectionTest() {
+>negativeIntersectionTest : Symbol(negativeIntersectionTest, Decl(inKeywordTypeguard.ts, 104, 1))
+
+    if ("ontouchstart" in window) {
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+        window.ontouchstart
+>window.ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    } else {
+        window.ontouchstart
+>window.ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+    }
+}
 
