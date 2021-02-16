@@ -8342,9 +8342,9 @@ namespace ts {
             }
         }
 
+        /** Create a synthetic property access flow node after the last statement of the file */
         function getFlowTypeFromCommonJSExport(symbol: Symbol) {
-            // Just create a synthetic property access flow node after the last statement of the file
-            const file = getSourceFileOfNode(symbol.declarations[0])
+            const file = getSourceFileOfNode(symbol.declarations[0]);
             const accessName = unescapeLeadingUnderscores(symbol.escapedName);
             const reference = factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
             setParent(reference.expression, reference);
@@ -8353,7 +8353,7 @@ namespace ts {
             reference.flowNode = lastStatementFlow && {
                 antecedents: [lastStatementFlow],
                 flags: FlowFlags.BranchLabel
-            }
+            };
             return getFlowTypeOfReference(reference, autoType, undefinedType);
         }
 
@@ -9060,7 +9060,7 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
-                const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true)
+                const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
