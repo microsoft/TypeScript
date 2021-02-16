@@ -39550,9 +39550,6 @@ namespace ts {
                         else if (flags & ModifierFlags.Abstract) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
                         }
-                        else if (isPrivateIdentifierClassElementDeclaration(node)) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "static");
-                        }
                         flags |= ModifierFlags.Static;
                         lastStatic = modifier;
                         break;

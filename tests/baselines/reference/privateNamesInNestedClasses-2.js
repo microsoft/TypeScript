@@ -41,5 +41,4 @@ class A {
         _B_x = new WeakMap();
     }
 }
-_A_x = new WeakMap();
-_A_x.set(A, 5);
+_A_x = { value: 5 };

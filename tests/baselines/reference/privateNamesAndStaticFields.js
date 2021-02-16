@@ -24,35 +24,36 @@ const willErrorSomeDay: typeof A = class {}; // OK for now
 
 //// [privateNamesAndStaticFields.js]
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
+var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
+    if (receiver !== classConstructor) {
+        throw new TypeError("Private static access of wrong provenance");
     }
-    privateMap.set(receiver, value);
+    propertyDescriptor.value = value;
     return value;
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
+var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
+    if (receiver !== classConstructor) {
+        throw new TypeError("Private static access of wrong provenance");
     }
-    return privateMap.get(receiver);
+    return propertyDescriptor.value;
 };
 var _A_foo, _A_bar, _B_foo;
 class A {
     constructor() {
-        __classPrivateFieldSet(A, _A_foo, 3);
-        __classPrivateFieldGet(B, _A_foo); // Error
-        __classPrivateFieldGet(B, _A_bar); // Error
+        __classStaticPrivateFieldSet(A, A, _A_foo, 3);
+        __classStaticPrivateFieldGet(B, A, _A_foo); // Error
+        __classStaticPrivateFieldGet(B, A, _A_bar); // Error
     }
 }
-_A_foo = new WeakMap(), _A_bar = new WeakMap();
+_A_foo = { value: void 0 };
+_A_bar = { value: void 0 };
 class B extends A {
     constructor() {
         super();
-        __classPrivateFieldSet(B, _B_foo, "some string");
+        __classStaticPrivateFieldSet(B, B, _B_foo, "some string");
     }
 }
-_B_foo = new WeakMap();
+_B_foo = { value: void 0 };
 // We currently filter out static private identifier fields in `getUnmatchedProperties`.
 // We will need a more robust solution when we support static fields
 const willErrorSomeDay = class {
