@@ -25187,7 +25187,7 @@ namespace ts {
             }
             const reduction = !contextualType || checkMode && checkMode & CheckMode.Inferential ? UnionReduction.Subtype : UnionReduction.Literal;
             return createArrayLiteralType(createArrayType(elementTypes.length ?
-                getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), reduction) :
+                getUnionType(deduplicateObjectOrArrayLiteralTypes(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t)), reduction) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
@@ -25201,6 +25201,48 @@ namespace ts {
                 literalType.objectFlags |= ObjectFlags.ArrayLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             }
             return literalType;
+        }
+
+        /**
+         * Replaces all references to structurally equivalent object and array literal types in the given list
+         * with references to a single one of those types. The process is applied recursively to properties of
+         * object literals and elements of array literals.
+         */
+        function deduplicateObjectOrArrayLiteralTypes(types: Type[]) {
+            if (!some(types, isObjectOrArrayLiteralType)) {
+                return types;
+            }
+            const typeMap = new Map<string, Type>();
+            return sameMap(types, getInternedType);
+
+            function getInternedType(type: Type): Type {
+                if (type.flags & TypeFlags.Union) {
+                    const newTypes = sameMap((<UnionType>type).types, getInternedType);
+                    return newTypes !== (<UnionType>type).types ? getUnionType(newTypes) : type;
+                }
+                const key = getLiteralTypeKey(type);
+                return key ? typeMap.get(key) || (typeMap.set(key, type), type) : type;
+            }
+
+            function getLiteralTypeKey(type: Type): string | undefined {
+                const objectFlags = getObjectFlags(type);
+                if (objectFlags & ObjectFlags.ObjectLiteral) {
+                    const props = getPropertiesOfObjectType(type);
+                    const propTypes = map(props, p => getInternedType(getTypeOfSymbol(p)));
+                    const nameLengths = map(props, p => p.flags & SymbolFlags.Optional ? -(<string>p.escapedName).length : (<string>p.escapedName).length);
+                    const nameStrings = map(props, p => <string>p.escapedName);
+                    return `${getTypeListId(propTypes)}|${nameLengths.join(",")}|${nameStrings.join("")}`;
+                }
+                if (objectFlags & ObjectFlags.ArrayLiteral) {
+                    if (isArrayType(type)) {
+                        return `${isReadonlyArrayType(type) ? "R" : "A"}${getTypeId(getInternedType(getTypeArguments(type)[0]))}`;
+                    }
+                    if (isTupleType(type)) {
+                        return `T${getTypeId(type.target)}|${getTypeListId(sameMap(getTypeArguments(type), getInternedType))}`;
+                    }
+                }
+                return undefined;
+            }
         }
 
         function isNumericName(name: DeclarationName): boolean {
