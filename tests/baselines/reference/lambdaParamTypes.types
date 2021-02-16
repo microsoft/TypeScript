@@ -19,7 +19,7 @@ var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
 >thing : MyArrayWrapper<{ name: string; id: number; }>
 >create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]) : MyArrayWrapper<{ name: string; id: number; }>
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->[{ name: "bob", id: 24 }, { name: "doug", id: 32 }] : ({ name: string; id: number; } | { name: string; id: number; })[]
+>[{ name: "bob", id: 24 }, { name: "doug", id: 32 }] : { name: string; id: number; }[]
 >{ name: "bob", id: 24 } : { name: string; id: number; }
 >name : string
 >"bob" : "bob"
