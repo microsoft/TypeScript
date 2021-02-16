@@ -2,9 +2,10 @@
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
+        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, !!resolvedRef.file)] || emptyArray;
         if (resolvedRef?.file) {
             // If `file` is missing, do a symbol-based lookup as well
-            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, /*unverified*/ false)];
+            return fileReferenceDefinition;
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -26,7 +27,7 @@ namespace ts.GoToDefinition {
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
         if (!symbol) {
-            return getDefinitionInfoForIndexSignatures(node, typeChecker);
+            return fileReferenceDefinition || getDefinitionInfoForIndexSignatures(node, typeChecker);
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
@@ -94,10 +95,7 @@ namespace ts.GoToDefinition {
             }
         }
 
-        return flatten([
-            resolvedRef && getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, /*unverified*/ true),
-            getDefinitionFromSymbol(typeChecker, symbol, node)
-        ]);
+        return concatenate(fileReferenceDefinition, getDefinitionFromSymbol(typeChecker, symbol, node));
     }
 
     /**

@@ -7,7 +7,7 @@
 
 // @Filename: types.ts
 //// declare module /*2b*/"*.css" {
-////   declare const styles: any;
+////   const styles: any;
 ////   export = styles;
 //// }
 
