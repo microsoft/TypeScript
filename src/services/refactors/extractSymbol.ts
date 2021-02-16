@@ -277,8 +277,8 @@ namespace ts.refactor.extractSymbol {
 
         const startToken = getTokenAtPosition(sourceFile, span.start);
         const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
-        /* If the refactor command is invoked through a keyboard action it's safe to assume that the user is actively looking for
-        refactor actions at the span location. As they may not know the exact range that will trigger a refactor, we expand the
+        /* If the refactoring command is invoked through a keyboard action it's safe to assume that the user is actively looking for
+        refactoring actions at the span location. As they may not know the exact range that will trigger a refactoring, we expand the
         searched span to cover a real node range making it more likely that something useful will show up. */
         const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
 
