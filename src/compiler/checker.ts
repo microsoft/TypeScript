@@ -25881,11 +25881,11 @@ namespace ts {
             if (!links.resolvedJsxElementAttributesType) {
                 const symbol = getIntrinsicTagSymbol(node);
                 if (links.jsxFlags & JsxFlags.IntrinsicNamedElement) {
-                    return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol);
+                    return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol) || errorType;
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
                     return links.resolvedJsxElementAttributesType =
-                        getIndexTypeOfType(getDeclaredTypeOfSymbol(symbol), IndexKind.String)!;
+                        getIndexTypeOfType(getJsxType(JsxNames.IntrinsicElements, node), IndexKind.String) || errorType;
                 }
                 else {
                     return links.resolvedJsxElementAttributesType = errorType;
