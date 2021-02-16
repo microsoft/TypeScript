@@ -27,7 +27,7 @@ namespace ts.GoToDefinition {
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
         if (!symbol) {
-            return fileReferenceDefinition || getDefinitionInfoForIndexSignatures(node, typeChecker);
+            return concatenate(fileReferenceDefinition, getDefinitionInfoForIndexSignatures(node, typeChecker));
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
