@@ -588,7 +588,6 @@ node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/npm\"": EventEmitter; }' have no overlap.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -639,8 +638,7 @@ node_modules/npm/lib/pack.js(127,15): error TS2339: Property 'config' does not e
 node_modules/npm/lib/pack.js(147,36): error TS2339: Property 'tmp' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/pack.js(177,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/pack.js(299,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/pack.js(300,20): error TS2345: Argument of type '`--${string}=${any}`' is not assignable to parameter of type 'never'.
-  Type 'string' is not assignable to type 'never'.
+node_modules/npm/lib/pack.js(300,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/pack.js(300,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/pack.js(333,15): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/pack.js(335,17): error TS2339: Property 'code' does not exist on type 'Error'.
@@ -857,7 +855,6 @@ node_modules/npm/lib/utils/locker.js(28,20): error TS2339: Property 'config' doe
 node_modules/npm/lib/utils/locker.js(29,17): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/locker.js(65,15): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/map-to-registry.js(98,45): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
-node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch\"": () => child_process.ChildProcessWithoutNullStreams | undefined; }' have no overlap.
 node_modules/npm/lib/utils/metrics-launch.js(12,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(13,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(14,30): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
