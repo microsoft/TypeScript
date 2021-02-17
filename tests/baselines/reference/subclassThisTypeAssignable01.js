@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/subclassThisTypeAssignable.ts] ////
+//// [tests/cases/compiler/subclassThisTypeAssignable01.ts] ////
 
 //// [tile1.ts]
 interface Lifecycle<Attrs, State> {
