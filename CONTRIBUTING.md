@@ -97,7 +97,7 @@ Your pull request should:
 * Include a description of what your change intends to do
 * Be based on reasonably recent commit in the **master** branch
 * Include adequate tests
-    * At least one test should fail in the absence of your non-test code changes. If your PR does not match these criteria, please specify why
+    * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
 * Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
