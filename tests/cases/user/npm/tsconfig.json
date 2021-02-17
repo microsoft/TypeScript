@@ -1,5 +1,10 @@
 {
     "compilerOptions": {
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "resolveJsonModule": true,
+        "downlevelIteration": true,
+        "target": "es2019",
         "noImplicitAny": false,
         "noImplicitThis": false,
         "maxNodeModuleJsDepth": 0,
