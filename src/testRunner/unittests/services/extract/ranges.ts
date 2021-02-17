@@ -189,6 +189,10 @@ namespace ts {
 
             // Return statements
             testExtractRange("extractRange28", `[#|return [$|1|];|]`);
+
+            // For statements
+            testExtractRange("extractRange29", `for ([#|var i = 1|]; i < 2; i++) {}`);
+            testExtractRange("extractRange30", `for (var i = [#|[$|1|]|]; i < 2; i++) {}`);
         });
 
         testExtractRangeFailed("extractRangeFailed1",
