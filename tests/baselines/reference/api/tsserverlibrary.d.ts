@@ -2261,6 +2261,8 @@ declare namespace ts {
         NoTypeReduction = 536870912,
         NoUndefinedOptionalParameterType = 1073741824,
         AllowThisInObjectLiteral = 32768,
+        AllowQualifiedNameInPlaceOfIdentifier = 65536,
+        /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
         AllowEmptyUnionOrIntersection = 262144,

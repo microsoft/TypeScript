@@ -5757,7 +5757,7 @@ namespace ts {
 
                 if (expectsIdentifier && chain.length !== 1
                     && !context.encounteredError
-                    && !(context.flags & NodeBuilderFlags.AllowQualifedNameInPlaceOfIdentifier)) {
+                    && !(context.flags & NodeBuilderFlags.AllowQualifiedNameInPlaceOfIdentifier)) {
                     context.encounteredError = true;
                 }
                 return createEntityNameFromSymbolChain(chain, chain.length - 1);
