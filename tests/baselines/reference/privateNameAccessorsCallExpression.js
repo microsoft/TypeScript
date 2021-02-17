@@ -25,7 +25,7 @@ var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || func
     }
     return fn.call(receiver);
 };
-var _A_fieldFunc_get, _A_fieldFunc2_get, _A_instances;
+var _A_instances, _A_fieldFunc_get, _A_fieldFunc2_get;
 class A {
     constructor() {
         _A_instances.add(this);

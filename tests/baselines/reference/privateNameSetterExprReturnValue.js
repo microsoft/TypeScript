@@ -18,7 +18,7 @@ var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || func
     fn.call(receiver, value);
     return value;
 };
-var _C_foo_set, _C_instances;
+var _C_instances, _C_foo_set;
 class C {
     constructor() {
         _C_instances.add(this);

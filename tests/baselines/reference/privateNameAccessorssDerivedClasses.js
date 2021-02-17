@@ -19,7 +19,7 @@ var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || func
     }
     return fn.call(receiver);
 };
-var _Base_prop_get, _Base_instances;
+var _Base_instances, _Base_prop_get;
 class Base {
     constructor() {
         _Base_instances.add(this);

@@ -25,7 +25,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _C_field, _C_method, _C_instances, _a;
+var _C_instances, _C_field, _C_method, _a;
 const C = (_a = class {
         constructor() {
             _C_instances.add(this);

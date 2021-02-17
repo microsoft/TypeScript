@@ -22,10 +22,10 @@ var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || func
     }
     return fn.call(receiver);
 };
-var _Base_x_get, _Base_instances;
+var _Base_instances, _Base_x_get;
 class Base {
     constructor() {
-        var _Derived_x_get, _Derived_instances;
+        var _Derived_instances, _Derived_x_get;
         _Base_instances.add(this);
         class Derived {
             constructor() {

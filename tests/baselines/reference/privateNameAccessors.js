@@ -32,7 +32,7 @@ var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || func
     }
     return fn.call(receiver);
 };
-var _A1_prop_get, _A1_prop_set, _A1_roProp_get, _A1_instances;
+var _A1_instances, _A1_prop_get, _A1_prop_set, _A1_roProp_get;
 class A1 {
     constructor(name) {
         _A1_instances.add(this);

@@ -10,7 +10,7 @@ class A {
 
 
 //// [privateNamesAndDecorators.js]
-var _A_foo, _A_bar, _A_instances;
+var _A_instances, _A_foo, _A_bar;
 var A = /** @class */ (function () {
     function A() {
         _A_instances.add(this);

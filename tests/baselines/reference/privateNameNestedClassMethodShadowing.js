@@ -22,10 +22,10 @@ var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function
     }
     return fn;
 };
-var _Base_x, _Base_instances;
+var _Base_instances, _Base_x;
 class Base {
     constructor() {
-        var _Derived_x, _Derived_instances;
+        var _Derived_instances, _Derived_x;
         _Base_instances.add(this);
         class Derived {
             constructor() {

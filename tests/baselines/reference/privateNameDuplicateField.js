@@ -53,7 +53,7 @@ class A9 {
 
 //// [privateNameDuplicateField.js]
 "use strict";
-var _A_foo, _A_foo_1, _A2_foo, _A2_foo_1, _A2_instances, _A3_foo, _A3_foo_get, _A3_instances, _A4_foo, _A4_foo_1, _A4_instances, _A5_foo, _A5_foo_get, _A5_instances, _A6_foo, _A6_foo_1, _A6_foo_get, _A6_instances, _A7_foo_get, _A7_foo_get_1, _A7_instances, _A8_foo_set, _A8_foo_set_1, _A8_instances, _A9_foo_get, _A9_foo_set, _A9_foo_get_1, _A9_foo_set_1, _A9_instances;
+var _A_foo, _A_foo_1, _A2_instances, _A2_foo, _A2_foo_1, _A3_instances, _A3_foo, _A3_foo_get, _A4_instances, _A4_foo, _A4_foo_1, _A5_instances, _A5_foo, _A5_foo_get, _A6_instances, _A6_foo, _A6_foo_1, _A6_foo_get, _A7_instances, _A7_foo_get, _A7_foo_get_1, _A8_instances, _A8_foo_set, _A8_foo_set_1, _A9_instances, _A9_foo_get, _A9_foo_set, _A9_foo_get_1, _A9_foo_set_1;
 class A {
     constructor() {
         _A_foo_1.set(this, "foo");

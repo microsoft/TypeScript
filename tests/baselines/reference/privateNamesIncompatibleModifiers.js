@@ -57,7 +57,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var _A_foo, _A_bar, _A_baz, _A_qux, _A_fooMethod, _A_barMethod, _A_bazMethod, _A_quxMethod, _A_asyncMethod, _A_genMethod, _A_asyncGenMethod, _A_fooProp_get, _A_fooProp_set, _A_barProp_get, _A_barProp_set, _A_bazProp_get, _A_bazProp_set, _A_quxProp_get, _A_quxProp_set, _A_whatProp_get, _A_whatProp_set, _A_asyncProp_get, _A_asyncProp_set, _A_instances;
+var _A_instances, _A_foo, _A_bar, _A_baz, _A_qux, _A_fooMethod, _A_barMethod, _A_bazMethod, _A_quxMethod, _A_asyncMethod, _A_genMethod, _A_asyncGenMethod, _A_fooProp_get, _A_fooProp_set, _A_barProp_get, _A_barProp_set, _A_bazProp_get, _A_bazProp_set, _A_quxProp_get, _A_quxProp_set, _A_whatProp_get, _A_whatProp_set, _A_asyncProp_get, _A_asyncProp_set;
 class A {
     constructor() {
         _A_instances.add(this);

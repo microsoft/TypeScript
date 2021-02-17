@@ -13,7 +13,7 @@ type T = keyof A     // should not include '#foo*'
 
 //// [privateNamesAndkeyof.js]
 "use strict";
-var _A_fooField, _A_fooMethod, _A_fooProp_get, _A_fooProp_set, _A_instances;
+var _A_instances, _A_fooField, _A_fooMethod, _A_fooProp_get, _A_fooProp_set;
 class A {
     constructor() {
         _A_instances.add(this);

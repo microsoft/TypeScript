@@ -19,7 +19,7 @@ var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function
     }
     return fn;
 };
-var _Base_prop, _Base_instances;
+var _Base_instances, _Base_prop;
 class Base {
     constructor() {
         _Base_instances.add(this);
