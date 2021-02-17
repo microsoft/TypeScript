@@ -36,7 +36,7 @@ class SomeClass extends SomeAbstractClass<number, string, boolean> {
 >context : number
 
         return `${context}`;
->`${context}` : `${number}`
+>`${context}` : string
 >context : number
     }
 }

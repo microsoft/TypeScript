@@ -328,7 +328,7 @@ declare namespace FourSlashInterface {
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
-        docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
+        docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string, options?: VerifyDocCommentTemplateOptions): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
         codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[] }): void;
@@ -662,6 +662,10 @@ declare namespace FourSlashInterface {
         tags?: ReadonlyArray<JSDocTagInfo>;
         triggerReason?: SignatureHelpTriggerReason;
         overrideSelectedItemIndex?: number;
+    }
+
+    interface VerifyDocCommentTemplateOptions {
+        generateReturnInDocTemplate?: boolean;
     }
 
     export type SignatureHelpTriggerReason =

@@ -5643,7 +5643,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging || tracing.isTracing()) {
+        if (Debug.isDebugging || tracing) {
             this.checker = checker;
         }
     }
@@ -6584,6 +6584,18 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    function numberOfDirectorySeparators(str: string) {
+        const match = str.match(/\//g);
+        return match ? match.length : 0;
+    }
+
+    export function compareNumberOfDirectorySeparators(path1: string, path2: string) {
+        return compareValues(
+            numberOfDirectorySeparators(path1),
+            numberOfDirectorySeparators(path2)
+        );
     }
 
     /**

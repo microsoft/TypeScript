@@ -56,7 +56,7 @@ function A() { this.id = 1; }
 >id : Symbol(A.id, Decl(other.js, 0, 14))
 
 module.exports = A;
->module.exports : Symbol("tests/cases/conformance/salsa/other", Decl(other.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(other.js, 0, 0))
 >module : Symbol(export=, Decl(other.js, 0, 29))
 >exports : Symbol(export=, Decl(other.js, 0, 29))
 >A : Symbol(A, Decl(other.js, 0, 0))

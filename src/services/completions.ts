@@ -732,7 +732,7 @@ namespace ts.Completions {
             exportedSymbol,
             moduleSymbol,
             sourceFile,
-            getNameForExportedSymbol(symbol, compilerOptions.target!),
+            getNameForExportedSymbol(symbol, compilerOptions.target),
             host,
             program,
             formatContext,
