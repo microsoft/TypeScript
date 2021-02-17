@@ -22746,11 +22746,15 @@ namespace ts {
             }
 
             function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
-                if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union &&
-                    getKeyPropertyName(<UnionType>type) === getAccessedPropertyName(access)) {
-                    const candidate = getConstituentTypeForKeyType(<UnionType>type, getTypeOfExpression(value));
-                    if (candidate) {
-                        return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ? candidate : filterType(type, t => t !== candidate);
+                if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union) {
+                    const keyPropertyName = getKeyPropertyName(<UnionType>type);
+                    if (keyPropertyName && keyPropertyName === getAccessedPropertyName(access)) {
+                        const candidate = getConstituentTypeForKeyType(<UnionType>type, getTypeOfExpression(value));
+                        if (candidate) {
+                            return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ? candidate :
+                                isUnitType(getTypeOfPropertyOfType(candidate, keyPropertyName) || unknownType) ? filterType(type, t => t !== candidate) :
+                                type;
+                        }
                     }
                 }
                 return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
