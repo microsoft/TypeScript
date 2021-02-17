@@ -117,6 +117,9 @@ namespace ts {
         /** Instead of using output d.ts file from project reference, use its source file */
         useSourceOfProjectReferenceRedirect?(): boolean;
 
+        /** If provided, use this method to get parsed command lines for referenced projects */
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
     }
@@ -315,6 +318,7 @@ namespace ts {
         compilerHost.fileIsOpen = returnFalse;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
+        // compilerHost.getParsedCommandLine = getParsedCommandLine;
 
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost,
@@ -684,6 +688,20 @@ namespace ts {
             canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(configFileParseResult.raw);
             hasChangedConfigFileParsingErrors = true;
         }
+
+        // function getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
+        //     if (host.getParsedCommandLine) {
+        //         return host.getParsedCommandLine(fileName);
+        //     }
+
+        //     // TODO:: sheetal: cache, watch
+        //     // Ignore errors
+        //     const onUnRecoverableConfigFileDiagnostic = parseConfigFileHost.onUnRecoverableConfigFileDiagnostic;
+        //     parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+        //     const result = getParsedCommandLineOfConfigFile(fileName, /*optionsToExtend*/ undefined, parseConfigFileHost);
+        //     parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
+        //     return result;
+        // }
 
         function watchFilePath(
             path: Path,
