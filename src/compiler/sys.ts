@@ -83,9 +83,6 @@ namespace ts {
 
     /* @internal */
     export function setCustomPollingValues(system: System) {
-        if (!system.getEnvironmentVariable) {
-            return;
-        }
         const pollingIntervalChanged = setCustomLevels("TSC_WATCH_POLLINGINTERVAL", PollingInterval);
         pollingChunkSize = getCustomPollingBasedLevels("TSC_WATCH_POLLINGCHUNKSIZE", defaultChunkLevels) || pollingChunkSize;
         unchangedPollThresholds = getCustomPollingBasedLevels("TSC_WATCH_UNCHANGEDPOLLTHRESHOLDS", defaultChunkLevels) || unchangedPollThresholds;
