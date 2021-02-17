@@ -1,0 +1,44 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameNestedMethodAccess.ts, 0, 5))
+
+    #foo = 42;
+>#foo : Symbol(C.#foo, Decl(privateNameNestedMethodAccess.ts, 0, 17))
+
+    #bar() { new C().#baz; }
+>#bar : Symbol(C.#bar, Decl(privateNameNestedMethodAccess.ts, 1, 14))
+>new C().#baz : Symbol(C.#baz, Decl(privateNameNestedMethodAccess.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameNestedMethodAccess.ts, 0, 5))
+
+    get #baz() { return 42; }
+>#baz : Symbol(C.#baz, Decl(privateNameNestedMethodAccess.ts, 2, 28))
+
+    m() {
+>m : Symbol(C.m, Decl(privateNameNestedMethodAccess.ts, 3, 29))
+
+        return class D {
+>D : Symbol(D, Decl(privateNameNestedMethodAccess.ts, 6, 14))
+
+            #bar() {}
+>#bar : Symbol(D.#bar, Decl(privateNameNestedMethodAccess.ts, 6, 24))
+
+            constructor() {
+                new C().#foo;
+>new C().#foo : Symbol(C.#foo, Decl(privateNameNestedMethodAccess.ts, 0, 17))
+>C : Symbol(C, Decl(privateNameNestedMethodAccess.ts, 0, 5))
+
+                new C().#bar; // Error
+>C : Symbol(C, Decl(privateNameNestedMethodAccess.ts, 0, 5))
+
+                new C().#baz;
+>new C().#baz : Symbol(C.#baz, Decl(privateNameNestedMethodAccess.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameNestedMethodAccess.ts, 0, 5))
+
+                new D().#bar;
+>new D().#bar : Symbol(D.#bar, Decl(privateNameNestedMethodAccess.ts, 6, 24))
+>D : Symbol(D, Decl(privateNameNestedMethodAccess.ts, 6, 14))
+            }
+        }
+    }
+}
+
