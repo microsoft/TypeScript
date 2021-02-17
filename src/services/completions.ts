@@ -1007,6 +1007,7 @@ namespace ts.Completions {
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
         let isJsxIdentifierExpected = false;
+        let importCompletionNode: ImportEqualsDeclaration | ImportDeclaration | undefined;
 
         let location = getTouchingPropertyName(sourceFile, position);
         if (contextToken) {
@@ -1017,6 +1018,7 @@ namespace ts.Completions {
             }
 
             let parent = contextToken.parent;
+            importCompletionNode = getImportCompletionNode(parent);
             if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
                 isRightOfDot = contextToken.kind === SyntaxKind.DotToken;
                 isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
@@ -1050,7 +1052,7 @@ namespace ts.Completions {
                         return undefined;
                 }
             }
-            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+            else if (!importCompletionNode && sourceFile.languageVariant === LanguageVariant.JSX) {
                 // <UI.Test /* completion position */ />
                 // If the tagname is a property access expression, we will then walk up to the top most of property access expression.
                 // Then, try to get a JSX container and its associated attributes type.
@@ -1403,6 +1405,7 @@ namespace ts.Completions {
                 || tryGetConstructorCompletion()
                 || tryGetClassLikeCompletionSymbols()
                 || tryGetJsxCompletionSymbols()
+                || tryGetImportCompletionSymbols()
                 || (getGlobalCompletions(), GlobalsSearch.Success);
             return result === GlobalsSearch.Success;
         }
@@ -1428,6 +1431,13 @@ namespace ts.Completions {
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
+            return GlobalsSearch.Success;
+        }
+
+        function tryGetImportCompletionSymbols(): GlobalsSearch {
+            if (!importCompletionNode) return GlobalsSearch.Continue;
+            if (!shouldOfferImportCompletions()) return GlobalsSearch.Fail;
+            collectAndFilterAutoImportCompletions();
             return GlobalsSearch.Success;
         }
 
@@ -1495,7 +1505,10 @@ namespace ts.Completions {
                     }
                 }
             }
+            collectAndFilterAutoImportCompletions(/*resolveModuleSpecifier*/ false);
+        }
 
+        function collectAndFilterAutoImportCompletions(resolveModuleSpecifier: boolean) {
             if (shouldOfferImportCompletions()) {
                 const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
                 if (detailsEntryId?.data) {
@@ -2341,7 +2354,6 @@ namespace ts.Completions {
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.VarKeyword:
-                case SyntaxKind.ImportKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.InferKeyword:
@@ -2911,6 +2923,16 @@ namespace ts.Completions {
         }
         if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             return typeChecker.getTypeAtLocation(node.parent);
+        }
+        return undefined;
+    }
+
+    function getImportCompletionNode(parent: Node) {
+        if (isImportEqualsDeclaration(parent)) {
+            return nodeIsMissing(parent.moduleReference) ? parent : undefined;
+        }
+        if (isNamedImports(parent) || isNamespaceImport(parent)) {
+            return nodeIsMissing(parent.parent.parent.moduleSpecifier) ? parent.parent.parent : undefined;
         }
         return undefined;
     }

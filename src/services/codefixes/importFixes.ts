@@ -222,7 +222,6 @@ namespace ts.codefix {
 
     function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, symbolName: string, program: Program, position: number | undefined, preferTypeOnlyImport: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
         Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
-        // We sort the best codefixes first, so taking `first` is best.
         return getBestFix(getFixForImport(exportInfos, symbolName, position, preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences), sourceFile, program, host);
     }
 
@@ -270,6 +269,24 @@ namespace ts.codefix {
                 if (exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
                     result.push({ moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exported, checker) });
                 }
+            }
+        });
+        return result;
+    }
+
+    export function getSymbolToExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, useAutoImportProvider: boolean) {
+        const result: MultiMap<Symbol, SymbolExportInfo> = createMultiMap();
+        const compilerOptions = program.getCompilerOptions();
+        forEachExternalModuleToImportFrom(program, host, importingFile, /*filterByPackageJson*/ true, useAutoImportProvider, (moduleSymbol, _moduleFile, program) => {
+            const checker = program.getTypeChecker();
+            const defaultInfo = getDefaultLikeExportInfo(importingFile, moduleSymbol, checker, compilerOptions);
+            if (defaultInfo) {
+                const original = skipAlias(defaultInfo.symbol, checker);
+                result.add(original, { moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(original, checker) });
+            }
+            for (const exported of checker.getExportsAndPropertiesOfModule(moduleSymbol)) {
+                const original = skipAlias(exported, checker);
+                result.add(original, { moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(original, checker) });
             }
         });
         return result;
