@@ -1,7 +1,6 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts ===
-const C = class {
->C : typeof C
->class {    #foo = 42;    #bar() { new C().#baz; }    get #baz() { return 42; }    m() {        return class D {            #bar() {}            constructor() {                new C().#foo;                new C().#bar; // Error                new C().#baz;                new D().#bar;            }        }    }} : typeof C
+class C {
+>C : C
 
     #foo = 42;
 >#foo : number
@@ -21,7 +20,7 @@ const C = class {
 >m : () => typeof D
 
         return class D {
->class D {            #bar() {}            constructor() {                new C().#foo;                new C().#bar; // Error                new C().#baz;                new D().#bar;            }        } : typeof D
+>class D {            #bar() {}            constructor() {                new C().#foo;                new C().#bar; // Error                new C().#baz;                new D().#bar;            }            n(x: any) {                x.#foo;                x.#bar;                x.#unknown; // Error            }        } : typeof D
 >D : typeof D
 
             #bar() {}
@@ -47,6 +46,23 @@ const C = class {
 >new D().#bar : () => void
 >new D() : D
 >D : typeof D
+            }
+
+            n(x: any) {
+>n : (x: any) => void
+>x : any
+
+                x.#foo;
+>x.#foo : any
+>x : any
+
+                x.#bar;
+>x.#bar : any
+>x : any
+
+                x.#unknown; // Error
+>x.#unknown : any
+>x : any
             }
         }
     }

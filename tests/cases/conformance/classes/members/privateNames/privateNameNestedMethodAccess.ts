@@ -1,6 +1,6 @@
 // @target: es2015
 
-const C = class {
+class C {
     #foo = 42;
     #bar() { new C().#baz; }
     get #baz() { return 42; }
@@ -13,6 +13,12 @@ const C = class {
                 new C().#bar; // Error
                 new C().#baz;
                 new D().#bar;
+            }
+
+            n(x: any) {
+                x.#foo;
+                x.#bar;
+                x.#unknown; // Error
             }
         }
     }
