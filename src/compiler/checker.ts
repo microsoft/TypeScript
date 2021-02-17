@@ -34958,7 +34958,6 @@ namespace ts {
 
         function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
             if (!strictNullChecks) return;
-            if (getFalsyFlags(type)) return;
 
             if (getAwaitedTypeOfPromise(type)) {
                 errorAndMaybeSuggestAwait(
@@ -34969,7 +34968,12 @@ namespace ts {
                 return;
             }
 
-            const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
+            const location = isBinaryExpression(condExpr) ? condExpr.right
+                : isPrefixUnaryExpression(condExpr) ? condExpr.operand
+                : condExpr;
+            if (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
+                checkTestingKnownTruthyCallableOrAwaitableType(condExpr.left, type, body);
+            }
             const testedNode = isIdentifier(location) ? location
                 : isPropertyAccessExpression(location) ? location.name
                 : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
@@ -34980,12 +34984,17 @@ namespace ts {
                 return;
             }
 
+            const testedType = isPrefixUnaryExpression(condExpr) ? checkExpression(location) : type;
+            if (typeToString(testedType).includes("undefined")) { // maybeTypeOfKind(testedType, TypeFlags.Undefined)
+                return;
+            }
+
             // While it technically should be invalid for any known-truthy value
             // to be tested, we de-scope to functions unrefenced in the block as a
             // heuristic to identify the most common bugs. There are too many
             // false positives for values sourced from type definitions without
             // strictNullChecks otherwise.
-            const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+            const callSignatures = getSignaturesOfType(testedType, SignatureKind.Call);
             if (callSignatures.length === 0) {
                 return;
             }
@@ -34998,7 +35007,12 @@ namespace ts {
             const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
                 || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
             if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                if (getFalsyFlags(type)) {
+                    error(location, Diagnostics.This_condition_will_always_return_false_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                }
+                else {
+                    error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                }
             }
         }
 
