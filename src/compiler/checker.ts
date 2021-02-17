@@ -8346,14 +8346,16 @@ namespace ts {
         function getFlowTypeFromCommonJSExport(symbol: Symbol) {
             const file = getSourceFileOfNode(symbol.declarations[0]);
             const accessName = unescapeLeadingUnderscores(symbol.escapedName);
-            const reference = factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
+            const areAllModuleExports = symbol.declarations.every(d => isInJSFile(d) && isAccessExpression(d) && isModuleExportsAccessExpression(d.expression));
+            const reference = areAllModuleExports
+                ? factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(factory.createIdentifier("module"), factory.createIdentifier("exports")), accessName)
+                : factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
+            if (areAllModuleExports) {
+                setParent((reference.expression as PropertyAccessExpression).expression, reference.expression);
+            }
             setParent(reference.expression, reference);
             setParent(reference, file);
-            const lastStatementFlow = file.statements[file.statements.length - 1].flowNode;
-            reference.flowNode = lastStatementFlow && {
-                antecedents: [lastStatementFlow],
-                flags: FlowFlags.BranchLabel
-            };
+            reference.flowNode = file.endFlowNode;
             return getFlowTypeOfReference(reference, autoType, undefinedType);
         }
 
