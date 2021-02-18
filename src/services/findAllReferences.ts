@@ -231,7 +231,7 @@ namespace ts.FindAllReferences {
         }
         else {
             const queue = entries && [...entries];
-            const seenNodes = new Map<string, true>();
+            const seenNodes = new Map<number, true>();
             while (queue && queue.length) {
                 const entry = queue.shift() as NodeEntry;
                 if (!addToSeen(seenNodes, getNodeId(entry.node))) {
@@ -2154,7 +2154,7 @@ namespace ts.FindAllReferences {
          *                                The value of previousIterationSymbol is undefined when the function is first called.
          */
         function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-            const seen = new Map<string, true>();
+            const seen = new Map<SymbolId, true>();
             return recur(symbol);
 
             function recur(symbol: Symbol): T | undefined {
