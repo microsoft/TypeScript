@@ -1681,7 +1681,7 @@ namespace ts.Completions {
                 const original = skipAlias(nonLocalSymbol, typeChecker);
                 const symbolName = getNameForExportedSymbol(symbol, target);
                 const existingSuggestions = results.get(getSymbolId(original));
-                if (!existingSuggestions || !some(existingSuggestions, s => s.symbolName === symbolName && moduleSymbolsAreDuplicateOrigins(moduleSymbol, s.origin.moduleSymbol))) {
+                if (!some(existingSuggestions, s => s.symbolName === symbolName && moduleSymbolsAreDuplicateOrigins(moduleSymbol, s.origin.moduleSymbol))) {
                     const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport, isFromPackageJson };
                     results.add(getSymbolId(original), {
                         symbol,
