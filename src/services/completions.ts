@@ -232,22 +232,12 @@ namespace ts.Completions {
             symbolToSortTextMap,
         } = completionData;
 
-        if (location && location.parent && isJsxClosingElement(location.parent)) {
-            // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
-            // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
-            // For example:
-            //     var x = <div> </ /*1*/
-            // The completion list at "1" will contain "div>" with type any
-            // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
-            const tagName = location.parent.parent.openingElement.tagName;
-            const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
-            const entry: CompletionEntry = {
-                name: tagName.getFullText(sourceFile) + (hasClosingAngleBracket ? "" : ">"),
-                kind: ScriptElementKind.classElement,
-                kindModifiers: undefined,
-                sortText: SortText.LocationPriority,
-            };
-            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
+        // Verify if the file is JSX language variant
+        if (getLanguageVariant(sourceFile.scriptKind) === LanguageVariant.JSX) {
+            const completionInfo = getJsxClosingTagCompletion(location, sourceFile);
+            if (completionInfo) {
+                return completionInfo;
+            }
         }
 
         const entries: CompletionEntry[] = [];
@@ -333,6 +323,52 @@ namespace ts.Completions {
             default:
                 return false;
         }
+    }
+
+    function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: SourceFile): CompletionInfo | undefined {
+        // We wanna walk up the tree till we find a JSX closing element
+        const jsxClosingElement = findAncestor(location, node => {
+            switch (node.kind) {
+                case SyntaxKind.JsxClosingElement:
+                    return true;
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.PropertyAccessExpression:
+                    return false;
+                default:
+                    return "quit";
+            }
+        }) as JsxClosingElement | undefined;
+
+        if (jsxClosingElement) {
+            // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
+            // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
+            // For example:
+            //     var x = <div> </ /*1*/
+            // The completion list at "1" will contain "div>" with type any
+            // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
+            // And at property access expressions `<MainComponent.Child> </MainComponent. /*1*/ >` the completion will
+            // return full closing tag with an optional replacement span
+            // For example:
+            //     var x = <MainComponent.Child> </     MainComponent /*1*/  >
+            //     var y = <MainComponent.Child> </   /*2*/   MainComponent >
+            // the completion list at "1" and "2" will contain "MainComponent.Child" with a replacement span of closing tag name
+            const hasClosingAngleBracket = !!findChildOfKind(jsxClosingElement, SyntaxKind.GreaterThanToken, sourceFile);
+            const tagName = jsxClosingElement.parent.openingElement.tagName;
+            const closingTag = tagName.getText(sourceFile);
+            const fullClosingTag = closingTag + (hasClosingAngleBracket ? "" : ">");
+            const replacementSpan = createTextSpanFromNode(jsxClosingElement.tagName);
+
+            const entry: CompletionEntry = {
+                name: fullClosingTag,
+                kind: ScriptElementKind.classElement,
+                kindModifiers: undefined,
+                sortText: SortText.LocationPriority,
+            };
+            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: replacementSpan, entries: [entry] };
+        }
+        return;
     }
 
     function getJSCompletionEntries(
