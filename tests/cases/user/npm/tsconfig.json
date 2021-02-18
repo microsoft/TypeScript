@@ -14,5 +14,5 @@
         "types": ["node"],
         "lib": ["esnext"]
     },
-    "include": ["npm-cli/lib"]
+    "include": ["npm/lib"]
 }
