@@ -138,5 +138,78 @@ export function Component(x: Config): any;`
                 verifyProgramUptoDate(/*useProjectVersion*/ false);
             });
         });
+
+        it("detects program upto date when new file is added to the referenced project", () => {
+            const config1: TestFSWithWatch.File = {
+                path: `${tscWatch.projectRoot}/projets/project1/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
+                    }
+                })
+            };
+            const class1: TestFSWithWatch.File = {
+                path: `${tscWatch.projectRoot}/projets/project1/class1.ts`,
+                content: `class class1 {}`
+            };
+            const config2: TestFSWithWatch.File = {
+                path: `${tscWatch.projectRoot}/projets/project2/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
+                    },
+                    references: [
+                        { path: "../project1" }
+                    ]
+                })
+            };
+            const class2: TestFSWithWatch.File = {
+                path: `${tscWatch.projectRoot}/projets/project2/class2.ts`,
+                content: `class class2 {}`
+            };
+            const system = projectSystem.createServerHost([config1, class1, config2, class2, projectSystem.libFile]);
+            const result = getParsedCommandLineOfConfigFile(`${tscWatch.projectRoot}/projets/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
+                useCaseSensitiveFileNames: true,
+                fileExists: path => system.fileExists(path),
+                readFile: path => system.readFile(path),
+                getCurrentDirectory: () => system.getCurrentDirectory(),
+                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                onUnRecoverableConfigFileDiagnostic: noop,
+            })!;
+            const host: LanguageServiceHost = {
+                useCaseSensitiveFileNames: returnTrue,
+                useSourceOfProjectReferenceRedirect: returnTrue,
+                getCompilationSettings: () => result.options,
+                fileExists: path => system.fileExists(path),
+                getScriptFileNames: () => result.fileNames,
+                getScriptVersion: path => {
+                    const text = system.readFile(path);
+                    return text !== undefined ? system.createHash(path) : "";
+                },
+                getScriptSnapshot: path => {
+                    const text = system.readFile(path);
+                    return text ? ScriptSnapshot.fromString(text) : undefined;
+                },
+                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                getCurrentDirectory: () => system.getCurrentDirectory(),
+                getDefaultLibFileName: () => projectSystem.libFile.path,
+                getProjectReferences: () => result.projectReferences,
+            };
+            const ls = ts.createLanguageService(host);
+            const program1 = ls.getProgram()!;
+            assert.deepEqual(
+                program1.getSourceFiles().map(f => f.fileName),
+                [projectSystem.libFile.path, class1.path, class2.path]
+            );
+            const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
+            system.writeFile(class3, `class class3 {}`);
+            const program2 = ls.getProgram()!;
+            assert.deepEqual(
+                program2.getSourceFiles().map(f => f.fileName),
+                [projectSystem.libFile.path, class1.path, class2.path, class3]
+            );
+        });
     });
 }

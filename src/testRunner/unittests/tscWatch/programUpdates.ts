@@ -1696,5 +1696,58 @@ import { x } from "../b";`),
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "when new file is added to the referenced project",
+            commandLineArgs: ["-w", "-p", `${projectRoot}/projets/project2/tsconfig.json`],
+            sys: () => {
+                const config1: File = {
+                    path: `${projectRoot}/projets/project1/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        }
+                    })
+                };
+                const class1: File = {
+                    path: `${projectRoot}/projets/project1/class1.ts`,
+                    content: `class class1 {}`
+                };
+                // Built file
+                const class1Dt: File = {
+                    path: `${projectRoot}/projets/project1/class1.d.ts`,
+                    content: `declare class class1 {}`
+                };
+                const config2: File = {
+                    path: `${projectRoot}/projets/project2/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        },
+                        references: [
+                            { path: "../project1" }
+                        ]
+                    })
+                };
+                const class2: File = {
+                    path: `${projectRoot}/projets/project2/class2.ts`,
+                    content: `class class2 {}`
+                };
+                return createWatchedSystem([config1, class1, config2, class2, libFile, class1Dt]);
+            },
+            changes: [
+                {
+                    caption: "Add class3 to project1 and build it",
+                    change: sys => {
+                        sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
+                        sys.writeFile(`${projectRoot}/projets/project1/class3.d.ts`, `declare class class3 {}`);
+                    },
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
     });
 }
