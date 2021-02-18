@@ -13358,7 +13358,7 @@ namespace ts {
             return true;
         }
 
-        function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
+        function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags, reduceVoidUndefined: boolean) {
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -13369,7 +13369,7 @@ namespace ts {
                     flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                     flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                     flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
-                    flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
+                    reduceVoidUndefined && flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
                     isFreshLiteralType(t) && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -13437,7 +13437,7 @@ namespace ts {
                 }
                 if (unionReduction & (UnionReduction.Literal | UnionReduction.Subtype)) {
                     if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
-                        removeRedundantLiteralTypes(typeSet, includes);
+                        removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
                     }
                     if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
                         removeStringLiteralsMatchedByTemplateLiterals(typeSet);
