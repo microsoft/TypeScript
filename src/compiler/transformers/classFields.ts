@@ -36,23 +36,28 @@ namespace ts {
     interface PrivateIdentifierStaticField {
         placement: PrivateIdentifierPlacement.StaticField;
         variableName: Identifier;
+        classConstructor: Identifier;
     }
     interface PrivateIdentifierStaticMethod {
         placement: PrivateIdentifierPlacement.StaticMethod;
         functionName: Identifier;
+        classConstructor: Identifier;
     }
     interface PrivateIdentifierStaticGetterOnly {
         placement: PrivateIdentifierPlacement.StaticGetterOnly;
         getterName: Identifier;
+        classConstructor: Identifier;
     }
     interface PrivateIdentifierStaticSetterOnly {
         placement: PrivateIdentifierPlacement.StaticSetterOnly;
         setterName: Identifier;
+        classConstructor: Identifier;
     }
     interface PrivateIdentifierStaticGetterAndSetterOnly {
         placement: PrivateIdentifierPlacement.StaticGetterAndSetter;
         getterName: Identifier;
         setterName: Identifier;
+        classConstructor: Identifier;
     }
     interface PrivateIdentifierInstanceField {
         placement: PrivateIdentifierPlacement.InstanceField;
@@ -331,6 +336,8 @@ namespace ts {
             Debug.assert(!some(node.decorators));
             if (!shouldTransformPrivateElements && isPrivateIdentifier(node.name)) {
                 // Initializer is elided as the field is initialized in transformConstructor.
+                // We include initalizers for static private fields as there is no simple way to do this emit,
+                // and nobody is relying on the old assignment semantics for private static fields. 
                 return factory.updatePropertyDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -338,7 +345,7 @@ namespace ts {
                     node.name,
                     /*questionOrExclamationToken*/ undefined,
                     /*type*/ undefined,
-                    /*initializer*/ undefined
+                    /*initializer*/ hasStaticModifier(node) ? node.initializer : undefined
                 );
             }
             // Create a temporary variable to store a computed property name (if necessary).
@@ -384,20 +391,20 @@ namespace ts {
                 case PrivateIdentifierPlacement.StaticField:
                     return context.getEmitHelperFactory().createClassStaticPrivateFieldGetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().classConstructor,
+                        info.classConstructor,
                         info.variableName
                     );
                 case PrivateIdentifierPlacement.StaticMethod:
                     return context.getEmitHelperFactory().createClassStaticPrivateMethodGetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().classConstructor,
+                        info.classConstructor,
                         info.functionName
                     );
                 case PrivateIdentifierPlacement.StaticGetterOnly:
                 case PrivateIdentifierPlacement.StaticGetterAndSetter:
                     return context.getEmitHelperFactory().createClassStaticPrivateAccessorGetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().classConstructor,
+                        info.classConstructor,
                         info.getterName
                     );
                 case PrivateIdentifierPlacement.StaticSetterOnly:
@@ -622,7 +629,7 @@ namespace ts {
                 case PrivateIdentifierPlacement.StaticField:
                     return context.getEmitHelperFactory().createClassStaticPrivateFieldSetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().classConstructor,
+                        info.classConstructor,
                         info.variableName,
                         right
                     );
@@ -636,7 +643,7 @@ namespace ts {
                 case PrivateIdentifierPlacement.StaticGetterAndSetter:
                     return context.getEmitHelperFactory().createClassStaticPrivateAccessorSetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().classConstructor,
+                        info.classConstructor,
                         info.setterName,
                         right
                     );
@@ -716,13 +723,23 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+            let staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+
+            if (languageVersion === ScriptTarget.ESNext) {
+                // We can't initialize static private properties after the class as the are not in the lexical scope
+                // so we rely on standard init even under useDefineForClassFields:false
+                staticProperties = filter(staticProperties, p => !isPrivateIdentifier(p.name));
+            }
+            else {
+                // We must initialize static private properties even if the don't have a value as we initialize them with a wrapper object which mist always exist.
+                const staticUninitializedPrivateProperties = filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
+                if (some(staticUninitializedPrivateProperties)) {
+                    addPropertyStatements(statements, staticUninitializedPrivateProperties, factory.getInternalName(node));
+                }
+            }
+
             if (some(staticProperties)) {
                 addPropertyStatements(statements, staticProperties, factory.getInternalName(node));
-            }
-            const staticPrivateProperties = filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
-            if(some(staticPrivateProperties)) {
-                addPropertyStatements(statements, staticPrivateProperties, factory.getInternalName(node));
             }
 
             return statements;
@@ -742,13 +759,20 @@ namespace ts {
             // these statements after the class expression variable statement.
             const isDecoratedClassDeclaration = isClassDeclaration(getOriginalNode(node));
 
-            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+            let staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+            if (!shouldTransformPrivateElements) {
+                // We can't initialize static private properties after the class as the are not in the lexical scope
+                // so we rely on standard init even under useDefineForClassFields:false
+                staticProperties = filter(staticProperties, p => !isPrivateIdentifier(p.name));
+            }
+            const staticUninitializedPrivateProperties = !shouldTransformPrivateElements ? []:
+                filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
             const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
             let temp: Identifier | undefined;
-            if (some(node.members, m => hasStaticModifier(m) && !!m.name && isPrivateIdentifier(m.name))) {
+            if (shouldTransformPrivateElements && some(node.members, m => hasStaticModifier(m) && !!m.name && isPrivateIdentifier(m.name))) {
                 temp = factory.createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
                 getPrivateIdentifierEnvironment().classConstructor = factory.cloneNode(temp);
             }
@@ -763,7 +787,7 @@ namespace ts {
                 transformClassMembers(node, isDerivedClass)
             );
 
-            if (some(staticProperties) || some(pendingExpressions)) {
+            if (some(staticUninitializedPrivateProperties) ||some(staticProperties) || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
@@ -772,8 +796,13 @@ namespace ts {
                         pendingStatements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
                     }
 
-                    if (pendingStatements && some(staticProperties)) {
-                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
+                    if (pendingStatements ) {
+                        if (some(staticProperties)) {
+                            addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
+                        }
+                        if (some(staticUninitializedPrivateProperties)) {
+                            addPropertyStatements(pendingStatements, staticUninitializedPrivateProperties, factory.getInternalName(node));
+                        }
                     }
                     if(temp) {
                         return factory.inlineExpressions([factory.createAssignment(temp, classExpression), temp]);
@@ -798,6 +827,7 @@ namespace ts {
                     // Add any pending expressions leftover from elided or relocated computed property names
                     addRange(expressions, map(pendingExpressions, startOnNewLine));
                     addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
+                    addRange(expressions, generateInitializedPropertyExpressions(staticUninitializedPrivateProperties, temp));
                     expressions.push(startOnNewLine(temp));
 
                     return factory.inlineExpressions(expressions);
@@ -1207,20 +1237,22 @@ namespace ts {
             const { weakSetName } = getPrivateIdentifierEnvironment();
             let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
-
+            const env = getPrivateIdentifierEnvironment();
             if(hasStaticModifier(node)) {
                 if (isPropertyDeclaration(node)) {
                     const variableName = createHoistedVariableForPrivateName(text);
                     info = {
                         placement: PrivateIdentifierPlacement.StaticField,
-                        variableName
+                        variableName,
+                        classConstructor: env.classConstructor
                     };
                 }
                 else if(isMethodDeclaration(node)) {
                     const functionName = createHoistedVariableForPrivateName(text);
                     info = {
                         placement: PrivateIdentifierPlacement.StaticMethod,
-                        functionName
+                        functionName,
+                        classConstructor: env.classConstructor
                     };
                 }
                 else if(isGetAccessorDeclaration(node)) {
@@ -1238,6 +1270,7 @@ namespace ts {
                         info = {
                             placement: PrivateIdentifierPlacement.StaticGetterOnly,
                             getterName,
+                            classConstructor: env.classConstructor
                         };
                     }
                 }
@@ -1256,6 +1289,7 @@ namespace ts {
                         info = {
                             placement: PrivateIdentifierPlacement.StaticSetterOnly,
                             setterName,
+                            classConstructor: env.classConstructor
                         };
                     }
                 }
@@ -1332,7 +1366,7 @@ namespace ts {
                 return;
             }
 
-            getPrivateIdentifierEnvironment().identifiers.set(node.name.escapedText, info);
+            env.identifiers.set(node.name.escapedText, info);
             getPendingExpressions().push(...assignmentExpressions);
         }
 
