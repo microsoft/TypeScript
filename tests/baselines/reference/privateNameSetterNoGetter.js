@@ -20,7 +20,7 @@ var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || func
     fn.call(receiver, value);
     return value;
 };
-var _C_x_set, _C_instances, _a;
+var _C_instances, _C_x_set, _a;
 const C = (_a = class {
         constructor() {
             _C_instances.add(this);

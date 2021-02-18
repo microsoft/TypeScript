@@ -30,21 +30,25 @@ namespace ts {
 
     interface PrivateIdentifierInstanceMethod {
         placement: PrivateIdentifierPlacement.InstanceMethod;
+        weakSetName: Identifier;
         functionName: Identifier;
     }
 
     interface PrivateIdentifierInstanceGetterOnly {
         placement: PrivateIdentifierPlacement.InstanceGetterOnly;
+        weakSetName: Identifier;
         getterName: Identifier;
     }
 
     interface PrivateIdentifierInstanceSetterOnly {
         placement: PrivateIdentifierPlacement.InstanceSetterOnly;
+        weakSetName: Identifier;
         setterName: Identifier;
     }
 
     interface PrivateIdentifierInstanceGetterAndSetter {
         placement: PrivateIdentifierPlacement.InstanceGetterAndSetter;
+        weakSetName: Identifier;
         getterName: Identifier;
         setterName: Identifier;
     }
@@ -54,7 +58,6 @@ namespace ts {
          * Used for prefixing generated variable names.
          */
         className: string;
-        hasPrivateMethods: boolean;
         /**
          * Used for brand check on private methods.
          */
@@ -325,14 +328,14 @@ namespace ts {
                 case PrivateIdentifierPlacement.InstanceMethod:
                     return context.getEmitHelperFactory().createClassPrivateMethodGetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().weakSetName,
+                        info.weakSetName,
                         info.functionName
                     );
                 case PrivateIdentifierPlacement.InstanceGetterOnly:
                 case PrivateIdentifierPlacement.InstanceGetterAndSetter:
                     return context.getEmitHelperFactory().createClassPrivateAccessorGetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().weakSetName,
+                        info.weakSetName,
                         info.getterName
                     );
                 case PrivateIdentifierPlacement.InstanceSetterOnly:
@@ -550,7 +553,7 @@ namespace ts {
                 case PrivateIdentifierPlacement.InstanceGetterAndSetter:
                     return context.getEmitHelperFactory().createClassPrivateAccessorSetHelper(
                         receiver,
-                        getPrivateIdentifierEnvironment().weakSetName,
+                        info.weakSetName,
                         info.setterName,
                         right
                     );
@@ -571,6 +574,10 @@ namespace ts {
                 if (name && isIdentifier(name)) {
                     getPrivateIdentifierEnvironment().className = name.escapedText as string;
                 }
+
+                if (some(getPrivateInstanceMethods(node))) {
+                    getPrivateIdentifierEnvironment().weakSetName = createHoistedVariableForClass("instances");
+                }
             }
 
             const result = isClassDeclaration(node) ?
@@ -586,6 +593,13 @@ namespace ts {
 
         function doesClassElementNeedTransform(node: ClassElement) {
             return isPropertyDeclaration(node) || (shouldTransformPrivateElements && node.name && isPrivateIdentifier(node.name));
+        }
+
+        function getPrivateInstanceMethods(node: ClassLikeDeclaration) {
+            return filter(
+                [...getMethods(node, /*isStatic*/ false), ...getAccessors(node, /*isStatic*/ false)],
+                method => isPrivateIdentifier(method.name)
+            );
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
@@ -705,7 +719,9 @@ namespace ts {
                     }
                 }
 
-                createBrandCheckWeakSetForPrivateMethods();
+                if (some(getPrivateInstanceMethods(node))) {
+                    createBrandCheckWeakSetForPrivateMethods();
+                }
             }
 
             const members: ClassElement[] = [];
@@ -718,17 +734,9 @@ namespace ts {
         }
 
         function createBrandCheckWeakSetForPrivateMethods() {
-            const env = getPrivateIdentifierEnvironment();
-            if (!env.hasPrivateMethods) {
-                return;
-            }
-
-            const weakSetName = createHoistedVariableForClass("instances");
-            env.weakSetName = weakSetName;
-
             getPendingExpressions().push(
                 factory.createAssignment(
-                    env.weakSetName,
+                    getPrivateIdentifierEnvironment().weakSetName,
                     factory.createNewExpression(
                         factory.createIdentifier("WeakSet"),
                         /*typeArguments*/ undefined,
@@ -784,10 +792,7 @@ namespace ts {
                 properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
             }
 
-            const privateMethods = filter(
-                [...getMethods(node, /*isStatic*/ false), ...getAccessors(node, /*isStatic*/ false)],
-                method => isPrivateIdentifier(method.name)
-            );
+            const privateMethods = getPrivateInstanceMethods(node);
             const needsConstructorBody = some(properties) || some(privateMethods);
 
             // Only generate synthetic constructor when there are property initializers to move.
@@ -1081,7 +1086,6 @@ namespace ts {
             if (!currentPrivateIdentifierEnvironment) {
                 currentPrivateIdentifierEnvironment = {
                     className: "",
-                    hasPrivateMethods: false,
                     weakSetName: factory.createUniqueName("_instances", GeneratedIdentifierFlags.Optimistic),
                     identifiers: new Map()
                 };
@@ -1096,6 +1100,7 @@ namespace ts {
 
         function addPrivateIdentifierToEnvironment(node: PrivateClassElementDeclaration) {
             const text = getTextOfPropertyName(node.name) as string;
+            const { weakSetName } = getPrivateIdentifierEnvironment();
             let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
 
@@ -1118,10 +1123,9 @@ namespace ts {
             else if (isMethodDeclaration(node)) {
                 info = {
                     placement: PrivateIdentifierPlacement.InstanceMethod,
-                    functionName: createHoistedVariableForPrivateName(text)
+                    weakSetName,
+                    functionName: createHoistedVariableForPrivateName(text),
                 };
-
-                getPrivateIdentifierEnvironment().hasPrivateMethods = true;
             }
             else if (isAccessor(node)) {
                 const previousInfo = findPreviousAccessorInfo(node);
@@ -1132,6 +1136,7 @@ namespace ts {
                     if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceSetterOnly) {
                         info = {
                             placement: PrivateIdentifierPlacement.InstanceGetterAndSetter,
+                            weakSetName,
                             getterName,
                             setterName: previousInfo.setterName
                         };
@@ -1139,6 +1144,7 @@ namespace ts {
                     else {
                         info = {
                             placement: PrivateIdentifierPlacement.InstanceGetterOnly,
+                            weakSetName,
                             getterName
                         };
                     }
@@ -1149,6 +1155,7 @@ namespace ts {
                     if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceGetterOnly) {
                         info = {
                             placement: PrivateIdentifierPlacement.InstanceGetterAndSetter,
+                            weakSetName,
                             setterName,
                             getterName: previousInfo.getterName
                         };
@@ -1156,12 +1163,11 @@ namespace ts {
                     else {
                         info = {
                             placement: PrivateIdentifierPlacement.InstanceSetterOnly,
+                            weakSetName,
                             setterName
                         };
                     }
                 }
-
-                getPrivateIdentifierEnvironment().hasPrivateMethods = true;
             }
             else {
                 return;

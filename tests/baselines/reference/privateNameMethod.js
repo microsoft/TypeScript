@@ -20,7 +20,7 @@ var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function
     }
     return fn;
 };
-var _A1_method, _A1_instances;
+var _A1_instances, _A1_method;
 class A1 {
     constructor(name) {
         _A1_instances.add(this);

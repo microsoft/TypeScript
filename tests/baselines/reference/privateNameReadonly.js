@@ -13,7 +13,7 @@ console.log(new C().foo());
 var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
     throw new TypeError("private element is not writable");
 };
-var _C_bar, _C_instances, _a;
+var _C_instances, _C_bar, _a;
 const C = (_a = class {
         constructor() {
             _C_instances.add(this);
