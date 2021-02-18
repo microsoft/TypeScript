@@ -882,11 +882,11 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PrivateIdentifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
-                (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
-                isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right) ||
-                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression) ||
-                isAssignmentExpression(expr) && isNarrowableReference(expr.left);
+            return isDottedName(expr)
+                || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
+                || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
+                || isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression)
+                || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }
 
         function containsNarrowableReference(expr: Expression): boolean {
@@ -1369,7 +1369,7 @@ namespace ts {
             // is potentially an assertion and is therefore included in the control flow.
             if (node.kind === SyntaxKind.CallExpression) {
                 const call = <CallExpression>node;
-                if (isDottedName(call.expression) && call.expression.kind !== SyntaxKind.SuperKeyword) {
+                if (call.expression.kind !== SyntaxKind.SuperKeyword && isDottedName(call.expression)) {
                     currentFlow = createFlowCall(currentFlow, call);
                 }
             }
@@ -2542,6 +2542,7 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     break;
+                case SyntaxKind.MetaProperty:
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
