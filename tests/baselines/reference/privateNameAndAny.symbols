@@ -14,6 +14,35 @@ class A {
 
         thing.#bar; // Error
 >thing : Symbol(thing, Decl(privateNameAndAny.ts, 2, 11))
+
+        thing.#foo();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 2, 11))
+    }
+    methodU(thing: unknown) {
+>methodU : Symbol(A.methodU, Decl(privateNameAndAny.ts, 6, 5))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 7, 12))
+
+        thing.#foo;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 7, 12))
+
+        thing.#bar;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 7, 12))
+
+        thing.#foo();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 7, 12))
+    }
+    methodN(thing: never) {
+>methodN : Symbol(A.methodN, Decl(privateNameAndAny.ts, 11, 5))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 12, 12))
+
+        thing.#foo;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 12, 12))
+
+        thing.#bar;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 12, 12))
+
+        thing.#foo();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 12, 12))
     }
 };
 
