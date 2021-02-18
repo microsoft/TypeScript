@@ -1696,5 +1696,43 @@ import { x } from "../b";`),
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "when creating new file in symlinked folder",
+            commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+            sys: () => {
+                const module1: File = {
+                    path: `${projectRoot}/client/folder1/module1.ts`,
+                    content: `export class Module1Class { }`
+                };
+                const module2: File = {
+                    path: `${projectRoot}/folder2/module2.ts`,
+                    content: `import * as M from "folder1/module1";`
+                };
+                const symlink: SymLink = {
+                    path: `${projectRoot}/client/linktofolder2`,
+                    symLink: `${projectRoot}/folder2`,
+                };
+                const config: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            baseUrl: "client",
+                            paths: { "*": ["*"] },
+                        },
+                        include: ["client/**/*", "folder2"]
+                    })
+                };
+                return createWatchedSystem([module1, module2, symlink, config, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Add module3 to folder2",
+                    change: sys => sys.writeFile(`${projectRoot}/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
     });
 }
