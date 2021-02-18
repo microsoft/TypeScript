@@ -2248,6 +2248,10 @@ namespace ts.server.protocol {
          */
         source?: string;
         /**
+         * Human-readable description of the `source`.
+         */
+         sourceDisplay?: SymbolDisplayPart[];
+        /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
@@ -2308,9 +2312,14 @@ namespace ts.server.protocol {
         codeActions?: CodeAction[];
 
         /**
-         * Human-readable description of the `source` from the CompletionEntry.
+         * @deprecated Use `sourceDisplay` instead.
          */
         source?: SymbolDisplayPart[];
+
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+         sourceDisplay?: SymbolDisplayPart[];
     }
 
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */

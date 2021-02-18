@@ -34,6 +34,7 @@ namespace ts.Completions {
         Export              = 1 << 2,
         Promise             = 1 << 3,
         Nullable            = 1 << 4,
+        ResolvedExport      = 1 << 5,
 
         SymbolMemberNoExport = SymbolMember,
         SymbolMemberExport   = SymbolMember | Export,
@@ -45,11 +46,19 @@ namespace ts.Completions {
 
     interface SymbolOriginInfoExport extends SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
+        symbolName: string;
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
         isFromPackageJson?: boolean;
         exportName: string;
         fileName?: string;
+    }
+
+    interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
+        kind: SymbolOriginInfoKind;
+        symbolName: string;
+        moduleSpecifier: string;
+        isFromPackageJson?: boolean;
     }
 
     function originIsThisType(origin: SymbolOriginInfo): boolean {
@@ -64,8 +73,16 @@ namespace ts.Completions {
         return !!(origin && origin.kind & SymbolOriginInfoKind.Export);
     }
 
+    function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoResolvedExport {
+        return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
+    }
+
+    function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport {
+        return originIsExport(origin) || originIsResolvedExport(origin);
+    }
+
     function originIsPackageJsonImport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
-        return originIsExport(origin) && !!origin.isFromPackageJson;
+        return (originIsExport(origin) || originIsResolvedExport(origin)) && !!origin.isFromPackageJson;
     }
 
     function originIsPromise(origin: SymbolOriginInfo): boolean {
@@ -85,7 +102,7 @@ namespace ts.Completions {
      * Map from symbol id -> SymbolOriginInfo.
      * Only populated for symbols that come from other modules.
      */
-    type SymbolOriginInfoMap = (SymbolOriginInfo | SymbolOriginInfoExport | undefined)[];
+    type SymbolOriginInfoMap = (SymbolOriginInfo | SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | undefined)[];
 
     type SymbolSortTextMap = (SortText | undefined)[];
 
@@ -107,6 +124,11 @@ namespace ts.Completions {
         symbol: Symbol;
         symbolName: string;
         origin: SymbolOriginInfoExport;
+    }
+    export interface AutoImportSuggestionWithModuleSpecifier {
+        symbol: Symbol;
+        symbolName: string;
+        moduleSpecifier: string;
     }
     export interface ImportSuggestionsForFileCache {
         clear(): void;
@@ -470,6 +492,10 @@ namespace ts.Completions {
             replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
         }
 
+        if (originIsResolvedExport(origin)) {
+            insertText = `${origin.symbolName} from "${origin.moduleSpecifier}"`;
+        }
+
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
             return undefined;
         }
@@ -522,6 +548,9 @@ namespace ts.Completions {
     function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
         if (originIsExport(origin)) {
             return stripQuotes(origin.moduleSymbol.name);
+        }
+        if (originIsResolvedExport(origin)) {
+            return origin.moduleSpecifier;
         }
         if (origin?.kind === SymbolOriginInfoKind.ThisType) {
             return CompletionSource.ThisProperty;
@@ -750,7 +779,7 @@ namespace ts.Completions {
     }
 
     export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
-        return { name, kindModifiers, kind, displayParts, documentation, tags, codeActions, source };
+        return { name, kindModifiers, kind, displayParts, documentation, tags, codeActions, source, sourceDisplay: source };
     }
 
     interface CodeActionsAndSourceDisplay {
@@ -1007,7 +1036,7 @@ namespace ts.Completions {
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
         let isJsxIdentifierExpected = false;
-        let importCompletionNode: ImportEqualsDeclaration | ImportDeclaration | undefined;
+        let importCompletionNode: ImportEqualsDeclaration | ImportDeclaration | Token<SyntaxKind.ImportKeyword> | undefined;
 
         let location = getTouchingPropertyName(sourceFile, position);
         if (contextToken) {
@@ -1018,7 +1047,7 @@ namespace ts.Completions {
             }
 
             let parent = contextToken.parent;
-            importCompletionNode = getImportCompletionNode(parent);
+            importCompletionNode = getImportCompletionNode(contextToken);
             if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
                 isRightOfDot = contextToken.kind === SyntaxKind.DotToken;
                 isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
@@ -1437,7 +1466,7 @@ namespace ts.Completions {
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
             if (!shouldOfferImportCompletions()) return GlobalsSearch.Fail;
-            collectAndFilterAutoImportCompletions();
+            collectAndFilterAutoImportCompletions(!!importCompletionNode);
             return GlobalsSearch.Success;
         }
 
@@ -1518,6 +1547,9 @@ namespace ts.Completions {
                         symbols.push(autoImport.symbol);
                         symbolToOriginInfoMap[symbolId] = autoImport.origin;
                     }
+                }
+                else if (resolveModuleSpecifier) {
+                    collectAutoImportsWithModuleSpecifiers(lowerCaseTokenText);
                 }
                 else {
                     const autoImportSuggestions = getSymbolsFromOtherSourceFileExports(program.getCompilerOptions().target!, host);
@@ -1689,6 +1721,47 @@ namespace ts.Completions {
                 typeChecker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, seenModules));
         }
 
+        /** Mutates `symbols`, `symbolToOriginInfoMap`, and `symbolToSortTextMap` */
+        function collectAutoImportsWithModuleSpecifiers(lowerCaseTokenText: string) {
+            if (detailsEntryId?.source && host.resolveModuleNames) {
+                const resolved = Debug.checkDefined(
+                    host.resolveModuleNames([detailsEntryId.source], sourceFile.fileName, /*reusedNames*/ undefined, /*redirectedReference*/ undefined, program.getCompilerOptions())[0],
+                    "Completion entry source did not pass module resolution"
+                );
+
+                const moduleSymbol = Debug.checkDefined(
+                    program.getSourceFile(resolved.resolvedFileName) || host.getPackageJsonAutoImportProvider?.()?.getSourceFile(resolved.resolvedFileName),
+                    "Could not find an existing SourceFile for completion entry source"
+                ).symbol;
+
+                const checker = program.getTypeChecker();
+                const exportedSymbol = Debug.checkDefined(
+                    checker.tryGetMemberInModuleExportsAndProperties(detailsEntryId.name, moduleSymbol) ||
+                    host.getPackageJsonAutoImportProvider?.()?.getTypeChecker().tryGetMemberInModuleExportsAndProperties(detailsEntryId.name, moduleSymbol),
+                    "Could not find an export by the completion entry name at the completion entry source"
+                );
+
+                const symbolId = getSymbolId(exportedSymbol);
+                symbols.push(exportedSymbol);
+                symbolToOriginInfoMap[symbolId] = { kind: SymbolOriginInfoKind.ResolvedExport, moduleSpecifier: detailsEntryId.source, symbolName: detailsEntryId.name };
+                return;
+            }
+
+            const target = getEmitScriptTarget(program.getCompilerOptions());
+            const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*useAutoImportProvider*/ true);
+            exportInfo.forEach((info, symbol) => {
+                const symbolName = getNameForExportedSymbol(symbol, target);
+                if (stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
+                    const moduleSpecifier = codefix.getBestModuleSpecifier(info, sourceFile, /*position*/ undefined, /*preferTypeOnlyImport*/ false, /*useRequire*/ false, program, host, preferences);
+                    const symbolId = getSymbolId(symbol);
+                    symbols.push(symbol);
+                    // `isFromPackageJson` should all be the same
+                    symbolToOriginInfoMap[symbolId] = { kind: SymbolOriginInfoKind.ResolvedExport, moduleSpecifier, symbolName, isFromPackageJson: info[0].isFromPackageJson };
+                    symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+                }
+            });
+        }
+
         /**
          * Gathers symbols that can be imported from other files, de-duplicating along the way. Symbols can be "duplicates"
          * if re-exported from another module by the same name, e.g. `export { foo } from "./a"`.
@@ -1757,6 +1830,7 @@ namespace ts.Completions {
                     const origin: SymbolOriginInfoExport = {
                         kind: SymbolOriginInfoKind.Export,
                         moduleSymbol,
+                        symbolName,
                         isDefaultExport,
                         isFromPackageJson,
                         exportName,
@@ -1791,6 +1865,7 @@ namespace ts.Completions {
                 origin: {
                     kind: SymbolOriginInfoKind.Export,
                     moduleSymbol,
+                    symbolName: "",
                     isDefaultExport,
                     exportName: data.exportName,
                     fileName: data.fileName,
@@ -2610,7 +2685,7 @@ namespace ts.Completions {
         kind: CompletionKind,
         jsxIdentifierExpected: boolean,
     ): CompletionEntryDisplayNameForSymbol | undefined {
-        const name = originIsExport(origin) ? getNameForExportedSymbol(symbol, target) : symbol.name;
+        const name = originIncludesSymbolName(origin) ? origin.symbolName : symbol.name;
         if (name === undefined
             // If the symbol is external module, don't show it in the completion list
             // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
@@ -2927,12 +3002,17 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getImportCompletionNode(parent: Node) {
+    function getImportCompletionNode(contextToken: Node) {
+        const parent = contextToken.parent;
         if (isImportEqualsDeclaration(parent)) {
             return nodeIsMissing(parent.moduleReference) ? parent : undefined;
         }
         if (isNamedImports(parent) || isNamespaceImport(parent)) {
             return nodeIsMissing(parent.parent.parent.moduleSpecifier) ? parent.parent.parent : undefined;
+        }
+        if (isImportKeyword(contextToken) && isSourceFile(parent)) {
+            // A lone import keyword with nothing following it does not parse as a statement at all
+            return contextToken;
         }
         return undefined;
     }
