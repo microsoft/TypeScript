@@ -6,7 +6,7 @@
 type TV0<T extends unknown[]> = [string, ...T];
 type TV1<T extends unknown[]> = [string, ...T, number];
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
+type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
 
 // Normalization
 
@@ -208,11 +208,18 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 // Inference between variadic tuple types
 
-type First<T extends readonly unknown[]> = T[0];
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+type First<T extends readonly unknown[]> =
+    T extends readonly [unknown, ...unknown[]] ? T[0] :
+    T[0] | undefined;
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+
+type Last<T extends readonly unknown[]> =
+    T extends readonly [...unknown[], infer U] ? U :
+    T extends readonly [unknown, ...unknown[]] ? T[number] :
+    T[number] | undefined;
+
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 
 type T00 = First<[number, symbol, string]>;
 type T01 = First<[symbol, string]>;
@@ -243,8 +250,8 @@ type T23 = Last<[number, symbol, ...string[]]>;
 type T24 = Last<[symbol, ...string[]]>;
 type T25 = Last<[string?]>;
 type T26 = Last<string[]>;
-type T27 = Last<[]>;  // unknown, maybe should undefined
-type T28 = Last<any>;  // unknown, maybe should be any
+type T27 = Last<[]>;
+type T28 = Last<any>;
 type T29 = Last<never>;
 
 type T30 = DropLast<[number, symbol, string]>;
@@ -342,10 +349,6 @@ ft(['a', 'b'], ['c', 'd', 42])
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 
 call('hello', 32, (a, b) => 42);
-
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-
 call(...sa, (...x) => 42);
 
 // No inference to ending optional elements (except with identical structure)
@@ -394,7 +397,7 @@ callApi(getOrgUser);
 
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
-const data: Unbounded = [false, false];
+const data: Unbounded = [false, false];  // Error
 
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];

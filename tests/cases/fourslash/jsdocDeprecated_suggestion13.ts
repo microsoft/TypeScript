@@ -18,7 +18,7 @@ const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
-        "message": "'foo' is deprecated",
+        "message": "'foo' is deprecated.",
         "reportsDeprecated": true,
         "range": ranges[0]
     },

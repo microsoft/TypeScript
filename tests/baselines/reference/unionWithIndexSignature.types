@@ -16,12 +16,12 @@ interface StrList {
 
 export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
 >foo : <T extends NumList | StrList>(arr: T & (NumList | StrList)) => void
->arr : (T & NumList) | (T & StrList)
+>arr : T & (NumList | StrList)
 
   let zz = arr[1];  // Error
 >zz : string | number
 >arr[1] : string | number
->arr : (T & NumList) | (T & StrList)
+>arr : T & (NumList | StrList)
 >1 : 1
 }
 
@@ -31,7 +31,7 @@ export type TypedArray = Int32Array | Uint8Array;
 >TypedArray : TypedArray
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
->isTypedArray : (a: {}) => a is TypedArray
+>isTypedArray : (a: {}) => a is Int32Array | Uint8Array
 >a : {}
 
   return a instanceof Int32Array || a instanceof Uint8Array;
@@ -45,17 +45,17 @@ export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 }
 
 export function flatten<T extends number|TypedArray>(arr: T) {
->flatten : <T extends number | Int32Array | Uint8Array>(arr: T) => void
+>flatten : <T extends number | TypedArray>(arr: T) => void
 >arr : T
 
   if (isTypedArray(arr)) {
 >isTypedArray(arr) : boolean
->isTypedArray : (a: {}) => a is TypedArray
+>isTypedArray : (a: {}) => a is Int32Array | Uint8Array
 >arr : T
 
       arr[1];
 >arr[1] : number
->arr : (T & Int32Array) | (T & Uint8Array)
+>arr : T & (Int32Array | Uint8Array)
 >1 : 1
   }
 }

@@ -4,6 +4,8 @@ namespace ts {
     // between browsers and NodeJS:
 
     export interface PerformanceHooks {
+        /** Indicates whether we should write native performance events */
+        shouldWriteNativeEvents: boolean;
         performance: Performance;
         PerformanceObserver: PerformanceObserverConstructor;
     }
@@ -37,6 +39,7 @@ namespace ts {
     export type PerformanceEntryList = PerformanceEntry[];
 
     // Browser globals for the Web Performance User Timings API
+    declare const process: any;
     declare const performance: Performance | undefined;
     declare const PerformanceObserver: PerformanceObserverConstructor | undefined;
 
@@ -55,6 +58,10 @@ namespace ts {
             typeof PerformanceObserver === "function" &&
             hasRequiredAPI(performance, PerformanceObserver)) {
             return {
+                // For now we always write native performance events when running in the browser. We may
+                // make this conditional in the future if we find that native web performance hooks
+                // in the browser also slow down compilation.
+                shouldWriteNativeEvents: true,
                 performance,
                 PerformanceObserver
             };
@@ -62,10 +69,12 @@ namespace ts {
     }
 
     function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
-        if (typeof module === "object" && typeof require === "function") {
+        if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof module === "object" && typeof require === "function") {
             try {
-                const { performance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
-                if (hasRequiredAPI(performance, PerformanceObserver)) {
+                let performance: Performance;
+                const { performance: nodePerformance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
+                if (hasRequiredAPI(nodePerformance, PerformanceObserver)) {
+                    performance = nodePerformance;
                     // There is a bug in Node's performance.measure prior to 12.16.3/13.13.0 that does not
                     // match the Web Performance API specification. Node's implementation did not allow
                     // optional `start` and `end` arguments for `performance.measure`.
@@ -73,26 +82,25 @@ namespace ts {
                     const version = new Version(process.versions.node);
                     const range = new VersionRange("<12.16.3 || 13 <13.13");
                     if (range.test(version)) {
-                        return {
-                            performance: {
-                                get timeOrigin() { return performance.timeOrigin; },
-                                now() { return performance.now(); },
-                                mark(name) { return performance.mark(name); },
-                                measure(name, start = "nodeStart", end?) {
-                                    if (end === undefined) {
-                                        end = "__performance.measure-fix__";
-                                        performance.mark(end);
-                                    }
-                                    performance.measure(name, start, end);
-                                    if (end === "__performance.measure-fix__") {
-                                        performance.clearMarks("__performance.measure-fix__");
-                                    }
+                        performance = {
+                            get timeOrigin() { return nodePerformance.timeOrigin; },
+                            now() { return nodePerformance.now(); },
+                            mark(name) { return nodePerformance.mark(name); },
+                            measure(name, start = "nodeStart", end?) {
+                                if (end === undefined) {
+                                    end = "__performance.measure-fix__";
+                                    nodePerformance.mark(end);
                                 }
-                            },
-                            PerformanceObserver
+                                nodePerformance.measure(name, start, end);
+                                if (end === "__performance.measure-fix__") {
+                                    nodePerformance.clearMarks("__performance.measure-fix__");
+                                }
+                            }
                         };
                     }
                     return {
+                        // By default, only write native events when generating a cpu profile or using the v8 profiler.
+                        shouldWriteNativeEvents: false,
                         performance,
                         PerformanceObserver
                     };

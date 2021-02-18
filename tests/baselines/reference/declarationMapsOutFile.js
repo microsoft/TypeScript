@@ -20,7 +20,7 @@ export { c, Foo };
 
 
 //// [bundle.js]
-define("example/a", ["require", "exports"], function (require, exports) {
+define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     exports.Foo = void 0;
@@ -37,7 +37,7 @@ define("example/a", ["require", "exports"], function (require, exports) {
     }());
     exports.Foo = Foo;
 });
-define("example/index", ["require", "exports", "example/a"], function (require, exports, a_1) {
+define("index", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
     exports.Foo = exports.c = exports.x = void 0;
@@ -50,7 +50,7 @@ define("example/index", ["require", "exports", "example/a"], function (require, 
 
 
 //// [bundle.d.ts]
-declare module "example/a" {
+declare module "a" {
     export class Foo {
         doThing(x: {
             a: number;
@@ -60,8 +60,8 @@ declare module "example/a" {
         static make(): Foo;
     }
 }
-declare module "example/index" {
-    import { Foo } from "example/a";
+declare module "index" {
+    import { Foo } from "a";
     const c: Foo;
     export let x: {
         b: number;

@@ -907,6 +907,10 @@ namespace ts {
         }
     }
 
+    export function hasPossibleExternalModuleReference(node: Node): node is AnyImportOrReExport | ModuleDeclaration | ImportTypeNode | ImportCall {
+        return isAnyImportOrReExport(node) || isModuleDeclaration(node) || isImportTypeNode(node) || isImportCall(node);
+    }
+
     export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
         return isAnyImportSyntax(node) || isExportDeclaration(node);
     }
@@ -2426,7 +2430,7 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall | ModuleDeclaration): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -2435,6 +2439,10 @@ namespace ts {
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
             case SyntaxKind.ImportType:
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
+            case SyntaxKind.CallExpression:
+                return node.arguments[0];
+            case SyntaxKind.ModuleDeclaration:
+                return node.name.kind === SyntaxKind.StringLiteral ? node.name : undefined;
             default:
                 return Debug.assertNever(node);
         }
@@ -2622,18 +2630,31 @@ namespace ts {
 
     export function getEffectiveJSDocHost(node: Node): Node | undefined {
         const host = getJSDocHost(node);
-        const decl = getSourceOfDefaultedAssignment(host) ||
-            getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
-            getSingleVariableOfVariableStatement(host) ||
-            getNestedModuleDeclaration(host) ||
-            host;
-        return decl;
+        if (host) {
+            return getSourceOfDefaultedAssignment(host)
+                || getSourceOfAssignment(host)
+                || getSingleInitializerOfVariableStatementOrPropertyDeclaration(host)
+                || getSingleVariableOfVariableStatement(host)
+                || getNestedModuleDeclaration(host)
+                || host;
+        }
     }
 
-    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments.  */
-    export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
+    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments. */
+    export function getJSDocHost(node: Node): HasJSDoc | undefined {
+        const jsDoc = getJSDocRoot(node);
+        if (!jsDoc) {
+            return undefined;
+        }
+
+        const host = jsDoc.parent;
+        if (host && host.jsDoc && jsDoc === lastOrUndefined(host.jsDoc)) {
+            return host;
+        }
+    }
+
+    export function getJSDocRoot(node: Node): JSDoc | undefined {
+        return findAncestor(node.parent, isJSDoc);
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -2979,7 +3000,7 @@ namespace ts {
     }
 
     export function getEffectiveImplementsTypeNodes(node: ClassLikeDeclaration): undefined | readonly ExpressionWithTypeArguments[]{
-        if(isInJSFile(node)) {
+        if (isInJSFile(node)) {
             return getJSDocImplementsTags(node).map(n => n.class);
         }
         else {
@@ -3052,14 +3073,7 @@ namespace ts {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
-    export type TriviaKind =
-        SyntaxKind.SingleLineCommentTrivia
-        | SyntaxKind.MultiLineCommentTrivia
-        | SyntaxKind.NewLineTrivia
-        | SyntaxKind.WhitespaceTrivia
-        | SyntaxKind.ShebangTrivia
-        | SyntaxKind.ConflictMarkerTrivia;
-    export function isTrivia(token: SyntaxKind): token is TriviaKind {
+    export function isTrivia(token: SyntaxKind): token is TriviaSyntaxKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
@@ -3567,7 +3581,8 @@ namespace ts {
                 }
 
             // TODO: Should prefix `++` and `--` be moved to the `Update` precedence?
-            // TODO: We are missing `TypeAssertionExpression`
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.NonNullExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
@@ -3588,6 +3603,9 @@ namespace ts {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return OperatorPrecedence.Member;
+
+            case SyntaxKind.AsExpression:
+                return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
@@ -4096,16 +4114,25 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
-        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName, referenceFile && referenceFile.fileName);
     }
 
+    function getCanonicalAbsolutePath(host: ResolveModuleNameResolutionHost, path: string) {
+        return host.getCanonicalFileName(getNormalizedAbsolutePath(path, host.getCurrentDirectory()));
+    }
+
     export function getExternalModuleNameFromDeclaration(host: ResolveModuleNameResolutionHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): string | undefined {
         const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || file.isDeclarationFile) {
+            return undefined;
+        }
+        // If the declaration already uses a non-relative name, and is outside the common source directory, continue to use it
+        const specifier = getExternalModuleName(declaration);
+        if (specifier && isStringLiteralLike(specifier) && !pathIsRelative(specifier.text) &&
+            getCanonicalAbsolutePath(host, file.path).indexOf(getCanonicalAbsolutePath(host, ensureTrailingDirectorySeparator(host.getCommonSourceDirectory()))) === -1) {
             return undefined;
         }
         return getResolvedExternalModuleName(host, file);
@@ -4120,16 +4147,7 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        if (referencePath) {
-            return ensurePathIsNonModuleName(extensionless);
-        }
-        const options = host.getCompilerOptions();
-        const rootPkgName = options.bundledPackageName || "";
-        const newPath = combinePaths(rootPkgName, extensionless);
-        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
-            return newPath.slice(0, newPath.length - "/index".length);
-        }
-        return newPath;
+        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4735,7 +4753,7 @@ namespace ts {
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -4860,6 +4878,12 @@ namespace ts {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
             if (baseStr !== undefined) {
                 return baseStr + "." + entityNameToString(expr.name);
+            }
+        }
+        else if (isElementAccessExpression(expr)) {
+            const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
+            if (baseStr !== undefined && isPropertyName(expr.argumentExpression)) {
+                return baseStr + "." + getPropertyNameForPropertyNameNode(expr.argumentExpression);
             }
         }
         else if (isIdentifier(expr)) {
@@ -5436,11 +5460,6 @@ namespace ts {
         });
     }
 
-    // Return true if the given type is the constructor type for an abstract class
-    export function isAbstractConstructorType(type: Type): boolean {
-        return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
-    }
-
     export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
         if (symbol.flags & SymbolFlags.Class) {
             const declaration = getClassLikeDeclarationOfSymbol(symbol);
@@ -5624,7 +5643,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging || tracing.isTracing()) {
+        if (Debug.isDebugging || tracing) {
             this.checker = checker;
         }
     }
@@ -6000,6 +6019,10 @@ namespace ts {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
+    export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
+        return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
+    }
+
     export function isIncrementalCompilation(options: CompilerOptions) {
         return !!(options.incremental || options.composite);
     }
@@ -6078,25 +6101,43 @@ namespace ts {
     }
 
     export interface SymlinkCache {
+        /** Gets a map from symlink to realpath. Keys have trailing directory separators. */
         getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+        /** Gets a map from realpath to symlinks. Keys have trailing directory separators. */
+        getSymlinkedDirectoriesByRealpath(): MultiMap<Path, string> | undefined;
+        /** Gets a map from symlink to realpath */
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
-        setSymlinkedDirectory(path: Path, directory: SymlinkedDirectory | false): void;
-        setSymlinkedFile(path: Path, real: string): void;
+        setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
+        setSymlinkedFile(symlinkPath: Path, real: string): void;
     }
 
-    export function createSymlinkCache(): SymlinkCache {
+    export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
+            getSymlinkedDirectoriesByRealpath: () => symlinkedDirectoriesByRealpath,
             setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
-            setSymlinkedDirectory: (path, directory) => (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory),
+            setSymlinkedDirectory: (symlink, real) => {
+                // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
+                // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
+                // this path is never a candidate for a module specifier, we can ignore it entirely.
+                let symlinkPath = toPath(symlink, cwd, getCanonicalFileName);
+                if (!containsIgnoredPath(symlinkPath)) {
+                    symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
+                    if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
+                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                    }
+                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
+                }
+            }
         };
     }
 
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
-        const cache = createSymlinkCache();
+        const cache = createSymlinkCache(cwd, getCanonicalFileName);
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
@@ -6104,7 +6145,7 @@ namespace ts {
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
-                    toPath(commonOriginal, cwd, getCanonicalFileName),
+                    commonOriginal,
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }
@@ -6112,8 +6153,8 @@ namespace ts {
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
-        const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
-        const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        const aParts = getPathComponents(getNormalizedAbsolutePath(a, cwd));
+        const bParts = getPathComponents(getNormalizedAbsolutePath(b, cwd));
         let isDirectory = false;
         while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
@@ -6543,6 +6584,18 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    function numberOfDirectorySeparators(str: string) {
+        const match = str.match(/\//g);
+        return match ? match.length : 0;
+    }
+
+    export function compareNumberOfDirectorySeparators(path1: string, path2: string) {
+        return compareValues(
+            numberOfDirectorySeparators(path1),
+            numberOfDirectorySeparators(path2)
+        );
     }
 
     /**
@@ -7017,6 +7070,17 @@ namespace ts {
         }
     }
 
+    function isPackedElement(node: Expression) {
+        return !isOmittedExpression(node);
+    }
+
+    /**
+     * Determines whether the provided node is an ArrayLiteralExpression that contains no missing elements.
+     */
+    export function isPackedArrayLiteral(node: Expression) {
+        return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
+    }
+
     /**
      * Indicates whether the result of an `Expression` will be unused.
      *
@@ -7053,5 +7117,9 @@ namespace ts {
             }
             return false;
         }
+    }
+
+    export function containsIgnoredPath(path: string) {
+        return some(ignoredPaths, p => stringContains(path, p));
     }
 }

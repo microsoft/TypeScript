@@ -1,0 +1,16 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 8,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "comment": {
+        "kind": "JSDocCommentText",
+        "pos": 0,
+        "end": 6,
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
+        "text": "*@a"
+    }
+}

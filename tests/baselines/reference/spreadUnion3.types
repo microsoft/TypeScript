@@ -24,15 +24,15 @@ function g(t?: { a: number } | null): void {
 >null : null
 
     let b = { ...t };
->b : {}
->{ ...t } : {} | {} | { a: number; }
+>b : { a?: number | undefined; }
+>{ ...t } : { a?: number | undefined; }
 >t : { a: number; } | null | undefined
 
     let c: number = b.a;  // might not have 'a'
 >c : number
->b.a : any
->b : {}
->a : any
+>b.a : number | undefined
+>b : { a?: number | undefined; }
+>a : number | undefined
 }
 g()
 >g() : void

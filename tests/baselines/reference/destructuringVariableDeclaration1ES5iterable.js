@@ -58,9 +58,10 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
@@ -86,7 +87,7 @@ var _s = __read([1, "string"], 2), d1 = _s[0], d2 = _s[1];
 //      Otherwise, if S is a tuple- like type (section 3.3.3):
 //              Otherwise, if S has a numeric index signature, T is the type of the numeric index signature.
 var temp1 = [true, false, true];
-var _t = __read(__spread([1, "string"], temp1), 2), d3 = _t[0], d4 = _t[1];
+var _t = __read(__spreadArray([1, "string"], __read(temp1)), 2), d3 = _t[0], d4 = _t[1];
 //  Combining both forms of destructuring,
 var _u = __read({ e: [1, 2, { b1: 4, b4: 0 }] }.e, 3), e1 = _u[0], e2 = _u[1], _v = _u[2], e3 = _v === void 0 ? { b1: 1000, b4: 200 } : _v;
 var _w = __read({ f: [1, 2, { f3: 4, f5: 0 }] }.f, 4), f1 = _w[0], f2 = _w[1], _x = _w[2], f4 = _x.f3, f5 = _x.f5;

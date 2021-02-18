@@ -215,6 +215,10 @@ namespace FourSlashInterface {
             this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
 
+        public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
+            this.state.verifyRefactorKindsAvailable(kind, expected, preferences);
+        }
+
         public toggleLineComment(newFileContent: string) {
             this.state.toggleLineComment(newFileContent);
         }
@@ -428,9 +432,9 @@ namespace FourSlashInterface {
             this.state.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string) {
+        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
             this.state.goToMarker(marker);
-            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset });
+            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
         }
 
         public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {

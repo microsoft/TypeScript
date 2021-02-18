@@ -346,7 +346,7 @@ oh.no
  *   Comments
  * @author Early Close Caret > <a@b>
  * @author No Line Breaks:
- *   <the.email@address> must be on the same line to parse
+ *   <the email @address> must be on the same line to parse
  * @author Long Comment <long@comment.org> I
  *  want to keep commenting down here, I dunno.
  */`);
@@ -355,6 +355,22 @@ oh.no
                     `/**
  * @example
  * Some\n\n * text\r\n * with newlines.
+ */`);
+                parsesCorrectly("Chained tags, no leading whitespace", `/**@a @b @c@d*/`);
+                parsesCorrectly("Initial star is not a tag", `/***@a*/`);
+                parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
+                parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);
+                parsesCorrectly("no space before @ is not a new tag",
+                    `/**
+ * @param this (@is@)
+ * @param fine its@fine
+@zerowidth
+*@singlestar
+**@doublestar
+ */`);
+                parsesCorrectly("@@ does not start a new tag",
+                    `/**
+ * @param this is (@@fine@@and) is one comment
  */`);
             });
         });
@@ -380,6 +396,10 @@ oh.no
         describe("getStart of node with JSDoc but no parent pointers", () => {
             const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
             root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+        });
+        describe("missing type parameter in jsDoc doesn't create a 1-element array", () => {
+            const doc = parseIsolatedJSDocComment("/**\n    @template\n*/");
+            assert.equal((doc?.jsDoc.tags?.[0] as JSDocTemplateTag).typeParameters.length, 0);
         });
     });
 }
