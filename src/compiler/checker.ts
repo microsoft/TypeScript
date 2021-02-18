@@ -21978,7 +21978,16 @@ namespace ts {
                         const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression, diagnostic);
                         if (type) {
                             const name = (<PropertyAccessExpression>node).name;
-                            const prop = getPropertyOfType(type, isPrivateIdentifier(name) ? getSymbolNameForPrivateIdentifier(type.symbol, name.escapedText) : name.escapedText);
+                            let prop: Symbol | undefined;
+                            if (isPrivateIdentifier(name)) {
+                                if (!type.symbol) {
+                                    return undefined;
+                                }
+                                prop = getPropertyOfType(type, getSymbolNameForPrivateIdentifier(type.symbol, name.escapedText));
+                            }
+                            else {
+                                prop = getPropertyOfType(type, name.escapedText);
+                            }
                             return prop && getExplicitTypeOfSymbol(prop, diagnostic);
                         }
                         return undefined;
