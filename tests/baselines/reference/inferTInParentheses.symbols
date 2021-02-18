@@ -1,0 +1,73 @@
+=== tests/cases/compiler/inferTInParentheses.ts ===
+type F1 = (num: [number]) => void;
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>num : Symbol(num, Decl(inferTInParentheses.ts, 0, 11))
+
+type IsNumber<T extends number> = T;
+>IsNumber : Symbol(IsNumber, Decl(inferTInParentheses.ts, 0, 34))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 1, 14))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 1, 14))
+
+type T1 = F1 extends (...args: (infer T)) => void ? T : never;
+>T1 : Symbol(T1, Decl(inferTInParentheses.ts, 1, 36))
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>args : Symbol(args, Decl(inferTInParentheses.ts, 3, 22))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 3, 37))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 3, 37))
+
+type T2 = F1 extends (args: [...(infer T)]) => void ? T : never;
+>T2 : Symbol(T2, Decl(inferTInParentheses.ts, 3, 62))
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>args : Symbol(args, Decl(inferTInParentheses.ts, 4, 22))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 4, 38))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 4, 38))
+
+type T3<T> = T extends IsNumber<(infer N)> ? true : false;
+>T3 : Symbol(T3, Decl(inferTInParentheses.ts, 4, 64))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 5, 8))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 5, 8))
+>IsNumber : Symbol(IsNumber, Decl(inferTInParentheses.ts, 0, 34))
+>N : Symbol(N, Decl(inferTInParentheses.ts, 5, 38))
+
+type T4 = F1 extends (...args: ((infer T))) => void ? T : never;
+>T4 : Symbol(T4, Decl(inferTInParentheses.ts, 5, 58))
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>args : Symbol(args, Decl(inferTInParentheses.ts, 7, 22))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 7, 38))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 7, 38))
+
+type T5 = F1 extends (args: [...((infer T))]) => void ? T : never;
+>T5 : Symbol(T5, Decl(inferTInParentheses.ts, 7, 64))
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>args : Symbol(args, Decl(inferTInParentheses.ts, 8, 22))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 8, 39))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 8, 39))
+
+type T6<T> = T extends IsNumber<((infer N))> ? true : false;
+>T6 : Symbol(T6, Decl(inferTInParentheses.ts, 8, 66))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 9, 8))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 9, 8))
+>IsNumber : Symbol(IsNumber, Decl(inferTInParentheses.ts, 0, 34))
+>N : Symbol(N, Decl(inferTInParentheses.ts, 9, 39))
+
+type T7 = F1 extends (...args: ((((infer T))))) => void ? T : never;
+>T7 : Symbol(T7, Decl(inferTInParentheses.ts, 9, 60))
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>args : Symbol(args, Decl(inferTInParentheses.ts, 11, 22))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 11, 40))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 11, 40))
+
+type T8 = F1 extends (args: [...((((infer T))))]) => void ? T : never;
+>T8 : Symbol(T8, Decl(inferTInParentheses.ts, 11, 68))
+>F1 : Symbol(F1, Decl(inferTInParentheses.ts, 0, 0))
+>args : Symbol(args, Decl(inferTInParentheses.ts, 12, 22))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 12, 41))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 12, 41))
+
+type T9<T> = T extends IsNumber<((((infer N))))> ? true : false;
+>T9 : Symbol(T9, Decl(inferTInParentheses.ts, 12, 70))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 13, 8))
+>T : Symbol(T, Decl(inferTInParentheses.ts, 13, 8))
+>IsNumber : Symbol(IsNumber, Decl(inferTInParentheses.ts, 0, 34))
+>N : Symbol(N, Decl(inferTInParentheses.ts, 13, 41))
+

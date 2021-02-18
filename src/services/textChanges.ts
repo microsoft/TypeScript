@@ -56,6 +56,8 @@ namespace ts.textChanges {
     export enum TrailingTriviaOption {
         /** Exclude all trailing trivia (use getEnd()) */
         Exclude,
+        /** Doesn't include whitespace, but does strip comments */
+        ExcludeWhitespace,
         /** Include trailing trivia */
         Include,
     }
@@ -209,10 +211,19 @@ namespace ts.textChanges {
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         const { end } = node;
         const { trailingTriviaOption } = options;
-        if (trailingTriviaOption === TrailingTriviaOption.Exclude || (isExpression(node) && trailingTriviaOption !== TrailingTriviaOption.Include)) {
+        if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
+            return end;
+        }
+        if (trailingTriviaOption === TrailingTriviaOption.ExcludeWhitespace) {
+            const comments = concatenate(getTrailingCommentRanges(sourceFile.text, end), getLeadingCommentRanges(sourceFile.text, end));
+            const realEnd = comments?.[comments.length - 1]?.end;
+            if (realEnd) {
+                return realEnd;
+            }
             return end;
         }
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
+
         return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
             ? newEnd
             : end;
@@ -243,7 +254,7 @@ namespace ts.textChanges {
 
     export type ThisTypeAnnotatable = FunctionDeclaration | FunctionExpression;
 
-    export function isThisTypeAnnotatable(containingFunction: FunctionLike): containingFunction is ThisTypeAnnotatable {
+    export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration): containingFunction is ThisTypeAnnotatable {
         return isFunctionExpression(containingFunction) || isFunctionDeclaration(containingFunction);
     }
 
@@ -388,19 +399,12 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
         }
 
-        public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
-            const pos = before.getStart(sourceFile);
-            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), { suffix: " " });
+        public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
+            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), options);
         }
 
-        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
-            if (!before.modifiers) {
-                this.insertModifierBefore(sourceFile, modifier, before);
-                return;
-            }
-
-            const pos = before.modifiers.end;
-            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), { prefix: " " });
+        public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+            return this.insertModifierAt(sourceFile, before.getStart(sourceFile), modifier, { suffix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -832,7 +836,7 @@ namespace ts.textChanges {
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
-                        this.deleteRange(sourceFile, rangeOfTypeParameters(node));
+                        this.deleteRange(sourceFile, rangeOfTypeParameters(sourceFile, node));
                     }
                     else {
                         deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);

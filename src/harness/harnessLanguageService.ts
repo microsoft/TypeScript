@@ -461,14 +461,15 @@ namespace Harness.LanguageService {
         getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
         }
-        getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
-            return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
+        getSemanticClassifications(fileName: string, span: ts.TextSpan, format?: ts.SemanticClassificationFormat): ts.ClassifiedSpan[] {
+            return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length, format));
         }
         getEncodedSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSyntacticClassifications(fileName, span.start, span.length));
         }
-        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
-            return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
+        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan, format?: ts.SemanticClassificationFormat): ts.Classifications {
+            const responseFormat = format || ts.SemanticClassificationFormat.Original;
+            return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length, responseFormat));
         }
         getCompletionsAtPosition(fileName: string, position: number, preferences: ts.UserPreferences | undefined): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, preferences));
@@ -518,6 +519,9 @@ namespace Harness.LanguageService {
         findReferences(fileName: string, position: number): ts.ReferencedSymbol[] {
             return unwrapJSONCallResult(this.shim.findReferences(fileName, position));
         }
+        getFileReferences(fileName: string): ts.ReferenceEntry[] {
+            return unwrapJSONCallResult(this.shim.getFileReferences(fileName));
+        }
         getOccurrencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
             return unwrapJSONCallResult(this.shim.getOccurrencesAtPosition(fileName, position));
         }
@@ -554,8 +558,8 @@ namespace Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
-            return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions): ts.TextInsertion {
+            return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options));
         }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));

@@ -283,6 +283,25 @@ namespace ts.projectSystem {
             // Project for A is created - ensure it doesn't have an autoImportProvider
             assert.isUndefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getLanguageService().getAutoImportProvider());
         });
+
+        it("Does not close when root files are redirects that don't actually exist", () => {
+            const files = [
+                // packages/a
+                { path: "/packages/a/package.json", content: `{ "dependencies": { "b": "*" } }` },
+                { path: "/packages/a/tsconfig.json", content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "./node_modules/b" }] }` },
+                { path: "/packages/a/index.ts", content: "" },
+
+                // packages/b
+                { path: "/packages/a/node_modules/b/package.json", content: `{ "types": "dist/index.d.ts" }` },
+                { path: "/packages/a/node_modules/b/tsconfig.json", content: `{ "compilerOptions": { "composite": true, "outDir": "dist" } }` },
+                { path: "/packages/a/node_modules/b/index.ts", content: `export class B {}` }
+            ];
+
+            const { projectService, session } = setup(files);
+            openFilesForSession([files[2]], session);
+            assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
+            assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
+        });
     });
 
     function setup(files: File[]) {

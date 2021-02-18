@@ -28,6 +28,9 @@
 ////         d: 1
 ////     }
 //// }
+////
+//// function foo(props: { x: number; y: number }) {}
+//// export default foo({ x: 1, y: 1 });
 
 verify.navigationTree({
   "text": '"navigationItemsExportDefaultExpression"',
@@ -91,6 +94,21 @@ verify.navigationTree({
       ]
     },
     {
+      "text": "default",
+      "kind": "const",
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "x",
+          "kind": "property"
+        },
+        {
+          "text": "y",
+          "kind": "property"
+        }
+      ]
+    },
+    {
       "text": "AB",
       "kind": "class",
       "kindModifiers": "export"
@@ -119,6 +137,10 @@ verify.navigationTree({
           "kind": "class"
         }
       ]
+    },
+    {
+      "text": "foo",
+      "kind": "function"
     }
   ]
 });

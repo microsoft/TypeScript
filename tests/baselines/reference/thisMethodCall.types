@@ -9,7 +9,7 @@ class C {
 >other : () => void
 
         this.method?.();
->this.method?.() : void | undefined
+>this.method?.() : void
 >this.method : (() => void) | undefined
 >this : this
 >method : (() => void) | undefined

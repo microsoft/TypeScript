@@ -1,0 +1,69 @@
+=== tests/cases/conformance/jsdoc/declarations/supplement.d.ts ===
+export { };
+declare module "./argument.js" {
+>"./argument.js" : typeof import("tests/cases/conformance/jsdoc/declarations/argument")
+
+    interface Argument {
+        idlType: any;
+>idlType : any
+
+        default: null;
+>default : null
+>null : null
+    }
+}
+=== tests/cases/conformance/jsdoc/declarations/base.js ===
+export class Base {
+>Base : Base
+
+    constructor() { }
+
+    toJSON() {
+>toJSON : () => { type: any; name: any; inheritance: any; }
+
+        const json = { type: undefined, name: undefined, inheritance: undefined };
+>json : { type: any; name: any; inheritance: any; }
+>{ type: undefined, name: undefined, inheritance: undefined } : { type: undefined; name: undefined; inheritance: undefined; }
+>type : undefined
+>undefined : undefined
+>name : undefined
+>undefined : undefined
+>inheritance : undefined
+>undefined : undefined
+
+        return json;
+>json : { type: any; name: any; inheritance: any; }
+    }
+}
+=== tests/cases/conformance/jsdoc/declarations/argument.js ===
+import { Base } from "./base.js";
+>Base : typeof Base
+
+export class Argument extends Base {
+>Argument : Argument
+>Base : Base
+
+    /**
+     * @param {*} tokeniser
+     */
+    static parse(tokeniser) {
+>parse : (tokeniser: any) => void
+>tokeniser : any
+
+        return;
+    }
+
+    get type() {
+>type : string
+
+        return "argument";
+>"argument" : "argument"
+    }
+
+    /**
+     * @param {*} defs
+     */
+    *validate(defs) { }
+>validate : (defs: any) => Generator<never, void, unknown>
+>defs : any
+}

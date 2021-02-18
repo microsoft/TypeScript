@@ -1,0 +1,33 @@
+=== tests/cases/conformance/declarationEmit/index.ts ===
+export {}
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/declarationEmit/nested/base.ts ===
+import { C } from "./";
+>C : typeof C
+
+export function f() {
+>f : () => C
+
+    return new C();
+>new C() : C
+>C : typeof C
+}
+
+=== tests/cases/conformance/declarationEmit/nested/derived.ts ===
+import { f } from "./base";
+>f : () => import("tests/cases/conformance/declarationEmit/nested/index").C
+
+export function g() {
+>g : () => import("tests/cases/conformance/declarationEmit/nested/index").C
+
+    return f();
+>f() : import("tests/cases/conformance/declarationEmit/nested/index").C
+>f : () => import("tests/cases/conformance/declarationEmit/nested/index").C
+}
+
+=== tests/cases/conformance/declarationEmit/nested/index.ts ===
+export * from "./base";
+export * from "./derived";
+export class C {}
+>C : C
+

@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createTemplateLiteralTypeSpan,
+            updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
             createTypePredicateNode,
             updateTypePredicateNode,
@@ -138,6 +140,8 @@ namespace ts {
             updateMappedTypeNode,
             createLiteralTypeNode,
             updateLiteralTypeNode,
+            createTemplateLiteralType,
+            updateTemplateLiteralType,
             createObjectBindingPattern,
             updateObjectBindingPattern,
             createArrayBindingPattern,
@@ -337,6 +341,10 @@ namespace ts {
             updateJSDocAugmentsTag,
             createJSDocImplementsTag,
             updateJSDocImplementsTag,
+            createJSDocSeeTag,
+            updateJSDocSeeTag,
+            createJSDocNameReference,
+            updateJSDocNameReference,
             // lazily load factory members for JSDoc tags with similar structure
             get createJSDocTypeTag() { return getJSDocTypeLikeTagCreateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
             get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
@@ -1596,6 +1604,23 @@ namespace ts {
                 : node;
         }
 
+        // @api
+        function createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            const node = createBaseNode<TemplateLiteralTypeSpan>(SyntaxKind.TemplateLiteralTypeSpan);
+            node.type = type;
+            node.literal = literal;
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            return node.type !== type
+                || node.literal !== literal
+                ? update(createTemplateLiteralTypeSpan(type, literal), node)
+                : node;
+        }
+
         //
         // Types
         //
@@ -1675,7 +1700,14 @@ namespace ts {
         }
 
         // @api
-        function createConstructorTypeNode(
+        function createConstructorTypeNode(...args: Parameters<typeof createConstructorTypeNode1 | typeof createConstructorTypeNode2>) {
+            return args.length === 4 ? createConstructorTypeNode1(...args) :
+                args.length === 3 ? createConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function createConstructorTypeNode1(
+            modifiers: readonly Modifier[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
@@ -1683,7 +1715,7 @@ namespace ts {
             const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
                 SyntaxKind.ConstructorType,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 /*name*/ undefined,
                 typeParameters,
                 parameters,
@@ -1693,18 +1725,45 @@ namespace ts {
             return node;
         }
 
+        /** @deprecated */
+        function createConstructorTypeNode2(
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined
+        ): ConstructorTypeNode {
+            return createConstructorTypeNode1(/*modifiers*/ undefined, typeParameters, parameters, type);
+        }
+
         // @api
-        function updateConstructorTypeNode(
+        function updateConstructorTypeNode(...args: Parameters<typeof updateConstructorTypeNode1 | typeof updateConstructorTypeNode2>) {
+            return args.length === 5 ? updateConstructorTypeNode1(...args) :
+                args.length === 4 ? updateConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function updateConstructorTypeNode1(
+            node: ConstructorTypeNode,
+            modifiers: readonly Modifier[] | undefined,
+            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+            parameters: NodeArray<ParameterDeclaration>,
+            type: TypeNode | undefined
+        ) {
+            return node.modifiers !== modifiers
+                || node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? updateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
+                : node;
+        }
+
+        /** @deprecated */
+        function updateConstructorTypeNode2(
             node: ConstructorTypeNode,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
             parameters: NodeArray<ParameterDeclaration>,
             type: TypeNode | undefined
         ) {
-            return node.typeParameters !== typeParameters
-                || node.parameters !== parameters
-                || node.type !== type
-                ? updateBaseSignatureDeclaration(createConstructorTypeNode(typeParameters, parameters, type), node)
-                : node;
+            return updateConstructorTypeNode1(node, node.modifiers, typeParameters, parameters, type);
         }
 
         // @api
@@ -1888,6 +1947,23 @@ namespace ts {
         }
 
         // @api
+        function createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
+            const node = createBaseNode<TemplateLiteralTypeNode>(SyntaxKind.TemplateLiteralType);
+            node.head = head;
+            node.templateSpans = createNodeArray(templateSpans);
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
+            return node.head !== head
+                || node.templateSpans !== templateSpans
+                ? update(createTemplateLiteralType(head, templateSpans), node)
+                : node;
+        }
+
+        // @api
         function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf = false) {
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             node.argument = argument;
@@ -1964,10 +2040,11 @@ namespace ts {
         }
 
         // @api
-        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             const node = createBaseNode<MappedTypeNode>(SyntaxKind.MappedType);
             node.readonlyToken = readonlyToken;
             node.typeParameter = typeParameter;
+            node.nameType = nameType;
             node.questionToken = questionToken;
             node.type = type;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1975,12 +2052,13 @@ namespace ts {
         }
 
         // @api
-        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
+                || node.nameType !== nameType
                 || node.questionToken !== questionToken
                 || node.type !== type
-                ? update(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
+                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), node)
                 : node;
         }
 
@@ -2619,12 +2697,14 @@ namespace ts {
                     node.transformFlags |=
                         TransformFlags.ContainsES2015 |
                         TransformFlags.ContainsES2018 |
-                        TransformFlags.ContainsDestructuringAssignment;
+                        TransformFlags.ContainsDestructuringAssignment |
+                        propagateAssignmentPatternFlags(node.left);
                 }
                 else if (isArrayLiteralExpression(node.left)) {
                     node.transformFlags |=
                         TransformFlags.ContainsES2015 |
-                        TransformFlags.ContainsDestructuringAssignment;
+                        TransformFlags.ContainsDestructuringAssignment |
+                        propagateAssignmentPatternFlags(node.left);
                 }
             }
             else if (operatorKind === SyntaxKind.AsteriskAsteriskToken || operatorKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
@@ -2634,6 +2714,27 @@ namespace ts {
                 node.transformFlags |= TransformFlags.ContainsESNext;
             }
             return node;
+        }
+
+        function propagateAssignmentPatternFlags(node: AssignmentPattern): TransformFlags {
+            if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return TransformFlags.ContainsObjectRestOrSpread;
+            if (node.transformFlags & TransformFlags.ContainsES2018) {
+                // check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
+                // will not be correctly interpreted by the ES2018 transformer
+                for (const element of getElementsOfBindingOrAssignmentPattern(node)) {
+                    const target = getTargetOfBindingOrAssignmentElement(element);
+                    if (target && isAssignmentPattern(target)) {
+                        if (target.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                            return TransformFlags.ContainsObjectRestOrSpread;
+                        }
+                        if (target.transformFlags & TransformFlags.ContainsES2018) {
+                            const flags = propagateAssignmentPatternFlags(target);
+                            if (flags) return flags;
+                        }
+                    }
+                }
+            }
+            return TransformFlags.None;
         }
 
         // @api
@@ -3709,6 +3810,7 @@ namespace ts {
         function createImportEqualsDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
+            isTypeOnly: boolean,
             name: string | Identifier,
             moduleReference: ModuleReference
         ) {
@@ -3718,6 +3820,7 @@ namespace ts {
                 modifiers,
                 name
             );
+            node.isTypeOnly = isTypeOnly;
             node.moduleReference = moduleReference;
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
@@ -3730,14 +3833,16 @@ namespace ts {
             node: ImportEqualsDeclaration,
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
+            isTypeOnly: boolean,
             name: Identifier,
             moduleReference: ModuleReference
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
+                || node.isTypeOnly !== isTypeOnly
                 || node.name !== name
                 || node.moduleReference !== moduleReference
-                ? update(createImportEqualsDeclaration(decorators, modifiers, name, moduleReference), node)
+                ? update(createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, name, moduleReference), node)
                 : node;
         }
 
@@ -4257,6 +4362,36 @@ namespace ts {
             const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
             node.class = className;
             return node;
+        }
+
+        // @api
+        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+            const node = createBaseJSDocTag<JSDocSeeTag>(SyntaxKind.JSDocSeeTag, tagName ?? createIdentifier("see"), comment);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+            return node.tagName !== tagName
+                || node.name !== name
+                || node.comment !== comment
+                ? update(createJSDocSeeTag(tagName, name, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocNameReference(name: EntityName): JSDocNameReference {
+            const node = createBaseNode<JSDocNameReference>(SyntaxKind.JSDocNameReference);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference {
+            return node.name !== name
+                ? update(createJSDocNameReference(name), node)
+                : node;
         }
 
         // @api
@@ -5701,7 +5836,7 @@ namespace ts {
                 isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
                 isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
                 isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.name, node.moduleReference) :
                 isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
                 isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
                 isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :

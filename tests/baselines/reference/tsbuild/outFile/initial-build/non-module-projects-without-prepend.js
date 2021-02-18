@@ -47,7 +47,7 @@ function f() {
     "sourceMap": true,
     "declarationMap": true,
     
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "first_PART1.ts",
@@ -115,7 +115,7 @@ c.doSomething();
     "declarationMap": true,
     "declaration": true,
     
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
   },
   "files": [
     "third_part1.ts"
