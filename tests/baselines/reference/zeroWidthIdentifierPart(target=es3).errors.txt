@@ -1,0 +1,14 @@
+tests/cases/compiler/zeroWidthIdentifierPart.ts(2,21): error TS1127: Invalid character.
+tests/cases/compiler/zeroWidthIdentifierPart.ts(4,22): error TS1127: Invalid character.
+
+
+==== tests/cases/compiler/zeroWidthIdentifierPart.ts (2 errors) ====
+    // with ZWNJ \u200C
+    const identifierWith‌ZeroWidthNonJoiner = "";
+                        
+!!! error TS1127: Invalid character.
+    // with ZWJ \u200D
+    const indentifierWith‍ZeroWidthJoiner = ""
+                         
+!!! error TS1127: Invalid character.
+    

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/zeroWidthIdentifierPart.ts ===
+// with ZWNJ \u200C
+const identifierWith‌ZeroWidthNonJoiner = "";
+>identifierWith‌ZeroWidthNonJoiner : Symbol(identifierWith‌ZeroWidthNonJoiner, Decl(zeroWidthIdentifierPart.ts, 1, 5))
+
+// with ZWJ \u200D
+const indentifierWith‍ZeroWidthJoiner = ""
+>indentifierWith‍ZeroWidthJoiner : Symbol(indentifierWith‍ZeroWidthJoiner, Decl(zeroWidthIdentifierPart.ts, 3, 5))
+
