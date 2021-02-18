@@ -13327,26 +13327,12 @@ namespace ts {
             const hasEmptyObject = hasObjectTypes && some(types, t => !!(t.flags & TypeFlags.Object) && !isGenericMappedType(t) && isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>t)));
             const len = types.length;
             let i = len;
-            let count = 0;
             while (i > 0) {
                 i--;
                 const source = types[i];
                 if (hasEmptyObject || source.flags & TypeFlags.StructuredOrInstantiable) {
                     for (const target of types) {
                         if (source !== target) {
-                            if (count === 100000) {
-                                // After 100000 subtype checks we estimate the remaining amount of work by assuming the
-                                // same ratio of checks per element. If the estimated number of remaining type checks is
-                                // greater than 1M we deem the union type too complex to represent. This for example
-                                // caps union types at 1000 unique object types.
-                                const estimatedCount = (count / (len - i)) * len;
-                                if (estimatedCount > 1000000) {
-                                    tracing?.instant(tracing.Phase.CheckTypes, "removeSubtypes_DepthLimit", { typeIds: types.map(t => t.id) });
-                                    error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
-                                    return false;
-                                }
-                            }
-                            count++;
                             if (isTypeRelatedTo(source, target, strictSubtypeRelation) && (
                                 !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
                                 !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
@@ -13446,7 +13432,7 @@ namespace ts {
                         removeStringLiteralsMatchedByTemplateLiterals(typeSet);
                     }
                 }
-                if (unionReduction & UnionReduction.Subtype) {
+                if (unionReduction & UnionReduction.Subtype && typeSet.length < 100) {
                     if (!removeSubtypes(typeSet, !!(includes & TypeFlags.Object))) {
                         return errorType;
                     }
@@ -25184,9 +25170,9 @@ namespace ts {
             if (forceTuple || inConstContext || contextualType && forEachType(contextualType, isTupleLikeType)) {
                 return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
             }
-            const reduction = !contextualType || checkMode && checkMode & CheckMode.Inferential ? UnionReduction.Subtype : UnionReduction.Literal;
+            const deduplicatedTypes = deduplicateObjectOrArrayLiteralTypes(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t));
             return createArrayLiteralType(createArrayType(elementTypes.length ?
-                getUnionType(deduplicateObjectOrArrayLiteralTypes(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t)), reduction) :
+                getUnionType(deduplicatedTypes, UnionReduction.Subtype) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
