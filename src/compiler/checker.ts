@@ -21275,6 +21275,12 @@ namespace ts {
                         (isBinaryExpression(target) && target.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source, target.right));
             }
             switch (source.kind) {
+                case SyntaxKind.MetaProperty:
+                    return target.kind === SyntaxKind.MetaProperty
+                        && (source as MetaProperty).keywordToken === SyntaxKind.ImportKeyword
+                        && (target as MetaProperty).keywordToken === SyntaxKind.ImportKeyword
+                        && (source as MetaProperty).name.escapedText === "meta"
+                        && (target as MetaProperty).name.escapedText === "meta";
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PrivateIdentifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
