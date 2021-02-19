@@ -1139,9 +1139,16 @@ namespace ts {
     }
 
     export interface CompletionEntryData {
+        /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
+        /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
         ambientModuleName?: string;
+        /** True if the export was found in the package.json AutoImportProvider */
         isPackageJsonImport?: true;
+        /**
+         * The name of the property or export in the module's symbol table. Differs from the completion name
+         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+         */
         exportName: string;
     }
 
@@ -1163,6 +1170,14 @@ namespace ts {
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name. Currently only defined for auto-import completions, but the type is
+         * `unknown` in the protocol, so it can be changed as needed to support other kinds of completions.
+         * The presence of this property should generally not be used to assume that this completion entry
+         * is an auto-import.
+         */
         data?: CompletionEntryData;
     }
 
