@@ -3264,11 +3264,15 @@
         "category": "Error",
         "code": 2802
     },
-
     "Cannot assign to private method '{0}'. Private methods are not writable.": {
         "category": "Error",
         "code": 2803
     },
+    "Duplicate identifier '{0}'. Static and instance elements cannot share the same private name.": {
+        "category": "Error",
+        "code": 2804
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
