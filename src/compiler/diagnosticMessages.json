@@ -3267,7 +3267,7 @@
 
     "Cannot assign to private method '{0}'. Private methods are not writable.": {
         "category": "Error",
-        "code": 2801
+        "code": 2803
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

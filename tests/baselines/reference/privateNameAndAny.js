@@ -35,18 +35,18 @@ class A {
     method(thing) {
         __classPrivateFieldGet(thing, _A_foo); // OK
         thing.; // Error
-        __classPrivateFieldGet(thing, _foo).call(// Error
+        __classPrivateFieldGet(thing, _A_foo).call(// Error
         thing);
     }
     methodU(thing) {
-        __classPrivateFieldGet(thing, _foo);
+        __classPrivateFieldGet(thing, _A_foo);
         thing.;
-        __classPrivateFieldGet(thing, _foo).call(thing);
+        __classPrivateFieldGet(thing, _A_foo).call(thing);
     }
     methodN(thing) {
-        __classPrivateFieldGet(thing, _foo);
+        __classPrivateFieldGet(thing, _A_foo);
         thing.;
-        __classPrivateFieldGet(thing, _foo).call(thing);
+        __classPrivateFieldGet(thing, _A_foo).call(thing);
     }
 }
 _A_foo = new WeakMap();
