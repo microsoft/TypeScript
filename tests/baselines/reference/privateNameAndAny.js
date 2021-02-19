@@ -1,8 +1,12 @@
 //// [privateNameAndAny.ts]
 class A {
-    #foo = true; 
+    #foo = true;
+    static #baz = 10;
+    static #m() {}
     method(thing: any) {
         thing.#foo; // OK
+        thing.#m();
+        thing.#bar;
         thing.#bar; // Error
         thing.#foo();
     }
@@ -27,13 +31,22 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _A_foo;
+var __classStaticPrivateMethodGet = (this && this.__classStaticPrivateMethodGet) || function (receiver, classConstructor, fn) {
+    if (receiver !== classConstructor) {
+        throw new TypeError("Private static access of wrong provenance");
+    }
+    return fn;
+};
+var _A_foo, _A_baz, _A_m;
 class A {
     constructor() {
         _A_foo.set(this, true);
     }
     method(thing) {
         __classPrivateFieldGet(thing, _A_foo); // OK
+        __classStaticPrivateMethodGet(thing, A, _A_m).call(// OK
+        thing);
+        thing.;
         thing.; // Error
         __classPrivateFieldGet(thing, _A_foo).call(// Error
         thing);
@@ -49,5 +62,6 @@ class A {
         __classPrivateFieldGet(thing, _A_foo).call(thing);
     }
 }
-_A_foo = new WeakMap();
+_A_foo = new WeakMap(), _A_m = function _A_m() { };
+_A_baz = { value: 10 };
 ;

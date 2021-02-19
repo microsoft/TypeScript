@@ -337,7 +337,7 @@ namespace ts {
             if (!shouldTransformPrivateElements && isPrivateIdentifier(node.name)) {
                 // Initializer is elided as the field is initialized in transformConstructor.
                 // We include initalizers for static private fields as there is no simple way to do this emit,
-                // and nobody is relying on the old assignment semantics for private static fields. 
+                // and nobody is relying on the old assignment semantics for private static fields.
                 return factory.updatePropertyDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -796,7 +796,7 @@ namespace ts {
                         pendingStatements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
                     }
 
-                    if (pendingStatements ) {
+                    if (pendingStatements) {
                         if (some(staticProperties)) {
                             addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
                         }
