@@ -424,10 +424,11 @@ namespace ts {
          *
          * @param fileName The path to the file
          * @param position A zero based index of the character where you want the entries
-         * @param entryName The name from an existing completion which came from `getCompletionsAtPosition`
+         * @param entryName The `name` from an existing completion which came from `getCompletionsAtPosition`
          * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
-         * @param source Source code for the current file, can be undefined for backwards compatibility
+         * @param source `source` property from the completion entry
          * @param preferences User settings, can be undefined for backwards compatibility
+         * @param data `data` property from the completion entry
          */
         getCompletionEntryDetails(
             fileName: string,
@@ -436,6 +437,7 @@ namespace ts {
             formatOptions: FormatCodeOptions | FormatCodeSettings | undefined,
             source: string | undefined,
             preferences: UserPreferences | undefined,
+            data: CompletionEntryData | undefined,
         ): CompletionEntryDetails | undefined;
 
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
@@ -1136,6 +1138,13 @@ namespace ts {
         entries: CompletionEntry[];
     }
 
+    export interface CompletionEntryData {
+        fileName?: string;
+        ambientModuleName?: string;
+        isPackageJsonImport?: true;
+        exportName: string;
+    }
+
     // see comments in protocol.ts
     export interface CompletionEntry {
         name: string;
@@ -1154,6 +1163,7 @@ namespace ts {
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
+        data?: CompletionEntryData;
     }
 
     export interface CompletionEntryDetails {
