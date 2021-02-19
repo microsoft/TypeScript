@@ -5511,10 +5511,9 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: ESMap<string, true>, key: string | number): boolean;
-    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T): boolean;
-    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T = true as any): boolean {
-        key = String(key);
+    export function addToSeen<K>(seen: ESMap<K, true>, key: K): boolean;
+    export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T): boolean;
+    export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T = true as any): boolean {
         if (seen.has(key)) {
             return false;
         }
@@ -5643,7 +5642,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging || tracing.isTracing()) {
+        if (Debug.isDebugging || tracing) {
             this.checker = checker;
         }
     }
@@ -6584,6 +6583,18 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    function numberOfDirectorySeparators(str: string) {
+        const match = str.match(/\//g);
+        return match ? match.length : 0;
+    }
+
+    export function compareNumberOfDirectorySeparators(path1: string, path2: string) {
+        return compareValues(
+            numberOfDirectorySeparators(path1),
+            numberOfDirectorySeparators(path2)
+        );
     }
 
     /**

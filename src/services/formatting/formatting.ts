@@ -390,7 +390,8 @@ namespace ts.formatting {
                 sourceFile));
     }
 
-    function formatSpanWorker(originalRange: TextRange,
+    function formatSpanWorker(
+        originalRange: TextRange,
         enclosingNode: Node,
         initialIndentation: number,
         delta: number,
@@ -424,14 +425,18 @@ namespace ts.formatting {
         }
 
         if (!formattingScanner.isOnToken()) {
+            const indentation = SmartIndenter.nodeWillIndentChild(options, enclosingNode, /*child*/ undefined, sourceFile, /*indentByDefault*/ false)
+                ? initialIndentation + options.indentSize!
+                : initialIndentation;
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
-                indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
+                indentTriviaItems(leadingTrivia, indentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-                if (options.trimTrailingWhitespace !== false) {
-                    trimTrailingWhitespacesForRemainingRange();
-                }
             }
+        }
+
+        if (options.trimTrailingWhitespace !== false) {
+            trimTrailingWhitespacesForRemainingRange();
         }
 
         return edits;

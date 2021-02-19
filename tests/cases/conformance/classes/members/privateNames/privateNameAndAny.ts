@@ -10,5 +10,16 @@ class A {
         thing.#m();
         thing.#bar;
         thing.#bar; // Error
+        thing.#foo();
+    }
+    methodU(thing: unknown) {
+        thing.#foo;
+        thing.#bar;
+        thing.#foo();
+    }
+    methodN(thing: never) {
+        thing.#foo;
+        thing.#bar;
+        thing.#foo();
     }
 };

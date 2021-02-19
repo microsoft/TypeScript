@@ -1,7 +1,14 @@
 tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(5,15): error TS2339: Property '#bar' does not exist on type 'any'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(9,9): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(10,9): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(10,15): error TS2339: Property '#bar' does not exist on type 'any'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(11,9): error TS2571: Object is of type 'unknown'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(14,15): error TS2339: Property '#foo' does not exist on type 'never'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(15,15): error TS2339: Property '#bar' does not exist on type 'never'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(16,15): error TS2339: Property '#foo' does not exist on type 'never'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts (1 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts (8 errors) ====
     class A {
         #foo = true; 
         method(thing: any) {
@@ -9,6 +16,31 @@ tests/cases/conformance/classes/members/privateNames/privateNameAndAny.ts(5,15):
             thing.#bar; // Error
                   ~~~~
 !!! error TS2339: Property '#bar' does not exist on type 'any'.
+            thing.#foo();
+        }
+        methodU(thing: unknown) {
+            thing.#foo;
+            ~~~~~
+!!! error TS2571: Object is of type 'unknown'.
+            thing.#bar;
+            ~~~~~
+!!! error TS2571: Object is of type 'unknown'.
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'any'.
+            thing.#foo();
+            ~~~~~
+!!! error TS2571: Object is of type 'unknown'.
+        }
+        methodN(thing: never) {
+            thing.#foo;
+                  ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'never'.
+            thing.#bar;
+                  ~~~~
+!!! error TS2339: Property '#bar' does not exist on type 'never'.
+            thing.#foo();
+                  ~~~~
+!!! error TS2339: Property '#foo' does not exist on type 'never'.
         }
     };
     
