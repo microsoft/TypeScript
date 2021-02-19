@@ -726,6 +726,7 @@ namespace ts {
         const templateLiteralTypes = new Map<string, TemplateLiteralType>();
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
+        const subtypeReductionCache = new Map<string, Type[]>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
 
@@ -13320,19 +13321,51 @@ namespace ts {
             return includes;
         }
 
-        function removeSubtypes(types: Type[], hasObjectTypes: boolean): boolean {
+        function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
+            const id = getTypeListId(types);
+            const match = subtypeReductionCache.get(id);
+            if (match) {
+                return match;
+            }
             // We assume that redundant primitive types have already been removed from the types array and that there
             // are no any and unknown types in the array. Thus, the only possible supertypes for primitive types are empty
             // object types, and if none of those are present we can exclude primitive types from the subtype check.
             const hasEmptyObject = hasObjectTypes && some(types, t => !!(t.flags & TypeFlags.Object) && !isGenericMappedType(t) && isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>t)));
             const len = types.length;
             let i = len;
+            let count = 0;
             while (i > 0) {
                 i--;
                 const source = types[i];
                 if (hasEmptyObject || source.flags & TypeFlags.StructuredOrInstantiable) {
+                    // Find the first property with a unit type, if any. When constituents have a property by the same name
+                    // but of a different unit type, we can quickly disqualify them from subtype checks. This helps subtype
+                    // reduction of large discriminated union types.
+                    const keyProperty = source.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive) ?
+                        find(getPropertiesOfType(source), p => isUnitType(getTypeOfSymbol(p))) :
+                        undefined;
+                    const keyPropertyType = keyProperty && getRegularTypeOfLiteralType(getTypeOfSymbol(keyProperty));
                     for (const target of types) {
                         if (source !== target) {
+                            if (count === 100000) {
+                                // After 100000 subtype checks we estimate the remaining amount of work by assuming the
+                                // same ratio of checks per element. If the estimated number of remaining type checks is
+                                // greater than 1M we deem the union type too complex to represent. This for example
+                                // caps union types at 1000 unique object types.
+                                const estimatedCount = (count / (len - i)) * len;
+                                if (estimatedCount > 1000000) {
+                                    tracing?.instant(tracing.Phase.CheckTypes, "removeSubtypes_DepthLimit", { typeIds: types.map(t => t.id) });
+                                    error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                                    return undefined;
+                                }
+                            }
+                            count++;
+                            if (keyProperty && target.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive)) {
+                                const t = getTypeOfPropertyOfType(target, keyProperty.escapedName);
+                                if (t && isUnitType(t) && getRegularTypeOfLiteralType(t) !== keyPropertyType) {
+                                    continue;
+                                }
+                            }
                             if (isTypeRelatedTo(source, target, strictSubtypeRelation) && (
                                 !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
                                 !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
@@ -13344,7 +13377,8 @@ namespace ts {
                     }
                 }
             }
-            return true;
+            subtypeReductionCache.set(id, types);
+            return types;
         }
 
         function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
@@ -13418,22 +13452,21 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const typeSet: Type[] = [];
+            let typeSet: Type[] | undefined = [];
             const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
                 }
-                if (unionReduction & (UnionReduction.Literal | UnionReduction.Subtype)) {
-                    if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
-                        removeRedundantLiteralTypes(typeSet, includes);
-                    }
-                    if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
-                        removeStringLiteralsMatchedByTemplateLiterals(typeSet);
-                    }
+                if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
+                    removeRedundantLiteralTypes(typeSet, includes);
                 }
-                if (unionReduction & UnionReduction.Subtype && typeSet.length < 100) {
-                    if (!removeSubtypes(typeSet, !!(includes & TypeFlags.Object))) {
+                if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
+                    removeStringLiteralsMatchedByTemplateLiterals(typeSet);
+                }
+                if (unionReduction === UnionReduction.Subtype) {
+                    typeSet = removeSubtypes(typeSet, !!(includes & TypeFlags.Object));
+                    if (!typeSet) {
                         return errorType;
                     }
                 }
