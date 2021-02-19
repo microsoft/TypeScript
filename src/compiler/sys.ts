@@ -1560,7 +1560,7 @@ namespace ts {
                     return event === "rename" &&
                         (!relativeName ||
                             relativeName === lastDirectoryPart ||
-                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                            (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
                         !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                         invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
                         callback(event, relativeName);
