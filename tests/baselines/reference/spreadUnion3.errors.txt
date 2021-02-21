@@ -2,10 +2,11 @@ tests/cases/conformance/types/spread/spreadUnion3.ts(2,14): error TS2322: Type '
 tests/cases/conformance/types/spread/spreadUnion3.ts(9,9): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 tests/cases/conformance/types/spread/spreadUnion3.ts(17,11): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/spreadUnion3.ts(17,37): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/spreadUnion3.ts(18,11): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/spreadUnion3.ts (4 errors) ====
+==== tests/cases/conformance/types/spread/spreadUnion3.ts (5 errors) ====
     function f(x: { y: string } | undefined): { y: string } {
         return { y: 123, ...x } // y: string | number
                  ~
@@ -30,6 +31,8 @@ tests/cases/conformance/types/spread/spreadUnion3.ts(18,11): error TS2698: Sprea
     declare const nullAndUndefinedUnion: null | undefined;
     var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2698: Spread types may only be created from object types.
     var y = { ...nullAndUndefinedUnion };
               ~~~~~~~~~~~~~~~~~~~~~~~~
