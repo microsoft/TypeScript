@@ -89,7 +89,7 @@ f({ a: 12  }, undefined, undefined, 101, 'nope');
  * @param {T} x
  */
 function g(x) { }
->g : <(Missing) extends any, T>(x: T) => void
+>g : <T>(x: T) => void
 >x : T
 
 

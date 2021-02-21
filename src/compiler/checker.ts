@@ -2496,7 +2496,7 @@ namespace ts {
                     && isAliasableOrJsExpression(node.parent.right)
                 || node.kind === SyntaxKind.ShorthandPropertyAssignment
                 || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
-                || isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true);
+                || isRequireVariableDeclaration(node);
         }
 
         function isAliasableOrJsExpression(e: Expression) {
@@ -9186,7 +9186,6 @@ namespace ts {
                     return undefined;
                 }
                 switch (node.kind) {
-                    case SyntaxKind.VariableStatement:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
@@ -9206,7 +9205,7 @@ namespace ts {
                     case SyntaxKind.JSDocEnumTag:
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.MappedType:
-                    case SyntaxKind.ConditionalType:
+                    case SyntaxKind.ConditionalType: {
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
                         if (node.kind === SyntaxKind.MappedType) {
                             return append(outerTypeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfNode((<MappedTypeNode>node).typeParameter)));
@@ -9214,20 +9213,24 @@ namespace ts {
                         else if (node.kind === SyntaxKind.ConditionalType) {
                             return concatenate(outerTypeParameters, getInferTypeParameters(<ConditionalTypeNode>node));
                         }
-                        else if (node.kind === SyntaxKind.VariableStatement && !isInJSFile(node)) {
-                            break;
-                        }
                         const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(<DeclarationWithTypeParameters>node));
                         const thisType = includeThisTypes &&
                             (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration || isJSConstructor(node)) &&
                             getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
                         return thisType ? append(outerAndOwnTypeParameters, thisType) : outerAndOwnTypeParameters;
+                    }
                     case SyntaxKind.JSDocParameterTag:
                         const paramSymbol = getParameterSymbolFromJSDoc(node as JSDocParameterTag);
                         if (paramSymbol) {
                             node = paramSymbol.valueDeclaration;
                         }
                         break;
+                    case SyntaxKind.JSDocComment: {
+                        const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
+                        return (node as JSDoc).tags
+                            ? appendTypeParameters(outerTypeParameters, flatMap((node as JSDoc).tags, t => isJSDocTemplateTag(t) ? t.typeParameters : undefined))
+                            : outerTypeParameters;
+                    }
                 }
             }
         }
@@ -13381,7 +13384,7 @@ namespace ts {
             return types;
         }
 
-        function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
+        function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags, reduceVoidUndefined: boolean) {
             let i = types.length;
             while (i > 0) {
                 i--;
@@ -13392,7 +13395,7 @@ namespace ts {
                     flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                     flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                     flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
-                    flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
+                    reduceVoidUndefined && flags & TypeFlags.Undefined && includes & TypeFlags.Void ||
                     isFreshLiteralType(t) && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
@@ -13459,7 +13462,7 @@ namespace ts {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
                 }
                 if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
-                    removeRedundantLiteralTypes(typeSet, includes);
+                    removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
                 }
                 if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
                     removeStringLiteralsMatchedByTemplateLiterals(typeSet);
@@ -22079,7 +22082,16 @@ namespace ts {
                         const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression, diagnostic);
                         if (type) {
                             const name = (<PropertyAccessExpression>node).name;
-                            const prop = getPropertyOfType(type, isPrivateIdentifier(name) ? getSymbolNameForPrivateIdentifier(type.symbol, name.escapedText) : name.escapedText);
+                            let prop: Symbol | undefined;
+                            if (isPrivateIdentifier(name)) {
+                                if (!type.symbol) {
+                                    return undefined;
+                                }
+                                prop = getPropertyOfType(type, getSymbolNameForPrivateIdentifier(type.symbol, name.escapedText));
+                            }
+                            else {
+                                prop = getPropertyOfType(type, name.escapedText);
+                            }
                             return prop && getExplicitTypeOfSymbol(prop, diagnostic);
                         }
                         return undefined;
@@ -34565,7 +34577,7 @@ namespace ts {
             }
             // For a commonjs `const x = require`, validate the alias and exit
             const symbol = getSymbolOfNode(node);
-            if (symbol.flags & SymbolFlags.Alias && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+            if (symbol.flags & SymbolFlags.Alias && isRequireVariableDeclaration(node)) {
                 checkAliasSymbol(node);
                 return;
             }
@@ -35070,18 +35082,8 @@ namespace ts {
                     // want to say that number is not an array type. But if the input was just
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
-                    const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
-                    const [defaultDiagnostic, maybeMissingAwait]: [DiagnosticMessage, boolean] = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
-                        ? downlevelIteration
-                            ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
-                            : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
-                                : [Diagnostics.Type_0_is_not_an_array_type, true]
-                        : downlevelIteration
-                            ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
-                            : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
-                                : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, true];
+                    const allowsStrings = !!(use & IterationUse.AllowsStringInputFlag) && !hasStringConstituent;
+                    const [defaultDiagnostic, maybeMissingAwait] = getIterationDiagnosticDetails(allowsStrings, downlevelIteration);
                     errorAndMaybeSuggestAwait(
                         errorNode,
                         maybeMissingAwait && !!getAwaitedTypeOfPromise(arrayType),
@@ -35102,6 +35104,45 @@ namespace ts {
             }
 
             return (use & IterationUse.PossiblyOutOfBounds) ? includeUndefinedInIndexSignature(arrayElementType) : arrayElementType;
+
+            function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration: boolean | undefined): [DiagnosticMessage, boolean] {
+                if (downlevelIteration) {
+                    return allowsStrings
+                        ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
+                        : [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true];
+                }
+
+                const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
+
+                if (yieldType) {
+                    return [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false];
+                }
+
+                if (isES2015OrLaterIterable(inputType.symbol?.escapedName)) {
+                    return [Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher, true];
+                }
+
+                return allowsStrings
+                    ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, true]
+                    : [Diagnostics.Type_0_is_not_an_array_type, true];
+            }
+        }
+
+        function isES2015OrLaterIterable(n: __String) {
+            switch (n) {
+                case "Float32Array":
+                case "Float64Array":
+                case "Int16Array":
+                case "Int32Array":
+                case "Int8Array":
+                case "NodeList":
+                case "Uint16Array":
+                case "Uint32Array":
+                case "Uint8Array":
+                case "Uint8ClampedArray":
+                    return true;
+            }
+            return false;
         }
 
         /**
@@ -40906,7 +40947,7 @@ namespace ts {
                 if (isStringLiteral(node.name) && node.name.text === "constructor") {
                     return grammarErrorOnNode(node.name, Diagnostics.Classes_may_not_have_a_field_named_constructor);
                 }
-                if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type)) {
+                if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_class_property_declaration_must_have_a_simple_literal_type_or_a_unique_symbol_type)) {
                     return true;
                 }
                 if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(node.name)) {

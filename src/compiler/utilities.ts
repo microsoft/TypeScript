@@ -1965,8 +1965,7 @@ namespace ts {
     }
 
     export function getExternalModuleRequireArgument(node: Node) {
-        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
-            && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+        return isRequireVariableDeclaration(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -2033,19 +2032,17 @@ namespace ts {
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
-    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
-    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
+    export function isRequireVariableDeclaration(node: Node): node is RequireVariableDeclaration {
         if (node.kind === SyntaxKind.BindingElement) {
             node = node.parent.parent;
         }
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), /*requireStringLiteralLikeArgument*/ true);
     }
 
-    export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
+    export function isRequireVariableStatement(node: Node): node is RequireVariableStatement {
         return isVariableStatement(node)
             && node.declarationList.declarations.length > 0
-            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
+            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -5511,10 +5508,9 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: ESMap<string, true>, key: string | number): boolean;
-    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T): boolean;
-    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T = true as any): boolean {
-        key = String(key);
+    export function addToSeen<K>(seen: ESMap<K, true>, key: K): boolean;
+    export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T): boolean;
+    export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T = true as any): boolean {
         if (seen.has(key)) {
             return false;
         }
