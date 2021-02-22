@@ -10219,7 +10219,8 @@ namespace ts {
             sig.resolvedMinArgumentCount = undefined;
             sig.target = undefined;
             sig.mapper = undefined;
-            sig.unionSignatures = undefined;
+            sig.compositeSignatures = undefined;
+            sig.compositeKind = undefined;
             return sig;
         }
 
@@ -10228,13 +10229,15 @@ namespace ts {
                 /*resolvedTypePredicate*/ undefined, sig.minArgumentCount, sig.flags & SignatureFlags.PropagatingFlags);
             result.target = sig.target;
             result.mapper = sig.mapper;
-            result.unionSignatures = sig.unionSignatures;
+            result.compositeSignatures = sig.compositeSignatures;
+            result.compositeKind = sig.compositeKind;
             return result;
         }
 
         function createUnionSignature(signature: Signature, unionSignatures: Signature[]) {
             const result = cloneSignature(signature);
-            result.unionSignatures = unionSignatures;
+            result.compositeSignatures = unionSignatures;
+            result.compositeKind = TypeFlags.Union;
             result.target = undefined;
             result.mapper = undefined;
             return result;
@@ -10398,7 +10401,7 @@ namespace ts {
                     if (signatures !== masterList) {
                         const signature = signatures[0];
                         Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                        results = signature.typeParameters && some(results, s => !!s.typeParameters && !compareTypeParametersIdentical(signature.typeParameters!, s.typeParameters)) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
+                        results = !!signature.typeParameters && some(results, s => !!s.typeParameters && !compareTypeParametersIdentical(signature.typeParameters, s.typeParameters)) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
                         if (!results) {
                             break;
                         }
@@ -10409,9 +10412,12 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function compareTypeParametersIdentical(sourceParams: readonly TypeParameter[], targetParams: readonly TypeParameter[]): boolean {
-            if (sourceParams.length !== targetParams.length) {
+        function compareTypeParametersIdentical(sourceParams: readonly TypeParameter[] | undefined, targetParams: readonly TypeParameter[] | undefined): boolean {
+            if (length(sourceParams) !== length(targetParams)) {
                 return false;
+            }
+            if (!sourceParams || !targetParams) {
+                return true;
             }
 
             const mapper = createTypeMapper(targetParams, sourceParams);
@@ -10508,9 +10514,10 @@ namespace ts {
                 minArgCount,
                 (left.flags | right.flags) & SignatureFlags.PropagatingFlags
             );
-            result.unionSignatures = concatenate(left.unionSignatures || [left], [right]);
+            result.compositeKind = TypeFlags.Union;
+            result.compositeSignatures = concatenate(left.compositeKind !== TypeFlags.Intersection && left.compositeSignatures || [left], [right]);
             if (paramMapper) {
-                result.mapper = left.mapper && left.unionSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
+                result.mapper = left.compositeKind !== TypeFlags.Intersection && left.mapper && left.compositeSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
             }
             return result;
         }
@@ -12028,8 +12035,8 @@ namespace ts {
                     const targetTypePredicate = getTypePredicateOfSignature(signature.target);
                     signature.resolvedTypePredicate = targetTypePredicate ? instantiateTypePredicate(targetTypePredicate, signature.mapper!) : noTypePredicate;
                 }
-                else if (signature.unionSignatures) {
-                    signature.resolvedTypePredicate = getUnionTypePredicate(signature.unionSignatures) || noTypePredicate;
+                else if (signature.compositeSignatures) {
+                    signature.resolvedTypePredicate = getUnionOrIntersectionTypePredicate(signature.compositeSignatures, signature.compositeKind) || noTypePredicate;
                 }
                 else {
                     const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
@@ -12058,13 +12065,17 @@ namespace ts {
                     findIndex(signature.parameters, p => p.escapedName === parameterName.escapedText), type);
         }
 
+        function getUnionOrIntersectionType(types: Type[], kind: TypeFlags | undefined, unionReduction?: UnionReduction) {
+            return kind !== TypeFlags.Intersection ? getUnionType(types, unionReduction) : getIntersectionType(types);
+        }
+
         function getReturnTypeOfSignature(signature: Signature): Type {
             if (!signature.resolvedReturnType) {
                 if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
                     return errorType;
                 }
                 let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper) :
-                    signature.unionSignatures ? instantiateType(getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype), signature.mapper) :
+                    signature.compositeSignatures ? instantiateType(getUnionOrIntersectionType(map(signature.compositeSignatures, getReturnTypeOfSignature), signature.compositeKind, UnionReduction.Subtype), signature.mapper) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (signature.flags & SignatureFlags.IsInnerCallChain) {
@@ -13487,13 +13498,18 @@ namespace ts {
             return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments, origin);
         }
 
-        function getUnionTypePredicate(signatures: readonly Signature[]): TypePredicate | undefined {
+        function getUnionOrIntersectionTypePredicate(signatures: readonly Signature[], kind: TypeFlags | undefined): TypePredicate | undefined {
             let first: TypePredicate | undefined;
             const types: Type[] = [];
             for (const sig of signatures) {
                 const pred = getTypePredicateOfSignature(sig);
                 if (!pred || pred.kind === TypePredicateKind.AssertsThis || pred.kind === TypePredicateKind.AssertsIdentifier) {
-                    continue;
+                    if (kind !== TypeFlags.Intersection) {
+                        continue;
+                    }
+                    else {
+                        return; // intersections demand all members be type predicates for the result to have a predicate
+                    }
                 }
 
                 if (first) {
@@ -13508,11 +13524,11 @@ namespace ts {
                 types.push(pred.type);
             }
             if (!first) {
-                // No union signatures had a type predicate.
+                // No signatures had a type predicate.
                 return undefined;
             }
-            const unionType = getUnionType(types);
-            return createTypePredicate(first.kind, first.parameterName, first.parameterIndex, unionType);
+            const compositeType = getUnionOrIntersectionType(types, kind);
+            return createTypePredicate(first.kind, first.parameterName, first.parameterIndex, compositeType);
         }
 
         function typePredicateKindsMatch(a: TypePredicate, b: TypePredicate): boolean {
@@ -24826,14 +24842,14 @@ namespace ts {
         }
 
         function getJsxPropsTypeForSignatureFromMember(sig: Signature, forcedLookupLocation: __String) {
-            if (sig.unionSignatures) {
+            if (sig.compositeSignatures) {
                 // JSX Elements using the legacy `props`-field based lookup (eg, react class components) need to treat the `props` member as an input
                 // instead of an output position when resolving the signature. We need to go back to the input signatures of the composite signature,
                 // get the type of `props` on each return type individually, and then _intersect them_, rather than union them (as would normally occur
                 // for a union signature). It's an unfortunate quirk of looking in the output of the signature for the type we want to use for the input.
                 // The default behavior of `getTypeOfFirstParameterOfSignatureWithFallback` when no `props` member name is defined is much more sane.
                 const results: Type[] = [];
-                for (const signature of sig.unionSignatures) {
+                for (const signature of sig.compositeSignatures) {
                     const instance = getReturnTypeOfSignature(signature);
                     if (isTypeAny(instance)) {
                         return instance;
@@ -24844,7 +24860,7 @@ namespace ts {
                     }
                     results.push(propType);
                 }
-                return getIntersectionType(results);
+                return getIntersectionType(results); // Same result for both union and intersection signatures
             }
             const instanceType = getReturnTypeOfSignature(sig);
             return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
@@ -24938,16 +24954,109 @@ namespace ts {
             }
         }
 
+        function getIntersectedSignatures(signatures: readonly Signature[]) {
+            return getStrictOptionValue(compilerOptions, "noImplicitAny")
+                ? reduceLeft(
+                    signatures,
+                    (left, right) =>
+                        left === right || !left ? left
+                        : compareTypeParametersIdentical(left.typeParameters, right.typeParameters) ? combineSignaturesOfIntersectionMembers(left, right)
+                        : undefined)
+                : undefined;
+        }
+
+        function combineIntersectionThisParam(left: Symbol | undefined, right: Symbol | undefined, mapper: TypeMapper | undefined): Symbol | undefined {
+            if (!left || !right) {
+                return left || right;
+            }
+            // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
+            // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
+            // pessimistic when contextual typing, for now, we'll union the `this` types.
+            const thisType = getUnionType([getTypeOfSymbol(left), instantiateType(getTypeOfSymbol(right), mapper)]);
+            return createSymbolWithType(left, thisType);
+        }
+
+        function combineIntersectionParameters(left: Signature, right: Signature, mapper: TypeMapper | undefined) {
+            const leftCount = getParameterCount(left);
+            const rightCount = getParameterCount(right);
+            const longest = leftCount >= rightCount ? left : right;
+            const shorter = longest === left ? right : left;
+            const longestCount = longest === left ? leftCount : rightCount;
+            const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
+            const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
+            const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
+            for (let i = 0; i < longestCount; i++) {
+                let longestParamType = tryGetTypeAtPosition(longest, i)!;
+                if (longest === right) {
+                    longestParamType = instantiateType(longestParamType, mapper);
+                }
+                let shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                if (shorter === right) {
+                    shorterParamType = instantiateType(shorterParamType, mapper);
+                }
+                const unionParamType = getUnionType([longestParamType, shorterParamType]);
+                const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
+                const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
+                const leftName = i >= leftCount ? undefined : getParameterNameAtPosition(left, i);
+                const rightName = i >= rightCount ? undefined : getParameterNameAtPosition(right, i);
+
+                const paramName = leftName === rightName ? leftName :
+                    !leftName ? rightName :
+                    !rightName ? leftName :
+                    undefined;
+                const paramSymbol = createSymbol(
+                    SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
+                    paramName || `arg${i}` as __String
+                );
+                paramSymbol.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
+                params[i] = paramSymbol;
+            }
+            if (needsExtraRestElement) {
+                const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
+                restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, longestCount));
+                if (shorter === right) {
+                    restParamSymbol.type = instantiateType(restParamSymbol.type, mapper);
+                }
+                params[longestCount] = restParamSymbol;
+            }
+            return params;
+        }
+
+        function combineSignaturesOfIntersectionMembers(left: Signature, right: Signature): Signature {
+            const typeParams = left.typeParameters || right.typeParameters;
+            let paramMapper: TypeMapper | undefined;
+            if (left.typeParameters && right.typeParameters) {
+                paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
+                // We just use the type parameter defaults from the first signature
+            }
+            const declaration = left.declaration;
+            const params = combineIntersectionParameters(left, right, paramMapper);
+            const thisParam = combineIntersectionThisParam(left.thisParameter, right.thisParameter, paramMapper);
+            const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
+            const result = createSignature(
+                declaration,
+                typeParams,
+                thisParam,
+                params,
+                /*resolvedReturnType*/ undefined,
+                /*resolvedTypePredicate*/ undefined,
+                minArgCount,
+                (left.flags | right.flags) & SignatureFlags.PropagatingFlags
+            );
+            result.compositeKind = TypeFlags.Intersection;
+            result.compositeSignatures = concatenate(left.compositeKind === TypeFlags.Intersection && left.compositeSignatures || [left], [right]);
+            if (paramMapper) {
+                result.mapper = left.compositeKind === TypeFlags.Intersection && left.mapper && left.compositeSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
+            }
+            return result;
+        }
+
         // If the given type is an object or union type with a single signature, and if that signature has at
         // least as many parameters as the given function, return the signature. Otherwise return undefined.
         function getContextualCallSignature(type: Type, node: SignatureDeclaration): Signature | undefined {
             const signatures = getSignaturesOfType(type, SignatureKind.Call);
-            if (signatures.length === 1) {
-                const signature = signatures[0];
-                if (!isAritySmaller(signature, node)) {
-                    return signature;
-                }
-            }
+            const applicableByArity = filter(signatures, s => !isAritySmaller(s, node));
+            return applicableByArity.length === 1 ? applicableByArity[0] : getIntersectedSignatures(applicableByArity);
         }
 
         /** If the contextual signature has fewer parameters than the function expression, do not use it */
