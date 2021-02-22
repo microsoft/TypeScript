@@ -933,7 +933,7 @@ namespace FourSlash {
             assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
             if (expected.text !== undefined) {
-                const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;
+                const actualDetails = ts.Debug.checkDefined(this.getCompletionEntryDetails(actual.name, actual.source), `No completion details available for name '${actual.name}' and source '${actual.source}'`);
                 assert.equal(ts.displayPartsToString(actualDetails.displayParts), expected.text, "Expected 'text' property to match 'displayParts' string");
                 assert.equal(ts.displayPartsToString(actualDetails.documentation), expected.documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
                 // TODO: GH#23587
