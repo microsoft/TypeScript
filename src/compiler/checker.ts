@@ -5114,9 +5114,14 @@ namespace ts {
                 // Since anonymous types usually come from expressions, this allows us to preserve the output
                 // for deep mappings which likely come from expressions, while truncating those parts which
                 // come from mappings over library functions.
-                return !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped) && (
-                    contains(context.reverseMappedStack, propertySymbol as ReverseMappedSymbol)
-                    || (context.reverseMappedStack?.[0] && !(getObjectFlags(last(context.reverseMappedStack).propertyType) & ObjectFlags.Anonymous)));
+                return !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped)
+                    && (
+                        contains(context.reverseMappedStack, propertySymbol as ReverseMappedSymbol)
+                        || (
+                                context.reverseMappedStack?.[0]
+                                && !(getObjectFlags(last(context.reverseMappedStack).propertyType) & ObjectFlags.Anonymous)
+                            )
+                    );
             }
 
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
