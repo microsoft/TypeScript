@@ -344,12 +344,9 @@ namespace ts {
                     if (isSignedNumericLiteral(nameExpression)) {
                         return tokenToString(nameExpression.operator) + nameExpression.operand.text as __String;
                     }
-
-                    Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-                }
-                if (isWellKnownSymbolSyntactically(name)) {
-                    return getPropertyNameForKnownSymbolName(idText(name.name));
+                    else {
+                        Debug.fail("Only computed properties with literal names have declaration names");
+                    }
                 }
                 if (isPrivateIdentifier(name)) {
                     // containingClass exists because private names only allowed inside classes
@@ -3307,7 +3304,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && !getJSDocTypeTag(node)) {
+                if (isInJSFile(node) && isRequireVariableDeclaration(node) && !getJSDocTypeTag(node)) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {

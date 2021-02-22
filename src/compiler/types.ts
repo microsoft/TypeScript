@@ -2308,12 +2308,6 @@ namespace ts {
         ;
 
     /** @internal */
-    export interface WellKnownSymbolExpression extends PropertyAccessExpression {
-        readonly expression: Identifier & { readonly escapedText: __String & "Symbol" };
-        readonly name: Identifier;
-    }
-
-    /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & {
         readonly arguments: readonly [BindableStaticNameExpression, StringLiteralLike | NumericLiteral, ObjectLiteralExpression] & Readonly<TextRange>;
     };
@@ -2326,7 +2320,7 @@ namespace ts {
 
     /** @internal */
     export type LiteralLikeElementAccessExpression = ElementAccessExpression & Declaration & {
-        readonly argumentExpression: StringLiteralLike | NumericLiteral | WellKnownSymbolExpression;
+        readonly argumentExpression: StringLiteralLike | NumericLiteral;
     };
 
     /** @internal */
@@ -5549,7 +5543,9 @@ namespace ts {
         /* @internal */
         mapper?: TypeMapper;                // Instantiation mapper
         /* @internal */
-        unionSignatures?: Signature[];      // Underlying signatures of a union signature
+        compositeSignatures?: Signature[];  // Underlying signatures of a union/intersection signature
+        /* @internal */
+        compositeKind?: TypeFlags;          // TypeFlags.Union if the underlying signatures are from union members, otherwise TypeFlags.Intersection
         /* @internal */
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */

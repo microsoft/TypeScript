@@ -85,6 +85,7 @@ tests/baselines/reference/dt
 .failed-tests
 TEST-results.xml
 package-lock.json
+tests/cases/user/npm/npm
 tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter
 tests/cases/user/TypeScript-Node-Starter/TypeScript-Node-Starter
 tests/cases/user/TypeScript-React-Native-Starter/TypeScript-React-Native-Starter

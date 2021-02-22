@@ -4,7 +4,7 @@ var obj: {
 
     [Symbol.isConcatSpreadable]: string;
 >[Symbol.isConcatSpreadable] : string
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 }
