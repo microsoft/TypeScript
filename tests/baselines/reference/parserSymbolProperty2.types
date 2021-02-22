@@ -2,7 +2,7 @@
 interface I {
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : () => string
->Symbol.unscopables : symbol
+>Symbol.unscopables : unique symbol
 >Symbol : SymbolConstructor
->unscopables : symbol
+>unscopables : unique symbol
 }
