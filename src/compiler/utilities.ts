@@ -2241,9 +2241,7 @@ namespace ts {
 
     /** x[0] OR x['a'] OR x[Symbol.y] */
     export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
-        return isElementAccessExpression(node) && (
-            isStringOrNumericLiteralLike(node.argumentExpression) ||
-            isWellKnownSymbolSyntactically(node.argumentExpression));
+        return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
     }
 
     /** Any series of property and element accesses. */
@@ -2327,9 +2325,6 @@ namespace ts {
             if (isStringLiteralLike(name) || isNumericLiteral(name)) {
                 return escapeLeadingUnderscores(name.text);
             }
-        }
-        if (isElementAccessExpression(node) && isWellKnownSymbolSyntactically(node.argumentExpression)) {
-            return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>node.argumentExpression).name));
         }
         return undefined;
     }
@@ -3139,9 +3134,6 @@ namespace ts {
      *   3. The computed name is *not* expressed as a NumericLiteral.
      *   4. The computed name is *not* expressed as a PlusToken or MinusToken
      *      immediately followed by a NumericLiteral.
-     *   5. The computed name is *not* expressed as `Symbol.<name>`, where `<name>`
-     *      is a property of the Symbol constructor that denotes a built-in
-     *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
         const name = getNameOfDeclaration(declaration);
@@ -3154,17 +3146,7 @@ namespace ts {
         }
         const expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
         return !isStringOrNumericLiteralLike(expr) &&
-            !isSignedNumericLiteral(expr) &&
-            !isWellKnownSymbolSyntactically(expr);
-    }
-
-    /**
-     * Checks if the expression is of the form:
-     *    Symbol.name
-     * where Symbol is literally the word "Symbol", and name is any identifierName
-     */
-    export function isWellKnownSymbolSyntactically(node: Node): node is WellKnownSymbolExpression {
-        return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
+            !isSignedNumericLiteral(expr);
     }
 
     export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
@@ -3177,10 +3159,7 @@ namespace ts {
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
                 const nameExpression = name.expression;
-                if (isWellKnownSymbolSyntactically(nameExpression)) {
-                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-                }
-                else if (isStringOrNumericLiteralLike(nameExpression)) {
+                if (isStringOrNumericLiteralLike(nameExpression)) {
                     return escapeLeadingUnderscores(nameExpression.text);
                 }
                 else if (isSignedNumericLiteral(nameExpression)) {
@@ -3216,10 +3195,6 @@ namespace ts {
 
     export function getPropertyNameForUniqueESSymbol(symbol: Symbol): __String {
         return `__@${getSymbolId(symbol)}@${symbol.escapedName}` as __String;
-    }
-
-    export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
-        return "__@" + symbolName as __String;
     }
 
     export function getSymbolNameForPrivateIdentifier(containingClassSymbol: Symbol, description: __String): __String {

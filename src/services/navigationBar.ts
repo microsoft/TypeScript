@@ -136,7 +136,7 @@ namespace ts.NavigationBar {
         for (let i = 0; i < depth; i++) endNode();
     }
     function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
-        const names: (PropertyNameLiteral | WellKnownSymbolExpression)[] = [];
+        const names: PropertyNameLiteral[] = [];
         while (!isPropertyNameLiteral(entityName)) {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
@@ -194,6 +194,21 @@ namespace ts.NavigationBar {
         }
     }
 
+    /**
+     * Historically, we've elided dynamic names from the nav tree (including late bound names),
+     * but included certain "well known" symbol names. While we no longer distinguish those well-known
+     * symbols from other unique symbols, we do the below to retain those members in the nav tree.
+     */
+    function hasNavigationBarName(node: Declaration) {
+        return !hasDynamicName(node) ||
+            (
+                node.kind !== SyntaxKind.BinaryExpression &&
+                isPropertyAccessExpression(node.name.expression) &&
+                isIdentifier(node.name.expression.expression) &&
+                idText(node.name.expression.expression) === "Symbol"
+            );
+    }
+
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
     function addChildrenRecursively(node: Node | undefined): void {
         curCancellationToken.throwIfCancellationRequested();
@@ -220,18 +235,18 @@ namespace ts.NavigationBar {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodSignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
+                if (hasNavigationBarName((<ClassElement | TypeElement>node))) {
                     addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
                 }
                 break;
 
             case SyntaxKind.PropertyDeclaration:
-                if (!hasDynamicName(<ClassElement>node)) {
+                if (hasNavigationBarName(<ClassElement>node)) {
                     addNodeWithRecursiveInitializer(<PropertyDeclaration>node);
                 }
                 break;
             case SyntaxKind.PropertySignature:
-                if (!hasDynamicName(<TypeElement>node)) {
+                if (hasNavigationBarName(<TypeElement>node)) {
                     addLeafNode(node);
                 }
                 break;
@@ -358,7 +373,7 @@ namespace ts.NavigationBar {
                             assignmentTarget;
 
                         let depth = 0;
-                        let className: PropertyNameLiteral | WellKnownSymbolExpression;
+                        let className: PropertyNameLiteral;
                         // If we see a prototype assignment, start tracking the target as a class
                         // This is only done for simple classes not nested assignments.
                         if (isIdentifier(prototypeAccess.expression)) {
