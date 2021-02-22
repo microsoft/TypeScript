@@ -21277,10 +21277,8 @@ namespace ts {
             switch (source.kind) {
                 case SyntaxKind.MetaProperty:
                     return target.kind === SyntaxKind.MetaProperty
-                        && (source as MetaProperty).keywordToken === SyntaxKind.ImportKeyword
-                        && (target as MetaProperty).keywordToken === SyntaxKind.ImportKeyword
-                        && (source as MetaProperty).name.escapedText === "meta"
-                        && (target as MetaProperty).name.escapedText === "meta";
+                        && (source as MetaProperty).keywordToken === (target as MetaProperty).keywordToken
+                        && (source as MetaProperty).name.escapedText === (target as MetaProperty).name.escapedText;
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PrivateIdentifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
