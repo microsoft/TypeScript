@@ -200,7 +200,13 @@ namespace ts.NavigationBar {
      * symbols from other unique symbols, we do the below to retain those members in the nav tree.
      */
     function hasNavigationBarName(node: Declaration) {
-        return !hasDynamicName(node) || (node.kind !== SyntaxKind.BinaryExpression && isPropertyAccessExpression(node.name.expression) && isIdentifier(node.name.expression.expression) && idText(node.name.expression.expression) === "Symbol");
+        return !hasDynamicName(node) ||
+            (
+                node.kind !== SyntaxKind.BinaryExpression &&
+                isPropertyAccessExpression(node.name.expression) &&
+                isIdentifier(node.name.expression.expression) &&
+                idText(node.name.expression.expression) === "Symbol"
+            );
     }
 
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */

@@ -3678,11 +3678,15 @@ namespace ts {
                 const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
                 const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
                 const objectLiteralContainer = getVariableDeclarationOfObjectLiteral(container, meaning);
-                if (enclosingDeclaration && container.flags & getQualifiedLeftMeaning(meaning) && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
+                if (
+                    enclosingDeclaration &&
+                    container.flags & getQualifiedLeftMeaning(meaning) &&
+                    getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)
+                ) {
                     return append(concatenate(concatenate([container], additionalContainers), reexportContainers), objectLiteralContainer); // This order expresses a preference for the real container if it is in scope
                 }
-                // we potentially a symbol which is a member of the instance side of something - look for a variable in scope with the container's type
-                // which may be acting like a namespace
+                // we potentially have a symbol which is a member of the instance side of something - look for a variable in scope with the container's type
+                // which may be acting like a namespace (eg, `Symbol` acts like a namespace when looking up `Symbol.toStringTag`)
                 const firstVariableMatch = !(container.flags & getQualifiedLeftMeaning(meaning))
                     && container.flags & SymbolFlags.Type
                     && getDeclaredTypeOfSymbol(container).flags & TypeFlags.Object
@@ -3694,9 +3698,10 @@ namespace ts {
                         }
                     });
                 }) : undefined;
-                const res = append(append(additionalContainers, container), objectLiteralContainer);
-                const resWithReexports = concatenate(res, reexportContainers);
-                return firstVariableMatch ? [firstVariableMatch, ...resWithReexports] : resWithReexports;
+                let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers, container] : [...additionalContainers, container];
+                res = append(res, objectLiteralContainer);
+                res = addRange(res, reexportContainers);
+                return res;
             }
             const candidates = mapDefined(symbol.declarations, d => {
                 if (!isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
@@ -8728,7 +8733,7 @@ namespace ts {
 
         function widenTypeForVariableLikeDeclaration(type: Type | undefined, declaration: any, reportErrors?: boolean) {
             if (type) {
-                // TODO: Remove the following SymbolConstructor special case when back compat with pre-3.0 libs isn't required
+                // TODO: If back compat with pre-3.0/4.0 libs isn't required, remove the following SymbolConstructor special case transforming `symbol` into `unique symbol`
                 if (type.flags & TypeFlags.ESSymbol && isGlobalSymbolConstructor(declaration.parent)) {
                     type = getESSymbolLikeTypeForNode(declaration);
                 }
