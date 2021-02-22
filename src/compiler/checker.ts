@@ -5118,9 +5118,9 @@ namespace ts {
                     && (
                         contains(context.reverseMappedStack, propertySymbol as ReverseMappedSymbol)
                         || (
-                                context.reverseMappedStack?.[0]
-                                && !(getObjectFlags(last(context.reverseMappedStack).propertyType) & ObjectFlags.Anonymous)
-                            )
+                            context.reverseMappedStack?.[0]
+                            && !(getObjectFlags(last(context.reverseMappedStack).propertyType) & ObjectFlags.Anonymous)
+                        )
                     );
             }
 
