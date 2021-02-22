@@ -382,5 +382,9 @@ namespace ts {
             const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
             root.statements[0].getStart(root, /*includeJsdocComment*/ true);
         });
+        describe("missing type parameter in jsDoc doesn't create a 1-element array", () => {
+            const doc = parseIsolatedJSDocComment("/**\n    @template\n*/");
+            assert.equal((doc?.jsDoc.tags?.[0] as JSDocTemplateTag).typeParameters.length, 0);
+        });
     });
 }

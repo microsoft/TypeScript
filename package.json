@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "4.2.0",
+    "version": "4.3.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -52,7 +52,6 @@
         "@types/q": "latest",
         "@types/source-map-support": "latest",
         "@types/through2": "latest",
-        "@types/travis-fold": "latest",
         "@types/xml2js": "^0.4.0",
         "@typescript-eslint/eslint-plugin": "4.5.0",
         "@typescript-eslint/experimental-utils": "4.5.0",
@@ -95,7 +94,6 @@
         "remove-internal": "^2.9.2",
         "source-map-support": "latest",
         "through2": "latest",
-        "travis-fold": "latest",
         "typescript": "^4.0.0-dev.20200624",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
@@ -128,6 +126,9 @@
         "@microsoft/typescript-etw": false,
         "source-map-support": false,
         "inspector": false
+    },
+    "volta": {
+        "node": "14.15.5"
     },
     "dependencies": {}
 }

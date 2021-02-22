@@ -20,7 +20,7 @@ BaseFactory.Base = Base;
 >Base : Symbol(Base, Decl(base.js, 0, 0))
 
 module.exports = BaseFactory;
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/base", Decl(base.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(base.js, 0, 0))
 >module : Symbol(export=, Decl(base.js, 8, 24))
 >exports : Symbol(export=, Decl(base.js, 8, 24))
 >BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
