@@ -25470,10 +25470,7 @@ namespace ts {
                 }
 
                 if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
-                    if (isTypeAny(computedNameType)) {
-                        hasComputedStringProperty = true; // string is the closest to a catch-all index signature we have
-                    }
-                    else if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
+                    if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
                         if (isTypeAssignableTo(computedNameType, numberType)) {
                             hasComputedNumberProperty = true;
                         }

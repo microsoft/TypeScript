@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/functionPropertyAssignments/FunctionPropertyAssignments5_es6.ts ===
 var v = { *[foo()]() { } }
->v : { [x: string]: () => Generator<never, void, unknown>; }
->{ *[foo()]() { } } : { [x: string]: () => Generator<never, void, unknown>; }
+>v : { [x: number]: () => Generator<never, void, unknown>; }
+>{ *[foo()]() { } } : { [x: number]: () => Generator<never, void, unknown>; }
 >[foo()] : () => Generator<never, void, unknown>
 >foo() : any
 >foo : any
