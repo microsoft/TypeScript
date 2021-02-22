@@ -9,9 +9,13 @@ export type { T1 }
 // @Filename: type2.ts
 export interface T2 {}
 
+// @Filename: class3.ts
+export class C3 {}
+
 // @Filename: index.ts
 import { T1 } from "./type1";
 import type { T2 } from "./type2";
+import { C3 } from "./class3";
 declare var EventListener: any;
 
 class HelloWorld {
@@ -26,4 +30,7 @@ class HelloWorld {
 
   @EventListener('2')
   p2!: T2; // Ok
+
+  @EventListener('3')
+  handleEvent3(event: C3): T1 { return undefined! } // Ok, Error
 }
