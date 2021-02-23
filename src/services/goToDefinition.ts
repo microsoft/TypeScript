@@ -51,7 +51,8 @@ namespace ts.GoToDefinition {
         // assignment. This case and others are handled by the following code.
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-            return shorthandSymbol ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : [];
+            const definitions = shorthandSymbol ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : emptyArray;
+            return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || emptyArray);
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -75,25 +76,7 @@ namespace ts.GoToDefinition {
             });
         }
 
-        // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
-        // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
-        // For example
-        //      interface Props{
-        //          /*first*/prop1: number
-        //          prop2: boolean
-        //      }
-        //      function Foo(arg: Props) {}
-        //      Foo( { pr/*1*/op1: 10, prop2: true })
-        const element = getContainingObjectLiteralElement(node);
-        if (element) {
-            const contextualType = element && typeChecker.getContextualType(element.parent);
-            if (contextualType) {
-                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
-                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
-            }
-        }
-
-        return getDefinitionFromSymbol(typeChecker, symbol, node);
+        return getDefinitionFromObjectLiteralElement(typeChecker, node) || getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
     /**
@@ -106,6 +89,26 @@ namespace ts.GoToDefinition {
             || s === calledDeclaration.symbol.parent
             || isAssignmentExpression(calledDeclaration.parent)
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
+    }
+
+    // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
+    // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
+    // For example
+    //      interface Props{
+    //          /*first*/prop1: number
+    //          prop2: boolean
+    //      }
+    //      function Foo(arg: Props) {}
+    //      Foo( { pr/*1*/op1: 10, prop2: true })
+    function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: Node) {
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            const contextualType = element && typeChecker.getContextualType(element.parent);
+            if (contextualType) {
+                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
+                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            }
+        }
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, file: SourceFile } | undefined {
