@@ -299,8 +299,11 @@ namespace ts.tscWatch {
             changes: [
                 {
                     caption: "Add class3 to project1",
-                    change: sys => sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`),
-                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                    change: sys => {
+                        sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
+                        watch.getProgram();
+                    },
+                    timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
             ],
             watchOrSolution: watch

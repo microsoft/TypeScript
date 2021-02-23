@@ -23,7 +23,7 @@ namespace ts {
                 ;
                 assert.deepEqual(
                     getOutputFileNames(
-                        parseConfigFileWithSystem("/src/tsconfig.json", {}, {}, sys, noop)!,
+                        parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, noop)!,
                         "/src/src/index.ts",
                         /*ignoreCase*/ false
                     ),

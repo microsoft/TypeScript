@@ -258,7 +258,7 @@ namespace ts {
     }
 
     export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
-        fileWatcher: FileWatcher;
+        watcher: FileWatcher;
         projects: Set<T>;
     }
 
@@ -267,12 +267,12 @@ namespace ts {
      */
     export function updateSharedExtendedConfigFileWatcher<T>(
         projectPath: T,
-        parsed: ParsedCommandLine | undefined,
+        options: CompilerOptions | undefined,
         extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
         createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
         toPath: (fileName: string) => Path,
     ) {
-        const extendedConfigs = arrayToMap(parsed?.options.configFile?.extendedSourceFiles || emptyArray, toPath);
+        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
         // remove project from all unrelated watchers
         extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
             if (!extendedConfigs.has(extendedConfigFilePath)) {
@@ -290,14 +290,38 @@ namespace ts {
                 // start watching previously unseen extended config
                 extendedConfigFilesMap.set(extendedConfigFilePath, {
                     projects: new Set([projectPath]),
-                    fileWatcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
+                    watcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
                     close: () => {
                         const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
                         if (!existing || existing.projects.size !== 0) return;
-                        existing.fileWatcher.close();
+                        existing.watcher.close();
                         extendedConfigFilesMap.delete(extendedConfigFilePath);
                     },
                 });
+            }
+        });
+    }
+
+    export function clearSharedExtendedConfigFileWatcher<T>(
+        projectPath: T,
+        extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+    ) {
+        // remove project from all unrelated watchers
+        extendedConfigFilesMap.forEach(watcher => {
+            if (watcher.projects.delete(projectPath)) watcher.close();
+        });
+    }
+
+    export function cleanExtendsCache(
+        extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
+        extendedConfigFilePath: Path,
+        toPath: (fileName: string) => Path,
+    ) {
+        // Update extended config cache
+        if (!extendedConfigCache.delete(extendedConfigFilePath)) return;
+        extendedConfigCache.forEach(({ extendedResult }, key) => {
+            if (extendedResult.extendedSourceFiles?.some(extendedFile => toPath(extendedFile) === extendedConfigFilePath)) {
+                cleanExtendsCache(extendedConfigCache, key as Path, toPath);
             }
         });
     }

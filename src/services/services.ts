@@ -940,7 +940,6 @@ namespace ts {
     // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
-        private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
@@ -953,17 +952,6 @@ namespace ts {
             for (const fileName of rootFileNames) {
                 this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
-
-            // store the compilation settings
-            this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
-        }
-
-        public compilationSettings() {
-            return this._compilationSettings;
-        }
-
-        public getProjectReferences(): readonly ProjectReference[] | undefined {
-            return this.host.getProjectReferences && this.host.getProjectReferences();
         }
 
         private createEntry(fileName: string, path: Path) {
@@ -1310,12 +1298,23 @@ namespace ts {
             // Get a fresh cache of the host information
             let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
+            const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
-            const projectReferences = hostCache.getProjectReferences();
+            const projectReferences = host.getProjectReferences?.();
+            const parsedCommandLines = new Map<Path, ParsedCommandLine | false>();
+            const parseConfigHost: ParseConfigFileHost = {
+                useCaseSensitiveFileNames,
+                fileExists,
+                readFile,
+                readDirectory,
+                trace: maybeBind(host, host.trace),
+                getCurrentDirectory: () => currentDirectory,
+                onUnRecoverableConfigFileDiagnostic: noop,
+            };
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
             }
 
@@ -1324,8 +1323,6 @@ namespace ts {
             // instance.  If we cancel midway through, we may end up in an inconsistent state where
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
-
-            const newSettings = hostCache.compilationSettings();
 
             // Now create a new compiler
             const compilerHost: CompilerHost = {
@@ -1348,18 +1345,16 @@ namespace ts {
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
-                readDirectory(path, extensions, exclude, include, depth) {
-                    Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
-                    return host.readDirectory!(path, extensions, exclude, include, depth);
-                },
+                readDirectory,
                 onReleaseOldSourceFile,
+                onReleaseParsedCommandLine,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames,
-                trace: maybeBind(host, host.trace),
+                trace: parseConfigHost.trace,
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
-                getParsedCommandLine: maybeBind(host, host.getParsedCommandLine),
+                getParsedCommandLine,
             };
             host.setCompilerHost?.(compilerHost);
 
@@ -1387,6 +1382,42 @@ namespace ts {
             program.getTypeChecker();
             return;
 
+            function getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
+                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                const existing = parsedCommandLines.get(path);
+                if (existing !== undefined) return existing || undefined;
+
+                const result = host.getParsedCommandLine ?
+                    host.getParsedCommandLine(fileName) :
+                    getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
+                parsedCommandLines.set(path, result || false);
+                return result;
+            }
+
+            function getParsedCommandLineOfConfigFileUsingSourceFile(configFileName: string): ParsedCommandLine | undefined {
+                const result = getOrCreateSourceFile(configFileName, ScriptTarget.JSON) as JsonSourceFile | undefined;
+                if (!result) return undefined;
+                result.path = toPath(configFileName, currentDirectory, getCanonicalFileName);
+                result.resolvedPath = result.path;
+                result.originalFileName = result.fileName;
+                return parseJsonSourceFileConfigFileContent(
+                    result,
+                    parseConfigHost,
+                    getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
+                    /*optionsToExtend*/ undefined,
+                    getNormalizedAbsolutePath(configFileName, currentDirectory),
+                );
+            }
+
+            function onReleaseParsedCommandLine(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, oldOptions: CompilerOptions) {
+                if (host.getParsedCommandLine) {
+                    host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef, oldOptions);
+                }
+                else if (oldResolvedRef) {
+                    onReleaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
+                }
+            }
+
             function fileExists(fileName: string): boolean {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                 const entry = hostCache && hostCache.getEntryByPath(path);
@@ -1403,6 +1434,11 @@ namespace ts {
                     return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                 }
                 return host.readFile && host.readFile(fileName);
+            }
+
+            function readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number) {
+                Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                return host.readDirectory!(path, extensions, exclude, include, depth);
             }
 
             // Release any files we have acquired in the old program but are

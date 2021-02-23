@@ -167,6 +167,7 @@ namespace ts {
     /*@internal*/
     export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T> {
         configFileParsingResult?: ParsedCommandLine;
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>;
     }
 
     export interface Watch<T> {
@@ -225,6 +226,13 @@ namespace ts {
         }
     }
 
+    interface CachedCommandLine {
+        parsedCommandLine: ParsedCommandLine | undefined;
+        watcher?: FileWatcher;
+        watchedDirectories?: Map<WildcardDirectoryWatcher>;
+        reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
+    }
+
     /**
      * Creates the watch from the host for root files and compiler options
      */
@@ -249,12 +257,11 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
-        let extendedConfigFilesMap: ESMap<Path, FileWatcher>;               // Map of file watchers for the extended config files
         let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
-
+        let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>;
 
         const sourceFilesCache = new Map<string, HostFileInfo>();                 // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
@@ -268,6 +275,8 @@ namespace ts {
         let configFileParsingDiagnostics: Diagnostic[] | undefined;
         let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
+        let parsedConfigs: ESMap<Path, CachedCommandLine> | undefined;
+        const extendedConfigCache = host.extendedConfigCache || new Map<string, ExtendedConfigCacheEntry>();
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
@@ -305,6 +314,7 @@ namespace ts {
         compilerHost.getNewLine = () => newLine;
         compilerHost.fileExists = fileExists;
         compilerHost.onReleaseOldSourceFile = onReleaseOldSourceFile;
+        compilerHost.onReleaseParsedCommandLine = onReleaseParsedCommandLine;
         // Members for ResolutionCacheHost
         compilerHost.toPath = toPath;
         compilerHost.getCompilationSettings = () => compilerOptions;
@@ -318,7 +328,7 @@ namespace ts {
         compilerHost.fileIsOpen = returnFalse;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
-        // compilerHost.getParsedCommandLine = getParsedCommandLine;
+        compilerHost.getParsedCommandLine = getParsedCommandLine;
 
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost,
@@ -343,7 +353,7 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         // Update extended config file watch
-        watchExtendedConfigFiles();
+        if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
 
         return configFileName ?
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
@@ -362,9 +372,10 @@ namespace ts {
                 configFileWatcher.close();
                 configFileWatcher = undefined;
             }
-            if (extendedConfigFilesMap) {
-                clearMap(extendedConfigFilesMap, closeFileWatcher);
-                extendedConfigFilesMap = undefined!;
+            extendedConfigCache.clear();
+            if (sharedExtendedConfigFileWatchers) {
+                clearMap(sharedExtendedConfigFileWatchers, closeFileWatcherOf);
+                sharedExtendedConfigFileWatchers = undefined!;
             }
             if (watchedWildcardDirectories) {
                 clearMap(watchedWildcardDirectories, closeFileWatcherOf);
@@ -373,6 +384,15 @@ namespace ts {
             if (missingFilesMap) {
                 clearMap(missingFilesMap, closeFileWatcher);
                 missingFilesMap = undefined!;
+            }
+            if (parsedConfigs) {
+                clearMap(parsedConfigs, config => {
+                    config.watcher?.close();
+                    config.watcher = undefined;
+                    if (config.watchedDirectories) clearMap(config.watchedDirectories, closeFileWatcherOf);
+                    config.watchedDirectories = undefined;
+                });
+                parsedConfigs = undefined;
             }
         }
 
@@ -398,7 +418,7 @@ namespace ts {
 
             // All resolutions are invalid if user provided resolutions
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
-            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
+            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
                     hasChangedConfigFileParsingErrors = false;
@@ -671,11 +691,11 @@ namespace ts {
             watchConfigFileWildCardDirectories();
 
             // Update extended config file watch
-            watchExtendedConfigFiles();
+            updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
         }
 
         function parseConfigFile() {
-            setConfigFileParsingResult(getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost, /*extendedConfigCache*/ undefined, watchOptionsToExtend, extraFileExtensions)!); // TODO: GH#18217
+            setConfigFileParsingResult(getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost, extendedConfigCache, watchOptionsToExtend, extraFileExtensions)!); // TODO: GH#18217
         }
 
         function setConfigFileParsingResult(configFileParseResult: ParsedCommandLine) {
@@ -689,19 +709,57 @@ namespace ts {
             hasChangedConfigFileParsingErrors = true;
         }
 
-        // function getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
-        //     if (host.getParsedCommandLine) {
-        //         return host.getParsedCommandLine(fileName);
-        //     }
+        function getParsedCommandLine(configFileName: string): ParsedCommandLine | undefined {
+            if (host.getParsedCommandLine) {
+                return host.getParsedCommandLine(configFileName);
+            }
 
-        //     // TODO:: sheetal: cache, watch
-        //     // Ignore errors
-        //     const onUnRecoverableConfigFileDiagnostic = parseConfigFileHost.onUnRecoverableConfigFileDiagnostic;
-        //     parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
-        //     const result = getParsedCommandLineOfConfigFile(fileName, /*optionsToExtend*/ undefined, parseConfigFileHost);
-        //     parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
-        //     return result;
-        // }
+            const configPath = toPath(configFileName);
+            let config = parsedConfigs?.get(configPath);
+            if (config) {
+                if (!config.reloadLevel) return config.parsedCommandLine;
+                if (config.parsedCommandLine && config.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                    writeLog("Reloading new file names and options");
+                    const fileNames = getFileNamesFromConfigSpecs(
+                        config.parsedCommandLine.options.configFile!.configFileSpecs!,
+                        getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
+                        compilerOptions,
+                        parseConfigFileHost,
+                    );
+                    config.parsedCommandLine = { ...config.parsedCommandLine, fileNames, };
+                    config.reloadLevel = undefined;
+                    return config.parsedCommandLine;
+                }
+            }
+
+            // Ignore the file absent errors
+            writeLog(`Loading config file: ${configFileName}`);
+            const onUnRecoverableConfigFileDiagnostic = parseConfigFileHost.onUnRecoverableConfigFileDiagnostic;
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+            const parsedCommandLine = getParsedCommandLineOfConfigFile(configFileName, /*optionsToExtend*/ undefined, parseConfigFileHost, extendedConfigCache, watchOptionsToExtend);
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
+            if (config) {
+                config.parsedCommandLine = parsedCommandLine;
+                config.reloadLevel = undefined;
+            }
+            else {
+                (parsedConfigs ||= new Map()).set(configPath, config = { parsedCommandLine });
+            }
+            watchReferencedProject(configFileName, configPath, config);
+            return parsedCommandLine;
+        }
+
+        function onReleaseParsedCommandLine(fileName: string) {
+            if (host.getParsedCommandLine) return;
+            const path = toPath(fileName);
+            const existing = parsedConfigs?.get(path);
+            if (!existing) return;
+
+            parsedConfigs!.delete(path);
+            if (existing.watchedDirectories) clearMap(existing.watchedDirectories, closeFileWatcherOf);
+            existing.watcher?.close();
+            clearSharedExtendedConfigFileWatcher(path, sharedExtendedConfigFileWatchers);
+        }
 
         function watchFilePath(
             path: Path,
@@ -735,7 +793,10 @@ namespace ts {
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(missingFilePath, missingFilePath, onMissingFileChange, PollingInterval.Medium, watchOptions, WatchType.MissingFile);
+            // If watching missing referenced config file, we are already watching it so no need for separate watcher
+            return parsedConfigs?.has(missingFilePath) ?
+                noopFileWatcher :
+                watchFilePath(missingFilePath, missingFilePath, onMissingFileChange, PollingInterval.Medium, watchOptions, WatchType.MissingFile);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {
@@ -808,22 +869,110 @@ namespace ts {
             );
         }
 
-        function watchExtendedConfigFiles() {
-            // Update the extended config files watcher
-            mutateMap(
-                extendedConfigFilesMap ||= new Map(),
-                arrayToMap(compilerOptions.configFile?.extendedSourceFiles || emptyArray, toPath),
-                {
-                    // Watch the extended config files
-                    createNewValue: watchExtendedConfigFile,
-                    // Config files that are no longer extended should no longer be watched.
-                    onDeleteValue: closeFileWatcher
-                }
+        function updateExtendedConfigFilesWatches(forProjectPath: Path, options: CompilerOptions | undefined, watchOptions: WatchOptions | undefined, watchType: WatchTypeRegistry["ExtendedConfigFile"] | WatchTypeRegistry["ExtendedConfigOfReferencedProject"]) {
+            updateSharedExtendedConfigFileWatcher(
+                forProjectPath,
+                options,
+                sharedExtendedConfigFileWatchers ||= new Map(),
+                (extendedConfigFileName, extendedConfigFilePath) => watchFile(
+                    extendedConfigFileName,
+                    (_fileName, eventKind) => {
+                        updateCachedSystemWithFile(extendedConfigFileName, extendedConfigFilePath, eventKind);
+                        // Update extended config cache
+                        cleanExtendsCache(extendedConfigCache, extendedConfigFilePath, toPath);
+                        // Update projects
+                        const projects = sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects;
+                        if (!projects?.size) return;
+                        projects.forEach(projectPath => {
+                            if (toPath(configFileName) === projectPath) {
+                                reloadLevel = ConfigFileProgramReloadLevel.Full;
+                            }
+                            else {
+                                const existing = parsedConfigs?.get(projectPath);
+                                if (existing) existing.reloadLevel = ConfigFileProgramReloadLevel.Full;
+                                resolutionCache.removeResolutionsFromProjectReferenceRedirects(projectPath);
+                            }
+                            scheduleProgramUpdate();
+                        });
+                    },
+                    PollingInterval.High,
+                    watchOptions,
+                    watchType
+                ),
+                toPath,
             );
         }
 
-        function watchExtendedConfigFile(extendedConfigFile: Path) {
-            return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ExtendedConfigFile);
+        function watchReferencedProject(configFileName: string, configPath: Path, commandLine: CachedCommandLine) {
+            // Watch file
+            commandLine.watcher ||= watchFile(
+                configFileName,
+                (_fileName, eventKind) => {
+                    updateCachedSystemWithFile(configFileName, configPath, eventKind);
+                    const existing = parsedConfigs?.get(configPath);
+                    if (existing) existing.reloadLevel = ConfigFileProgramReloadLevel.Full;
+                    resolutionCache.removeResolutionsFromProjectReferenceRedirects(configPath);
+                    scheduleProgramUpdate();
+                },
+                PollingInterval.High,
+                commandLine.parsedCommandLine?.watchOptions || watchOptions,
+                WatchType.ConfigFileOfReferencedProject
+            );
+            // Watch Wild card
+            if (commandLine.parsedCommandLine?.wildcardDirectories) {
+                updateWatchingWildcardDirectories(
+                    commandLine.watchedDirectories ||= new Map(),
+                    new Map(getEntries(commandLine.parsedCommandLine?.wildcardDirectories)),
+                    (directory, flags) => watchDirectory(
+                        directory,
+                        fileOrDirectory => {
+                            const fileOrDirectoryPath = toPath(fileOrDirectory);
+                            // Since the file existence changed, update the sourceFiles cache
+                            if (cachedDirectoryStructureHost) {
+                                cachedDirectoryStructureHost.addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                            }
+                            nextSourceFileVersion(fileOrDirectoryPath);
+
+                            const existing = parsedConfigs?.get(configPath);
+                            if (!existing?.parsedCommandLine) return;
+                            if (isIgnoredFileFromWildCardWatching({
+                                watchedDirPath: toPath(directory),
+                                fileOrDirectory,
+                                fileOrDirectoryPath,
+                                configFileName,
+                                options: existing.parsedCommandLine.options,
+                                program: existing.parsedCommandLine.fileNames,
+                                currentDirectory,
+                                useCaseSensitiveFileNames,
+                                writeLog,
+                                toPath,
+                            })) return;
+
+                            // Reload is pending, do the reload
+                            if (existing.reloadLevel !== ConfigFileProgramReloadLevel.Full) {
+                                existing.reloadLevel = ConfigFileProgramReloadLevel.Partial;
+
+                                // Schedule Update the program
+                                scheduleProgramUpdate();
+                            }
+                        },
+                        flags,
+                        commandLine.parsedCommandLine?.watchOptions || watchOptions,
+                        WatchType.WildcardDirectoryOfReferencedProject
+                    )
+                );
+            }
+            else if (commandLine.watchedDirectories) {
+                clearMap(commandLine.watchedDirectories, closeFileWatcherOf);
+                commandLine.watchedDirectories = undefined;
+            }
+            // Watch extended config files
+            updateExtendedConfigFilesWatches(
+                configPath,
+                commandLine.parsedCommandLine?.options,
+                commandLine.parsedCommandLine?.watchOptions || watchOptions,
+                WatchType.ExtendedConfigOfReferencedProject
+            );
         }
     }
 }

@@ -208,7 +208,7 @@ export function Component(x: Config): any;`
             const program2 = ls.getProgram()!;
             assert.deepEqual(
                 program2.getSourceFiles().map(f => f.fileName),
-                [projectSystem.libFile.path, class1.path, class2.path, class3]
+                [projectSystem.libFile.path, class1.path, class3, class2.path]
             );
         });
     });

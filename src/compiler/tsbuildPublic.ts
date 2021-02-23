@@ -1809,7 +1809,7 @@ namespace ts {
     function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
         updateSharedExtendedConfigFileWatcher(
             resolvedPath,
-            parsed,
+            parsed?.options,
             state.allWatchedExtendedConfigFiles,
             (extendedConfigFileName, extendedConfigFilePath) => state.watchFile(
                 extendedConfigFileName,
@@ -1895,10 +1895,7 @@ namespace ts {
 
     function stopWatching(state: SolutionBuilderState) {
         clearMap(state.allWatchedConfigFiles, closeFileWatcher);
-        clearMap(state.allWatchedExtendedConfigFiles, watcher => {
-            watcher.projects.clear();
-            watcher.close();
-        });
+        clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
     }

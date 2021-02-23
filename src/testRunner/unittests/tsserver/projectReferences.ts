@@ -1461,7 +1461,7 @@ bar;`
                 const { host, project2, class1, class2, config2 } = setup();
                 const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                host.checkTimeoutQueueLength(0);
+                host.checkTimeoutQueueLengthAndRun(2);
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
             });
 
@@ -1474,7 +1474,7 @@ bar;`
 
                 const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
-                host.checkTimeoutQueueLengthAndRun(2);
+                host.checkTimeoutQueueLengthAndRun(3);
                 checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
             });
