@@ -66,6 +66,7 @@
         "unittests/factory.ts",
         "unittests/incrementalParser.ts",
         "unittests/jsDocParsing.ts",
+        "unittests/jsonParserRecovery.ts",
         "unittests/moduleResolution.ts",
         "unittests/parsePseudoBigInt.ts",
         "unittests/paths.ts",

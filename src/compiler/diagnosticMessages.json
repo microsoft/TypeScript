@@ -3850,6 +3850,10 @@
         "category": "Error",
         "code": 5091
     },
+    "The root value of a '{0}' file must be an object.": {
+        "category": "Error",
+        "code": 5092
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
