@@ -302,26 +302,30 @@ namespace ts {
         });
     }
 
+    /**
+     * Remove the project from the extended config file watchers and close not needed watches
+     */
     export function clearSharedExtendedConfigFileWatcher<T>(
         projectPath: T,
         extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
     ) {
-        // remove project from all unrelated watchers
         extendedConfigFilesMap.forEach(watcher => {
             if (watcher.projects.delete(projectPath)) watcher.close();
         });
     }
 
-    export function cleanExtendsCache(
+    /**
+     * Clean the extendsConfigCache when extended config file has changed
+     */
+    export function cleanExtendedConfigCache(
         extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
         extendedConfigFilePath: Path,
         toPath: (fileName: string) => Path,
     ) {
-        // Update extended config cache
         if (!extendedConfigCache.delete(extendedConfigFilePath)) return;
         extendedConfigCache.forEach(({ extendedResult }, key) => {
             if (extendedResult.extendedSourceFiles?.some(extendedFile => toPath(extendedFile) === extendedConfigFilePath)) {
-                cleanExtendsCache(extendedConfigCache, key as Path, toPath);
+                cleanExtendedConfigCache(extendedConfigCache, key as Path, toPath);
             }
         });
     }

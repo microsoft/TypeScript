@@ -1424,7 +1424,7 @@ namespace ts.server {
                     extendedConfigFileName,
                     () => {
                         // Update extended config cache
-                        cleanExtendsCache(this.extendedConfigCache, extendedConfigFilePath, fileName => this.toPath(fileName));
+                        cleanExtendedConfigCache(this.extendedConfigCache, extendedConfigFilePath, fileName => this.toPath(fileName));
                         // Update projects
                         let ensureProjectsForOpenFiles = false;
                         this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {

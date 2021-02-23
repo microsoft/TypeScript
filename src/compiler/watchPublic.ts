@@ -900,7 +900,7 @@ namespace ts {
                     (_fileName, eventKind) => {
                         updateCachedSystemWithFile(extendedConfigFileName, extendedConfigFilePath, eventKind);
                         // Update extended config cache
-                        if (extendedConfigCache) cleanExtendsCache(extendedConfigCache, extendedConfigFilePath, toPath);
+                        if (extendedConfigCache) cleanExtendedConfigCache(extendedConfigCache, extendedConfigFilePath, toPath);
                         // Update projects
                         const projects = sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects;
                         if (!projects?.size) return;

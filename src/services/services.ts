@@ -1302,7 +1302,7 @@ namespace ts {
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = host.getProjectReferences?.();
-            const parsedCommandLines = new Map<Path, ParsedCommandLine | false>();
+            let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
             const parseConfigHost: ParseConfigFileHost = {
                 useCaseSensitiveFileNames,
                 fileExists,
@@ -1371,6 +1371,7 @@ namespace ts {
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
+            parsedCommandLines = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
@@ -1384,13 +1385,13 @@ namespace ts {
 
             function getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                const existing = parsedCommandLines.get(path);
+                const existing = parsedCommandLines?.get(path);
                 if (existing !== undefined) return existing || undefined;
 
                 const result = host.getParsedCommandLine ?
                     host.getParsedCommandLine(fileName) :
                     getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
-                parsedCommandLines.set(path, result || false);
+                (parsedCommandLines ||= new Map()).set(path, result || false);
                 return result;
             }
 
