@@ -1202,15 +1202,15 @@ namespace ts {
         function emitWithContext<T extends Node>(node: T, emitCallback: (node: T) => void) {
             onBeforeEmitNode?.(node);
 
+            const emitFlags = getEmitFlags(node);
             const savedPreserveSourceNewlines = preserveSourceNewlines;
-            if (preserveSourceNewlines && !!(getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
+            if (preserveSourceNewlines && (emitFlags & EmitFlags.IgnoreSourceNewlines)) {
                 preserveSourceNewlines = false;
             }
 
             const savedContainerPos = containerPos;
             const savedContainerEnd = containerEnd;
             const savedDeclarationListContainerEnd = declarationListContainerEnd;
-            const emitFlags = getEmitFlags(node);
             const commentRange = shouldEmitComments(node) ? getCommentRange(node) : undefined;
             const sourceMapRange = shouldEmitSourceMaps(node) ? getSourceMapRange(node) : undefined;
 
@@ -2520,7 +2520,62 @@ namespace ts {
         }
 
         function createEmitBinaryExpression() {
-            return createBinaryExpressionWalker(noop, maybePipelineEmitExpression, onOperator, maybePipelineEmitExpression, onExit, identity);
+            class EmitBinaryExpressionState {
+                nested = false;
+                preserveSourceNewlines: boolean | undefined = undefined;
+                containerPos = -1;
+                containerEnd = -1;
+                declarationListContainerEnd = -1;
+                emitFlags = EmitFlags.None;
+                commentRange: TextRange | undefined = undefined;
+                sourceMapRange: SourceMapRange | undefined = undefined;
+            }
+
+            return createBinaryExpressionWalker(onEnter, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
+
+            function onEnter(node: BinaryExpression, prev: EmitBinaryExpressionState | undefined) {
+                const state = new EmitBinaryExpressionState();
+                if (prev) {
+                    // `prev` is only defined when recuring. We can use this fact to indicate
+                    // we are entering into a nested binary expression and can replicate the
+                    // leading comment and sourcemap emit performed by `emitWithContext`.
+                    state.nested = true;
+                    onBeforeEmitNode?.(node);
+
+                    state.emitFlags = getEmitFlags(node);
+                    state.preserveSourceNewlines = preserveSourceNewlines;
+                    if (preserveSourceNewlines && (state.emitFlags & EmitFlags.IgnoreSourceNewlines)) {
+                        preserveSourceNewlines = false;
+                    }
+
+                    state.containerPos = containerPos;
+                    state.containerEnd = containerEnd;
+                    state.declarationListContainerEnd = declarationListContainerEnd;
+                    state.commentRange = shouldEmitComments(node) ? getCommentRange(node) : undefined;
+                    state.sourceMapRange = shouldEmitSourceMaps(node) ? getSourceMapRange(node) : undefined;
+
+                    // Emit leading comments
+                    if (state.commentRange) {
+                        emitLeadingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end);
+                        if (state.emitFlags & EmitFlags.NoNestedComments) {
+                            commentsDisabled = true;
+                        }
+                    }
+
+                    // Emit leading sourcemap
+                    if (state.sourceMapRange) {
+                        const source = state.sourceMapRange.source || sourceMapSource;
+                        if ((state.emitFlags & EmitFlags.NoLeadingSourceMap) === 0
+                            && state.sourceMapRange.pos >= 0) {
+                            emitSourcePos(state.sourceMapRange.source || sourceMapSource, skipSourceTrivia(source, state.sourceMapRange.pos));
+                        }
+                        if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
+                            sourceMapsDisabled = true;
+                        }
+                    }
+                }
+                return state;
+            }
 
             function onOperator(operatorToken: BinaryOperatorToken, _: unknown, node: BinaryExpression) {
                 const isCommaOperator = operatorToken.kind !== SyntaxKind.CommaToken;
@@ -2533,25 +2588,48 @@ namespace ts {
                 writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
             }
 
-            function onExit(node: BinaryExpression) {
+            function onExit(node: BinaryExpression, state: EmitBinaryExpressionState) {
                 const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
                 const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
                 decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
+
+                if (state.nested) {
+                    // If we are marked as nested, we are recurring. We can use this fact to indicate
+                    // we are exiting from a nested binary expression and can replicate the trailing
+                    // comment and sourcemap emit performed by `emitWithContext`.
+
+                    // Emit trailing sourcemap
+                    if (state.sourceMapRange) {
+                        if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
+                            sourceMapsDisabled = false;
+                        }
+                        if ((state.emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                            && state.sourceMapRange.end >= 0) {
+                            emitSourcePos(state.sourceMapRange.source || sourceMapSource, state.sourceMapRange.end);
+                        }
+                    }
+
+                    // Emit trailing comments
+                    if (state.commentRange) {
+                        if (state.emitFlags & EmitFlags.NoNestedComments) {
+                            commentsDisabled = false;
+                        }
+                        emitTrailingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end, state.containerPos, state.containerEnd, state.declarationListContainerEnd);
+                    }
+
+                    onAfterEmitNode?.(node);
+
+                    preserveSourceNewlines = state.preserveSourceNewlines;
+                }
             }
 
-            function maybePipelineEmitExpression(next: Expression) {
-                // Then actually do the work of emitting the node `next` returned by the prior state
-                // The following section should be identical to `pipelineEmit` save it assumes EmitHint.Expression and offloads
-                // binary expression handling, where possible, to the contained work queue
-
-                if (!shouldEmitComments(next) && !shouldEmitSourceMaps(next) && isBinaryExpression(next)) {
-                    // If the target pipeline phase is emit directly, and the next node's also a binary expression,
-                    // skip all the intermediate indirection and push the expression directly onto the work stack
+            function maybeEmitExpression(next: Expression) {
+                // Push a new frame for binary expressions, otherwise emit all other expressions.
+                if (isBinaryExpression(next)) {
                     return next;
                 }
-                else {
-                    emit(next);
-                }
+
+                emit(next);
             }
         }
 
