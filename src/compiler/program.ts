@@ -537,8 +537,7 @@ namespace ts {
         return forEachProjectReference(/*projectReferences*/ undefined, resolvedProjectReferences, (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent));
     }
 
-    /* @internal */
-    export function forEachProjectReference<T>(
+    function forEachProjectReference<T>(
         projectReferences: readonly ProjectReference[] | undefined,
         resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
         cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, parent: ResolvedProjectReference | undefined, index: number) => T | undefined,
@@ -712,8 +711,8 @@ namespace ts {
                 // Check if config file exists
                 if (!newParsedCommandLine) return false;
 
-                // check compiler options
-                if (!compareDataObjects(oldResolvedRef.commandLine.options, newParsedCommandLine.options)) return false;
+                // If change in source file
+                if (oldResolvedRef.commandLine.options.configFile !== newParsedCommandLine.options.configFile) return false;
 
                 // check file names
                 if (!arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newParsedCommandLine.fileNames)) return false;
@@ -1022,6 +1021,7 @@ namespace ts {
             }
         }
 
+        // Release commandlines that new program does not use
         if (oldProgram && host.onReleaseParsedCommandLine) {
             forEachProjectReference(
                 oldProgram.getProjectReferences(),
@@ -1378,7 +1378,6 @@ namespace ts {
                         // Resolved project reference has gone missing or changed
                         return !newResolvedRef ||
                             newResolvedRef.sourceFile !== oldResolvedRef.sourceFile ||
-                            !compareDataObjects(oldResolvedRef.commandLine.options, newResolvedRef.commandLine.options) ||
                             !arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames);
                     }
                     else {

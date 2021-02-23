@@ -226,10 +226,14 @@ namespace ts {
         }
     }
 
-    interface CachedCommandLine {
+    interface ParsedConfig {
+        /** ParsedCommandLine for the config file if present */
         parsedCommandLine: ParsedCommandLine | undefined;
+        /** File watcher of the config file */
         watcher?: FileWatcher;
+        /** Wild card directories watched from this config file */
         watchedDirectories?: Map<WildcardDirectoryWatcher>;
+        /** Reload to be done for this config file */
         reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
     }
 
@@ -257,13 +261,15 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
-        let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
+        let missingFilesMap: ESMap<Path, FileWatcher>;                       // Map of file watchers for the missing files
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
-        let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>;
+        let parsedConfigs: ESMap<Path, ParsedConfig> | undefined;           // Parsed commandline and watching cached for referenced projects
+        let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
+        let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
 
-        const sourceFilesCache = new Map<string, HostFileInfo>();                 // Cache that stores the source file and version info
+        const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
 
@@ -275,8 +281,6 @@ namespace ts {
         let configFileParsingDiagnostics: Diagnostic[] | undefined;
         let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
-        let parsedConfigs: ESMap<Path, CachedCommandLine> | undefined;
-        const extendedConfigCache = host.extendedConfigCache || new Map<string, ExtendedConfigCacheEntry>();
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
         const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
@@ -372,7 +376,8 @@ namespace ts {
                 configFileWatcher.close();
                 configFileWatcher = undefined;
             }
-            extendedConfigCache.clear();
+            extendedConfigCache?.clear();
+            extendedConfigCache = undefined;
             if (sharedExtendedConfigFileWatchers) {
                 clearMap(sharedExtendedConfigFileWatchers, closeFileWatcherOf);
                 sharedExtendedConfigFileWatchers = undefined!;
@@ -695,7 +700,14 @@ namespace ts {
         }
 
         function parseConfigFile() {
-            setConfigFileParsingResult(getParsedCommandLineOfConfigFile(configFileName, optionsToExtendForConfigFile, parseConfigFileHost, extendedConfigCache, watchOptionsToExtend, extraFileExtensions)!); // TODO: GH#18217
+            setConfigFileParsingResult(getParsedCommandLineOfConfigFile(
+                configFileName,
+                optionsToExtendForConfigFile,
+                parseConfigFileHost,
+                extendedConfigCache ||= new Map(),
+                watchOptionsToExtend,
+                extraFileExtensions
+            )!); // TODO: GH#18217
         }
 
         function setConfigFileParsingResult(configFileParseResult: ParsedCommandLine) {
@@ -726,17 +738,23 @@ namespace ts {
                         compilerOptions,
                         parseConfigFileHost,
                     );
-                    config.parsedCommandLine = { ...config.parsedCommandLine, fileNames, };
+                    config.parsedCommandLine = { ...config.parsedCommandLine, fileNames };
                     config.reloadLevel = undefined;
                     return config.parsedCommandLine;
                 }
             }
 
-            // Ignore the file absent errors
             writeLog(`Loading config file: ${configFileName}`);
+            // Ignore the file absent errors
             const onUnRecoverableConfigFileDiagnostic = parseConfigFileHost.onUnRecoverableConfigFileDiagnostic;
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
-            const parsedCommandLine = getParsedCommandLineOfConfigFile(configFileName, /*optionsToExtend*/ undefined, parseConfigFileHost, extendedConfigCache, watchOptionsToExtend);
+            const parsedCommandLine = getParsedCommandLineOfConfigFile(
+                configFileName,
+                /*optionsToExtend*/ undefined,
+                parseConfigFileHost,
+                extendedConfigCache ||= new Map(),
+                watchOptionsToExtend
+            );
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
             if (config) {
                 config.parsedCommandLine = parsedCommandLine;
@@ -752,12 +770,12 @@ namespace ts {
         function onReleaseParsedCommandLine(fileName: string) {
             if (host.getParsedCommandLine) return;
             const path = toPath(fileName);
-            const existing = parsedConfigs?.get(path);
-            if (!existing) return;
+            const config = parsedConfigs?.get(path);
+            if (!config) return;
 
             parsedConfigs!.delete(path);
-            if (existing.watchedDirectories) clearMap(existing.watchedDirectories, closeFileWatcherOf);
-            existing.watcher?.close();
+            if (config.watchedDirectories) clearMap(config.watchedDirectories, closeFileWatcherOf);
+            config.watcher?.close();
             clearSharedExtendedConfigFileWatcher(path, sharedExtendedConfigFileWatchers);
         }
 
@@ -879,7 +897,7 @@ namespace ts {
                     (_fileName, eventKind) => {
                         updateCachedSystemWithFile(extendedConfigFileName, extendedConfigFilePath, eventKind);
                         // Update extended config cache
-                        cleanExtendsCache(extendedConfigCache, extendedConfigFilePath, toPath);
+                        if (extendedConfigCache) cleanExtendsCache(extendedConfigCache, extendedConfigFilePath, toPath);
                         // Update projects
                         const projects = sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects;
                         if (!projects?.size) return;
@@ -888,8 +906,8 @@ namespace ts {
                                 reloadLevel = ConfigFileProgramReloadLevel.Full;
                             }
                             else {
-                                const existing = parsedConfigs?.get(projectPath);
-                                if (existing) existing.reloadLevel = ConfigFileProgramReloadLevel.Full;
+                                const config = parsedConfigs?.get(projectPath);
+                                if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
                                 resolutionCache.removeResolutionsFromProjectReferenceRedirects(projectPath);
                             }
                             scheduleProgramUpdate();
@@ -903,14 +921,14 @@ namespace ts {
             );
         }
 
-        function watchReferencedProject(configFileName: string, configPath: Path, commandLine: CachedCommandLine) {
+        function watchReferencedProject(configFileName: string, configPath: Path, commandLine: ParsedConfig) {
             // Watch file
             commandLine.watcher ||= watchFile(
                 configFileName,
                 (_fileName, eventKind) => {
                     updateCachedSystemWithFile(configFileName, configPath, eventKind);
-                    const existing = parsedConfigs?.get(configPath);
-                    if (existing) existing.reloadLevel = ConfigFileProgramReloadLevel.Full;
+                    const config = parsedConfigs?.get(configPath);
+                    if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
                     resolutionCache.removeResolutionsFromProjectReferenceRedirects(configPath);
                     scheduleProgramUpdate();
                 },
@@ -933,15 +951,15 @@ namespace ts {
                             }
                             nextSourceFileVersion(fileOrDirectoryPath);
 
-                            const existing = parsedConfigs?.get(configPath);
-                            if (!existing?.parsedCommandLine) return;
+                            const config = parsedConfigs?.get(configPath);
+                            if (!config?.parsedCommandLine) return;
                             if (isIgnoredFileFromWildCardWatching({
                                 watchedDirPath: toPath(directory),
                                 fileOrDirectory,
                                 fileOrDirectoryPath,
                                 configFileName,
-                                options: existing.parsedCommandLine.options,
-                                program: existing.parsedCommandLine.fileNames,
+                                options: config.parsedCommandLine.options,
+                                program: config.parsedCommandLine.fileNames,
                                 currentDirectory,
                                 useCaseSensitiveFileNames,
                                 writeLog,
@@ -949,8 +967,8 @@ namespace ts {
                             })) return;
 
                             // Reload is pending, do the reload
-                            if (existing.reloadLevel !== ConfigFileProgramReloadLevel.Full) {
-                                existing.reloadLevel = ConfigFileProgramReloadLevel.Partial;
+                            if (config.reloadLevel !== ConfigFileProgramReloadLevel.Full) {
+                                config.reloadLevel = ConfigFileProgramReloadLevel.Partial;
 
                                 // Schedule Update the program
                                 scheduleProgramUpdate();
