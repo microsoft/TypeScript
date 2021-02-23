@@ -1278,8 +1278,8 @@ namespace ts.server {
         private addMissingFileWatcher(missingFilePath: Path) {
             if (isConfiguredProject(this)) {
                 // If this file is referenced config file, we are already watching it, no need to watch again
-                const configInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
-                if (configInfo?.cachedCommandLine?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
+                const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
+                if (configFileExistenceInfo?.config?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
             }
             const fileWatcher = this.projectService.watchFactory.watchFile(
                 missingFilePath,
@@ -2140,23 +2140,29 @@ namespace ts.server {
         getParsedCommandLine(fileName: string) {
             const configFileName = asNormalizedPath(normalizePath(fileName));
             const canonicalConfigFilePath = asNormalizedPath(this.projectService.toCanonicalFileName(configFileName));
+            // Ensure the config file existience info is cached
             let configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(canonicalConfigFilePath);
             if (!configFileExistenceInfo) {
-                // Create it
                 this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.host.fileExists(configFileName) });
             }
-            this.projectService.parseTsconfigFile(configFileName, canonicalConfigFilePath, this.canonicalConfigFilePath);
+            // Ensure we have upto date parsed command line
+            this.projectService.ensureParsedConfigUptoDate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, this);
+            // Watch wild cards if LS is enabled
             if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic) {
-                this.projectService.watchWildcards(configFileName, configFileExistenceInfo, this.canonicalConfigFilePath);
+                this.projectService.watchWildcards(configFileName, configFileExistenceInfo, this);
             }
-            return configFileExistenceInfo.exists ? configFileExistenceInfo.cachedCommandLine!.parsedCommandLine : undefined;
+            return configFileExistenceInfo.exists ? configFileExistenceInfo.config!.parsedCommandLine : undefined;
         }
 
         /* @internal */
         onReleaseParsedCommandLine(fileName: string) {
-            const canonicalConfigFilePath = asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName))));
-            this.projectService.stopWatchingWildCards(canonicalConfigFilePath, this.canonicalConfigFilePath);
-            this.projectService.setConfigFileExistenceInfoByClosedCommandLineCache(canonicalConfigFilePath, this.canonicalConfigFilePath);
+            this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))));
+        }
+
+        /* @internal */
+        private releaseParsedConfig(canonicalConfigFilePath: NormalizedPath) {
+            this.projectService.stopWatchingWildCards(canonicalConfigFilePath, this);
+            this.projectService.releaseParsedConfig(canonicalConfigFilePath, this);
         }
 
         /**
@@ -2275,14 +2281,8 @@ namespace ts.server {
         }
 
         close() {
-            this.projectService.stopWatchingWildCards(this.canonicalConfigFilePath, this.canonicalConfigFilePath);
-            this.projectService.setConfigFileExistenceInfoByClosedCommandLineCache(this.canonicalConfigFilePath, this.canonicalConfigFilePath);
-            this.projectService.configFileExistenceInfoCache.forEach((value, key) => {
-                if (value.cachedCommandLine?.projects.has(this.canonicalConfigFilePath)) {
-                    this.projectService.stopWatchingWildCards(key, this.canonicalConfigFilePath);
-                    this.projectService.setConfigFileExistenceInfoByClosedCommandLineCache(key, this.canonicalConfigFilePath);
-                }
-            });
+            this.projectService.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) =>
+                this.releaseParsedConfig(canonicalConfigFilePath));
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;

@@ -800,7 +800,6 @@ namespace ts {
             if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.has(path)) {
                 resolutionCache.invalidateResolutionOfFile(path);
             }
-            resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
             nextSourceFileVersion(path);
 
             // Update the program

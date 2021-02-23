@@ -9753,20 +9753,10 @@ declare namespace ts.server {
         private closeOpenFile;
         private deleteScriptInfo;
         private configFileExists;
-        private createConfigFileWatcherForCommandLineCache;
         /**
          * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
          */
         private configFileExistenceImpactsRootOfInferredProject;
-        /**
-         * Create the watcher for the configFileExistenceInfo
-         */
-        private createConfigFileWatcherOfConfigFileExistence;
-        /**
-         * Close the config file watcher in the cached ConfigFileExistenceInfo
-         *   if there arent any open files that are root of inferred project
-         */
-        private closeConfigFileWatcherIfNotNeeded;
         /**
          * This is called on file close, so that we stop watching the config file for this script info
          */
