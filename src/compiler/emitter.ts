@@ -1,16 +1,6 @@
 namespace ts {
     const brackets = createBracketsMap();
 
-    /**
-     * For a BinaryExpression trampoline function, indicates
-     * which state of the trampoline we are currently in.
-     */
-    const enum BinaryExpressionState {
-        Left,
-        Right,
-        Finish
-    }
-
     /*@internal*/
     export function isBuildInfoFile(file: string) {
         return fileExtensionIs(file, Extension.TsBuildInfo);
@@ -925,6 +915,7 @@ namespace ts {
         let commentsDisabled = !!printerOptions.removeComments;
         const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
         const preprint = createPreprinter(handlers);
+        const emitBinaryExpression = createEmitBinaryExpression();
 
         reset();
         return {
@@ -2528,66 +2519,39 @@ namespace ts {
             writeTokenText(node.operator, writeOperator);
         }
 
-        /**
-         * emitBinaryExpression includes an embedded work stack to attempt to handle as many nested binary expressions
-         * as possible without creating any additional stack frames. This can only be done when the emit pipeline does
-         * not require notification/substitution/comment/sourcemap decorations.
-         */
-        function emitBinaryExpression(node: BinaryExpression) {
-            const nodeStack = [node];
-            const stateStack = [BinaryExpressionState.Left];
-            let stackIndex = 0;
-            while (stackIndex >= 0) {
-                node = nodeStack[stackIndex];
-                switch (stateStack[stackIndex]) {
-                    case BinaryExpressionState.Left: {
-                        maybePipelineEmitExpression(node.left);
-                        break;
-                    }
-                    case BinaryExpressionState.Right: {
-                        const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
-                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
-                        writeLinesAndIndent(linesBeforeOperator, isCommaOperator);
-                        emitLeadingCommentsOfPosition(node.operatorToken.pos);
-                        writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
-                        emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-                        writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-                        maybePipelineEmitExpression(node.right);
-                        break;
-                    }
-                    case BinaryExpressionState.Finish: {
-                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
-                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
-                        decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
-                        stackIndex--;
-                        break;
-                    }
-                    default: return Debug.fail(`Invalid state ${stateStack[stackIndex]} for emitBinaryExpressionWorker`);
-                }
+        function createEmitBinaryExpression() {
+            return createBinaryExpressionWalker(noop, maybePipelineEmitExpression, onOperator, maybePipelineEmitExpression, onExit, identity);
+
+            function onOperator(operatorToken: BinaryOperatorToken, _: unknown, node: BinaryExpression) {
+                const isCommaOperator = operatorToken.kind !== SyntaxKind.CommaToken;
+                const linesBeforeOperator = getLinesBetweenNodes(node, node.left, operatorToken);
+                const linesAfterOperator = getLinesBetweenNodes(node, operatorToken, node.right);
+                writeLinesAndIndent(linesBeforeOperator, isCommaOperator);
+                emitLeadingCommentsOfPosition(operatorToken.pos);
+                writeTokenNode(operatorToken, operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
+                emitTrailingCommentsOfPosition(operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
+                writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+            }
+
+            function onExit(node: BinaryExpression) {
+                const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
+                const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
+                decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
             }
 
             function maybePipelineEmitExpression(next: Expression) {
-                // Advance the state of this unit of work,
-                stateStack[stackIndex]++;
-
                 // Then actually do the work of emitting the node `next` returned by the prior state
-
                 // The following section should be identical to `pipelineEmit` save it assumes EmitHint.Expression and offloads
                 // binary expression handling, where possible, to the contained work queue
 
-                // #region trampolinePipelineEmit
                 if (!shouldEmitComments(next) && !shouldEmitSourceMaps(next) && isBinaryExpression(next)) {
                     // If the target pipeline phase is emit directly, and the next node's also a binary expression,
                     // skip all the intermediate indirection and push the expression directly onto the work stack
-                    stackIndex++;
-                    stateStack[stackIndex] = BinaryExpressionState.Left;
-                    nodeStack[stackIndex] = next;
+                    return next;
                 }
                 else {
                     emit(next);
                 }
-                // #endregion trampolinePipelineEmit
             }
         }
 
@@ -6615,75 +6579,66 @@ namespace ts {
                 visitTypeNode(node.default));
         }
 
-        function preprintBinaryExpression(node: BinaryExpression) {
-            // This emulates `emitBinaryExpression` in `createPrinter`, except that
-            // it handles tree transformation instead of printing.
-            const nodeStack = [node];
-            const leftStack = [node.left];
-            const operatorStack = [node.operatorToken];
-            const rightStack = [node.right];
-            const stateStack = [BinaryExpressionState.Left];
-            let stackIndex = 0;
-            while (stackIndex >= 0) {
-                node = nodeStack[stackIndex];
-                switch (stateStack[stackIndex]) {
-                    case BinaryExpressionState.Left: {
-                        maybeVisitExpression(node.left);
-                        break;
-                    }
-                    case BinaryExpressionState.Right: {
-                        operatorStack[stackIndex] = visit(node.operatorToken, isBinaryOperatorToken);
-                        maybeVisitExpression(node.right);
-                        break;
-                    }
-                    case BinaryExpressionState.Finish: {
-                        const left = leftStack[stackIndex];
-                        const right = rightStack[stackIndex];
-                        const updated = factory.updateBinaryExpression(node, left, node.operatorToken, right);
-                        stackIndex--;
-                        if (stackIndex >= 0) {
-                            const sideStack = stateStack[stackIndex] === BinaryExpressionState.Finish ? rightStack : leftStack;
-                            sideStack[stackIndex] = updated;
-                        }
-                        break;
-                    }
-                    default:
-                        Debug.fail(`Invalid state ${stateStack[stackIndex]} for preprintBinaryExpression`);
-                }
+        function createPreprintBinaryExpression() {
+            class PreprintBinaryExpressionState {
+                constructor(
+                    public left: Expression,
+                    public operator: BinaryOperatorToken,
+                    public right: Expression
+                ) {}
             }
 
-            return factory.updateBinaryExpression(node, leftStack[0], operatorStack[0], rightStack[0]);
+            return createBinaryExpressionWalker(onEnter, onLeft, onOperator, onRight, onExit, foldState);
 
-            function maybeVisitExpression(next: Expression) {
-                // Advance the state of this unit of work,
-                const currentState = stateStack[stackIndex];
-                stateStack[stackIndex]++;
+            function onEnter(node: BinaryExpression) {
+                return new PreprintBinaryExpressionState(node.left, node.operatorToken, node.right);
+            }
+
+            function onLeft(left: Expression, state: PreprintBinaryExpressionState) {
+                return maybeVisitExpression(left, state, "left");
+            }
+
+            function onOperator(operator: BinaryOperatorToken, state: PreprintBinaryExpressionState) {
+                state.operator = visit(operator, isBinaryOperatorToken);
+            }
+
+            function onRight(right: Expression, state: PreprintBinaryExpressionState) {
+                return maybeVisitExpression(right, state, "right");
+            }
+
+            function onExit(node: BinaryExpression, state: PreprintBinaryExpressionState) {
+                return factory.updateBinaryExpression(node, state.left, state.operator, state.right);
+            }
+
+            function foldState(state: PreprintBinaryExpressionState, result: BinaryExpression, side: "left" | "right") {
+                state[side] = result;
+                return state;
+            }
+
+            function maybeVisitExpression(node: Expression, state: PreprintBinaryExpressionState, side: "left" | "right") {
                 // Get the first supported pipeline phase for this node. We can skip several stack
                 // frames if we aren't doing emit notification, so we check for substitution and
                 // direct callbacks and execute those immediately.
-                let pipelinePhase = getPipelinePhase(PreprintPipelinePhase.Notification, next);
+                let pipelinePhase = getPipelinePhase(PreprintPipelinePhase.Notification, node);
                 if (pipelinePhase === pipelineVisitWithSubstitution) {
                     // The next phase after substitution is always direct visitation, so we can reduce the call stack
                     // depth by proceding to the direct visitor.
-                    next = cast(substituteNode(EmitHint.Expression, next), isExpression);
+                    node = cast(substituteNode(EmitHint.Expression, node), isExpression);
                     pipelinePhase = pipelineVisitDirect;
                 }
-                if (pipelinePhase === pipelineVisitDirect && isBinaryExpression(next)) {
+                if (pipelinePhase === pipelineVisitDirect && isBinaryExpression(node)) {
                     // If we are visiting directly and the next node is a BinaryExpression, we can
                     // add it to the stack and continue the trampoline.
-                    stackIndex++;
-                    stateStack[stackIndex] = BinaryExpressionState.Left;
-                    nodeStack[stackIndex] = next;
-                    leftStack[stackIndex] = next.left;
-                    rightStack[stackIndex] = next.right;
+                    return node;
                 }
                 else {
                     // Visit the expression and store the result on whichever side we are currently visiting.
-                    const sideStack = currentState === BinaryExpressionState.Left ? leftStack : rightStack;
-                    sideStack[stackIndex] = visitExpression(next, isExpression);
+                    state[side] = visitExpression(node, isExpression);
                 }
             }
         }
+
+        const preprintBinaryExpression = createPreprintBinaryExpression();
 
         function preprint(hint: EmitHint, node: Node) {
             // If we're not performing substitution or notification, we have no work to do here.

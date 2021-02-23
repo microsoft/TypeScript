@@ -227,6 +227,7 @@ namespace ts {
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+        const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
 
         /**
          * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
@@ -1500,132 +1501,106 @@ namespace ts {
             bindAssignmentTargetFlow(node.left);
         }
 
-        const enum BindBinaryExpressionFlowState {
-            BindThenBindChildren,
-            MaybeBindLeft,
-            BindToken,
-            BindRight,
-            FinishBind
-        }
-
-        function bindBinaryExpressionFlow(node: BinaryExpression) {
-            const workStacks: {
-                expr: BinaryExpression[],
-                state: BindBinaryExpressionFlowState[],
-                inStrictMode: (boolean | undefined)[],
-                parent: (Node | undefined)[],
-            } = {
-                expr: [node],
-                state: [BindBinaryExpressionFlowState.MaybeBindLeft],
-                inStrictMode: [undefined],
-                parent: [undefined],
-            };
-            let stackIndex = 0;
-            while (stackIndex >= 0) {
-                node = workStacks.expr[stackIndex];
-                switch (workStacks.state[stackIndex]) {
-                    case BindBinaryExpressionFlowState.BindThenBindChildren: {
-                        // This state is used only when recuring, to emulate the work that `bind` does before
-                        // reaching `bindChildren`. A normal call to `bindBinaryExpressionFlow` will already have done this work.
-                        setParent(node, parent);
-                        const saveInStrictMode = inStrictMode;
-                        bindWorker(node);
-                        const saveParent = parent;
-                        parent = node;
-
-                        advanceState(BindBinaryExpressionFlowState.MaybeBindLeft, saveInStrictMode, saveParent);
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.MaybeBindLeft: {
-                        const operator = node.operatorToken.kind;
-                        // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
-                        // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
-                        // For now, though, since the common cases are chained `+`, leaving it recursive is fine
-                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken ||
-                            isLogicalOrCoalescingAssignmentOperator(operator)) {
-                            if (isTopLevelLogicalExpression(node)) {
-                                const postExpressionLabel = createBranchLabel();
-                                bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
-                                currentFlow = finishFlowLabel(postExpressionLabel);
-                            }
-                            else {
-                                bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
-                            }
-                            completeNode();
-                        }
-                        else {
-                            advanceState(BindBinaryExpressionFlowState.BindToken);
-                            maybeBind(node.left);
-                        }
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.BindToken: {
-                        if (node.operatorToken.kind === SyntaxKind.CommaToken) {
-                            maybeBindExpressionFlowIfCall(node.left);
-                        }
-                        advanceState(BindBinaryExpressionFlowState.BindRight);
-                        maybeBind(node.operatorToken);
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.BindRight: {
-                        advanceState(BindBinaryExpressionFlowState.FinishBind);
-                        maybeBind(node.right);
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.FinishBind: {
-                        const operator = node.operatorToken.kind;
-                        if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
-                            bindAssignmentTargetFlow(node.left);
-                            if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
-                                const elementAccess = <ElementAccessExpression>node.left;
-                                if (isNarrowableOperand(elementAccess.expression)) {
-                                    currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
-                                }
-                            }
-                        }
-                        completeNode();
-                        break;
-                    }
-                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for bindBinaryExpressionFlow`);
+        function createBindBinaryExpressionFlow() {
+            class BindBinaryExpressionState {
+                public skip = false;
+                constructor(
+                    readonly isInStrictMode: boolean | undefined,
+                    readonly parent: Node | undefined
+                ) {
                 }
             }
 
-            /**
-             * Note that `advanceState` sets the _current_ head state, and that `maybeBind` potentially pushes on a new
-             * head state; so `advanceState` must be called before any `maybeBind` during a state's execution.
-             */
-            function advanceState(state: BindBinaryExpressionFlowState, isInStrictMode?: boolean, parent?: Node) {
-                workStacks.state[stackIndex] = state;
-                if (isInStrictMode !== undefined) {
-                    workStacks.inStrictMode[stackIndex] = isInStrictMode;
-                }
-                if (parent !== undefined) {
-                    workStacks.parent[stackIndex] = parent;
-                }
-            }
+            return createBinaryExpressionWalker(onEnter, onLeft, onOperator, onRight, onExit, identity);
 
-            function completeNode() {
-                if (workStacks.inStrictMode[stackIndex] !== undefined) {
-                    inStrictMode = workStacks.inStrictMode[stackIndex]!;
-                    parent = workStacks.parent[stackIndex]!;
-                }
-                stackIndex--;
-            }
-
-            /**
-             * If `node` is a BinaryExpression, adds it to the local work stack, otherwise recursively binds it
-             */
-            function maybeBind(node: Node) {
-                if (node && isBinaryExpression(node) && !isDestructuringAssignment(node)) {
-                    stackIndex++;
-                    workStacks.expr[stackIndex] = node;
-                    workStacks.state[stackIndex] = BindBinaryExpressionFlowState.BindThenBindChildren;
-                    workStacks.inStrictMode[stackIndex] = undefined;
-                    workStacks.parent[stackIndex] = undefined;
+            function onEnter(node: BinaryExpression, prev: BindBinaryExpressionState | undefined) {
+                let state: BindBinaryExpressionState;
+                if (prev) {
+                    // `prev` is only defined when recuring. We can use this to emulate the work that `bind` does before
+                    // reaching `bindChildren`. A normal call to `bindBinaryExpressionFlow` will already have done this work.
+                    setParent(node, parent);
+                    const saveInStrictMode = inStrictMode;
+                    bindWorker(node);
+                    const saveParent = parent;
+                    parent = node;
+                    state = new BindBinaryExpressionState(saveInStrictMode, saveParent);
                 }
                 else {
-                    bind(node);
+                    state = new BindBinaryExpressionState(/*isInStrictMode*/ undefined, /*parent*/ undefined);
                 }
+
+                // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
+                // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
+                // For now, though, since the common cases are chained `+`, leaving it recursive is fine
+                const operator = node.operatorToken.kind;
+                if (operator === SyntaxKind.AmpersandAmpersandToken ||
+                    operator === SyntaxKind.BarBarToken ||
+                    operator === SyntaxKind.QuestionQuestionToken ||
+                    isLogicalOrCoalescingAssignmentOperator(operator)) {
+                    if (isTopLevelLogicalExpression(node)) {
+                        const postExpressionLabel = createBranchLabel();
+                        bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
+                        currentFlow = finishFlowLabel(postExpressionLabel);
+                    }
+                    else {
+                        bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
+                    }
+                    state.skip = true;
+                }
+                return state;
+            }
+
+            function onLeft(left: Expression, state: BindBinaryExpressionState, _node: BinaryExpression) {
+                if (!state.skip) {
+                    return maybeBind(left);
+                }
+            }
+
+            function onOperator(operatorToken: BinaryOperatorToken, state: BindBinaryExpressionState, node: BinaryExpression) {
+                if (!state.skip) {
+                    if (operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(node.left);
+                    }
+                    bind(operatorToken);
+                }
+            }
+
+            function onRight(right: Expression, state: BindBinaryExpressionState, _node: BinaryExpression) {
+                if (!state.skip) {
+                    return maybeBind(right);
+                }
+            }
+
+            function onExit(node: BinaryExpression, state: BindBinaryExpressionState) {
+                if (!state.skip) {
+                    const operator = node.operatorToken.kind;
+                    if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
+                        bindAssignmentTargetFlow(node.left);
+                        if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
+                            const elementAccess = <ElementAccessExpression>node.left;
+                            if (isNarrowableOperand(elementAccess.expression)) {
+                                currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
+                            }
+                        }
+                    }
+                }
+                completeNode(state);
+            }
+
+            function completeNode(state: BindBinaryExpressionState) {
+                if (state.isInStrictMode !== undefined) {
+                    inStrictMode = state.isInStrictMode;
+                }
+                if (state.parent !== undefined) {
+                    parent = state.parent;
+                }
+            }
+
+            function maybeBind(node: Node) {
+                if (node && isBinaryExpression(node) && !isDestructuringAssignment(node)) {
+                    return node;
+                }
+                bind(node);
             }
         }
 
