@@ -911,7 +911,7 @@ namespace ts {
                     }
                 }
 
-                const expression = isArray(expressions) ? finishNode(factory.createArrayLiteralExpression(expressions), pos) : expressions!;
+                const expression = isArray(expressions) ? finishNode(factory.createArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
                 const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
                 finishNode(statement, pos);
                 statements = createNodeArray([statement], pos);
