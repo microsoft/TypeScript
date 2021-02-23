@@ -722,15 +722,12 @@ namespace ts {
         }
 
         function getParsedCommandLine(configFileName: string): ParsedCommandLine | undefined {
-            if (host.getParsedCommandLine) {
-                return host.getParsedCommandLine(configFileName);
-            }
-
             const configPath = toPath(configFileName);
             let config = parsedConfigs?.get(configPath);
             if (config) {
                 if (!config.reloadLevel) return config.parsedCommandLine;
-                if (config.parsedCommandLine && config.reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                // With host implementing getParsedCommandLine we cant just update file names
+                if (config.parsedCommandLine && config.reloadLevel === ConfigFileProgramReloadLevel.Partial && !host.getParsedCommandLine) {
                     writeLog("Reloading new file names and options");
                     const fileNames = getFileNamesFromConfigSpecs(
                         config.parsedCommandLine.options.configFile!.configFileSpecs!,
@@ -745,17 +742,9 @@ namespace ts {
             }
 
             writeLog(`Loading config file: ${configFileName}`);
-            // Ignore the file absent errors
-            const onUnRecoverableConfigFileDiagnostic = parseConfigFileHost.onUnRecoverableConfigFileDiagnostic;
-            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
-            const parsedCommandLine = getParsedCommandLineOfConfigFile(
-                configFileName,
-                /*optionsToExtend*/ undefined,
-                parseConfigFileHost,
-                extendedConfigCache ||= new Map(),
-                watchOptionsToExtend
-            );
-            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
+            const parsedCommandLine = host.getParsedCommandLine ?
+                host.getParsedCommandLine(configFileName) :
+                getParsedCommandLineFromConfigFileHost(configFileName);
             if (config) {
                 config.parsedCommandLine = parsedCommandLine;
                 config.reloadLevel = undefined;
@@ -767,8 +756,22 @@ namespace ts {
             return parsedCommandLine;
         }
 
+        function getParsedCommandLineFromConfigFileHost(configFileName: string) {
+            // Ignore the file absent errors
+            const onUnRecoverableConfigFileDiagnostic = parseConfigFileHost.onUnRecoverableConfigFileDiagnostic;
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+            const parsedCommandLine = getParsedCommandLineOfConfigFile(
+                configFileName,
+                /*optionsToExtend*/ undefined,
+                parseConfigFileHost,
+                extendedConfigCache ||= new Map(),
+                watchOptionsToExtend
+            );
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
+            return parsedCommandLine;
+        }
+
         function onReleaseParsedCommandLine(fileName: string) {
-            if (host.getParsedCommandLine) return;
             const path = toPath(fileName);
             const config = parsedConfigs?.get(path);
             if (!config) return;

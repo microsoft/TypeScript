@@ -281,14 +281,19 @@ namespace ts.tscWatch {
             system,
         });
         compilerHost.useSourceOfProjectReferenceRedirect = returnTrue;
-        compilerHost.getParsedCommandLine = fileName => getParsedCommandLineOfConfigFile(fileName, /*optionsToExtend*/ undefined, {
-            useCaseSensitiveFileNames: true,
-            fileExists: path => system.fileExists(path),
-            readFile: path => system.readFile(path),
-            getCurrentDirectory: () => system.getCurrentDirectory(),
-            readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
-            onUnRecoverableConfigFileDiagnostic: noop,
-        });
+        const calledGetParsedCommandLin = new Set<string>();
+        compilerHost.getParsedCommandLine = fileName => {
+            assert.isFalse(calledGetParsedCommandLin.has(fileName), `Already called on ${fileName}`);
+            calledGetParsedCommandLin.add(fileName);
+            return getParsedCommandLineOfConfigFile(fileName, /*optionsToExtend*/ undefined, {
+                useCaseSensitiveFileNames: true,
+                fileExists: path => system.fileExists(path),
+                readFile: path => system.readFile(path),
+                getCurrentDirectory: () => system.getCurrentDirectory(),
+                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                onUnRecoverableConfigFileDiagnostic: noop,
+            });
+        };
         const watch = createWatchProgram(compilerHost);
         runWatchBaseline({
             scenario: "watchApi",
@@ -300,10 +305,10 @@ namespace ts.tscWatch {
                 {
                     caption: "Add class3 to project1",
                     change: sys => {
+                        calledGetParsedCommandLin.clear();
                         sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
-                        watch.getProgram();
                     },
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
             ],
             watchOrSolution: watch

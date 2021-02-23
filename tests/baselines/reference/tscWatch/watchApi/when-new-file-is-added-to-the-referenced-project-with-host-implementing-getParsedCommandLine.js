@@ -50,6 +50,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/myproject/projets/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/projets/project2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projets/project1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projets/project1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/projets/project1/class1.ts:
   {"fileName":"/user/username/projects/myproject/projets/project1/class1.ts","pollingInterval":250}
 /user/username/projects/myproject/projets/project2/class2.ts:
@@ -60,6 +62,8 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
+/user/username/projects/myproject/projets/project1:
+  {"directoryName":"/user/username/projects/myproject/projets/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/projets/project2/node_modules/@types:
   {"directoryName":"/user/username/projects/myproject/projets/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/projets/node_modules/@types:
@@ -122,6 +126,63 @@ declare class class2 {
 Change:: Add class3 to project1
 
 Input::
+//// [/user/username/projects/myproject/projets/project1/class3.ts]
+class class3 {}
+
+
+Output::
+>> Screen clear
+12:00:41 AM - File change detected. Starting incremental compilation...
+
+
+12:00:51 AM - Found 0 errors. Watching for file changes.
+
+
+Program root files: ["/user/username/projects/myproject/projets/project2/class2.ts"]
+Program options: {"module":0,"composite":true,"configFilePath":"/user/username/projects/myproject/projets/project2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projets/project1/class1.ts
+/user/username/projects/myproject/projets/project1/class3.ts
+/user/username/projects/myproject/projets/project2/class2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projets/project1/class1.ts
+/user/username/projects/myproject/projets/project1/class3.ts
+/user/username/projects/myproject/projets/project2/class2.ts
+
+WatchedFiles::
+/user/username/projects/myproject/projets/project2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projets/project2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projets/project1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projets/project1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projets/project1/class1.ts:
+  {"fileName":"/user/username/projects/myproject/projets/project1/class1.ts","pollingInterval":250}
+/user/username/projects/myproject/projets/project2/class2.ts:
+  {"fileName":"/user/username/projects/myproject/projets/project2/class2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projets/project1/class3.ts:
+  {"fileName":"/user/username/projects/myproject/projets/project1/class3.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projets/project1:
+  {"directoryName":"/user/username/projects/myproject/projets/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projets/project2/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projets/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projets/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projets/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projets/project2:
+  {"directoryName":"/user/username/projects/myproject/projets/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
 //// [/user/username/projects/myproject/projets/project2/class2.js] file written with same contents
 //// [/user/username/projects/myproject/projets/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projets/project2/tsconfig.tsbuildinfo]
@@ -163,54 +224,4 @@ Input::
   },
   "version": "FakeTSVersion"
 }
-
-//// [/user/username/projects/myproject/projets/project1/class3.ts]
-class class3 {}
-
-
-Output::
-
-12:00:50 AM - Found 0 errors. Watching for file changes.
-
-
-Program root files: ["/user/username/projects/myproject/projets/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"configFilePath":"/user/username/projects/myproject/projets/project2/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projets/project1/class1.ts
-/user/username/projects/myproject/projets/project1/class3.ts
-/user/username/projects/myproject/projets/project2/class2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projets/project1/class1.ts
-/user/username/projects/myproject/projets/project1/class3.ts
-/user/username/projects/myproject/projets/project2/class2.ts
-
-WatchedFiles::
-/user/username/projects/myproject/projets/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/projets/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/projets/project1/class1.ts:
-  {"fileName":"/user/username/projects/myproject/projets/project1/class1.ts","pollingInterval":250}
-/user/username/projects/myproject/projets/project2/class2.ts:
-  {"fileName":"/user/username/projects/myproject/projets/project2/class2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/projets/project1/class3.ts:
-  {"fileName":"/user/username/projects/myproject/projets/project1/class3.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projets/project2/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projets/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projets/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/projets/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/projets/project2:
-  {"directoryName":"/user/username/projects/myproject/projets/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
 
