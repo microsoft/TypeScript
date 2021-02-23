@@ -32309,6 +32309,9 @@ namespace ts {
                     getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
                 }
             }
+            if (isPrivateIdentifier(node.name) && hasStaticModifier(node) && node.initializer && languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) {
+                error(node.initializer, Diagnostics.Static_fields_with_private_names_can_t_have_initializers_when_the_useDefineForClassFields_flag_is_not_specified_with_a_target_of_esnext_Consider_adding_the_useDefineForClassFields_flag);
+            }
         }
 
         function checkPropertySignature(node: PropertySignature) {

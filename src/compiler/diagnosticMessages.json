@@ -3272,6 +3272,10 @@
         "category": "Error",
         "code": 2804
     },
+    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
+        "category": "Error",
+        "code": 2805
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
