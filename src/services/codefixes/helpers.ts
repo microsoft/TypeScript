@@ -138,7 +138,7 @@ namespace ts.codefix {
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        addClassElement(createMethodImplementingSignatures(signatures, name, optional, modifiers, quotePreference));
+                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional, modifiers, quotePreference));
                     }
                 }
                 break;
@@ -338,6 +338,9 @@ namespace ts.codefix {
     }
 
     function createMethodImplementingSignatures(
+        checker: TypeChecker,
+        context: TypeConstructionContext,
+        enclosingDeclaration: ClassLikeDeclaration,
         signatures: readonly Signature[],
         name: PropertyName,
         optional: boolean,
@@ -362,7 +365,6 @@ namespace ts.codefix {
         }
         const maxNonRestArgs = maxArgsSignature.parameters.length - (signatureHasRestParameter(maxArgsSignature) ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
-
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
@@ -384,8 +386,15 @@ namespace ts.codefix {
             optional,
             /*typeParameters*/ undefined,
             parameters,
-            /*returnType*/ undefined,
+            getReturnTypeFromSignatures(signatures, checker, context, enclosingDeclaration),
             quotePreference);
+    }
+
+    function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
+        if (length(signatures)) {
+            const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
+            return checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+        }
     }
 
     function createStubbedMethod(
