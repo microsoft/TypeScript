@@ -1511,7 +1511,7 @@ namespace ts {
                 }
             }
 
-            return createBinaryExpressionWalker(onEnter, onLeft, onOperator, onRight, onExit, identity);
+            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, identity);
 
             function onEnter(node: BinaryExpression, prev: BindBinaryExpressionState | undefined) {
                 let state: BindBinaryExpressionState;

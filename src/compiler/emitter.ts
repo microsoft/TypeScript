@@ -2531,7 +2531,7 @@ namespace ts {
                 sourceMapRange: SourceMapRange | undefined = undefined;
             }
 
-            return createBinaryExpressionWalker(onEnter, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
+            return createBinaryExpressionTrampoline(onEnter, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
 
             function onEnter(node: BinaryExpression, prev: EmitBinaryExpressionState | undefined) {
                 const state = new EmitBinaryExpressionState();
@@ -6666,7 +6666,7 @@ namespace ts {
                 ) {}
             }
 
-            return createBinaryExpressionWalker(onEnter, onLeft, onOperator, onRight, onExit, foldState);
+            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, foldState);
 
             function onEnter(node: BinaryExpression) {
                 return new PreprintBinaryExpressionState(node.left, node.operatorToken, node.right);

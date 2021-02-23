@@ -930,7 +930,7 @@ namespace ts {
         return isBinaryOperator(node.kind);
     }
 
-    type BinaryExpressionState = <TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>) => BinaryExpressionStateMachineFrame<TState, TResult>;
+    type BinaryExpressionState = <TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }) => number;
 
     namespace BinaryExpressionState {
         /**
@@ -939,11 +939,12 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function enter<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>): BinaryExpressionStateMachineFrame<TState, TResult> {
-            Debug.assertEqual(frame.state, enter);
-            frame.userState = machine.onEnter(frame.node, frame.prev?.userState);
-            frame.state = nextState(machine, enter);
-            return frame;
+        export function enter<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+            const prevUserState = stackIndex > 0 ? userStateStack[stackIndex - 1] : undefined;
+            Debug.assertEqual(stateStack[stackIndex], enter);
+            userStateStack[stackIndex] = machine.onEnter(nodeStack[stackIndex], prevUserState);
+            stateStack[stackIndex] = nextState(machine, enter);
+            return stackIndex;
         }
 
         /**
@@ -952,16 +953,16 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function left<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>): BinaryExpressionStateMachineFrame<TState, TResult> {
-            Debug.assertEqual(frame.state, left);
+        export function left<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+            Debug.assertEqual(stateStack[stackIndex], left);
             Debug.assertIsDefined(machine.onLeft);
-            frame.state = nextState(machine, left);
-            const nextNode = machine.onLeft(frame.node.left, frame.userState, frame.node);
+            stateStack[stackIndex] = nextState(machine, left);
+            const nextNode = machine.onLeft(nodeStack[stackIndex].left, userStateStack[stackIndex], nodeStack[stackIndex]);
             if (nextNode) {
-                checkCircularity(frame, nextNode);
-                return new BinaryExpressionStateMachineFrame(frame, nextNode);
+                checkCircularity(stackIndex, nodeStack, nextNode);
+                return pushStack(stackIndex, stateStack, nodeStack, userStateStack, nextNode);
             }
-            return frame;
+            return stackIndex;
         }
 
         /**
@@ -970,12 +971,12 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function operator<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>): BinaryExpressionStateMachineFrame<TState, TResult> {
-            Debug.assertEqual(frame.state, operator);
+        export function operator<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+            Debug.assertEqual(stateStack[stackIndex], operator);
             Debug.assertIsDefined(machine.onOperator);
-            frame.state = nextState(machine, operator);
-            machine.onOperator(frame.node.operatorToken, frame.userState, frame.node);
-            return frame;
+            stateStack[stackIndex] = nextState(machine, operator);
+            machine.onOperator(nodeStack[stackIndex].operatorToken, userStateStack[stackIndex], nodeStack[stackIndex]);
+            return stackIndex;
         }
 
         /**
@@ -984,16 +985,16 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function right<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>): BinaryExpressionStateMachineFrame<TState, TResult> {
-            Debug.assertEqual(frame.state, right);
+        export function right<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+            Debug.assertEqual(stateStack[stackIndex], right);
             Debug.assertIsDefined(machine.onRight);
-            frame.state = nextState(machine, right);
-            const nextNode = machine.onRight(frame.node.right, frame.userState, frame.node);
+            stateStack[stackIndex] = nextState(machine, right);
+            const nextNode = machine.onRight(nodeStack[stackIndex].right, userStateStack[stackIndex], nodeStack[stackIndex]);
             if (nextNode) {
-                checkCircularity(frame, nextNode);
-                return new BinaryExpressionStateMachineFrame(frame, nextNode);
+                checkCircularity(stackIndex, nodeStack, nextNode);
+                return pushStack(stackIndex, stateStack, nodeStack, userStateStack, nextNode);
             }
-            return frame;
+            return stackIndex;
         }
 
         /**
@@ -1002,25 +1003,28 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function exit<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>): BinaryExpressionStateMachineFrame<TState, TResult> {
-            Debug.assertEqual(frame.state, exit);
-            frame.state = nextState(machine, exit);
-            frame.result = machine.onExit(frame.node, frame.userState);
-            if (frame.prev) {
-                const side = frame.prev.state === exit ? "right" : "left";
-                frame.prev.userState = machine.foldState(frame.prev.userState, frame.result, side);
-                return frame.prev;
+        export function exit<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }): number {
+            Debug.assertEqual(stateStack[stackIndex], exit);
+            stateStack[stackIndex] = nextState(machine, exit);
+            const result = machine.onExit(nodeStack[stackIndex], userStateStack[stackIndex]);
+            if (stackIndex > 0) {
+                stackIndex--;
+                const side = stateStack[stackIndex] === exit ? "right" : "left";
+                userStateStack[stackIndex] = machine.foldState(userStateStack[stackIndex], result, side);
             }
-            return frame;
+            else {
+                resultHolder.value = result;
+            }
+            return stackIndex;
         }
 
         /**
          * Handles a frame that is already done.
          * @returns The `done` state.
          */
-        export function done<TState, TResult>(_machine: BinaryExpressionStateMachine<TState, TResult>, frame: BinaryExpressionStateMachineFrame<TState, TResult>): BinaryExpressionStateMachineFrame<TState, TResult> {
-            Debug.assertEqual(frame.state, done);
-            return frame;
+        export function done<TState, TResult>(_machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult }): number {
+            Debug.assertEqual(stateStack[stackIndex], done);
+            return stackIndex;
         }
 
         export function nextState<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, currentState: BinaryExpressionState) {
@@ -1041,11 +1045,19 @@ namespace ts {
             }
         }
 
-        function checkCircularity<TState, TResult>(frame: BinaryExpressionStateMachineFrame<TState, TResult> | undefined, node: BinaryExpression) {
+        function pushStack<TState>(stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], node: BinaryExpression) {
+            stackIndex++;
+            stateStack[stackIndex] = BinaryExpressionState.enter;
+            nodeStack[stackIndex] = node;
+            userStateStack[stackIndex] = undefined!;
+            return stackIndex;
+        }
+
+        function checkCircularity(stackIndex: number, nodeStack: BinaryExpression[], node: BinaryExpression) {
             if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
-                while (frame) {
-                    Debug.assert(frame.node !== node, "Circular traversal detected.");
-                    frame = frame.prev;
+                while (stackIndex >= 0) {
+                    Debug.assert(nodeStack[stackIndex] !== node, "Circular traversal detected.");
+                    stackIndex--;
                 }
             }
         }
@@ -1067,20 +1079,6 @@ namespace ts {
     }
 
     /**
-     * Holds the current frame for the state machine
-     */
-    class BinaryExpressionStateMachineFrame<TState, TResult> {
-        public state: BinaryExpressionState = BinaryExpressionState.enter;
-        public userState: TState = undefined!;
-        public result: TResult = undefined!;
-        constructor(
-            public prev: BinaryExpressionStateMachineFrame<TState, TResult> | undefined,
-            public node: BinaryExpression
-        ) {
-        }
-    }
-
-    /**
      * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
      * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
      * @param onLeft Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
@@ -1089,7 +1087,7 @@ namespace ts {
      * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
      * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
      */
-    export function createBinaryExpressionWalker<TState, TResult>(
+    export function createBinaryExpressionTrampoline<TState, TResult>(
         onEnter: (node: BinaryExpression, prev: TState | undefined) => TState,
         onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
         onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
@@ -1099,11 +1097,16 @@ namespace ts {
     ) {
         const machine = new BinaryExpressionStateMachine(onEnter, onLeft, onOperator, onRight, onExit, foldState);
         return (node: BinaryExpression) => {
-            let frame = new BinaryExpressionStateMachineFrame<TState, TResult>(/*prev*/ undefined, node);
-            while (frame.state !== BinaryExpressionState.done) {
-                frame = frame.state(machine, frame);
+            const resultHolder: { value: TResult } = { value: undefined! };
+            const stateStack: BinaryExpressionState[] = [BinaryExpressionState.enter];
+            const nodeStack: BinaryExpression[] = [node];
+            const userStateStack: TState[] = [undefined!];
+            let stackIndex = 0;
+            while (stateStack[stackIndex] !== BinaryExpressionState.done) {
+                stackIndex = stateStack[stackIndex](machine, stackIndex, stateStack, nodeStack, userStateStack, resultHolder);
             }
-            return frame.result;
+            Debug.assertEqual(stackIndex, 0);
+            return resultHolder.value;
         };
     }
 }
