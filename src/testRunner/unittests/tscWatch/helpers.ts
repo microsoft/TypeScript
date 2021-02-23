@@ -299,6 +299,7 @@ namespace ts.tscWatch {
     }
     export interface TscWatchCheckOptions {
         baselineSourceMap?: boolean;
+        baselineDependencies?: boolean;
     }
     export interface TscWatchCompileBase extends TscWatchCheckOptions {
         scenario: string;
@@ -323,7 +324,7 @@ namespace ts.tscWatch {
             const {
                 scenario, subScenario,
                 commandLineArgs, changes,
-                baselineSourceMap
+                baselineSourceMap, baselineDependencies
             } = input;
 
             if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
@@ -342,6 +343,7 @@ namespace ts.tscWatch {
                 oldSnap,
                 getPrograms,
                 baselineSourceMap,
+                baselineDependencies,
                 changes,
                 watchOrSolution
             });
@@ -381,7 +383,7 @@ namespace ts.tscWatch {
     export function runWatchBaseline({
         scenario, subScenario, commandLineArgs,
         getPrograms, sys, baseline, oldSnap,
-        baselineSourceMap,
+        baselineSourceMap, baselineDependencies,
         changes, watchOrSolution
     }: RunWatchBaseline) {
         baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
@@ -390,7 +392,8 @@ namespace ts.tscWatch {
             getPrograms,
             sys,
             oldSnap,
-            baselineSourceMap
+            baselineSourceMap,
+            baselineDependencies,
         });
 
         for (const { caption, change, timeouts } of changes) {
@@ -401,7 +404,8 @@ namespace ts.tscWatch {
                 getPrograms,
                 sys,
                 oldSnap,
-                baselineSourceMap
+                baselineSourceMap,
+                baselineDependencies,
             });
         }
         Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ?
@@ -420,10 +424,10 @@ namespace ts.tscWatch {
     export interface WatchBaseline extends Baseline, TscWatchCheckOptions {
         getPrograms: () => readonly CommandLineProgram[];
     }
-    export function watchBaseline({ baseline, getPrograms, sys, oldSnap, baselineSourceMap }: WatchBaseline) {
+    export function watchBaseline({ baseline, getPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         sys.serializeOutput(baseline);
-        const programs = baselinePrograms(baseline, getPrograms);
+        const programs = baselinePrograms(baseline, getPrograms, baselineDependencies);
         sys.serializeWatches(baseline);
         baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
         sys.diff(baseline, oldSnap);
@@ -434,15 +438,15 @@ namespace ts.tscWatch {
         return programs;
     }
 
-    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[]) {
+    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], baselineDependencies: boolean | undefined) {
         const programs = getPrograms();
         for (const program of programs) {
-            baselineProgram(baseline, program);
+            baselineProgram(baseline, program, baselineDependencies);
         }
         return programs;
     }
 
-    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram) {
+    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, baselineDependencies: boolean | undefined) {
         const options = program.getCompilerOptions();
         baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
         baseline.push(`Program options: ${JSON.stringify(options)}`);
@@ -464,6 +468,15 @@ namespace ts.tscWatch {
         }
         else {
             baseline.push("No cached semantic diagnostics in the builder::");
+        }
+        baseline.push("");
+        if (!baselineDependencies) return;
+        baseline.push("Dependencies for::");
+        for (const file of builderProgram.getSourceFiles()) {
+            baseline.push(`${file.fileName}:`);
+            for (const depenedency of builderProgram.getAllDependencies(file)) {
+                baseline.push(`  ${depenedency}`);
+            }
         }
         baseline.push("");
     }
@@ -491,5 +504,32 @@ namespace ts.tscWatch {
     export function replaceFileText(sys: WatchedSystem, file: string, searchValue: string | RegExp, replaceValue: string) {
         const content = Debug.checkDefined(sys.readFile(file));
         sys.writeFile(file, content.replace(searchValue, replaceValue));
+    }
+
+    export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
+        const host = createSolutionBuilderHost(system);
+        return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
+    }
+
+    export function ensureErrorFreeBuild(host: WatchedSystem, rootNames: readonly string[]) {
+        // ts build should succeed
+        const solutionBuilder = createSolutionBuilder(host, rootNames, {});
+        solutionBuilder.build();
+        assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
+    }
+
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+        const sys = createWatchedSystem(files, params);
+        const originalReadFile = sys.readFile;
+        const originalWrite = sys.write;
+        const originalWriteFile = sys.writeFile;
+        const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
+            fakes.patchHostForBuildInfoReadWrite(sys)
+        ), solutionRoots, {});
+        solutionBuilder.build();
+        sys.readFile = originalReadFile;
+        sys.write = originalWrite;
+        sys.writeFile = originalWriteFile;
+        return sys;
     }
 }
