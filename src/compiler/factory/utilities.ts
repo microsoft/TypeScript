@@ -1047,7 +1047,7 @@ namespace ts {
 
         function pushStack<TState>(stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], node: BinaryExpression) {
             stackIndex++;
-            stateStack[stackIndex] = BinaryExpressionState.enter;
+            stateStack[stackIndex] = enter;
             nodeStack[stackIndex] = node;
             userStateStack[stackIndex] = undefined!;
             return stackIndex;

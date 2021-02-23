@@ -2520,64 +2520,64 @@ namespace ts {
         }
 
         function createEmitBinaryExpression() {
-            class EmitBinaryExpressionState {
-                nested = false;
-                preserveSourceNewlines: boolean | undefined = undefined;
-                containerPos = -1;
-                containerEnd = -1;
-                declarationListContainerEnd = -1;
-                emitFlags = EmitFlags.None;
-                commentRange: TextRange | undefined = undefined;
-                sourceMapRange: SourceMapRange | undefined = undefined;
-            }
+            // class EmitBinaryExpressionState {
+            //     nested = false;
+            //     preserveSourceNewlines: boolean | undefined = undefined;
+            //     containerPos = -1;
+            //     containerEnd = -1;
+            //     declarationListContainerEnd = -1;
+            //     emitFlags = EmitFlags.None;
+            //     commentRange: TextRange | undefined = undefined;
+            //     sourceMapRange: SourceMapRange | undefined = undefined;
+            // }
 
-            return createBinaryExpressionTrampoline(onEnter, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
+            return createBinaryExpressionTrampoline(noop, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
 
-            function onEnter(node: BinaryExpression, prev: EmitBinaryExpressionState | undefined) {
-                const state = new EmitBinaryExpressionState();
-                if (prev) {
-                    // `prev` is only defined when recuring. We can use this fact to indicate
-                    // we are entering into a nested binary expression and can replicate the
-                    // leading comment and sourcemap emit performed by `emitWithContext`.
-                    state.nested = true;
-                    onBeforeEmitNode?.(node);
+            // function onEnter(_node: BinaryExpression, _prev: EmitBinaryExpressionState | undefined) {
+            //     const state = new EmitBinaryExpressionState();
+            //     if (prev) {
+            //         // `prev` is only defined when recuring. We can use this fact to indicate
+            //         // we are entering into a nested binary expression and can replicate the
+            //         // leading comment and sourcemap emit performed by `emitWithContext`.
+            //         state.nested = true;
+            //         onBeforeEmitNode?.(node);
 
-                    state.emitFlags = getEmitFlags(node);
-                    state.preserveSourceNewlines = preserveSourceNewlines;
-                    if (preserveSourceNewlines && (state.emitFlags & EmitFlags.IgnoreSourceNewlines)) {
-                        preserveSourceNewlines = false;
-                    }
+            //         state.emitFlags = getEmitFlags(node);
+            //         state.preserveSourceNewlines = preserveSourceNewlines;
+            //         if (preserveSourceNewlines && (state.emitFlags & EmitFlags.IgnoreSourceNewlines)) {
+            //             preserveSourceNewlines = false;
+            //         }
 
-                    state.containerPos = containerPos;
-                    state.containerEnd = containerEnd;
-                    state.declarationListContainerEnd = declarationListContainerEnd;
-                    state.commentRange = shouldEmitComments(node) ? getCommentRange(node) : undefined;
-                    state.sourceMapRange = shouldEmitSourceMaps(node) ? getSourceMapRange(node) : undefined;
+            //         state.containerPos = containerPos;
+            //         state.containerEnd = containerEnd;
+            //         state.declarationListContainerEnd = declarationListContainerEnd;
+            //         state.commentRange = shouldEmitComments(node) ? getCommentRange(node) : undefined;
+            //         state.sourceMapRange = shouldEmitSourceMaps(node) ? getSourceMapRange(node) : undefined;
 
-                    // Emit leading comments
-                    if (state.commentRange) {
-                        emitLeadingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end);
-                        if (state.emitFlags & EmitFlags.NoNestedComments) {
-                            commentsDisabled = true;
-                        }
-                    }
+            //         // Emit leading comments
+            //         if (state.commentRange) {
+            //             emitLeadingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end);
+            //             if (state.emitFlags & EmitFlags.NoNestedComments) {
+            //                 commentsDisabled = true;
+            //             }
+            //         }
 
-                    // Emit leading sourcemap
-                    if (state.sourceMapRange) {
-                        const source = state.sourceMapRange.source || sourceMapSource;
-                        if ((state.emitFlags & EmitFlags.NoLeadingSourceMap) === 0
-                            && state.sourceMapRange.pos >= 0) {
-                            emitSourcePos(state.sourceMapRange.source || sourceMapSource, skipSourceTrivia(source, state.sourceMapRange.pos));
-                        }
-                        if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
-                            sourceMapsDisabled = true;
-                        }
-                    }
-                }
-                return state;
-            }
+            //         // Emit leading sourcemap
+            //         if (state.sourceMapRange) {
+            //             const source = state.sourceMapRange.source || sourceMapSource;
+            //             if ((state.emitFlags & EmitFlags.NoLeadingSourceMap) === 0
+            //                 && state.sourceMapRange.pos >= 0) {
+            //                 emitSourcePos(state.sourceMapRange.source || sourceMapSource, skipSourceTrivia(source, state.sourceMapRange.pos));
+            //             }
+            //             if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
+            //                 sourceMapsDisabled = true;
+            //             }
+            //         }
+            //     }
+            //     return state;
+            // }
 
-            function onOperator(operatorToken: BinaryOperatorToken, _: unknown, node: BinaryExpression) {
+            function onOperator(operatorToken: BinaryOperatorToken, _state: unknown, node: BinaryExpression) {
                 const isCommaOperator = operatorToken.kind !== SyntaxKind.CommaToken;
                 const linesBeforeOperator = getLinesBetweenNodes(node, node.left, operatorToken);
                 const linesAfterOperator = getLinesBetweenNodes(node, operatorToken, node.right);
@@ -2588,44 +2588,44 @@ namespace ts {
                 writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
             }
 
-            function onExit(node: BinaryExpression, state: EmitBinaryExpressionState) {
+            function onExit(node: BinaryExpression, _state: unknown) {
                 const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
                 const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
                 decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
 
-                if (state.nested) {
-                    // If we are marked as nested, we are recurring. We can use this fact to indicate
-                    // we are exiting from a nested binary expression and can replicate the trailing
-                    // comment and sourcemap emit performed by `emitWithContext`.
+                // if (state.nested) {
+                //     // If we are marked as nested, we are recurring. We can use this fact to indicate
+                //     // we are exiting from a nested binary expression and can replicate the trailing
+                //     // comment and sourcemap emit performed by `emitWithContext`.
 
-                    // Emit trailing sourcemap
-                    if (state.sourceMapRange) {
-                        if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
-                            sourceMapsDisabled = false;
-                        }
-                        if ((state.emitFlags & EmitFlags.NoTrailingSourceMap) === 0
-                            && state.sourceMapRange.end >= 0) {
-                            emitSourcePos(state.sourceMapRange.source || sourceMapSource, state.sourceMapRange.end);
-                        }
-                    }
+                //     // Emit trailing sourcemap
+                //     if (state.sourceMapRange) {
+                //         if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
+                //             sourceMapsDisabled = false;
+                //         }
+                //         if ((state.emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                //             && state.sourceMapRange.end >= 0) {
+                //             emitSourcePos(state.sourceMapRange.source || sourceMapSource, state.sourceMapRange.end);
+                //         }
+                //     }
 
-                    // Emit trailing comments
-                    if (state.commentRange) {
-                        if (state.emitFlags & EmitFlags.NoNestedComments) {
-                            commentsDisabled = false;
-                        }
-                        emitTrailingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end, state.containerPos, state.containerEnd, state.declarationListContainerEnd);
-                    }
+                //     // Emit trailing comments
+                //     if (state.commentRange) {
+                //         if (state.emitFlags & EmitFlags.NoNestedComments) {
+                //             commentsDisabled = false;
+                //         }
+                //         emitTrailingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end, state.containerPos, state.containerEnd, state.declarationListContainerEnd);
+                //     }
 
-                    onAfterEmitNode?.(node);
+                //     onAfterEmitNode?.(node);
 
-                    preserveSourceNewlines = state.preserveSourceNewlines;
-                }
+                //     preserveSourceNewlines = state.preserveSourceNewlines;
+                // }
             }
 
             function maybeEmitExpression(next: Expression) {
                 // Push a new frame for binary expressions, otherwise emit all other expressions.
-                if (isBinaryExpression(next)) {
+                if (isBinaryExpression(next) && !shouldEmitComments(next) && !shouldEmitSourceMaps(next)) {
                     return next;
                 }
 
