@@ -32168,7 +32168,7 @@ namespace ts {
                 const prev = names.get(name);
                 if (prev) {
                     // For private identifiers, do not allow mixing of static and instance members with the same name
-                    if((prev & DeclarationMeaning.PrivateStatic) !== (meaning & DeclarationMeaning.PrivateStatic)) {
+                    if ((prev & DeclarationMeaning.PrivateStatic) !== (meaning & DeclarationMeaning.PrivateStatic)) {
                         error(location, Diagnostics.Duplicate_identifier_0_Static_and_instance_elements_cannot_share_the_same_private_name, getTextOfNode(location));
                     }
                     else {

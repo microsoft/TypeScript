@@ -684,6 +684,9 @@ namespace ts {
         function doesClassElementNeedTransform(node: ClassElement) {
             return isPropertyDeclaration(node) || (shouldTransformPrivateElements && node.name && isPrivateIdentifier(node.name));
         }
+        function getPrivateUnitializedPrivateStaticFields(node: ClassLikeDeclaration) {
+            return filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer)
+        }
 
         function getPrivateInstanceMethods(node: ClassLikeDeclaration) {
             return filter(
@@ -731,8 +734,8 @@ namespace ts {
                 staticProperties = filter(staticProperties, p => !isPrivateIdentifier(p.name));
             }
             else {
-                // We must initialize static private properties even if the don't have a value as we initialize them with a wrapper object which mist always exist.
-                const staticUninitializedPrivateProperties = filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
+                // We must initialize static private properties even if the don't have a value as we initialize them with a wrapper object which must always exist.
+                const staticUninitializedPrivateProperties = getPrivateUnitializedPrivateStaticFields(node);
                 if (some(staticUninitializedPrivateProperties)) {
                     addPropertyStatements(statements, staticUninitializedPrivateProperties, factory.getInternalName(node));
                 }
@@ -765,8 +768,7 @@ namespace ts {
                 // so we rely on standard init even under useDefineForClassFields:false
                 staticProperties = filter(staticProperties, p => !isPrivateIdentifier(p.name));
             }
-            const staticUninitializedPrivateProperties = !shouldTransformPrivateElements ? []:
-                filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
+            const staticUninitializedPrivateProperties = !shouldTransformPrivateElements ? []: getPrivateUnitializedPrivateStaticFields(node);
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
@@ -787,7 +789,7 @@ namespace ts {
                 transformClassMembers(node, isDerivedClass)
             );
 
-            if (some(staticUninitializedPrivateProperties) ||some(staticProperties) || some(pendingExpressions)) {
+            if (some(staticUninitializedPrivateProperties) || some(staticProperties) || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
@@ -804,7 +806,7 @@ namespace ts {
                             addPropertyStatements(pendingStatements, staticUninitializedPrivateProperties, factory.getInternalName(node));
                         }
                     }
-                    if(temp) {
+                    if (temp) {
                         return factory.inlineExpressions([factory.createAssignment(temp, classExpression), temp]);
                     }
                     return classExpression;
@@ -1234,11 +1236,11 @@ namespace ts {
 
         function addPrivateIdentifierToEnvironment(node: PrivateClassElementDeclaration) {
             const text = getTextOfPropertyName(node.name) as string;
-            const { weakSetName } = getPrivateIdentifierEnvironment();
+            const env = getPrivateIdentifierEnvironment();
+            const { weakSetName } = env;
             let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
-            const env = getPrivateIdentifierEnvironment();
-            if(hasStaticModifier(node)) {
+            if (hasStaticModifier(node)) {
                 if (isPropertyDeclaration(node)) {
                     const variableName = createHoistedVariableForPrivateName(text);
                     info = {
@@ -1247,7 +1249,7 @@ namespace ts {
                         classConstructor: env.classConstructor
                     };
                 }
-                else if(isMethodDeclaration(node)) {
+                else if (isMethodDeclaration(node)) {
                     const functionName = createHoistedVariableForPrivateName(text);
                     info = {
                         placement: PrivateIdentifierPlacement.StaticMethod,
@@ -1255,7 +1257,7 @@ namespace ts {
                         classConstructor: env.classConstructor
                     };
                 }
-                else if(isGetAccessorDeclaration(node)) {
+                else if (isGetAccessorDeclaration(node)) {
                     const getterName = createHoistedVariableForPrivateName(text + "_get");
                     const previousInfo = findPreviousStaticAccessorInfo(node);
                     if (previousInfo?.placement === PrivateIdentifierPlacement.StaticSetterOnly) {
@@ -1274,7 +1276,7 @@ namespace ts {
                         };
                     }
                 }
-                else if(isSetAccessorDeclaration(node)) {
+                else if (isSetAccessorDeclaration(node)) {
                     const setterName = createHoistedVariableForPrivateName(text + "_set");
                     const previousInfo = findPreviousStaticAccessorInfo(node);
                     if (previousInfo?.placement === PrivateIdentifierPlacement.StaticGetterOnly) {
@@ -1294,7 +1296,7 @@ namespace ts {
                     }
                 }
                 else {
-                    return;
+                    Debug.assertNever(node, "Unknown class element type.")
                 }
             }
             else if (isPropertyDeclaration(node)) {
