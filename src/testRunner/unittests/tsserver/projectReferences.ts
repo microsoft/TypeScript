@@ -1419,7 +1419,7 @@ bar;`
         describe("when new file is added to the referenced project", () => {
             function setup() {
                 const config1: File = {
-                    path: `${tscWatch.projectRoot}/projets/project1/tsconfig.json`,
+                    path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
                             module: "none",
@@ -1429,11 +1429,11 @@ bar;`
                     })
                 };
                 const class1: File = {
-                    path: `${tscWatch.projectRoot}/projets/project1/class1.ts`,
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
                     content: `class class1 {}`
                 };
                 const config2: File = {
-                    path: `${tscWatch.projectRoot}/projets/project2/tsconfig.json`,
+                    path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
                             module: "none",
@@ -1445,7 +1445,7 @@ bar;`
                     })
                 };
                 const class2: File = {
-                    path: `${tscWatch.projectRoot}/projets/project2/class2.ts`,
+                    path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
                     content: `class class2 {}`
                 };
                 const host = createServerHost([config1, class1, config2, class2, libFile]);
@@ -1460,11 +1460,11 @@ bar;`
 
             it("when referenced project is not open", () => {
                 const { host, project2, class1, class2, config2 } = setup();
-                const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
                 host.checkTimeoutQueueLengthAndRun(2);
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
-                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
                 host.checkTimeoutQueueLengthAndRun(0);
             });
 
@@ -1475,12 +1475,12 @@ bar;`
                 const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
                 checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
 
-                const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
                 host.writeFile(class3, `class class3 {}`);
                 host.checkTimeoutQueueLengthAndRun(3);
                 checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
-                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
                 host.checkTimeoutQueueLengthAndRun(0);
             });
         });

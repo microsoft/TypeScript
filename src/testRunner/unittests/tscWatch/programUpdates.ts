@@ -1738,10 +1738,10 @@ import { x } from "../b";`),
         verifyTscWatch({
             scenario,
             subScenario: "when new file is added to the referenced project",
-            commandLineArgs: ["-w", "-p", `${projectRoot}/projets/project2/tsconfig.json`, "--extendedDiagnostics"],
+            commandLineArgs: ["-w", "-p", `${projectRoot}/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
             sys: () => {
                 const config1: File = {
-                    path: `${projectRoot}/projets/project1/tsconfig.json`,
+                    path: `${projectRoot}/projects/project1/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
                             module: "none",
@@ -1751,16 +1751,16 @@ import { x } from "../b";`),
                     })
                 };
                 const class1: File = {
-                    path: `${projectRoot}/projets/project1/class1.ts`,
+                    path: `${projectRoot}/projects/project1/class1.ts`,
                     content: `class class1 {}`
                 };
                 // Built file
                 const class1Dt: File = {
-                    path: `${projectRoot}/projets/project1/class1.d.ts`,
+                    path: `${projectRoot}/projects/project1/class1.d.ts`,
                     content: `declare class class1 {}`
                 };
                 const config2: File = {
-                    path: `${projectRoot}/projets/project2/tsconfig.json`,
+                    path: `${projectRoot}/projects/project2/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
                             module: "none",
@@ -1772,7 +1772,7 @@ import { x } from "../b";`),
                     })
                 };
                 const class2: File = {
-                    path: `${projectRoot}/projets/project2/class2.ts`,
+                    path: `${projectRoot}/projects/project2/class2.ts`,
                     content: `class class2 {}`
                 };
                 return createWatchedSystem([config1, class1, config2, class2, libFile, class1Dt]);
@@ -1781,14 +1781,14 @@ import { x } from "../b";`),
                 {
                     caption: "Add class3 to project1 and build it",
                     change: sys => {
-                        sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
-                        sys.writeFile(`${projectRoot}/projets/project1/class3.d.ts`, `declare class class3 {}`);
+                        sys.writeFile(`${projectRoot}/projects/project1/class3.ts`, `class class3 {}`);
+                        sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`);
                     },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
                 {
                     caption: "Add excluded file to project1",
-                    change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                     timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
             ]

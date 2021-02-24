@@ -247,7 +247,7 @@ namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implemented", () => {
         it("when new file is added to the referenced project with host implementing getParsedCommandLine", () => {
             const config1: File = {
-                path: `${projectRoot}/projets/project1/tsconfig.json`,
+                path: `${projectRoot}/projects/project1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -257,11 +257,11 @@ namespace ts.tscWatch {
                 })
             };
             const class1: File = {
-                path: `${projectRoot}/projets/project1/class1.ts`,
+                path: `${projectRoot}/projects/project1/class1.ts`,
                 content: `class class1 {}`
             };
             const config2: File = {
-                path: `${projectRoot}/projets/project2/tsconfig.json`,
+                path: `${projectRoot}/projects/project2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -273,7 +273,7 @@ namespace ts.tscWatch {
                 })
             };
             const class2: File = {
-                path: `${projectRoot}/projets/project2/class2.ts`,
+                path: `${projectRoot}/projects/project2/class2.ts`,
                 content: `class class2 {}`
             };
             const system = createWatchedSystem([config1, class1, config2, class2, libFile]);
@@ -309,13 +309,13 @@ namespace ts.tscWatch {
                         caption: "Add class3 to project1",
                         change: sys => {
                             calledGetParsedCommandLin.clear();
-                            sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
+                            sys.writeFile(`${projectRoot}/projects/project1/class3.ts`, `class class3 {}`);
                         },
                         timeouts: checkSingleTimeoutQueueLengthAndRun,
                     },
                     {
                         caption: "Add excluded file to project1",
-                        change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                        change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                         timeouts: sys => sys.checkTimeoutQueueLength(0),
                     },
                 ],

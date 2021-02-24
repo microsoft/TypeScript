@@ -141,7 +141,7 @@ export function Component(x: Config): any;`
 
         it("detects program upto date when new file is added to the referenced project", () => {
             const config1: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projets/project1/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -151,11 +151,11 @@ export function Component(x: Config): any;`
                 })
             };
             const class1: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projets/project1/class1.ts`,
+                path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
                 content: `class class1 {}`
             };
             const config2: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projets/project2/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -167,11 +167,11 @@ export function Component(x: Config): any;`
                 })
             };
             const class2: TestFSWithWatch.File = {
-                path: `${tscWatch.projectRoot}/projets/project2/class2.ts`,
+                path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
                 content: `class class2 {}`
             };
             const system = projectSystem.createServerHost([config1, class1, config2, class2, projectSystem.libFile]);
-            const result = getParsedCommandLineOfConfigFile(`${tscWatch.projectRoot}/projets/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
+            const result = getParsedCommandLineOfConfigFile(`${tscWatch.projectRoot}/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
                 useCaseSensitiveFileNames: true,
                 fileExists: path => system.fileExists(path),
                 readFile: path => system.readFile(path),
@@ -204,14 +204,14 @@ export function Component(x: Config): any;`
                 program1.getSourceFiles().map(f => f.fileName),
                 [projectSystem.libFile.path, class1.path, class2.path]
             );
-            const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
+            const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
             system.writeFile(class3, `class class3 {}`);
             const program2 = ls.getProgram()!;
             assert.deepEqual(
                 program2.getSourceFiles().map(f => f.fileName),
                 [projectSystem.libFile.path, class1.path, class3, class2.path]
             );
-            system.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` });
+            system.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             assert.strictEqual(ls.getProgram(), program2);
         });
     });
