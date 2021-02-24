@@ -1199,20 +1199,16 @@ namespace ts {
                 !isUnparsedPrepend(node);
         }
 
-        function emitWithContext<T extends Node>(node: T, emitCallback: (node: T) => void) {
+        function beforeEmitWithContext(node: Node, shouldEmitComments: boolean, shouldEmitSourceMaps: boolean) {
             onBeforeEmitNode?.(node);
 
             const emitFlags = getEmitFlags(node);
-            const savedPreserveSourceNewlines = preserveSourceNewlines;
+            const commentRange = shouldEmitComments ? getCommentRange(node) : undefined;
+            const sourceMapRange = shouldEmitSourceMaps ? getSourceMapRange(node) : undefined;
+
             if (preserveSourceNewlines && (emitFlags & EmitFlags.IgnoreSourceNewlines)) {
                 preserveSourceNewlines = false;
             }
-
-            const savedContainerPos = containerPos;
-            const savedContainerEnd = containerEnd;
-            const savedDeclarationListContainerEnd = declarationListContainerEnd;
-            const commentRange = shouldEmitComments(node) ? getCommentRange(node) : undefined;
-            const sourceMapRange = shouldEmitSourceMaps(node) ? getSourceMapRange(node) : undefined;
 
             // Emit leading comments
             if (commentRange) {
@@ -1250,8 +1246,12 @@ namespace ts {
                     }
                 }
             }
+        }
 
-            emitCallback(node);
+        function afterEmitWithContext(node: Node, shouldEmitComments: boolean, shouldEmitSourceMaps: boolean, savedContainerPos: number, savedContainerEnd: number, savedDeclarationListContainerEnd: number, savedPreserveSourceNewlines: boolean | undefined) {
+            const emitFlags = getEmitFlags(node);
+            const commentRange = shouldEmitComments ? getCommentRange(node) : undefined;
+            const sourceMapRange = shouldEmitSourceMaps ? getSourceMapRange(node) : undefined;
 
             // Emit trailing sourcemap
             if (sourceMapRange) {
@@ -1275,9 +1275,20 @@ namespace ts {
                 emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
             }
 
-            onAfterEmitNode?.(node);
-
             preserveSourceNewlines = savedPreserveSourceNewlines;
+            onAfterEmitNode?.(node);
+        }
+
+        function emitWithContext<T extends Node>(node: T, emitCallback: (node: T) => void) {
+            const savedPreserveSourceNewlines = preserveSourceNewlines;
+            const savedContainerPos = containerPos;
+            const savedContainerEnd = containerEnd;
+            const savedDeclarationListContainerEnd = declarationListContainerEnd;
+            const emitComments = shouldEmitComments(node);
+            const emitSourceMaps = shouldEmitSourceMaps(node);
+            beforeEmitWithContext(node, emitComments, emitSourceMaps);
+            emitCallback(node);
+            afterEmitWithContext(node, emitComments, emitSourceMaps, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd, savedPreserveSourceNewlines);
         }
 
         function emitWorker(node: Node): void {
@@ -2533,46 +2544,18 @@ namespace ts {
 
             return createBinaryExpressionTrampoline(noop, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
 
-            // function onEnter(_node: BinaryExpression, _prev: EmitBinaryExpressionState | undefined) {
+            // function onEnter(node: BinaryExpression, prev: EmitBinaryExpressionState | undefined) {
             //     const state = new EmitBinaryExpressionState();
             //     if (prev) {
             //         // `prev` is only defined when recuring. We can use this fact to indicate
             //         // we are entering into a nested binary expression and can replicate the
             //         // leading comment and sourcemap emit performed by `emitWithContext`.
             //         state.nested = true;
-            //         onBeforeEmitNode?.(node);
-
-            //         state.emitFlags = getEmitFlags(node);
             //         state.preserveSourceNewlines = preserveSourceNewlines;
-            //         if (preserveSourceNewlines && (state.emitFlags & EmitFlags.IgnoreSourceNewlines)) {
-            //             preserveSourceNewlines = false;
-            //         }
-
             //         state.containerPos = containerPos;
             //         state.containerEnd = containerEnd;
             //         state.declarationListContainerEnd = declarationListContainerEnd;
-            //         state.commentRange = shouldEmitComments(node) ? getCommentRange(node) : undefined;
-            //         state.sourceMapRange = shouldEmitSourceMaps(node) ? getSourceMapRange(node) : undefined;
-
-            //         // Emit leading comments
-            //         if (state.commentRange) {
-            //             emitLeadingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end);
-            //             if (state.emitFlags & EmitFlags.NoNestedComments) {
-            //                 commentsDisabled = true;
-            //             }
-            //         }
-
-            //         // Emit leading sourcemap
-            //         if (state.sourceMapRange) {
-            //             const source = state.sourceMapRange.source || sourceMapSource;
-            //             if ((state.emitFlags & EmitFlags.NoLeadingSourceMap) === 0
-            //                 && state.sourceMapRange.pos >= 0) {
-            //                 emitSourcePos(state.sourceMapRange.source || sourceMapSource, skipSourceTrivia(source, state.sourceMapRange.pos));
-            //             }
-            //             if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
-            //                 sourceMapsDisabled = true;
-            //             }
-            //         }
+            //         beforeEmitWithContext(node);
             //     }
             //     return state;
             // }
@@ -2592,34 +2575,8 @@ namespace ts {
                 const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
                 const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
                 decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
-
                 // if (state.nested) {
-                //     // If we are marked as nested, we are recurring. We can use this fact to indicate
-                //     // we are exiting from a nested binary expression and can replicate the trailing
-                //     // comment and sourcemap emit performed by `emitWithContext`.
-
-                //     // Emit trailing sourcemap
-                //     if (state.sourceMapRange) {
-                //         if (state.emitFlags & EmitFlags.NoNestedSourceMaps) {
-                //             sourceMapsDisabled = false;
-                //         }
-                //         if ((state.emitFlags & EmitFlags.NoTrailingSourceMap) === 0
-                //             && state.sourceMapRange.end >= 0) {
-                //             emitSourcePos(state.sourceMapRange.source || sourceMapSource, state.sourceMapRange.end);
-                //         }
-                //     }
-
-                //     // Emit trailing comments
-                //     if (state.commentRange) {
-                //         if (state.emitFlags & EmitFlags.NoNestedComments) {
-                //             commentsDisabled = false;
-                //         }
-                //         emitTrailingCommentsOfNode(node, state.emitFlags, state.commentRange.pos, state.commentRange.end, state.containerPos, state.containerEnd, state.declarationListContainerEnd);
-                //     }
-
-                //     onAfterEmitNode?.(node);
-
-                //     preserveSourceNewlines = state.preserveSourceNewlines;
+                //     afterEmitWithContext(node, state.containerPos, state.containerEnd, state.declarationListContainerEnd, state.preserveSourceNewlines);
                 // }
             }
 
@@ -6658,42 +6615,61 @@ namespace ts {
         }
 
         function createPreprintBinaryExpression() {
-            class PreprintBinaryExpressionState {
-                constructor(
-                    public left: Expression,
-                    public operator: BinaryOperatorToken,
-                    public right: Expression
-                ) {}
+            interface WorkArea {
+                stackIndex: number;
+                leftStack: Expression[];
+                operatorStack: BinaryOperatorToken[];
+                rightStack: Expression[];
             }
 
             return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, foldState);
 
-            function onEnter(node: BinaryExpression) {
-                return new PreprintBinaryExpressionState(node.left, node.operatorToken, node.right);
-            }
-
-            function onLeft(left: Expression, state: PreprintBinaryExpressionState) {
-                return maybeVisitExpression(left, state, "left");
-            }
-
-            function onOperator(operator: BinaryOperatorToken, state: PreprintBinaryExpressionState) {
-                state.operator = visit(operator, isBinaryOperatorToken);
-            }
-
-            function onRight(right: Expression, state: PreprintBinaryExpressionState) {
-                return maybeVisitExpression(right, state, "right");
-            }
-
-            function onExit(node: BinaryExpression, state: PreprintBinaryExpressionState) {
-                return factory.updateBinaryExpression(node, state.left, state.operator, state.right);
-            }
-
-            function foldState(state: PreprintBinaryExpressionState, result: BinaryExpression, side: "left" | "right") {
-                state[side] = result;
+            function onEnter(node: BinaryExpression, state: WorkArea | undefined) {
+                if (state) {
+                    state.stackIndex++;
+                    state.leftStack[state.stackIndex] = node.left;
+                    state.operatorStack[state.stackIndex] = node.operatorToken;
+                    state.rightStack[state.stackIndex] = node.right;
+                }
+                else {
+                    state = {
+                        stackIndex: 0,
+                        leftStack: [node.left],
+                        operatorStack: [node.operatorToken],
+                        rightStack: [node.right],
+                    };
+                }
                 return state;
             }
 
-            function maybeVisitExpression(node: Expression, state: PreprintBinaryExpressionState, side: "left" | "right") {
+            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+                return maybeVisitExpression(left, state, "left");
+            }
+
+            function onOperator(operator: BinaryOperatorToken, state: WorkArea, _node: BinaryExpression) {
+                state.operatorStack[state.stackIndex] = visit(operator, isBinaryOperatorToken);
+            }
+
+            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+                return maybeVisitExpression(right, state, "right");
+            }
+
+            function onExit(node: BinaryExpression, state: WorkArea) {
+                const left = state.leftStack[state.stackIndex];
+                const operator = state.operatorStack[state.stackIndex];
+                const right = state.rightStack[state.stackIndex];
+                if (state.stackIndex > 0) {
+                    state.stackIndex--;
+                }
+                return factory.updateBinaryExpression(node, left, operator, right);
+            }
+
+            function foldState(state: WorkArea, result: BinaryExpression, side: "left" | "right") {
+                (side === "left" ? state.leftStack : state.rightStack)[state.stackIndex] = result;
+                return state;
+            }
+
+            function maybeVisitExpression(node: Expression, state: WorkArea, side: "left" | "right") {
                 // Get the first supported pipeline phase for this node. We can skip several stack
                 // frames if we aren't doing emit notification, so we check for substitution and
                 // direct callbacks and execute those immediately.
@@ -6711,7 +6687,7 @@ namespace ts {
                 }
                 else {
                     // Visit the expression and store the result on whichever side we are currently visiting.
-                    state[side] = visitExpression(node, isExpression);
+                    (side === "left" ? state.leftStack : state.rightStack)[state.stackIndex] = visitExpression(node, isExpression);
                 }
             }
         }

@@ -1502,27 +1502,18 @@ namespace ts {
         }
 
         function createBindBinaryExpressionFlow() {
-            let stackIndex = -1;
-            let inStrictModeStack: (boolean | undefined)[];
-            let parentStack: (Node | undefined)[];
+            interface WorkArea {
+                stackIndex: number;
+                skip: boolean;
+                inStrictModeStack: (boolean | undefined)[];
+                parentStack: (Node | undefined)[];
+            }
 
-            const trampoline = createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, identity);
-            return (node: BinaryExpression) => {
-                const savedStackIndex = stackIndex;
-                const savedInStrictModeStack = inStrictModeStack;
-                const savedParentStack = parentStack;
-                stackIndex = -1;
-                inStrictModeStack = [undefined];
-                parentStack = [undefined];
-                trampoline(node);
-                stackIndex = savedStackIndex;
-                inStrictModeStack = savedInStrictModeStack;
-                parentStack = savedParentStack;
-            };
+            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, identity);
 
-            function onEnter(node: BinaryExpression, _: boolean | undefined) {
-                stackIndex++;
-                if (stackIndex > 0) {
+            function onEnter(node: BinaryExpression, state: WorkArea | undefined) {
+                if (state) {
+                    state.stackIndex++;
                     // Emulate the work that `bind` does before reaching `bindChildren`. A normal call to
                     // `bindBinaryExpressionFlow` will already have done this work.
                     setParent(node, parent);
@@ -1530,14 +1521,18 @@ namespace ts {
                     bindWorker(node);
                     const saveParent = parent;
                     parent = node;
-                    inStrictModeStack[stackIndex] = saveInStrictMode;
-                    parentStack[stackIndex] = saveParent;
+                    state.skip = false;
+                    state.inStrictModeStack[state.stackIndex] = saveInStrictMode;
+                    state.parentStack[state.stackIndex] = saveParent;
                 }
                 else {
-                    inStrictModeStack[stackIndex] = undefined;
-                    parentStack[stackIndex] = undefined;
+                    state = {
+                        stackIndex: 0,
+                        skip: false,
+                        inStrictModeStack: [undefined],
+                        parentStack: [undefined]
+                    };
                 }
-
                 // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
                 // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
                 // For now, though, since the common cases are chained `+`, leaving it recursive is fine
@@ -1554,19 +1549,19 @@ namespace ts {
                     else {
                         bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
                     }
-                    return true;
+                    state.skip = true;
                 }
-                return false;
+                return state;
             }
 
-            function onLeft(left: Expression, skip: boolean, _node: BinaryExpression) {
-                if (!skip) {
+            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+                if (!state.skip) {
                     return maybeBind(left);
                 }
             }
 
-            function onOperator(operatorToken: BinaryOperatorToken, skip: boolean, node: BinaryExpression) {
-                if (!skip) {
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+                if (!state.skip) {
                     if (operatorToken.kind === SyntaxKind.CommaToken) {
                         maybeBindExpressionFlowIfCall(node.left);
                     }
@@ -1574,14 +1569,14 @@ namespace ts {
                 }
             }
 
-            function onRight(right: Expression, skip: boolean, _node: BinaryExpression) {
-                if (!skip) {
+            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+                if (!state.skip) {
                     return maybeBind(right);
                 }
             }
 
-            function onExit(node: BinaryExpression, skip: boolean) {
-                if (!skip) {
+            function onExit(node: BinaryExpression, state: WorkArea) {
+                if (!state.skip) {
                     const operator = node.operatorToken.kind;
                     if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
                         bindAssignmentTargetFlow(node.left);
@@ -1593,15 +1588,16 @@ namespace ts {
                         }
                     }
                 }
-                const savedInStrictMode = inStrictModeStack[stackIndex];
-                const savedParent = parentStack[stackIndex];
+                const savedInStrictMode = state.inStrictModeStack[state.stackIndex];
+                const savedParent = state.parentStack[state.stackIndex];
                 if (savedInStrictMode !== undefined) {
                     inStrictMode = savedInStrictMode;
                 }
                 if (savedParent !== undefined) {
                     parent = savedParent;
                 }
-                stackIndex--;
+                state.skip = false;
+                state.stackIndex--;
             }
 
             function maybeBind(node: Node) {
