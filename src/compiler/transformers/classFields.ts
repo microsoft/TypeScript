@@ -336,8 +336,6 @@ namespace ts {
             Debug.assert(!some(node.decorators));
             if (!shouldTransformPrivateElements && isPrivateIdentifier(node.name)) {
                 // Initializer is elided as the field is initialized in transformConstructor.
-                // We include initalizers for static private fields as there is no simple way to do this emit,
-                // and nobody is relying on the old assignment semantics for private static fields.
                 return factory.updatePropertyDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -345,7 +343,7 @@ namespace ts {
                     node.name,
                     /*questionOrExclamationToken*/ undefined,
                     /*type*/ undefined,
-                    /*initializer*/ hasStaticModifier(node) ? node.initializer : undefined
+                    /*initializer*/ undefined
                 );
             }
             // Create a temporary variable to store a computed property name (if necessary).
@@ -685,7 +683,7 @@ namespace ts {
             return isPropertyDeclaration(node) || (shouldTransformPrivateElements && node.name && isPrivateIdentifier(node.name));
         }
         function getPrivateUnitializedPrivateStaticFields(node: ClassLikeDeclaration) {
-            return filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer)
+            return filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
         }
 
         function getPrivateInstanceMethods(node: ClassLikeDeclaration) {
@@ -726,14 +724,9 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            let staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
 
-            if (languageVersion === ScriptTarget.ESNext) {
-                // We can't initialize static private properties after the class as the are not in the lexical scope
-                // so we rely on standard init even under useDefineForClassFields:false
-                staticProperties = filter(staticProperties, p => !isPrivateIdentifier(p.name));
-            }
-            else {
+            if (languageVersion < ScriptTarget.ESNext) {
                 // We must initialize static private properties even if the don't have a value as we initialize them with a wrapper object which must always exist.
                 const staticUninitializedPrivateProperties = getPrivateUnitializedPrivateStaticFields(node);
                 if (some(staticUninitializedPrivateProperties)) {
@@ -762,12 +755,8 @@ namespace ts {
             // these statements after the class expression variable statement.
             const isDecoratedClassDeclaration = isClassDeclaration(getOriginalNode(node));
 
-            let staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
-            if (!shouldTransformPrivateElements) {
-                // We can't initialize static private properties after the class as the are not in the lexical scope
-                // so we rely on standard init even under useDefineForClassFields:false
-                staticProperties = filter(staticProperties, p => !isPrivateIdentifier(p.name));
-            }
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+
             const staticUninitializedPrivateProperties = !shouldTransformPrivateElements ? []: getPrivateUnitializedPrivateStaticFields(node);
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
@@ -1265,7 +1254,6 @@ namespace ts {
                             ...previousInfo,
                             placement: PrivateIdentifierPlacement.StaticGetterAndSetter,
                             getterName,
-                            setterName: previousInfo.setterName,
                         };
                     }
                     else {

@@ -35,7 +35,7 @@ class C {
         this.#a = "hello";
         console.log(this.#b);
     }
-    static #m = "test";
+    static #m;
     static #x;
     static test() {
         console.log(this.#m);
@@ -43,3 +43,4 @@ class C {
     }
     #something;
 }
+C.#m = "test";
