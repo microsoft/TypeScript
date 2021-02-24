@@ -558,8 +558,8 @@ namespace Harness.LanguageService {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: ts.FormatCodeOptions): ts.TextChange[] {
             return unwrapJSONCallResult(this.shim.getFormattingEditsAfterKeystroke(fileName, position, key, JSON.stringify(options)));
         }
-        getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
-            return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: ts.DocCommentTemplateOptions): ts.TextInsertion {
+            return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position, options));
         }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));

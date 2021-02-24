@@ -255,16 +255,8 @@ namespace ts.moduleSpecifiers {
         return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text) : undefined) || false;
     }
 
-    function numberOfDirectorySeparators(str: string) {
-        const match = str.match(/\//g);
-        return match ? match.length : 0;
-    }
-
     function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: ModulePath) {
-        return compareBooleans(b.isRedirect, a.isRedirect) || compareValues(
-            numberOfDirectorySeparators(a.path),
-            numberOfDirectorySeparators(b.path)
-        );
+        return compareBooleans(b.isRedirect, a.isRedirect) || compareNumberOfDirectorySeparators(a.path, b.path);
     }
 
     function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string) {

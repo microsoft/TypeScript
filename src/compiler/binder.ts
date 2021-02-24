@@ -174,14 +174,14 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        tracing.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
+        tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
-        tracing.pop();
+        tracing?.pop();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -344,12 +344,9 @@ namespace ts {
                     if (isSignedNumericLiteral(nameExpression)) {
                         return tokenToString(nameExpression.operator) + nameExpression.operand.text as __String;
                     }
-
-                    Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-                }
-                if (isWellKnownSymbolSyntactically(name)) {
-                    return getPropertyNameForKnownSymbolName(idText(name.name));
+                    else {
+                        Debug.fail("Only computed properties with literal names have declaration names");
+                    }
                 }
                 if (isPrivateIdentifier(name)) {
                     // containingClass exists because private names only allowed inside classes
@@ -885,11 +882,11 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PrivateIdentifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
-                (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
-                isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right) ||
-                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression) ||
-                isAssignmentExpression(expr) && isNarrowableReference(expr.left);
+            return isDottedName(expr)
+                || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
+                || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
+                || isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression)
+                || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }
 
         function containsNarrowableReference(expr: Expression): boolean {
@@ -1372,7 +1369,7 @@ namespace ts {
             // is potentially an assertion and is therefore included in the control flow.
             if (node.kind === SyntaxKind.CallExpression) {
                 const call = <CallExpression>node;
-                if (isDottedName(call.expression) && call.expression.kind !== SyntaxKind.SuperKeyword) {
+                if (call.expression.kind !== SyntaxKind.SuperKeyword && isDottedName(call.expression)) {
                     currentFlow = createFlowCall(currentFlow, call);
                 }
             }
@@ -2540,6 +2537,12 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkContextualIdentifier(<Identifier>node);
+                case SyntaxKind.QualifiedName:
+                    if (currentFlow && parent.kind === SyntaxKind.TypeQuery) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
+                case SyntaxKind.MetaProperty:
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
@@ -3302,7 +3305,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && !getJSDocTypeTag(node)) {
+                if (isInJSFile(node) && isRequireVariableDeclaration(node) && !getJSDocTypeTag(node)) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 }
                 else if (isBlockOrCatchScoped(node)) {

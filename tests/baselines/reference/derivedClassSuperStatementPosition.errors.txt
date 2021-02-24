@@ -1,10 +1,10 @@
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(12,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(22,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(45,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(60,15): error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(69,13): error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(81,13): error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(90,13): error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(60,15): error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(69,13): error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(81,13): error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(90,13): error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts (7 errors) ====
@@ -75,7 +75,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             Math.random()
                 ? super(1)
                   ~~~~~~~~
-!!! error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
                 : super(0);
         }
     }
@@ -86,7 +86,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             if (Math.random()) {
                 super(1);
                 ~~~~~~~~
-!!! error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
             else {
                 super(0);
@@ -100,7 +100,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             {
                 super();
                 ~~~~~~~
-!!! error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         }
     }
@@ -111,7 +111,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             if (Math.random()) {
                 super(1);
                 ~~~~~~~~
-!!! error TS2799: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2803: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             } else {
                 super(0);
             }

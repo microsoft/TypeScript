@@ -1603,7 +1603,7 @@ namespace ts {
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
-            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*reportOptionsErrors*/ false, /*optionsIterator*/ undefined),
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1767,11 +1767,35 @@ namespace ts {
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
+    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, reportOptionsErrors: boolean, optionsIterator: JsonConversionNotifier | undefined): any {
+        const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
+        const knownRootOptions = reportOptionsErrors ? getTsconfigRootOptionsMap() : undefined;
+        if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
+            errors.push(createDiagnosticForNodeInSourceFile(
+                sourceFile,
+                rootExpression,
+                Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                getBaseFileName(sourceFile.fileName) === "jsconfig.json" ? "jsconfig.json" : "tsconfig.json"
+            ));
+            // Last-ditch error recovery. Somewhat useful because the JSON parser will recover from some parse errors by
+            // synthesizing a top-level array literal expression. There's a reasonable chance the first element of that
+            // array is a well-formed configuration object, made into an array element by stray characters.
+            if (isArrayLiteralExpression(rootExpression)) {
+                const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
+                if (firstObject) {
+                    return convertToObjectWorker(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+                }
+            }
+            return {};
+        }
+        return convertToObjectWorker(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+    }
+
     /**
      * Convert the json syntax tree into the json value
      */
     export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
-        return convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+        return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
     }
 
     /**
@@ -1782,15 +1806,16 @@ namespace ts {
     /*@internal*/
     export function convertToObjectWorker(
         sourceFile: JsonSourceFile,
+        rootExpression: Expression | undefined,
         errors: Push<Diagnostic>,
         returnValue: boolean,
         knownRootOptions: CommandLineOption | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
-        if (!sourceFile.statements.length) {
+        if (!rootExpression) {
             return returnValue ? {} : undefined;
         }
 
-        return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
+        return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
         function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
             return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
@@ -2617,14 +2642,17 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors, extendedConfigCache);
+            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, resolutionStack, errors, extendedConfigCache);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
                 const baseRaw = extendedConfig.raw;
                 const raw = ownConfig.raw;
+                let relativeDifference: string | undefined ;
                 const setPropertyInRawIfNotUndefined = (propertyName: string) => {
-                    const value = raw[propertyName] || baseRaw[propertyName];
-                    if (value) {
-                        raw[propertyName] = value;
+                    if (!raw[propertyName] && baseRaw[propertyName]) {
+                        raw[propertyName] = map(baseRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
+                            relativeDifference ||= convertToRelativePath(getDirectoryPath(ownConfig.extendedConfigPath!), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                            path
+                        ));
                     }
                 };
                 setPropertyInRawIfNotUndefined("include");
@@ -2730,7 +2758,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
 
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
@@ -2786,7 +2814,6 @@ namespace ts {
         sourceFile: TsConfigSourceFile | undefined,
         extendedConfigPath: string,
         host: ParseConfigHost,
-        basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
         extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
@@ -2801,25 +2828,8 @@ namespace ts {
         else {
             extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
             if (!extendedResult.parseDiagnostics.length) {
-                const extendedDirname = getDirectoryPath(extendedConfigPath);
-                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
+                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, getDirectoryPath(extendedConfigPath),
                     getBaseFileName(extendedConfigPath), resolutionStack, errors, extendedConfigCache);
-
-                if (isSuccessfulParsedTsconfig(extendedConfig)) {
-                    // Update the paths to reflect base path
-                    const relativeDifference = convertToRelativePath(extendedDirname, basePath, identity);
-                    const updatePath = (path: string) => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
-                    const mapPropertiesInRawIfNotUndefined = (propertyName: string) => {
-                        if (raw[propertyName]) {
-                            raw[propertyName] = map(raw[propertyName], updatePath);
-                        }
-                    };
-
-                    const { raw } = extendedConfig;
-                    mapPropertiesInRawIfNotUndefined("include");
-                    mapPropertiesInRawIfNotUndefined("exclude");
-                    mapPropertiesInRawIfNotUndefined("files");
-                }
             }
             if (extendedConfigCache) {
                 extendedConfigCache.set(path, { extendedResult, extendedConfig });

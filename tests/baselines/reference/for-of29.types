@@ -4,9 +4,9 @@ var iterableWithOptionalIterator: {
 
     [Symbol.iterator]?(): Iterator<string>
 >[Symbol.iterator] : () => Iterator<string>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
 };
 

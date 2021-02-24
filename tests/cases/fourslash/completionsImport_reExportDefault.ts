@@ -28,16 +28,6 @@ verify.completions({
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
-        {
-            name: "foo",
-            source: "/a/index",
-            sourceDisplay: "./a",
-            text: "(alias) function foo(): void\nexport foo",
-            kind: "alias",
-            kindModifiers: "export",
-            hasAction: true,
-            sortText: completion.SortText.AutoImportSuggestions
-        },
         ...completion.globalKeywords,
     ],
     preferences: { includeCompletionsForModuleExports: true },

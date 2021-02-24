@@ -232,7 +232,7 @@ namespace ts.GoToDefinition {
                 return declaration.parent.kind === SyntaxKind.NamedImports;
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration, /*requireStringLiteralLikeArgument*/ true);
+                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration);
             default:
                 return false;
         }

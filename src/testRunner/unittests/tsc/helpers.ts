@@ -29,6 +29,7 @@ namespace ts {
         baselineSourceMap?: boolean;
         baselineReadFileCalls?: boolean;
         baselinePrograms?: boolean;
+        baselineDependencies?: boolean;
     }
 
     export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
@@ -73,7 +74,7 @@ namespace ts {
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
-            baselineSourceMap, baselineReadFileCalls, baselinePrograms
+            baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies
         } = input;
         if (modifyFs) modifyFs(inputFs);
         inputFs.makeReadonly();
@@ -110,7 +111,7 @@ namespace ts {
         sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
         if (baselinePrograms) {
             const baseline: string[] = [];
-            tscWatch.baselinePrograms(baseline, getPrograms);
+            tscWatch.baselinePrograms(baseline, getPrograms, baselineDependencies);
             sys.write(baseline.join("\n"));
         }
         if (baselineReadFileCalls) {
