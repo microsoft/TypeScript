@@ -37,8 +37,8 @@ var x = 1`);
                 tags: [{
                     name: "wat",
                     text: [{
-                        "kind": "text",
-                        "text": "",
+                        kind: "text",
+                        text: "",
                     }, {
                         kind: "link",
                         // textSpan: {
@@ -96,11 +96,11 @@ var x = 1`);
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [{
-                    "kind": "text",
-                    "text": "",
+                    kind: "text",
+                    text: "",
                 }, {
-                    "kind": "lineBreak",
-                    "text": "\n",
+                    kind: "lineBreak",
+                    text: "\n",
                 }, {
                     kind: "link",
                     name: {

@@ -546,7 +546,7 @@ namespace ts.server {
         //             }
         //     }));
         // }
-        private decodeLinkDisplayParts(tags: Array<protocol.JSDocTagInfo | JSDocTagInfo>): JSDocTagInfo[] {
+        private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
             return tags.map(tag => typeof tag.text === "string" ? {
                 ...tag,
                 text: [textPart(tag.text)]
@@ -575,7 +575,7 @@ namespace ts.server {
 
             // TODO: Same here, it doesn't actually seem to be encoded
             const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
-            const items = (encodedItems as Array<SignatureHelpItem | protocol.SignatureHelpItem>).map(item => ({ ...item, tags: this.decodeLinkDisplayParts(item.tags) }));
+            const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({ ...item, tags: this.decodeLinkDisplayParts(item.tags) }));
 
             return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
         }

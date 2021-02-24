@@ -3578,7 +3578,7 @@ namespace ts {
         //
         function emitJSDoc(node: JSDoc) {
             write("/**");
-            const text = getTextOfJSDocComment(node.comment)
+            const text = getTextOfJSDocComment(node.comment);
             if (text) {
                 const lines = text.split(/\r\n?|\n/g);
                 for (const line of lines) {
@@ -3720,7 +3720,7 @@ namespace ts {
         }
 
         function emitJSDocComment(comment: NodeArray<JSDocText | JSDocLink> | undefined) {
-            const text = getTextOfJSDocComment(comment)
+            const text = getTextOfJSDocComment(comment);
             if (text) {
                 writeSpace();
                 write(text);

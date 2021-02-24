@@ -2177,12 +2177,10 @@ namespace ts {
 
     /** return type subtype reduction elimination! */
     export function linkPart(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart {
-        if (!link.name)
-            return textPart(`{@link ${link.text}}`)
+        if (!link.name) {return textPart(`{@link ${link.text}}`);}
         const text = `{@link ${getTextOfNode(link.name)}${link.text}}`;
         const symbol = checker?.getSymbolAtLocation(link.name);
-        if (!symbol)
-            return textPart(text)
+        if (!symbol) {return textPart(text);}
         return {
             text,
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.link],
@@ -2191,7 +2189,7 @@ namespace ts {
                 fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
                 textSpan: createTextSpanFromNode(symbol.valueDeclaration),
             },
-        } as JSDocLinkPart
+        } as JSDocLinkPart;
     }
 
     const carriageReturnLineFeed = "\r\n";

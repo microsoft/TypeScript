@@ -897,7 +897,7 @@ namespace ts {
     /** Gets the text of a jsdoc comment, flattening links to their text. */
     export function getTextOfJSDocComment(comment?: NodeArray<JSDocText | JSDocLink>) {
         // TODO: Stringify c.name correctly
-        return comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name}${c.text}}`).join("")
+        return comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name}${c.text}}`).join("");
     }
 
     /**

@@ -1044,7 +1044,7 @@ namespace ts {
 
     export interface JSDocTagInfo {
         name: string;
-        text?: Array<SymbolDisplayPart | JSDocLinkPart>;
+        text?: (SymbolDisplayPart | JSDocLinkPart)[];
     }
 
     export interface QuickInfo {
@@ -1052,7 +1052,7 @@ namespace ts {
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
-        documentation?: Array<SymbolDisplayPart | JSDocLinkPart>;
+        documentation?: (SymbolDisplayPart | JSDocLinkPart)[];
         tags?: JSDocTagInfo[];
     }
 

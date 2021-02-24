@@ -7394,11 +7394,11 @@ namespace ts {
                                 const link = parseLink(linkStart);
                                 if (link) {
                                     if (!linkEnd) {
-                                        removeLeadingNewlines(comments)
+                                        removeLeadingNewlines(comments);
                                     }
-                                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentEnd))
+                                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentEnd));
                                     parts.push(link);
-                                    comments = []
+                                    comments = [];
                                     linkEnd = scanner.getTextPos();
                                     break;
                                 }
@@ -7415,7 +7415,7 @@ namespace ts {
                     }
                     removeTrailingWhitespace(comments);
                     if (comments.length) {
-                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentsPos))
+                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentsPos));
                     }
                     if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
@@ -7628,9 +7628,9 @@ namespace ts {
                                 const linkStart = scanner.getTextPos() - 1;
                                 const link = parseLink(linkStart);
                                 if (link) {
-                                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos, commentEnd))
+                                    parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos, commentEnd));
                                     parts.push(link);
-                                    comments = []
+                                    comments = [];
                                     linkEnd = scanner.getTextPos();
                                 }
                                 else {
@@ -7669,7 +7669,7 @@ namespace ts {
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
                     if (comments.length) {
-                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos))
+                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
                     }
                     if (parts.length) {
                         return createNodeArray(parts, commentsPos, scanner.getTextPos());
@@ -7688,7 +7688,7 @@ namespace ts {
                         : undefined;
                     const text = [];
                     while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia) {
-                        text.push(scanner.getTokenText())
+                        text.push(scanner.getTokenText());
                         nextTokenJSDoc();
                     }
                     return finishNode(factory.createJSDocLink(name, text.join("")), start, scanner.getTextPos());
@@ -7824,12 +7824,12 @@ namespace ts {
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
                     const commentStart = getNodePos();
                     const textOnly = parseAuthorNameAndEmail();
-                    let commentEnd = scanner.getStartPos()
+                    let commentEnd = scanner.getStartPos();
                     const comments = parseTrailingTagComments(start, commentEnd, indent, indentText);
                     if (!comments) {
-                        commentEnd = scanner.getStartPos()
+                        commentEnd = scanner.getStartPos();
                     }
-                    const allParts = concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as Array<JSDocText | JSDocLink> // cast away readonly
+                    const allParts = concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as (JSDocText | JSDocLink)[]; // cast away readonly
                     return finishNode(factory.createJSDocAuthorTag(tagName, createNodeArray(allParts, commentStart)), start);
                 }
 
@@ -7853,7 +7853,7 @@ namespace ts {
                         token = nextTokenJSDoc();
                     }
 
-                    return factory.createJSDocText(comments.join(""))
+                    return factory.createJSDocText(comments.join(""));
                 }
 
                 function parseImplementsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImplementsTag {

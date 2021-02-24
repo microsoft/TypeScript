@@ -127,8 +127,8 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getDisplayPartsFromComment(comment: ReadonlyArray<JSDocText | JSDocLink>, checker: TypeChecker | undefined) {
-        return comment.map(node => node.kind === SyntaxKind.JSDocText ? textPart(node.text) : linkPart(node, checker))
+    function getDisplayPartsFromComment(comment: readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined) {
+        return comment.map(node => node.kind === SyntaxKind.JSDocText ? textPart(node.text) : linkPart(node, checker));
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
@@ -158,7 +158,7 @@ namespace ts.JsDoc {
         }
 
         function addComment(s: string) {
-            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)]
+            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)];
         }
     }
 
