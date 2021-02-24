@@ -1509,7 +1509,7 @@ namespace ts {
                 parentStack: (Node | undefined)[];
             }
 
-            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, identity);
+            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, /*foldState*/ undefined);
 
             function onEnter(node: BinaryExpression, state: WorkArea | undefined) {
                 if (state) {

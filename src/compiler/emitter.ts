@@ -2531,36 +2531,44 @@ namespace ts {
         }
 
         function createEmitBinaryExpression() {
-            // class EmitBinaryExpressionState {
-            //     nested = false;
-            //     preserveSourceNewlines: boolean | undefined = undefined;
-            //     containerPos = -1;
-            //     containerEnd = -1;
-            //     declarationListContainerEnd = -1;
-            //     emitFlags = EmitFlags.None;
-            //     commentRange: TextRange | undefined = undefined;
-            //     sourceMapRange: SourceMapRange | undefined = undefined;
-            // }
+            interface WorkArea {
+                stackIndex: number;
+                preserveSourceNewlinesStack: (boolean | undefined)[];
+                containerPosStack: number[];
+                containerEndStack: number[];
+                declarationListContainerEndStack: number[];
+                shouldEmitCommentsStack: boolean[];
+                shouldEmitSourceMapsStack: boolean[];
+            }
 
-            return createBinaryExpressionTrampoline(noop, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, identity);
+            return createBinaryExpressionTrampoline(onEnter, maybeEmitExpression, onOperator, maybeEmitExpression, onExit, /*foldState*/ undefined);
 
-            // function onEnter(node: BinaryExpression, prev: EmitBinaryExpressionState | undefined) {
-            //     const state = new EmitBinaryExpressionState();
-            //     if (prev) {
-            //         // `prev` is only defined when recuring. We can use this fact to indicate
-            //         // we are entering into a nested binary expression and can replicate the
-            //         // leading comment and sourcemap emit performed by `emitWithContext`.
-            //         state.nested = true;
-            //         state.preserveSourceNewlines = preserveSourceNewlines;
-            //         state.containerPos = containerPos;
-            //         state.containerEnd = containerEnd;
-            //         state.declarationListContainerEnd = declarationListContainerEnd;
-            //         beforeEmitWithContext(node);
-            //     }
-            //     return state;
-            // }
+            function onEnter(node: BinaryExpression, state: WorkArea | undefined) {
+                if (state) {
+                    state.stackIndex++;
+                    state.preserveSourceNewlinesStack[state.stackIndex] = preserveSourceNewlines;
+                    state.containerPosStack[state.stackIndex] = containerPos;
+                    state.containerEndStack[state.stackIndex] = containerEnd;
+                    state.declarationListContainerEndStack[state.stackIndex] = declarationListContainerEnd;
+                    const emitComments = state.shouldEmitCommentsStack[state.stackIndex] = shouldEmitComments(node);
+                    const emitSourceMaps = state.shouldEmitSourceMapsStack[state.stackIndex] = shouldEmitSourceMaps(node);
+                    beforeEmitWithContext(node, emitComments, emitSourceMaps);
+                }
+                else {
+                    state = {
+                        stackIndex: 0,
+                        preserveSourceNewlinesStack: [undefined],
+                        containerPosStack: [-1],
+                        containerEndStack: [-1],
+                        declarationListContainerEndStack: [-1],
+                        shouldEmitCommentsStack: [false],
+                        shouldEmitSourceMapsStack: [false],
+                    };
+                }
+                return state;
+            }
 
-            function onOperator(operatorToken: BinaryOperatorToken, _state: unknown, node: BinaryExpression) {
+            function onOperator(operatorToken: BinaryOperatorToken, _state: WorkArea, node: BinaryExpression) {
                 const isCommaOperator = operatorToken.kind !== SyntaxKind.CommaToken;
                 const linesBeforeOperator = getLinesBetweenNodes(node, node.left, operatorToken);
                 const linesAfterOperator = getLinesBetweenNodes(node, operatorToken, node.right);
@@ -2571,18 +2579,25 @@ namespace ts {
                 writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
             }
 
-            function onExit(node: BinaryExpression, _state: unknown) {
+            function onExit(node: BinaryExpression, state: WorkArea) {
                 const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
                 const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
                 decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
-                // if (state.nested) {
-                //     afterEmitWithContext(node, state.containerPos, state.containerEnd, state.declarationListContainerEnd, state.preserveSourceNewlines);
-                // }
+                if (state.stackIndex > 0) {
+                    const savedPreserveSourceNewlines = state.preserveSourceNewlinesStack[state.stackIndex];
+                    const savedContainerPos = state.containerPosStack[state.stackIndex];
+                    const savedContainerEnd = state.containerEndStack[state.stackIndex];
+                    const savedDeclarationListContainerEnd = state.declarationListContainerEndStack[state.stackIndex];
+                    const shouldEmitComments = state.shouldEmitCommentsStack[state.stackIndex];
+                    const shouldEmitSourceMaps = state.shouldEmitSourceMapsStack[state.stackIndex];
+                    afterEmitWithContext(node, shouldEmitComments, shouldEmitSourceMaps, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd, savedPreserveSourceNewlines);
+                    state.stackIndex--;
+                }
             }
 
             function maybeEmitExpression(next: Expression) {
                 // Push a new frame for binary expressions, otherwise emit all other expressions.
-                if (isBinaryExpression(next) && !shouldEmitComments(next) && !shouldEmitSourceMaps(next)) {
+                if (isBinaryExpression(next)) {
                     return next;
                 }
 

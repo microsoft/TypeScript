@@ -1009,8 +1009,10 @@ namespace ts {
             const result = machine.onExit(nodeStack[stackIndex], userStateStack[stackIndex]);
             if (stackIndex > 0) {
                 stackIndex--;
-                const side = stateStack[stackIndex] === exit ? "right" : "left";
-                userStateStack[stackIndex] = machine.foldState(userStateStack[stackIndex], result, side);
+                if (machine.foldState) {
+                    const side = stateStack[stackIndex] === exit ? "right" : "left";
+                    userStateStack[stackIndex] = machine.foldState(userStateStack[stackIndex], result, side);
+                }
             }
             else {
                 resultHolder.value = result;
@@ -1073,7 +1075,7 @@ namespace ts {
             readonly onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
             readonly onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
             readonly onExit: (node: BinaryExpression, userState: TState) => TResult,
-            readonly foldState: (userState: TState, result: TResult, side: "left" | "right") => TState,
+            readonly foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
         ) {
         }
     }
@@ -1093,7 +1095,7 @@ namespace ts {
         onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
         onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
         onExit: (node: BinaryExpression, userState: TState) => TResult,
-        foldState: (userState: TState, result: TResult, side: "left" | "right") => TState,
+        foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
     ) {
         const machine = new BinaryExpressionStateMachine(onEnter, onLeft, onOperator, onRight, onExit, foldState);
         return (node: BinaryExpression) => {

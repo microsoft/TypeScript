@@ -42,7 +42,7 @@ async function main() {
             for (const file of resp.items) {
                 if (/[\\/]linux\.benchmark$/.test(file.path)) {
                     const benchmarkUrl = new URL(artifact.resource.url);
-                    benchmarkUrl.search = `artifactName=benchmark&fileId=${file.blob.id}&fileName=${file.path}`;
+                    benchmarkUrl.search = `artifactName=benchmark&fileId=${file.blob.id}&fileName=linux.benchmark`;
                     benchmarkText = `\n<details><summary>Developer Information:</summary><p><a href="${benchmarkUrl.href}">Download Benchmark</a></p></details>\n`;
                     break;
                 }
