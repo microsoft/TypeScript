@@ -445,6 +445,7 @@ namespace ts {
             writeLog("CreatingProgramWith::");
             writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
             writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
+            if (projectReferences) writeLog(`  projectReferences: ${JSON.stringify(projectReferences)}`);
 
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !getCurrentProgram();
             hasChangedCompilerOptions = false;
