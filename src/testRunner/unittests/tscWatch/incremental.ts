@@ -32,6 +32,7 @@ namespace ts.tscWatch {
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
             const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
+            let oldPrograms: readonly CommandLineProgram[] = emptyArray;
             const { cb, getPrograms } = commandLineCallbacks(sys);
             build(oldSnap);
 
@@ -48,9 +49,10 @@ namespace ts.tscWatch {
                     cb,
                     argsToPass,
                 );
-                watchBaseline({
+                oldPrograms = watchBaseline({
                     baseline,
                     getPrograms,
+                    oldPrograms,
                     sys,
                     oldSnap
                 });

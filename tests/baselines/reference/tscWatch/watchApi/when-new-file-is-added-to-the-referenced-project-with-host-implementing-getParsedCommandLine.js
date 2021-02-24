@@ -276,20 +276,9 @@ Project: /user/username/projects/myproject/projets/project1/tsconfig.json Detect
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projets/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projets/project1 1 undefined Wild card directory of referenced project
 
 
-Program root files: ["/user/username/projects/myproject/projets/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projets/project2/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projets/project1/class1.ts
-/user/username/projects/myproject/projets/project1/class3.ts
-/user/username/projects/myproject/projets/project2/class2.ts
+Program: Same as old program
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projets/project1/class1.ts
-/user/username/projects/myproject/projets/project1/class3.ts
-/user/username/projects/myproject/projets/project2/class2.ts
+BuilderProgram: Same as old builder program
 
 WatchedFiles::
 /user/username/projects/myproject/projets/project2/tsconfig.json:
