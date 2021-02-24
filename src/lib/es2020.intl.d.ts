@@ -1,5 +1,4 @@
 declare namespace Intl {
-
     /**
      * [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers) definition.
      *
@@ -16,15 +15,22 @@ declare namespace Intl {
      * [Specification](https://tc39.es/ecma402/#sec-singularrelativetimeunit).
      */
     type RelativeTimeFormatUnit =
-        | "year" | "years"
-        | "quarter" | "quarters"
-        | "month" | "months"
-        | "week" | "weeks"
-        | "day" | "days"
-        | "hour" | "hours"
-        | "minute" | "minutes"
-        | "second" | "seconds"
-        ;
+        | "year"
+        | "years"
+        | "quarter"
+        | "quarters"
+        | "month"
+        | "months"
+        | "week"
+        | "weeks"
+        | "day"
+        | "days"
+        | "hour"
+        | "hours"
+        | "minute"
+        | "minutes"
+        | "second"
+        | "seconds";
 
     /**
      * The locale matching algorithm to use.
@@ -127,10 +133,7 @@ declare namespace Intl {
          *
          * [Specification](https://tc39.es/ecma402/#sec-Intl.RelativeTimeFormat.prototype.format).
          */
-        format(
-            value: number,
-            unit: RelativeTimeFormatUnit,
-        ): string;
+        format(value: number, unit: RelativeTimeFormatUnit): string;
 
         /**
          *  A version of the format method which it returns an array of objects
@@ -162,7 +165,7 @@ declare namespace Intl {
          */
         formatToParts(
             value: number,
-            unit: RelativeTimeFormatUnit,
+            unit: RelativeTimeFormatUnit
         ): RelativeTimeFormatPart[];
 
         /**
@@ -219,9 +222,11 @@ declare namespace Intl {
          *
          * [Specification](https://tc39.es/ecma402/#sec-intl-relativetimeformat-constructor).
          */
-        new(
-            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
-            options?: RelativeTimeFormatOptions,
+        new (
+            locales?:
+                | UnicodeBCP47LocaleIdentifier
+                | UnicodeBCP47LocaleIdentifier[],
+            options?: RelativeTimeFormatOptions
         ): RelativeTimeFormat;
 
         /**
@@ -256,34 +261,80 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-Intl.RelativeTimeFormat.supportedLocalesOf).
          */
         supportedLocalesOf(
-            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
-            options?: RelativeTimeFormatOptions,
+            locales?:
+                | UnicodeBCP47LocaleIdentifier
+                | UnicodeBCP47LocaleIdentifier[],
+            options?: RelativeTimeFormatOptions
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
+    /**
+     * List of sanctioned unit: https://402.ecma-international.org/7.0/#table-sanctioned-simple-unit-identifiers
+     */
+    type NumberFormatUnit =
+        | "acre"
+        | "bit"
+        | "byte"
+        | "celsius"
+        | "centimeter"
+        | "day"
+        | "degree"
+        | "fahrenheit"
+        | "fluid-ounce"
+        | "foot"
+        | "gallon"
+        | "gigabit"
+        | "gigabyte"
+        | "gram"
+        | "hectare"
+        | "hour"
+        | "inch"
+        | "kilobit"
+        | "kilobyte"
+        | "kilogram"
+        | "kilometer"
+        | "liter"
+        | "megabit"
+        | "megabyte"
+        | "meter"
+        | "mile-scandinavian"
+        | "mile"
+        | "milliliter"
+        | "millimeter"
+        | "millisecond"
+        | "minute"
+        | "month"
+        | "ounce"
+        | "percent"
+        | "petabyte"
+        | "pound"
+        | "second"
+        | "stone"
+        | "terabit"
+        | "terabyte"
+        | "week"
+        | "yard"
+        | "year";
+
     interface NumberFormatOptions {
-        compactDisplay?: string;
-        notation?: string;
-        signDisplay?: string;
-        unit?: string;
-        unitDisplay?: string;
+        compactDisplay?: "short" | "long";
+        notation?: "standard" | "scientific" | "engineering" | "compact";
+        signDisplay?: "auto" | "never" | "always";
+        unit?: NumberFormatUnit;
+        unitDisplay?: "short" | "long" | "narrow";
     }
 
     interface ResolvedNumberFormatOptions {
-        compactDisplay?: string;
-        notation?: string;
-        signDisplay?: string;
-        unit?: string;
-        unitDisplay?: string;
+        compactDisplay?: "short" | "long";
+        notation?: "standard" | "scientific" | "engineering" | "compact";
+        signDisplay?: "auto" | "never" | "always";
+        unit?: NumberFormatUnit;
+        unitDisplay?: "short" | "long" | "narrow";
     }
 
     interface DateTimeFormatOptions {
-        dateStyle?: "full" | "long" | "medium" | "short";
-        timeStyle?: "full" | "long" | "medium" | "short";
         calendar?: string;
-        dayPeriod?: "narrow" | "short" | "long";
         numberingSystem?: string;
         hourCycle?: "h11" | "h12" | "h23" | "h24";
-        fractionalSecondDigits?: 0 | 1 | 2 | 3;
     }
 }
