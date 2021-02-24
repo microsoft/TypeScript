@@ -868,12 +868,16 @@ namespace ts.server.protocol {
 
     /** The response for a EncodedSemanticClassificationsRequest */
     export interface EncodedSemanticClassificationsResponse extends Response {
-        body?: {
-            endOfLineState: EndOfLineState;
-            spans: number[];
-        };
+        body?: EncodedSemanticClassificationsResponseBody
     }
 
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    export interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: ClassifiedSpan[] | number[];
+    }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
