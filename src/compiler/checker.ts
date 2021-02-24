@@ -17750,9 +17750,16 @@ namespace ts {
                     targetStack = [];
                 }
                 else {
+                    // generate a key where all type parameter id positions are replaced with unconstrained type parameter ids
+                    // this isn't perfect - nested type references passed as type arguments will muck up the indexes and thus
+                    // prevent finding matches- but it should hit up the common cases
+                    const broadestEquivalentId = id.split(",").map(i => i.replace(/-\d+/g, (_match, offset: number) => {
+                        const index = length(id.slice(0, offset).match(/[-=]/g) || undefined);
+                        return `=${index}`;
+                    })).join(",");
                     for (let i = 0; i < maybeCount; i++) {
                         // If source and target are already being compared, consider them related with assumptions
-                        if (id === maybeKeys[i]) {
+                        if (id === maybeKeys[i] || broadestEquivalentId === maybeKeys[i]) {
                             return Ternary.Maybe;
                         }
                     }
@@ -19192,7 +19199,7 @@ namespace ts {
         }
 
         function isTypeReferenceWithGenericArguments(type: Type): boolean {
-            return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => isUnconstrainedTypeParameter(t) || isTypeReferenceWithGenericArguments(t));
+            return isNonDeferredTypeReference(type) && some(getTypeArguments(type), t => !!(t.flags & TypeFlags.TypeParameter) || isTypeReferenceWithGenericArguments(t));
         }
 
         /**
