@@ -40,7 +40,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanJsxToken(isFormatting?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
         reScanInvalidIdentifier(): SyntaxKind;
@@ -2223,9 +2223,9 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
-        function reScanJsxToken(): JsxTokenSyntaxKind {
+        function reScanJsxToken(isFormatting?: boolean): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
-            return token = scanJsxToken();
+            return token = scanJsxToken(isFormatting);
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2242,7 +2242,7 @@ namespace ts {
             return token = SyntaxKind.QuestionToken;
         }
 
-        function scanJsxToken(): JsxTokenSyntaxKind {
+        function scanJsxToken(isFormatting?: boolean): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
             if (pos >= end) {
@@ -2268,17 +2268,13 @@ namespace ts {
             let firstNonWhitespace = 0;
             let lastNonWhitespace = -1;
 
+            // Keeps track for the last line break in jsx text.
+            let seenLineBreakInJsxText = false;
+
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
-
-                // We want to keep track of the last non-whitespace (but including
-                // newlines character for hitting the end of the JSX Text region)
-                if (!isWhiteSpaceSingleLine(char)) {
-                    lastNonWhitespace = pos;
-                }
-
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -2297,8 +2293,6 @@ namespace ts {
                     error(Diagnostics.Unexpected_token_Did_you_mean_or_rbrace, pos, 1);
                 }
 
-                if (lastNonWhitespace > 0) lastNonWhitespace++;
-
                 // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
                 // i.e (- : whitespace)
                 //      <div>----
@@ -2310,13 +2304,34 @@ namespace ts {
                 }
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
+                    seenLineBreakInJsxText = false;
                 }
 
                 pos++;
+
+                // If is not formatting, just continue capturing the non whitespace.
+                // Stop JsxText on the last linebreak if it exists otherwise just continue capturing the position.
+                if(!isFormatting) {
+                    lastNonWhitespace = pos;
+                }
+                else if (firstNonWhitespace > 0 && !seenLineBreakInJsxText) {
+                    if (isLineBreak(char)) {
+                        seenLineBreakInJsxText = true;
+                    }
+                    else {
+                        lastNonWhitespace = pos;
+                    }
+                }
             }
 
             const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
             tokenValue = text.substring(startPos, endPosition);
+
+            // Update pos if it is rescanning for formatting. This will allow the next node to include
+            // all whitespace as trivia instead of being part of jsx text node.
+            if(isFormatting) {
+                pos = endPosition;
+            }
 
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
