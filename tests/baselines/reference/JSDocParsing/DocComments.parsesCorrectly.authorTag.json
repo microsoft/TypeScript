@@ -21,12 +21,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 15,
+                    "end": 50,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "John Doe <john.doe@example.com>"
+                },
+                "length": 1,
                 "pos": 15,
                 "end": 50,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "John Doe <john.doe@example.com>"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "1": {
@@ -44,12 +51,27 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 58,
+                    "end": 89,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "John Doe <john.doe@example.com>"
+                },
+                "1": {
+                    "kind": "JSDocText",
+                    "pos": 89,
+                    "end": 112,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " unexpected comment"
+                },
+                "length": 2,
                 "pos": 58,
                 "end": 112,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "John Doe <john.doe@example.com> unexpected comment"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "2": {
@@ -67,12 +89,27 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 120,
+                    "end": 146,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "108 <108@actionbutton.net>"
+                },
+                "1": {
+                    "kind": "JSDocText",
+                    "pos": 146,
+                    "end": 170,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " Video Games Forever"
+                },
+                "length": 2,
                 "pos": 120,
                 "end": 170,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "108 <108@actionbutton.net> Video Games Forever"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "3": {
@@ -90,12 +127,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 178,
+                    "end": 227,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Multiple Ats <email@quoting@how@does@it@work>"
+                },
+                "length": 1,
                 "pos": 178,
                 "end": 227,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Multiple Ats <email@quoting@how@does@it@work>"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "4": {
@@ -113,12 +157,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 235,
+                    "end": 272,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Multiple Open Carets <hi<there@<>"
+                },
+                "length": 1,
                 "pos": 235,
                 "end": 272,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Multiple Open Carets <hi<there@<>"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "5": {
@@ -136,12 +187,27 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 280,
+                    "end": 312,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Multiple Close Carets <probably>"
+                },
+                "1": {
+                    "kind": "JSDocText",
+                    "pos": 312,
+                    "end": 338,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "invalid>but>who>cares>"
+                },
+                "length": 2,
                 "pos": 280,
                 "end": 338,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Multiple Close Carets <probably>invalid>but>who>cares>"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "6": {
@@ -159,12 +225,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 346,
+                    "end": 381,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Unclosed Carets <joe@sloppy.gov"
+                },
+                "length": 1,
                 "pos": 346,
                 "end": 381,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Unclosed Carets <joe@sloppy.gov"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "7": {
@@ -182,12 +255,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 389,
+                    "end": 398,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Multiple "
+                },
+                "length": 1,
                 "pos": 389,
                 "end": 398,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Multiple "
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "8": {
@@ -205,12 +285,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 406,
+                    "end": 429,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "On One <one@two.three>"
+                },
+                "length": 1,
                 "pos": 406,
                 "end": 429,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "On One <one@two.three>"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "9": {
@@ -228,12 +315,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 437,
+                    "end": 445,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Line"
+                },
+                "length": 1,
                 "pos": 437,
                 "end": 445,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Line"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "10": {
@@ -249,6 +343,21 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
+            },
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 453,
+                    "end": 453,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": ""
+                },
+                "length": 1,
+                "pos": 453,
+                "end": 453,
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "11": {
@@ -264,6 +373,21 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
+            },
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 461,
+                    "end": 461,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": ""
+                },
+                "length": 1,
+                "pos": 461,
+                "end": 461,
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "12": {
@@ -281,12 +405,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 469,
+                    "end": 486,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Empty authors"
+                },
+                "length": 1,
                 "pos": 469,
                 "end": 486,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Empty authors"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "13": {
@@ -302,6 +433,21 @@
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
+            },
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 497,
+                    "end": 497,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": ""
+                },
+                "length": 1,
+                "pos": 497,
+                "end": 497,
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "14": {
@@ -319,12 +465,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 510,
+                    "end": 522,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Comments"
+                },
+                "length": 1,
                 "pos": 510,
                 "end": 522,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Comments"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "15": {
@@ -342,12 +495,19 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 530,
+                    "end": 559,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Early Close Caret > <a@b>"
+                },
+                "length": 1,
                 "pos": 530,
                 "end": 559,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Early Close Caret > <a@b>"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "16": {
@@ -365,12 +525,27 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 567,
+                    "end": 582,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "No Line Breaks:"
+                },
+                "1": {
+                    "kind": "JSDocText",
+                    "pos": 582,
+                    "end": 599,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "<the email"
+                },
+                "length": 2,
                 "pos": 567,
                 "end": 599,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "No Line Breaks:<the email"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "17": {
@@ -388,12 +563,19 @@
                 "escapedText": "address"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 607,
+                    "end": 646,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "> must be on the same line to parse"
+                },
+                "length": 1,
                 "pos": 607,
                 "end": 646,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "> must be on the same line to parse"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "18": {
@@ -411,12 +593,27 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 654,
+                    "end": 685,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Long Comment <long@comment.org>"
+                },
+                "1": {
+                    "kind": "JSDocText",
+                    "pos": 685,
+                    "end": 737,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " I\nwant to keep commenting down here, I dunno."
+                },
+                "length": 2,
                 "pos": 654,
                 "end": 737,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Long Comment <long@comment.org> I\nwant to keep commenting down here, I dunno."
+                "hasTrailingComma": false,
+                "transformFlags": 0
             }
         },
         "length": 19,

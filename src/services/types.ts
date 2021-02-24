@@ -44,7 +44,6 @@ namespace ts {
         /* @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
-        getJsDocLinks(checker: TypeChecker): JSDocLinkInfo[];
     }
 
     export interface Type {
@@ -85,7 +84,6 @@ namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
-        getJsDocLinks(): JSDocLinkInfo[];
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -1031,6 +1029,7 @@ namespace ts {
         enumMemberName,
         functionName,
         regularExpressionLiteral,
+        link,
     }
 
     export interface SymbolDisplayPart {
@@ -1038,15 +1037,14 @@ namespace ts {
         kind: string;
     }
 
-    export interface JSDocTagInfo {
-        name: string;
-        text?: string;
-        links?: JSDocLinkInfo[];
+    export interface JSDocLinkPart extends SymbolDisplayPart {
+        name: TextSpan; // TODO: Might need to be relative to comment start (or, easier, filename+line+offset)
+        target: DocumentSpan; // TODO: Protocol needs to convert these to the protocol line+offset version
     }
 
-    export interface JSDocLinkInfo extends DocumentSpan {
-        name: TextSpan;
-        target: DocumentSpan;
+    export interface JSDocTagInfo {
+        name: string;
+        text?: Array<SymbolDisplayPart | JSDocLinkPart>;
     }
 
     export interface QuickInfo {
@@ -1054,8 +1052,7 @@ namespace ts {
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
-        documentation?: SymbolDisplayPart[];
-        links?: JSDocLinkInfo[];
+        documentation?: Array<SymbolDisplayPart | JSDocLinkPart>;
         tags?: JSDocTagInfo[];
     }
 
@@ -1113,7 +1110,6 @@ namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
-        links: JSDocLinkInfo[];
         tags: JSDocTagInfo[];
     }
 
@@ -1172,7 +1168,6 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
@@ -1376,6 +1371,9 @@ namespace ts {
 
         /** String literal */
         string = "string",
+
+        /** Jsdoc {@link entityname} */
+        link = "link",
     }
 
     export const enum ScriptElementKindModifier {

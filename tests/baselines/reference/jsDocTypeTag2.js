@@ -38,11 +38,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{string}"
+          "text": [
+            {
+              "text": "{string}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -86,11 +90,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -134,11 +142,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{boolean}"
+          "text": [
+            {
+              "text": "{boolean}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -182,11 +194,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{void}"
+          "text": [
+            {
+              "text": "{void}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -230,11 +246,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{undefined}"
+          "text": [
+            {
+              "text": "{undefined}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -278,11 +298,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{null}"
+          "text": [
+            {
+              "text": "{null}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -334,11 +358,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{array}"
+          "text": [
+            {
+              "text": "{array}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -394,11 +422,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{promise}"
+          "text": [
+            {
+              "text": "{promise}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -442,11 +474,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{?number}"
+          "text": [
+            {
+              "text": "{?number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -490,11 +526,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{function}"
+          "text": [
+            {
+              "text": "{function}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -574,11 +614,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{function (number): number}"
+          "text": [
+            {
+              "text": "{function (number): number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -638,11 +682,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{string | number}"
+          "text": [
+            {
+              "text": "{string | number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

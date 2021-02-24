@@ -82,21 +82,25 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[]): SymbolDisplayPart[] {
+    export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[], checker?: TypeChecker): SymbolDisplayPart[] {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment: string[] = [];
+        const parts: SymbolDisplayPart[] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                pushIfUnique(documentationComment, comment.text);
+                for (const part of getDisplayPartsFromComment(comment, checker)) {
+                    if (!contains(parts, part, (part1,part2) => part1.kind === part2.kind && part1.text === part2.text)) {
+                        parts.push(part);
+                    }
+                }
             }
         });
-        return intersperse(map(documentationComment, textPart), lineBreakPart());
+        return intersperse(parts, lineBreakPart());
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -117,53 +121,17 @@ namespace ts.JsDoc {
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentText(tag), links: checker ? getLinks(tag, checker) : undefined });
+                tags.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
             }
         });
         return tags;
     }
 
-    export function getJsDocLinksFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocLinkInfo[] {
-        // Only collect doc comments from duplicate declarations once.
-        const links: JSDocLinkInfo[] = [];
-        if (!declarations || !checker) {
-            return links;
-        }
-        forEachUnique(declarations, declaration => {
-            for (const comment of getJSDocCommentsAndTags(declaration)) {
-                if (isJSDoc(comment)) {
-                    const newLinks = getLinks(comment, checker);
-                    if (newLinks) {
-                        links.push(...newLinks);
-                    }
-                }
-            }
-        });
-        return links;
-
+    function getDisplayPartsFromComment(comment: ReadonlyArray<JSDocText | JSDocLink>, checker: TypeChecker | undefined) {
+        return comment.map(node => node.kind === SyntaxKind.JSDocText ? textPart(node.text) : linkPart(node, checker))
     }
 
-    function getLinks(tag: JSDoc | JSDocTag, checker: TypeChecker): JSDocLinkInfo[] | undefined {
-        const links = tag.comment?.links;
-        if (links) {
-            return mapDefined(links, link => {
-                if (!link.name) return;
-                const symbol = checker.getSymbolAtLocation(link.name);
-                if (!symbol || !symbol.valueDeclaration) return;
-                return {
-                    fileName: getSourceFileOfNode(link).fileName,
-                    textSpan: createTextSpanFromNode(link),
-                    name: createTextSpanFromNode(link.name),
-                    target: {
-                        fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
-                        textSpan: createTextSpanFromNode(symbol.valueDeclaration)
-                    }
-                };
-            });
-        }
-    }
-
-    function getCommentText(tag: JSDocTag): string | undefined {
+    function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
         const { comment } = tag;
         switch (tag.kind) {
             case SyntaxKind.JSDocImplementsTag:
@@ -171,7 +139,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return withList((tag as JSDocTemplateTag).typeParameters);
+                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
@@ -180,21 +148,17 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment?.text;
+                return name ? withNode(name) : comment && getDisplayPartsFromComment(comment, checker);
             default:
-                return comment?.text;
+                return comment && getDisplayPartsFromComment(comment, checker);
         }
 
         function withNode(node: Node) {
             return addComment(node.getText());
         }
 
-        function withList(list: NodeArray<Node>): string {
-            return addComment(list.map(x => x.getText()).join(", "));
-        }
-
         function addComment(s: string) {
-            return comment === undefined ? s : `${s} ${comment.text}`;
+            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)]
         }
     }
 
@@ -229,7 +193,6 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
-            links: undefined,
             tags: undefined,
             codeActions: undefined,
         };
@@ -264,7 +227,6 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
-            links: undefined,
             tags: undefined,
             codeActions: undefined,
         };

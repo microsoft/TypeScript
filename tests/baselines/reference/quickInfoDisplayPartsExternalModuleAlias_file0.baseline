@@ -53,8 +53,7 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   },
   {
@@ -83,8 +82,7 @@
           "kind": "aliasName"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   },
   {
@@ -141,8 +139,7 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   },
   {
@@ -199,8 +196,7 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   },
   {
@@ -229,8 +225,7 @@
           "kind": "aliasName"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   },
   {
@@ -287,8 +282,7 @@
           "kind": "punctuation"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   }
 ]

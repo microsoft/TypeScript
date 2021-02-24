@@ -2175,6 +2175,25 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.text);
     }
 
+    /** return type subtype reduction elimination! */
+    export function linkPart(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart {
+        if (!link.name)
+            return textPart(`{@link ${link.text}}`)
+        const text = `{@link ${getTextOfNode(link.name)}${link.text}}`;
+        const symbol = checker?.getSymbolAtLocation(link.name);
+        if (!symbol)
+            return textPart(text)
+        return {
+            text,
+            kind: SymbolDisplayPartKind[SymbolDisplayPartKind.link],
+            name: createTextSpanFromNode(link.name),
+            target: {
+                fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
+                textSpan: createTextSpanFromNode(symbol.valueDeclaration),
+            },
+        } as JSDocLinkPart
+    }
+
     const carriageReturnLineFeed = "\r\n";
     /**
      * The default is CRLF.

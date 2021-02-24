@@ -894,6 +894,12 @@ namespace ts {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
 
+    /** Gets the text of a jsdoc comment, flattening links to their text. */
+    export function getTextOfJSDocComment(comment?: NodeArray<JSDocText | JSDocLink>) {
+        // TODO: Stringify c.name correctly
+        return comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name}${c.text}}`).join("")
+    }
+
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
@@ -1850,8 +1856,8 @@ namespace ts {
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
         return node.kind === SyntaxKind.JSDocComment
-            || node.kind === SyntaxKind.JSDocCommentText
             || node.kind === SyntaxKind.JSDocNamepathType
+            || node.kind === SyntaxKind.JSDocText
             || node.kind === SyntaxKind.JSDocLink
             || isJSDocTag(node)
             || isJSDocTypeLiteral(node)

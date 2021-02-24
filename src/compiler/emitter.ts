@@ -3578,8 +3578,9 @@ namespace ts {
         //
         function emitJSDoc(node: JSDoc) {
             write("/**");
-            if (node.comment?.text) {
-                const lines = node.comment.text.split(/\r\n?|\n/g);
+            const text = getTextOfJSDocComment(node.comment)
+            if (text) {
+                const lines = text.split(/\r\n?|\n/g);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -3718,10 +3719,11 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: JSDocCommentText | undefined) {
-            if (comment?.text) {
+        function emitJSDocComment(comment: NodeArray<JSDocText | JSDocLink> | undefined) {
+            const text = getTextOfJSDocComment(comment)
+            if (text) {
                 writeSpace();
-                write(comment.text);
+                write(text);
             }
         }
 

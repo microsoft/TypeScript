@@ -46,11 +46,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "param",
-          "text": "opts"
+          "text": [
+            {
+              "text": "opts",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -101,8 +105,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "links": []
+      "documentation": []
     }
   }
 ]

@@ -51,11 +51,15 @@
           "kind": "text"
         }
       ],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -112,11 +116,15 @@
           "kind": "text"
         }
       ],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -153,11 +161,15 @@
           "kind": "text"
         }
       ],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

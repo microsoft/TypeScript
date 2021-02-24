@@ -1274,19 +1274,20 @@ namespace ts.server {
                 result;
         }
 
-        private mapJSDocLinkInfo(links: JSDocLinkInfo[] | undefined, project: Project): protocol.JSDocLinkInfo[] {
-            if (links === undefined) {
-                return [];
-            }
-            return links.map(link => ({
-                    ...link,
-                    name: this.toFileSpan(link.fileName, link.name, project),
-                    target: this.toFileSpan(link.target.fileName, link.target.textSpan, project),
-            }));
-        }
+        // private mapJSDocLinkPart(parts: ts.SymbolDisplayPart[] | undefined, project: Project): protocol.SymbolDisplayPart[] {
+        //     if (parts === undefined) {
+        //         return [];
+        //     }
+        //     return parts.map(part => part.kind !== "link" ? part.text : {
+        //         ...part,
+        //         name: this.toFileSpan((part as JSDocLinkPart).name.fileName, (part as JSDocLinkPart).name.textSpan, project),
+        //         target: this.toFileSpan((part as JSDocLinkPart).target.fileName, (part as JSDocLinkPart).target.textSpan, project),
+        //     });
+        // }
 
-        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
-            return tags ? tags.map(tag => ({ ...tag, links: this.mapJSDocLinkInfo(tag.links, project) })) : [];
+        // TODO: If rich version, then don't map (except...maybe the symbol links' spans need mapping??)
+        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined): protocol.JSDocTagInfo[] {
+            return tags ? tags.map(tag => ({ ...tag, text: tag.text && tag.text.map(part => part.text).join("") })) : [];
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1692,7 +1693,7 @@ namespace ts.server {
             return languageService.isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
         }
 
-        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
+        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean, partlyUnsimplifiedResult?: boolean): protocol.QuickInfoResponseBody | protocol.RichQuickInfoResponseBody | QuickInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
@@ -1702,18 +1703,30 @@ namespace ts.server {
 
             if (simplifiedResult) {
                 const displayString = displayPartsToString(quickInfo.displayParts);
-                const docString = displayPartsToString(quickInfo.documentation);
+                if (partlyUnsimplifiedResult) {
+                    return {
+                        kind: quickInfo.kind,
+                        kindModifiers: quickInfo.kindModifiers,
+                        start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                        end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
+                        displayString,
+                        documentation: quickInfo.documentation || [],
+                        tags: quickInfo.tags || []
+                    };
 
-                return {
-                    kind: quickInfo.kind,
-                    kindModifiers: quickInfo.kindModifiers,
-                    start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
-                    end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
-                    displayString,
-                    documentation: docString,
-                    links: this.mapJSDocLinkInfo(quickInfo.links, project),
-                    tags: this.mapJSDocTagInfo(quickInfo.tags, project)
-                };
+                }
+                else {
+                    const documentation = displayPartsToString(quickInfo.documentation);
+                    return {
+                        kind: quickInfo.kind,
+                        kindModifiers: quickInfo.kindModifiers,
+                        start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                        end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
+                        displayString,
+                        documentation,
+                        tags: this.mapJSDocTagInfo(quickInfo.tags)
+                    };
+                }
             }
             else {
                 return quickInfo;
@@ -1846,7 +1859,7 @@ namespace ts.server {
             return res;
         }
 
-        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean, partlyUnsimplifiedResult?: boolean): readonly protocol.CompletionEntryDetails[] | readonly protocol.RichCompletionEntryDetails[] | readonly CompletionEntryDetails[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1856,13 +1869,15 @@ namespace ts.server {
                 const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file));
             });
-            return fullResult
-                ? result
+            return fullResult ? result
+                : partlyUnsimplifiedResult ? result.map(details => ({
+                    ...details,
+                    codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
+                }))
                 : result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
-                    links: this.mapJSDocLinkInfo(details.links, project),
-                    tags: this.mapJSDocTagInfo(details.tags, project)
+                    tags: this.mapJSDocTagInfo(details.tags)
                 }));
         }
 
@@ -1918,7 +1933,7 @@ namespace ts.server {
                 !emitSkipped;
         }
 
-        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
+        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean, partlyUnsimplifiedResult?: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1927,7 +1942,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            if (simplifiedResult) {
+            if (simplifiedResult && !partlyUnsimplifiedResult) {
                 const span = helpItems.applicableSpan;
                 return {
                     items: helpItems.items,
@@ -2655,7 +2670,7 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
-                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true, request.richResponse));
             },
             [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
@@ -2718,7 +2733,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionsFull));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ false));
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ false, request.richResponse));
             },
             [CommandNames.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ true));
@@ -2730,7 +2745,7 @@ namespace ts.server {
                 return this.requiredResponse(this.emitFile(request.arguments));
             },
             [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
-                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
+                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true, request.richResponse));
             },
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));

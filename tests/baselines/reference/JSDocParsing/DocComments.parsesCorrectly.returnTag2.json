@@ -22,12 +22,19 @@
                 "escapedText": "return"
             },
             "comment": {
-                "kind": "JSDocCommentText",
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 24,
+                    "end": 52,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Description text follows"
+                },
+                "length": 1,
                 "pos": 24,
                 "end": 52,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "text": "Description text follows"
+                "hasTrailingComma": false,
+                "transformFlags": 0
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",

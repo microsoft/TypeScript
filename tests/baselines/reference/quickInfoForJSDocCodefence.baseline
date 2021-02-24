@@ -46,11 +46,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "example",
-          "text": "```\n1 + 2\n```"
+          "text": [
+            {
+              "text": "```\n1 + 2\n```",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -102,11 +106,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "example",
-          "text": "``\n1 + 2\n`"
+          "text": [
+            {
+              "text": "``\n1 + 2\n`",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

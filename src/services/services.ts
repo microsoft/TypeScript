@@ -293,7 +293,6 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[]; // same
-        links?: JSDocLinkInfo[]; // same
 
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
@@ -355,14 +354,6 @@ namespace ts {
                 default:
                     return this.getDocumentationComment(checker);
             }
-        }
-
-        getJsDocLinks(checker: TypeChecker): JSDocLinkInfo[] {
-            if (this.links === undefined) {
-                this.links = JsDoc.getJsDocLinksFromDeclarations(this.declarations, checker);
-            }
-
-            return this.links;
         }
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
@@ -528,7 +519,6 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
         jsDocTags?: JSDocTagInfo[]; // same
-        jsDocLinks?: JSDocLinkInfo[]; // same
 
         constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
@@ -550,14 +540,6 @@ namespace ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
-        }
-
-        getJsDocLinks(): JSDocLinkInfo[] {
-            if (this.jsDocLinks === undefined) {
-                this.jsDocLinks = this.declaration ? JsDoc.getJsDocLinksFromDeclarations([this.declaration], this.checker) : [];
-            }
-
-            return this.jsDocLinks;
         }
 
         getJsDocTags(): JSDocTagInfo[] {
@@ -593,7 +575,7 @@ namespace ts {
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
-        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
         if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
             forEachUnique(declarations, declaration => {
                 const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
@@ -1612,12 +1594,11 @@ namespace ts {
                     textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                     displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                    links: type.symbol ? type.symbol.getJsDocLinks(typeChecker): undefined,
                     tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined
                 };
             }
 
-            const { symbolKind, displayParts, documentation, links, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
+            const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
                 SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
             );
             return {
@@ -1626,7 +1607,6 @@ namespace ts {
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,
-                links,
                 tags,
             };
         }

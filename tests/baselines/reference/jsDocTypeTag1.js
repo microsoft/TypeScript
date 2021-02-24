@@ -38,11 +38,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{String}"
+          "text": [
+            {
+              "text": "{String}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -86,11 +90,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Number}"
+          "text": [
+            {
+              "text": "{Number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -134,11 +142,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Boolean}"
+          "text": [
+            {
+              "text": "{Boolean}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -182,11 +194,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Void}"
+          "text": [
+            {
+              "text": "{Void}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -230,11 +246,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Undefined}"
+          "text": [
+            {
+              "text": "{Undefined}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -278,11 +298,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Null}"
+          "text": [
+            {
+              "text": "{Null}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -334,11 +358,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Array}"
+          "text": [
+            {
+              "text": "{Array}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -394,11 +422,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Promise}"
+          "text": [
+            {
+              "text": "{Promise}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -442,11 +474,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Object}"
+          "text": [
+            {
+              "text": "{Object}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -490,11 +526,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{Function}"
+          "text": [
+            {
+              "text": "{Function}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -538,11 +578,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{*}"
+          "text": [
+            {
+              "text": "{*}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -586,11 +630,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{?}"
+          "text": [
+            {
+              "text": "{?}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -650,11 +698,15 @@
         }
       ],
       "documentation": [],
-      "links": [],
       "tags": [
         {
           "name": "type",
-          "text": "{String|Number}"
+          "text": [
+            {
+              "text": "{String|Number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

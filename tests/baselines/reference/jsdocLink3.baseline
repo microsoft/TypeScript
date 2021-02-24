@@ -47,17 +47,16 @@
       ],
       "documentation": [
         {
-          "text": "{@link C}",
+          "text": "",
           "kind": "text"
-        }
-      ],
-      "links": [
+        },
         {
-          "fileName": "/module1.ts",
-          "textSpan": {
-            "start": 40,
-            "length": 9
-          },
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "{@link C}",
+          "kind": "link",
           "name": {
             "start": 47,
             "length": 1
@@ -74,14 +73,14 @@
       "tags": [
         {
           "name": "wat",
-          "text": "Makes a {@link C}. A default one.\n{@link C()}\n{@link C|postfix text}\n{@link unformatted postfix text}",
-          "links": [
+          "text": [
             {
-              "fileName": "/module1.ts",
-              "textSpan": {
-                "start": 66,
-                "length": 9
-              },
+              "text": "Makes a ",
+              "kind": "text"
+            },
+            {
+              "text": "{@link C}",
+              "kind": "link",
               "name": {
                 "start": 73,
                 "length": 1
@@ -95,11 +94,12 @@
               }
             },
             {
-              "fileName": "/module1.ts",
-              "textSpan": {
-                "start": 95,
-                "length": 11
-              },
+              "text": ". A default one.\n",
+              "kind": "text"
+            },
+            {
+              "text": "{@link C()}",
+              "kind": "link",
               "name": {
                 "start": 102,
                 "length": 1
@@ -113,11 +113,12 @@
               }
             },
             {
-              "fileName": "/module1.ts",
-              "textSpan": {
-                "start": 110,
-                "length": 22
-              },
+              "text": "\n",
+              "kind": "text"
+            },
+            {
+              "text": "{@link C|postfix text}",
+              "kind": "link",
               "name": {
                 "start": 117,
                 "length": 1
@@ -129,19 +130,27 @@
                   "length": 18
                 }
               }
+            },
+            {
+              "text": "\n",
+              "kind": "text"
+            },
+            {
+              "text": "{@link unformattedpostfix text}",
+              "kind": "text"
             }
           ]
         },
         {
           "name": "see",
-          "text": "{@link C} its great",
-          "links": [
+          "text": [
             {
-              "fileName": "/module1.ts",
-              "textSpan": {
-                "start": 177,
-                "length": 9
-              },
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link C}",
+              "kind": "link",
               "name": {
                 "start": 184,
                 "length": 1
@@ -153,6 +162,10 @@
                   "length": 18
                 }
               }
+            },
+            {
+              "text": " its great",
+              "kind": "text"
             }
           ]
         }

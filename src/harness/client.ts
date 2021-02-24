@@ -175,9 +175,8 @@ namespace ts.server {
                 kindModifiers: body.kindModifiers,
                 textSpan: this.decodeSpan(body, fileName),
                 displayParts: [{ kind: "text", text: body.displayString }],
-                documentation: [{ kind: "text", text: body.documentation }],
-                links: this.decodeLinks(body.links),
-                tags: this.decodeLinkTags(body.tags)
+                documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
+                tags: this.decodeLinkDisplayParts(body.tags)
             };
         }
 
@@ -224,9 +223,8 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body!.length === 1, "Unexpected length of completion details response body.");
             const convertedCodeActions = map(response.body![0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
-            const tags = response.body![0].tags ? this.decodeLinkTags(response.body![0].tags) : undefined;
-            const links = response.body![0].links ? this.decodeLinks(response.body![0].links) : undefined;
-            return { ...response.body![0], links, tags, codeActions: convertedCodeActions };
+            const tags = response.body![0].tags ? this.decodeLinkDisplayParts(response.body![0].tags) : undefined;
+            return { ...response.body![0], tags, codeActions: convertedCodeActions };
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
@@ -537,22 +535,22 @@ namespace ts.server {
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
-        private decodeLinks(links: protocol.JSDocLinkInfo[]): JSDocLinkInfo[] {
-            return links.map(link => ({
-                    ...link,
-                    name: link.name as unknown as TextSpan,
-                    target: {
-                        // TODO: The JSDocLinkInfo tag data mismatches the type!! (probably wasn't correctly encoded in the first place?)
-                        textSpan: link.target as unknown as TextSpan,
-                        fileName: link.target.file,
-                    }
-            }));
-        }
-        private decodeLinkTags(tags: protocol.JSDocTagInfo[]): JSDocTagInfo[] {
-            return tags.map(tag => ({
+        // private decodeLinks(links: protocol.JSDocLinkInfo[]): JSDocLinkInfo[] {
+        //     return links.map(link => ({
+        //             ...link,
+        //             name: link.name as unknown as TextSpan,
+        //             target: {
+        //                 // TODO: The JSDocLinkInfo tag data mismatches the type!! (probably wasn't correctly encoded in the first place?)
+        //                 textSpan: link.target as unknown as TextSpan,
+        //                 fileName: link.target.file,
+        //             }
+        //     }));
+        // }
+        private decodeLinkDisplayParts(tags: Array<protocol.JSDocTagInfo | JSDocTagInfo>): JSDocTagInfo[] {
+            return tags.map(tag => typeof tag.text === "string" ? {
                 ...tag,
-                links: tag.links ? this.decodeLinks(tag.links) : undefined
-            }));
+                text: [textPart(tag.text)]
+            } : (tag as JSDocTagInfo));
         }
 
         getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
@@ -577,7 +575,7 @@ namespace ts.server {
 
             // TODO: Same here, it doesn't actually seem to be encoded
             const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
-            const items = encodedItems.map(item => ({ ...item, links: this.decodeLinks(item.links), tags: this.decodeLinkTags(item.tags) }));
+            const items = (encodedItems as Array<SignatureHelpItem | protocol.SignatureHelpItem>).map(item => ({ ...item, tags: this.decodeLinkDisplayParts(item.tags) }));
 
             return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
         }

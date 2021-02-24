@@ -34,10 +34,18 @@ var x = 1`);
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [],
-                links: [],
                 tags: [{
-                    links: [{
-                        fileName: "someFile1.js",
+                    name: "wat",
+                    text: [{
+                        "kind": "text",
+                        "text": "",
+                    }, {
+                        kind: "link",
+                        // textSpan: {
+                        //     length: 9,
+                        //     start: 21,
+                        // },
+                        // fileName: "someFile1.js",
                         name: {
                             length: 1,
                             start: 28,
@@ -49,13 +57,8 @@ var x = 1`);
                                 start: 0,
                             }
                         },
-                        textSpan: {
-                            length: 9,
-                            start: 21,
-                        },
+                        text: "{@link C}",
                     }],
-                    name: "wat",
-                    text: "{@link C}",
                 }]
             });
         });
@@ -93,26 +96,30 @@ var x = 1`);
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [{
-                    kind: "text",
-                    text: "{@link C}"
-                }],
-                links: [{
+                    "kind": "text",
+                    "text": "",
+                }, {
+                    "kind": "lineBreak",
+                    "text": "\n",
+                }, {
+                    kind: "link",
+                    name: {
+                        length: 1,
+                        start: 23,
+                    },
+                    target: {
                         fileName: "someFile1.js",
-                        name: {
-                            length: 1,
-                            start: 23,
-                        },
-                        target: {
-                            fileName: "someFile1.js",
-                            textSpan: {
-                                length: 11,
-                                start: 0,
-                            }
-                        },
                         textSpan: {
-                            length: 9,
-                            start: 16,
-                        },
+                            length: 11,
+                            start: 0,
+                        }
+                    },
+                    text: "{@link C}"
+                    // fileName: "someFile1.js",
+                    // textSpan: {
+                    //     length: 9,
+                    //     start: 16,
+                    // },
                 }],
                 tags: undefined,
             });

@@ -64,13 +64,12 @@ namespace ts.projectSystem {
                     displayPart("0", SymbolDisplayPartKind.stringLiteral),
                 ],
                 documentation: emptyArray,
-                links: [],
                 kind: ScriptElementKind.constElement,
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
             };
-            assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
+            assert.deepEqual<readonly protocol.CompletionEntryDetails[] | readonly protocol.RichCompletionEntryDetails[] | undefined>(detailsResponse, [
                 {
                     codeActions: [
                         {
