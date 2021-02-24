@@ -1424,7 +1424,8 @@ bar;`
                         compilerOptions: {
                             module: "none",
                             composite: true
-                        }
+                        },
+                        exclude: ["temp"]
                     })
                 };
                 const class1: File = {
@@ -1452,7 +1453,7 @@ bar;`
                 openFilesForSession([class2], session);
                 const service = session.getProjectService();
                 checkNumberOfProjects(service, { configuredProjects: 1 });
-                const project2 = Debug.assertDefined(service.configuredProjects.get(config2.path));
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
                 return { host, session, service, project2, class1, class2, config1, config2 };
             }
@@ -1463,13 +1464,15 @@ bar;`
                 host.writeFile(class3, `class class3 {}`);
                 host.checkTimeoutQueueLengthAndRun(2);
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
             });
 
             it("when referenced project is open", () => {
                 const { host, session, service, project2, class1, class2, config1, config2 } = setup();
                 openFilesForSession([class1], session);
                 checkNumberOfProjects(service, { configuredProjects: 2 });
-                const project1 = Debug.assertDefined(service.configuredProjects.get(config1.path));
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
                 checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
 
                 const class3 = `${tscWatch.projectRoot}/projets/project1/class3.ts`;
@@ -1477,6 +1480,8 @@ bar;`
                 host.checkTimeoutQueueLengthAndRun(3);
                 checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
                 checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
             });
         });
 

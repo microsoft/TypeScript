@@ -146,7 +146,8 @@ export function Component(x: Config): any;`
                     compilerOptions: {
                         module: "none",
                         composite: true
-                    }
+                    },
+                    exclude: ["temp"]
                 })
             };
             const class1: TestFSWithWatch.File = {
@@ -210,6 +211,8 @@ export function Component(x: Config): any;`
                 program2.getSourceFiles().map(f => f.fileName),
                 [projectSystem.libFile.path, class1.path, class3, class2.path]
             );
+            system.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` });
+            assert.strictEqual(ls.getProgram(), program2);
         });
     });
 }

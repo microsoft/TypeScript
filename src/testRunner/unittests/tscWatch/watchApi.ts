@@ -244,74 +244,83 @@ namespace ts.tscWatch {
         });
     });
 
-    it("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implemented", () => {
-        const config1: File = {
-            path: `${projectRoot}/projets/project1/tsconfig.json`,
-            content: JSON.stringify({
-                compilerOptions: {
-                    module: "none",
-                    composite: true
-                }
-            })
-        };
-        const class1: File = {
-            path: `${projectRoot}/projets/project1/class1.ts`,
-            content: `class class1 {}`
-        };
-        const config2: File = {
-            path: `${projectRoot}/projets/project2/tsconfig.json`,
-            content: JSON.stringify({
-                compilerOptions: {
-                    module: "none",
-                    composite: true
-                },
-                references: [
-                    { path: "../project1" }
-                ]
-            })
-        };
-        const class2: File = {
-            path: `${projectRoot}/projets/project2/class2.ts`,
-            content: `class class2 {}`
-        };
-        const system = createWatchedSystem([config1, class1, config2, class2, libFile]);
-        const baseline = createBaseline(system);
-        const compilerHost = createWatchCompilerHostOfConfigFile({
-            configFileName: config2.path,
-            system,
-        });
-        compilerHost.useSourceOfProjectReferenceRedirect = returnTrue;
-        const calledGetParsedCommandLin = new Set<string>();
-        compilerHost.getParsedCommandLine = fileName => {
-            assert.isFalse(calledGetParsedCommandLin.has(fileName), `Already called on ${fileName}`);
-            calledGetParsedCommandLin.add(fileName);
-            return getParsedCommandLineOfConfigFile(fileName, /*optionsToExtend*/ undefined, {
-                useCaseSensitiveFileNames: true,
-                fileExists: path => system.fileExists(path),
-                readFile: path => system.readFile(path),
-                getCurrentDirectory: () => system.getCurrentDirectory(),
-                readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
-                onUnRecoverableConfigFileDiagnostic: noop,
-            });
-        };
-        const watch = createWatchProgram(compilerHost);
-        runWatchBaseline({
-            scenario: "watchApi",
-            subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine",
-            commandLineArgs: ["--w", "-p", config2.path],
-            ...baseline,
-            getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
-            changes: [
-                {
-                    caption: "Add class3 to project1",
-                    change: sys => {
-                        calledGetParsedCommandLin.clear();
-                        sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
+    describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implemented", () => {
+        it("when new file is added to the referenced project with host implementing getParsedCommandLine", () => {
+            const config1: File = {
+                path: `${projectRoot}/projets/project1/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
                     },
-                    timeouts: checkSingleTimeoutQueueLengthAndRun,
-                },
-            ],
-            watchOrSolution: watch
+                    exclude: ["temp"]
+                })
+            };
+            const class1: File = {
+                path: `${projectRoot}/projets/project1/class1.ts`,
+                content: `class class1 {}`
+            };
+            const config2: File = {
+                path: `${projectRoot}/projets/project2/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
+                    },
+                    references: [
+                        { path: "../project1" }
+                    ]
+                })
+            };
+            const class2: File = {
+                path: `${projectRoot}/projets/project2/class2.ts`,
+                content: `class class2 {}`
+            };
+            const system = createWatchedSystem([config1, class1, config2, class2, libFile]);
+            const baseline = createBaseline(system);
+            const compilerHost = createWatchCompilerHostOfConfigFile({
+                configFileName: config2.path,
+                system,
+                optionsToExtend: { extendedDiagnostics: true }
+            });
+            compilerHost.useSourceOfProjectReferenceRedirect = returnTrue;
+            const calledGetParsedCommandLin = new Set<string>();
+            compilerHost.getParsedCommandLine = fileName => {
+                assert.isFalse(calledGetParsedCommandLin.has(fileName), `Already called on ${fileName}`);
+                calledGetParsedCommandLin.add(fileName);
+                return getParsedCommandLineOfConfigFile(fileName, /*optionsToExtend*/ undefined, {
+                    useCaseSensitiveFileNames: true,
+                    fileExists: path => system.fileExists(path),
+                    readFile: path => system.readFile(path),
+                    getCurrentDirectory: () => system.getCurrentDirectory(),
+                    readDirectory: (path, extensions, excludes, includes, depth) => system.readDirectory(path, extensions, excludes, includes, depth),
+                    onUnRecoverableConfigFileDiagnostic: noop,
+                });
+            };
+            const watch = createWatchProgram(compilerHost);
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine",
+                commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
+                ...baseline,
+                getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
+                changes: [
+                    {
+                        caption: "Add class3 to project1",
+                        change: sys => {
+                            calledGetParsedCommandLin.clear();
+                            sys.writeFile(`${projectRoot}/projets/project1/class3.ts`, `class class3 {}`);
+                        },
+                        timeouts: checkSingleTimeoutQueueLengthAndRun,
+                    },
+                    {
+                        caption: "Add excluded file to project1",
+                        change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                        timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    },
+                ],
+                watchOrSolution: watch
+            });
         });
     });
 }

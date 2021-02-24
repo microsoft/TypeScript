@@ -1738,7 +1738,7 @@ import { x } from "../b";`),
         verifyTscWatch({
             scenario,
             subScenario: "when new file is added to the referenced project",
-            commandLineArgs: ["-w", "-p", `${projectRoot}/projets/project2/tsconfig.json`],
+            commandLineArgs: ["-w", "-p", `${projectRoot}/projets/project2/tsconfig.json`, "--extendedDiagnostics"],
             sys: () => {
                 const config1: File = {
                     path: `${projectRoot}/projets/project1/tsconfig.json`,
@@ -1746,7 +1746,8 @@ import { x } from "../b";`),
                         compilerOptions: {
                             module: "none",
                             composite: true
-                        }
+                        },
+                        exclude: ["temp"]
                     })
                 };
                 const class1: File = {
@@ -1784,7 +1785,12 @@ import { x } from "../b";`),
                         sys.writeFile(`${projectRoot}/projets/project1/class3.d.ts`, `declare class class3 {}`);
                     },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
-                }
+                },
+                {
+                    caption: "Add excluded file to project1",
+                    change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projets/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                },
             ]
         });
     });
