@@ -25475,15 +25475,20 @@ namespace ts {
                         hasComputedNumberProperty = false;
                     }
                     const type = getReducedType(checkExpression(memberDecl.expression));
-                    if (!isValidSpreadType(type)) {
+                    if (isValidSpreadType(type)) {
+                        if (allPropertiesTable) {
+                            checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
+                        }
+                        offset = propertiesArray.length;
+                        if (spread === errorType) {
+                            continue;
+                        }
+                        spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
+                    }
+                    else {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
-                        return errorType;
+                        spread = errorType;
                     }
-                    if (allPropertiesTable) {
-                        checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
-                    }
-                    spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
-                    offset = propertiesArray.length;
                     continue;
                 }
                 else {
@@ -25530,6 +25535,10 @@ namespace ts {
                         propertiesArray.push(prop);
                     }
                 }
+            }
+
+            if (spread === errorType) {
+                return errorType;
             }
 
             if (spread !== emptyObjectType) {
