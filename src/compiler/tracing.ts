@@ -249,6 +249,15 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     };
                 }
 
+                let evolvingArrayProperties: object = {};
+                if (objectFlags & ObjectFlags.EvolvingArray) {
+                    const evolvingArrayType = type as EvolvingArrayType;
+                    evolvingArrayProperties = {
+                        evolvingArrayElementType: evolvingArrayType.elementType.id,
+                        evolvingArrayFinalType: evolvingArrayType.finalArrayType?.id,
+                    };
+                }
+
                 // We can't print out an arbitrary object, so just assign each one a unique number.
                 // Don't call it an "id" so people don't treat it as a type id.
                 let recursionToken: number | undefined;
@@ -275,6 +284,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...conditionalProperties,
                     ...substitutionProperties,
                     ...reverseMappedProperties,
+                    ...evolvingArrayProperties,
                     destructuringPattern: destructuringPatternFile && {
                         path: destructuringPatternFile.path,
                         start: indexFromOne(getLineAndCharacterOfPosition(destructuringPatternFile, destructuringPattern!.pos)),
