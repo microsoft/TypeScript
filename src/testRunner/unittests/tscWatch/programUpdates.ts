@@ -1779,17 +1779,29 @@ import { x } from "../b";`),
             },
             changes: [
                 {
-                    caption: "Add class3 to project1 and build it",
-                    change: sys => {
-                        sys.writeFile(`${projectRoot}/projects/project1/class3.ts`, `class class3 {}`);
-                        sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`);
-                    },
+                    caption: "Add class3 to project1",
+                    change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.ts`, `class class3 {}`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Add output of class3",
+                    change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
                 {
                     caption: "Add excluded file to project1",
                     change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                     timeouts: sys => sys.checkTimeoutQueueLength(0),
+                },
+                {
+                    caption: "Delete output of class3",
+                    change: sys => sys.deleteFile(`${projectRoot}/projects/project1/class3.d.ts`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Add output of class3",
+                    change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
             ]
         });

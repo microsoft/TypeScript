@@ -302,10 +302,17 @@ declare global {
                 {
                     subScenario: "Add class3 to project1 and build it",
                     buildKind: BuildKind.IncrementalDtsChange,
-                    modifyFs: fs => {
-                        fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8");
-                        fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8");
-                    }
+                    modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.ts", `class class3 {}`, "utf-8"),
+                    cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
+                        // Ts buildinfo will not be updated in incremental build so it will have semantic diagnostics cached from previous build
+                        // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
+                        ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
+                    ]),
+                },
+                {
+                    subScenario: "Add output of class3",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
                 },
                 {
                     subScenario: "Add excluded file to project1",
@@ -314,6 +321,21 @@ declare global {
                         fs.mkdirSync("/src/projects/project1/temp");
                         fs.writeFileSync("/src/projects/project1/temp/file.d.ts", `declare class file {}`, "utf-8");
                     },
+                },
+                {
+                    subScenario: "Delete output for class3",
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
+                    cleanBuildDiscrepancies: () => new Map<string, CleanBuildDescrepancy>([
+                        // Ts buildinfo willbe updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache
+                        // But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo
+                        ["/src/projects/project2/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent]
+                    ]),
+                },
+                {
+                    subScenario: "Create output for class3",
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
                 },
             ]
         });

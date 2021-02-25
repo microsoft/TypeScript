@@ -150,24 +150,18 @@ declare class class2 {
 }
 
 
-Change:: Add class3 to project1 and build it
+Change:: Add class3 to project1
 
 Input::
 //// [/user/username/projects/myproject/projects/project1/class3.ts]
 class class3 {}
-
-//// [/user/username/projects/myproject/projects/project1/class3.d.ts]
-declare class class3 {}
 
 
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
 Synchronizing program
 Reloading new file names and options
@@ -175,8 +169,85 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+[91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+  The file is in the program because:
+    Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
+
+  [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+    [7m1[0m {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
+    File is output from referenced project specified here.
+
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
+Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.d.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Semantic diagnostics in builder refreshed for::
+
+WatchedFiles::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project2:
+  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: Add output of class3
+
+Input::
+//// [/user/username/projects/myproject/projects/project1/class3.d.ts]
+declare class class3 {}
+
+
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
+
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
+  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -316,4 +387,236 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+
+Change:: Delete output of class3
+
+Input::
+//// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
+
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+[[90m12:01:03 AM[0m] File change detected. Starting incremental compilation...
+
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
+  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
+FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+[91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.
+  The file is in the program because:
+    Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'
+
+  [96muser/username/projects/myproject/projects/project2/tsconfig.json[0m:[93m1[0m:[93m69[0m
+    [7m1[0m {"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+    [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
+    File is output from referenced project specified here.
+
+[[90m12:01:13 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
+Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.d.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/projects/project1/class1.d.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+WatchedFiles::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project2:
+  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
+//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../project1/class1.d.ts": {
+        "version": "-3469237238-declare class class1 {}",
+        "signature": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "./class2.ts": {
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "options": {
+      "module": 0,
+      "composite": true,
+      "watch": true,
+      "project": "./tsconfig.json",
+      "extendedDiagnostics": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+
+
+Change:: Add output of class3
+
+Input::
+//// [/user/username/projects/myproject/projects/project1/class3.d.ts]
+declare class class3 {}
+
+
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Missing file
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
+
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
+  options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+  projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
+[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
+Program options: {"module":0,"composite":true,"watch":true,"project":"/user/username/projects/myproject/projects/project2/tsconfig.json","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.d.ts
+/user/username/projects/myproject/projects/project1/class3.d.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.d.ts
+/user/username/projects/myproject/projects/project1/class3.d.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+WatchedFiles::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/projects/project1/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project1/class1.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project2/class2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"fileName":"/user/username/projects/myproject/projects/project1/class3.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {"directoryName":"/user/username/projects/myproject/projects/project1","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projects/project2/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/projects/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/projects/project2:
+  {"directoryName":"/user/username/projects/myproject/projects/project2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
+//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "../project1/class1.d.ts": {
+        "version": "-3469237238-declare class class1 {}",
+        "signature": "-3469237238-declare class class1 {}",
+        "affectsGlobalScope": true
+      },
+      "../project1/class3.d.ts": {
+        "version": "-3469165364-declare class class3 {}",
+        "signature": "-3469165364-declare class class3 {}",
+        "affectsGlobalScope": true
+      },
+      "./class2.ts": {
+        "version": "777969115-class class2 {}",
+        "signature": "-2684084705-declare class class2 {\n}\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "options": {
+      "module": 0,
+      "composite": true,
+      "watch": true,
+      "project": "./tsconfig.json",
+      "extendedDiagnostics": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../project1/class1.d.ts",
+      "../project1/class3.d.ts",
+      "./class2.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
 
