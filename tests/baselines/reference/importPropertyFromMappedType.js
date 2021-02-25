@@ -1,6 +1,8 @@
 //// [tests/cases/compiler/importPropertyFromMappedType.ts] ////
 
 //// [errors.d.ts]
+// #42957
+
 export = createHttpError;
 declare const createHttpError: createHttpError.NamedConstructors;
 declare namespace createHttpError {

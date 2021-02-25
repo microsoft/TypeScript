@@ -1,4 +1,6 @@
 === tests/cases/compiler/errors.d.ts ===
+// #42957
+
 export = createHttpError;
 >createHttpError : createHttpError.NamedConstructors
 
