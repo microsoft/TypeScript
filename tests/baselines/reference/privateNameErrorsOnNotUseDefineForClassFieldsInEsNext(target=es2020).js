@@ -27,41 +27,40 @@ class Test {
 
 //// [privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.js]
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _prop, _foo, _a;
+var _Test_prop, _Inner_foo, _a;
 class Test {
     constructor() {
-        _prop.set(this, 0);
+        _Test_prop.set(this, 0);
     }
 }
-_prop = new WeakMap();
-Test.dd = __classPrivateFieldGet(new Test(), _prop); // Err
+_Test_prop = new WeakMap();
+Test.dd = __classPrivateFieldGet(new Test(), _Test_prop, "f"); // Err
 Test["X_ z_ zz"] = (_a = class Inner {
         constructor() {
-            _foo.set(this, 10);
+            _Inner_foo.set(this, 10);
         }
         m() {
-            __classPrivateFieldGet(new Test(), _prop); // Err
+            __classPrivateFieldGet(new Test(), _Test_prop, "f"); // Err
         }
         static M() {
             return class {
                 m() {
-                    __classPrivateFieldGet(new Test(), _prop); // Err
-                    __classPrivateFieldGet(new Inner(), _foo); // OK
+                    __classPrivateFieldGet(new Test(), _Test_prop, "f"); // Err
+                    __classPrivateFieldGet(new Inner(), _Inner_foo, "f"); // OK
                 }
             };
         }
     },
-    _foo = new WeakMap(),
+    _Inner_foo = new WeakMap(),
     _a.C = class InnerInner {
         m() {
-            __classPrivateFieldGet(new Test(), _prop); // Err
-            __classPrivateFieldGet(new _a(), _foo); // Err
+            __classPrivateFieldGet(new Test(), _Test_prop, "f"); // Err
+            __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // Err
         }
     },
     _a);

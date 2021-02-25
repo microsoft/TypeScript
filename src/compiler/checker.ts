@@ -26996,7 +26996,7 @@ namespace ts {
                         const parentStaticFieldInitializerSymbol = getSymbolOfNode(parentStaticFieldInitializer.parent);
                         Debug.assert(parentStaticFieldInitializerSymbol, "Initializer without declaration symbol");
                         const diagnostic = error(node,
-                            Diagnostics.Property_0_has_a_private_name_but_is_used_in_a_static_initializer_in_its_declaring_class_This_is_only_supported_for_an_ESNext_target_if_useDefineForClassFields_is_set_to_true,
+                            Diagnostics.Property_0_is_used_in_a_static_property_s_initializer_in_the_same_class_This_is_only_supported_when_target_set_to_is_esnext_and_if_useDefineForClassFields_is_set_to_true,
                             symbolName(lexicallyScopedSymbol));
                         addRelatedInfo(diagnostic,
                             createDiagnosticForNode(parentStaticFieldInitializer.parent,
