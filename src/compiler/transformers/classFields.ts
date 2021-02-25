@@ -682,9 +682,6 @@ namespace ts {
         function doesClassElementNeedTransform(node: ClassElement) {
             return isPropertyDeclaration(node) || (shouldTransformPrivateElements && node.name && isPrivateIdentifier(node.name));
         }
-        function getPrivateUnitializedPrivateStaticFields(node: ClassLikeDeclaration) {
-            return filter(node.members, (p): p is PropertyDeclaration => isPropertyDeclaration(p) && isPrivateIdentifier(p.name) && hasStaticModifier(p) && !p.initializer);
-        }
 
         function getPrivateInstanceMethods(node: ClassLikeDeclaration) {
             return filter(
@@ -724,15 +721,7 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
-
-            if (languageVersion < ScriptTarget.ESNext) {
-                // We must initialize static private properties even if the don't have a value as we initialize them with a wrapper object which must always exist.
-                const staticUninitializedPrivateProperties = getPrivateUnitializedPrivateStaticFields(node);
-                if (some(staticUninitializedPrivateProperties)) {
-                    addPropertyStatements(statements, staticUninitializedPrivateProperties, factory.getInternalName(node));
-                }
-            }
+            const staticProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ true);
 
             if (some(staticProperties)) {
                 addPropertyStatements(statements, staticProperties, factory.getInternalName(node));
@@ -755,9 +744,8 @@ namespace ts {
             // these statements after the class expression variable statement.
             const isDecoratedClassDeclaration = isClassDeclaration(getOriginalNode(node));
 
-            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+            const staticProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ true);
 
-            const staticUninitializedPrivateProperties = !shouldTransformPrivateElements ? []: getPrivateUnitializedPrivateStaticFields(node);
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             const isDerivedClass = !!(extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword);
 
@@ -778,7 +766,7 @@ namespace ts {
                 transformClassMembers(node, isDerivedClass)
             );
 
-            if (some(staticUninitializedPrivateProperties) || some(staticProperties) || some(pendingExpressions)) {
+            if (some(staticProperties, p => !!p.initializer || isPrivateIdentifier(p.name)) || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
@@ -790,9 +778,6 @@ namespace ts {
                     if (pendingStatements) {
                         if (some(staticProperties)) {
                             addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
-                        }
-                        if (some(staticUninitializedPrivateProperties)) {
-                            addPropertyStatements(pendingStatements, staticUninitializedPrivateProperties, factory.getInternalName(node));
                         }
                     }
                     if (temp) {
@@ -818,7 +803,7 @@ namespace ts {
                     // Add any pending expressions leftover from elided or relocated computed property names
                     addRange(expressions, map(pendingExpressions, startOnNewLine));
                     addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
-                    addRange(expressions, generateInitializedPropertyExpressions(staticUninitializedPrivateProperties, temp));
+
                     expressions.push(startOnNewLine(temp));
 
                     return factory.inlineExpressions(expressions);
@@ -1069,7 +1054,7 @@ namespace ts {
                     Debug.fail("Undeclared private name for property declaration.");
                 }
             }
-            if (isPrivateIdentifier(propertyName) && !property.initializer) {
+            if ((isPrivateIdentifier(propertyName) || hasStaticModifier(property)) && !property.initializer) {
                 return undefined;
             }
 
@@ -1284,7 +1269,7 @@ namespace ts {
                     }
                 }
                 else {
-                    Debug.assertNever(node, "Unknown class element type.")
+                    Debug.assertNever(node, "Unknown class element type.");
                 }
             }
             else if (isPropertyDeclaration(node)) {
