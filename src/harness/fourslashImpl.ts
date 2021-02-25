@@ -1916,6 +1916,38 @@ namespace FourSlash {
                     }))));
         }
 
+        public baselineSignatureHelp() {
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            Harness.Baseline.runBaseline(
+                baselineFile,
+                stringify(
+                    this.testData.markers.map(marker => ({
+                        marker,
+                        signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
+                    }))));
+        }
+
+        public baselineCompletions(preferences?: ts.UserPreferences) {
+            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            Harness.Baseline.runBaseline(
+                baselineFile,
+                stringify(
+                    this.testData.markers.map(marker => {
+                        const completions = this.getCompletionListAtCaret(preferences)
+                        this.goToMarker(marker);
+                        return {
+                            marker,
+                            completionList: {
+                                ...completions,
+                                entries: completions?.entries.map(entry => ({
+                                    ...entry,
+                                    ...this.getCompletionEntryDetails(entry.name, entry.source, preferences)
+                                })),
+                            }
+                        }
+                    })));
+        }
+
         public baselineSmartSelection() {
             const n = "\n";
             const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
