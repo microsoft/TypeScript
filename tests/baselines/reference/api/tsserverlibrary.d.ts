@@ -7166,7 +7166,7 @@ declare namespace ts.server.protocol {
      */
     interface EncodedSemanticClassificationsResponseBody {
         endOfLineState: EndOfLineState;
-        spans: ClassifiedSpan[] | number[];
+        spans: number[];
     }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
