@@ -224,7 +224,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                             path: sourceFile.path,
                             start: indexFromOne(getLineAndCharacterOfPosition(sourceFile, referenceNode.pos)),
                             end: indexFromOne(getLineAndCharacterOfPosition(sourceFile, referenceNode.end)),
-                        }
+                        };
                     }
                 }
 
@@ -284,7 +284,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     intrinsicName: (type as any).intrinsicName,
                     symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
                     recursionId: recursionToken,
-                    isTuple: objectFlags & ObjectFlags.Tuple ? true :  undefined,
+                    isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
                     unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
                     intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
                     aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
