@@ -17154,6 +17154,7 @@ namespace ts {
                         );
                     }
                     else {
+                        errorInfo = undefined;
                         reportError(
                             Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
                             targetType,
