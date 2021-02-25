@@ -8,17 +8,21 @@ class A {
     method(thing: any) {
         thing.#foo; // OK
         thing.#m();
-        thing.#bar;
+        thing.#baz;
         thing.#bar; // Error
         thing.#foo();
     }
     methodU(thing: unknown) {
         thing.#foo;
+        thing.#m();
+        thing.#baz;
         thing.#bar;
         thing.#foo();
     }
     methodN(thing: never) {
         thing.#foo;
+        thing.#m();
+        thing.#baz;
         thing.#bar;
         thing.#foo();
     }

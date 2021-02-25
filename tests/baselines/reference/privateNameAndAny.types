@@ -26,8 +26,8 @@ class A {
 >thing.#m : any
 >thing : any
 
-        thing.#bar;
->thing.#bar : any
+        thing.#baz;
+>thing.#baz : any
 >thing : any
 
         thing.#bar; // Error
@@ -47,6 +47,15 @@ class A {
 >thing.#foo : any
 >thing : unknown
 
+        thing.#m();
+>thing.#m() : any
+>thing.#m : any
+>thing : unknown
+
+        thing.#baz;
+>thing.#baz : any
+>thing : unknown
+
         thing.#bar;
 >thing.#bar : any
 >thing : unknown
@@ -62,6 +71,15 @@ class A {
 
         thing.#foo;
 >thing.#foo : any
+>thing : never
+
+        thing.#m();
+>thing.#m() : any
+>thing.#m : any
+>thing : never
+
+        thing.#baz;
+>thing.#baz : any
 >thing : never
 
         thing.#bar;

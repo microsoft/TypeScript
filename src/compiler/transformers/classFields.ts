@@ -691,7 +691,7 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
-            getPrivateIdentifierEnvironment().classConstructor = factory.getInternalName(node) ;
+            getPrivateIdentifierEnvironment().classConstructor = factory.getInternalName(node);
             if (!forEach(node.members, doesClassElementNeedTransform)) {
                 return visitEachChild(node, visitor, context);
             }
@@ -765,8 +765,8 @@ namespace ts {
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
                 transformClassMembers(node, isDerivedClass)
             );
-
-            if (some(staticProperties, p => !!p.initializer || isPrivateIdentifier(p.name)) || some(pendingExpressions)) {
+            const hasTransformableStatics = some(staticProperties, p => !!p.initializer || (shouldTransformPrivateElements && isPrivateIdentifier(p.name)));
+            if (hasTransformableStatics || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
                     Debug.assertIsDefined(pendingStatements, "Decorated classes transformed by TypeScript are expected to be within a variable declaration.");
 
@@ -775,10 +775,8 @@ namespace ts {
                         pendingStatements.push(factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions)));
                     }
 
-                    if (pendingStatements) {
-                        if (some(staticProperties)) {
-                            addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
-                        }
+                    if (pendingStatements && some(staticProperties)) {
+                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
                     }
                     if (temp) {
                         return factory.inlineExpressions([factory.createAssignment(temp, classExpression), temp]);
@@ -1211,7 +1209,7 @@ namespace ts {
         function addPrivateIdentifierToEnvironment(node: PrivateClassElementDeclaration) {
             const text = getTextOfPropertyName(node.name) as string;
             const env = getPrivateIdentifierEnvironment();
-            const { weakSetName } = env;
+            const { weakSetName, classConstructor } = env;
             let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
             if (hasStaticModifier(node)) {
@@ -1220,7 +1218,7 @@ namespace ts {
                     info = {
                         placement: PrivateIdentifierPlacement.StaticField,
                         variableName,
-                        classConstructor: env.classConstructor
+                        classConstructor
                     };
                 }
                 else if (isMethodDeclaration(node)) {
@@ -1228,7 +1226,7 @@ namespace ts {
                     info = {
                         placement: PrivateIdentifierPlacement.StaticMethod,
                         functionName,
-                        classConstructor: env.classConstructor
+                        classConstructor
                     };
                 }
                 else if (isGetAccessorDeclaration(node)) {
@@ -1245,7 +1243,7 @@ namespace ts {
                         info = {
                             placement: PrivateIdentifierPlacement.StaticGetterOnly,
                             getterName,
-                            classConstructor: env.classConstructor
+                            classConstructor
                         };
                     }
                 }
@@ -1256,7 +1254,6 @@ namespace ts {
                         info = {
                             ...previousInfo,
                             placement: PrivateIdentifierPlacement.StaticGetterAndSetter,
-                            getterName: previousInfo.getterName,
                             setterName,
                         };
                     }
@@ -1264,7 +1261,7 @@ namespace ts {
                         info = {
                             placement: PrivateIdentifierPlacement.StaticSetterOnly,
                             setterName,
-                            classConstructor: env.classConstructor
+                            classConstructor
                         };
                     }
                 }

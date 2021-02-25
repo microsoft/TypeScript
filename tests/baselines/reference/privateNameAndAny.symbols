@@ -21,7 +21,7 @@ class A {
         thing.#m();
 >thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
 
-        thing.#bar;
+        thing.#baz;
 >thing : Symbol(thing, Decl(privateNameAndAny.ts, 4, 11))
 
         thing.#bar; // Error
@@ -37,6 +37,12 @@ class A {
         thing.#foo;
 >thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
 
+        thing.#m();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
+        thing.#baz;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
+
         thing.#bar;
 >thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
 
@@ -44,17 +50,23 @@ class A {
 >thing : Symbol(thing, Decl(privateNameAndAny.ts, 11, 12))
     }
     methodN(thing: never) {
->methodN : Symbol(A.methodN, Decl(privateNameAndAny.ts, 15, 5))
->thing : Symbol(thing, Decl(privateNameAndAny.ts, 16, 12))
+>methodN : Symbol(A.methodN, Decl(privateNameAndAny.ts, 17, 5))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
 
         thing.#foo;
->thing : Symbol(thing, Decl(privateNameAndAny.ts, 16, 12))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#m();
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
+
+        thing.#baz;
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
 
         thing.#bar;
->thing : Symbol(thing, Decl(privateNameAndAny.ts, 16, 12))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
 
         thing.#foo();
->thing : Symbol(thing, Decl(privateNameAndAny.ts, 16, 12))
+>thing : Symbol(thing, Decl(privateNameAndAny.ts, 18, 12))
     }
 };
 
