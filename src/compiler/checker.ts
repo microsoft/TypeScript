@@ -24600,12 +24600,8 @@ namespace ts {
                 return undefined;
             }
 
-            const signatures = getSignaturesOfType(methodDeclType, SignatureKind.Call);
-            if (signatures.length > 1) {
-                return undefined;
-            }
-            const signature = first(signatures);
-            if (signature.typeParameters || signature.flags & SignatureFlags.HasRestParameter) {
+            const signature = getSingleCallSignature(methodDeclType);
+            if (!signature || signature.typeParameters || signature.flags & SignatureFlags.HasRestParameter) {
                 return undefined;
             }
 
@@ -24617,14 +24613,9 @@ namespace ts {
             if (!baseMethodType) {
                 return undefined;
             }
-
-            const baseSignatures = getSignaturesOfType(baseMethodType, SignatureKind.Call);
-            if (baseSignatures.length > 1) {
-                return undefined;
-            }
-
-            const baseSignature = first(baseSignatures);
-            if (baseSignature.typeParameters || baseSignature.flags & SignatureFlags.HasRestParameter) {
+            
+            const baseSignature = getSingleCallSignature(baseMethodType);
+            if (!baseSignature || baseSignature.typeParameters || baseSignature.flags & SignatureFlags.HasRestParameter) {
                 return undefined;
             }
 
@@ -24643,7 +24634,7 @@ namespace ts {
             const newSignatureParameters: Symbol[] = [];
             for (let i = 0; i < signature.parameters.length; ++i) {
                 const parameter = signature.parameters[i];
-                const parameterDeclaration = isParameter(parameter.valueDeclaration) && parameter.valueDeclaration
+                const parameterDeclaration = isParameter(parameter.valueDeclaration) && parameter.valueDeclaration;
                 if (!parameterDeclaration || parameterDeclaration.initializer || i >= baseSignature.parameters.length || getEffectiveTypeAnnotationNode(parameterDeclaration)) {
                     newSignatureParameters.push(parameter);
                     continue;
