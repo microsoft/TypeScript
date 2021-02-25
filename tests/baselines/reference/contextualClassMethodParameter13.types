@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter13.ts ===
+declare const Base: any
+>Base : any
+
+class Derived extends Base {
+>Derived : Derived
+>Base : any
+
+    method(x) { }
+>method : (x: any) => void
+>x : any
+}
+

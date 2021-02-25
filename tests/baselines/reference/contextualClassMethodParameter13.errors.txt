@@ -1,0 +1,12 @@
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter13.ts(4,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter13.ts (1 errors) ====
+    declare const Base: any
+    
+    class Derived extends Base {
+        method(x) { }
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    }
+    

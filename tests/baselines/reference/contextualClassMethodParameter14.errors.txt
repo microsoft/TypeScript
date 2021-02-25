@@ -1,0 +1,16 @@
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter14.ts(5,23): error TS2507: Type '{ method(x: string): void; }' is not a constructor function type.
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter14.ts(6,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter14.ts (2 errors) ====
+    declare const Base: {
+        method(x: string): void
+    }
+    
+    class Derived extends Base {
+                          ~~~~
+!!! error TS2507: Type '{ method(x: string): void; }' is not a constructor function type.
+        method(x) { }
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    }

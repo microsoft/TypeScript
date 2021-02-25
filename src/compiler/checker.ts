@@ -24591,10 +24591,10 @@ namespace ts {
             }
 
             const container = cast(node.parent, isClassLike);
-            const heritageElement = getClassExtendsHeritageElement(container);
-            Debug.assertIsDefined(heritageElement);
+            const baseTypeNode = getEffectiveBaseTypeNode(container);
+            Debug.assertIsDefined(baseTypeNode);
 
-            const baseType = getTypeFromTypeReference(heritageElement);
+            const baseType = getTypeOfNode(baseTypeNode);
             if (baseType === errorType) {
                 return undefined;
             }

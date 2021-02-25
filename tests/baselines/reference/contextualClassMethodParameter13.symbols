@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter13.ts ===
+declare const Base: any
+>Base : Symbol(Base, Decl(contextualClassMethodParameter13.ts, 0, 13))
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(contextualClassMethodParameter13.ts, 0, 23))
+>Base : Symbol(Base, Decl(contextualClassMethodParameter13.ts, 0, 13))
+
+    method(x) { }
+>method : Symbol(Derived.method, Decl(contextualClassMethodParameter13.ts, 2, 28))
+>x : Symbol(x, Decl(contextualClassMethodParameter13.ts, 3, 11))
+}
+
