@@ -187,6 +187,8 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                 const symbol = type.aliasSymbol ?? type.symbol;
                 const firstDeclaration = symbol?.declarations?.[0];
                 const firstFile = firstDeclaration && getSourceFileOfNode(firstDeclaration);
+                const destructuringPattern = type.pattern;
+                const destructuringPatternFile = destructuringPattern && getSourceFileOfNode(destructuringPattern);
 
                 // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
                 let display: string | undefined;
@@ -273,10 +275,15 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...conditionalProperties,
                     ...substitutionProperties,
                     ...reverseMappedProperties,
-                    firstDeclaration: firstDeclaration && {
+                    destructuringPattern: destructuringPatternFile && {
+                        path: destructuringPatternFile.path,
+                        start: indexFromOne(getLineAndCharacterOfPosition(destructuringPatternFile, destructuringPattern!.pos)),
+                        end: indexFromOne(getLineAndCharacterOfPosition(destructuringPatternFile, destructuringPattern!.end)),
+                    },
+                    firstDeclaration: firstFile && {
                         path: firstFile.path,
                         start: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.pos)),
-                        end: indexFromOne(getLineAndCharacterOfPosition(getSourceFileOfNode(firstDeclaration), firstDeclaration.end)),
+                        end: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.end)),
                     },
                     flags: Debug.formatTypeFlags(type.flags).split("|"),
                     display,
