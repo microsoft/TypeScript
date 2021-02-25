@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter3.ts ===
+class Base {
+>Base : Base
+
+    method(x: number, y: string, z: boolean) { }
+>method : (x: number, y: string, z: boolean) => void
+>x : number
+>y : string
+>z : boolean
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    method(x, ...y) { }
+>method : (x: number, y: string, z: boolean) => void
+>x : number
+>y : [y: string, z: boolean]
+}
+

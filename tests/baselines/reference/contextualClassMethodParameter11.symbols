@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter11.ts ===
+class Base<T> {
+>Base : Symbol(Base, Decl(contextualClassMethodParameter11.ts, 0, 0))
+>T : Symbol(T, Decl(contextualClassMethodParameter11.ts, 0, 11))
+
+    method(x: T) { }
+>method : Symbol(Base.method, Decl(contextualClassMethodParameter11.ts, 0, 15))
+>x : Symbol(x, Decl(contextualClassMethodParameter11.ts, 1, 11))
+>T : Symbol(T, Decl(contextualClassMethodParameter11.ts, 0, 11))
+}
+
+class Derived extends Base<string> {
+>Derived : Symbol(Derived, Decl(contextualClassMethodParameter11.ts, 2, 1))
+>Base : Symbol(Base, Decl(contextualClassMethodParameter11.ts, 0, 0))
+
+    method(x) { }
+>method : Symbol(Derived.method, Decl(contextualClassMethodParameter11.ts, 4, 36))
+>x : Symbol(x, Decl(contextualClassMethodParameter11.ts, 5, 11))
+}
+

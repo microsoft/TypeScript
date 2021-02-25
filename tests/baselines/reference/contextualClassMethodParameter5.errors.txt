@@ -1,0 +1,13 @@
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter5.ts(6,5): error TS2425: Class 'Base' defines instance member property 'method', but extended class 'Derived' defines it as instance member function.
+
+
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter5.ts (1 errors) ====
+    class Base {
+        method = (x: number) => { }
+    }
+    
+    class Derived extends Base {
+        method(x) { }
+        ~~~~~~
+!!! error TS2425: Class 'Base' defines instance member property 'method', but extended class 'Derived' defines it as instance member function.
+    }

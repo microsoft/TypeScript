@@ -15989,6 +15989,10 @@ namespace ts {
                 isContextSensitiveFunctionLikeDeclaration(func);
         }
 
+        function isContextSensitiveClassMethod(func: Node): func is MethodDeclaration {
+            return noImplicitAny && isClassMethodInSubClass(func) && hasContextSensitiveParameters(func);
+        }
+
         function getTypeWithoutSignatures(type: Type): Type {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -24203,7 +24207,7 @@ namespace ts {
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
             const func = parameter.parent;
-            if (!isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+            if (!isContextSensitiveFunctionOrObjectLiteralMethod(func) && !isContextSensitiveClassMethod(func)) {
                 return undefined;
             }
             const iife = getImmediatelyInvokedFunctionExpression(func);
@@ -24581,6 +24585,22 @@ namespace ts {
             return getContextualTypeForObjectLiteralElement(node, contextFlags);
         }
 
+        function getContextualTypeForClassMethod(node: MethodDeclaration): Type | undefined {
+            if (!isPropertyNameLiteral(node.name) || !isClassMethodInSubClass(node) || !hasContextSensitiveParameters(node)) {
+                return undefined;
+            }
+
+            const container = cast(node.parent, isClassLike);
+            const heritageElement = getClassExtendsHeritageElement(container);
+            Debug.assertIsDefined(heritageElement);
+
+            const baseType = getTypeFromTypeReference(heritageElement);
+            if (baseType === errorType) {
+                return undefined;
+            }
+            return getTypeOfPropertyOfType(baseType, getTextOfPropertyName(node.name));
+        }
+
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             const type = getApparentTypeOfContextualType(objectLiteral, contextFlags);
@@ -24716,6 +24736,7 @@ namespace ts {
         function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags?: ContextFlags): Type | undefined {
             const contextualType = isObjectLiteralMethod(node) ?
                 getContextualTypeForObjectLiteralMethod(node, contextFlags) :
+                isClassMethodInSubClass(node) ? getContextualTypeForClassMethod(node) :
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
             if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
@@ -25142,7 +25163,7 @@ namespace ts {
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature | undefined {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node) || isClassMethodInSubClass(node));
             const typeTagSignature = getSignatureOfTypeTag(node);
             if (typeTagSignature) {
                 return typeTagSignature;
