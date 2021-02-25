@@ -237,6 +237,16 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     };
                 }
 
+                let reverseMappedProperties: object = {};
+                if (objectFlags & ObjectFlags.ReverseMapped) {
+                    const reverseMappedType = type as ReverseMappedType;
+                    reverseMappedProperties = {
+                        reverseMappedSourceType: reverseMappedType.source?.id,
+                        reverseMappedMappedType: reverseMappedType.mappedType?.id,
+                        reverseMappedConstraintType: reverseMappedType.constraintType?.id,
+                    };
+                }
+
                 // We can't print out an arbitrary object, so just assign each one a unique number.
                 // Don't call it an "id" so people don't treat it as a type id.
                 let recursionToken: number | undefined;
@@ -262,6 +272,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...referenceProperties,
                     ...conditionalProperties,
                     ...substitutionProperties,
+                    ...reverseMappedProperties,
                     firstDeclaration: firstDeclaration && {
                         path: firstFile.path,
                         start: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.pos)),
