@@ -1,0 +1,17 @@
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter3.ts(6,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter3.ts(6,15): error TS7019: Rest parameter 'y' implicitly has an 'any[]' type.
+
+
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter3.ts (2 errors) ====
+    class Base {
+        method(x: number, y: string, z: boolean) { }
+    }
+    
+    class Derived extends Base {
+        method(x, ...y) { }
+               ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+                  ~~~~
+!!! error TS7019: Rest parameter 'y' implicitly has an 'any[]' type.
+    }
+    

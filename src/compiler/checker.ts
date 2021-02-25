@@ -15990,7 +15990,8 @@ namespace ts {
         }
 
         function isContextSensitiveClassMethod(func: Node): func is MethodDeclaration {
-            return noImplicitAny && isClassMethodInSubClass(func) && hasContextSensitiveParameters(func);
+            return noImplicitAny && isClassMethodInSubClass(func) && !(func.type && isTypePredicateNode(func.type)) &&
+                !getThisParameter(func) && hasContextSensitiveParameters(func);
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -24594,11 +24595,73 @@ namespace ts {
             const baseTypeNode = getEffectiveBaseTypeNode(container);
             Debug.assertIsDefined(baseTypeNode);
 
+            const methodDeclType = getTypeOfNode(node);
+            if (methodDeclType === errorType) {
+                return undefined;
+            }
+
+            const signatures = getSignaturesOfType(methodDeclType, SignatureKind.Call);
+            if (signatures.length > 1) {
+                return undefined;
+            }
+            const signature = first(signatures);
+            if (signature.flags & SignatureFlags.HasRestParameter) {
+                return undefined;
+            }
+
             const baseType = getTypeOfNode(baseTypeNode);
             if (baseType === errorType) {
                 return undefined;
             }
-            return getTypeOfPropertyOfType(baseType, getTextOfPropertyName(node.name));
+            const baseMethodType = getTypeOfPropertyOfType(baseType, getTextOfPropertyName(node.name));
+            if (!baseMethodType) {
+                return undefined;
+            }
+
+            const baseSignatures = getSignaturesOfType(baseMethodType, SignatureKind.Call);
+            if (baseSignatures.length > 1) {
+                return undefined;
+            }
+
+            const baseSignature = first(baseSignatures);
+            if (baseSignature.flags & SignatureFlags.HasRestParameter) {
+                return undefined;
+            }
+        
+            const contextualSignature = resolveContextualClassMethodParameters(baseSignature, signature);
+
+            return createAnonymousType(
+                undefined,
+                emptySymbols,
+                [contextualSignature],
+                emptyArray,
+                undefined,
+                undefined
+            );
+        }
+
+        function resolveContextualClassMethodParameters (baseSignature: Signature, signature: Signature) {
+            const newSignatureParameters: Symbol[] = [];
+            for (let i = 0; i < signature.parameters.length; ++i) {
+                const parameter = signature.parameters[i];
+                if (i >= baseSignature.parameters.length || getEffectiveTypeAnnotationNode(parameter.valueDeclaration)) {
+                    newSignatureParameters.push(parameter);
+                    continue;
+                }
+
+                newSignatureParameters.push(baseSignature.parameters[i]);
+            }
+           
+            return createSignature(
+                signature.declaration,
+                /*typeParameters*/ undefined,
+                /*thisParameter*/ undefined,
+                baseSignature.parameters,
+                signature.resolvedReturnType,
+                /*resolvedTypePredicate*/ undefined,
+                signature.minArgumentCount,
+                SignatureFlags.None
+            );
         }
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {

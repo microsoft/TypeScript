@@ -14,8 +14,8 @@ class Derived extends Base {
 >Base : Base
 
     method(x, ...y) { }
->method : (x: number, y: string, z: boolean) => void
->x : number
->y : [y: string, z: boolean]
+>method : (x: any, ...y: any[]) => void
+>x : any
+>y : any[]
 }
 
