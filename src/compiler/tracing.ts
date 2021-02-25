@@ -228,6 +228,15 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     };
                 }
 
+                let substitutionProperties: object = {};
+                if (type.flags & TypeFlags.Substitution) {
+                    const substitutionType = type as SubstitutionType;
+                    substitutionProperties = {
+                        substitutionBaseType: substitutionType.baseType?.id,
+                        substituteType: substitutionType.substitute?.id,
+                    };
+                }
+
                 // We can't print out an arbitrary object, so just assign each one a unique number.
                 // Don't call it an "id" so people don't treat it as a type id.
                 let recursionToken: number | undefined;
@@ -252,6 +261,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...indexedAccessProperties,
                     ...referenceProperties,
                     ...conditionalProperties,
+                    ...substitutionProperties,
                     firstDeclaration: firstDeclaration && {
                         path: firstFile.path,
                         start: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.pos)),
