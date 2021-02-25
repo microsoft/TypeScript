@@ -19,6 +19,9 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     if (receiver !== classConstructor) {
         throw new TypeError("Private static access of wrong provenance");
     }
+    if (propertyDescriptor === undefined) {
+        throw new TypeError("Private static field was accessed before its declaration.");
+    }
     return propertyDescriptor.value;
 };
 var _A_foo, _A_foo_1, _B_foo;
