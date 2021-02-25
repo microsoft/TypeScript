@@ -13403,7 +13403,7 @@ namespace ts {
                 if (t.flags & TypeFlags.Union) {
                     const origin = (<UnionType>t).origin;
                     if (t.aliasSymbol || origin && !(origin.flags & TypeFlags.Union)) {
-                        namedUnions.push(t);
+                        pushIfUnique(namedUnions, t);
                     }
                     else if (origin && origin.flags & TypeFlags.Union) {
                         addNamedUnions(namedUnions, (<UnionType>origin).types);
