@@ -217,6 +217,15 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                         instantiatedType: referenceType.target?.id,
                         typeArguments: referenceType.resolvedTypeArguments?.map(t => t.id),
                     };
+                    const referenceNode = referenceType.node;
+                    if (referenceNode) {
+                        const sourceFile = getSourceFileOfNode(referenceNode);
+                        (referenceProperties as any).referenceLocation = {
+                            path: sourceFile.path,
+                            start: indexFromOne(getLineAndCharacterOfPosition(sourceFile, referenceNode.pos)),
+                            end: indexFromOne(getLineAndCharacterOfPosition(sourceFile, referenceNode.end)),
+                        }
+                    }
                 }
 
                 let conditionalProperties: object = {};
