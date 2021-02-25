@@ -1,5 +1,5 @@
 FROM node:10
-RUN git clone https://github.com/ReactiveX/rxjs /rxjs
+RUN git clone --depth 1 https://github.com/ReactiveX/rxjs /rxjs
 WORKDIR /rxjs
 RUN git pull
 COPY --from=typescript/typescript /typescript/typescript-*.tgz /typescript.tgz

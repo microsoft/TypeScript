@@ -1,6 +1,6 @@
 # node-pty doesn't build on node 12 right now, so we lock to 10
 FROM node:10
-RUN git clone https://github.com/xtermjs/xterm.js.git /xtermjs
+RUN git clone --depth 1 https://github.com/xtermjs/xterm.js.git /xtermjs
 WORKDIR /xtermjs
 RUN git pull
 COPY --from=typescript/typescript /typescript/typescript-*.tgz /typescript.tgz

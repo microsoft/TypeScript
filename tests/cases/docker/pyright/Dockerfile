@@ -1,5 +1,5 @@
 FROM node:current
-RUN git clone https://github.com/microsoft/pyright.git /pyright
+RUN git clone --depth 1 https://github.com/microsoft/pyright.git /pyright
 WORKDIR /pyright
 RUN git pull
 RUN npm i

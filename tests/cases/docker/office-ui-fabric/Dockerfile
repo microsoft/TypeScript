@@ -4,7 +4,7 @@ ENV CI=true
 ENV TF_BUILD=true
 # Download repo version, sets up better layer caching for the following clone
 ADD https://api.github.com/repos/OfficeDev/office-ui-fabric-react/git/ref/heads/master version.json
-RUN git clone https://github.com/OfficeDev/office-ui-fabric-react.git /office-ui-fabric-react
+RUN git clone --depth 1 https://github.com/OfficeDev/office-ui-fabric-react.git /office-ui-fabric-react
 WORKDIR /office-ui-fabric-react
 RUN git pull
 WORKDIR /
