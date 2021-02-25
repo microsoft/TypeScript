@@ -382,14 +382,14 @@ namespace ts.codefix {
     }
 
     export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-        const comments = flatMap(parent.jsDoc, j => j.comment);
+        const comments = flatMap(parent.jsDoc, j => j.comment) as (JSDocText | JSDocLink)[];
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
             const merged = tryMergeJsdocTags(tag, newTag);
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = factory.createJSDocComment(factory.createNodeArray(comments), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
