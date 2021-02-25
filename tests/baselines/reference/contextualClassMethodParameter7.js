@@ -4,7 +4,7 @@ class Base {
 }
 
 class Derived extends Base {
-    method(x = "c") { }
+    method(y = "c") { }
 }
 
 
@@ -35,8 +35,8 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived.prototype.method = function (x) {
-        if (x === void 0) { x = "c"; }
+    Derived.prototype.method = function (y) {
+        if (y === void 0) { y = "c"; }
     };
     return Derived;
 }(Base));

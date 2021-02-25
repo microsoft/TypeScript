@@ -1,7 +1,9 @@
 // @noImplicitAny: true
 
 class Base {
-    method(x: number): true { return true }
+    method(x: number): x is number {
+        return true
+    }
 }
 
 class Derived extends Base {

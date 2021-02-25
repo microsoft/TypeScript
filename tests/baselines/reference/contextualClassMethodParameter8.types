@@ -2,9 +2,10 @@
 class Base {
 >Base : Base
 
-    method(x: number): true { }
+    method(x: number): true { return true }
 >method : (x: number) => true
 >x : number
+>true : true
 >true : true
 }
 

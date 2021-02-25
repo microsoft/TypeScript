@@ -11,8 +11,8 @@ class Derived extends Base {
 >Derived : Symbol(Derived, Decl(contextualClassMethodParameter7.ts, 2, 1))
 >Base : Symbol(Base, Decl(contextualClassMethodParameter7.ts, 0, 0))
 
-    method(x = "c") { }
+    method(y = "c") { }
 >method : Symbol(Derived.method, Decl(contextualClassMethodParameter7.ts, 4, 28))
->x : Symbol(x, Decl(contextualClassMethodParameter7.ts, 5, 11))
+>y : Symbol(y, Decl(contextualClassMethodParameter7.ts, 5, 11))
 }
 

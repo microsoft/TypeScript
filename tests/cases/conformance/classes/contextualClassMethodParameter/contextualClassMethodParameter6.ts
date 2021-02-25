@@ -5,5 +5,6 @@ class Base {
 }
 
 class Derived extends Base {
-    method(x = "a") { }
+    method(y = "a") { }
 }
+

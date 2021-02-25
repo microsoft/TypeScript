@@ -1,6 +1,6 @@
 //// [contextualClassMethodParameter8.ts]
 class Base {
-    method(x: number): true { }
+    method(x: number): true { return true }
 }
 
 class Derived extends Base {
@@ -27,7 +27,7 @@ var __extends = (this && this.__extends) || (function () {
 var Base = /** @class */ (function () {
     function Base() {
     }
-    Base.prototype.method = function (x) { };
+    Base.prototype.method = function (x) { return true; };
     return Base;
 }());
 var Derived = /** @class */ (function (_super) {

@@ -15991,7 +15991,7 @@ namespace ts {
 
         function isContextSensitiveClassMethod(func: Node): func is MethodDeclaration {
             return noImplicitAny && isClassMethodInSubClass(func) && !(func.type && isTypePredicateNode(func.type)) &&
-                !getThisParameter(func) && hasContextSensitiveParameters(func);
+                !getThisParameter(func) && !func.typeParameters && hasContextSensitiveParameters(func);
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -24605,7 +24605,7 @@ namespace ts {
                 return undefined;
             }
             const signature = first(signatures);
-            if (signature.flags & SignatureFlags.HasRestParameter) {
+            if (signature.typeParameters || signature.flags & SignatureFlags.HasRestParameter) {
                 return undefined;
             }
 
@@ -24624,39 +24624,39 @@ namespace ts {
             }
 
             const baseSignature = first(baseSignatures);
-            if (baseSignature.flags & SignatureFlags.HasRestParameter) {
+            if (baseSignature.typeParameters || baseSignature.flags & SignatureFlags.HasRestParameter) {
                 return undefined;
             }
-        
-            const contextualSignature = resolveContextualClassMethodParameters(baseSignature, signature);
 
+            const contextualSignature = resolveContextualClassMethodParameters(baseSignature, signature);
             return createAnonymousType(
-                undefined,
+                /*symbol*/undefined,
                 emptySymbols,
                 [contextualSignature],
                 emptyArray,
-                undefined,
-                undefined
+                /*stringIndexInfo*/undefined,
+                /*numberIndexInfo*/undefined
             );
         }
 
-        function resolveContextualClassMethodParameters (baseSignature: Signature, signature: Signature) {
+        function resolveContextualClassMethodParameters(baseSignature: Signature, signature: Signature) {
             const newSignatureParameters: Symbol[] = [];
             for (let i = 0; i < signature.parameters.length; ++i) {
                 const parameter = signature.parameters[i];
-                if (i >= baseSignature.parameters.length || getEffectiveTypeAnnotationNode(parameter.valueDeclaration)) {
+                const parameterDeclaration = isParameter(parameter.valueDeclaration) && parameter.valueDeclaration
+                if (!parameterDeclaration || parameterDeclaration.initializer || i >= baseSignature.parameters.length || getEffectiveTypeAnnotationNode(parameterDeclaration)) {
                     newSignatureParameters.push(parameter);
                     continue;
                 }
 
                 newSignatureParameters.push(baseSignature.parameters[i]);
             }
-           
+
             return createSignature(
                 signature.declaration,
                 /*typeParameters*/ undefined,
                 /*thisParameter*/ undefined,
-                baseSignature.parameters,
+                newSignatureParameters,
                 signature.resolvedReturnType,
                 /*resolvedTypePredicate*/ undefined,
                 signature.minArgumentCount,

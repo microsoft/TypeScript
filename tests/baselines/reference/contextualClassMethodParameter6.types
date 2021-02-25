@@ -11,9 +11,10 @@ class Derived extends Base {
 >Derived : Derived
 >Base : Base
 
-    method(x = "a") { }
->method : (x?: "a" | "b") => void
->x : "a" | "b"
+    method(y = "a") { }
+>method : (y?: any) => void
+>y : any
 >"a" : "a"
 }
+
 

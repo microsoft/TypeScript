@@ -1,11 +1,8 @@
 tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter18.ts(6,5): error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
-  Type '(x: any, y: any, z: any) => void' is not assignable to type '(x: number, y: string) => void'.
-tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter18.ts(6,12): error TS7006: Parameter 'x' implicitly has an 'any' type.
-tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter18.ts(6,15): error TS7006: Parameter 'y' implicitly has an 'any' type.
-tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter18.ts(6,18): error TS7006: Parameter 'z' implicitly has an 'any' type.
+  Type '(x: number, y: string, z: any) => void' is not assignable to type '(x: number, y: string) => void'.
 
 
-==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter18.ts (4 errors) ====
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter18.ts (1 errors) ====
     class Base {
         method(x: number, y: string) { }
     }
@@ -14,12 +11,6 @@ tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMe
         method(x, y, z) { }
         ~~~~~~
 !!! error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
-!!! error TS2416:   Type '(x: any, y: any, z: any) => void' is not assignable to type '(x: number, y: string) => void'.
-               ~
-!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
-                  ~
-!!! error TS7006: Parameter 'y' implicitly has an 'any' type.
-                     ~
-!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
+!!! error TS2416:   Type '(x: number, y: string, z: any) => void' is not assignable to type '(x: number, y: string) => void'.
     }
     

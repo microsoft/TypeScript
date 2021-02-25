@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter7.ts(6,12): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter7.ts(6,12): error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 
 
 ==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter7.ts (1 errors) ====
@@ -7,8 +7,8 @@ tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMe
     }
     
     class Derived extends Base {
-        method(x = "c") { }
+        method(y = "c") { }
                ~~~~~~~
-!!! error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
+!!! error TS7022: 'y' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     }
     

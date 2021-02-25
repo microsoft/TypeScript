@@ -1,15 +1,15 @@
-//// [contextualClassMethodParameter6.ts]
+//// [contextualClassMethodParameter28.ts]
 class Base {
-    method(x: "a" | "b") { }
+    method(x: number): void
+    method(x: number | string): void { }
 }
 
 class Derived extends Base {
-    method(y = "a") { }
+    method(x) { }
 }
 
 
-
-//// [contextualClassMethodParameter6.js]
+//// [contextualClassMethodParameter28.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -36,8 +36,6 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived.prototype.method = function (y) {
-        if (y === void 0) { y = "a"; }
-    };
+    Derived.prototype.method = function (x) { };
     return Derived;
 }(Base));

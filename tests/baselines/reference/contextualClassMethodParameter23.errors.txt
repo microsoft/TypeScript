@@ -1,0 +1,20 @@
+tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter23.ts(8,5): error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
+  Type '(x: number) => void' is not assignable to type '(x: number) => x is number'.
+    Signature '(x: number): void' must be a type predicate.
+
+
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter23.ts (1 errors) ====
+    class Base {
+        method(x: number): x is number {
+            return true
+        }
+    }
+    
+    class Derived extends Base {
+        method(x) { }
+        ~~~~~~
+!!! error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '(x: number) => void' is not assignable to type '(x: number) => x is number'.
+!!! error TS2416:     Signature '(x: number): void' must be a type predicate.
+    }
+    

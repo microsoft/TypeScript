@@ -2,7 +2,7 @@
 class Base {
 >Base : Symbol(Base, Decl(contextualClassMethodParameter8.ts, 0, 0))
 
-    method(x: number): true { }
+    method(x: number): true { return true }
 >method : Symbol(Base.method, Decl(contextualClassMethodParameter8.ts, 0, 12))
 >x : Symbol(x, Decl(contextualClassMethodParameter8.ts, 1, 11))
 }

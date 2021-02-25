@@ -1,14 +1,11 @@
-tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter8.ts(2,24): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter8.ts(6,5): error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
   Type '(x: number) => void' is not assignable to type '(x: number) => true'.
     Type 'void' is not assignable to type 'true'.
 
 
-==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter8.ts (2 errors) ====
+==== tests/cases/conformance/classes/contextualClassMethodParameter/contextualClassMethodParameter8.ts (1 errors) ====
     class Base {
-        method(x: number): true { }
-                           ~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+        method(x: number): true { return true }
     }
     
     class Derived extends Base {

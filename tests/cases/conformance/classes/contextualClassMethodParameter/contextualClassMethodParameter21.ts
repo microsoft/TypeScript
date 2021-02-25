@@ -1,9 +1,9 @@
 // @noImplicitAny: true
 
 class Base {
-    method(x: "a" | "b") { }
+    method<T>(x: T) { }
 }
 
 class Derived extends Base {
-    method(y = "c") { }
+    method(x) { }
 }

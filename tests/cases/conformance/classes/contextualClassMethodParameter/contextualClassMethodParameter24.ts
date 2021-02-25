@@ -1,9 +1,11 @@
 // @noImplicitAny: true
 
 class Base {
-    method(x: "a" | "b") { }
+    method(x: number) { }
 }
 
 class Derived extends Base {
-    method(y = "c") { }
+    method(x): true {
+        return true
+    }
 }
