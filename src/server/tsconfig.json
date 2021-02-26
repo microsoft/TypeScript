@@ -19,6 +19,7 @@
         "utilities.ts",
         "watchType.ts",
         "protocol.ts",
+        "lspProtocol.ts",
         "scriptInfo.ts",
         "typingsCache.ts",
         "project.ts",

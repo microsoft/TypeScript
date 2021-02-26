@@ -851,16 +851,63 @@ namespace ts.server {
 
         class LSPSession extends IOSession {
             listen() {
-                rl.on("line", (_input: string) => {
-                    // const line = input.trim();
+                rl.on("line", (input: string) => {
+                    console.log(input);
+                    const message = input.trim();
+                    if (!message || message.charAt(0) !== "{") {
+                        return;
+                    }
+
+                    this.onMessage(message);
                 });
 
                 rl.on("close", () => {
                     this.exit();
                 });
             }
-            protected parseMessage(_message: string): protocol.Request {
-                throw new Error("");
+            protected parseMessage(message: string): protocol.Request {
+                const lspMessage = JSON.parse(message) as lsp.RequestMessage | lsp.NotificationMessage;
+                return {
+                    seq: (lspMessage as lsp.RequestMessage).id as number ?? 0, // TODO: aaaaaaahhhhh
+                    type: "request",
+                    command: lspMessage.method,
+                    arguments: lspMessage.params,
+                };
+            }
+
+            protected handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
+                [lsp.Methods.Initialize]: (_request: lsp.InitializeRequest) => this.requiredResponse({
+                    capabilities: {}
+                }),
+            }));
+
+            public send(msg: protocol.Message) {
+                if (msg.type === "event") {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                    }
+                    return;
+                }
+                const lspMsg: lsp.ResponseMessage = {
+                    jsonRpc: "2.0",
+                    id: (msg as protocol.Response).request_seq,
+                    result: (msg as protocol.Response).body
+                };
+                const msgText = this.formatMessage(lspMsg, this.logger, this.byteLength, this.host.newLine);
+                perfLogger.logEvent(`Response message size: ${msgText.length}`);
+                this.host.write(msgText);
+            }
+
+            private formatMessage<T extends lsp.Message>(msg: T, _logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+                // const verboseLogging = logger.hasLevel(LogLevel.verbose);
+
+                const json = JSON.stringify(msg);
+                // if (verboseLogging) {
+                    // logger.info(`${msg.}:${indent(json)}`);
+                // }
+
+                const len = byteLength(json, "utf8");
+                return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
             }
         }
 

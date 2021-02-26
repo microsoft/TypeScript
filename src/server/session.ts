@@ -1,5 +1,5 @@
 namespace ts.server {
-    interface StackTraceError extends Error {
+    export interface StackTraceError extends Error {
         stack?: string;
     }
 
@@ -893,7 +893,7 @@ namespace ts.server {
             this.logErrorWorker(err, cmd);
         }
 
-        private logErrorWorker(err: Error & PossibleProgramFileInfo, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
+        protected logErrorWorker(err: Error & PossibleProgramFileInfo, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
@@ -958,7 +958,7 @@ namespace ts.server {
             this.doOutput(info, cmdName, reqSeq!, /*success*/ !errorMsg, errorMsg); // TODO: GH#18217
         }
 
-        private doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
+        protected doOutput(info: {} | undefined, cmdName: string, reqSeq: number, success: boolean, message?: string): void {
             const res: protocol.Response = {
                 seq: 0,
                 type: "response",
@@ -2508,11 +2508,11 @@ namespace ts.server {
             return { responseRequired: false };
         }
 
-        private requiredResponse(response: {} | undefined): HandlerResponse {
+        protected requiredResponse(response: {} | undefined): HandlerResponse {
             return { response, responseRequired: true };
         }
 
-        private handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
+        protected handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.Status]: () => {
                 const response: protocol.StatusResponseBody = { version: ts.version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 return this.requiredResponse(response);
