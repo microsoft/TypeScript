@@ -8360,12 +8360,14 @@ namespace ts {
         }
 
         function getDeclaringConstructor(symbol: Symbol) {
-            return symbol.declarations?.find(declaration => {
-                const container = getThisContainer(declaration, /*includeArrowFunctions*/ false);
-                if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
-                    return container;
-                }
-            }) as ConstructorDeclaration | undefined;
+            if (symbol.declarations) {
+                for (const declaration of symbol.declarations) {
+                    const container = getThisContainer(declaration, /*includeArrowFunctions*/ false);
+                    if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
+                        return container as ConstructorDeclaration;
+                    }
+                };
+            }
         }
 
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
