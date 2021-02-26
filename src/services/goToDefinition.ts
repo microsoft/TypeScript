@@ -2,7 +2,7 @@
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, !!resolvedRef.file)] || emptyArray;
+        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
         if (resolvedRef?.file) {
             // If `file` is missing, do a symbol-based lookup as well
             return fileReferenceDefinition;
@@ -110,31 +110,31 @@ namespace ts.GoToDefinition {
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, file?: SourceFile } | undefined {
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, unverified: boolean, file?: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { reference: referencePath, fileName: file.fileName, file };
+            return file && { reference: referencePath, fileName: file.fileName, file, unverified: false };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { reference: typeReferenceDirective, fileName: file.fileName, file };
+            return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { reference: libReferenceDirective, fileName: file.fileName, file };
+            return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
         if (sourceFile.resolvedModules?.size) {
             const node = getTokenAtPosition(sourceFile, position);
             if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
-                const fileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName
-                    || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+                const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
                 return {
                     file: program.getSourceFile(fileName),
                     fileName,
@@ -142,7 +142,8 @@ namespace ts.GoToDefinition {
                         pos: node.getStart(),
                         end: node.getEnd(),
                         fileName: node.text
-                    }
+                    },
+                    unverified: !!verifiedFileName,
                 };
             }
         }
