@@ -61,7 +61,7 @@ namespace ts.codefix {
             // all static members are stored in the "exports" array of symbol
             if (symbol.exports) {
                 symbol.exports.forEach(member => {
-                    if (member.name === "prototype") {
+                    if (member.name === "prototype" && member.declarations) {
                         const firstDeclaration = member.declarations[0];
                         // only one "x.prototype = { ... }" will pass
                         if (member.declarations.length === 1 &&

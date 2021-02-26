@@ -253,8 +253,8 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...referenceProperties,
                     ...conditionalProperties,
                     firstDeclaration: firstDeclaration && {
-                        path: firstFile.path,
-                        start: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.pos)),
+                        path: firstFile!.path,
+                        start: indexFromOne(getLineAndCharacterOfPosition(firstFile!, firstDeclaration.pos)),
                         end: indexFromOne(getLineAndCharacterOfPosition(getSourceFileOfNode(firstDeclaration), firstDeclaration.end)),
                     },
                     flags: Debug.formatTypeFlags(type.flags).split("|"),

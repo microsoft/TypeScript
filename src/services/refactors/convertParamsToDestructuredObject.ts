@@ -360,7 +360,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (isObjectLiteralExpression(functionDeclaration.parent)) {
                     const contextualSymbol = getSymbolForContextualType(functionDeclaration.name, checker);
                     // don't offer the refactor when there are multiple signatures since we won't know which ones the user wants to change
-                    return contextualSymbol?.declarations.length === 1 && isSingleImplementation(functionDeclaration, checker);
+                    return contextualSymbol?.declarations?.length === 1 && isSingleImplementation(functionDeclaration, checker);
                 }
                 return isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.Constructor:

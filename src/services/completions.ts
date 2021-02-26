@@ -877,7 +877,7 @@ namespace ts.Completions {
     }
 
     function isModuleSymbol(symbol: Symbol): boolean {
-        return symbol.declarations.some(d => d.kind === SyntaxKind.SourceFile);
+        return !!symbol.declarations?.some(d => d.kind === SyntaxKind.SourceFile);
     }
 
     function getCompletionData(
@@ -1227,7 +1227,7 @@ namespace ts.Completions {
                         const isValidAccess: (symbol: Symbol) => boolean =
                             isNamespaceName
                                 // At `namespace N.M/**/`, if this is the only declaration of `M`, don't include `M` as a completion.
-                                ? symbol => !!(symbol.flags & SymbolFlags.Namespace) && !symbol.declarations.every(d => d.parent === node.parent)
+                                ? symbol => !!(symbol.flags & SymbolFlags.Namespace) && !symbol.declarations?.every(d => d.parent === node.parent)
                                 : isRhsOfImportDeclaration ?
                                     // Any kind is allowed when dotting off namespace in internal import equals declaration
                                     symbol => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :

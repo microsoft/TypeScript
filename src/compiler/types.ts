@@ -4714,7 +4714,7 @@ namespace ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
-        declarations: Declaration[];            // Declarations associated with this symbol
+        declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration: Declaration;          // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
