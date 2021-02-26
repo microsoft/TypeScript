@@ -15,6 +15,7 @@ namespace ts.projectSystem {
                         noGetErrOnBackgroundUpdate: true,
                         syntaxOnly: undefined,
                         serverMode: undefined,
+                        useLsp: false,
                         ...options
                     },
                     logger,

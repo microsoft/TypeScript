@@ -849,6 +849,21 @@ namespace ts.server {
             }
         }
 
+        class LSPSession extends IOSession {
+            listen() {
+                rl.on("line", (_input: string) => {
+                    // const line = input.trim();
+                });
+
+                rl.on("close", () => {
+                    this.exit();
+                });
+            }
+            protected parseMessage(_message: string): protocol.Request {
+                throw new Error("");
+            }
+        }
+
         const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
         const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
         const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
@@ -864,7 +879,7 @@ namespace ts.server {
             startTracing("server", traceDir);
         }
 
-        const ioSession = new IOSession();
+        const ioSession = options.useLsp ? new LSPSession() : new IOSession();
         process.on("uncaughtException", err => {
             ioSession.logError(err, "unknown");
         });

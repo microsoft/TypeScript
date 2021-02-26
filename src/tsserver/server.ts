@@ -67,7 +67,8 @@ namespace ts.server {
                 suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
                 noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
                 syntaxOnly,
-                serverMode
+                serverMode,
+                useLsp: hasArgument("--useLsp"),
             },
             logger,
             cancellationToken

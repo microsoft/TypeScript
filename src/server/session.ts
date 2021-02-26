@@ -710,6 +710,7 @@ namespace ts.server {
         pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        useLsp?: boolean;
     }
 
     export class Session<TMessage = string> implements EventSender {

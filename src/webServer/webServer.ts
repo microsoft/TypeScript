@@ -177,6 +177,7 @@ namespace ts.server {
         noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
         syntaxOnly: SessionOptions["syntaxOnly"];
         serverMode: SessionOptions["serverMode"];
+        useLsp: SessionOptions["useLsp"];
     }
     export class WorkerSession extends Session<{}> {
         constructor(host: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
