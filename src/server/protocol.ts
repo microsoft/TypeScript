@@ -3315,6 +3315,7 @@ namespace ts.server.protocol {
         checkJs?: boolean;
         declaration?: boolean;
         declarationDir?: string;
+        disableLazyShapeComputation?: boolean;
         disableSizeLimit?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;

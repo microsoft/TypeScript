@@ -61,13 +61,16 @@ namespace ts {
         allFileNames?: readonly string[];
     }
 
+    export const NOT_COMPUTED_YET = 0;
+    export const SHAPE_CHANGE_UNKNOWN = Symbol("shape change unknown");
+
     export namespace BuilderState {
         /**
          * Information about the source file: Its version and optional signature from last emit
          */
         export interface FileInfo {
             readonly version: string;
-            signature: string | undefined;
+            signature: string | typeof NOT_COMPUTED_YET | undefined;
             affectsGlobalScope: boolean;
         }
         /**
@@ -264,7 +267,7 @@ namespace ts {
         /**
          * Gets the files affected by the path from the program
          */
-        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: ESMap<Path, string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
+        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: ESMap<Path, string | typeof NOT_COMPUTED_YET>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
             // Since the operation could be cancelled, the signatures are always stored in the cache
             // They will be committed once it is safe to use them
             // eg when calling this api from tsserver, if there is no cancellation of the operation
@@ -275,11 +278,12 @@ namespace ts {
                 return emptyArray;
             }
 
-            if (!updateShapeSignature(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache)) {
+            const updateResult = updateShapeSignature(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache, /*fromChange*/ true);
+            if (!updateResult) {
                 return [sourceFile];
             }
 
-            const result = (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache);
+            const result = (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache, updateResult === true);
             if (!cacheToUpdateSignature) {
                 // Commit all the signatures in the signature cache
                 updateSignaturesFromCache(state, signatureCache);
@@ -291,11 +295,11 @@ namespace ts {
          * Updates the signatures from the cache into state's fileinfo signatures
          * This should be called whenever it is safe to commit the state of the builder
          */
-        export function updateSignaturesFromCache(state: BuilderState, signatureCache: ESMap<Path, string>) {
+        export function updateSignaturesFromCache(state: BuilderState, signatureCache: ESMap<Path, string | typeof NOT_COMPUTED_YET>) {
             signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path));
         }
 
-        export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
+        export function updateSignatureOfFile(state: BuilderState, signature: string | typeof NOT_COMPUTED_YET | undefined, path: Path) {
             state.fileInfos.get(path)!.signature = signature;
             state.hasCalledUpdateShapeSignature.add(path);
         }
@@ -303,7 +307,7 @@ namespace ts {
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
+        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string | typeof NOT_COMPUTED_YET>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap, fromChange?: boolean): (boolean | typeof SHAPE_CHANGE_UNKNOWN) {
             Debug.assert(!!sourceFile);
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
@@ -316,7 +320,7 @@ namespace ts {
             if (!info) return Debug.fail();
 
             const prevSignature = info.signature;
-            let latestSignature: string;
+            let latestSignature: string | typeof NOT_COMPUTED_YET;
             if (sourceFile.isDeclarationFile) {
                 latestSignature = sourceFile.version;
                 if (exportedModulesMapCache && latestSignature !== prevSignature) {
@@ -326,6 +330,14 @@ namespace ts {
                 }
             }
             else {
+                if ((prevSignature === undefined || prevSignature === NOT_COMPUTED_YET && !fromChange) && !programOfThisState.getCompilerOptions().disableLazyShapeComputation) {
+                    if (exportedModulesMapCache) {
+                        const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                        exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
+                    }
+                    cacheToUpdateSignature.set(sourceFile.resolvedPath, NOT_COMPUTED_YET);
+                    return SHAPE_CHANGE_UNKNOWN;
+                }
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,
@@ -352,7 +364,7 @@ namespace ts {
             }
             cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
 
-            return !prevSignature || latestSignature !== prevSignature;
+            return prevSignature ? latestSignature !== prevSignature : SHAPE_CHANGE_UNKNOWN;
         }
 
         /**
@@ -524,7 +536,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string | typeof NOT_COMPUTED_YET>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache: ComputingExportedModulesMap | undefined, realShapeChange: boolean) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }
@@ -541,14 +553,20 @@ namespace ts {
 
             // Start with the paths this file was referenced by
             seenFileNamesMap.set(sourceFileWithUpdatedShape.resolvedPath, sourceFileWithUpdatedShape);
-            const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.resolvedPath);
+            const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.resolvedPath).map(path => ({ path, updatedShape: realShapeChange }));
             while (queue.length > 0) {
-                const currentPath = queue.pop()!;
+                const { path: currentPath, updatedShape } = queue.pop()!;
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash, exportedModulesMapCache)) {
-                        queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
+                    if (currentSourceFile) {
+                        const updateResult = updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash, exportedModulesMapCache, updatedShape);
+                        if (updateResult) {
+                            const updatedShape = updateResult === true;
+                            getReferencedByPaths(state, currentSourceFile.resolvedPath).forEach(path => {
+                                queue.push({ path, updatedShape });
+                            });
+                        }
                     }
                 }
             }

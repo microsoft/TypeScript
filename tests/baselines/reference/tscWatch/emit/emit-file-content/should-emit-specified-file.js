@@ -106,7 +106,7 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -122,6 +122,7 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
 /a/b/f2.ts
+/a/b/f3.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -156,3 +157,4 @@ exports.foo2 = foo2;
 
 
 //// [/a/b/f2.js] file written with same contents
+//// [/a/b/f3.js] file written with same contents

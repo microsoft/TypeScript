@@ -153,7 +153,7 @@ Output::
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:00:58 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -214,4 +214,5 @@ export declare class C {
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
+//// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/a.d.ts] file written with same contents

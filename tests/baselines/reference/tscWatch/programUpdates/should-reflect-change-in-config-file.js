@@ -110,6 +110,7 @@ Program files::
 /a/b/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /a/b/commonFile1.ts
 
 WatchedFiles::

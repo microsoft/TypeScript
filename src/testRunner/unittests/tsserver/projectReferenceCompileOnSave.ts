@@ -11,7 +11,7 @@ export function fn2() { }
         const dependencyConfig: File = {
             path: `${dependecyLocation}/tsconfig.json`,
             content: JSON.stringify({
-                compilerOptions: { composite: true, declarationDir: "../decls" },
+                compilerOptions: { composite: true, disableLazyShapeComputation: true, declarationDir: "../decls" },
                 compileOnSave: true
             })
         };
@@ -29,6 +29,9 @@ fn2();
             path: `${usageLocation}/tsconfig.json`,
             content: JSON.stringify({
                 compileOnSave: true,
+                compilerOptions: {
+                    disableLazyShapeComputation: true
+                },
                 references: [{ path: "../dependency" }]
             })
         };

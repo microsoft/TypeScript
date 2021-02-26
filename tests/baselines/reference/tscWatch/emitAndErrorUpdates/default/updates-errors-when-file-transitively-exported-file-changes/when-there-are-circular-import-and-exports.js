@@ -232,7 +232,7 @@ Output::
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:20 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -288,3 +288,8 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.js] file written with same contents
+//// [/user/username/projects/myproject/app.js] file written with same contents

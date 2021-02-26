@@ -272,7 +272,7 @@ Output::
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-[[90m12:01:40 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:55 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -335,8 +335,13 @@ export interface ITest {
 
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/app.js] file written with same contents
 //// [/user/username/projects/myproject/app.d.ts] file written with same contents

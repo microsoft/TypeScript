@@ -110,7 +110,7 @@ namespace ts.tscWatch {
             };
             const config: File = {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } })
+                content: JSON.stringify({ compilerOptions: { incremental: true, disableLazyShapeComputation: true, module: "amd" } })
             };
 
             verifyIncrementalWatchEmit({
@@ -175,6 +175,7 @@ namespace ts.tscWatch {
 
                     assert.deepEqual(state.compilerOptions, {
                         incremental: true,
+                        disableLazyShapeComputation: true,
                         module: ModuleKind.AMD,
                         configFilePath: config.path
                     });

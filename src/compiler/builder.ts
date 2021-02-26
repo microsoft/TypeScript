@@ -41,7 +41,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures?: ReadonlyESMap<Path, string> | undefined;
+        currentAffectedFilesSignatures?: ReadonlyESMap<Path, string | typeof NOT_COMPUTED_YET> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -110,7 +110,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures: ESMap<Path, string> | undefined;
+        currentAffectedFilesSignatures: ESMap<Path, string | typeof NOT_COMPUTED_YET> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -511,7 +511,7 @@ namespace ts {
     function isChangedSignature(state: BuilderProgramState, path: Path) {
         const newSignature = Debug.checkDefined(state.currentAffectedFilesSignatures).get(path);
         const oldSignature = Debug.checkDefined(state.fileInfos.get(path)).signature;
-        return newSignature !== oldSignature;
+        return oldSignature === NOT_COMPUTED_YET || newSignature !== oldSignature;
     }
 
     /**

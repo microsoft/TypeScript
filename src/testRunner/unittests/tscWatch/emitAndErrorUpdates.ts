@@ -73,13 +73,13 @@ namespace ts.tscWatch {
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
                 subScenario: `assumeChangesOnlyAffectDirectDependencies/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true })
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, disableLazyShapeComputation: true })
             });
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
                 subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, declaration: true })
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, disableLazyShapeComputation: true, declaration: true })
             });
         }
 

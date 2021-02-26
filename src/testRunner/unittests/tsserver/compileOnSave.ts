@@ -905,6 +905,7 @@ namespace ts.projectSystem {
                         compileOnSave: true,
                         compilerOptions: {
                             declaration,
+                            disableLazyShapeComputation: true,
                             module: hasModule ? undefined : "none"
                         },
                     })

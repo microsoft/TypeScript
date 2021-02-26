@@ -942,6 +942,12 @@ namespace ts {
             description: Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
         },
         {
+            name: "disableLazyShapeComputation",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_lazy_computation_of_module_shapes
+        },
+        {
             name: "disableSizeLimit",
             type: "boolean",
             affectsSourceFile: true,

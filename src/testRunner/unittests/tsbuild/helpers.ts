@@ -359,8 +359,10 @@ interface Symbol {
                 }
                 else if (incrementalBuildText !== cleanBuildText) {
                     // Verify build info without affectedFilesPendingEmit
-                    const { buildInfo: incrementalBuildInfo, affectedFilesPendingEmit: incrementalBuildAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
-                    const { buildInfo: cleanBuildInfo, affectedFilesPendingEmit: incrementalAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
+                    const { buildInfo: incrementalBuildInfo, affectedFilesPendingEmit: incrementalBuildAffectedFilesPendingEmit, signatures: incrementalSignatures, exportedModulesMap: incrementalExportedModulesMap } =
+                        getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
+                    const { buildInfo: cleanBuildInfo, affectedFilesPendingEmit: incrementalAffectedFilesPendingEmit, signatures: cleanSignatures, exportedModulesMap: cleanExportedModulesMap } =
+                        getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
                     verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, descrepancyInClean, `TsBuild info text without affectedFilesPendingEmit ${subScenario}:: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
                     // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
                     if (incrementalBuildAffectedFilesPendingEmit && descrepancyInClean === undefined) {
@@ -371,6 +373,24 @@ interface Symbol {
                             assert.notEqual(expectedIndex, -1, `Incremental build contains ${actualFile} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${incrementalBuildText}\nClean buildInfoText:: ${cleanBuildText}`);
                             expectedIndex++;
                         });
+                    }
+                    if (incrementalSignatures && cleanSignatures) {
+                        for (let i = 0; i < incrementalSignatures.length; i++) {
+                            if (incrementalSignatures[i] === 0) cleanSignatures[i] = 0;
+                        }
+                    }
+                    assert.deepEqual(incrementalSignatures, cleanSignatures);
+                    if (incrementalExportedModulesMap && cleanExportedModulesMap) {
+                        const keys = Object.keys(incrementalExportedModulesMap);
+                        if (keys.length > 0) {
+                            assert.containsAllKeys(cleanExportedModulesMap, keys);
+                            for (const key of keys) {
+                                assert.includeMembers(cleanExportedModulesMap[key], incrementalExportedModulesMap[key]);
+                            }
+                        }
+                    }
+                    else {
+                        assert.deepEqual(incrementalExportedModulesMap, cleanExportedModulesMap);
                     }
                 }
             }
@@ -397,21 +417,46 @@ interface Symbol {
         });
     }
 
-    function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): { buildInfo: string | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
+    function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
+        buildInfo: string | undefined;
+        affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"];
+        signatures?: BuilderState.FileInfo["signature"][];
+        exportedModulesMap?: MapLike<string[]>;
+    } {
         const buildInfo = text ? getBuildInfo(text) : undefined;
         if (!buildInfo?.program) return { buildInfo: text };
         // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
-        const { program: { affectedFilesPendingEmit, options: { noEmit, ...optionsRest}, ...programRest }, ...rest } = buildInfo;
+        const { program: { affectedFilesPendingEmit, options: { noEmit, ...optionsRest}, fileInfos, referencedMap, exportedModulesMap, fileIdsList, fileNames, ...programRest }, ...rest } = buildInfo;
+        const signatures: BuilderState.FileInfo["signature"][] = [];
         return {
-            buildInfo: getBuildInfoText({
+            buildInfo: JSON.stringify({
                 ...rest,
                 program: {
+                    fileInfos: fileInfos.map(fileInfo => {
+                        const { signature, ...remainingFileInfo } = fileInfo;
+                        return {
+                            signature: 0,
+                            ...remainingFileInfo
+                        };
+                    }),
                     options: optionsRest,
+                    fileNames,
+                    referencedMap: referencedMap && expandMap(referencedMap),
                     ...programRest
-                }
+                },
             }),
-            affectedFilesPendingEmit
+            affectedFilesPendingEmit,
+            signatures,
+            exportedModulesMap: exportedModulesMap && expandMap(exportedModulesMap)
         };
+
+        function expandMap(map: ProgramBuildInfoReferencedMap) {
+            const result: MapLike<string[]> = {};
+            for(const [fileId, listId] of map) {
+                result[fileNames[fileId]] = fileIdsList![listId].map(id => fileNames[id]);
+            }
+            return result;
+        }
     }
 
     export enum CleanBuildDescrepancy {

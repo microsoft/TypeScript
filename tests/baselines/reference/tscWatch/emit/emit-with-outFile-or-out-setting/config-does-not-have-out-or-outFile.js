@@ -84,7 +84,7 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -98,6 +98,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 WatchedFiles::
 /a/tsconfig.json:
@@ -123,3 +125,4 @@ exitCode:: ExitStatus.undefined
 var x = 11;
 
 
+//// [/a/b.js] file written with same contents
