@@ -6,7 +6,6 @@ ENV TF_BUILD=true
 ADD https://api.github.com/repos/OfficeDev/office-ui-fabric-react/git/ref/heads/master version.json
 RUN git clone --depth 1 https://github.com/OfficeDev/office-ui-fabric-react.git /office-ui-fabric-react
 WORKDIR /office-ui-fabric-react
-RUN git pull
 WORKDIR /
 COPY --from=typescript/typescript /typescript/typescript-*.tgz typescript.tgz
 WORKDIR /office-ui-fabric-react

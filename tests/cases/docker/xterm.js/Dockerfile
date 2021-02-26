@@ -2,7 +2,6 @@
 FROM node:10
 RUN git clone --depth 1 https://github.com/xtermjs/xterm.js.git /xtermjs
 WORKDIR /xtermjs
-RUN git pull
 COPY --from=typescript/typescript /typescript/typescript-*.tgz /typescript.tgz
 RUN mkdir /typescript
 RUN tar -xzvf /typescript.tgz -C /typescript
