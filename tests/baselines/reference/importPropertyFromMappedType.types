@@ -1,0 +1,19 @@
+=== tests/cases/compiler/errors.d.ts ===
+// #42957
+
+export = createHttpError;
+>createHttpError : createHttpError.NamedConstructors
+
+declare const createHttpError: createHttpError.NamedConstructors;
+>createHttpError : createHttpError.NamedConstructors
+>createHttpError : any
+
+declare namespace createHttpError {
+    type NamedConstructors =  { [P in 'NotFound']: unknown;}
+>NamedConstructors : NamedConstructors
+}
+
+=== tests/cases/compiler/main.ts ===
+import { NotFound } from './errors'
+>NotFound : unknown
+
