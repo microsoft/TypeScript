@@ -9,7 +9,7 @@ const alias = {};
 module.exports = alias;
 >module.exports = alias : {}
 >module.exports : {}
->module : { "\"/a\"": {}; }
+>module : { exports: {}; }
 >exports : {}
 >alias : {}
 

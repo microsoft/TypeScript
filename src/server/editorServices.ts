@@ -207,7 +207,7 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            match: /jquery(-[\d\.]+)?(\.intellisense)?(\.min)?\.js$/i,
             types: ["jquery"]
         },
         "WinJS": {
@@ -2707,7 +2707,7 @@ namespace ts.server {
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
-                return snap.getText(0, snap.getLength());
+                return getSnapshotText(snap);
             };
             const projectName = project.projectName;
             const documentPositionMapper = getDocumentPositionMapper(

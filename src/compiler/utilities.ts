@@ -1965,8 +1965,7 @@ namespace ts {
     }
 
     export function getExternalModuleRequireArgument(node: Node) {
-        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
-            && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+        return isRequireVariableDeclaration(node) && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -2033,19 +2032,17 @@ namespace ts {
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
      */
-    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
-    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
-    export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
+    export function isRequireVariableDeclaration(node: Node): node is RequireVariableDeclaration {
         if (node.kind === SyntaxKind.BindingElement) {
             node = node.parent.parent;
         }
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), /*requireStringLiteralLikeArgument*/ true);
     }
 
-    export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
+    export function isRequireVariableStatement(node: Node): node is RequireVariableStatement {
         return isVariableStatement(node)
             && node.declarationList.declarations.length > 0
-            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
+            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -2244,9 +2241,7 @@ namespace ts {
 
     /** x[0] OR x['a'] OR x[Symbol.y] */
     export function isLiteralLikeElementAccess(node: Node): node is LiteralLikeElementAccessExpression {
-        return isElementAccessExpression(node) && (
-            isStringOrNumericLiteralLike(node.argumentExpression) ||
-            isWellKnownSymbolSyntactically(node.argumentExpression));
+        return isElementAccessExpression(node) && isStringOrNumericLiteralLike(node.argumentExpression);
     }
 
     /** Any series of property and element accesses. */
@@ -2330,9 +2325,6 @@ namespace ts {
             if (isStringLiteralLike(name) || isNumericLiteral(name)) {
                 return escapeLeadingUnderscores(name.text);
             }
-        }
-        if (isElementAccessExpression(node) && isWellKnownSymbolSyntactically(node.argumentExpression)) {
-            return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>node.argumentExpression).name));
         }
         return undefined;
     }
@@ -3142,9 +3134,6 @@ namespace ts {
      *   3. The computed name is *not* expressed as a NumericLiteral.
      *   4. The computed name is *not* expressed as a PlusToken or MinusToken
      *      immediately followed by a NumericLiteral.
-     *   5. The computed name is *not* expressed as `Symbol.<name>`, where `<name>`
-     *      is a property of the Symbol constructor that denotes a built-in
-     *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): declaration is DynamicNamedDeclaration | DynamicNamedBinaryExpression {
         const name = getNameOfDeclaration(declaration);
@@ -3157,17 +3146,7 @@ namespace ts {
         }
         const expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
         return !isStringOrNumericLiteralLike(expr) &&
-            !isSignedNumericLiteral(expr) &&
-            !isWellKnownSymbolSyntactically(expr);
-    }
-
-    /**
-     * Checks if the expression is of the form:
-     *    Symbol.name
-     * where Symbol is literally the word "Symbol", and name is any identifierName
-     */
-    export function isWellKnownSymbolSyntactically(node: Node): node is WellKnownSymbolExpression {
-        return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
+            !isSignedNumericLiteral(expr);
     }
 
     export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
@@ -3180,10 +3159,7 @@ namespace ts {
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
                 const nameExpression = name.expression;
-                if (isWellKnownSymbolSyntactically(nameExpression)) {
-                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-                }
-                else if (isStringOrNumericLiteralLike(nameExpression)) {
+                if (isStringOrNumericLiteralLike(nameExpression)) {
                     return escapeLeadingUnderscores(nameExpression.text);
                 }
                 else if (isSignedNumericLiteral(nameExpression)) {
@@ -3210,19 +3186,15 @@ namespace ts {
         }
     }
     export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
-        return isIdentifierOrPrivateIdentifier(node) ? idText(node) : node.text;
+        return isMemberName(node) ? idText(node) : node.text;
     }
 
     export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-        return isIdentifierOrPrivateIdentifier(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+        return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForUniqueESSymbol(symbol: Symbol): __String {
         return `__@${getSymbolId(symbol)}@${symbol.escapedName}` as __String;
-    }
-
-    export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
-        return "__@" + symbolName as __String;
     }
 
     export function getSymbolNameForPrivateIdentifier(containingClassSymbol: Symbol, description: __String): __String {
@@ -3602,6 +3574,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.MetaProperty:
                 return OperatorPrecedence.Member;
 
             case SyntaxKind.AsExpression:
@@ -4864,9 +4837,12 @@ namespace ts {
     }
 
     export function isDottedName(node: Expression): boolean {
-        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
-            node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
-            node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
+        return node.kind === SyntaxKind.Identifier
+            || node.kind === SyntaxKind.ThisKeyword
+            || node.kind === SyntaxKind.SuperKeyword
+            || node.kind === SyntaxKind.MetaProperty
+            || node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression)
+            || node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
     }
 
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
@@ -5511,10 +5487,9 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: ESMap<string, true>, key: string | number): boolean;
-    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T): boolean;
-    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T = true as any): boolean {
-        key = String(key);
+    export function addToSeen<K>(seen: ESMap<K, true>, key: K): boolean;
+    export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T): boolean;
+    export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T = true as any): boolean {
         if (seen.has(key)) {
             return false;
         }
@@ -5643,7 +5618,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging || tracing.isTracing()) {
+        if (Debug.isDebugging || tracing) {
             this.checker = checker;
         }
     }

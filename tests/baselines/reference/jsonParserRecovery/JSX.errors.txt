@@ -1,0 +1,37 @@
+JSX(2,9): error TS1005: '{' expected.
+JSX(2,19): error TS1005: ',' expected.
+JSX(2,24): error TS1005: ',' expected.
+JSX(4,9): error TS1012: Unexpected token.
+JSX(4,15): error TS1005: ':' expected.
+JSX(15,10): error TS1005: '}' expected.
+
+
+==== JSX (6 errors) ====
+    
+            interface Test {}
+            ~~~~~~~~~
+!!! error TS1005: '{' expected.
+                      ~~~~
+!!! error TS1005: ',' expected.
+                           ~
+!!! error TS1005: ',' expected.
+    
+            const Header = () => (
+            ~~~~~
+!!! error TS1012: Unexpected token.
+                  ~~~~~~
+!!! error TS1005: ':' expected.
+              <div>
+                <h1>Header</h1>
+                <style jsx>
+                  {`
+                    h1 {
+                      color: red;
+                    }
+                  `}
+                </style>
+              </div>
+            )
+             
+!!! error TS1005: '}' expected.
+!!! related TS1007 JSX:4:9: The parser expected to find a '}' to match the '{' token here.
