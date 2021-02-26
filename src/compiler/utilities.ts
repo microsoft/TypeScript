@@ -7097,4 +7097,71 @@ namespace ts {
     export function containsIgnoredPath(path: string) {
         return some(ignoredPaths, p => stringContains(path, p));
     }
+
+    export function getContainingNodeArray(node: Node): NodeArray<Node> | undefined {
+        if (!node.parent) return undefined;
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+                const { parent } = node as TypeParameterDeclaration;
+                return parent.kind === SyntaxKind.InferType ? undefined : parent.typeParameters;
+            case SyntaxKind.Parameter:
+                return (node as ParameterDeclaration).parent.parameters;
+            case SyntaxKind.TemplateLiteralTypeSpan:
+                return (node as TemplateLiteralTypeSpan).parent.templateSpans;
+            case SyntaxKind.TemplateSpan:
+                return (node as TemplateSpan).parent.templateSpans;
+            case SyntaxKind.Decorator:
+                return (node as Decorator).parent.decorators;
+            case SyntaxKind.HeritageClause:
+                return (node as HeritageClause).parent.heritageClauses;
+        }
+
+        const { parent } = node;
+        if (isJSDocTag(node)) {
+            return isJSDocTypeLiteral(node.parent) ? undefined : node.parent.tags;
+        }
+
+        switch (parent.kind) {
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.InterfaceDeclaration:
+                return isTypeElement(node) ? (parent as TypeLiteralNode | InterfaceDeclaration).members : undefined;
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+                return (parent as UnionOrIntersectionTypeNode).types;
+            case SyntaxKind.TupleType:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.CommaListExpression:
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
+                return (parent as TupleTypeNode | ArrayLiteralExpression | CommaListExpression | NamedImports | NamedExports).elements;
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.JsxAttributes:
+                return (parent as ObjectLiteralExpressionBase<ObjectLiteralElement>).properties;
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                return isTypeNode(node) ? (parent as CallExpression | NewExpression).typeArguments :
+                    (parent as CallExpression | NewExpression).expression === node ? undefined :
+                    (parent as CallExpression | NewExpression).arguments;
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxFragment:
+                return isJsxChild(node) ? (parent as JsxElement | JsxFragment).children : undefined;
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
+                return isTypeNode(node) ? (parent as JsxOpeningElement | JsxSelfClosingElement).typeArguments : undefined;
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.ModuleBlock:
+                return (parent as Block | CaseOrDefaultClause | ModuleBlock).statements;
+            case SyntaxKind.CaseBlock:
+                return (parent as CaseBlock).clauses;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+                return isClassElement(node) ? (parent as ClassLikeDeclaration).members : undefined;
+            case SyntaxKind.EnumDeclaration:
+                return isEnumMember(node) ? (parent as EnumDeclaration).members : undefined;
+            case SyntaxKind.SourceFile:
+                return (parent as SourceFile).statements;
+        }
+    }
 }

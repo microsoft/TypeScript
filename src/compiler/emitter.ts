@@ -910,7 +910,7 @@ namespace ts {
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
         let currentLineMap: readonly number[] | undefined;
-        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
+        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number }[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
         const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
@@ -4469,15 +4469,15 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && (!previousNode.parent || !nextNode.parent || previousNode.parent === nextNode.parent)) {
-                    if (preserveSourceNewlines && previousNode.parent && nextNode.parent) {
-                        return getEffectiveLines(
-                            includeComments => getLinesBetweenRangeEndAndRangeStart(
-                                previousNode,
-                                nextNode,
-                                currentSourceFile!,
-                                includeComments));
-                    }
+                else if (preserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode)) {
+                    return getEffectiveLines(
+                        includeComments => getLinesBetweenRangeEndAndRangeStart(
+                            previousNode,
+                            nextNode,
+                            currentSourceFile!,
+                            includeComments));
+                }
+                else if (!preserveSourceNewlines && !nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
                     return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
@@ -5171,6 +5171,27 @@ namespace ts {
             }
             exitComment();
 
+        }
+
+        function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
+            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
+                return false;
+            }
+
+            if (nextNode.pos < previousNode.end) {
+                return false;
+            }
+
+            previousNode = getOriginalNode(previousNode);
+            nextNode = getOriginalNode(nextNode);
+            const parent = previousNode.parent;
+            if (!parent || parent !== nextNode.parent) {
+                return false;
+            }
+
+            const parentNodeArray = getContainingNodeArray(previousNode);
+            const prevNodeIndex = parentNodeArray?.indexOf(previousNode);
+            return prevNodeIndex !== undefined && prevNodeIndex > -1 && parentNodeArray!.indexOf(nextNode) === prevNodeIndex + 1;
         }
 
         function emitLeadingComments(pos: number, isEmittedNode: boolean) {
