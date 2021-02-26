@@ -1838,7 +1838,7 @@ namespace ts.server {
 
             const result = mapDefined(args.entryNames, entryName => {
                 const { name, source, data } = typeof entryName === "string" ? { name: entryName, source: undefined, data: undefined } : entryName;
-                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data as any);
+                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
             return simplifiedResult
                 ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(action)) }))
@@ -3117,5 +3117,13 @@ namespace ts.server {
             isWriteAccess,
             isDefinition
         };
+    }
+
+    function isCompletionEntryData(data: any): data is CompletionEntryData {
+        return data === undefined || data && typeof data === "object"
+            && typeof data.exportName === "string"
+            && (data.fileName === undefined || typeof data.fileName === "string")
+            && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
+            && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
     }
 }
