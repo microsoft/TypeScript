@@ -162,11 +162,22 @@ namespace ts { // eslint-disable-line one-namespace-per-file
             performance.measure("Tracing", "beginTracing", "endTracing");
         }
 
-        function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
-            return {
-                line: lc.line + 1,
-                character: lc.character + 1,
-            };
+        function getLocation(node: Node | undefined) {
+            const file = getSourceFileOfNode(node);
+            return !file
+                ? undefined
+                : {
+                    path: file.path,
+                    start: indexFromOne(getLineAndCharacterOfPosition(file, node!.pos)),
+                    end: indexFromOne(getLineAndCharacterOfPosition(file, node!.end)),
+                };
+
+            function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
+                return {
+                    line: lc.line + 1,
+                    character: lc.character + 1,
+                };
+            }
         }
 
         function dumpTypes(types: readonly Type[]) {
@@ -185,10 +196,6 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                 const type = types[i];
                 const objectFlags = (type as any).objectFlags;
                 const symbol = type.aliasSymbol ?? type.symbol;
-                const firstDeclaration = symbol?.declarations?.[0];
-                const firstFile = firstDeclaration && getSourceFileOfNode(firstDeclaration);
-                const destructuringPattern = type.pattern;
-                const destructuringPatternFile = destructuringPattern && getSourceFileOfNode(destructuringPattern);
 
                 // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
                 let display: string | undefined;
@@ -216,16 +223,8 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     referenceProperties = {
                         instantiatedType: referenceType.target?.id,
                         typeArguments: referenceType.resolvedTypeArguments?.map(t => t.id),
+                        referenceLocation: getLocation(referenceType.node),
                     };
-                    const referenceNode = referenceType.node;
-                    if (referenceNode) {
-                        const sourceFile = getSourceFileOfNode(referenceNode);
-                        (referenceProperties as any).referenceLocation = {
-                            path: sourceFile.path,
-                            start: indexFromOne(getLineAndCharacterOfPosition(sourceFile, referenceNode.pos)),
-                            end: indexFromOne(getLineAndCharacterOfPosition(sourceFile, referenceNode.end)),
-                        };
-                    }
                 }
 
                 let conditionalProperties: object = {};
@@ -295,16 +294,8 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...substitutionProperties,
                     ...reverseMappedProperties,
                     ...evolvingArrayProperties,
-                    destructuringPattern: destructuringPatternFile && {
-                        path: destructuringPatternFile.path,
-                        start: indexFromOne(getLineAndCharacterOfPosition(destructuringPatternFile, destructuringPattern!.pos)),
-                        end: indexFromOne(getLineAndCharacterOfPosition(destructuringPatternFile, destructuringPattern!.end)),
-                    },
-                    firstDeclaration: firstFile && {
-                        path: firstFile.path,
-                        start: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.pos)),
-                        end: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.end)),
-                    },
+                    destructuringPattern: getLocation(type.pattern),
+                    firstDeclaration: getLocation(symbol?.declarations?.[0]),
                     flags: Debug.formatTypeFlags(type.flags).split("|"),
                     display,
                 };
