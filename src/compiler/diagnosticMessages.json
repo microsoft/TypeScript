@@ -1360,6 +1360,50 @@
         "category": "Error",
         "code": 1432
     },
+    "Unexpected keyword or identifier.": {
+        "category": "Error",
+        "code": 1433
+    },
+    "Unknown keyword or identifier. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 1434
+    },
+    "Decorators must precede all other keywords for property declarations.": {
+        "category": "Error",
+        "code": 1435
+    },
+    "Namespace must be given a name.": {
+        "category": "Error",
+        "code": 1436
+    },
+    "Interface must be given a name.": {
+        "category": "Error",
+        "code": 1437
+    },
+    "Type alias must be given a name.": {
+        "category": "Error",
+        "code": 1438
+    },
+    "Variable declaration not allowed at this location.": {
+        "category": "Error",
+        "code": 1439
+    },
+    "Function call not allowed at this location.": {
+        "category": "Error",
+        "code": 1440
+    },
+    "Missing '=' before default property value.": {
+        "category": "Error",
+        "code": 1441
+    },
+    "Template literal not allowed as a string at this position.": {
+        "category": "Error",
+        "code": 1442
+    },
+    "Template literal not allowed as a string at this position. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 1443
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3263,6 +3307,10 @@
     "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
         "category": "Error",
         "code": 2802
+    },
+    "Namespace name cannot be '{0}'.": {
+        "category": "Error",
+        "code": 2803
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

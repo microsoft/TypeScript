@@ -1518,6 +1518,139 @@ namespace ts {
             return false;
         }
 
+        const commonKeywords = [
+            "async",
+            "class",
+            "const",
+            "declare",
+            "export",
+            "function",
+            "interface",
+            "let",
+            "type",
+            "var",
+        ];
+
+        function parseSemicolonAfter(expression: Expression | PropertyName) {
+            // Consume the semicolon if it was explicitly provided.
+            if (canParseSemicolon()) {
+                if (token() === SyntaxKind.SemicolonToken) {
+                    nextToken();
+                }
+
+                return;
+            }
+
+            // Specialized diagnostics for a keyword expression are redundant if the related token is already complaining.
+            const lastError = lastOrUndefined(parseDiagnostics);
+            if (lastError && scanner.getTokenPos() < lastError.start + 2) {
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+                return;
+            }
+
+            // Tagged template literals are sometimes used in places where only simple strings are allowed, e.g.:
+            //   module `M1` {
+            //   ^^^^^^^^^^^ This block is parsed as a template literal as with module`M1`.
+            if (isTaggedTemplateExpression(expression)) {
+                parseErrorAt(skipTrivia(sourceText, expression.template.pos), expression.template.end, Diagnostics.Template_literal_not_allowed_as_a_string_at_this_position);
+                return;
+            }
+
+            // Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
+            const expressionText = getExpressionText(expression);
+            if (!expressionText || !isIdentifierText(expressionText, languageVersion)) {
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+                return;
+            }
+
+            const pos = skipTrivia(sourceText, expression.pos);
+
+            // Some known keywords are likely signs of syntax being used improperly.
+            switch (expressionText) {
+                case "const":
+                case "let":
+                case "var":
+                    parseErrorAt(pos, expression.end, Diagnostics.Variable_declaration_not_allowed_at_this_location);
+                    return;
+
+                case "interface":
+                    parseErrorForExpectedName(scanner.getTokenText(), "{", Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0);
+                    return;
+
+                case "is":
+                    parseErrorAt(pos, scanner.getTextPos(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                    return;
+
+                case "module":
+                case "namespace":
+                    parseErrorForExpectedName(scanner.getTokenText(), "{", Diagnostics.Namespace_must_be_given_a_name, Diagnostics.Namespace_name_cannot_be_0);
+                    return;
+
+                case "type":
+                    parseErrorForExpectedName(scanner.getTokenText(), "=", Diagnostics.Type_alias_must_be_given_a_name, Diagnostics.Type_alias_name_cannot_be_0);
+                    return;
+            }
+
+            // The user alternately might have misspelled or forgotten to add a space after a common keyword.
+            const suggestion = getSpellingSuggestion(expressionText, commonKeywords, n => n) || getSpaceSuggestion(expressionText);
+            if (suggestion) {
+                parseErrorAt(pos, expression.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
+            }
+
+            // We know this is a slightly more precise case than a missing expected semicolon.
+            parseErrorAt(pos, expression.end, Diagnostics.Unexpected_keyword_or_identifier);
+        }
+
+        function parseErrorForExpectedName(name: string, normalToken: string, blankDiagnostic: DiagnosticMessage, nameDiagnostic: DiagnosticMessage) {
+            if (name === normalToken) {
+                parseErrorAtCurrentToken(blankDiagnostic);
+            }
+            else {
+                parseErrorAtCurrentToken(nameDiagnostic, name);
+            }
+        }
+
+        function getSpaceSuggestion(expressionText: string) {
+            for (const keyword of commonKeywords) {
+                if (expressionText.length > keyword.length + 2 && startsWith(expressionText, keyword)) {
+                    return `${keyword} ${expressionText.slice(keyword.length)}`;
+                }
+            }
+
+            return undefined;
+        }
+
+        function parseSemicolonAfterPropertyName(name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
+            switch (scanner.getTokenText()) {
+                case "@":
+                    parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_all_other_keywords_for_property_declarations);
+                    return;
+
+                case "(":
+                    parseErrorAtCurrentToken(Diagnostics.Function_call_not_allowed_at_this_location);
+                    nextToken();
+                    return;
+            }
+
+            if (type && !canParseSemicolon()) {
+                if (initializer) {
+                    parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+                }
+                else {
+                    parseErrorAtCurrentToken(Diagnostics.Missing_before_default_property_value);
+                }
+                return;
+            }
+
+            return parseSemicolonAfter(name);
+        }
+
+        function getExpressionText(expression: Expression | PropertyName) {
+            return expression && ts.isIdentifier(expression)
+                ? expression.escapedText.toString()
+                : undefined;
+        }
+
         function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
             if (token() === kind) {
                 nextTokenJSDoc();
@@ -5786,7 +5919,7 @@ namespace ts {
                 identifierCount++;
                 expression = finishNode(factory.createIdentifier(""), getNodePos());
             }
-            parseSemicolon();
+            parseSemicolonAfter(expression);
             return finishNode(factory.createThrowStatement(expression), pos);
         }
 
@@ -5847,7 +5980,7 @@ namespace ts {
                 node = factory.createLabeledStatement(expression, parseStatement());
             }
             else {
-                parseSemicolon();
+                parseSemicolonAfter(expression);
                 node = factory.createExpressionStatement(expression);
                 if (hasParen) {
                     // do not parse the same jsdoc twice
@@ -6440,7 +6573,7 @@ namespace ts {
             const exclamationToken = !questionToken && !scanner.hasPrecedingLineBreak() ? parseOptionalToken(SyntaxKind.ExclamationToken) : undefined;
             const type = parseTypeAnnotation();
             const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
-            parseSemicolon();
+            parseSemicolonAfterPropertyName(name, type, initializer);
             const node = factory.createPropertyDeclaration(decorators, modifiers, name, questionToken || exclamationToken, type, initializer);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }

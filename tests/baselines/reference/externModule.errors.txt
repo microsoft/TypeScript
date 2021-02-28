@@ -1,7 +1,7 @@
+tests/cases/compiler/externModule.ts(1,1): error TS1433: Unexpected keyword or identifier.
 tests/cases/compiler/externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
-tests/cases/compiler/externModule.ts(1,9): error TS1005: ';' expected.
 tests/cases/compiler/externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/externModule.ts(1,16): error TS1005: ';' expected.
+tests/cases/compiler/externModule.ts(1,16): error TS1436: Namespace must be given a name.
 tests/cases/compiler/externModule.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/externModule.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/externModule.ts(18,6): error TS2390: Constructor implementation is missing.
@@ -17,13 +17,13 @@ tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDat
 ==== tests/cases/compiler/externModule.ts (14 errors) ====
     declare module {
     ~~~~~~~
+!!! error TS1433: Unexpected keyword or identifier.
+    ~~~~~~~
 !!! error TS2304: Cannot find name 'declare'.
-            ~~~~~~
-!!! error TS1005: ';' expected.
             ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                    ~
-!!! error TS1005: ';' expected.
+!!! error TS1436: Namespace must be given a name.
         export class XDate {
     		public getDay():number;
     		       ~~~~~~

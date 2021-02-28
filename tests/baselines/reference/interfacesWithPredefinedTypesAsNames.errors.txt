@@ -3,7 +3,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefine
 tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(3,11): error TS2427: Interface name cannot be 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(4,11): error TS2427: Interface name cannot be 'boolean'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,1): error TS2304: Cannot find name 'interface'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,11): error TS1005: ';' expected.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts(5,11): error TS2427: Interface name cannot be 'void'.
 
 
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefinedTypesAsNames.ts (6 errors) ====
@@ -23,4 +23,4 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfacesWithPredefine
     ~~~~~~~~~
 !!! error TS2304: Cannot find name 'interface'.
               ~~~~
-!!! error TS1005: ';' expected.
+!!! error TS2427: Interface name cannot be 'void'.
