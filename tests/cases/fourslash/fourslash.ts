@@ -98,6 +98,13 @@ declare module ts {
         character: number;
     }
 
+    interface CompletionEntryData {
+        fileName?: string;
+        ambientModuleName?: string;
+        isPackageJsonImport?: true;
+        exportName: string;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -253,6 +260,7 @@ declare namespace FourSlashInterface {
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
+            data?: ts.CompletionEntryData,
             description: string,
             newFileContent?: string,
             newRangeContent?: string,

@@ -1558,14 +1558,14 @@ namespace ts {
                 options.triggerCharacter);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
                 log,
                 getValidSourceFile(fileName),
                 position,
-                { name, source },
+                { name, source, data },
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions, host))!, // TODO: GH#18217
                 preferences,
