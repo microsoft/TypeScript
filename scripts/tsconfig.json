@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "strictNullChecks": true,
+        "skipLibCheck": true,
         "removeComments": false,
         "declaration": false,
         "sourceMap": true,
