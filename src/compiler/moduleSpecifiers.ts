@@ -282,12 +282,12 @@ namespace ts.moduleSpecifiers {
         const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
-        let filterIgnoredPaths = some(targets, not(containsIgnoredPath));
+        let shouldFilterIgnoredPaths = !every(targets, containsIgnoredPath);
 
         if (!preferSymlinks) {
             // Symlinks inside ignored paths are already filtered out of the symlink cache,
             // so we only need to remove them from the realpath filenames.
-            const result = forEach(targets, p => !(filterIgnoredPaths && containsIgnoredPath(p)) && cb(p, referenceRedirect === p));
+            const result = forEach(targets, p => !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
         const links = host.getSymlinkCache
@@ -314,13 +314,13 @@ namespace ts.moduleSpecifiers {
                 for (const symlinkDirectory of symlinkDirectories) {
                     const option = resolvePath(symlinkDirectory, relative);
                     const result = cb(option, target === referenceRedirect);
-                    filterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
+                    shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
                     if (result) return result;
                 }
             });
         });
         return result || (preferSymlinks
-            ? forEach(targets, p => filterIgnoredPaths && containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
+            ? forEach(targets, p => shouldFilterIgnoredPaths && containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
             : undefined);
     }
 
