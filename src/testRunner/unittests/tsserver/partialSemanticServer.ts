@@ -70,7 +70,8 @@ import { something } from "something";
                     isPackageJsonImport: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
-                    source: undefined
+                    source: undefined,
+                    data: undefined,
                 };
             }
         });

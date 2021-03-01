@@ -839,7 +839,7 @@ namespace ts.FindAllReferences {
             }
 
             const exported = symbol.exports!.get(InternalSymbolName.ExportEquals);
-            if (exported) {
+            if (exported?.declarations) {
                 for (const decl of exported.declarations) {
                     const sourceFile = decl.getSourceFile();
                     if (sourceFilesSet.has(sourceFile.fileName)) {
@@ -916,7 +916,7 @@ namespace ts.FindAllReferences {
             const result: SymbolAndEntries[] = [];
             const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
-            const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) ? undefined : find(symbol.declarations, isExportSpecifier);
+            const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) || !symbol.declarations ? undefined : find(symbol.declarations, isExportSpecifier);
             if (exportSpecifier) {
                 // When renaming at an export specifier, rename the export and not the thing being exported.
                 getReferencesAtExportSpecifier(exportSpecifier.name, symbol, exportSpecifier, state.createSearch(node, originalSymbol, /*comingFrom*/ undefined), state, /*addReferencesHere*/ true, /*alwaysGetReferences*/ true);
