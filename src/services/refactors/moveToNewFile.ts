@@ -443,22 +443,23 @@ namespace ts.refactor {
         const oldFileNamedImports: string[] = [];
         const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
         newFileImportsFromOldFile.forEach(symbol => {
-            if (symbol.declarations) {
-                for (const decl of symbol.declarations) {
-                    if (!isTopLevelDeclaration(decl)) continue;
-                    const name = nameOfTopLevelDeclaration(decl);
-                    if (!name) continue;
+            if (!symbol.declarations) {
+                return;
+            }
+            for (const decl of symbol.declarations) {
+                if (!isTopLevelDeclaration(decl)) continue;
+                const name = nameOfTopLevelDeclaration(decl);
+                if (!name) continue;
 
-                    const top = getTopLevelDeclarationStatement(decl);
-                    if (markSeenTop(top)) {
-                        addExportToChanges(oldFile, top, changes, useEs6ModuleSyntax);
-                    }
-                    if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
-                        oldFileDefault = name;
-                    }
-                    else {
-                        oldFileNamedImports.push(name.text);
-                    }
+                const top = getTopLevelDeclarationStatement(decl);
+                if (markSeenTop(top)) {
+                    addExportToChanges(oldFile, top, changes, useEs6ModuleSyntax);
+                }
+                if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
+                    oldFileDefault = name;
+                }
+                else {
+                    oldFileNamedImports.push(name.text);
                 }
             }
         });

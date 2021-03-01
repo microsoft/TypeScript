@@ -1243,7 +1243,10 @@ namespace ts {
                 // as we will already report a "Declaration name conflicts..." error, and this error
                 // won't make much sense.
                 if (target !== globalThisSymbol) {
-                    error(source.declarations && getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
+                    error(
+                        source.declarations && getNameOfDeclaration(source.declarations[0]),
+                        Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity,
+                        symbolToString(target));
                 }
             }
             else { // error
@@ -8362,14 +8365,15 @@ namespace ts {
         }
 
         function getDeclaringConstructor(symbol: Symbol) {
-            if (symbol.declarations) {
-                for (const declaration of symbol.declarations) {
-                    const container = getThisContainer(declaration, /*includeArrowFunctions*/ false);
-                    if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
-                        return container as ConstructorDeclaration;
-                    }
-                };
+            if (!symbol.declarations) {
+                return;
             }
+            for (const declaration of symbol.declarations) {
+                const container = getThisContainer(declaration, /*includeArrowFunctions*/ false);
+                if (container && (container.kind === SyntaxKind.Constructor || isJSConstructor(container))) {
+                    return container as ConstructorDeclaration;
+                }
+            };
         }
 
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
@@ -8413,9 +8417,9 @@ namespace ts {
                 type = getFlowTypeInConstructor(symbol, getDeclaringConstructor(symbol)!);
             }
             if (!type) {
-                let jsdocType: Type | undefined;
                 let types: Type[] | undefined;
                 if (symbol.declarations) {
+                    let jsdocType: Type | undefined;
                     for (const declaration of symbol.declarations) {
                         const expression = (isBinaryExpression(declaration) || isCallExpression(declaration)) ? declaration :
                             isAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
@@ -8442,8 +8446,8 @@ namespace ts {
                             (types || (types = [])).push((isBinaryExpression(expression) || isCallExpression(expression)) ? getInitializerTypeFromAssignmentDeclaration(symbol, resolvedSymbol, expression, kind) : neverType);
                         }
                     }
+                    type = jsdocType;
                 }
-                type = jsdocType;
                 if (!type) {
                     if (!length(types)) {
                         return errorType; // No types from any declarations :(
@@ -9286,17 +9290,18 @@ namespace ts {
         // The local type parameters are the combined set of type parameters from all declarations of the class,
         // interface, or type alias.
         function getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): TypeParameter[] | undefined {
+            if (!symbol.declarations) {
+                return;
+            }
             let result: TypeParameter[] | undefined;
-            if (symbol.declarations) {
-                for (const node of symbol.declarations) {
-                    if (node.kind === SyntaxKind.InterfaceDeclaration ||
-                        node.kind === SyntaxKind.ClassDeclaration ||
-                        node.kind === SyntaxKind.ClassExpression ||
-                        isJSConstructor(node) ||
-                        isTypeAlias(node)) {
-                        const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
-                        result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
-                    }
+            for (const node of symbol.declarations) {
+                if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                    node.kind === SyntaxKind.ClassDeclaration ||
+                    node.kind === SyntaxKind.ClassExpression ||
+                    isJSConstructor(node) ||
+                    isTypeAlias(node)) {
+                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
+                    result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
                 }
             }
             return result;
@@ -9587,20 +9592,21 @@ namespace ts {
          * and if none of the base interfaces have a "this" type.
          */
         function isThislessInterface(symbol: Symbol): boolean {
-            if (symbol.declarations) {
-                for (const declaration of symbol.declarations) {
-                    if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                        if (declaration.flags & NodeFlags.ContainsThis) {
-                            return false;
-                        }
-                        const baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
-                        if (baseTypeNodes) {
-                            for (const node of baseTypeNodes) {
-                                if (isEntityNameExpression(node.expression)) {
-                                    const baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
-                                    if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
-                                        return false;
-                                    }
+            if (!symbol.declarations) {
+                return true;
+            }
+            for (const declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                    if (declaration.flags & NodeFlags.ContainsThis) {
+                        return false;
+                    }
+                    const baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
+                    if (baseTypeNodes) {
+                        for (const node of baseTypeNodes) {
+                            if (isEntityNameExpression(node.expression)) {
+                                const baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
+                                if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
+                                    return false;
                                 }
                             }
                         }
@@ -12048,23 +12054,21 @@ namespace ts {
         }
 
         function getSignaturesOfSymbol(symbol: Symbol | undefined): Signature[] {
-            if (!symbol) return emptyArray;
+            if (!symbol || !symbol.declarations) return emptyArray;
             const result: Signature[] = [];
-            if (symbol.declarations) {
-                for (let i = 0; i < symbol.declarations.length; i++) {
-                    const decl = symbol.declarations[i];
-                    if (!isFunctionLike(decl)) continue;
-                    // Don't include signature if node is the implementation of an overloaded function. A node is considered
-                    // an implementation node if it has a body and the previous node is of the same kind and immediately
-                    // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
-                    if (i > 0 && (decl as FunctionLikeDeclaration).body) {
-                        const previous = symbol.declarations[i - 1];
-                        if (decl.parent === previous.parent && decl.kind === previous.kind && decl.pos === previous.end) {
-                            continue;
-                        }
+            for (let i = 0; i < symbol.declarations.length; i++) {
+                const decl = symbol.declarations[i];
+                if (!isFunctionLike(decl)) continue;
+                // Don't include signature if node is the implementation of an overloaded function. A node is considered
+                // an implementation node if it has a body and the previous node is of the same kind and immediately
+                // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
+                if (i > 0 && (decl as FunctionLikeDeclaration).body) {
+                    const previous = symbol.declarations[i - 1];
+                    if (decl.parent === previous.parent && decl.kind === previous.kind && decl.pos === previous.end) {
+                        continue;
                     }
-                    result.push(getSignatureFromDeclaration(decl));
                 }
+                result.push(getSignatureFromDeclaration(decl));
             }
             return result;
         }
@@ -39497,27 +39501,22 @@ namespace ts {
             // defined here to avoid outer scope pollution
             function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined {
                 // program does not have any files with type reference directives - bail out
-                if (!fileToDirective) {
-                    return undefined;
-                }
-                if (!isSymbolFromTypeDeclarationFile(symbol)) {
+                if (!fileToDirective || !isSymbolFromTypeDeclarationFile(symbol)) {
                     return undefined;
                 }
                 // check what declarations in the symbol can contribute to the target meaning
                 let typeReferenceDirectives: string[] | undefined;
-                if (symbol.declarations) {
-                    for (const decl of symbol.declarations) {
-                        // check meaning of the local symbol to see if declaration needs to be analyzed further
-                        if (decl.symbol && decl.symbol.flags & meaning!) {
-                            const file = getSourceFileOfNode(decl);
-                            const typeReferenceDirective = fileToDirective.get(file.path);
-                            if (typeReferenceDirective) {
-                                (typeReferenceDirectives || (typeReferenceDirectives = [])).push(typeReferenceDirective);
-                            }
-                            else {
-                                // found at least one entry that does not originate from type reference directive
-                                return undefined;
-                            }
+                for (const decl of symbol.declarations!) {
+                    // check meaning of the local symbol to see if declaration needs to be analyzed further
+                    if (decl.symbol && decl.symbol.flags & meaning!) {
+                        const file = getSourceFileOfNode(decl);
+                        const typeReferenceDirective = fileToDirective.get(file.path);
+                        if (typeReferenceDirective) {
+                            (typeReferenceDirectives || (typeReferenceDirectives = [])).push(typeReferenceDirective);
+                        }
+                        else {
+                            // found at least one entry that does not originate from type reference directive
+                            return undefined;
                         }
                     }
                 }

@@ -174,14 +174,15 @@ namespace ts {
             return referencedFiles;
 
             function addReferenceFromAmbientModule(symbol: Symbol) {
-                if (symbol.declarations) {
-                    // Add any file other than our own as reference
-                    for (const declaration of symbol.declarations) {
-                        const declarationSourceFile = getSourceFileOfNode(declaration);
-                        if (declarationSourceFile &&
-                            declarationSourceFile !== sourceFile) {
-                            addReferencedFile(declarationSourceFile.resolvedPath);
-                        }
+                if (!symbol.declarations) {
+                    return;
+                }
+                // Add any file other than our own as reference
+                for (const declaration of symbol.declarations) {
+                    const declarationSourceFile = getSourceFileOfNode(declaration);
+                    if (declarationSourceFile &&
+                        declarationSourceFile !== sourceFile) {
+                        addReferencedFile(declarationSourceFile.resolvedPath);
                     }
                 }
             }
