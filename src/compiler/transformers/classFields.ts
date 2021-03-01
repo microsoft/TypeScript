@@ -1170,7 +1170,7 @@ namespace ts {
                 }
             }
             else {
-                return;
+                Debug.assertNever(node, "Unknown class element type.");
             }
 
             getPrivateIdentifierEnvironment().identifiers.set(node.name.escapedText, info);
