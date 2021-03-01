@@ -98,6 +98,13 @@ declare module ts {
         character: number;
     }
 
+    interface CompletionEntryData {
+        fileName?: string;
+        ambientModuleName?: string;
+        isPackageJsonImport?: true;
+        exportName: string;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -253,6 +260,7 @@ declare namespace FourSlashInterface {
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
+            data?: ts.CompletionEntryData,
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
@@ -329,7 +337,7 @@ declare namespace FourSlashInterface {
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
         noMatchingBracePositionInCurrentFile(bracePosition: number): void;
-        docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
+        docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string, options?: VerifyDocCommentTemplateOptions): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
         codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[] }): void;
@@ -663,6 +671,10 @@ declare namespace FourSlashInterface {
         tags?: ReadonlyArray<JSDocTagInfo>;
         triggerReason?: SignatureHelpTriggerReason;
         overrideSelectedItemIndex?: number;
+    }
+
+    interface VerifyDocCommentTemplateOptions {
+        generateReturnInDocTemplate?: boolean;
     }
 
     export type SignatureHelpTriggerReason =

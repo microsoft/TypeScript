@@ -503,7 +503,7 @@
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
+    "A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1166
     },
@@ -3248,6 +3248,22 @@
         "category": "Error",
         "code": 2798
     },
+    "Type produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2799
+    },
+    "Expression produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2800
+    },
+    "This condition will always return true since the Promise is always truthy.": {
+        "category": "Error",
+        "code": 2801
+    },
+    "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
+        "category": "Error",
+        "code": 2802
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3536,6 +3552,10 @@
     "Type parameter '{0}' of exported type alias has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4083
+    },
+    "Exported type alias '{0}' has or is using private name '{1}' from module {2}.": {
+        "category": "Error",
+        "code": 4084
     },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
@@ -3829,6 +3849,10 @@
     "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 5091
+    },
+    "The root value of a '{0}' file must be an object.": {
+        "category": "Error",
+        "code": 5092
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

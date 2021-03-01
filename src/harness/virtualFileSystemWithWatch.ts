@@ -195,7 +195,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[], additionalInfo?: string) {
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: readonly string[], additionalInfo?: string) {
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
 
@@ -1001,14 +1001,18 @@ interface Array<T> { length: number; [n: number]: T; }`
 
             // base folder has to be present
             const base = getDirectoryPath(file.path);
-            const folder = this.fs.get(base) as FsFolder;
-            Debug.assert(isFsFolder(folder));
+            const folder = Debug.checkDefined(this.getRealFolder(base));
 
-            if (!this.fs.has(file.path)) {
-                this.addFileOrFolderInFolder(folder, file);
+            if (folder.path === base) {
+                if (!this.fs.has(file.path)) {
+                    this.addFileOrFolderInFolder(folder, file);
+                }
+                else {
+                    this.modifyFile(path, content);
+                }
             }
             else {
-                this.modifyFile(path, content);
+                this.writeFile(this.realpath(path), content);
             }
         }
 

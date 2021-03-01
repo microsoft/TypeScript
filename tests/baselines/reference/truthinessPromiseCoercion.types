@@ -1,0 +1,55 @@
+=== tests/cases/compiler/truthinessPromiseCoercion.ts ===
+declare const p: Promise<number>
+>p : Promise<number>
+
+declare const p2: null | Promise<number>
+>p2 : Promise<number> | null
+>null : null
+
+async function f() {
+>f : () => Promise<void>
+
+    if (p) {} // err
+>p : Promise<number>
+
+    if (!!p) {} // no err
+>!!p : true
+>!p : false
+>p : Promise<number>
+
+    if (p2) {} // no err
+>p2 : Promise<number> | null
+
+    p ? f.arguments : f.arguments;
+>p ? f.arguments : f.arguments : any
+>p : Promise<number>
+>f.arguments : any
+>f : () => Promise<void>
+>arguments : any
+>f.arguments : any
+>f : () => Promise<void>
+>arguments : any
+
+    !!p ? f.arguments : f.arguments;
+>!!p ? f.arguments : f.arguments : any
+>!!p : true
+>!p : false
+>p : Promise<number>
+>f.arguments : any
+>f : () => Promise<void>
+>arguments : any
+>f.arguments : any
+>f : () => Promise<void>
+>arguments : any
+
+    p2 ? f.arguments : f.arguments;
+>p2 ? f.arguments : f.arguments : any
+>p2 : Promise<number> | null
+>f.arguments : any
+>f : () => Promise<void>
+>arguments : any
+>f.arguments : any
+>f : () => Promise<void>
+>arguments : any
+}
+

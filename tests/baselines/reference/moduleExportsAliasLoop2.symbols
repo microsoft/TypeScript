@@ -1,0 +1,16 @@
+=== tests/cases/conformance/salsa/x.js ===
+const Foo = { min: 3 };
+>Foo : Symbol(Foo, Decl(x.js, 0, 5))
+>min : Symbol(min, Decl(x.js, 0, 13))
+
+exports.fn1();
+>exports : Symbol("tests/cases/conformance/salsa/x", Decl(x.js, 0, 0))
+
+exports.fn2 = Foo.min;
+>exports.fn2 : Symbol(fn2, Decl(x.js, 1, 14))
+>exports : Symbol(fn2, Decl(x.js, 1, 14))
+>fn2 : Symbol(fn2, Decl(x.js, 1, 14))
+>Foo.min : Symbol(fn2, Decl(x.js, 0, 13))
+>Foo : Symbol(Foo, Decl(x.js, 0, 5))
+>min : Symbol(fn2, Decl(x.js, 0, 13))
+

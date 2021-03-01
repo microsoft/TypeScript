@@ -23,4 +23,4 @@
 verify.completions({ marker: ["1"], excludes: ['obj'], includes: ['o'] });
 verify.completions({ marker: ["2"], excludes: ['obj1'], includes: ['o', 'obj'] });
 verify.completions({ marker: ["3"], includes: ['o', 'obj', 'obj1'] });
-verify.completions({ marker: ["4"], includes: ['o'], excludes: ['obj'] });
+verify.completions({ marker: ["4"], includes: ['o'], excludes: ['obj'], isNewIdentifierLocation: true });

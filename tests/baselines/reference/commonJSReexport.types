@@ -20,10 +20,10 @@ const hardline = { type: "hard" }
 >"hard" : "hard"
 
 module.exports = {
->module.exports = {  hardline} : typeof import("tests/cases/conformance/salsa/first")
->module.exports : typeof import("tests/cases/conformance/salsa/first")
->module : { "\"tests/cases/conformance/salsa/first\"": typeof import("tests/cases/conformance/salsa/first"); }
->exports : typeof import("tests/cases/conformance/salsa/first")
+>module.exports = {  hardline} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{  hardline} : { hardline: { type: string; }; }
 
   hardline
@@ -35,7 +35,7 @@ module.exports = {
 module.exports = {
 >module.exports = {  nested: require('./first')} : { nested: typeof import("tests/cases/conformance/salsa/first"); }
 >module.exports : { nested: typeof import("tests/cases/conformance/salsa/first"); }
->module : { "\"tests/cases/conformance/salsa/second\"": { nested: typeof import("tests/cases/conformance/salsa/first"); }; }
+>module : { exports: { nested: typeof import("tests/cases/conformance/salsa/first"); }; }
 >exports : { nested: typeof import("tests/cases/conformance/salsa/first"); }
 >{  nested: require('./first')} : { nested: typeof import("tests/cases/conformance/salsa/first"); }
 
