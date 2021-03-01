@@ -2408,7 +2408,7 @@ declare namespace ts {
     export interface Symbol {
         flags: SymbolFlags;
         escapedName: __String;
-        declarations: Declaration[];
+        declarations?: Declaration[];
         valueDeclaration: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
