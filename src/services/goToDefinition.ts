@@ -2,8 +2,10 @@
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-        if (resolvedRef) {
-            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.file.fileName)];
+        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
+        if (resolvedRef?.file) {
+            // If `file` is missing, do a symbol-based lookup as well
+            return fileReferenceDefinition;
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -25,7 +27,7 @@ namespace ts.GoToDefinition {
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
         if (!symbol) {
-            return getDefinitionInfoForIndexSignatures(node, typeChecker);
+            return concatenate(fileReferenceDefinition, getDefinitionInfoForIndexSignatures(node, typeChecker));
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
@@ -76,7 +78,7 @@ namespace ts.GoToDefinition {
             });
         }
 
-        return getDefinitionFromObjectLiteralElement(typeChecker, node) || getDefinitionFromSymbol(typeChecker, symbol, node);
+        return concatenate(fileReferenceDefinition, getDefinitionFromObjectLiteralElement(typeChecker, node) || getDefinitionFromSymbol(typeChecker, symbol, node));
     }
 
     /**
@@ -111,24 +113,42 @@ namespace ts.GoToDefinition {
         }
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, file: SourceFile } | undefined {
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, unverified: boolean, file?: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { reference: referencePath, file };
+            return file && { reference: referencePath, fileName: file.fileName, file, unverified: false };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { reference: typeReferenceDirective, file };
+            return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { reference: libReferenceDirective, file };
+            return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
+        }
+
+        if (sourceFile.resolvedModules?.size) {
+            const node = getTokenAtPosition(sourceFile, position);
+            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+                const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
+                return {
+                    file: program.getSourceFile(fileName),
+                    fileName,
+                    reference: {
+                        pos: node.getStart(),
+                        end: node.getEnd(),
+                        fileName: node.text
+                    },
+                    unverified: !!verifiedFileName,
+                };
+            }
         }
 
         return undefined;
@@ -318,7 +338,7 @@ namespace ts.GoToDefinition {
         return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
-    function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {
+    function getDefinitionInfoForFileReference(name: string, targetFileName: string, unverified: boolean): DefinitionInfo {
         return {
             fileName: targetFileName,
             textSpan: createTextSpanFromBounds(0, 0),
@@ -326,6 +346,7 @@ namespace ts.GoToDefinition {
             name,
             containerName: undefined!,
             containerKind: undefined!, // TODO: GH#18217
+            unverified,
         };
     }
 

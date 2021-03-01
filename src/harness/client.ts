@@ -526,6 +526,9 @@ namespace ts.server {
         private decodeSpan(span: protocol.TextSpan & { file: string }): TextSpan;
         private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap?: number[]): TextSpan;
         private decodeSpan(span: protocol.TextSpan & { file: string }, fileName?: string, lineMap?: number[]): TextSpan {
+            if (span.start.line === 1 && span.start.offset === 1 && span.end.line === 1 && span.end.offset === 1) {
+                return { start: 0, length: 0 };
+            }
             fileName = fileName || span.file;
             lineMap = lineMap || this.getLineMap(fileName);
             return createTextSpanFromBounds(

@@ -624,7 +624,7 @@ namespace ts.FindAllReferences {
             }
             if (isSourceFile(node)) {
                 const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
-                if (!resolvedRef) {
+                if (!resolvedRef?.file) {
                     return undefined;
                 }
                 const moduleSymbol = program.getTypeChecker().getMergedSymbol(resolvedRef.file.symbol);
@@ -656,7 +656,7 @@ namespace ts.FindAllReferences {
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
                 if (!options.implementations && isStringLiteralLike(node)) {
-                    if (isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ true) || isExternalModuleReference(node.parent) || isImportDeclaration(node.parent) || isImportCall(node.parent)) {
+                    if (isModuleSpecifierLike(node)) {
                         const fileIncludeReasons = program.getFileIncludeReasons();
                         const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
                         const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
