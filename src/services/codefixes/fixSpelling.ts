@@ -46,7 +46,7 @@ namespace ts.codefix {
 
         let suggestedSymbol: Symbol | undefined;
         if (isPropertyAccessExpression(parent) && parent.name === node) {
-            Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
+            Debug.assert(isMemberName(node), "Expected an identifier for spelling (property access)");
             let containingType = checker.getTypeAtLocation(parent.expression);
             if (parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);

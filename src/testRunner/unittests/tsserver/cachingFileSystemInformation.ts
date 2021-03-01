@@ -713,5 +713,40 @@ namespace ts.projectSystem {
             checkProjectActualFiles(project, files.map(f => f.path));
             assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
         });
+
+        it("when creating new file in symlinked folder", () => {
+            const module1: File = {
+                path: `${tscWatch.projectRoot}/client/folder1/module1.ts`,
+                content: `export class Module1Class { }`
+            };
+            const module2: File = {
+                path: `${tscWatch.projectRoot}/folder2/module2.ts`,
+                content: `import * as M from "folder1/module1";`
+            };
+            const symlink: SymLink = {
+                path: `${tscWatch.projectRoot}/client/linktofolder2`,
+                symLink: `${tscWatch.projectRoot}/folder2`,
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        baseUrl: "client",
+                        paths: { "*": ["*"] },
+                    },
+                    include: ["client/**/*", "folder2"]
+                })
+            };
+            const host = createServerHost([module1, module2, symlink, config, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(`${symlink.path}/module2.ts`);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = Debug.checkDefined(service.configuredProjects.get(config.path));
+            checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path]);
+            host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path, `${symlink.path}/module3.ts`]);
+        });
     });
 }

@@ -2707,7 +2707,7 @@ namespace ts.server {
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
-                return snap.getText(0, snap.getLength());
+                return getSnapshotText(snap);
             };
             const projectName = project.projectName;
             const documentPositionMapper = getDocumentPositionMapper(

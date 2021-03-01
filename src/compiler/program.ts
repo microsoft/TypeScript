@@ -833,7 +833,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
-        tracing.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
+        tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeProgram");
 
         const host = createProgramOptions.host || createCompilerHost(options);
@@ -919,15 +919,15 @@ namespace ts {
             forEachResolvedProjectReference
         });
 
-        tracing.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
+        tracing?.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
-        tracing.pop();
+        tracing?.pop();
         // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
         // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
         let structureIsReused: StructureIsReused;
-        tracing.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
+        tracing?.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
         structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
-        tracing.pop();
+        tracing?.pop();
         if (structureIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];
@@ -964,15 +964,15 @@ namespace ts {
                 }
             }
 
-            tracing.push(tracing.Phase.Program, "processRootFiles", { count: rootNames.length });
+            tracing?.push(tracing.Phase.Program, "processRootFiles", { count: rootNames.length });
             forEach(rootNames, (name, index) => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.RootFile, index }));
-            tracing.pop();
+            tracing?.pop();
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
             const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
 
             if (typeReferences.length) {
-                tracing.push(tracing.Phase.Program, "processTypeReferences", { count: typeReferences.length });
+                tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: typeReferences.length });
                 // This containingFilename needs to match with the one used in managed-side
                 const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
                 const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
@@ -980,7 +980,7 @@ namespace ts {
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId });
                 }
-                tracing.pop();
+                tracing?.pop();
             }
 
             // Do not process the default library if:
@@ -1108,7 +1108,7 @@ namespace ts {
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
-        tracing.pop();
+        tracing?.pop();
 
         return program;
 
@@ -1116,12 +1116,12 @@ namespace ts {
             if (!moduleNames.length) return emptyArray;
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
             const redirectedReference = getRedirectReferenceForResolution(containingFile);
-            tracing.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
+            tracing?.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
             performance.mark("beforeResolveModule");
             const result = actualResolveModuleNamesWorker(moduleNames, containingFileName, reusedNames, redirectedReference);
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
-            tracing.pop();
+            tracing?.pop();
             return result;
         }
 
@@ -1129,12 +1129,12 @@ namespace ts {
             if (!typeDirectiveNames.length) return [];
             const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
             const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
-            tracing.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
+            tracing?.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
             performance.mark("beforeResolveTypeReference");
             const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference);
             performance.mark("afterResolveTypeReference");
             performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
-            tracing.pop();
+            tracing?.pop();
             return result;
         }
 
@@ -1655,7 +1655,7 @@ namespace ts {
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
             Debug.assert(!outFile(options));
-            tracing.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
+            tracing?.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
                 notImplementedResolver,
@@ -1668,7 +1668,7 @@ namespace ts {
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
-            tracing.pop();
+            tracing?.pop();
             return emitResult;
         }
 
@@ -1729,9 +1729,9 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
-            tracing.push(tracing.Phase.Emit, "emit", { path: sourceFile?.path }, /*separateBeginAndEnd*/ true);
+            tracing?.push(tracing.Phase.Emit, "emit", { path: sourceFile?.path }, /*separateBeginAndEnd*/ true);
             const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
-            tracing.pop();
+            tracing?.pop();
             return result;
         }
 
@@ -2485,13 +2485,13 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
-            tracing.push(tracing.Phase.Program, "findSourceFile", {
+            tracing?.push(tracing.Phase.Program, "findSourceFile", {
                 fileName,
                 isDefaultLib: isDefaultLib || undefined,
                 fileIncludeKind: (FileIncludeKind as any)[reason.kind],
             });
             const result = findSourceFileWorker(fileName, path, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
-            tracing.pop();
+            tracing?.pop();
             return result;
         }
 
@@ -2792,9 +2792,9 @@ namespace ts {
             resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
             reason: FileIncludeReason
         ): void {
-            tracing.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolveModuleNamesReusingOldState, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
+            tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolveModuleNamesReusingOldState, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
             processTypeReferenceDirectiveWorker(typeReferenceDirective, resolvedTypeReferenceDirective, reason);
-            tracing.pop();
+            tracing?.pop();
         }
 
         function processTypeReferenceDirectiveWorker(

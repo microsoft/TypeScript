@@ -70,6 +70,13 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Tips
 
+### Using a development container
+
+This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
+
+- Clone the TypeScript repository locally and use the `Open Folder in Container` command.
+- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
+
 ### Faster clones
 
 The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
@@ -153,10 +160,10 @@ gulp runtests --tests=2dArrays
 
 ## Debugging the tests
 
-You can debug with VS Code or Node instead with `gulp runtests --inspect`:
+You can debug with VS Code or Node instead with `gulp runtests -i`:
 
 ```Shell
-gulp runtests --tests=2dArrays --inspect
+gulp runtests --tests=2dArrays -i
 ```
 
 You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
