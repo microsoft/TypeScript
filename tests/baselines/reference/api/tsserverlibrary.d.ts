@@ -638,6 +638,7 @@ declare namespace ts {
     }
     export type EntityName = Identifier | QualifiedName;
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    export type MemberName = Identifier | PrivateIdentifier;
     export type DeclarationName = Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern | EntityNameExpression;
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -1216,11 +1217,11 @@ declare namespace ts {
         readonly kind: SyntaxKind.PropertyAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
-        readonly name: Identifier | PrivateIdentifier;
+        readonly name: MemberName;
     }
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
-        readonly name: Identifier | PrivateIdentifier;
+        readonly name: MemberName;
     }
     export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
         readonly expression: SuperExpression;
@@ -3130,17 +3131,21 @@ declare namespace ts {
         Iterator = 8388608,
         NoAsciiEscaping = 16777216,
     }
-    export interface EmitHelper {
+    export interface EmitHelperBase {
         readonly name: string;
         readonly scoped: boolean;
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
         readonly dependencies?: EmitHelper[];
     }
-    export interface UnscopedEmitHelper extends EmitHelper {
+    export interface ScopedEmitHelper extends EmitHelperBase {
+        readonly scoped: true;
+    }
+    export interface UnscopedEmitHelper extends EmitHelperBase {
         readonly scoped: false;
         readonly text: string;
     }
+    export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
     export type EmitHelperUniqueNameCallback = (name: string) => string;
     export enum EmitHint {
         SourceFile = 0,
@@ -3286,10 +3291,10 @@ declare namespace ts {
         updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression;
         createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
         updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression;
-        createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier): PropertyAccessExpression;
-        updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier): PropertyAccessExpression;
-        createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier): PropertyAccessChain;
-        updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier): PropertyAccessChain;
+        createPropertyAccessExpression(expression: Expression, name: string | MemberName): PropertyAccessExpression;
+        updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: MemberName): PropertyAccessExpression;
+        createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName): PropertyAccessChain;
+        updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: MemberName): PropertyAccessChain;
         createElementAccessExpression(expression: Expression, index: number | Expression): ElementAccessExpression;
         updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
         createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression): ElementAccessChain;
@@ -3750,12 +3755,12 @@ declare namespace ts {
          * });
          * ```
          */
-        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
          * A hook used to check if an emit notification is required for a node.
          * @param node The node to emit.
          */
-        isEmitNotificationEnabled?(node: Node | undefined): boolean;
+        isEmitNotificationEnabled?(node: Node): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
@@ -4191,7 +4196,7 @@ declare namespace ts {
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
-    function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier;
+    function isMemberName(node: Node): node is MemberName;
     function isPropertyAccessChain(node: Node): node is PropertyAccessChain;
     function isElementAccessChain(node: Node): node is ElementAccessChain;
     function isCallChain(node: Node): node is CallChain;
@@ -4206,6 +4211,12 @@ declare namespace ts {
     function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
     function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
+    /**
+     * True if kind is of some token syntax kind.
+     * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+     */
+    function isTokenKind(kind: SyntaxKind): boolean;
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
@@ -4348,10 +4359,14 @@ declare namespace ts {
     function isTemplateHead(node: Node): node is TemplateHead;
     function isTemplateMiddle(node: Node): node is TemplateMiddle;
     function isTemplateTail(node: Node): node is TemplateTail;
+    function isDotDotDotToken(node: Node): node is DotDotDotToken;
+    function isPlusToken(node: Node): node is PlusToken;
+    function isMinusToken(node: Node): node is MinusToken;
+    function isAsteriskToken(node: Node): node is AsteriskToken;
     function isIdentifier(node: Node): node is Identifier;
+    function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
-    function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
     function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
     function isParameter(node: Node): node is ParameterDeclaration;
     function isDecorator(node: Node): node is Decorator;
@@ -7139,6 +7154,41 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
+     * A request to get encoded semantic classifications for a span in the file
+     */
+    interface EncodedSemanticClassificationsRequest extends FileRequest {
+        arguments: EncodedSemanticClassificationsRequestArgs;
+    }
+    /**
+     * Arguments for EncodedSemanticClassificationsRequest request.
+     */
+    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+        /**
+         * Optional parameter for the semantic highlighting response, if absent it
+         * defaults to "original".
+         */
+        format?: "original" | "2020";
+    }
+    /** The response for a EncodedSemanticClassificationsRequest */
+    interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody;
+    }
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
+    /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
      */
@@ -9161,6 +9211,33 @@ declare namespace ts.server.protocol {
         ES2020 = "ES2020",
         ESNext = "ESNext"
     }
+    enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25
+    }
 }
 declare namespace ts.server {
     interface ScriptInfoVersion {
@@ -10308,13 +10385,13 @@ declare namespace ts {
     /** @deprecated Use `factory.updateObjectLiteralExpression` or the factory supplied by your transformation context instead. */
     const updateObjectLiteral: (node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]) => ObjectLiteralExpression;
     /** @deprecated Use `factory.createPropertyAccessExpression` or the factory supplied by your transformation context instead. */
-    const createPropertyAccess: (expression: Expression, name: string | Identifier | PrivateIdentifier) => PropertyAccessExpression;
+    const createPropertyAccess: (expression: Expression, name: string | MemberName) => PropertyAccessExpression;
     /** @deprecated Use `factory.updatePropertyAccessExpression` or the factory supplied by your transformation context instead. */
-    const updatePropertyAccess: (node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) => PropertyAccessExpression;
+    const updatePropertyAccess: (node: PropertyAccessExpression, expression: Expression, name: MemberName) => PropertyAccessExpression;
     /** @deprecated Use `factory.createPropertyAccessChain` or the factory supplied by your transformation context instead. */
-    const createPropertyAccessChain: (expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) => PropertyAccessChain;
+    const createPropertyAccessChain: (expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName) => PropertyAccessChain;
     /** @deprecated Use `factory.updatePropertyAccessChain` or the factory supplied by your transformation context instead. */
-    const updatePropertyAccessChain: (node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier) => PropertyAccessChain;
+    const updatePropertyAccessChain: (node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: MemberName) => PropertyAccessChain;
     /** @deprecated Use `factory.createElementAccessExpression` or the factory supplied by your transformation context instead. */
     const createElementAccess: (expression: Expression, index: number | Expression) => ElementAccessExpression;
     /** @deprecated Use `factory.updateElementAccessExpression` or the factory supplied by your transformation context instead. */
@@ -10884,6 +10961,10 @@ declare namespace ts {
      */
     interface Map<T> extends ESMap<string, T> {
     }
+    /**
+     * @deprecated Use `isMemberName` instead.
+     */
+    const isIdentifierOrPrivateIdentifier: (node: Node) => node is MemberName;
 }
 
 export = ts;

@@ -28,9 +28,9 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     declare readonly [Symbol.toStringTag]: "IterableWeakMap";
 >[Symbol.toStringTag] : "IterableWeakMap"
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     #weakMap = new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>();
 >#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
@@ -236,9 +236,9 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     declare [Symbol.iterator]: this["entries"];
 >[Symbol.iterator] : this["entries"]
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
     *entries(): Generator<[key: K, value: V], void> {
 >entries : () => Generator<[key: K, value: V], void>
@@ -317,9 +317,9 @@ Object.defineProperties(IterableWeakMap.prototype, {
 
     [Symbol.iterator]: {
 >[Symbol.iterator] : { configurable: true; enumerable: false; writable: true; value: any; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >{        configurable: true,        enumerable: false,        writable: true,        value: Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value,    } : { configurable: true; enumerable: false; writable: true; value: any; }
 
         configurable: true,
@@ -357,9 +357,9 @@ Object.defineProperties(IterableWeakMap.prototype, {
     },
     [Symbol.toStringTag]: {
 >[Symbol.toStringTag] : { configurable: true; enumerable: false; writable: false; value: string; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >{        configurable: true,        enumerable: false,        writable: false,        value: "IterableWeakMap",    } : { configurable: true; enumerable: false; writable: false; value: string; }
 
         configurable: true,

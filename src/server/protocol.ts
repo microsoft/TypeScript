@@ -843,7 +843,6 @@ namespace ts.server.protocol {
     /**
      * A request to get encoded semantic classifications for a span in the file
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequest extends FileRequest {
         arguments: EncodedSemanticClassificationsRequestArgs;
     }
@@ -851,7 +850,6 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -868,6 +866,18 @@ namespace ts.server.protocol {
         format?: "original" | "2020"
     }
 
+    /** The response for a EncodedSemanticClassificationsRequest */
+    export interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody
+    }
+
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    export interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
@@ -3389,5 +3399,33 @@ namespace ts.server.protocol {
         ES2019 = "ES2019",
         ES2020 = "ES2020",
         ESNext = "ESNext"
+    }
+
+    export const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25,
     }
 }

@@ -44,7 +44,7 @@ namespace ts {
             return undefined;
         }
 
-        const cachedReadDirectoryResult = new Map<string, MutableFileSystemEntries>();
+        const cachedReadDirectoryResult = new Map<string, MutableFileSystemEntries | false>();
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         return {
             useCaseSensitiveFileNames,
@@ -65,11 +65,11 @@ namespace ts {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
+        function getCachedFileSystemEntries(rootDirPath: Path) {
             return cachedReadDirectoryResult.get(ensureTrailingDirectorySeparator(rootDirPath));
         }
 
-        function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
+        function getCachedFileSystemEntriesForBaseDir(path: Path) {
             return getCachedFileSystemEntries(getDirectoryPath(path));
         }
 
@@ -78,13 +78,24 @@ namespace ts {
         }
 
         function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
-            const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories!(rootDir) || []
-            };
+            if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
+                const resultFromHost: MutableFileSystemEntries = {
+                    files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
+                    directories: host.getDirectories!(rootDir) || []
+                };
 
-            cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
-            return resultFromHost;
+                cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
+                return resultFromHost;
+            }
+
+            // If the directory is symlink do not cache the result
+            if (host.directoryExists?.(rootDir)) {
+                cachedReadDirectoryResult.set(rootDirPath, false);
+                return false;
+            }
+
+            // Non existing directory
+            return undefined;
         }
 
         /**
@@ -92,7 +103,7 @@ namespace ts {
          * Otherwise gets result from host and caches it.
          * The host request is done under try catch block to avoid caching incorrect result
          */
-        function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
+        function tryReadDirectory(rootDir: string, rootDirPath: Path) {
             rootDirPath = ensureTrailingDirectorySeparator(rootDirPath);
             const cachedResult = getCachedFileSystemEntries(rootDirPath);
             if (cachedResult) {
@@ -170,8 +181,9 @@ namespace ts {
 
         function readDirectory(rootDir: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
             const rootDirPath = toPath(rootDir);
-            const result = tryReadDirectory(rootDir, rootDirPath);
-            if (result) {
+            const rootResult = tryReadDirectory(rootDir, rootDirPath);
+            let rootSymLinkResult: FileSystemEntries | undefined;
+            if (rootResult !== undefined) {
                 return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
             }
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
@@ -179,9 +191,22 @@ namespace ts {
             function getFileSystemEntries(dir: string): FileSystemEntries {
                 const path = toPath(dir);
                 if (path === rootDirPath) {
-                    return result!;
+                    return rootResult || getFileSystemEntriesFromHost(dir, path);
                 }
-                return tryReadDirectory(dir, path) || emptyFileSystemEntries;
+                const result = tryReadDirectory(dir, path);
+                return result !== undefined ?
+                    result || getFileSystemEntriesFromHost(dir, path) :
+                    emptyFileSystemEntries;
+            }
+
+            function getFileSystemEntriesFromHost(dir: string, path: Path): FileSystemEntries {
+                if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
+                const result: FileSystemEntries = {
+                    files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || emptyArray,
+                    directories: host.getDirectories!(dir) || emptyArray
+                };
+                if (path === rootDirPath) rootSymLinkResult = result;
+                return result;
             }
         }
 
@@ -191,7 +216,7 @@ namespace ts {
 
         function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
             const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
-            if (existingResult) {
+            if (existingResult !== undefined) {
                 // Just clear the cache for now
                 // For now just clear the cache, since this could mean that multiple level entries might need to be re-evaluated
                 clearCache();
