@@ -5292,6 +5292,10 @@ namespace ts {
         regularType?: UnionType;
         /* @internal */
         origin?: Type;  // Denormalized union, intersection, or index type in which union originates
+        /* @internal */
+        keyPropertyName?: __String;  // Property with unique unit type that exists in every object/intersection in union type
+        /* @internal */
+        constituentMap?: ESMap<TypeId, Type>;  // Constituents keyed by unit type discriminants
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
