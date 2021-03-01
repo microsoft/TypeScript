@@ -237,6 +237,8 @@ function f() {
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./first_part1.ts",
@@ -325,6 +327,8 @@ var C = (function () {
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./second_part1.ts",
@@ -401,6 +405,8 @@ c.doSomething();
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../first/first_part1.d.ts",

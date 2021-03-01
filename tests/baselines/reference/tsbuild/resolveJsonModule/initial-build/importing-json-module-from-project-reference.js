@@ -139,11 +139,18 @@ console.log(foo_json_1.foo);
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.ts": [
-        "../strings/foo.json"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../strings/foo.json",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./index.ts",
@@ -181,6 +188,8 @@ console.log(foo_json_1.foo);
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./foo.json"

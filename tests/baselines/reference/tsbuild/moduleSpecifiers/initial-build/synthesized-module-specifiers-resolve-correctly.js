@@ -173,6 +173,8 @@ exports.__esModule = true;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
       "../../../solution/common/nominal.ts"
@@ -219,15 +221,20 @@ exports.__esModule = true;
       "configFilePath": "../../../solution/sub-project/tsconfig.json"
     },
     "referencedMap": {
-      "../../../solution/sub-project/index.ts": [
-        "../common/nominal.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {
-      "../../../solution/sub-project/index.ts": [
-        "../common/nominal.d.ts"
-      ]
+      "0": 0
     },
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "../../../solution/sub-project/index.ts",
+      "../common/nominal.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
       "../common/nominal.d.ts",
@@ -292,21 +299,26 @@ exports.getVar = getVar;
       "configFilePath": "../../../solution/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
-      "../sub-project/index.d.ts": [
-        "../common/nominal.d.ts"
-      ],
-      "../../../solution/sub-project-2/index.ts": [
-        "../sub-project/index.d.ts"
-      ]
+      "0": 1,
+      "2": 0
     },
     "exportedModulesMap": {
-      "../sub-project/index.d.ts": [
-        "../common/nominal.d.ts"
-      ],
-      "../../../solution/sub-project-2/index.ts": [
-        "../sub-project/index.d.ts"
-      ]
+      "0": 1,
+      "2": 0
     },
+    "mapLists": [
+      [
+        1
+      ],
+      [
+        2
+      ]
+    ],
+    "mapFiles": [
+      "../../../solution/sub-project-2/index.ts",
+      "../common/nominal.d.ts",
+      "../sub-project/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
       "../common/nominal.d.ts",

@@ -199,23 +199,28 @@ var bar_2 = require("./bar");
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
-      ],
-      "../lazyindex.ts": [
-        "../bar.ts"
-      ]
+      "2": 1,
+      "3": 0
     },
     "exportedModulesMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
-      ],
-      "../lazyindex.ts": [
-        "../bar.ts"
-      ]
+      "2": 1,
+      "3": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "mapFiles": [
+      "../bar.ts",
+      "../bundling.ts",
+      "../index.ts",
+      "../lazyindex.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../bar.ts",
@@ -309,23 +314,28 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
-      ],
-      "../lazyindex.ts": [
-        "../bar.ts"
-      ]
+      "2": 1,
+      "3": 0
     },
     "exportedModulesMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
-      ],
-      "../lazyindex.ts": [
-        "../bar.ts"
-      ]
+      "2": 1,
+      "3": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "mapFiles": [
+      "../bar.ts",
+      "../bundling.ts",
+      "../index.ts",
+      "../lazyindex.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../bar.ts",
@@ -462,23 +472,28 @@ var bar_2 = require("./bar");
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
-      ],
-      "../lazyindex.ts": [
-        "../bar.ts"
-      ]
+      "2": 1,
+      "3": 0
     },
     "exportedModulesMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
-      ],
-      "../lazyindex.ts": [
-        "../bar.ts"
-      ]
+      "2": 1,
+      "3": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "mapFiles": [
+      "../bar.ts",
+      "../bundling.ts",
+      "../index.ts",
+      "../lazyindex.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../bar.ts",

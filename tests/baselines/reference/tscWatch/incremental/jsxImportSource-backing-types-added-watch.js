@@ -100,6 +100,8 @@ exports.App = App;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       [
@@ -214,15 +216,20 @@ exitCode:: ExitStatus.undefined
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.tsx": [
-        "./node_modules/react/jsx-runtime/index.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {
-      "./index.tsx": [
-        "./node_modules/react/jsx-runtime/index.d.ts"
-      ]
+      "0": 0
     },
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "./index.tsx",
+      "./node_modules/react/jsx-runtime/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./index.tsx",

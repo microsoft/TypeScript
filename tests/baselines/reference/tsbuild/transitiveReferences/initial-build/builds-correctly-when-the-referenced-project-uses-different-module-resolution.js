@@ -131,6 +131,8 @@ a_1.X;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./a.ts"
@@ -166,15 +168,20 @@ a_1.X;
       "configFilePath": "./tsconfig.b.json"
     },
     "referencedMap": {
-      "./b.ts": [
-        "./a.d.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "./b.ts": [
-        "./a.d.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "./a.d.ts",
+      "./b.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./a.d.ts",

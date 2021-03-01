@@ -100,6 +100,8 @@ var y = 20;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",
@@ -191,6 +193,8 @@ var z = 10;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",

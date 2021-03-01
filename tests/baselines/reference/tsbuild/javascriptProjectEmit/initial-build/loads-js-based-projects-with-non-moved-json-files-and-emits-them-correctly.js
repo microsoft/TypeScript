@@ -172,18 +172,25 @@ exports.m = common_1["default"];
       "configFilePath": "../../src/sub-project/tsconfig.json"
     },
     "referencedMap": {
-      "../../src/common/index.d.ts": [
-        "../../src/common/obj.json"
-      ],
-      "../../src/sub-project/index.js": [
-        "../../src/common/index.d.ts"
-      ]
+      "0": 1,
+      "2": 0
     },
     "exportedModulesMap": {
-      "../../src/common/index.d.ts": [
-        "../../src/common/obj.json"
-      ]
+      "0": 1
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "../../src/common/index.d.ts",
+      "../../src/common/obj.json",
+      "../../src/sub-project/index.js"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../../src/common/index.d.ts",
@@ -249,11 +256,18 @@ exports.getVar = getVar;
       "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
     "referencedMap": {
-      "../../src/sub-project-2/index.js": [
-        "../sub-project/index.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "../../src/sub-project-2/index.js",
+      "../sub-project/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../sub-project/index.d.ts",
@@ -307,15 +321,20 @@ module.exports = x;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.ts": [
-        "./obj.json"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {
-      "./index.ts": [
-        "./obj.json"
-      ]
+      "0": 0
     },
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "./index.ts",
+      "./obj.json"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./index.ts",

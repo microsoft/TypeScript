@@ -57,6 +57,8 @@ exitCode:: ExitStatus.Success
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./src/another.d.ts",
@@ -118,6 +120,8 @@ exitCode:: ExitStatus.Success
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./src/another.d.ts",

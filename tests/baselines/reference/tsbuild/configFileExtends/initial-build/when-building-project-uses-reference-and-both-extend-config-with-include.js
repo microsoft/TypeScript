@@ -100,6 +100,8 @@ exports.a = 1;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../shared/index.ts",
@@ -149,6 +151,8 @@ exports.b = 1;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../shared/typings-base/globals.d.ts",

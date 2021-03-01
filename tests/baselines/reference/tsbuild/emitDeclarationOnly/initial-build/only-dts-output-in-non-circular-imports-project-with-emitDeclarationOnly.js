@@ -148,21 +148,26 @@ export interface C {
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
     "exportedModulesMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",
@@ -248,21 +253,26 @@ exitCode:: ExitStatus.Success
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
     "exportedModulesMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",
@@ -359,21 +369,26 @@ export interface A {
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
     "exportedModulesMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",

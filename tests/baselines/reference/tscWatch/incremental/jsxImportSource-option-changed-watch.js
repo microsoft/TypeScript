@@ -144,15 +144,20 @@ exports.App = App;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.tsx": [
-        "./node_modules/react/jsx-runtime/index.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {
-      "./index.tsx": [
-        "./node_modules/react/jsx-runtime/index.d.ts"
-      ]
+      "0": 0
     },
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "./index.tsx",
+      "./node_modules/react/jsx-runtime/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./index.tsx",
@@ -264,15 +269,20 @@ exports.App = App;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.tsx": [
-        "./node_modules/preact/jsx-runtime/index.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {
-      "./index.tsx": [
-        "./node_modules/preact/jsx-runtime/index.d.ts"
-      ]
+      "0": 0
     },
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "./index.tsx",
+      "./node_modules/preact/jsx-runtime/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       [

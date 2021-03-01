@@ -153,37 +153,39 @@ export { C } from "./c";
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
     "exportedModulesMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",
@@ -278,37 +280,39 @@ export interface A {
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
     "exportedModulesMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
-      ],
-      "./src/b.ts": [
-        "./src/c.ts"
-      ],
-      "./src/c.ts": [
-        "./src/a.ts"
-      ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./src/a.ts",
+      "./src/b.ts",
+      "./src/c.ts",
+      "./src/index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/a.ts",

@@ -121,11 +121,18 @@ exports["default"] = index_json_1["default"].hello;
       "configFilePath": "../tsconfig_withIncludeOfJson.json"
     },
     "referencedMap": {
-      "../src/index.ts": [
-        "../src/index.json"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../src/index.json",
+      "../src/index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../src/index.json",

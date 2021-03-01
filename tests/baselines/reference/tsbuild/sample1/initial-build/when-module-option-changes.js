@@ -118,6 +118,8 @@ exports.multiply = multiply;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./anothermodule.ts",
@@ -208,6 +210,8 @@ define(["require", "exports"], function (require, exports) {
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./anothermodule.ts",

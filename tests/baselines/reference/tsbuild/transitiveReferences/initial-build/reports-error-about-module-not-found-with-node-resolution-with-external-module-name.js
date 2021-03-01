@@ -106,6 +106,8 @@ exports.A = A;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./a.ts"
@@ -137,6 +139,8 @@ exports.A = A;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       [

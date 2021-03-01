@@ -95,6 +95,8 @@ exports.Other = 0;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../src/other/other.ts"

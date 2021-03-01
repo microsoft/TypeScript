@@ -123,11 +123,18 @@ exitCode:: ExitStatus.undefined
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../shared/types/db.ts",
+      "../src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../shared/types/db.ts",
@@ -296,11 +303,18 @@ exitCode:: ExitStatus.undefined
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../shared/types/db.ts",
+      "../src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../shared/types/db.ts",
@@ -420,11 +434,18 @@ exitCode:: ExitStatus.undefined
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../shared/types/db.ts",
+      "../src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../shared/types/db.ts",
@@ -590,11 +611,18 @@ exitCode:: ExitStatus.undefined
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../shared/types/db.ts",
+      "../src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../shared/types/db.ts",

@@ -352,6 +352,8 @@ exports.multiply = multiply;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./anothermodule.ts",
@@ -544,16 +546,25 @@ sourceFile:index.ts
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
-      ]
+      "2": 1
     },
     "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
-      ]
+      "2": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "mapFiles": [
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../core/anothermodule.d.ts",
@@ -619,23 +630,29 @@ exports.m = mod;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
-      ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/index.d.ts"
-      ]
+      "2": 0,
+      "3": 1
     },
     "exportedModulesMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
-      ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
-      ]
+      "2": 0,
+      "3": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "mapFiles": [
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      "../logic/index.d.ts",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../core/anothermodule.d.ts",

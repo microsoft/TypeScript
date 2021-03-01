@@ -264,24 +264,32 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
       "configFilePath": "../../animals/tsconfig.json"
     },
     "referencedMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts",
-        "../core/utilities.d.ts"
-      ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ]
+      "1": 2,
+      "2": 1
     },
     "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
-      ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ]
+      "1": 0,
+      "2": 1
     },
+    "mapLists": [
+      [
+        2
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "mapFiles": [
+      "../../animals/animal.ts",
+      "../../animals/dog.ts",
+      "../../animals/index.ts",
+      "../core/utilities.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../animals/animal.ts",
@@ -324,6 +332,8 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../core/utilities.ts"
@@ -398,29 +408,30 @@ exports.lastElementOf = lastElementOf;
       "configFilePath": "../../zoo/tsconfig.json"
     },
     "referencedMap": {
-      "../animals/dog.d.ts": [
-        "../animals/index.d.ts"
-      ],
-      "../animals/index.d.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
-      "../../zoo/zoo.ts": [
-        "../animals/index.d.ts"
-      ]
+      "0": 0,
+      "2": 0,
+      "3": 1
     },
     "exportedModulesMap": {
-      "../animals/dog.d.ts": [
-        "../animals/index.d.ts"
-      ],
-      "../animals/index.d.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
-      "../../zoo/zoo.ts": [
-        "../animals/index.d.ts"
-      ]
+      "0": 0,
+      "2": 0,
+      "3": 1
     },
+    "mapLists": [
+      [
+        3
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "mapFiles": [
+      "../../zoo/zoo.ts",
+      "../animals/animal.d.ts",
+      "../animals/dog.d.ts",
+      "../animals/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../animals/animal.d.ts",

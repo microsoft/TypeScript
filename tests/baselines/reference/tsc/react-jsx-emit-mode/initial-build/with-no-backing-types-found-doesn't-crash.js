@@ -83,6 +83,8 @@ exports.App = App;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./node_modules/@types/react/index.d.ts",

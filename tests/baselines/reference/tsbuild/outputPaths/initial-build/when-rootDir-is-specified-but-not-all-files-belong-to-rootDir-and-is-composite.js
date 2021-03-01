@@ -127,6 +127,8 @@ exports.x = 10;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": []
   },
   "version": "FakeTSVersion"

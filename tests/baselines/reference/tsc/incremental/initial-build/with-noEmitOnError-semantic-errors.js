@@ -98,11 +98,18 @@ Semantic diagnostics in builder refreshed for::
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../shared/types/db.ts",
+      "../src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../shared/types/db.ts",
@@ -244,11 +251,18 @@ console.log("hi");
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../shared/types/db.ts",
+      "../src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../shared/types/db.ts",

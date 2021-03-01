@@ -135,6 +135,8 @@ export function multiply(a, b) { return a * b; }
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.esnext.d.ts",
       "../../lib/lib.esnext.full.d.ts",
@@ -239,6 +241,8 @@ exports.multiply = multiply;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../../lib/lib.esnext.d.ts",

@@ -160,37 +160,39 @@ export { C } from "./c";
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./a.ts": [
-        "./b.ts"
-      ],
-      "./b.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./index.ts": [
-        "./a.ts",
-        "./b.ts",
-        "./c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
     "exportedModulesMap": {
-      "./a.ts": [
-        "./b.ts"
-      ],
-      "./b.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./index.ts": [
-        "./a.ts",
-        "./b.ts",
-        "./c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./a.ts",
@@ -314,37 +316,39 @@ export interface A {
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./a.ts": [
-        "./b.ts"
-      ],
-      "./b.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./index.ts": [
-        "./a.ts",
-        "./b.ts",
-        "./c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
     "exportedModulesMap": {
-      "./a.ts": [
-        "./b.ts"
-      ],
-      "./b.ts": [
-        "./c.ts"
-      ],
-      "./c.ts": [
-        "./a.ts"
-      ],
-      "./index.ts": [
-        "./a.ts",
-        "./b.ts",
-        "./c.ts"
-      ]
+      "0": 1,
+      "1": 2,
+      "2": 0,
+      "3": 3
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        1,
+        2
+      ]
+    ],
+    "mapFiles": [
+      "./a.ts",
+      "./b.ts",
+      "./c.ts",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./a.ts",

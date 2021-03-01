@@ -101,15 +101,20 @@ var x = 10;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "./src/hkt.ts",
+      "./src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/globals.d.ts",
@@ -190,15 +195,20 @@ var sym = Symbol();
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "./src/hkt.ts",
+      "./src/main.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../lib/lib.d.ts",
       "./src/globals.d.ts",

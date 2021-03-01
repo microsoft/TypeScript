@@ -79,6 +79,8 @@ console.log(Config.value);
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./globals.d.ts",
@@ -145,6 +147,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       [

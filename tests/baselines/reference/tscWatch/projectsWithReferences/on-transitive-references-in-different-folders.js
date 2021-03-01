@@ -77,6 +77,8 @@ export declare class A {
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
@@ -130,15 +132,20 @@ export declare const b: A;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../a/index.d.ts",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../a/index.d.ts",
@@ -297,15 +304,20 @@ export declare function gfoo(): void;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../a/index.d.ts",
+      "./index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../a/index.d.ts",

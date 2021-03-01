@@ -695,10 +695,93 @@ namespace ts {
     export interface ProgramBuildInfo {
         fileInfos: MapLike<BuilderState.FileInfo>;
         options: CompilerOptions;
-        referencedMap?: MapLike<string[]>;
-        exportedModulesMap?: MapLike<string[]>;
+        referencedMap?: MapLike<number>;
+        exportedModulesMap?: MapLike<number>;
+        mapLists: number[][];
+        mapFiles: string[];
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
+    }
+
+    /**
+     * Runs deduplication on a map of lists of files to reduce storage cost
+     */
+    function deduplicateFileMaps(inputMaps: (ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined)[], relativeToBuildInfo: (path: Path) => string): { maps: (MapLike<number> | undefined)[], lists: number[][], files: string[] } {
+
+        // Discover all the files and Sets to bring them in a deterministic order
+        const allAbsoluteFiles = new Set<Path>();
+        const allSets = new Set<BuilderState.ReferencedSet>();
+        for(const inputMap of inputMaps) {
+            if(!inputMap) continue;
+            for(const key of arrayFrom(inputMap.keys())) {
+                allAbsoluteFiles.add(key);
+                const set = inputMap.get(key)!;
+                if(!allSets.has(set)) {
+                    allSets.add(set);
+                    const it = set.keys();
+                    let itResult;
+                    while (!(itResult = it.next()).done) {
+                        allAbsoluteFiles.add(itResult.value);
+                    }
+                }
+            }
+        }
+
+        // Get files list and map indicies
+        const fileToIndexMap = new Map<string, number>();
+        const filesWithInfo = arrayFrom(allAbsoluteFiles.keys(), file => ({ file, relativeFile: relativeToBuildInfo(file) })).sort((a, b) => compareStringsCaseSensitive(a.relativeFile, b.relativeFile));
+        for(let i = 0; i < filesWithInfo.length; i++) fileToIndexMap.set(filesWithInfo[i].file, i);
+        const files = filesWithInfo.map(info => info.relativeFile);
+
+        const setToArray = new Map<BuilderState.ReferencedSet, number[]>();
+        const setKeyToArray = new Map<string, number[]>();
+        const it = allSets.keys();
+        let itResult;
+        while (!(itResult = it.next()).done) {
+            const set = itResult.value;
+            const array = arrayFrom(set.keys(), file => fileToIndexMap.get(file)!).sort((a, b) => a - b);
+            const key = array.join();
+            let listArray = setKeyToArray.get(key);
+            if(listArray === undefined) {
+                listArray = array;
+                setKeyToArray.set(key, listArray);
+            }
+            setToArray.set(set, listArray);
+        }
+
+        // Create lists in a deterministic order
+        const lists = arrayFrom(setKeyToArray.values()).sort((a, b) => {
+            const d = a.length - b.length;
+            if(d !== 0) return d;
+            let i = 0;
+            while(true) {
+                const d = a[i] - b[i];
+                if(d !== 0) return d;
+                i++;
+            }
+        });
+        const arrayToIndexMap = new Map<number[], number>();
+        for(let i = 0; i < lists.length; i++) arrayToIndexMap.set(lists[i], i);
+
+        // Replace input maps with numbers
+        const maps = inputMaps.map(inputMap => {
+            if(!inputMap) return undefined;
+
+            const map: MapLike<number> = {};
+            const it = inputMap.keys();
+            let itResult;
+            while (!(itResult = it.next()).done) {
+                const key = itResult.value;
+                const set = inputMap.get(key)!;
+
+                // In an object, keys that look like numbers will always be in numeric order
+                // no need to sort them
+                map[fileToIndexMap.get(key)!] = arrayToIndexMap.get(setToArray.get(set)!)!;
+            }
+            return map;
+        });
+
+        return { maps, lists, files };
     }
 
     /**
@@ -714,29 +797,15 @@ namespace ts {
             fileInfos[relativeToBuildInfo(key)] = signature === undefined ? value : { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope };
         });
 
+        const { maps: [referencedMap, exportedModulesMap], lists, files } = deduplicateFileMaps([state.referencedMap, state.exportedModulesMap], relativeToBuildInfo);
         const result: ProgramBuildInfo = {
             fileInfos,
-            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath)
+            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
+            referencedMap,
+            exportedModulesMap,
+            mapLists: lists,
+            mapFiles: files,
         };
-        if (state.referencedMap) {
-            const referencedMap: MapLike<string[]> = {};
-            for (const key of arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive)) {
-                referencedMap[relativeToBuildInfo(key)] = arrayFrom(state.referencedMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-            }
-            result.referencedMap = referencedMap;
-        }
-
-        if (state.exportedModulesMap) {
-            const exportedModulesMap: MapLike<string[]> = {};
-            for (const key of arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive)) {
-                const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
-                // Not in temporary cache, use existing value
-                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(state.exportedModulesMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-                // Value in cache and has updated value map, use that
-                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-            }
-            result.exportedModulesMap = exportedModulesMap;
-        }
 
         if (state.semanticDiagnosticsPerFile) {
             const semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] = [];
@@ -1167,17 +1236,19 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
-        if (!mapLike) return undefined;
-        const map = new Map<Path, BuilderState.ReferencedSet>();
-        // Copies keys/values from template. Note that for..in will not throw if
-        // template is undefined, and instead will just exit the loop.
-        for (const key in mapLike) {
-            if (hasProperty(mapLike, key)) {
-                map.set(toPath(key), new Set(mapLike[key].map(toPath)));
+    function expandFileMaps(inputMaps: (MapLike<number> | undefined)[], lists: number[][], files: string[], toPath: (path: string) => Path): (ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined)[] {
+        const paths = files.map(toPath);
+        const sets = lists.map(list => new Set(list.map(i => paths[i])));
+        return inputMaps.map(inputMap => {
+            if(!inputMap) return undefined;
+            const map = new Map<Path, BuilderState.ReferencedSet>();
+            for (const key in inputMap) {
+                if (hasProperty(inputMap, key)) {
+                    map.set(paths[+key], sets[+inputMap[key]]);
+                }
             }
-        }
-        return map;
+            return map;
+        });
     }
 
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
@@ -1191,11 +1262,12 @@ namespace ts {
             }
         }
 
+        const [referencedMap, exportedModulesMap] = expandFileMaps([program.referencedMap, program.exportedModulesMap], program.mapLists, program.mapFiles, toPath);
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
-            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
+            referencedMap,
+            exportedModulesMap,
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toPath(value[0])),

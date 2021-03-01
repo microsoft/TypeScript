@@ -127,6 +127,8 @@ export declare function multiply(a: number, b: number): number;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../anothermodule.ts",
@@ -248,6 +250,8 @@ exitCode:: ExitStatus.undefined
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../anothermodule.ts",

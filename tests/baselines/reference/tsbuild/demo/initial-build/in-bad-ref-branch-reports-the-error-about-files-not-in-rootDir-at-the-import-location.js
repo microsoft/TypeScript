@@ -258,27 +258,33 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       "configFilePath": "../../core/tsconfig.json"
     },
     "referencedMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts",
-        "../../core/utilities.ts"
-      ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ],
-      "../../core/utilities.ts": [
-        "../../animals/index.ts"
-      ]
+      "1": 2,
+      "2": 1,
+      "3": 0
     },
     "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
-      ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ]
+      "1": 0,
+      "2": 1
     },
+    "mapLists": [
+      [
+        2
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "mapFiles": [
+      "../../animals/animal.ts",
+      "../../animals/dog.ts",
+      "../../animals/index.ts",
+      "../../core/utilities.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../animals/animal.ts",

@@ -127,6 +127,8 @@ export declare class myClass {
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./filewitherror.ts",

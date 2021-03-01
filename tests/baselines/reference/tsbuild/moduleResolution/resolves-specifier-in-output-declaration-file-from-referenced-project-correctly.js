@@ -171,15 +171,20 @@ export type { TheNum } from 'const';
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../const.ts",
+      "../index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../../../a/lib/lib.d.ts",
       "../const.ts",

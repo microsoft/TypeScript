@@ -86,11 +86,18 @@ exports.x = (0, tslib_1.__assign)({});
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
-      "./index.tsx": [
-        "./node_modules/tslib/index.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "./index.tsx",
+      "./node_modules/tslib/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./index.tsx",
@@ -159,6 +166,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       [

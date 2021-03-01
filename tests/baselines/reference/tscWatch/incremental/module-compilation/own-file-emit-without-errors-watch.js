@@ -110,6 +110,8 @@ define(["require", "exports"], function (require, exports) {
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",
@@ -203,6 +205,8 @@ define(["require", "exports"], function (require, exports) {
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",

@@ -113,11 +113,18 @@ exports.Other = 0;
       "configFilePath": "../src/main/tsconfig.main.json"
     },
     "referencedMap": {
-      "../src/main/a.ts": [
-        "../src/main/b.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "../src/main/a.ts",
+      "../src/main/b.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../src/main/a.ts",
@@ -149,6 +156,8 @@ exports.Other = 0;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../src/other/other.ts"

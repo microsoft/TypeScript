@@ -132,6 +132,8 @@ export {};
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./library.ts"
@@ -268,6 +270,8 @@ export {};
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./library.ts"
@@ -387,6 +391,8 @@ export {};
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./library.ts"

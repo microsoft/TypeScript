@@ -100,6 +100,8 @@ exports.__esModule = true;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
       "../src/index.ts"
@@ -156,15 +158,20 @@ exports.fn4 = fn4;
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/index.ts": [
-        "../../pkg1/lib/src/index.d.ts"
-      ]
+      "1": 0
     },
     "exportedModulesMap": {
-      "../src/index.ts": [
-        "../../pkg1/lib/src/index.d.ts"
-      ]
+      "1": 0
     },
+    "mapLists": [
+      [
+        0
+      ]
+    ],
+    "mapFiles": [
+      "../../pkg1/lib/src/index.d.ts",
+      "../src/index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../lib/lib.d.ts",
       "../../pkg1/lib/src/index.d.ts",

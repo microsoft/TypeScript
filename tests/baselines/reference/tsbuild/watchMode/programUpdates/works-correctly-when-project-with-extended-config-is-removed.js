@@ -150,6 +150,8 @@ declare let y: number;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "./commonfile1.ts",
       "./commonfile2.ts",
@@ -189,6 +191,8 @@ declare let z: number;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
+    "mapLists": [],
+    "mapFiles": [],
     "semanticDiagnosticsPerFile": [
       "./other.ts",
       "../lib/lib.d.ts"

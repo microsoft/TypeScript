@@ -118,11 +118,18 @@ exports.__esModule = true;
       "configFilePath": "../../../src/common/tsconfig.json"
     },
     "referencedMap": {
-      "../../../src/common/nominal.ts": [
-        "../../../src/common/types.d.ts"
-      ]
+      "0": 0
     },
     "exportedModulesMap": {},
+    "mapLists": [
+      [
+        1
+      ]
+    ],
+    "mapFiles": [
+      "../../../src/common/nominal.ts",
+      "../../../src/common/types.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../lib/lib.d.ts",
       "../../../src/common/nominal.ts",
@@ -174,21 +181,26 @@ exports.__esModule = true;
       "configFilePath": "../../../src/subProject/tsconfig.json"
     },
     "referencedMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
-      ],
-      "../../../src/subproject/index.ts": [
-        "../common/nominal.d.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
     "exportedModulesMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
-      ],
-      "../../../src/subproject/index.ts": [
-        "../common/nominal.d.ts"
-      ]
+      "1": 1,
+      "2": 0
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "mapFiles": [
+      "../../../src/common/types.d.ts",
+      "../../../src/subproject/index.ts",
+      "../common/nominal.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../lib/lib.d.ts",
       "../common/nominal.d.ts",
@@ -258,27 +270,32 @@ exports.getVar = getVar;
       "configFilePath": "../../../src/subProject2/tsconfig.json"
     },
     "referencedMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
-      ],
-      "../subproject/index.d.ts": [
-        "../common/nominal.d.ts"
-      ],
-      "../../../src/subproject2/index.ts": [
-        "../subproject/index.d.ts"
-      ]
+      "1": 2,
+      "2": 0,
+      "3": 1
     },
     "exportedModulesMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
-      ],
-      "../subproject/index.d.ts": [
-        "../common/nominal.d.ts"
-      ],
-      "../../../src/subproject2/index.ts": [
-        "../subproject/index.d.ts"
-      ]
+      "1": 2,
+      "2": 0,
+      "3": 1
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ]
+    ],
+    "mapFiles": [
+      "../../../src/common/types.d.ts",
+      "../../../src/subproject2/index.ts",
+      "../common/nominal.d.ts",
+      "../subproject/index.d.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../../../lib/lib.d.ts",
       "../common/nominal.d.ts",

@@ -148,24 +148,31 @@ exports.getVar = getVar;
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../src/common/nominal.ts": [
-        "../src/common/types.d.ts"
-      ],
-      "../src/subproject/index.ts": [
-        "../src/common/nominal.ts"
-      ],
-      "../src/subproject2/index.ts": [
-        "../src/subproject/index.ts"
-      ]
+      "0": 1,
+      "2": 0,
+      "3": 2
     },
     "exportedModulesMap": {
-      "../src/subproject/index.ts": [
-        "../src/common/nominal.ts"
-      ],
-      "../src/subproject2/index.ts": [
-        "../src/subproject/index.ts"
-      ]
+      "2": 0,
+      "3": 2
     },
+    "mapLists": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ]
+    ],
+    "mapFiles": [
+      "../src/common/nominal.ts",
+      "../src/common/types.d.ts",
+      "../src/subproject/index.ts",
+      "../src/subproject2/index.ts"
+    ],
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../src/common/nominal.ts",
