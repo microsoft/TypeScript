@@ -655,12 +655,6 @@ namespace ts.server {
         /*@internal*/
         readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
         private readonly scriptInfoInNodeModulesWatchers = new Map<string, ScriptInfoInNodeModulesWatcher>();
-        /**
-         * Contains all the deleted script info's version information so that
-         * it does not reset when creating script info again
-         * (and could have potentially collided with version where contents mismatch)
-         */
-        private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
         // Set of all '.js' files ever opened.
         private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
@@ -1598,7 +1592,6 @@ namespace ts.server {
 
         private deleteScriptInfo(info: ScriptInfo) {
             this.filenameToScriptInfo.delete(info.path);
-            this.filenameToScriptInfoVersion.set(info.path, info.getVersion());
             const realpath = info.getRealpathIfDifferent();
             if (realpath) {
                 this.realpathToScriptInfos!.remove(realpath, info); // TODO: GH#18217
@@ -2624,9 +2617,8 @@ namespace ts.server {
                 if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                     return;
                 }
-                info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path, this.filenameToScriptInfoVersion.get(path)); // TODO: GH#18217
+                info = new ScriptInfo(this.host, fileName, scriptKind!, !!hasMixedContent, path); // TODO: GH#18217
                 this.filenameToScriptInfo.set(info.path, info);
-                this.filenameToScriptInfoVersion.delete(info.path);
                 if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
                 }
