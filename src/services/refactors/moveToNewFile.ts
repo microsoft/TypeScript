@@ -443,6 +443,9 @@ namespace ts.refactor {
         const oldFileNamedImports: string[] = [];
         const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
         newFileImportsFromOldFile.forEach(symbol => {
+            if (!symbol.declarations) {
+                return;
+            }
             for (const decl of symbol.declarations) {
                 if (!isTopLevelDeclaration(decl)) continue;
                 const name = nameOfTopLevelDeclaration(decl);

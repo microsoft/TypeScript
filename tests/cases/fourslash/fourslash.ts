@@ -98,6 +98,13 @@ declare module ts {
         character: number;
     }
 
+    interface CompletionEntryData {
+        fileName?: string;
+        ambientModuleName?: string;
+        isPackageJsonImport?: true;
+        exportName: string;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -253,6 +260,7 @@ declare namespace FourSlashInterface {
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
+            data?: ts.CompletionEntryData,
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
@@ -278,6 +286,7 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string }): void;
         goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, range: Range): void;
         /** Performs `goToDefinition` for each pair. */

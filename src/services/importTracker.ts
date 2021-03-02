@@ -62,9 +62,11 @@ namespace ts.FindAllReferences {
             }
 
             // Module augmentations may use this module's exports without importing it.
-            for (const decl of exportingModuleSymbol.declarations) {
-                if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
-                    addIndirectUser(decl);
+            if (exportingModuleSymbol.declarations) {
+                for (const decl of exportingModuleSymbol.declarations) {
+                    if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
+                        addIndirectUser(decl);
+                    }
                 }
             }
 
@@ -468,7 +470,7 @@ namespace ts.FindAllReferences {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
-                    return symbol.declarations.some(d => d === parent) && isBinaryExpression(grandParent)
+                    return symbol.declarations?.some(d => d === parent) && isBinaryExpression(grandParent)
                         ? getSpecialPropertyExport(grandParent, /*useLhsSymbol*/ false)
                         : undefined;
                 }

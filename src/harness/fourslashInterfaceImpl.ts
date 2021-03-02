@@ -1709,6 +1709,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
+        data?: ts.CompletionEntryData;
         description: string;
         preferences?: ts.UserPreferences;
     }

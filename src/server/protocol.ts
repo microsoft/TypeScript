@@ -987,8 +987,15 @@ namespace ts.server.protocol {
     export interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
 
+    export interface DefinitionInfo extends FileSpanWithContext {
+        /**
+         * When true, the file may or may not exist.
+         */
+        unverified?: boolean;
+    }
+
     export interface DefinitionInfoAndBoundSpan {
-        definitions: readonly FileSpanWithContext[];
+        definitions: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
 
@@ -2169,6 +2176,7 @@ namespace ts.server.protocol {
     export interface CompletionEntryIdentifier {
         name: string;
         source?: string;
+        data?: unknown;
     }
 
     /**
@@ -2255,6 +2263,12 @@ namespace ts.server.protocol {
          * in the project package.json.
          */
         isPackageJsonImport?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name.
+         */
+        data?: unknown;
     }
 
     /**
