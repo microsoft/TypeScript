@@ -1,7 +1,7 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 4
     },
     "quickInfo": {
@@ -42,7 +42,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 37
     },
     "quickInfo": {
@@ -91,7 +91,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 41
     },
     "quickInfo": {
@@ -132,7 +132,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 65
     },
     "quickInfo": {
@@ -173,7 +173,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 88
     },
     "quickInfo": {
@@ -222,7 +222,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 102
     },
     "quickInfo": {
@@ -283,7 +283,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 123
     },
     "quickInfo": {
@@ -344,7 +344,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 127
     },
     "quickInfo": {
@@ -405,7 +405,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 130
     },
     "quickInfo": {
@@ -466,7 +466,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 139
     },
     "quickInfo": {
@@ -611,7 +611,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 193
     },
     "quickInfo": {
@@ -756,7 +756,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 197
     },
     "quickInfo": {
@@ -901,7 +901,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 200
     },
     "quickInfo": {
@@ -1006,7 +1006,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims-pp/quickInfoDisplayPartsVar.ts",
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
       "position": 207
     },
     "quickInfo": {
