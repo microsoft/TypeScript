@@ -1944,7 +1944,7 @@ namespace FourSlash {
                 baselineFile,
                 stringify(
                     this.testData.markers.map(marker => {
-                        const completions = this.getCompletionListAtCaret(preferences)
+                        const completions = this.getCompletionListAtCaret(preferences);
                         this.goToMarker(marker);
                         return {
                             marker,
@@ -1955,7 +1955,7 @@ namespace FourSlash {
                                     ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences)
                                 })),
                             }
-                        }
+                        };
                     })));
         }
 
