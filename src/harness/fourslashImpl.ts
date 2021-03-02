@@ -1939,6 +1939,9 @@ namespace FourSlash {
         }
 
         public baselineCompletions(preferences?: ts.UserPreferences) {
+            // TODO: Fix this! It needs to use the acutal filename, not the @Filename
+            // 
+            this.getBaselineFileNameForContainingTestFile
             const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
             Harness.Baseline.runBaseline(
                 baselineFile,
@@ -1952,7 +1955,7 @@ namespace FourSlash {
                                 ...completions,
                                 entries: completions?.entries.map(entry => ({
                                     ...entry,
-                                    ...this.getCompletionEntryDetails(entry.name, entry.source, preferences)
+                                    ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences)
                                 })),
                             }
                         }

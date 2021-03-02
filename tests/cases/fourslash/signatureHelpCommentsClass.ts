@@ -59,14 +59,3 @@
 ////var myVar = new m.m2.c1();
 
 verify.baselineSignatureHelp()
-verify.signatureHelp({ marker: "3", docComment: "" });
-verify.signatureHelp({ marker: "8", docComment: "Constructor comment" });
-verify.signatureHelp({ marker: "13", docComment: "Constructor comment" });
-verify.signatureHelp({ marker: "18", docComment: "" });
-verify.signatureHelp({ marker: "23", docComment: "constructor comment" });
-verify.signatureHelp({
-    marker: "27",
-    docComment: "constructor for a",
-    parameterDocComment: "this is my a",
-    tags: [{ name: "param", text: "a this is my a" }],
-});
