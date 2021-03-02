@@ -170,7 +170,7 @@ You can also use the [provided VS Code launch configuration](./.vscode/launch.te
 
 ## Adding a Test
 
-To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the your bug is now fixed, or your new feature now works.
+To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the bug is now fixed, or your new feature now works.
 
 These files support metadata tags in the format  `// @metaDataName: value`.
 The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
