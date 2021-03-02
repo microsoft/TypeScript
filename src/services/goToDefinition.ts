@@ -136,7 +136,7 @@ namespace ts.GoToDefinition {
         if (sourceFile.resolvedModules?.size) {
             const node = getTokenAtPosition(sourceFile, position);
             if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
-                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedModule?.resolvedFileName;
                 const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
                 return {
                     file: program.getSourceFile(fileName),

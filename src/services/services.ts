@@ -636,8 +636,8 @@ namespace ts {
         public languageVariant!: LanguageVariant;
         public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ESMap<string, ResolvedModuleWithFailedLookupLocations> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
         private namedDeclarations: ESMap<string, Declaration[]> | undefined;

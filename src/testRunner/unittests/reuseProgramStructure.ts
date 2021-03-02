@@ -175,7 +175,7 @@ namespace ts {
         return true;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ESMap<string, T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T, U>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ESMap<string, U> | undefined, getResolved: (actual: U) => T, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file!);
@@ -184,17 +184,17 @@ namespace ts {
         }
         else {
             assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-            assert.isTrue(mapsAreEqual(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
+            assert.isTrue(mapsAreEqual(expectedContent, cache!, getResolved, entryChecker), `contents of ${caption} did not match the expected contents.`);
         }
     }
 
     /** True if the maps have the same keys and values. */
-    function mapsAreEqual<T>(left: ESMap<string, T>, right: ESMap<string, T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
-        if (left === right) return true;
+    function mapsAreEqual<T, U>(left: ESMap<string, T>, right: ESMap<string, U>, getResolved: (actual: U) => T, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+        if (!left && !right) return true;
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
             if (!right.has(leftKey)) return true;
-            const rightValue = right.get(leftKey)!;
+            const rightValue = getResolved(right.get(leftKey)!);
             return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
         });
         if (someInLeftHasNoMatch) return false;
@@ -203,11 +203,11 @@ namespace ts {
     }
 
     function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedModule | undefined> | undefined): void {
-        checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
+        checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, resolved => resolved.resolvedModule, checkResolvedModule);
     }
 
     function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedTypeReferenceDirective> | undefined): void {
-        checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
+        checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, resolved => resolved.resolvedTypeReferenceDirective, checkResolvedTypeDirective);
     }
 
     describe("unittests:: Reuse program structure:: General", () => {

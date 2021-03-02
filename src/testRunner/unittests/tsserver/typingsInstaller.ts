@@ -1839,7 +1839,7 @@ namespace ts.projectSystem {
         function verifyResolvedModuleOfFooo(project: server.Project) {
             server.updateProjectIfDirty(project);
             const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo")!;
-            assert.equal(foooResolution.resolvedFileName, foooPath);
+            assert.equal(foooResolution.resolvedModule!.resolvedFileName, foooPath);
             return foooResolution;
         }
 

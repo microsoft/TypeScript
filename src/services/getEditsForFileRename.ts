@@ -153,7 +153,7 @@ namespace ts {
                         // TODO:GH#18217
                         ? getSourceFileToImportFromResolved(importLiteral, resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost),
                                                             oldToNew, allFiles)
-                        : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
+                        : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, oldToNew);
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
@@ -180,7 +180,6 @@ namespace ts {
         importLiteral: StringLiteralLike,
         importingSourceFile: SourceFile,
         program: Program,
-        host: LanguageServiceHost,
         oldToNew: PathUpdater,
     ): ToImport | undefined {
         if (importedModuleSymbol) {
@@ -190,9 +189,7 @@ namespace ts {
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
-            const resolved = host.resolveModuleNames
-                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
-                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
+            const resolved = importingSourceFile.resolvedModules?.get(importLiteral.text);
             return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
         }
     }

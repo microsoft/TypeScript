@@ -467,15 +467,11 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModuleFull | undefined)[] {
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) {
             return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference);
         }
 
-        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined {
-            return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile);
-        }
-
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[] {
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) {
             return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
         }
 
@@ -1742,7 +1738,7 @@ namespace ts.server {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
             if (!file.resolvedModules) return emptyArray;
             let unresolvedImports: string[] | undefined;
-            file.resolvedModules.forEach((resolvedModule, name) => {
+            file.resolvedModules.forEach(({ resolvedModule }, name) => {
                 // pick unresolved non-relative names
                 if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
                     !isExternalModuleNameRelative(name) &&

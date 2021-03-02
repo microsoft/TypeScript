@@ -170,20 +170,20 @@ namespace ts {
     }
 
     export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string): ResolvedModuleFull | undefined {
-        return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
+        return sourceFile?.resolvedModules?.get(moduleNameText)?.resolvedModule;
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = new Map<string, ResolvedModuleFull>();
+            sourceFile.resolvedModules = new Map();
         }
 
         sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
-    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective): void {
+    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = new Map<string, ResolvedTypeReferenceDirective | undefined>();
+            sourceFile.resolvedTypeReferenceDirectiveNames = new Map();
         }
 
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
@@ -195,12 +195,16 @@ namespace ts {
             !oldRef.circular === !newRef.circular;
     }
 
-    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
-        return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
-            oldResolution.extension === newResolution.extension &&
-            oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-            oldResolution.originalPath === newResolution.originalPath &&
-            packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFailedLookupLocations, newResolution: ResolvedModuleWithFailedLookupLocations): boolean {
+        return oldResolution === newResolution ||
+            oldResolution.resolvedModule === newResolution.resolvedModule ||
+            !!oldResolution.resolvedModule &&
+            !!newResolution.resolvedModule &&
+            oldResolution.resolvedModule.isExternalLibraryImport === newResolution.resolvedModule.isExternalLibraryImport &&
+            oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
+            oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
+            oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
+            packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
     }
 
     function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -212,10 +216,14 @@ namespace ts {
         return `${fullName}@${version}`;
     }
 
-    export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName
-            && oldResolution.primary === newResolution.primary
-            && oldResolution.originalPath === newResolution.originalPath;
+    export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+        return oldResolution === newResolution ||
+            oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
+            !!oldResolution.resolvedTypeReferenceDirective &&
+            !!newResolution.resolvedTypeReferenceDirective &&
+            oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
+            oldResolution.resolvedTypeReferenceDirective.primary === newResolution.resolvedTypeReferenceDirective.primary &&
+            oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
     }
 
     export function hasChangesInResolutions<T>(
@@ -6206,9 +6214,9 @@ namespace ts {
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
         const cache = createSymlinkCache(cwd, getCanonicalFileName);
         const symlinks = flatMap(files, sf => {
-            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
+            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), ({ resolvedModule: res }) =>
                 res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
-            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
+            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), ({ resolvedTypeReferenceDirective: res }) =>
                 res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
         });
 
