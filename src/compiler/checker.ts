@@ -357,6 +357,7 @@ namespace ts {
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
 
+        const checkBinaryExpression = createCheckBinaryExpression();
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
@@ -30981,92 +30982,142 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
-        const enum CheckBinaryExpressionState {
-            MaybeCheckLeft,
-            CheckRight,
-            FinishCheck
-        }
+        function createCheckBinaryExpression() {
+            interface WorkArea {
+                readonly checkMode: CheckMode | undefined;
+                skip: boolean;
+                stackIndex: number;
+                /**
+                 * Holds the types from the left-side of an expression from [0..stackIndex].
+                 * Holds the type of the result at stackIndex+1. This allows us to reuse existing stack entries
+                 * and avoid storing an extra property on the object (i.e., `lastResult`).
+                 */
+                typeStack: (Type | undefined)[];
+            }
 
-        function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            const workStacks: {
-                expr: BinaryExpression[],
-                state: CheckBinaryExpressionState[],
-                leftType: (Type | undefined)[]
-            } = {
-                expr: [node],
-                state: [CheckBinaryExpressionState.MaybeCheckLeft],
-                leftType: [undefined]
+            const trampoline = createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, foldState);
+
+            return (node: BinaryExpression, checkMode: CheckMode | undefined) => {
+                const result = trampoline(node, checkMode);
+                Debug.assertIsDefined(result);
+                return result;
             };
-            let stackIndex = 0;
-            let lastResult: Type | undefined;
-            while (stackIndex >= 0) {
-                node = workStacks.expr[stackIndex];
-                switch (workStacks.state[stackIndex]) {
-                    case CheckBinaryExpressionState.MaybeCheckLeft: {
-                        if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
-                            finishInvocation(checkExpression(node.right, checkMode));
-                            break;
-                        }
-                        checkGrammarNullishCoalesceWithLogicalExpression(node);
-                        const operator = node.operatorToken.kind;
-                        if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                            finishInvocation(checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
-                            break;
-                        }
-                        advanceState(CheckBinaryExpressionState.CheckRight);
-                        maybeCheckExpression(node.left);
-                        break;
-                    }
-                    case CheckBinaryExpressionState.CheckRight: {
-                        const leftType = lastResult!;
-                        workStacks.leftType[stackIndex] = leftType;
-                        const operator = node.operatorToken.kind;
-                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                            if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                                const parent = walkUpParenthesizedExpressions(node.parent);
-                                checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
-                            }
-                            checkTruthinessOfType(leftType, node.left);
-                        }
-                        advanceState(CheckBinaryExpressionState.FinishCheck);
-                        maybeCheckExpression(node.right);
-                        break;
-                    }
-                    case CheckBinaryExpressionState.FinishCheck: {
-                        const leftType = workStacks.leftType[stackIndex]!;
-                        const rightType = lastResult!;
-                        finishInvocation(checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node));
-                        break;
-                    }
-                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for checkBinaryExpression`);
-                }
-            }
 
-            return lastResult!;
-
-            function finishInvocation(result: Type) {
-                lastResult = result;
-                stackIndex--;
-            }
-
-            /**
-             * Note that `advanceState` sets the _current_ head state, and that `maybeCheckExpression` potentially pushes on a new
-             * head state; so `advanceState` must be called before any `maybeCheckExpression` during a state's execution.
-             */
-            function advanceState(nextState: CheckBinaryExpressionState) {
-                workStacks.state[stackIndex] = nextState;
-            }
-
-            function maybeCheckExpression(node: Expression) {
-                if (isBinaryExpression(node)) {
-                    stackIndex++;
-                    workStacks.expr[stackIndex] = node;
-                    workStacks.state[stackIndex] = CheckBinaryExpressionState.MaybeCheckLeft;
-                    workStacks.leftType[stackIndex] = undefined;
+            function onEnter(node: BinaryExpression, state: WorkArea | undefined, checkMode: CheckMode | undefined) {
+                if (state) {
+                    state.stackIndex++;
+                    state.skip = false;
+                    setLeftType(state, /*type*/ undefined);
+                    setLastResult(state, /*type*/ undefined);
                 }
                 else {
-                    lastResult = checkExpression(node, checkMode);
+                    state = {
+                        checkMode,
+                        skip: false,
+                        stackIndex: 0,
+                        typeStack: [undefined, undefined],
+                    };
                 }
+
+                if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
+                    state.skip = true;
+                    setLastResult(state, checkExpression(node.right, checkMode));
+                    return state;
+                }
+
+                checkGrammarNullishCoalesceWithLogicalExpression(node);
+
+                const operator = node.operatorToken.kind;
+                if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
+                    state.skip = true;
+                    setLastResult(state, checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
+                    return state;
+                }
+
+                return state;
+            }
+
+            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+                if (!state.skip) {
+                    return maybeCheckExpression(state, left);
+                }
+            }
+
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+                if (!state.skip) {
+                    const leftType = getLastResult(state);
+                    Debug.assertIsDefined(leftType);
+                    setLeftType(state, leftType);
+                    setLastResult(state, /*type*/ undefined);
+                    const operator = operatorToken.kind;
+                    if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                        if (operator === SyntaxKind.AmpersandAmpersandToken) {
+                            const parent = walkUpParenthesizedExpressions(node.parent);
+                            checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
+                        }
+                        checkTruthinessOfType(leftType, node.left);
+                    }
+                }
+            }
+
+            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+                if (!state.skip) {
+                    return maybeCheckExpression(state, right);
+                }
+            }
+
+            function onExit(node: BinaryExpression, state: WorkArea): Type | undefined {
+                let result: Type | undefined;
+                if (state.skip) {
+                    result = getLastResult(state);
+                }
+                else {
+                    const leftType = getLeftType(state);
+                    Debug.assertIsDefined(leftType);
+
+                    const rightType = getLastResult(state);
+                    Debug.assertIsDefined(rightType);
+
+                    result = checkBinaryLikeExpressionWorker(node.left, node.operatorToken, node.right, leftType, rightType, node);
+                }
+
+                state.skip = false;
+                setLeftType(state, /*type*/ undefined);
+                setLastResult(state, /*type*/ undefined);
+                state.stackIndex--;
+                return result;
+            }
+
+            function foldState(state: WorkArea, result: Type | undefined, _side: "left" | "right") {
+                setLastResult(state, result);
+                return state;
+            }
+
+            function maybeCheckExpression(state: WorkArea, node: Expression): BinaryExpression | undefined {
+                if (isBinaryExpression(node)) {
+                    return node;
+                }
+                setLastResult(state, checkExpression(node, state.checkMode));
+            }
+
+            function getLeftType(state: WorkArea) {
+                return state.typeStack[state.stackIndex];
+            }
+
+            function setLeftType(state: WorkArea, type: Type | undefined) {
+                state.typeStack[state.stackIndex] = type;
+            }
+
+            function getLastResult(state: WorkArea) {
+                return state.typeStack[state.stackIndex + 1];
+            }
+
+            function setLastResult(state: WorkArea, type: Type | undefined) {
+                // To reduce overhead, reuse the next stack entry to store the
+                // last result. This avoids the overhead of an additional property
+                // on `WorkArea` and reuses empty stack entries as we walk back up
+                // the stack.
+                state.typeStack[state.stackIndex + 1] = type;
             }
         }
 
