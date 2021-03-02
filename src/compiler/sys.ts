@@ -140,10 +140,9 @@ namespace ts {
         pollIndex: number, chunkSize: number,
         callbackOnWatchFileStat?: (watchedFile: T, pollIndex: number, fileChanged: boolean) => void
     ) {
-        // Max visit would be all elements of the queue
-        let needsVisit = queue.length;
         let definedValueCopyToIndex = pollIndex;
-        for (let polled = 0; polled < chunkSize && needsVisit > 0; nextPollIndex(), needsVisit--) {
+        // Max visit would be all elements of the queue
+        for (let canVisit = queue.length; chunkSize && canVisit; nextPollIndex(), canVisit--) {
             const watchedFile = queue[pollIndex];
             if (!watchedFile) {
                 continue;
@@ -153,16 +152,17 @@ namespace ts {
                 continue;
             }
 
-            polled++;
+            // Only files polled count towards chunkSize
+            chunkSize--;
             const fileChanged = onWatchedFileStat(watchedFile, getModifiedTime(host, watchedFile.fileName));
             if (watchedFile.isClosed) {
                 // Closed watcher as part of callback
                 queue[pollIndex] = undefined;
-            }
-            else {
-                callbackOnWatchFileStat?.(watchedFile, pollIndex, fileChanged);
+                continue;
             }
 
+            callbackOnWatchFileStat?.(watchedFile, pollIndex, fileChanged);
+            // Defragment the queue while we are at it
             if (queue[pollIndex]) {
                 // Copy this file to the non hole location
                 if (definedValueCopyToIndex < pollIndex) {
@@ -180,7 +180,7 @@ namespace ts {
             pollIndex++;
             if (pollIndex === queue.length) {
                 if (definedValueCopyToIndex < pollIndex) {
-                    // There are holes from nextDefinedValueIndex to end of queue, change queue size
+                    // There are holes from definedValueCopyToIndex to end of queue, change queue size
                     queue.length = definedValueCopyToIndex;
                 }
                 pollIndex = 0;
@@ -406,7 +406,6 @@ namespace ts {
             return {
                 close: () => {
                     file.isClosed = true;
-                    // Remove from watchedFiles
                     unorderedRemoveItem(watchedFiles, file);
                 }
             };
@@ -414,7 +413,6 @@ namespace ts {
 
         function pollQueue() {
             pollScheduled = undefined;
-            // Max visit would be all elements of the queue
             pollIndex = pollWatchedFileQueue(host, watchedFiles, pollIndex, pollingChunkSize[PollingInterval.Low]);
             scheduleNextPoll();
         }
