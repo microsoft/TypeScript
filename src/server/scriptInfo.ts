@@ -1,12 +1,7 @@
 namespace ts.server {
-    export interface ScriptInfoVersion {
-        svc: number;
-        text: number;
-    }
-
     /* @internal */
     export class TextStorage {
-        version: ScriptInfoVersion;
+        version: string | undefined;
 
         /**
          * Generated only on demand (based on edits, or information requested)
@@ -46,14 +41,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk = false;
 
-        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
-            this.version = initialVersion || { svc: 0, text: 0 };
-        }
-
-        public getVersion() {
-            return this.svc
-                ? `SVC-${this.version.svc}-${this.svc.getSnapshotVersion()}`
-                : `Text-${this.version.text}`;
+        constructor(private readonly host: ServerHost, private readonly info: ScriptInfo) {
         }
 
         public hasScriptVersionCache_TestOnly() {
@@ -77,16 +65,17 @@ namespace ts.server {
         public useText(newText?: string) {
             this.svc = undefined;
             this.text = newText;
+            this.version = undefined;
             this.lineMap = undefined;
             this.fileSize = undefined;
             this.resetSourceMapInfo();
-            this.version.text++;
         }
 
         public edit(start: number, end: number, newText: string) {
             this.switchToScriptVersionCache().edit(start, end - start, newText);
             this.ownFileText = false;
             this.text = undefined;
+            this.version = undefined;
             this.lineMap = undefined;
             this.fileSize = undefined;
             this.resetSourceMapInfo();
@@ -142,6 +131,7 @@ namespace ts.server {
 
         public delayReloadFromFileIntoText() {
             this.pendingReloadFromDisk = true;
+            this.version = undefined;
         }
 
         /**
@@ -225,7 +215,6 @@ namespace ts.server {
         private switchToScriptVersionCache(): ScriptVersionCache {
             if (!this.svc || this.pendingReloadFromDisk) {
                 this.svc = ScriptVersionCache.fromString(this.getOrLoadText());
-                this.version.svc++;
             }
             return this.svc;
         }
@@ -334,10 +323,10 @@ namespace ts.server {
             readonly scriptKind: ScriptKind,
             public readonly hasMixedContent: boolean,
             readonly path: Path,
-            initialVersion?: ScriptInfoVersion) {
+        ) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, this, initialVersion);
+            this.textStorage = new TextStorage(host, this);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -345,11 +334,6 @@ namespace ts.server {
             this.scriptKind = scriptKind
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
-        }
-
-        /*@internal*/
-        getVersion() {
-            return this.textStorage.version;
         }
 
         /*@internal*/
@@ -569,10 +553,15 @@ namespace ts.server {
             }
         }
 
-        getLatestVersion(): string {
+        getLatestVersion() {
             // Ensure we have updated snapshot to give back latest version
-            this.textStorage.getSnapshot();
-            return this.textStorage.getVersion();
+            const snapShot = this.textStorage.getSnapshot();
+            if (this.textStorage.version === undefined) {
+                // Ensure we have updated snapshot to give back latest version
+                const text = getSnapshotText(snapShot);
+                this.textStorage.version = this.host.createHash ? this.host.createHash(text) : generateDjb2Hash(text);
+            }
+            return this.textStorage.version;
         }
 
         saveTo(fileName: string) {
