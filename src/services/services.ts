@@ -1558,14 +1558,14 @@ namespace ts {
                 options.triggerCharacter);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
                 log,
                 getValidSourceFile(fileName),
                 position,
-                { name, source },
+                { name, source, data },
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions, host))!, // TODO: GH#18217
                 preferences,
@@ -2492,6 +2492,17 @@ namespace ts {
             return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
         }
 
+        function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
+            // Go to Definition supports returning a zero-length span at position 0 for
+            // non-existent files. We need to special-case the conversion of position 0
+            // to avoid a crash trying to get the text for that file, since this function
+            // otherwise assumes that 'fileName' is the name of a file that exists.
+            if (position === 0) {
+                return { line: 0, character: 0 };
+            }
+            return sourceMapper.toLineColumnOffset(fileName, position);
+        }
+
         function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
             synchronizeHostData();
             const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
@@ -2567,7 +2578,7 @@ namespace ts {
             getAutoImportProvider,
             getApplicableRefactors,
             getEditsForRefactor,
-            toLineColumnOffset: sourceMapper.toLineColumnOffset,
+            toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
             clearSourceMapperCache: () => sourceMapper.clearCache(),
             prepareCallHierarchy,

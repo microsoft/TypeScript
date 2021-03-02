@@ -399,7 +399,7 @@ namespace FourSlash {
                     }
                     const memo = Utils.memoize(
                         (_version: number, _active: string, _caret: number, _selectEnd: number, _marker: string, ...args: any[]) => (ls[key] as Function)(...args),
-                        (...args) => args.join("|,|")
+                        (...args) => args.map(a => a && typeof a === "object" ? JSON.stringify(a) : a).join("|,|")
                     );
                     proxy[key] = (...args: any[]) => memo(
                         target.languageServiceAdapterHost.getScriptInfo(target.activeFile.fileName)!.version,
@@ -688,7 +688,7 @@ namespace FourSlash {
             this.verifyGoToXWorker(toArray(endMarker), () => this.getGoToDefinition());
         }
 
-        public verifyGoToDefinition(arg0: any, endMarkerNames?: ArrayOrSingle<string>) {
+        public verifyGoToDefinition(arg0: any, endMarkerNames?: ArrayOrSingle<string> | { file: string }) {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
@@ -705,7 +705,7 @@ namespace FourSlash {
                 this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
         }
 
-        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | { file: string } | undefined, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
@@ -725,7 +725,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string> | { file: string }, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             for (const start of toArray(startMarkerNames)) {
                 this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
@@ -737,12 +737,12 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: ArrayOrSingle<string>, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXSingle(startMarkerName: string, endMarkerNames: ArrayOrSingle<string> | { file: string }, getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
             this.goToMarker(startMarkerName);
             this.verifyGoToXWorker(toArray(endMarkerNames), getDefs, startMarkerName);
         }
 
-        private verifyGoToXWorker(endMarkers: readonly string[], getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
+        private verifyGoToXWorker(endMarkers: readonly (string | { file: string })[], getDefs: () => readonly ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined, startMarkerName?: string) {
             const defs = getDefs();
             let definitions: readonly ts.DefinitionInfo[];
             let testName: string;
@@ -762,21 +762,22 @@ namespace FourSlash {
                 this.raiseError(`${testName} failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
             }
 
-            ts.zipWith(endMarkers, definitions, (endMarker, definition, i) => {
-                const marker = this.getMarkerByName(endMarker);
-                if (ts.comparePaths(marker.fileName, definition.fileName, /*ignoreCase*/ true) !== ts.Comparison.EqualTo || marker.position !== definition.textSpan.start) {
-                    const filesToDisplay = ts.deduplicate([marker.fileName, definition.fileName], ts.equateValues);
-                    const markers = [{ text: "EXPECTED", fileName: marker.fileName, position: marker.position }, { text: "ACTUAL", fileName: definition.fileName, position: definition.textSpan.start }];
+            ts.zipWith(endMarkers, definitions, (endMarkerOrFileResult, definition, i) => {
+                const expectedFileName = typeof endMarkerOrFileResult === "string" ? this.getMarkerByName(endMarkerOrFileResult).fileName : endMarkerOrFileResult.file;
+                const expectedPosition = typeof endMarkerOrFileResult === "string" ? this.getMarkerByName(endMarkerOrFileResult).position : 0;
+                if (ts.comparePaths(expectedFileName, definition.fileName, /*ignoreCase*/ true) !== ts.Comparison.EqualTo || expectedPosition !== definition.textSpan.start) {
+                    const filesToDisplay = ts.deduplicate([expectedFileName, definition.fileName], ts.equateValues);
+                    const markers = [{ text: "EXPECTED", fileName: expectedFileName, position: expectedPosition }, { text: "ACTUAL", fileName: definition.fileName, position: definition.textSpan.start }];
                     const text = filesToDisplay.map(fileName => {
                         const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
-                        let fileContent = this.getFileContent(fileName);
+                        let fileContent = this.tryGetFileContent(fileName) || "";
                         for (const marker of markersToRender) {
                             fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
                         }
                         return `// @Filename: ${fileName}\n${fileContent}`;
                     }).join("\n\n");
 
-                    this.raiseError(`${testName} failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}\n\n${text}\n`);
+                    this.raiseError(`${testName} failed for definition ${endMarkerOrFileResult} (${i}): expected ${expectedFileName} at ${expectedPosition}, got ${definition.fileName} at ${definition.textSpan.start}\n\n${text}\n`);
                 }
             });
         }
@@ -867,7 +868,7 @@ namespace FourSlash {
                     nameToEntries.set(entry.name, [entry]);
                 }
                 else {
-                    if (entries.some(e => e.source === entry.source)) {
+                    if (entries.some(e => e.source === entry.source && this.deepEqual(e.data, entry.data))) {
                         this.raiseError(`Duplicate completions for ${entry.name}`);
                     }
                     entries.push(entry);
@@ -885,8 +886,8 @@ namespace FourSlash {
                         const name = typeof include === "string" ? include : include.name;
                         const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`Includes: completion '${name}' not found.`);
-                        assert(found.length === 1, `Must use 'exact' for multiple completions with same name: '${name}'`);
-                        this.verifyCompletionEntry(ts.first(found), include);
+                        if (!found.length) throw this.raiseError(`Includes: no completions with name '${name}' remain unmatched.`);
+                        this.verifyCompletionEntry(found.shift()!, include);
                     }
                 }
                 if (options.excludes) {
@@ -933,7 +934,7 @@ namespace FourSlash {
             assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
             if (expected.text !== undefined) {
-                const actualDetails = ts.Debug.checkDefined(this.getCompletionEntryDetails(actual.name, actual.source), `No completion details available for name '${actual.name}' and source '${actual.source}'`);
+                const actualDetails = ts.Debug.checkDefined(this.getCompletionEntryDetails(actual.name, actual.source, actual.data), `No completion details available for name '${actual.name}' and source '${actual.source}'`);
                 assert.equal(ts.displayPartsToString(actualDetails.displayParts), expected.text, "Expected 'text' property to match 'displayParts' string");
                 assert.equal(ts.displayPartsToString(actualDetails.documentation), expected.documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
                 // TODO: GH#23587
@@ -1003,8 +1004,8 @@ namespace FourSlash {
 
         private verifySymbol(symbol: ts.Symbol, declarationRanges: Range[]) {
             const { declarations } = symbol;
-            if (declarations.length !== declarationRanges.length) {
-                this.raiseError(`Expected to get ${declarationRanges.length} declarations, got ${declarations.length}`);
+            if (declarations?.length !== declarationRanges.length) {
+                this.raiseError(`Expected to get ${declarationRanges.length} declarations, got ${declarations?.length}`);
             }
 
             ts.zipWith(declarations, declarationRanges, (decl, range) => {
@@ -1254,6 +1255,16 @@ namespace FourSlash {
 
         }
 
+        private deepEqual(a: unknown, b: unknown) {
+            try {
+                this.assertObjectsEqual(a, b);
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
+
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
             const referencedSymbols = this.findReferencesAtCaret()!;
 
@@ -1281,11 +1292,11 @@ namespace FourSlash {
             return this.languageService.getCompletionsAtPosition(this.activeFile.fileName, this.currentCaretPosition, options);
         }
 
-        private getCompletionEntryDetails(entryName: string, source?: string, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
+        private getCompletionEntryDetails(entryName: string, source: string | undefined, data: ts.CompletionEntryData | undefined, preferences?: ts.UserPreferences): ts.CompletionEntryDetails | undefined {
             if (preferences) {
                 this.configure(preferences);
             }
-            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences);
+            return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences, data);
         }
 
         private getReferencesAtCaret() {
@@ -2796,14 +2807,14 @@ namespace FourSlash {
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
             this.goToMarker(markerName);
 
-            const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences);
+            const details = this.getCompletionEntryDetails(options.name, options.source, options.data, options.preferences);
             if (!details) {
                 const completions = this.getCompletionListAtCaret(options.preferences)?.entries;
                 const matchingName = completions?.filter(e => e.name === options.name);
                 const detailMessage = matchingName?.length
                     ? `\n  Found ${matchingName.length} with name '${options.name}' from source(s) ${matchingName.map(e => `'${e.source}'`).join(", ")}.`
                     : ` (In fact, there were no completions with name '${options.name}' at all.)`;
-                return this.raiseError(`No completions were found for the given name, source, and preferences.` + detailMessage);
+                return this.raiseError(`No completions were found for the given name, source/data, and preferences.` + detailMessage);
             }
             const codeActions = details.codeActions;
             if (codeActions?.length !== 1) {
