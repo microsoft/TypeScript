@@ -1101,7 +1101,7 @@ namespace ts.codefix {
                 const genericParam = genericSig.parameters[i];
                 const usageParam = usageSig.parameters[i];
                 const isRest = genericSig.declaration && isRestParameter(genericSig.declaration.parameters[i]);
-                if (!usageParam/* || !usageParam.valueDeclaration || !genericParam.valueDeclaration*/) {
+                if (!usageParam) {
                     break;
                 }
                 let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration) : checker.getAnyType();
