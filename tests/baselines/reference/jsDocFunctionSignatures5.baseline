@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 489
+      "position": 489,
+      "name": ""
     },
     "signatureHelp": {
       "items": [

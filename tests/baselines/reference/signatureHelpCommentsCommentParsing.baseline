@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 63
+      "position": 63,
+      "name": "1"
     },
     "signatureHelp": {
       "items": [
@@ -63,7 +64,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 198
+      "position": 198,
+      "name": "2"
     },
     "signatureHelp": {
       "items": [
@@ -124,7 +126,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 302
+      "position": 302,
+      "name": "3"
     },
     "signatureHelp": {
       "items": [
@@ -190,7 +193,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 422
+      "position": 422,
+      "name": "4"
     },
     "signatureHelp": {
       "items": [
@@ -256,7 +260,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 631
+      "position": 631,
+      "name": "5"
     },
     "signatureHelp": {
       "items": [
@@ -322,7 +327,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 737
+      "position": 737,
+      "name": "6"
     },
     "signatureHelp": {
       "items": [
@@ -388,7 +394,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 869
+      "position": 869,
+      "name": "7"
     },
     "signatureHelp": {
       "items": [
@@ -454,7 +461,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1005
+      "position": 1005,
+      "name": "8"
     },
     "signatureHelp": {
       "items": [
@@ -520,7 +528,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1164
+      "position": 1164,
+      "name": "9"
     },
     "signatureHelp": {
       "items": [
@@ -586,7 +595,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1350
+      "position": 1350,
+      "name": "10"
     },
     "signatureHelp": {
       "items": [
@@ -652,7 +662,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1536
+      "position": 1536,
+      "name": "11"
     },
     "signatureHelp": {
       "items": [
@@ -718,7 +729,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1618
+      "position": 1618,
+      "name": "12"
     },
     "signatureHelp": {
       "items": [
@@ -779,7 +791,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1703
+      "position": 1703,
+      "name": "13"
     },
     "signatureHelp": {
       "items": [
@@ -840,7 +853,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1752
+      "position": 1752,
+      "name": "14"
     },
     "signatureHelp": {
       "items": [
@@ -901,7 +915,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1928
+      "position": 1928,
+      "name": "16"
     },
     "signatureHelp": {
       "items": [
@@ -1035,7 +1050,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 1932
+      "position": 1932,
+      "name": "17"
     },
     "signatureHelp": {
       "items": [
@@ -1169,7 +1185,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2166
+      "position": 2166,
+      "name": "19"
     },
     "signatureHelp": {
       "items": [
@@ -1409,7 +1426,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2169
+      "position": 2169,
+      "name": "20"
     },
     "signatureHelp": {
       "items": [
@@ -1649,7 +1667,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2173
+      "position": 2173,
+      "name": "21"
     },
     "signatureHelp": {
       "items": [
@@ -1889,7 +1908,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2178
+      "position": 2178,
+      "name": "22"
     },
     "signatureHelp": {
       "items": [
@@ -2129,7 +2149,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2182
+      "position": 2182,
+      "name": "23"
     },
     "signatureHelp": {
       "items": [
@@ -2369,7 +2390,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2372
+      "position": 2372,
+      "name": "25"
     },
     "signatureHelp": {
       "items": [
@@ -2534,7 +2556,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2380
+      "position": 2380,
+      "name": "26"
     },
     "signatureHelp": {
       "items": [
@@ -2699,7 +2722,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2823
+      "position": 2823,
+      "name": "28"
     },
     "signatureHelp": {
       "items": [
@@ -3051,7 +3075,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2827
+      "position": 2827,
+      "name": "29"
     },
     "signatureHelp": {
       "items": [
@@ -3403,7 +3428,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2832
+      "position": 2832,
+      "name": "30"
     },
     "signatureHelp": {
       "items": [
@@ -3755,7 +3781,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2839
+      "position": 2839,
+      "name": "31"
     },
     "signatureHelp": {
       "items": [
@@ -4107,7 +4134,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2846
+      "position": 2846,
+      "name": "32"
     },
     "signatureHelp": {
       "items": [
@@ -4459,7 +4487,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 2853
+      "position": 2853,
+      "name": "33"
     },
     "signatureHelp": {
       "items": [
@@ -4811,7 +4840,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3085
+      "position": 3085,
+      "name": "34"
     },
     "signatureHelp": {
       "items": [
@@ -4920,7 +4950,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3276
+      "position": 3276,
+      "name": "35"
     },
     "signatureHelp": {
       "items": [
@@ -5058,7 +5089,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3280
+      "position": 3280,
+      "name": "36"
     },
     "signatureHelp": {
       "items": [
@@ -5196,7 +5228,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3491
+      "position": 3491,
+      "name": "37"
     },
     "signatureHelp": {
       "items": [
@@ -5330,7 +5363,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3497
+      "position": 3497,
+      "name": "38"
     },
     "signatureHelp": {
       "items": [
@@ -5464,13 +5498,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3874
+      "position": 3874,
+      "name": "39"
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3906
+      "position": 3906,
+      "name": "40"
     },
     "signatureHelp": {
       "items": [
@@ -5665,7 +5701,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3910
+      "position": 3910,
+      "name": "41"
     },
     "signatureHelp": {
       "items": [
@@ -5860,7 +5897,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3914
+      "position": 3914,
+      "name": "42"
     },
     "signatureHelp": {
       "items": [
@@ -6055,7 +6093,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 3918
+      "position": 3918,
+      "name": "43"
     },
     "signatureHelp": {
       "items": [
@@ -6250,7 +6289,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 4059
+      "position": 4059,
+      "name": "45"
     },
     "signatureHelp": {
       "items": [
@@ -6316,7 +6356,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 4210
+      "position": 4210,
+      "name": "46"
     },
     "signatureHelp": {
       "items": [
@@ -6382,7 +6423,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 4826
+      "position": 4826,
+      "name": "47"
     },
     "signatureHelp": {
       "items": [
@@ -6549,7 +6591,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 4834
+      "position": 4834,
+      "name": "48"
     },
     "signatureHelp": {
       "items": [
@@ -6716,7 +6759,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 4837
+      "position": 4837,
+      "name": "49"
     },
     "signatureHelp": {
       "items": [
@@ -6883,7 +6927,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts",
-      "position": 4841
+      "position": 4841,
+      "name": ""
     }
   }
 ]

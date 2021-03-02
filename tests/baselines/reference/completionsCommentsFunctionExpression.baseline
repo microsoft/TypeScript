@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionExpression.ts",
-      "position": 123
+      "position": 123,
+      "name": "2"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -3530,7 +3531,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionExpression.ts",
-      "position": 249
+      "position": 249,
+      "name": "4"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -8041,7 +8043,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionExpression.ts",
-      "position": 841
+      "position": 841,
+      "name": "15"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -11573,7 +11576,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionExpression.ts",
-      "position": 861
+      "position": 861,
+      "name": "17"
     },
     "completionList": {
       "isGlobalCompletion": true,

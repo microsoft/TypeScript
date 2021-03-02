@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpConstructorCallParamProperties.ts",
-      "position": 179
+      "position": 179,
+      "name": ""
     },
     "signatureHelp": {
       "items": [

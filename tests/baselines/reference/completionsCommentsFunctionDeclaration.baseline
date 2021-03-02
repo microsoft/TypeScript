@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionDeclaration.ts",
-      "position": 63
+      "position": 63,
+      "name": "3"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -4336,7 +4337,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionDeclaration.ts",
-      "position": 240
+      "position": 240,
+      "name": "7"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -7491,7 +7493,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsFunctionDeclaration.ts",
-      "position": 262
+      "position": 262,
+      "name": "9"
     },
     "completionList": {
       "isGlobalCompletion": false,

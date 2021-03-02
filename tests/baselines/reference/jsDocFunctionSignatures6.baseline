@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 244
+      "position": 244,
+      "name": "1"
     },
     "signatureHelp": {
       "items": [
@@ -205,7 +206,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 251
+      "position": 251,
+      "name": "2"
     },
     "signatureHelp": {
       "items": [
@@ -408,7 +410,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 258
+      "position": 258,
+      "name": "3"
     },
     "signatureHelp": {
       "items": [
@@ -611,7 +614,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/Foo.js",
-      "position": 265
+      "position": 265,
+      "name": "4"
     },
     "signatureHelp": {
       "items": [

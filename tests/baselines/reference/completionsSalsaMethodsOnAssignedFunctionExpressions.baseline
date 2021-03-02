@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/something.js",
-      "position": 156
+      "position": 156,
+      "name": "2"
     },
     "completionList": {
       "isGlobalCompletion": true,

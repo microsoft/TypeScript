@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload03.ts",
-      "position": 17
+      "position": 17,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -79,7 +80,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload03.ts",
-      "position": 95
+      "position": 95,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "function",

@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocDontBreakWithNamespaces.js",
-      "position": 117
+      "position": 117,
+      "name": "foo"
     },
     "signatureHelp": {
       "items": [
@@ -68,7 +69,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocDontBreakWithNamespaces.js",
-      "position": 181
+      "position": 181,
+      "name": "bar"
     },
     "signatureHelp": {
       "items": [
@@ -129,7 +131,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocDontBreakWithNamespaces.js",
-      "position": 274
+      "position": 274,
+      "name": "zee"
     },
     "signatureHelp": {
       "items": [

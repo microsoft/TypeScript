@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 58
+      "position": 58,
+      "name": "1q"
     },
     "quickInfo": {
       "kind": "function",
@@ -51,7 +52,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 190
+      "position": 190,
+      "name": "2q"
     },
     "quickInfo": {
       "kind": "function",
@@ -100,7 +102,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 291
+      "position": 291,
+      "name": "3q"
     },
     "quickInfo": {
       "kind": "function",
@@ -154,7 +157,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 413
+      "position": 413,
+      "name": "4q"
     },
     "quickInfo": {
       "kind": "function",
@@ -208,7 +212,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 618
+      "position": 618,
+      "name": "5q"
     },
     "quickInfo": {
       "kind": "function",
@@ -262,7 +267,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 725
+      "position": 725,
+      "name": "6q"
     },
     "quickInfo": {
       "kind": "function",
@@ -316,7 +322,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 856
+      "position": 856,
+      "name": "7q"
     },
     "quickInfo": {
       "kind": "function",
@@ -370,7 +377,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 994
+      "position": 994,
+      "name": "8q"
     },
     "quickInfo": {
       "kind": "function",
@@ -424,7 +432,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1154
+      "position": 1154,
+      "name": "9q"
     },
     "quickInfo": {
       "kind": "function",
@@ -478,7 +487,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1336
+      "position": 1336,
+      "name": "10q"
     },
     "quickInfo": {
       "kind": "function",
@@ -532,7 +542,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1524
+      "position": 1524,
+      "name": "11q"
     },
     "quickInfo": {
       "kind": "function",
@@ -586,7 +597,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1608
+      "position": 1608,
+      "name": "12q"
     },
     "quickInfo": {
       "kind": "function",
@@ -635,7 +647,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1695
+      "position": 1695,
+      "name": "13q"
     },
     "quickInfo": {
       "kind": "function",
@@ -684,7 +697,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1744
+      "position": 1744,
+      "name": "14q"
     },
     "quickInfo": {
       "kind": "function",
@@ -733,7 +747,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1880
+      "position": 1880,
+      "name": "16aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -793,7 +808,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1891
+      "position": 1891,
+      "name": "17aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -853,7 +869,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 1925
+      "position": 1925,
+      "name": "16q"
     },
     "quickInfo": {
       "kind": "function",
@@ -957,7 +974,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2111
+      "position": 2111,
+      "name": "19aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1017,7 +1035,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2122
+      "position": 2122,
+      "name": "20aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1072,7 +1091,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2133
+      "position": 2133,
+      "name": "21aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1127,7 +1147,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2145
+      "position": 2145,
+      "name": "22aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1182,7 +1203,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2149
+      "position": 2149,
+      "name": "23aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1242,7 +1264,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2161
+      "position": 2161,
+      "name": "19q"
     },
     "quickInfo": {
       "kind": "function",
@@ -1452,7 +1475,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2253
+      "position": 2253,
+      "name": "25aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1501,7 +1525,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2277
+      "position": 2277,
+      "name": "26aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1550,7 +1575,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2370
+      "position": 2370,
+      "name": "25q"
     },
     "quickInfo": {
       "kind": "function",
@@ -1654,7 +1680,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2378
+      "position": 2378,
+      "name": "26q"
     },
     "quickInfo": {
       "kind": "function",
@@ -1758,7 +1785,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2716
+      "position": 2716,
+      "name": "28aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1807,7 +1835,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2727
+      "position": 2727,
+      "name": "29aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1867,7 +1896,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2738
+      "position": 2738,
+      "name": "30aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1947,7 +1977,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2756
+      "position": 2756,
+      "name": "31aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2027,7 +2058,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2774
+      "position": 2774,
+      "name": "32aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2107,7 +2139,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2792
+      "position": 2792,
+      "name": "33aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2176,7 +2209,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 2818
+      "position": 2818,
+      "name": "28q"
     },
     "quickInfo": {
       "kind": "function",
@@ -2488,7 +2522,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3045
+      "position": 3045,
+      "name": "34aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2548,7 +2583,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3081
+      "position": 3081,
+      "name": "34q"
     },
     "quickInfo": {
       "kind": "function",
@@ -2632,7 +2668,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3243
+      "position": 3243,
+      "name": "35aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2692,7 +2729,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3254
+      "position": 3254,
+      "name": "36aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2752,7 +2790,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3272
+      "position": 3272,
+      "name": "35q"
     },
     "quickInfo": {
       "kind": "function",
@@ -2860,7 +2899,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3432
+      "position": 3432,
+      "name": "37aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2920,7 +2960,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3445
+      "position": 3445,
+      "name": "38aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2980,7 +3021,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3486
+      "position": 3486,
+      "name": "37q"
     },
     "quickInfo": {
       "kind": "function",
@@ -3084,7 +3126,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3782
+      "position": 3782,
+      "name": "40aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3152,7 +3195,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3828
+      "position": 3828,
+      "name": "41aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3206,7 +3250,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3839
+      "position": 3839,
+      "name": "42aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3266,7 +3311,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3850
+      "position": 3850,
+      "name": "43aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3315,7 +3361,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 3894
+      "position": 3894,
+      "name": "40q"
     },
     "quickInfo": {
       "kind": "function",
@@ -3467,7 +3514,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4040
+      "position": 4040,
+      "name": "45q"
     },
     "quickInfo": {
       "kind": "function",
@@ -3521,7 +3569,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4193
+      "position": 4193,
+      "name": "46q"
     },
     "quickInfo": {
       "kind": "function",
@@ -3575,7 +3624,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4778
+      "position": 4778,
+      "name": "47aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3635,7 +3685,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4789
+      "position": 4789,
+      "name": "48aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3695,7 +3746,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4792
+      "position": 4792,
+      "name": "49aq"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3755,7 +3807,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4809
+      "position": 4809,
+      "name": "47q"
     },
     "quickInfo": {
       "kind": "function",
@@ -3887,13 +3940,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4841
+      "position": 4841,
+      "name": ""
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts",
-      "position": 4854
+      "position": 4854,
+      "name": "50q"
     },
     "quickInfo": {
       "kind": "class",

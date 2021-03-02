@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
-      "position": 205
+      "position": 205,
+      "name": "f0"
     },
     "signatureHelp": {
       "items": [
@@ -225,7 +226,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
-      "position": 217
+      "position": 217,
+      "name": "f1"
     },
     "signatureHelp": {
       "items": [
@@ -448,7 +450,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
-      "position": 237
+      "position": 237,
+      "name": "f2"
     },
     "signatureHelp": {
       "items": [
@@ -671,7 +674,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
-      "position": 266
+      "position": 266,
+      "name": "f3"
     },
     "signatureHelp": {
       "items": [

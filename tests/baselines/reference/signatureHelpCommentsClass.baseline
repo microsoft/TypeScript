@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClass.ts",
-      "position": 72
+      "position": 72,
+      "name": "3"
     },
     "signatureHelp": {
       "items": [
@@ -63,7 +64,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClass.ts",
-      "position": 175
+      "position": 175,
+      "name": "8"
     },
     "signatureHelp": {
       "items": [
@@ -129,7 +131,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClass.ts",
-      "position": 298
+      "position": 298,
+      "name": "13"
     },
     "signatureHelp": {
       "items": [
@@ -195,7 +198,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClass.ts",
-      "position": 393
+      "position": 393,
+      "name": "18"
     },
     "signatureHelp": {
       "items": [
@@ -256,7 +260,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClass.ts",
-      "position": 581
+      "position": 581,
+      "name": "23"
     },
     "signatureHelp": {
       "items": [
@@ -322,7 +327,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClass.ts",
-      "position": 716
+      "position": 716,
+      "name": "27"
     },
     "signatureHelp": {
       "items": [

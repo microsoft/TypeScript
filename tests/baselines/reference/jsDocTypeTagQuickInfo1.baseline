@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 26
+      "position": 26,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "var",
@@ -49,7 +50,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 55
+      "position": 55,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "var",
@@ -96,7 +98,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 85
+      "position": 85,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "var",
@@ -143,7 +146,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 112
+      "position": 112,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "var",
@@ -190,7 +194,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 144
+      "position": 144,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "var",
@@ -237,7 +242,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 171
+      "position": 171,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "var",
@@ -284,7 +290,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 200
+      "position": 200,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "var",
@@ -339,7 +346,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 230
+      "position": 230,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "var",
@@ -398,7 +406,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 259
+      "position": 259,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "var",
@@ -445,7 +454,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 292
+      "position": 292,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "var",
@@ -492,7 +502,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 319
+      "position": 319,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "var",
@@ -539,7 +550,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 349
+      "position": 349,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "var",
@@ -586,7 +598,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypeTag1.js",
-      "position": 389
+      "position": 389,
+      "name": "13"
     },
     "quickInfo": {
       "kind": "var",

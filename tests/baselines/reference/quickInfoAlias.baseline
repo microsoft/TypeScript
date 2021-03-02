@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/b.ts",
-      "position": 26
+      "position": 26,
+      "name": "b"
     },
     "quickInfo": {
       "kind": "alias",
@@ -86,7 +87,8 @@
   {
     "marker": {
       "fileName": "/c.ts",
-      "position": 118
+      "position": 118,
+      "name": "c"
     },
     "quickInfo": {
       "kind": "alias",

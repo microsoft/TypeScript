@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/trailingCommaSignatureHelp.ts",
-      "position": 221
+      "position": 221,
+      "name": "a"
     },
     "signatureHelp": {
       "items": [
@@ -196,7 +197,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/trailingCommaSignatureHelp.ts",
-      "position": 261
+      "position": 261,
+      "name": "b"
     },
     "signatureHelp": {
       "items": [

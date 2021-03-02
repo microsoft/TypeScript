@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts",
-      "position": 64
+      "position": 64,
+      "name": "4"
     },
     "signatureHelp": {
       "items": [
@@ -68,7 +69,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts",
-      "position": 263
+      "position": 263,
+      "name": "10"
     },
     "signatureHelp": {
       "items": [
@@ -193,7 +195,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts",
-      "position": 267
+      "position": 267,
+      "name": "11"
     },
     "signatureHelp": {
       "items": [
@@ -318,7 +321,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts",
-      "position": 351
+      "position": 351,
+      "name": "12"
     },
     "signatureHelp": {
       "items": [

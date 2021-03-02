@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 188
+      "position": 188,
+      "name": "4"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -1161,7 +1162,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 193
+      "position": 193,
+      "name": "5"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -1250,7 +1252,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 272
+      "position": 272,
+      "name": "7"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -2209,7 +2212,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 280
+      "position": 280,
+      "name": "9"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -2956,7 +2960,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 386
+      "position": 386,
+      "name": "11"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -3703,7 +3708,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 396
+      "position": 396,
+      "name": "12"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -4450,7 +4456,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 399
+      "position": 399,
+      "name": "13"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -4539,7 +4546,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 566
+      "position": 566,
+      "name": "16"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -5498,7 +5506,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 571
+      "position": 571,
+      "name": "17"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -5587,7 +5596,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 652
+      "position": 652,
+      "name": "19"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -6546,7 +6556,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 661
+      "position": 661,
+      "name": "21"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -7293,7 +7304,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 771
+      "position": 771,
+      "name": "23"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -8040,7 +8052,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 782
+      "position": 782,
+      "name": "24"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -8787,7 +8800,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 786
+      "position": 786,
+      "name": "25"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -8876,7 +8890,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1012
+      "position": 1012,
+      "name": "29"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -12725,7 +12740,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1015
+      "position": 1015,
+      "name": "30"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -13727,7 +13743,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1020
+      "position": 1020,
+      "name": "31"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -13863,7 +13880,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1099
+      "position": 1099,
+      "name": "33"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -17712,7 +17730,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1102
+      "position": 1102,
+      "name": "34"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -18708,7 +18727,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1105
+      "position": 1105,
+      "name": "35"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -18844,7 +18864,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1108
+      "position": 1108,
+      "name": "36"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -19840,7 +19861,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1210
+      "position": 1210,
+      "name": "38"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -19976,7 +19998,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1213
+      "position": 1213,
+      "name": "39"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -20978,7 +21001,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1218
+      "position": 1218,
+      "name": "40"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -21114,7 +21138,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1221
+      "position": 1221,
+      "name": "41"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -22116,7 +22141,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1224
+      "position": 1224,
+      "name": "42"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -22252,7 +22278,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1322
+      "position": 1322,
+      "name": "45"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -26101,7 +26128,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1471
+      "position": 1471,
+      "name": "49"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -29950,7 +29978,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1574
+      "position": 1574,
+      "name": "52"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -33799,7 +33828,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1731
+      "position": 1731,
+      "name": "56"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -37648,7 +37678,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1827
+      "position": 1827,
+      "name": "59"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -41497,7 +41528,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 1968
+      "position": 1968,
+      "name": "63"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -45346,7 +45378,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 2017
+      "position": 2017,
+      "name": "67"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -46305,7 +46338,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 2234
+      "position": 2234,
+      "name": "87"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -46358,7 +46392,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 2237
+      "position": 2237,
+      "name": "88"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -47515,7 +47550,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 2474
+      "position": 2474,
+      "name": "109"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -47616,7 +47652,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 2882
+      "position": 2882,
+      "name": "110"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -48775,7 +48812,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 3190
+      "position": 3190,
+      "name": "114"
     },
     "completionList": {
       "isGlobalCompletion": false,
@@ -48816,7 +48854,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClassMembers.ts",
-      "position": 3194
+      "position": 3194,
+      "name": "115"
     },
     "completionList": {
       "isGlobalCompletion": false,

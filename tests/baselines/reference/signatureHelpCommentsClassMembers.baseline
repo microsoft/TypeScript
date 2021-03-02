@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 275
+      "position": 275,
+      "name": "8"
     },
     "signatureHelp": {
       "items": [
@@ -98,7 +99,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 399
+      "position": 399,
+      "name": "13"
     },
     "signatureHelp": {
       "items": [
@@ -194,7 +196,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 656
+      "position": 656,
+      "name": "20"
     },
     "signatureHelp": {
       "items": [
@@ -290,7 +293,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 786
+      "position": 786,
+      "name": "25"
     },
     "signatureHelp": {
       "items": [
@@ -386,7 +390,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1105
+      "position": 1105,
+      "name": "35"
     },
     "signatureHelp": {
       "items": [
@@ -482,7 +487,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1224
+      "position": 1224,
+      "name": "42"
     },
     "signatureHelp": {
       "items": [
@@ -578,7 +584,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1382
+      "position": 1382,
+      "name": "47"
     },
     "signatureHelp": {
       "items": [
@@ -664,7 +671,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1471
+      "position": 1471,
+      "name": "49"
     },
     "signatureHelp": {
       "items": [
@@ -750,7 +758,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1637
+      "position": 1637,
+      "name": "54"
     },
     "signatureHelp": {
       "items": [
@@ -836,7 +845,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1731
+      "position": 1731,
+      "name": "56"
     },
     "signatureHelp": {
       "items": [
@@ -922,7 +932,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1885
+      "position": 1885,
+      "name": "61"
     },
     "signatureHelp": {
       "items": [
@@ -1008,7 +1019,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 1968
+      "position": 1968,
+      "name": "63"
     },
     "signatureHelp": {
       "items": [
@@ -1094,7 +1106,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 2000
+      "position": 2000,
+      "name": "65"
     },
     "signatureHelp": {
       "items": [
@@ -1160,7 +1173,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 2056
+      "position": 2056,
+      "name": "71"
     },
     "signatureHelp": {
       "items": [
@@ -1256,7 +1270,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 2168
+      "position": 2168,
+      "name": "81"
     },
     "signatureHelp": {
       "items": [
@@ -1342,7 +1357,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 2280
+      "position": 2280,
+      "name": "92"
     },
     "signatureHelp": {
       "items": [
@@ -1438,7 +1454,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpCommentsClassMembers.ts",
-      "position": 2402
+      "position": 2402,
+      "name": "102"
     },
     "signatureHelp": {
       "items": [

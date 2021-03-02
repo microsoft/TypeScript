@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts",
-      "position": 737
+      "position": 737,
+      "name": "1"
     },
     "signatureHelp": {
       "items": [
@@ -131,7 +132,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts",
-      "position": 743
+      "position": 743,
+      "name": "2"
     },
     "signatureHelp": {
       "items": [
@@ -260,7 +262,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts",
-      "position": 749
+      "position": 749,
+      "name": "3"
     },
     "signatureHelp": {
       "items": [
@@ -389,7 +392,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts",
-      "position": 755
+      "position": 755,
+      "name": "4"
     },
     "signatureHelp": {
       "items": [
@@ -518,7 +522,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTextFormatting1.ts",
-      "position": 761
+      "position": 761,
+      "name": "5"
     },
     "signatureHelp": {
       "items": [

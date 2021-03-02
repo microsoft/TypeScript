@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsClass.ts",
-      "position": 599
+      "position": 599,
+      "name": "26"
     },
     "completionList": {
       "isGlobalCompletion": true,

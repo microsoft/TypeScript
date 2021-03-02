@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 1915
+      "position": 1915,
+      "name": "18"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -5215,7 +5216,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 1924
+      "position": 1924,
+      "name": "15"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -11201,7 +11203,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 2361
+      "position": 2361,
+      "name": "24"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -16202,7 +16205,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 2390
+      "position": 2390,
+      "name": "27"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -21221,7 +21225,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 3874
+      "position": 3874,
+      "name": "39"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -26434,7 +26439,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 3891
+      "position": 3891,
+      "name": "44"
     },
     "completionList": {
       "isGlobalCompletion": true,
@@ -32432,7 +32438,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsCommentsCommentParsing.ts",
-      "position": 4841
+      "position": 4841,
+      "name": ""
     },
     "completionList": {
       "isGlobalCompletion": true,

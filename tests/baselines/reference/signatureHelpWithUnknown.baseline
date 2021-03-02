@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/signatureHelpWithUnknown.ts",
-      "position": 6
+      "position": 6,
+      "name": "1"
     },
     "signatureHelp": {
       "items": [

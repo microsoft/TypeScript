@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts",
-      "position": 51
+      "position": 51,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -56,7 +57,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts",
-      "position": 61
+      "position": 61,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "function",
@@ -110,7 +112,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts",
-      "position": 123
+      "position": 123,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "function",
@@ -204,7 +207,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts",
-      "position": 236
+      "position": 236,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "local var",
@@ -253,7 +257,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts",
-      "position": 257
+      "position": 257,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "function",

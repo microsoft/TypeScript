@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/something.js",
-      "position": 155
+      "position": 155,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "var",

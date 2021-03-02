@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/completionsJSDocTags.ts",
-      "position": 1100
+      "position": 1100,
+      "name": "14"
     },
     "completionList": {
       "isGlobalCompletion": true,

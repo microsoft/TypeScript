@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 50
+      "position": 50,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "class",
@@ -36,7 +37,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 61
+      "position": 61,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "var",
@@ -77,7 +79,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 70
+      "position": 70,
+      "name": "28"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -131,7 +134,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 81
+      "position": 81,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "var",
@@ -180,7 +184,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 87
+      "position": 87,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "class",
@@ -214,7 +219,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 97
+      "position": 97,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "class",
@@ -243,7 +249,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 164
+      "position": 164,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "var",
@@ -284,7 +291,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 173
+      "position": 173,
+      "name": "29"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -338,7 +346,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 184
+      "position": 184,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "var",
@@ -387,7 +396,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 190
+      "position": 190,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "class",
@@ -416,7 +426,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 220
+      "position": 220,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "class",
@@ -450,7 +461,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 287
+      "position": 287,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "var",
@@ -491,7 +503,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 296
+      "position": 296,
+      "name": "30"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -545,7 +558,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 307
+      "position": 307,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "var",
@@ -594,7 +608,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 313
+      "position": 313,
+      "name": "15"
     },
     "quickInfo": {
       "kind": "class",
@@ -628,7 +643,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 348
+      "position": 348,
+      "name": "16"
     },
     "quickInfo": {
       "kind": "class",
@@ -662,7 +678,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 382
+      "position": 382,
+      "name": "17"
     },
     "quickInfo": {
       "kind": "var",
@@ -703,7 +720,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 391
+      "position": 391,
+      "name": "31"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -757,7 +775,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 403
+      "position": 403,
+      "name": "19"
     },
     "quickInfo": {
       "kind": "var",
@@ -806,7 +825,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 408
+      "position": 408,
+      "name": "20"
     },
     "quickInfo": {
       "kind": "class",
@@ -840,7 +860,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 459
+      "position": 459,
+      "name": "21"
     },
     "quickInfo": {
       "kind": "class",
@@ -874,7 +895,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 570
+      "position": 570,
+      "name": "22"
     },
     "quickInfo": {
       "kind": "var",
@@ -915,7 +937,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 579
+      "position": 579,
+      "name": "32"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -969,7 +992,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 590
+      "position": 590,
+      "name": "24"
     },
     "quickInfo": {
       "kind": "var",
@@ -1018,7 +1042,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 596
+      "position": 596,
+      "name": "25"
     },
     "quickInfo": {
       "kind": "class",
@@ -1052,7 +1077,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoCommentsClass.ts",
-      "position": 935
+      "position": 935,
+      "name": "33"
     },
     "quickInfo": {
       "kind": "constructor",

@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 977
+      "position": 977,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "constructor",
@@ -78,13 +79,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 981
+      "position": 981,
+      "name": "10"
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 985
+      "position": 985,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "class",
@@ -124,7 +127,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 989
+      "position": 989,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "method",
@@ -200,13 +204,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 997
+      "position": 997,
+      "name": "11"
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1004
+      "position": 1004,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "method",
@@ -276,13 +282,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1012
+      "position": 1012,
+      "name": "12"
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1019
+      "position": 1019,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "method",
@@ -353,13 +361,15 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1027
+      "position": 1027,
+      "name": "13"
     }
   },
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1034
+      "position": 1034,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "method",
@@ -453,7 +463,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1049
+      "position": 1049,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "property",
@@ -516,7 +527,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1064
+      "position": 1064,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "property",
@@ -589,7 +601,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1079
+      "position": 1079,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "method",
@@ -659,7 +672,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJSDocTags.ts",
-      "position": 1100
+      "position": 1100,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "",
