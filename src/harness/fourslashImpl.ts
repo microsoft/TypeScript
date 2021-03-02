@@ -1931,7 +1931,7 @@ namespace FourSlash {
                 marker: { ...marker, name },
                 signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
             }));
-            Harness.Baseline.runBaseline(baselineFile, stringify(result))
+            Harness.Baseline.runBaseline(baselineFile, stringify(result));
         }
 
         public baselineCompletions(preferences?: ts.UserPreferences) {
