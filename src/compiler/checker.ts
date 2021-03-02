@@ -23474,6 +23474,9 @@ namespace ts {
 
         // Check if a parameter is assigned anywhere within its declaring function.
         function isParameterAssigned(symbol: Symbol) {
+            if (!symbol.valueDeclaration) {
+                return false;
+            }
             const func = <FunctionLikeDeclaration>getRootDeclaration(symbol.valueDeclaration).parent;
             const links = getNodeLinks(func);
             if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
@@ -23613,8 +23616,8 @@ namespace ts {
                 addDeprecatedSuggestion(node, sourceSymbol.declarations, node.escapedText as string);
             }
 
-            let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
-            if (localOrExportSymbol.flags & SymbolFlags.Class) {
+            let declaration = localOrExportSymbol.valueDeclaration;
+            if (declaration && localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
@@ -23753,6 +23756,7 @@ namespace ts {
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES2015 ||
                 (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
+                !symbol.valueDeclaration ||
                 isSourceFile(symbol.valueDeclaration) ||
                 symbol.valueDeclaration.parent.kind === SyntaxKind.CatchClause) {
                 return;
@@ -26392,7 +26396,7 @@ namespace ts {
                 return true;
             }
             if (isInJSFile(symbol.valueDeclaration)) {
-                const parent = symbol.valueDeclaration.parent;
+                const parent = symbol.valueDeclaration!.parent;
                 return parent && isBinaryExpression(parent) &&
                     getAssignmentDeclarationKind(parent) === AssignmentDeclarationKind.PrototypeProperty;
             }
@@ -26632,14 +26636,13 @@ namespace ts {
             }
             const diagName = diagnosticName(right);
             if (propertyOnType) {
-                const typeValueDecl = propertyOnType.valueDeclaration;
-                const typeClass = getContainingClass(typeValueDecl);
-                Debug.assert(!!typeClass);
+                const typeValueDecl = Debug.checkDefined(propertyOnType.valueDeclaration);
+                const typeClass = Debug.checkDefined(getContainingClass(typeValueDecl));
                 // We found a private identifier property with the same description.
                 // Either:
                 // - There is a lexically scoped private identifier AND it shadows the one we found on the type.
                 // - It is an attempt to access the private identifier outside of the class.
-                if (lexicallyScopedIdentifier) {
+                if (lexicallyScopedIdentifier?.valueDeclaration) {
                     const lexicalValueDecl = lexicallyScopedIdentifier.valueDeclaration;
                     const lexicalClass = getContainingClass(lexicalValueDecl);
                     Debug.assert(!!lexicalClass);
@@ -26948,7 +26951,7 @@ namespace ts {
 
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {
             const prop = containingType.symbol && getPropertyOfType(getTypeOfSymbol(containingType.symbol), propName);
-            return prop !== undefined && prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
+            return prop !== undefined && !!prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
         }
 
         function getSuggestedLibForNonExistentName(name: __String | Identifier) {
@@ -27096,7 +27099,7 @@ namespace ts {
                 return;
             }
             const hasPrivateModifier = hasEffectiveModifier(valueDeclaration, ModifierFlags.Private);
-            const hasPrivateIdentifier = isNamedDeclaration(prop.valueDeclaration) && isPrivateIdentifier(prop.valueDeclaration.name);
+            const hasPrivateIdentifier = prop.valueDeclaration && isNamedDeclaration(prop.valueDeclaration) && isPrivateIdentifier(prop.valueDeclaration.name);
             if (!hasPrivateModifier && !hasPrivateIdentifier) {
                 return;
             }
@@ -34753,7 +34756,7 @@ namespace ts {
                 if (node.initializer) {
                     checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(node.initializer), declarationType, node, node.initializer, /*headMessage*/ undefined);
                 }
-                if (!areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
+                if (symbol.valueDeclaration && !areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
                     error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                 }
             }
@@ -36054,7 +36057,7 @@ namespace ts {
                         if (blockLocals) {
                             forEachKey(catchClause.locals!, caughtName => {
                                 const blockLocal = blockLocals.get(caughtName);
-                                if (blockLocal && (blockLocal.flags & SymbolFlags.BlockScopedVariable) !== 0) {
+                                if (blockLocal?.valueDeclaration && (blockLocal.flags & SymbolFlags.BlockScopedVariable) !== 0) {
                                     grammarErrorOnNode(blockLocal.valueDeclaration, Diagnostics.Cannot_redeclare_identifier_0_in_catch_clause, caughtName);
                                 }
                             });
@@ -36085,7 +36088,7 @@ namespace ts {
                 });
 
                 const classDeclaration = type.symbol.valueDeclaration;
-                if (getObjectFlags(type) & ObjectFlags.Class && isClassLike(classDeclaration)) {
+                if (getObjectFlags(type) & ObjectFlags.Class && classDeclaration && isClassLike(classDeclaration)) {
                     for (const member of classDeclaration.members) {
                         // Only process instance properties with computed names here.
                         // Static properties cannot be in conflict with indexers,
@@ -36955,7 +36958,7 @@ namespace ts {
                 if (memberSymbol) {
                     const declaration = memberSymbol.valueDeclaration;
                     if (declaration !== member) {
-                        if (isBlockScopedNameDeclaredBeforeUse(declaration, member)) {
+                        if (declaration && isBlockScopedNameDeclaredBeforeUse(declaration, member)) {
                             return getEnumMemberValue(declaration as EnumMember);
                         }
                         error(expr, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
@@ -37614,7 +37617,7 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports!.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJSFile(declaration)) {
+                    if (declaration && !isTopLevelInExternalModuleAugmentation(declaration) && !isInJSFile(declaration)) {
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
@@ -38588,7 +38591,7 @@ namespace ts {
             }
         }
 
-        function getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined {
+        function getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined {
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
             }
@@ -38876,7 +38879,7 @@ namespace ts {
                     }
                     const parentSymbol = getParentOfSymbol(symbol);
                     if (parentSymbol) {
-                        if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                        if (parentSymbol.flags & SymbolFlags.ValueModule && parentSymbol.valueDeclaration?.kind === SyntaxKind.SourceFile) {
                             const symbolFile = <SourceFile>parentSymbol.valueDeclaration;
                             const referenceFile = getSourceFileOfNode(node);
                             // If `node` accesses an export and that export isn't in the same file, then symbol is a namespace export, so return undefined.
@@ -38909,12 +38912,13 @@ namespace ts {
         }
 
         function isSymbolOfDestructuredElementOfCatchBinding(symbol: Symbol) {
-            return isBindingElement(symbol.valueDeclaration)
+            return symbol.valueDeclaration
+                && isBindingElement(symbol.valueDeclaration)
                 && walkUpBindingElementsAndPatterns(symbol.valueDeclaration).parent.kind === SyntaxKind.CatchClause;
         }
 
         function isSymbolOfDeclarationWithCollidingName(symbol: Symbol): boolean {
-            if (symbol.flags & SymbolFlags.BlockScoped && !isSourceFile(symbol.valueDeclaration)) {
+            if (symbol.flags & SymbolFlags.BlockScoped && symbol.valueDeclaration && !isSourceFile(symbol.valueDeclaration)) {
                 const links = getSymbolLinks(symbol);
                 if (links.isDeclarationWithCollidingName === undefined) {
                     const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);

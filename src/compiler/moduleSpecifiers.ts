@@ -103,6 +103,9 @@ namespace ts.moduleSpecifiers {
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
+        if (!moduleSourceFile) {
+            return [];
+        }
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
 

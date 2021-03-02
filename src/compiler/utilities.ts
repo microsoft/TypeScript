@@ -734,9 +734,9 @@ namespace ts {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
-    function isShorthandAmbientModule(node: Node): boolean {
+    function isShorthandAmbientModule(node: Node | undefined): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
