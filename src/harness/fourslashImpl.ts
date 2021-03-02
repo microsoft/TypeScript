@@ -1917,7 +1917,7 @@ namespace FourSlash {
         }
 
         public baselineQuickInfo() {
-            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1928,7 +1928,7 @@ namespace FourSlash {
         }
 
         public baselineSignatureHelp() {
-            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1939,10 +1939,7 @@ namespace FourSlash {
         }
 
         public baselineCompletions(preferences?: ts.UserPreferences) {
-            // TODO: Fix this! It needs to use the acutal filename, not the @Filename
-            // 
-            this.getBaselineFileNameForContainingTestFile
-            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1964,7 +1961,7 @@ namespace FourSlash {
 
         public baselineSmartSelection() {
             const n = "\n";
-            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
             const markers = this.getMarkers();
             const fileContent = this.activeFile.content;
             const text = markers.map(marker => {
