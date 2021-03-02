@@ -3144,18 +3144,19 @@ namespace ts {
                 else if (namespace === unknownSymbol) {
                     return namespace;
                 }
-                if (isInJSFile(name)) {
-                    if (namespace.valueDeclaration &&
-                        isVariableDeclaration(namespace.valueDeclaration) &&
-                        namespace.valueDeclaration.initializer &&
-                        isCommonJsRequire(namespace.valueDeclaration.initializer)) {
-                        const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
-                        const moduleSym = resolveExternalModuleName(moduleName, moduleName);
-                        if (moduleSym) {
-                            const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
-                            if (resolvedModuleSymbol) {
-                                namespace = resolvedModuleSymbol;
-                            }
+                if (
+                    namespace.valueDeclaration &&
+                    isInJSFile(namespace.valueDeclaration) &&
+                    isVariableDeclaration(namespace.valueDeclaration) &&
+                    namespace.valueDeclaration.initializer &&
+                    isCommonJsRequire(namespace.valueDeclaration.initializer)
+                ) {
+                    const moduleName = (namespace.valueDeclaration.initializer as CallExpression).arguments[0] as StringLiteral;
+                    const moduleSym = resolveExternalModuleName(moduleName, moduleName);
+                    if (moduleSym) {
+                        const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                        if (resolvedModuleSymbol) {
+                            namespace = resolvedModuleSymbol;
                         }
                     }
                 }
