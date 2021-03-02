@@ -4046,7 +4046,7 @@ namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
 
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
@@ -4715,7 +4715,7 @@ namespace ts {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
-        valueDeclaration: Declaration;          // First value declaration of the symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
@@ -7394,7 +7394,7 @@ namespace ts {
          * @param allowComments A value indicating whether comments may be emitted for the name.
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        /* @internal */ getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+        /* @internal */ getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
          * Gets a namespace-qualified name for use in expressions.
          *

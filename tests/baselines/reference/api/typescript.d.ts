@@ -2187,7 +2187,7 @@ declare namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
@@ -2409,7 +2409,7 @@ declare namespace ts {
         flags: SymbolFlags;
         escapedName: __String;
         declarations?: Declaration[];
-        valueDeclaration: Declaration;
+        valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;
@@ -4107,7 +4107,7 @@ declare namespace ts {
     function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
     function symbolName(symbol: Symbol): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
-    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
+    function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -4233,7 +4233,7 @@ declare namespace ts {
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
-    function isFunctionLike(node: Node): node is SignatureDeclaration;
+    function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;
