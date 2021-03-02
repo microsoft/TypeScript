@@ -1224,7 +1224,7 @@
         "code": 2205,
         "elidedInCompatabilityPyramid": true
     },
-    "Enum annotation is support 'string' only.": {
+    "Enum annotation supports 'string' only.": {
         "category": "Error",
         "code": 2206
     },
