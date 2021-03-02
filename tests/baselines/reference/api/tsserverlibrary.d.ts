@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.2";
+    const versionMajorMinor = "4.3";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -638,6 +638,7 @@ declare namespace ts {
     }
     export type EntityName = Identifier | QualifiedName;
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    export type MemberName = Identifier | PrivateIdentifier;
     export type DeclarationName = Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern | EntityNameExpression;
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -1216,11 +1217,11 @@ declare namespace ts {
         readonly kind: SyntaxKind.PropertyAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
-        readonly name: Identifier | PrivateIdentifier;
+        readonly name: MemberName;
     }
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
-        readonly name: Identifier | PrivateIdentifier;
+        readonly name: MemberName;
     }
     export interface SuperPropertyAccessExpression extends PropertyAccessExpression {
         readonly expression: SuperExpression;
@@ -2261,6 +2262,8 @@ declare namespace ts {
         NoTypeReduction = 536870912,
         NoUndefinedOptionalParameterType = 1073741824,
         AllowThisInObjectLiteral = 32768,
+        AllowQualifiedNameInPlaceOfIdentifier = 65536,
+        /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
         AllowEmptyUnionOrIntersection = 262144,
@@ -2405,7 +2408,7 @@ declare namespace ts {
     export interface Symbol {
         flags: SymbolFlags;
         escapedName: __String;
-        declarations: Declaration[];
+        declarations?: Declaration[];
         valueDeclaration: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
@@ -2656,8 +2659,6 @@ declare namespace ts {
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];
         types: readonly Type[];
-        freshType: TemplateLiteralType;
-        regularType: TemplateLiteralType;
     }
     export interface StringMappingType extends InstantiableType {
         symbol: Symbol;
@@ -3133,17 +3134,21 @@ declare namespace ts {
         Iterator = 8388608,
         NoAsciiEscaping = 16777216,
     }
-    export interface EmitHelper {
+    export interface EmitHelperBase {
         readonly name: string;
         readonly scoped: boolean;
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
         readonly dependencies?: EmitHelper[];
     }
-    export interface UnscopedEmitHelper extends EmitHelper {
+    export interface ScopedEmitHelper extends EmitHelperBase {
+        readonly scoped: true;
+    }
+    export interface UnscopedEmitHelper extends EmitHelperBase {
         readonly scoped: false;
         readonly text: string;
     }
+    export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
     export type EmitHelperUniqueNameCallback = (name: string) => string;
     export enum EmitHint {
         SourceFile = 0,
@@ -3289,10 +3294,10 @@ declare namespace ts {
         updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression;
         createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
         updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression;
-        createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier): PropertyAccessExpression;
-        updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier): PropertyAccessExpression;
-        createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier): PropertyAccessChain;
-        updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier): PropertyAccessChain;
+        createPropertyAccessExpression(expression: Expression, name: string | MemberName): PropertyAccessExpression;
+        updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: MemberName): PropertyAccessExpression;
+        createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName): PropertyAccessChain;
+        updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: MemberName): PropertyAccessChain;
         createElementAccessExpression(expression: Expression, index: number | Expression): ElementAccessExpression;
         updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
         createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression): ElementAccessChain;
@@ -3753,12 +3758,12 @@ declare namespace ts {
          * });
          * ```
          */
-        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         /**
          * A hook used to check if an emit notification is required for a node.
          * @param node The node to emit.
          */
-        isEmitNotificationEnabled?(node: Node | undefined): boolean;
+        isEmitNotificationEnabled?(node: Node): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
@@ -3973,6 +3978,7 @@ declare namespace ts {
         reScanJsxToken(): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
+        reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -4193,7 +4199,7 @@ declare namespace ts {
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
-    function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier;
+    function isMemberName(node: Node): node is MemberName;
     function isPropertyAccessChain(node: Node): node is PropertyAccessChain;
     function isElementAccessChain(node: Node): node is ElementAccessChain;
     function isCallChain(node: Node): node is CallChain;
@@ -4208,6 +4214,12 @@ declare namespace ts {
     function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
     function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag;
+    /**
+     * True if kind is of some token syntax kind.
+     * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+     */
+    function isTokenKind(kind: SyntaxKind): boolean;
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
@@ -4350,10 +4362,14 @@ declare namespace ts {
     function isTemplateHead(node: Node): node is TemplateHead;
     function isTemplateMiddle(node: Node): node is TemplateMiddle;
     function isTemplateTail(node: Node): node is TemplateTail;
+    function isDotDotDotToken(node: Node): node is DotDotDotToken;
+    function isPlusToken(node: Node): node is PlusToken;
+    function isMinusToken(node: Node): node is MinusToken;
+    function isAsteriskToken(node: Node): node is AsteriskToken;
     function isIdentifier(node: Node): node is Identifier;
+    function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
-    function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
     function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
     function isParameter(node: Node): node is ParameterDeclaration;
     function isDecorator(node: Node): node is Decorator;
@@ -5515,12 +5531,13 @@ declare namespace ts {
          *
          * @param fileName The path to the file
          * @param position A zero based index of the character where you want the entries
-         * @param entryName The name from an existing completion which came from `getCompletionsAtPosition`
+         * @param entryName The `name` from an existing completion which came from `getCompletionsAtPosition`
          * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
-         * @param source Source code for the current file, can be undefined for backwards compatibility
+         * @param source `source` property from the completion entry
          * @param preferences User settings, can be undefined for backwards compatibility
+         * @param data `data` property from the completion entry
          */
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences | undefined): CompletionEntryDetails | undefined;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): CompletionEntryDetails | undefined;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
         /**
          * Gets semantic information about the identifier at a particular position in a
@@ -5559,7 +5576,7 @@ declare namespace ts {
         getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
-        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         /**
          * This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
@@ -5951,6 +5968,7 @@ declare namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+        unverified?: boolean;
     }
     interface DefinitionInfoAndBoundSpan {
         definitions?: readonly DefinitionInfo[];
@@ -6024,11 +6042,15 @@ declare namespace ts {
     interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }
+    interface DocCommentTemplateOptions {
+        readonly generateReturnInDocTemplate?: boolean;
+    }
     interface SignatureHelpParameter {
         name: string;
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+        isRest?: boolean;
     }
     interface SelectionRange {
         textSpan: TextSpan;
@@ -6076,6 +6098,19 @@ declare namespace ts {
         isNewIdentifierLocation: boolean;
         entries: CompletionEntry[];
     }
+    interface CompletionEntryData {
+        /** The file name declaring the export's module symbol, if it was an external module */
+        fileName?: string;
+        /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
+        ambientModuleName?: string;
+        /** True if the export was found in the package.json AutoImportProvider */
+        isPackageJsonImport?: true;
+        /**
+         * The name of the property or export in the module's symbol table. Differs from the completion name
+         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+         */
+        exportName: string;
+    }
     interface CompletionEntry {
         name: string;
         kind: ScriptElementKind;
@@ -6093,6 +6128,15 @@ declare namespace ts {
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name. Currently only defined for auto-import completions, but the type is
+         * `unknown` in the protocol, so it can be changed as needed to support other kinds of completions.
+         * The presence of this property should generally not be used to assume that this completion entry
+         * is an auto-import.
+         */
+        data?: CompletionEntryData;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -7137,6 +7181,41 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
+     * A request to get encoded semantic classifications for a span in the file
+     */
+    interface EncodedSemanticClassificationsRequest extends FileRequest {
+        arguments: EncodedSemanticClassificationsRequestArgs;
+    }
+    /**
+     * Arguments for EncodedSemanticClassificationsRequest request.
+     */
+    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+        /**
+         * Optional parameter for the semantic highlighting response, if absent it
+         * defaults to "original".
+         */
+        format?: "original" | "2020";
+    }
+    /** The response for a EncodedSemanticClassificationsRequest */
+    interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody;
+    }
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
+    /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
      */
@@ -7211,8 +7290,14 @@ declare namespace ts.server.protocol {
     }
     interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
+    interface DefinitionInfo extends FileSpanWithContext {
+        /**
+         * When true, the file may or may not exist.
+         */
+        unverified?: boolean;
+    }
     interface DefinitionInfoAndBoundSpan {
-        definitions: readonly FileSpanWithContext[];
+        definitions: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
     /**
@@ -8113,6 +8198,7 @@ declare namespace ts.server.protocol {
     interface CompletionEntryIdentifier {
         name: string;
         source?: string;
+        data?: unknown;
     }
     /**
      * Completion entry details request; value of command field is
@@ -8195,6 +8281,12 @@ declare namespace ts.server.protocol {
          * in the project package.json.
          */
         isPackageJsonImport?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name.
+         */
+        data?: unknown;
     }
     /**
      * Additional completion entry details, available on demand
@@ -9052,6 +9144,7 @@ declare namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly generateReturnInDocTemplate?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -9160,6 +9253,33 @@ declare namespace ts.server.protocol {
         ES2019 = "ES2019",
         ES2020 = "ES2020",
         ESNext = "ESNext"
+    }
+    enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25
     }
 }
 declare namespace ts.server {
@@ -9852,7 +9972,7 @@ declare namespace ts.server {
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
-         * If the there is no existing project it just opens the configured project for the config file
+         * If there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles;
@@ -10308,13 +10428,13 @@ declare namespace ts {
     /** @deprecated Use `factory.updateObjectLiteralExpression` or the factory supplied by your transformation context instead. */
     const updateObjectLiteral: (node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]) => ObjectLiteralExpression;
     /** @deprecated Use `factory.createPropertyAccessExpression` or the factory supplied by your transformation context instead. */
-    const createPropertyAccess: (expression: Expression, name: string | Identifier | PrivateIdentifier) => PropertyAccessExpression;
+    const createPropertyAccess: (expression: Expression, name: string | MemberName) => PropertyAccessExpression;
     /** @deprecated Use `factory.updatePropertyAccessExpression` or the factory supplied by your transformation context instead. */
-    const updatePropertyAccess: (node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) => PropertyAccessExpression;
+    const updatePropertyAccess: (node: PropertyAccessExpression, expression: Expression, name: MemberName) => PropertyAccessExpression;
     /** @deprecated Use `factory.createPropertyAccessChain` or the factory supplied by your transformation context instead. */
-    const createPropertyAccessChain: (expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) => PropertyAccessChain;
+    const createPropertyAccessChain: (expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName) => PropertyAccessChain;
     /** @deprecated Use `factory.updatePropertyAccessChain` or the factory supplied by your transformation context instead. */
-    const updatePropertyAccessChain: (node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier) => PropertyAccessChain;
+    const updatePropertyAccessChain: (node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: MemberName) => PropertyAccessChain;
     /** @deprecated Use `factory.createElementAccessExpression` or the factory supplied by your transformation context instead. */
     const createElementAccess: (expression: Expression, index: number | Expression) => ElementAccessExpression;
     /** @deprecated Use `factory.updateElementAccessExpression` or the factory supplied by your transformation context instead. */
@@ -10884,6 +11004,10 @@ declare namespace ts {
      */
     interface Map<T> extends ESMap<string, T> {
     }
+    /**
+     * @deprecated Use `isMemberName` instead.
+     */
+    const isIdentifierOrPrivateIdentifier: (node: Node) => node is MemberName;
 }
 
 export = ts;

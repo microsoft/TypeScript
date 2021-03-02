@@ -1193,6 +1193,7 @@ namespace ts {
         exit(exitCode?: number): void;
         /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): boolean;
         /*@internal*/ disableCPUProfiler?(continuation: () => void): boolean;
+        /*@internal*/ cpuProfilingEnabled?(): boolean;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -1365,6 +1366,7 @@ namespace ts {
                 },
                 enableCPUProfiler,
                 disableCPUProfiler,
+                cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
                 realpath,
                 debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
@@ -1637,7 +1639,7 @@ namespace ts {
                     return event === "rename" &&
                         (!relativeName ||
                             relativeName === lastDirectoryPart ||
-                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                            (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
                         !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                         invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
                         callback(event, relativeName);

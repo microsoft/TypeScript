@@ -1864,10 +1864,9 @@ namespace ts {
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
                         ? setTextRange(
-                            factory.createBinaryExpression(
-                                node.operand,
-                                factory.createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
-                                factory.createNumericLiteral(1)
+                            factory.createPrefixUnaryExpression(
+                                node.operator,
+                                node.operand
                             ),
                             /*location*/ node)
                         : node;
@@ -1876,7 +1875,12 @@ namespace ts {
                         noSubstitution[getNodeId(expression)] = true;
                         expression = createExportExpression(exportName, expression);
                     }
-
+                    if (node.kind === SyntaxKind.PostfixUnaryExpression) {
+                        noSubstitution[getNodeId(expression)] = true;
+                        expression = node.operator === SyntaxKind.PlusPlusToken
+                            ? factory.createSubtract(expression, factory.createNumericLiteral(1))
+                            : factory.createAdd(expression, factory.createNumericLiteral(1));
+                    }
                     return expression;
                 }
             }
