@@ -136,7 +136,7 @@ namespace ts.NavigationBar {
         for (let i = 0; i < depth; i++) endNode();
     }
     function startNestedNodes(targetNode: Node, entityName: BindableStaticNameExpression) {
-        const names: (PropertyNameLiteral | WellKnownSymbolExpression)[] = [];
+        const names: PropertyNameLiteral[] = [];
         while (!isPropertyNameLiteral(entityName)) {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
@@ -194,6 +194,21 @@ namespace ts.NavigationBar {
         }
     }
 
+    /**
+     * Historically, we've elided dynamic names from the nav tree (including late bound names),
+     * but included certain "well known" symbol names. While we no longer distinguish those well-known
+     * symbols from other unique symbols, we do the below to retain those members in the nav tree.
+     */
+    function hasNavigationBarName(node: Declaration) {
+        return !hasDynamicName(node) ||
+            (
+                node.kind !== SyntaxKind.BinaryExpression &&
+                isPropertyAccessExpression(node.name.expression) &&
+                isIdentifier(node.name.expression.expression) &&
+                idText(node.name.expression.expression) === "Symbol"
+            );
+    }
+
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
     function addChildrenRecursively(node: Node | undefined): void {
         curCancellationToken.throwIfCancellationRequested();
@@ -220,18 +235,18 @@ namespace ts.NavigationBar {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodSignature:
-                if (!hasDynamicName((<ClassElement | TypeElement>node))) {
+                if (hasNavigationBarName((<ClassElement | TypeElement>node))) {
                     addNodeWithRecursiveChild(node, (<FunctionLikeDeclaration>node).body);
                 }
                 break;
 
             case SyntaxKind.PropertyDeclaration:
-                if (!hasDynamicName(<ClassElement>node)) {
+                if (hasNavigationBarName(<ClassElement>node)) {
                     addNodeWithRecursiveInitializer(<PropertyDeclaration>node);
                 }
                 break;
             case SyntaxKind.PropertySignature:
-                if (!hasDynamicName(<TypeElement>node)) {
+                if (hasNavigationBarName(<TypeElement>node)) {
                     addLeafNode(node);
                 }
                 break;
@@ -358,7 +373,7 @@ namespace ts.NavigationBar {
                             assignmentTarget;
 
                         let depth = 0;
-                        let className: PropertyNameLiteral | WellKnownSymbolExpression;
+                        let className: PropertyNameLiteral;
                         // If we see a prototype assignment, start tracking the target as a class
                         // This is only done for simple classes not nested assignments.
                         if (isIdentifier(prototypeAccess.expression)) {
@@ -614,7 +629,8 @@ namespace ts.NavigationBar {
             case SyntaxKind.SetAccessor:
                 return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
             case SyntaxKind.ModuleDeclaration:
-                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
+                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b)
+                    && getFullyQualifiedModuleName(<ModuleDeclaration>a) === getFullyQualifiedModuleName(<ModuleDeclaration>b);
             default:
                 return true;
         }
@@ -634,7 +650,6 @@ namespace ts.NavigationBar {
     // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
     // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
     function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-        // TODO: GH#18217
         return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
     }
 
@@ -854,6 +869,10 @@ namespace ts.NavigationBar {
             return getTextOfNode(moduleDeclaration.name);
         }
 
+        return getFullyQualifiedModuleName(moduleDeclaration);
+    }
+
+    function getFullyQualifiedModuleName(moduleDeclaration: ModuleDeclaration): string {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result = [getTextOfIdentifierOrLiteral(moduleDeclaration.name)];
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {

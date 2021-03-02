@@ -401,8 +401,8 @@ namespace ts.SymbolDisplay {
         if (symbolFlags & SymbolFlags.EnumMember) {
             symbolKind = ScriptElementKind.enumMemberElement;
             addPrefixForAnyFunctionOrVar(symbol, "enum member");
-            const declaration = symbol.declarations[0];
-            if (declaration.kind === SyntaxKind.EnumMember) {
+            const declaration = symbol.declarations?.[0];
+            if (declaration?.kind === SyntaxKind.EnumMember) {
                 const constantValue = typeChecker.getConstantValue(<EnumMember>declaration);
                 if (constantValue !== undefined) {
                     displayParts.push(spacePart());
@@ -446,22 +446,24 @@ namespace ts.SymbolDisplay {
                 }
             }
 
-            switch (symbol.declarations[0].kind) {
-                case SyntaxKind.NamespaceExportDeclaration:
-                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                    displayParts.push(spacePart());
-                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
-                    break;
-                case SyntaxKind.ExportAssignment:
-                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                    displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
-                    break;
-                case SyntaxKind.ExportSpecifier:
-                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                    break;
-                default:
-                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+            if (symbol.declarations) {
+                switch (symbol.declarations[0].kind) {
+                    case SyntaxKind.NamespaceExportDeclaration:
+                        displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                        displayParts.push(spacePart());
+                        displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                        break;
+                    case SyntaxKind.ExportAssignment:
+                        displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                        displayParts.push(spacePart());
+                        displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                        break;
+                    case SyntaxKind.ExportSpecifier:
+                        displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                        break;
+                    default:
+                        displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+                }
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
@@ -556,7 +558,7 @@ namespace ts.SymbolDisplay {
             // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
             // there documentation comments might be attached to the right hand side symbol of their declarations.
             // The pattern of such special property access is that the parent symbol is the symbol of the file.
-            if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+            if (symbol.parent && symbol.declarations && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
                 for (const declaration of symbol.declarations) {
                     if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
                         continue;

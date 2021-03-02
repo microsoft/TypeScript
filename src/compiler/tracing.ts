@@ -162,11 +162,22 @@ namespace ts { // eslint-disable-line one-namespace-per-file
             performance.measure("Tracing", "beginTracing", "endTracing");
         }
 
-        function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
-            return {
-                line: lc.line + 1,
-                character: lc.character + 1,
-            };
+        function getLocation(node: Node | undefined) {
+            const file = getSourceFileOfNode(node);
+            return !file
+                ? undefined
+                : {
+                    path: file.path,
+                    start: indexFromOne(getLineAndCharacterOfPosition(file, node!.pos)),
+                    end: indexFromOne(getLineAndCharacterOfPosition(file, node!.end)),
+                };
+
+            function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
+                return {
+                    line: lc.line + 1,
+                    character: lc.character + 1,
+                };
+            }
         }
 
         function dumpTypes(types: readonly Type[]) {
@@ -185,8 +196,6 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                 const type = types[i];
                 const objectFlags = (type as any).objectFlags;
                 const symbol = type.aliasSymbol ?? type.symbol;
-                const firstDeclaration = symbol?.declarations?.[0];
-                const firstFile = firstDeclaration && getSourceFileOfNode(firstDeclaration);
 
                 // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
                 let display: string | undefined;
@@ -214,6 +223,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     referenceProperties = {
                         instantiatedType: referenceType.target?.id,
                         typeArguments: referenceType.resolvedTypeArguments?.map(t => t.id),
+                        referenceLocation: getLocation(referenceType.node),
                     };
                 }
 
@@ -225,6 +235,34 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                         conditionalExtendsType: conditionalType.extendsType?.id,
                         conditionalTrueType: conditionalType.resolvedTrueType?.id ?? -1,
                         conditionalFalseType: conditionalType.resolvedFalseType?.id ?? -1,
+                    };
+                }
+
+                let substitutionProperties: object = {};
+                if (type.flags & TypeFlags.Substitution) {
+                    const substitutionType = type as SubstitutionType;
+                    substitutionProperties = {
+                        substitutionBaseType: substitutionType.baseType?.id,
+                        substituteType: substitutionType.substitute?.id,
+                    };
+                }
+
+                let reverseMappedProperties: object = {};
+                if (objectFlags & ObjectFlags.ReverseMapped) {
+                    const reverseMappedType = type as ReverseMappedType;
+                    reverseMappedProperties = {
+                        reverseMappedSourceType: reverseMappedType.source?.id,
+                        reverseMappedMappedType: reverseMappedType.mappedType?.id,
+                        reverseMappedConstraintType: reverseMappedType.constraintType?.id,
+                    };
+                }
+
+                let evolvingArrayProperties: object = {};
+                if (objectFlags & ObjectFlags.EvolvingArray) {
+                    const evolvingArrayType = type as EvolvingArrayType;
+                    evolvingArrayProperties = {
+                        evolvingArrayElementType: evolvingArrayType.elementType.id,
+                        evolvingArrayFinalType: evolvingArrayType.finalArrayType?.id,
                     };
                 }
 
@@ -245,6 +283,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     intrinsicName: (type as any).intrinsicName,
                     symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
                     recursionId: recursionToken,
+                    isTuple: objectFlags & ObjectFlags.Tuple ? true : undefined,
                     unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
                     intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
                     aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
@@ -252,11 +291,11 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     ...indexedAccessProperties,
                     ...referenceProperties,
                     ...conditionalProperties,
-                    firstDeclaration: firstDeclaration && {
-                        path: firstFile.path,
-                        start: indexFromOne(getLineAndCharacterOfPosition(firstFile, firstDeclaration.pos)),
-                        end: indexFromOne(getLineAndCharacterOfPosition(getSourceFileOfNode(firstDeclaration), firstDeclaration.end)),
-                    },
+                    ...substitutionProperties,
+                    ...reverseMappedProperties,
+                    ...evolvingArrayProperties,
+                    destructuringPattern: getLocation(type.pattern),
+                    firstDeclaration: getLocation(symbol?.declarations?.[0]),
                     flags: Debug.formatTypeFlags(type.flags).split("|"),
                     display,
                 };

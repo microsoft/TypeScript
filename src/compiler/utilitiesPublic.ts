@@ -936,7 +936,7 @@ namespace ts {
 
     // #region
 
-    export function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier {
+    export function isMemberName(node: Node): node is MemberName {
         return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateIdentifier;
     }
 
@@ -1062,12 +1062,21 @@ namespace ts {
     }
 
     /**
+     * True if kind is of some token syntax kind.
+     * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+     */
+    export function isTokenKind(kind: SyntaxKind): boolean {
+        return kind >= SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken;
+    }
+
+    /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     export function isToken(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+        return isTokenKind(n.kind);
     }
 
     // Node Arrays

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/conditionalTypeGenericInSignatureTypeParameterConstraint.ts ===
+// should be x
+type H_inline1<x> = (<o extends x>() => o) extends (() => infer o) ? o : never;
+>H_inline1 : Symbol(H_inline1, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 0, 0))
+>x : Symbol(x, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 15))
+>o : Symbol(o, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 22))
+>x : Symbol(x, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 15))
+>o : Symbol(o, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 22))
+>o : Symbol(o, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 63))
+>o : Symbol(o, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 63))
+
+type Result = H_inline1<string>; // should be `string`
+>Result : Symbol(Result, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 1, 79))
+>H_inline1 : Symbol(H_inline1, Decl(conditionalTypeGenericInSignatureTypeParameterConstraint.ts, 0, 0))
+

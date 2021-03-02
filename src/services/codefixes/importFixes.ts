@@ -376,7 +376,7 @@ namespace ts.codefix {
         // Can't use an es6 import for a type in JS.
         return exportedSymbolIsTypeOnly && isSourceFileJS(sourceFile) ? emptyArray : mapDefined(sourceFile.imports, (moduleSpecifier): FixAddToExistingImportInfo | undefined => {
             const i = importFromModuleSpecifier(moduleSpecifier);
-            if (isRequireVariableDeclaration(i.parent, /*requireStringLiteralLikeArgument*/ true)) {
+            if (isRequireVariableDeclaration(i.parent)) {
                 return checker.resolveExternalModuleName(moduleSpecifier) === moduleSymbol ? { declaration: i.parent, importKind } : undefined;
             }
             if (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration) {

@@ -35,8 +35,7 @@ var y = {
     "typeof": 
 };
 var x = (_a = {
-        a: a,
-        : .b,
+        a: a, : .b,
         a: a
     },
     _a["ss"] = ,

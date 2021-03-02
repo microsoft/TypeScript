@@ -503,7 +503,7 @@
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
+    "A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1166
     },
@@ -3849,6 +3849,10 @@
     "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 5091
+    },
+    "The root value of a '{0}' file must be an object.": {
+        "category": "Error",
+        "code": 5092
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
