@@ -979,17 +979,18 @@ namespace ts.server.protocol {
         file: string;
     }
 
-    // TODO: JSDoc
     export interface JSDocTagInfo {
+        /** Name of the JSDoc tag */
         name: string;
+        /** Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
         text?: string;
     }
 
-    // TODO: Better JSDoc
-    /** Like ts.JSDocTagInfo, but with JSDocLinkParts translated to line+offset */
     export interface RichJSDocTagInfo {
+        /** Name of the JSDoc tag */
         name: string;
-        text?: (SymbolDisplayPart | JSDocLinkPart)[];
+        /** Comment display parts after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
+        text?: SymbolDisplayPart[];
     }
 
     export interface TextSpanWithContext extends TextSpan {
@@ -2008,9 +2009,6 @@ namespace ts.server.protocol {
         tags: JSDocTagInfo[];
     }
 
-    /**
-     * RICH Body of QuickInfoResponse.
-     */
     export interface RichQuickInfoResponseBody {
         /**
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
@@ -2265,10 +2263,11 @@ namespace ts.server.protocol {
         kind: string;
     }
 
+    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
     export interface JSDocLinkPart extends SymbolDisplayPart {
-        // TODO: JSDoc here
+        /** The name of the linked declaration. Includes the location inside the @link tag. */
         name: FileSpan;
-        // TODO: JSDoc here
+        /** The location of the declaration that the @link tag links to. */
         target: FileSpan;
     }
 
@@ -2381,7 +2380,7 @@ namespace ts.server.protocol {
     }
 
     /**
-     * RICH Additional completion entry details, available on demand
+     * Additional completion entry details, available on demand
      */
     export interface RichCompletionEntryDetails {
         /**

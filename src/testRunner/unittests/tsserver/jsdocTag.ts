@@ -56,7 +56,7 @@ var x = 1`);
                             }
                         },
                         text: "{@link C}",
-                    }],
+                    } as SymbolDisplayPart],
                 }]
             });
         });
@@ -116,7 +116,7 @@ var x = 1`);
                         }
                     },
                     text: "{@link C}"
-                }],
+                } as SymbolDisplayPart],
                 tags: undefined,
             });
         });

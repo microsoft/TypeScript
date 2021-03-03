@@ -1282,7 +1282,7 @@ namespace ts.server {
             return tags ? tags.map(tag => ({ ...tag, text: this.mapDisplayParts(tag.text, project) })) : [];
         }
 
-        private mapDisplayParts(parts: (SymbolDisplayPart | JSDocLinkPart)[] | undefined, project: Project): (protocol.SymbolDisplayPart | protocol.JSDocLinkPart)[] {
+        private mapDisplayParts(parts: SymbolDisplayPart[] | undefined, project: Project): protocol.SymbolDisplayPart[] {
             if (!parts) {
                 return [];
             }

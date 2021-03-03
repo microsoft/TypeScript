@@ -1042,12 +1042,12 @@ namespace ts {
 
     export interface JSDocLinkPart extends SymbolDisplayPart {
         name: DocumentSpan;
-        target: DocumentSpan; // TODO: Protocol needs to convert these to the protocol line+offset version
+        target: DocumentSpan;
     }
 
     export interface JSDocTagInfo {
         name: string;
-        text?: (SymbolDisplayPart | JSDocLinkPart)[];
+        text?: SymbolDisplayPart[];
     }
 
     export interface QuickInfo {
@@ -1055,7 +1055,7 @@ namespace ts {
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
-        documentation?: (SymbolDisplayPart | JSDocLinkPart)[];
+        documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
     }
 
