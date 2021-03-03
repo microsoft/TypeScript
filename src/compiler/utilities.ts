@@ -2401,6 +2401,19 @@ namespace ts {
         return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
+    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrRequire): string | undefined {
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+                return node.initializer.arguments[0].text;
+            case SyntaxKind.ImportDeclaration:
+                return tryCast(node.moduleSpecifier, isStringLiteralLike)?.text;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike)?.text;
+            default:
+                Debug.assertNever(node);
+        }
+    }
+
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
         return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
     }
