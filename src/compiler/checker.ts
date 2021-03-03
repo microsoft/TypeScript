@@ -32417,7 +32417,7 @@ namespace ts {
                         continue;
                     }
                     const isPrivate = isPrivateIdentifier(name);
-                    const isPrivateStatic = isPrivate && isStatic ? DeclarationMeaning.PrivateStatic : 0;
+                    const privateStaticFlags = isPrivate && isStatic ? DeclarationMeaning.PrivateStatic : 0;
                     const names =
                         isPrivate ? privateIdentifiers :
                         isStatic ? staticNames :
@@ -32427,19 +32427,19 @@ namespace ts {
                     if (memberName) {
                         switch (member.kind) {
                             case SyntaxKind.GetAccessor:
-                                addName(names, name, memberName, DeclarationMeaning.GetAccessor | isPrivateStatic);
+                                addName(names, name, memberName, DeclarationMeaning.GetAccessor | privateStaticFlags);
                                 break;
 
                             case SyntaxKind.SetAccessor:
-                                addName(names, name, memberName, DeclarationMeaning.SetAccessor | isPrivateStatic);
+                                addName(names, name, memberName, DeclarationMeaning.SetAccessor | privateStaticFlags);
                                 break;
 
                             case SyntaxKind.PropertyDeclaration:
-                                addName(names, name, memberName, DeclarationMeaning.GetOrSetAccessor | isPrivateStatic);
+                                addName(names, name, memberName, DeclarationMeaning.GetOrSetAccessor | privateStaticFlags);
                                 break;
 
                             case SyntaxKind.MethodDeclaration:
-                                addName(names, name, memberName, DeclarationMeaning.Method | isPrivateStatic);
+                                addName(names, name, memberName, DeclarationMeaning.Method | privateStaticFlags);
                                 break;
                         }
                     }
