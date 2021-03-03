@@ -206,13 +206,15 @@ namespace ts {
         }
 
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
-            const primaryDeclaration = find(parentSymbol.declarations, d => getSourceFileOfNode(d) === containingFile)!;
+            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile)!;
             const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
-            for (const augmentations of augmentingDeclarations) {
-                context.addDiagnostic(addRelatedInfo(
-                    createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
-                    createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
-                ));
+            if (augmentingDeclarations) {
+                for (const augmentations of augmentingDeclarations) {
+                    context.addDiagnostic(addRelatedInfo(
+                        createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
+                        createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
+                    ));
+                }
             }
         }
 

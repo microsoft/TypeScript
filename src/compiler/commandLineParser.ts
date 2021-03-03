@@ -1603,7 +1603,7 @@ namespace ts {
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
-            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*reportOptionsErrors*/ false, /*optionsIterator*/ undefined),
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1767,11 +1767,35 @@ namespace ts {
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
+    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, reportOptionsErrors: boolean, optionsIterator: JsonConversionNotifier | undefined): any {
+        const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
+        const knownRootOptions = reportOptionsErrors ? getTsconfigRootOptionsMap() : undefined;
+        if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
+            errors.push(createDiagnosticForNodeInSourceFile(
+                sourceFile,
+                rootExpression,
+                Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                getBaseFileName(sourceFile.fileName) === "jsconfig.json" ? "jsconfig.json" : "tsconfig.json"
+            ));
+            // Last-ditch error recovery. Somewhat useful because the JSON parser will recover from some parse errors by
+            // synthesizing a top-level array literal expression. There's a reasonable chance the first element of that
+            // array is a well-formed configuration object, made into an array element by stray characters.
+            if (isArrayLiteralExpression(rootExpression)) {
+                const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
+                if (firstObject) {
+                    return convertToObjectWorker(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+                }
+            }
+            return {};
+        }
+        return convertToObjectWorker(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+    }
+
     /**
      * Convert the json syntax tree into the json value
      */
     export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
-        return convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+        return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
     }
 
     /**
@@ -1782,15 +1806,16 @@ namespace ts {
     /*@internal*/
     export function convertToObjectWorker(
         sourceFile: JsonSourceFile,
+        rootExpression: Expression | undefined,
         errors: Push<Diagnostic>,
         returnValue: boolean,
         knownRootOptions: CommandLineOption | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
-        if (!sourceFile.statements.length) {
+        if (!rootExpression) {
             return returnValue ? {} : undefined;
         }
 
-        return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
+        return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
         function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
             return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
@@ -2733,7 +2758,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
 
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {

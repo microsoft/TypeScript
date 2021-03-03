@@ -269,8 +269,7 @@ namespace ts {
      * any such locations
      */
     export function isSimpleInlineableExpression(expression: Expression) {
-        return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
-            isWellKnownSymbolSyntactically(expression);
+        return !isIdentifier(expression) && isSimpleCopiableExpression(expression);
     }
 
     export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
