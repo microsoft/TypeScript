@@ -1,14 +1,15 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags5.js",
-      "position": 285
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags6.js",
+      "position": 308,
+      "name": ""
     },
     "quickInfo": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
-        "start": 285,
+        "start": 308,
         "length": 6
       },
       "displayParts": [
@@ -176,6 +177,9 @@
               "kind": "text"
             }
           ]
+        },
+        {
+          "name": "inheritDoc"
         }
       ]
     }

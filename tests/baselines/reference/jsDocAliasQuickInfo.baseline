@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/jsDocAliasQuickInfo.ts",
-      "position": 44
+      "position": 44,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "property",
@@ -67,7 +68,8 @@
   {
     "marker": {
       "fileName": "/test.ts",
-      "position": 9
+      "position": 9,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "property",
@@ -132,7 +134,8 @@
   {
     "marker": {
       "fileName": "/test.ts",
-      "position": 20
+      "position": 20,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "alias",

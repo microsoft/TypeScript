@@ -2198,7 +2198,7 @@ declare namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
@@ -2420,7 +2420,7 @@ declare namespace ts {
         flags: SymbolFlags;
         escapedName: __String;
         declarations?: Declaration[];
-        valueDeclaration: Declaration;
+        valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;
@@ -2786,18 +2786,21 @@ declare namespace ts {
         FixedPollingInterval = 0,
         PriorityPollingInterval = 1,
         DynamicPriorityPolling = 2,
-        UseFsEvents = 3,
-        UseFsEventsOnParentDirectory = 4
+        FixedChunkSizePolling = 3,
+        UseFsEvents = 4,
+        UseFsEventsOnParentDirectory = 5
     }
     export enum WatchDirectoryKind {
         UseFsEvents = 0,
         FixedPollingInterval = 1,
-        DynamicPriorityPolling = 2
+        DynamicPriorityPolling = 2,
+        FixedChunkSizePolling = 3
     }
     export enum PollingWatchKind {
         FixedInterval = 0,
         PriorityInterval = 1,
-        DynamicPriority = 2
+        DynamicPriority = 2,
+        FixedChunkSize = 3
     }
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     export interface CompilerOptions {
@@ -4122,7 +4125,7 @@ declare namespace ts {
     function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
     function symbolName(symbol: Symbol): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
-    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
+    function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -4250,7 +4253,7 @@ declare namespace ts {
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
-    function isFunctionLike(node: Node): node is SignatureDeclaration;
+    function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;
@@ -7714,18 +7717,21 @@ declare namespace ts.server.protocol {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
         UseFsEvents = "UseFsEvents",
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory"
     }
     enum WatchDirectoryKind {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
-        DynamicPriorityPolling = "DynamicPriorityPolling"
+        DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling"
     }
     enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
-        DynamicPriority = "DynamicPriority"
+        DynamicPriority = "DynamicPriority",
+        FixedChunkSize = "FixedChunkSize"
     }
     interface WatchOptions {
         watchFile?: WatchFileKind | ts.WatchFileKind;

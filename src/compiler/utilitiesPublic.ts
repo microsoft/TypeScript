@@ -614,7 +614,7 @@ namespace ts {
         return (declaration as NamedDeclaration).name;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
             (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
@@ -1214,8 +1214,8 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is SignatureDeclaration {
-        return node && isFunctionLikeKind(node.kind);
+    export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration {
+        return !!node && isFunctionLikeKind(node.kind);
     }
 
     /* @internal */

@@ -650,7 +650,7 @@ namespace ts {
                                 length: undefined
                             },
                             {
-                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority'.",
+                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority', 'fixedchunksize'.",
                                 category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                                 code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                                 file: undefined,
@@ -957,7 +957,7 @@ namespace ts {
                                 length: undefined
                             },
                             {
-                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority'.",
+                                messageText: "Argument for '--fallbackPolling' option must be: 'fixedinterval', 'priorityinterval', 'dynamicpriority', 'fixedchunksize'.",
                                 category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                                 code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                                 file: undefined,

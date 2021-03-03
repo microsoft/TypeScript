@@ -1543,6 +1543,7 @@ namespace ts.server.protocol {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
         UseFsEvents = "UseFsEvents",
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
     }
@@ -1551,12 +1552,14 @@ namespace ts.server.protocol {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
     }
 
     export const enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
         DynamicPriority = "DynamicPriority",
+        FixedChunkSize = "FixedChunkSize",
     }
 
     export interface WatchOptions {
