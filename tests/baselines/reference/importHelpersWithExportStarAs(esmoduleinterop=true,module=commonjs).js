@@ -23,4 +23,4 @@ exports.A = A;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const tslib_1 = require("tslib");
-exports.a = tslib_1.__importStar(require("./a"));
+exports.a = (0, tslib_1.__importStar)(require("./a"));
