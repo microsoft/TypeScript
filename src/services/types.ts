@@ -1041,7 +1041,7 @@ namespace ts {
     }
 
     export interface JSDocLinkPart extends SymbolDisplayPart {
-        name: TextSpan; // TODO: Might need to be relative to comment start (or, easier, filename+line+offset)
+        name: DocumentSpan;
         target: DocumentSpan; // TODO: Protocol needs to convert these to the protocol line+offset version
     }
 

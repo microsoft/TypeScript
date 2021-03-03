@@ -1274,20 +1274,31 @@ namespace ts.server {
                 result;
         }
 
-        // private mapJSDocLinkPart(parts: ts.SymbolDisplayPart[] | undefined, project: Project): protocol.SymbolDisplayPart[] {
-        //     if (parts === undefined) {
-        //         return [];
-        //     }
-        //     return parts.map(part => part.kind !== "link" ? part.text : {
-        //         ...part,
-        //         name: this.toFileSpan((part as JSDocLinkPart).name.fileName, (part as JSDocLinkPart).name.textSpan, project),
-        //         target: this.toFileSpan((part as JSDocLinkPart).target.fileName, (part as JSDocLinkPart).target.textSpan, project),
-        //     });
-        // }
-
-        // TODO: If rich version, then don't map (except...maybe the symbol links' spans need mapping??)
         private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined): protocol.JSDocTagInfo[] {
             return tags ? tags.map(tag => ({ ...tag, text: tag.text && tag.text.map(part => part.text).join("") })) : [];
+        }
+
+        private mapRichJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.RichJSDocTagInfo[] {
+            return tags ? tags.map(tag => ({ ...tag, text: this.mapDisplayParts(tag.text, project) })) : [];
+        }
+
+        private mapDisplayParts(parts: (SymbolDisplayPart | JSDocLinkPart)[] | undefined, project: Project): (protocol.SymbolDisplayPart | protocol.JSDocLinkPart)[] {
+            if (!parts) {
+                return [];
+            }
+            return parts.map(part => part.kind !== "link" ? part : {
+                ...part,
+                name: this.toFileSpan((part as JSDocLinkPart).name.fileName, (part as JSDocLinkPart).name.textSpan, project),
+                target: this.toFileSpan((part as JSDocLinkPart).target.fileName, (part as JSDocLinkPart).target.textSpan, project),
+            });
+        }
+
+        private mapSignatureHelpItems(items: SignatureHelpItem[], project: Project): protocol.RichSignatureHelpItem[] {
+            return items.map(item => ({
+                ...item,
+                documentation: this.mapDisplayParts(item.documentation, project),
+                tags: this.mapRichJSDocTagInfo(item.tags, project),
+            }));
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1693,7 +1704,7 @@ namespace ts.server {
             return languageService.isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
         }
 
-        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean, partlyUnsimplifiedResult?: boolean): protocol.QuickInfoResponseBody | protocol.RichQuickInfoResponseBody | QuickInfo | undefined {
+        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean, richDocumentation?: boolean): protocol.QuickInfoResponseBody | protocol.RichQuickInfoResponseBody | QuickInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
@@ -1703,30 +1714,19 @@ namespace ts.server {
 
             if (simplifiedResult) {
                 const displayString = displayPartsToString(quickInfo.displayParts);
-                if (partlyUnsimplifiedResult) {
-                    return {
-                        kind: quickInfo.kind,
-                        kindModifiers: quickInfo.kindModifiers,
-                        start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
-                        end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
-                        displayString,
-                        documentation: quickInfo.documentation || [],
-                        tags: quickInfo.tags || []
-                    };
-
-                }
-                else {
-                    const documentation = displayPartsToString(quickInfo.documentation);
-                    return {
-                        kind: quickInfo.kind,
-                        kindModifiers: quickInfo.kindModifiers,
-                        start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
-                        end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
-                        displayString,
-                        documentation,
-                        tags: this.mapJSDocTagInfo(quickInfo.tags)
-                    };
-                }
+                return {
+                    kind: quickInfo.kind,
+                    kindModifiers: quickInfo.kindModifiers,
+                    start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
+                    displayString,
+                    ...(richDocumentation ? {
+                        documentation: this.mapDisplayParts(quickInfo.documentation, project),
+                        tags: this.mapRichJSDocTagInfo(quickInfo.tags, project),
+                    } : {
+                        documentation: displayPartsToString(quickInfo.documentation),
+                        tags: this.mapJSDocTagInfo(quickInfo.tags),
+                    })};
             }
             else {
                 return quickInfo;
@@ -1859,7 +1859,7 @@ namespace ts.server {
             return res;
         }
 
-        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean, partlyUnsimplifiedResult?: boolean): readonly protocol.CompletionEntryDetails[] | readonly protocol.RichCompletionEntryDetails[] | readonly CompletionEntryDetails[] {
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean, richDocumentation?: boolean): readonly protocol.CompletionEntryDetails[] | readonly protocol.RichCompletionEntryDetails[] | readonly CompletionEntryDetails[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1870,13 +1870,16 @@ namespace ts.server {
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
             return fullResult ? result
-                : partlyUnsimplifiedResult ? result.map(details => ({
+                : richDocumentation ? result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
+                    documentation: this.mapDisplayParts(details.documentation, project),
+                    tags: this.mapRichJSDocTagInfo(details.tags, project),
                 }))
                 : result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
+                    documentation: this.mapDisplayParts(details.documentation, project),
                     tags: this.mapJSDocTagInfo(details.tags)
                 }));
         }
@@ -1933,7 +1936,7 @@ namespace ts.server {
                 !emitSkipped;
         }
 
-        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean, partlyUnsimplifiedResult?: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
+        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean, richDocumentation?: boolean): protocol.SignatureHelpItems | protocol.RichSignatureHelpItems | SignatureHelpItems | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1942,14 +1945,10 @@ namespace ts.server {
                 return undefined;
             }
 
-            if (simplifiedResult && !partlyUnsimplifiedResult) {
-                const span = helpItems.applicableSpan;
+            if (simplifiedResult) {
                 return {
-                    items: helpItems.items,
-                    applicableSpan: span,
-                    selectedItemIndex: helpItems.selectedItemIndex,
-                    argumentIndex: helpItems.argumentIndex,
-                    argumentCount: helpItems.argumentCount,
+                    ...helpItems,
+                    items: richDocumentation ? this.mapSignatureHelpItems(helpItems.items, project) : helpItems.items,
                 };
             }
             else {

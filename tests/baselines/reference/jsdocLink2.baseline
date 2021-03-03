@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/script.ts",
-      "position": 177
+      "position": 177,
+      "name": ""
     },
     "quickInfo": {
       "kind": "function",
@@ -58,8 +59,11 @@
           "text": "{@link C}",
           "kind": "link",
           "name": {
-            "start": 14,
-            "length": 1
+            "fileName": "/tests/cases/fourslash/script.ts",
+            "textSpan": {
+              "start": 14,
+              "length": 1
+            }
           },
           "target": {
             "fileName": "/tests/cases/fourslash/jsdocLink2.ts",
@@ -82,8 +86,11 @@
               "text": "{@link C}",
               "kind": "link",
               "name": {
-                "start": 40,
-                "length": 1
+                "fileName": "/tests/cases/fourslash/script.ts",
+                "textSpan": {
+                  "start": 40,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink2.ts",
@@ -101,8 +108,11 @@
               "text": "{@link C()}",
               "kind": "link",
               "name": {
-                "start": 69,
-                "length": 1
+                "fileName": "/tests/cases/fourslash/script.ts",
+                "textSpan": {
+                  "start": 69,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink2.ts",
@@ -120,8 +130,11 @@
               "text": "{@link C|postfix text}",
               "kind": "link",
               "name": {
-                "start": 84,
-                "length": 1
+                "fileName": "/tests/cases/fourslash/script.ts",
+                "textSpan": {
+                  "start": 84,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink2.ts",
@@ -152,8 +165,11 @@
               "text": "{@link C}",
               "kind": "link",
               "name": {
-                "start": 151,
-                "length": 1
+                "fileName": "/tests/cases/fourslash/script.ts",
+                "textSpan": {
+                  "start": 151,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink2.ts",

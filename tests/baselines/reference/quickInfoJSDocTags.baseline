@@ -71,7 +71,12 @@
       "tags": [
         {
           "name": "myjsdoctag",
-          "text": "this is a comment"
+          "text": [
+            {
+              "text": "this is a comment",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -119,7 +124,12 @@
       "tags": [
         {
           "name": "mytag",
-          "text": "comment1 comment2"
+          "text": [
+            {
+              "text": "comment1 comment2",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -196,7 +206,12 @@
       "tags": [
         {
           "name": "mytag",
-          "text": "comment1 comment2"
+          "text": [
+            {
+              "text": "comment1 comment2",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -353,7 +368,12 @@
       "tags": [
         {
           "name": "returns",
-          "text": "a value"
+          "text": [
+            {
+              "text": "a value",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -448,11 +468,29 @@
       "tags": [
         {
           "name": "param",
-          "text": "foo A value."
+          "text": [
+            {
+              "text": "foo",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A value.",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "returns",
-          "text": "Another value"
+          "text": [
+            {
+              "text": "Another value",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "mytag"
@@ -519,7 +557,12 @@
       "tags": [
         {
           "name": "mytag",
-          "text": "comment1 comment2"
+          "text": [
+            {
+              "text": "comment1 comment2",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -583,11 +626,21 @@
       "tags": [
         {
           "name": "mytag1",
-          "text": "some comments\nsome more comments about mytag1"
+          "text": [
+            {
+              "text": "some comments\nsome more comments about mytag1",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "mytag2",
-          "text": "here all the comments are on a new line"
+          "text": [
+            {
+              "text": "here all the comments are on a new line",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "mytag3"

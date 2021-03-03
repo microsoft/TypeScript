@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/module1.ts",
-      "position": 210
+      "position": 210,
+      "name": ""
     },
     "quickInfo": {
       "kind": "function",
@@ -58,8 +59,11 @@
           "text": "{@link C}",
           "kind": "link",
           "name": {
-            "start": 47,
-            "length": 1
+            "fileName": "/module1.ts",
+            "textSpan": {
+              "start": 47,
+              "length": 1
+            }
           },
           "target": {
             "fileName": "/jsdocLink3.ts",
@@ -82,8 +86,11 @@
               "text": "{@link C}",
               "kind": "link",
               "name": {
-                "start": 73,
-                "length": 1
+                "fileName": "/module1.ts",
+                "textSpan": {
+                  "start": 73,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/jsdocLink3.ts",
@@ -101,8 +108,11 @@
               "text": "{@link C()}",
               "kind": "link",
               "name": {
-                "start": 102,
-                "length": 1
+                "fileName": "/module1.ts",
+                "textSpan": {
+                  "start": 102,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/jsdocLink3.ts",
@@ -120,8 +130,11 @@
               "text": "{@link C|postfix text}",
               "kind": "link",
               "name": {
-                "start": 117,
-                "length": 1
+                "fileName": "/module1.ts",
+                "textSpan": {
+                  "start": 117,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/jsdocLink3.ts",
@@ -152,8 +165,11 @@
               "text": "{@link C}",
               "kind": "link",
               "name": {
-                "start": 184,
-                "length": 1
+                "fileName": "/module1.ts",
+                "textSpan": {
+                  "start": 184,
+                  "length": 1
+                }
               },
               "target": {
                 "fileName": "/jsdocLink3.ts",

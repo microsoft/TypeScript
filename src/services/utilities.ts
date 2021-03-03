@@ -2188,11 +2188,14 @@ namespace ts {
         if (!link.name) {return textPart(`{@link ${link.text}}`);}
         const text = `{@link ${getTextOfNode(link.name)}${link.text}}`;
         const symbol = checker?.getSymbolAtLocation(link.name);
-        if (!symbol) {return textPart(text);}
+        if (!symbol?.valueDeclaration) {return textPart(text);}
         return {
             text,
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.link],
-            name: createTextSpanFromNode(link.name),
+            name: {
+                fileName: getSourceFileOfNode(link).fileName,
+                textSpan: createTextSpanFromNode(link.name),
+            },
             target: {
                 fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
                 textSpan: createTextSpanFromNode(symbol.valueDeclaration),

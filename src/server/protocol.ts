@@ -979,9 +979,17 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    // TODO: JSDoc
     export interface JSDocTagInfo {
         name: string;
         text?: string;
+    }
+
+    // TODO: Better JSDoc
+    /** Like ts.JSDocTagInfo, but with JSDocLinkParts translated to line+offset */
+    export interface RichJSDocTagInfo {
+        name: string;
+        text?: (SymbolDisplayPart | JSDocLinkPart)[];
     }
 
     export interface TextSpanWithContext extends TextSpan {
@@ -2037,7 +2045,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags associated with symbol.
          */
-        tags: ts.JSDocTagInfo[];
+        tags: RichJSDocTagInfo[];
     }
 
     /**
@@ -2257,6 +2265,13 @@ namespace ts.server.protocol {
         kind: string;
     }
 
+    export interface JSDocLinkPart extends SymbolDisplayPart {
+        // TODO: JSDoc here
+        name: FileSpan;
+        // TODO: JSDoc here
+        target: FileSpan;
+    }
+
     /**
      * An item found in a completion response.
      */
@@ -2367,7 +2382,6 @@ namespace ts.server.protocol {
 
     /**
      * RICH Additional completion entry details, available on demand
-     * (It's just ts.JSDocTagInfo to get displayparts)
      */
     export interface RichCompletionEntryDetails {
         /**
@@ -2395,7 +2409,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags for the symbol.
          */
-        tags?: ts.JSDocTagInfo[];
+        tags?: RichJSDocTagInfo[];
 
         /**
          * The associated code actions for this entry
@@ -2502,6 +2516,47 @@ namespace ts.server.protocol {
     }
 
     /**
+     * Represents a single signature to show in signature help.
+     */
+    export interface RichSignatureHelpItem {
+
+        /**
+         * Whether the signature accepts a variable number of arguments.
+         */
+        isVariadic: boolean;
+
+        /**
+         * The prefix display parts.
+         */
+        prefixDisplayParts: SymbolDisplayPart[];
+
+        /**
+         * The suffix display parts.
+         */
+        suffixDisplayParts: SymbolDisplayPart[];
+
+        /**
+         * The separator display parts.
+         */
+        separatorDisplayParts: SymbolDisplayPart[];
+
+        /**
+         * The signature helps items for the parameters.
+         */
+        parameters: SignatureHelpParameter[];
+
+        /**
+         * The signature's documentation
+         */
+        documentation: SymbolDisplayPart[];
+
+        /**
+         * The signature's JSDoc tags
+         */
+        tags: RichJSDocTagInfo[];
+    }
+
+    /**
      * Signature help items found in the response of a signature help request.
      */
     export interface SignatureHelpItems {
@@ -2510,6 +2565,37 @@ namespace ts.server.protocol {
          * The signature help items.
          */
         items: SignatureHelpItem[];
+
+        /**
+         * The span for which signature help should appear on a signature
+         */
+        applicableSpan: TextSpan;
+
+        /**
+         * The item selected in the set of available help items.
+         */
+        selectedItemIndex: number;
+
+        /**
+         * The argument selected in the set of parameters.
+         */
+        argumentIndex: number;
+
+        /**
+         * The argument count
+         */
+        argumentCount: number;
+    }
+
+    /**
+     * Signature help items found in the response of a signature help request.
+     */
+    export interface RichSignatureHelpItems {
+
+        /**
+         * The signature help items.
+         */
+        items: RichSignatureHelpItem[];
 
         /**
          * The span for which signature help should appear on a signature
@@ -2602,7 +2688,7 @@ namespace ts.server.protocol {
      * Response object for a SignatureHelpRequest.
      */
     export interface SignatureHelpResponse extends Response {
-        body?: SignatureHelpItems | ts.SignatureHelpItems;
+        body?: SignatureHelpItems | RichSignatureHelpItems;
     }
 
     /**

@@ -6029,7 +6029,7 @@ declare namespace ts {
         kind: string;
     }
     interface JSDocLinkPart extends SymbolDisplayPart {
-        name: TextSpan;
+        name: DocumentSpan;
         target: DocumentSpan;
     }
     interface JSDocTagInfo {

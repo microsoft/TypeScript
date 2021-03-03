@@ -88,7 +88,6 @@ namespace ts.projectSystem {
                             end: { line: start.line, offset: start.offset + "numberConst".length },
                             displayString: "const numberConst: 10",
                             documentation: "",
-                            links: [],
                             tags: []
                         }
                     });

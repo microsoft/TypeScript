@@ -41,14 +41,12 @@ var x = 1`);
                         text: "",
                     }, {
                         kind: "link",
-                        // textSpan: {
-                        //     length: 9,
-                        //     start: 21,
-                        // },
-                        // fileName: "someFile1.js",
                         name: {
-                            length: 1,
-                            start: 28,
+                            fileName: "someFile1.js",
+                            textSpan: {
+                                length: 1,
+                                start: 28,
+                            }
                         },
                         target: {
                             fileName: "someFile1.js",
@@ -104,8 +102,11 @@ var x = 1`);
                 }, {
                     kind: "link",
                     name: {
-                        length: 1,
-                        start: 23,
+                        fileName: "someFile1.js",
+                        textSpan: {
+                            length: 1,
+                            start: 23,
+                        }
                     },
                     target: {
                         fileName: "someFile1.js",
@@ -115,11 +116,6 @@ var x = 1`);
                         }
                     },
                     text: "{@link C}"
-                    // fileName: "someFile1.js",
-                    // textSpan: {
-                    //     length: 9,
-                    //     start: 16,
-                    // },
                 }],
                 tags: undefined,
             });
