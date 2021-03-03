@@ -604,6 +604,41 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
+     * A request to get encoded semantic classifications for a span in the file
+     */
+    interface EncodedSemanticClassificationsRequest extends FileRequest {
+        arguments: EncodedSemanticClassificationsRequestArgs;
+    }
+    /**
+     * Arguments for EncodedSemanticClassificationsRequest request.
+     */
+    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+        /**
+         * Optional parameter for the semantic highlighting response, if absent it
+         * defaults to "original".
+         */
+        format?: "original" | "2020";
+    }
+    /** The response for a EncodedSemanticClassificationsRequest */
+    interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody;
+    }
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
+    /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
      */
@@ -2626,6 +2661,33 @@ declare namespace ts.server.protocol {
         ES2020 = "ES2020",
         ESNext = "ESNext"
     }
+    const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25
+    }
 }
 declare namespace ts.server.protocol {
 
@@ -2786,6 +2848,7 @@ declare namespace ts.server.protocol {
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
+    export type EndOfLineState = never;
     export type ScriptKind = never;
     export type WatchFileKind = never;
     export type WatchDirectoryKind = never;
