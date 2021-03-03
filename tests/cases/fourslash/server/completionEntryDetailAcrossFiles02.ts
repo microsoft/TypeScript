@@ -19,14 +19,12 @@ verify.completions(
         name: "foo",
         text: "var foo: (p1: string) => void",
         documentation: "Modify the parameter",
-        links: [],
-        tags: [{ name: "param", text: "p1", links: [] }]
+        tags: [{ name: "param", text: [{ kind: "text", text: "p1" }] }]
     } },
     { marker: "2", exact: {
         name: "foo",
         text: "(alias) var foo: (p1: string) => void\nimport a.foo",
         documentation: "Modify the parameter",
-        links: [],
-        tags: [{ name: "param", text: "p1", links: [] }]
+        tags: [{ name: "param", text: [{ kind: "text", text: "p1" }] }]
     } },
 );

@@ -10,9 +10,9 @@
 ////  * @return {number} - DIVEKICK
 ////  */
 //// /**
-////  * @type {FooHa/*8*/ndler} callback
+////  * @type {FooHandler} callback
 ////  */
-//// var t/*1*/;
+//// var t;
 ////
 //// /**
 ////  * @callback FooHandler2 - What, another one?
@@ -20,16 +20,9 @@
 ////  * @param {string} [eventName2] - i WARNED you dog
 ////  */
 //// /**
-////  * @type {FooH/*3*/andler2} callback
+////  * @type {FooHandler2} callback
 ////  */
-//// var t2/*2*/;
+//// var t2;
 //// t(/*4*/"!", /*5*/12, /*6*/false);
 
-goTo.marker("1");
-verify.quickInfoIs("var t: FooHandler");
-goTo.marker("2");
-verify.quickInfoIs("var t2: FooHandler2");
-goTo.marker("3");
-verify.quickInfoIs("type FooHandler2 = (eventName?: string | undefined, eventName2?: string) => any", "- What, another one?");
-goTo.marker("8");
-verify.quickInfoIs("type FooHandler = (eventName: string, eventName2: number | string, eventName3: any) => number", "- A kind of magic");
+verify.baselineSignatureHelp()

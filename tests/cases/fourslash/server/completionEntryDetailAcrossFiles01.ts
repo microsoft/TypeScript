@@ -18,8 +18,13 @@ const entry = (text: string): FourSlashInterface.ExpectedCompletionEntry => ({
     name: "foo",
     text,
     documentation: "Modify the parameter",
-    links: [],
-    tags: [{ name: "param", text: "p1", links: [] }]
+    tags: [{
+        name: "param",
+        text: [{
+            "kind": "text",
+            "text": "p1",
+        }],
+    }]
 });
 verify.completions(
     { marker: "1", includes: entry("var foo: (p1: string) => void") },
