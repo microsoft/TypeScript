@@ -1,0 +1,172 @@
+=== tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts ===
+interface Foo3<T extends string> {
+>Foo3 : Symbol(Foo3, Decl(unionIndexerGenericAssignability.ts, 0, 0))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 0, 15))
+
+   [x: `data-${T}`]: number;
+>x : Symbol(x, Decl(unionIndexerGenericAssignability.ts, 1, 4))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 0, 15))
+
+   a: string;
+>a : Symbol(Foo3.a, Decl(unionIndexerGenericAssignability.ts, 1, 28))
+}
+
+function goo<U extends string>(obj1: Foo3<U | 'hello'>, obj2: Foo3<U>) {
+>goo : Symbol(goo, Decl(unionIndexerGenericAssignability.ts, 3, 1))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 5, 13))
+>obj1 : Symbol(obj1, Decl(unionIndexerGenericAssignability.ts, 5, 31))
+>Foo3 : Symbol(Foo3, Decl(unionIndexerGenericAssignability.ts, 0, 0))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 5, 13))
+>obj2 : Symbol(obj2, Decl(unionIndexerGenericAssignability.ts, 5, 55))
+>Foo3 : Symbol(Foo3, Decl(unionIndexerGenericAssignability.ts, 0, 0))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 5, 13))
+
+   obj1 = obj2;  // Error expected
+>obj1 : Symbol(obj1, Decl(unionIndexerGenericAssignability.ts, 5, 31))
+>obj2 : Symbol(obj2, Decl(unionIndexerGenericAssignability.ts, 5, 55))
+
+   obj2 = obj1;
+>obj2 : Symbol(obj2, Decl(unionIndexerGenericAssignability.ts, 5, 55))
+>obj1 : Symbol(obj1, Decl(unionIndexerGenericAssignability.ts, 5, 31))
+}
+
+type Foo4<T extends string> = {
+>Foo4 : Symbol(Foo4, Decl(unionIndexerGenericAssignability.ts, 8, 1))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 10, 10))
+
+    [x: `data-${T}`]: number;
+>x : Symbol(x, Decl(unionIndexerGenericAssignability.ts, 11, 5))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 10, 10))
+
+    a: string;
+>a : Symbol(a, Decl(unionIndexerGenericAssignability.ts, 11, 29))
+ }
+ 
+ function loo<U extends string>(obj1: Foo4<U | 'hello'>, obj2: Foo4<U>) {
+>loo : Symbol(loo, Decl(unionIndexerGenericAssignability.ts, 13, 2))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 15, 14))
+>obj1 : Symbol(obj1, Decl(unionIndexerGenericAssignability.ts, 15, 32))
+>Foo4 : Symbol(Foo4, Decl(unionIndexerGenericAssignability.ts, 8, 1))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 15, 14))
+>obj2 : Symbol(obj2, Decl(unionIndexerGenericAssignability.ts, 15, 56))
+>Foo4 : Symbol(Foo4, Decl(unionIndexerGenericAssignability.ts, 8, 1))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 15, 14))
+
+    obj1 = obj2;  // Error expected, doesn't occur because object types have "inferrable indexes"
+>obj1 : Symbol(obj1, Decl(unionIndexerGenericAssignability.ts, 15, 32))
+>obj2 : Symbol(obj2, Decl(unionIndexerGenericAssignability.ts, 15, 56))
+
+    obj2 = obj1;
+>obj2 : Symbol(obj2, Decl(unionIndexerGenericAssignability.ts, 15, 56))
+>obj1 : Symbol(obj1, Decl(unionIndexerGenericAssignability.ts, 15, 32))
+ }
+
+interface I1<T extends string> {
+>I1 : Symbol(I1, Decl(unionIndexerGenericAssignability.ts, 18, 2))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 20, 13))
+
+    [x: `data-${T}`]: number;
+>x : Symbol(x, Decl(unionIndexerGenericAssignability.ts, 21, 5))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 20, 13))
+}
+
+function f1<
+>f1 : Symbol(f1, Decl(unionIndexerGenericAssignability.ts, 22, 1))
+
+    T extends string,
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+    U extends T
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 25, 21))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+>(
+    a: `data-${T}`,
+>a : Symbol(a, Decl(unionIndexerGenericAssignability.ts, 27, 2))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+    b: `data-${U}`,
+>b : Symbol(b, Decl(unionIndexerGenericAssignability.ts, 28, 19))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 25, 21))
+
+    aObj: {[_ in `data-${T}`]: any},
+>aObj : Symbol(aObj, Decl(unionIndexerGenericAssignability.ts, 29, 19))
+>_ : Symbol(_, Decl(unionIndexerGenericAssignability.ts, 30, 12))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+    bObj: {[_ in `data-${U}`]: any},
+>bObj : Symbol(bObj, Decl(unionIndexerGenericAssignability.ts, 30, 36))
+>_ : Symbol(_, Decl(unionIndexerGenericAssignability.ts, 31, 12))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 25, 21))
+
+    aObj2: {[_ in `data-${T}`]?: any},
+>aObj2 : Symbol(aObj2, Decl(unionIndexerGenericAssignability.ts, 31, 36))
+>_ : Symbol(_, Decl(unionIndexerGenericAssignability.ts, 32, 13))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+    bObj2: {[_ in `data-${U}`]?: any},
+>bObj2 : Symbol(bObj2, Decl(unionIndexerGenericAssignability.ts, 32, 38))
+>_ : Symbol(_, Decl(unionIndexerGenericAssignability.ts, 33, 13))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 25, 21))
+
+    aObj3: {[x: `data-${T}`]: number}, // type literals can have a "inferrable index"
+>aObj3 : Symbol(aObj3, Decl(unionIndexerGenericAssignability.ts, 33, 38))
+>x : Symbol(x, Decl(unionIndexerGenericAssignability.ts, 34, 13))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+    bObj3: {[x: `data-${U}`]: number}, // type literals can have a "inferrable index"
+>bObj3 : Symbol(bObj3, Decl(unionIndexerGenericAssignability.ts, 34, 38))
+>x : Symbol(x, Decl(unionIndexerGenericAssignability.ts, 35, 13))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 25, 21))
+
+    aObj4: I1<T>,
+>aObj4 : Symbol(aObj4, Decl(unionIndexerGenericAssignability.ts, 35, 38))
+>I1 : Symbol(I1, Decl(unionIndexerGenericAssignability.ts, 18, 2))
+>T : Symbol(T, Decl(unionIndexerGenericAssignability.ts, 24, 12))
+
+    bObj4: I1<U>,
+>bObj4 : Symbol(bObj4, Decl(unionIndexerGenericAssignability.ts, 36, 17))
+>I1 : Symbol(I1, Decl(unionIndexerGenericAssignability.ts, 18, 2))
+>U : Symbol(U, Decl(unionIndexerGenericAssignability.ts, 25, 21))
+
+) {
+    a = b;
+>a : Symbol(a, Decl(unionIndexerGenericAssignability.ts, 27, 2))
+>b : Symbol(b, Decl(unionIndexerGenericAssignability.ts, 28, 19))
+
+    b = a;
+>b : Symbol(b, Decl(unionIndexerGenericAssignability.ts, 28, 19))
+>a : Symbol(a, Decl(unionIndexerGenericAssignability.ts, 27, 2))
+
+    aObj = bObj;
+>aObj : Symbol(aObj, Decl(unionIndexerGenericAssignability.ts, 29, 19))
+>bObj : Symbol(bObj, Decl(unionIndexerGenericAssignability.ts, 30, 36))
+
+    bObj = aObj;
+>bObj : Symbol(bObj, Decl(unionIndexerGenericAssignability.ts, 30, 36))
+>aObj : Symbol(aObj, Decl(unionIndexerGenericAssignability.ts, 29, 19))
+
+    aObj2 = bObj2;
+>aObj2 : Symbol(aObj2, Decl(unionIndexerGenericAssignability.ts, 31, 36))
+>bObj2 : Symbol(bObj2, Decl(unionIndexerGenericAssignability.ts, 32, 38))
+
+    bObj2 = aObj2;
+>bObj2 : Symbol(bObj2, Decl(unionIndexerGenericAssignability.ts, 32, 38))
+>aObj2 : Symbol(aObj2, Decl(unionIndexerGenericAssignability.ts, 31, 36))
+
+    aObj3 = bObj3; // not an error because the type-literaly-ness of the source is allowing us to pretend it's closed and simply providing no members of the target at present - an "inferred index"
+>aObj3 : Symbol(aObj3, Decl(unionIndexerGenericAssignability.ts, 33, 38))
+>bObj3 : Symbol(bObj3, Decl(unionIndexerGenericAssignability.ts, 34, 38))
+
+    bObj3 = aObj3;
+>bObj3 : Symbol(bObj3, Decl(unionIndexerGenericAssignability.ts, 34, 38))
+>aObj3 : Symbol(aObj3, Decl(unionIndexerGenericAssignability.ts, 33, 38))
+
+    aObj4 = bObj4;
+>aObj4 : Symbol(aObj4, Decl(unionIndexerGenericAssignability.ts, 35, 38))
+>bObj4 : Symbol(bObj4, Decl(unionIndexerGenericAssignability.ts, 36, 17))
+
+    bObj4 = aObj4;
+>bObj4 : Symbol(bObj4, Decl(unionIndexerGenericAssignability.ts, 36, 17))
+>aObj4 : Symbol(aObj4, Decl(unionIndexerGenericAssignability.ts, 35, 38))
+}

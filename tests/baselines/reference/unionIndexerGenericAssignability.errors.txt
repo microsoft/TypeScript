@@ -1,0 +1,80 @@
+tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts(7,4): error TS2741: Property '"data-hello"' is missing in type 'Foo3<U>' but required in type 'Foo3<U | "hello">'.
+tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts(41,5): error TS2322: Type '`data-${T}`' is not assignable to type '`data-${U}`'.
+  Type '`data-${string}`' is not assignable to type '`data-${U}`'.
+tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts(43,5): error TS2322: Type '{ [_ in `data-${U}`]: any; }' is not assignable to type '{ [_ in `data-${T}`]: any; }'.
+  Type '`data-${T}`' is not assignable to type '`data-${U}`'.
+tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts(46,5): error TS2322: Type '{ [_ in `data-${U}`]?: any; }' is not assignable to type '{ [_ in `data-${T}`]?: any; }'.
+  Type '`data-${T}`' is not assignable to type '`data-${U}`'.
+tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts(52,5): error TS2322: Type 'I1<U>' is not assignable to type 'I1<T>'.
+  Index signature is missing in type 'I1<U>'.
+
+
+==== tests/cases/conformance/types/members/unionIndexerGenericAssignability.ts (5 errors) ====
+    interface Foo3<T extends string> {
+       [x: `data-${T}`]: number;
+       a: string;
+    }
+    
+    function goo<U extends string>(obj1: Foo3<U | 'hello'>, obj2: Foo3<U>) {
+       obj1 = obj2;  // Error expected
+       ~~~~
+!!! error TS2741: Property '"data-hello"' is missing in type 'Foo3<U>' but required in type 'Foo3<U | "hello">'.
+       obj2 = obj1;
+    }
+    
+    type Foo4<T extends string> = {
+        [x: `data-${T}`]: number;
+        a: string;
+     }
+     
+     function loo<U extends string>(obj1: Foo4<U | 'hello'>, obj2: Foo4<U>) {
+        obj1 = obj2;  // Error expected, doesn't occur because object types have "inferrable indexes"
+        obj2 = obj1;
+     }
+    
+    interface I1<T extends string> {
+        [x: `data-${T}`]: number;
+    }
+    
+    function f1<
+        T extends string,
+        U extends T
+    >(
+        a: `data-${T}`,
+        b: `data-${U}`,
+        aObj: {[_ in `data-${T}`]: any},
+        bObj: {[_ in `data-${U}`]: any},
+        aObj2: {[_ in `data-${T}`]?: any},
+        bObj2: {[_ in `data-${U}`]?: any},
+        aObj3: {[x: `data-${T}`]: number}, // type literals can have a "inferrable index"
+        bObj3: {[x: `data-${U}`]: number}, // type literals can have a "inferrable index"
+        aObj4: I1<T>,
+        bObj4: I1<U>,
+    ) {
+        a = b;
+        b = a;
+        ~
+!!! error TS2322: Type '`data-${T}`' is not assignable to type '`data-${U}`'.
+!!! error TS2322:   Type '`data-${string}`' is not assignable to type '`data-${U}`'.
+    
+        aObj = bObj;
+        ~~~~
+!!! error TS2322: Type '{ [_ in `data-${U}`]: any; }' is not assignable to type '{ [_ in `data-${T}`]: any; }'.
+!!! error TS2322:   Type '`data-${T}`' is not assignable to type '`data-${U}`'.
+        bObj = aObj;
+    
+        aObj2 = bObj2;
+        ~~~~~
+!!! error TS2322: Type '{ [_ in `data-${U}`]?: any; }' is not assignable to type '{ [_ in `data-${T}`]?: any; }'.
+!!! error TS2322:   Type '`data-${T}`' is not assignable to type '`data-${U}`'.
+        bObj2 = aObj2;
+    
+        aObj3 = bObj3; // not an error because the type-literaly-ness of the source is allowing us to pretend it's closed and simply providing no members of the target at present - an "inferred index"
+        bObj3 = aObj3;
+    
+        aObj4 = bObj4;
+        ~~~~~
+!!! error TS2322: Type 'I1<U>' is not assignable to type 'I1<T>'.
+!!! error TS2322:   Index signature is missing in type 'I1<U>'.
+        bObj4 = aObj4;
+    }
