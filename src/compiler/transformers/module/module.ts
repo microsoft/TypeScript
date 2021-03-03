@@ -1,24 +1,6 @@
 /*@internal*/
 namespace ts {
 
-    const enum ImportOrExportBindingReferenceKind {
-        None,
-        ImportedHelper,
-        TopLevelExportBinding,
-        ImportClause,
-        ImportSpecifier,
-    }
-
-    type ImportOrExportBindingReferenceResult =
-        | { kind: ImportOrExportBindingReferenceKind.None, node: undefined }
-        | { kind: ImportOrExportBindingReferenceKind.ImportedHelper, node: Identifier }
-        | { kind: ImportOrExportBindingReferenceKind.TopLevelExportBinding, node: undefined }
-        | { kind: ImportOrExportBindingReferenceKind.ImportClause, node: ImportClause }
-        | { kind: ImportOrExportBindingReferenceKind.ImportSpecifier, node: ImportSpecifier };
-
-    const noReferenceResult: ImportOrExportBindingReferenceResult = { kind: ImportOrExportBindingReferenceKind.None, node: undefined };
-    const topLevelExportReferenceResult: ImportOrExportBindingReferenceResult = { kind: ImportOrExportBindingReferenceKind.TopLevelExportBinding, node: undefined };
-
     export function transformModule(context: TransformationContext) {
         interface AsynchronousDependencies {
             aliasedModuleNames: Expression[];
@@ -67,7 +49,7 @@ namespace ts {
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
-        let bindingReferenceCache: ESMap<Node, ImportOrExportBindingReferenceResult> | undefined;
+        let bindingReferenceCache: ESMap<Node, Identifier | SourceFile | ImportClause | ImportSpecifier | undefined> | undefined;
 
         return chainBundle(context, transformSourceFile);
 
@@ -1776,49 +1758,61 @@ namespace ts {
             return node;
         }
 
-        function getImportOrExportBindingReferenceWorker(node: Identifier): ImportOrExportBindingReferenceResult {
+        /**
+         * For an Identifier, gets the import or export binding that it references.
+         * @returns One of the following:
+         * - An `Identifier` if node references an external helpers module (i.e., `tslib`).
+         * - A `SourceFile` if the node references an export in the file.
+         * - An `ImportClause` or `ImportSpecifier` if the node references an import binding.
+         * - Otherwise, `undefined`.
+         */
+        function getImportOrExportBindingReferenceWorker(node: Identifier): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
                 const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
                 if (externalHelpersModuleName) {
-                    return { kind: ImportOrExportBindingReferenceKind.ImportedHelper, node: externalHelpersModuleName };
+                    return externalHelpersModuleName;
                 }
             }
             else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer?.kind === SyntaxKind.SourceFile) {
-                    return topLevelExportReferenceResult;
+                    return exportContainer;
                 }
                 const importDeclaration = resolver.getReferencedImportDeclaration(node);
-                if (importDeclaration) {
-                    if (isImportClause(importDeclaration)) return { kind: ImportOrExportBindingReferenceKind.ImportClause, node: importDeclaration };
-                    if (isImportSpecifier(importDeclaration)) return { kind: ImportOrExportBindingReferenceKind.ImportSpecifier, node: importDeclaration };
+                if (importDeclaration && (isImportClause(importDeclaration) || isImportSpecifier(importDeclaration))) {
+                    return importDeclaration;
                 }
             }
-            return noReferenceResult;
+            return undefined;
         }
 
-        function getImportOrExportBindingReference(node: Identifier, removeEntry: boolean): ImportOrExportBindingReferenceResult {
-            bindingReferenceCache ||= new Map();
-            let result = bindingReferenceCache.get(node);
-            if (!result) {
+        /**
+         * For an Identifier, gets the import or export binding that it references.
+         * @param removeEntry When `false`, the result is cached to avoid recomputing the result in a later substitution.
+         * When `true`, any cached result for the node is removed.
+         * @returns One of the following:
+         * - An `Identifier` if node references an external helpers module (i.e., `tslib`).
+         * - A `SourceFile` if the node references an export in the file.
+         * - An `ImportClause` or `ImportSpecifier` if the node references an import binding.
+         * - Otherwise, `undefined`.
+         */
+        function getImportOrExportBindingReference(node: Identifier, removeEntry: boolean): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
+            let result = bindingReferenceCache?.get(node);
+            if (!result && !bindingReferenceCache?.has(node)) {
                 result = getImportOrExportBindingReferenceWorker(node);
                 if (!removeEntry) {
-                    switch (result.kind) {
-                        case ImportOrExportBindingReferenceKind.ImportedHelper:
-                        case ImportOrExportBindingReferenceKind.ImportClause:
-                        case ImportOrExportBindingReferenceKind.ImportSpecifier:
-                            bindingReferenceCache.set(node, result);
-                    }
+                    bindingReferenceCache ||= new Map();
+                    bindingReferenceCache.set(node, result);
                 }
             }
             else if (removeEntry) {
-                bindingReferenceCache.delete(node);
+                bindingReferenceCache?.delete(node);
             }
             return result;
         }
 
         function substituteCallExpression(node: CallExpression) {
-            if (isIdentifier(node.expression) && getImportOrExportBindingReference(node.expression, /*removeEntry*/ false).kind !== ImportOrExportBindingReferenceKind.None) {
+            if (isIdentifier(node.expression) && getImportOrExportBindingReference(node.expression, /*removeEntry*/ false)) {
                 return isCallChain(node) ?
                     factory.updateCallChain(node,
                         setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
@@ -1834,7 +1828,7 @@ namespace ts {
         }
 
         function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            if (isIdentifier(node.tag) && getImportOrExportBindingReference(node.tag, /*removeEntry*/ false).kind !== ImportOrExportBindingReferenceKind.None) {
+            if (isIdentifier(node.tag) && getImportOrExportBindingReference(node.tag, /*removeEntry*/ false)) {
                 return factory.updateTaggedTemplateExpression(
                     node,
                     setTextRange(factory.createComma(factory.createNumericLiteral(0), node.tag), node.tag),
@@ -1852,10 +1846,10 @@ namespace ts {
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
             const result = getImportOrExportBindingReference(node, /*removeEntry*/ true);
-            switch (result.kind) {
-                case ImportOrExportBindingReferenceKind.ImportedHelper:
-                    return factory.createPropertyAccessExpression(result.node, node);
-                case ImportOrExportBindingReferenceKind.TopLevelExportBinding:
+            switch (result?.kind) {
+                case SyntaxKind.Identifier: // tslib import
+                    return factory.createPropertyAccessExpression(result, node);
+                case SyntaxKind.SourceFile: // top-level export
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.createIdentifier("exports"),
@@ -1863,19 +1857,19 @@ namespace ts {
                         ),
                         /*location*/ node
                     );
-                case ImportOrExportBindingReferenceKind.ImportClause:
+                case SyntaxKind.ImportClause:
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(result.node.parent),
+                            factory.getGeneratedNameForNode(result.parent),
                             factory.createIdentifier("default")
                         ),
                         /*location*/ node
                     );
-                case ImportOrExportBindingReferenceKind.ImportSpecifier:
-                    const name = result.node.propertyName || result.node.name;
+                case SyntaxKind.ImportSpecifier:
+                    const name = result.propertyName || result.name;
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(result.node.parent?.parent?.parent || result.node),
+                            factory.getGeneratedNameForNode(result.parent?.parent?.parent || result),
                             factory.cloneNode(name)
                         ),
                         /*location*/ node
