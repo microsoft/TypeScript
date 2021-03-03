@@ -20,18 +20,18 @@ for (let x in {}) {
 }
 
 for (let x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => undefined
->function() { return x} : () => undefined
->x : undefined
+>(function() { return x}) : () => any
+>function() { return x} : () => any
+>x : any
 
     (() => x);
->(() => x) : () => undefined
->() => x : () => undefined
->x : undefined
+>(() => x) : () => any
+>() => x : () => any
+>x : any
 }
 
 for (let x = 0; x < 1; ++x) {
@@ -313,18 +313,18 @@ for (const x in {}) {
 }
 
 for (const x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => undefined
->function() { return x} : () => undefined
->x : undefined
+>(function() { return x}) : () => any
+>function() { return x} : () => any
+>x : any
 
     (() => x);
->(() => x) : () => undefined
->() => x : () => undefined
->x : undefined
+>(() => x) : () => any
+>() => x : () => any
+>x : any
 }
 
 for (const x = 0; x < 1;) {

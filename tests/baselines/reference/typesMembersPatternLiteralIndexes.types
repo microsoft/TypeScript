@@ -141,9 +141,9 @@ function f2() {
 
             Object.defineProperty(result, i, { get() { return x[i]; } });
 >Object.defineProperty(result, i, { get() { return x[i]; } }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >result : SlotProxy<T>
 >i : number
 >{ get() { return x[i]; } } : { get(): T; }

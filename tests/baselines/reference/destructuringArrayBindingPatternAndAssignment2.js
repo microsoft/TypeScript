@@ -35,12 +35,10 @@ function foo(idx: number): F {
 var [c4, c5, c6] = foo(1);  // Error
 
 //// [destructuringArrayBindingPatternAndAssignment2.js]
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or
@@ -57,8 +55,8 @@ var _c = bar(), _d = _c[0], b3 = _d === void 0 ? "string" : _d, b4 = _c[1], b5 =
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _e = __spreadArrays(temp), c0 = _e[0], c1 = _e[1]; // Error
-var _f = __spreadArrays(temp), c2 = _f[0], c3 = _f[1]; // Error
+var _e = __spreadArray([], temp), c0 = _e[0], c1 = _e[1]; // Error
+var _f = __spreadArray([], temp), c2 = _f[0], c3 = _f[1]; // Error
 function foo(idx) {
     return {
         2: true

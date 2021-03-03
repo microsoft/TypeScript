@@ -1,13 +1,13 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of4.ts ===
 for (var v of [])
->v : undefined
+>v : any
 >[] : undefined[]
 
     var x = v;
->x : undefined
->v : undefined
+>x : any
+>v : any
 
 var y = v;
->y : undefined
->v : undefined
+>y : any
+>v : any
 

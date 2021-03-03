@@ -447,12 +447,13 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const parent = containingFunction.parent;
-                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
                     parent.name :
                     containingFunction.name;
                 break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 searchToken = containingFunction.name;
                 break;
         }
@@ -946,7 +947,7 @@ namespace ts.codefix {
             const props = createMultiMap<Type>();
             for (const anon of anons) {
                 for (const p of checker.getPropertiesOfType(anon)) {
-                    props.add(p.name, checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration));
+                    props.add(p.name, p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType());
                 }
                 calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
                 constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
@@ -1094,12 +1095,13 @@ namespace ts.codefix {
                 if (!usageParam) {
                     break;
                 }
-                let genericParamType = checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration);
+                let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration) : checker.getAnyType();
                 const elementType = isRest && checker.getElementTypeOfArrayType(genericParamType);
                 if (elementType) {
                     genericParamType = elementType;
                 }
-                const targetType = (usageParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration);
+                const targetType = (usageParam as SymbolLinks).type
+                    || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
                 types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
             }
             const genericReturn = checker.getReturnTypeOfSignature(genericSig);

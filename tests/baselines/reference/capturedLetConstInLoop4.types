@@ -13,7 +13,7 @@ export function exportedFoo() {
 >v0 + v00 + v1 + v2 : string
 >v0 + v00 + v1 : string
 >v0 + v00 : string
->v0 : undefined
+>v0 : any
 >v00 : string
 >v1 : number
 >v2 : any
@@ -26,24 +26,24 @@ export function exportedFoo() {
 }
 
 for (let x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     var v0 = x;
->v0 : undefined
->x : undefined
+>v0 : any
+>x : any
 
     (function() { return x + v0});
 >(function() { return x + v0}) : () => any
 >function() { return x + v0} : () => any
 >x + v0 : any
->x : undefined
->v0 : undefined
+>x : any
+>v0 : any
 
     (() => x);    
->(() => x) : () => undefined
->() => x : () => undefined
->x : undefined
+>(() => x) : () => any
+>() => x : () => any
+>x : any
 }
 
 for (let x in []) {
@@ -313,7 +313,7 @@ export function exportedFoo2() {
 >v0_c + v00_c + v1_c + v2_c : string
 >v0_c + v00_c + v1_c : string
 >v0_c + v00_c : string
->v0_c : undefined
+>v0_c : any
 >v00_c : string
 >v1_c : number
 >v2_c : number
@@ -326,24 +326,24 @@ export function exportedFoo2() {
 }
 
 for (const x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     var v0_c = x;
->v0_c : undefined
->x : undefined
+>v0_c : any
+>x : any
 
     (function() { return x + v0_c});
 >(function() { return x + v0_c}) : () => any
 >function() { return x + v0_c} : () => any
 >x + v0_c : any
->x : undefined
->v0_c : undefined
+>x : any
+>v0_c : any
 
     (() => x);    
->(() => x) : () => undefined
->() => x : () => undefined
->x : undefined
+>(() => x) : () => any
+>() => x : () => any
+>x : any
 }
 
 for (const x in []) {

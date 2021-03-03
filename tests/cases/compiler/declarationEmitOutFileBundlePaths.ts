@@ -6,7 +6,6 @@
 // @strict: true
 // @esModuleInterop: true
 // @outFile: ./js/index.js
-// @bundledPackageName: mylib
 // @filename: js/versions.static.js
 export default {
     "@a/b": "1.0.0",

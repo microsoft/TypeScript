@@ -142,16 +142,16 @@ var i: I = {};
 >{} : {}
 
 var entries6 = Object.entries(i);                   // [string, any][]
->entries6 : [string, unknown][]
->Object.entries(i) : [string, unknown][]
+>entries6 : [string, any][]
+>Object.entries(i) : [string, any][]
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >i : I
 
 var values6 = Object.values(i);                     // any[]
->values6 : unknown[]
->Object.values(i) : unknown[]
+>values6 : any[]
+>Object.values(i) : any[]
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 >Object : ObjectConstructor
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }

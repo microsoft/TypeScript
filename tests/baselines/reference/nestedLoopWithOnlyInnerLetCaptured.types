@@ -3,13 +3,13 @@ declare let doSomething;
 >doSomething : any
 
 for (let a1 of [])
->a1 : undefined
+>a1 : any
 >[] : undefined[]
 
     for (let a2 of a1.someArray)
 >a2 : any
 >a1.someArray : any
->a1 : undefined
+>a1 : any
 >someArray : any
 
         doSomething(() => a2);

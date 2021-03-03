@@ -199,7 +199,7 @@ class SimpleMapMap2<K extends PropertyKey, V> {
 
     private o: { [k: PropertyKey]: V } = {};
 >o : { [x: string | number | symbol]: V; }
->k : string | number | symbol
+>k : PropertyKey
 >{} : {}
 
     public has(k: K): boolean {

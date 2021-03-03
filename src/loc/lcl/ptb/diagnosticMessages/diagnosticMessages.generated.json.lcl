@@ -1847,6 +1847,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_import_alias_cannot_use_import_type_1392" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An import alias cannot use 'import type']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um alias de importação não pode usar um 'tipo de importação']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_import_declaration_can_only_be_used_in_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An import declaration can only be used in a namespace or module.]]></Val>
@@ -7535,15 +7544,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Only_ECMAScript_imports_may_use_import_type_1370" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Only ECMAScript imports may use 'import type'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Somente importações ECMAScript podem usar 'import type'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement_1091" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only a single variable declaration is allowed in a 'for...in' statement.]]></Val>
@@ -11219,11 +11219,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is__1371" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set__1371" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
+          <Val><![CDATA[This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Essa importação nunca é usada como um valor e deve usar 'tipo de importação' porque 'importsNotUsedAsValues' está definido como 'erro'.]]></Val>
+            <Val><![CDATA[Esta importação nunca é usada como um valor e precisa usar um 'tipo de importação' porque 'importsNotUsedAsValues' está definido como 'erro'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -222,11 +222,11 @@ exports.CC = CC;
 
 
 //// [index.d.ts]
-export class M<T_1> {
-    field: T_1;
+export class M<T> {
+    field: T;
 }
-export class N<U_1> extends M<U_1> {
-    other: U_1;
+export class N<U> extends M<U> {
+    other: U;
 }
 export class O {
     [idx: string]: string;

@@ -1,8 +1,8 @@
 === tests/cases/conformance/jsdoc/bug27342.js ===
 module.exports = {}
->module.exports : Symbol("tests/cases/conformance/jsdoc/bug27342", Decl(bug27342.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(bug27342.js, 0, 0))
 >module : Symbol(module, Decl(bug27342.js, 0, 0))
->exports : Symbol("tests/cases/conformance/jsdoc/bug27342", Decl(bug27342.js, 0, 0))
+>exports : Symbol(module.exports, Decl(bug27342.js, 0, 0))
 
 /**
  * @type {exports}

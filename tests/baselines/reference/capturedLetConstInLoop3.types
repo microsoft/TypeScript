@@ -9,32 +9,32 @@ function foo0(x) {
 >x : any
 
     for (let x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
         var v = x;
->v : undefined
->x : undefined
+>v : any
+>x : any
 
         (function() { return x + v });
 >(function() { return x + v }) : () => any
 >function() { return x + v } : () => any
 >x + v : any
->x : undefined
->v : undefined
+>x : any
+>v : any
 
         (() => x + v);
 >(() => x + v) : () => any
 >() => x + v : () => any
 >x + v : any
->x : undefined
->v : undefined
+>x : any
+>v : any
     }
 
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : undefined
+>v : any
 }
 
 function foo0_1(x) {
@@ -405,32 +405,32 @@ function foo0_c(x) {
 >x : any
 
     for (const x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
         var v = x;
->v : undefined
->x : undefined
+>v : any
+>x : any
 
         (function() { return x + v });
 >(function() { return x + v }) : () => any
 >function() { return x + v } : () => any
 >x + v : any
->x : undefined
->v : undefined
+>x : any
+>v : any
 
         (() => x + v);
 >(() => x + v) : () => any
 >() => x + v : () => any
 >x + v : any
->x : undefined
->v : undefined
+>x : any
+>v : any
     }
 
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : undefined
+>v : any
 }
 
 function foo0_1_c(x) {

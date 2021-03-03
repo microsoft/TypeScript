@@ -1,5 +1,5 @@
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(55,12): error TS2322: Type '{ foo: number; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
-  Type '{ foo: number; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: string; }': bar, baz
+  Type '{ foo: number; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: string; }': bar, baz
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(57,41): error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
   Property 'bat' does not exist on type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(59,42): error TS2322: Type 'null' is not assignable to type 'string'.
@@ -9,7 +9,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(80,38): error TS2322
   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(81,29): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(98,12): error TS2322: Type '{ foo: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
-  Type '{ foo: string; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: number; }': bar, baz
+  Type '{ foo: string; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: number; }': bar, baz
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(100,56): error TS2322: Type '{ bar: string; baz: number; bat: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
   Property 'bat' does not exist on type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(102,57): error TS2322: Type 'null' is not assignable to type 'number'.
@@ -79,7 +79,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const b = <Component foo={12} />; // Error, missing required prop bar
                ~~~~~~~~~
 !!! error TS2322: Type '{ foo: number; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
-!!! error TS2322:   Type '{ foo: number; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: string; }': bar, baz
+!!! error TS2322:   Type '{ foo: number; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: string; }': bar, baz
     const c = <Component bar="yes" baz="yeah" />;
     const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
                                             ~~~
@@ -142,7 +142,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
                ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
-!!! error TS2322:   Type '{ foo: string; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: number; }': bar, baz
+!!! error TS2322:   Type '{ foo: string; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: number; }': bar, baz
     const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
     const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
                                                            ~~~

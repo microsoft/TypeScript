@@ -1,17 +1,17 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of15.ts ===
 for (let v of []) {
->v : undefined
+>v : any
 >[] : undefined[]
 
     v;
->v : undefined
+>v : any
 
     for (const v of []) {
->v : undefined
+>v : any
 >[] : undefined[]
 
         var x = v;
->x : undefined
->v : undefined
+>x : any
+>v : any
     }
 }

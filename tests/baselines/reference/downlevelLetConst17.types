@@ -159,11 +159,11 @@ for (const x in []) {
 }
 
 for (const x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : undefined
+>x : any
 }

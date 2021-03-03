@@ -4,29 +4,29 @@ l0:
 >l0 : any
 
 for (let x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => undefined
->function() { return x} : () => undefined
->x : undefined
+>(function() { return x}) : () => any
+>function() { return x} : () => any
+>x : any
 
     (() => x);
->(() => x) : () => undefined
->() => x : () => undefined
->x : undefined
+>(() => x) : () => any
+>() => x : () => any
+>x : any
 
     if (x == 1) {
 >x == 1 : boolean
->x : undefined
+>x : any
 >1 : 1
 
         break;
     }
     if (x == 1) {
 >x == 1 : boolean
->x : undefined
+>x : any
 >1 : 1
 
         break l0;
@@ -34,14 +34,14 @@ for (let x of []) {
     }
     if (x == 2) {
 >x == 2 : boolean
->x : undefined
+>x : any
 >2 : 2
 
         continue;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : undefined
+>x : any
 >2 : 2
 
         continue l0;
@@ -558,29 +558,29 @@ l0_c:
 >l0_c : any
 
 for (const x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => undefined
->function() { return x} : () => undefined
->x : undefined
+>(function() { return x}) : () => any
+>function() { return x} : () => any
+>x : any
 
     (() => x);
->(() => x) : () => undefined
->() => x : () => undefined
->x : undefined
+>(() => x) : () => any
+>() => x : () => any
+>x : any
 
     if (x == 1) {
 >x == 1 : boolean
->x : undefined
+>x : any
 >1 : 1
 
         break;
     }
     if (x == 1) {
 >x == 1 : boolean
->x : undefined
+>x : any
 >1 : 1
 
         break l0_c;
@@ -588,14 +588,14 @@ for (const x of []) {
     }
     if (x == 2) {
 >x == 2 : boolean
->x : undefined
+>x : any
 >2 : 2
 
         continue;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : undefined
+>x : any
 >2 : 2
 
         continue l0_c;

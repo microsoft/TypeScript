@@ -94,12 +94,12 @@ function foo() {
 >l0 : any
 
     for (let a of []) {
->a : undefined
+>a : any
 >[] : undefined[]
         
         if (a === 1) {
 >a === 1 : boolean
->a : undefined
+>a : any
 >1 : 1
 
             break;
@@ -107,7 +107,7 @@ function foo() {
         
         if (a === 2) {
 >a === 2 : boolean
->a : undefined
+>a : any
 >2 : 2
 
             break l0;
@@ -115,7 +115,7 @@ function foo() {
         }
         
         for (let b of []) {
->b : undefined
+>b : any
 >[] : undefined[]
 
             var [{x, y:z}] = [{x:1, y:2}];
@@ -131,7 +131,7 @@ function foo() {
 
             if (b === 1) {
 >b === 1 : boolean
->b : undefined
+>b : any
 >1 : 1
 
                 break;
@@ -140,7 +140,7 @@ function foo() {
             
             if (b === 2) {
 >b === 2 : boolean
->b : undefined
+>b : any
 >2 : 2
 
                 break l0;
@@ -152,7 +152,7 @@ function foo() {
 
             if (b === 3) {
 >b === 3 : boolean
->b : undefined
+>b : any
 >3 : 3
 
                 break l1;
@@ -164,7 +164,7 @@ function foo() {
         }
 
         for (let b of []) {
->b : undefined
+>b : any
 >[] : undefined[]
 
             var [{x1, y:z1}] = [{x1:1, y:arguments.length}];
@@ -182,7 +182,7 @@ function foo() {
 
             if (b === 1) {
 >b === 1 : boolean
->b : undefined
+>b : any
 >1 : 1
 
                 break;
@@ -190,7 +190,7 @@ function foo() {
             
             if (b === 2) {
 >b === 2 : boolean
->b : undefined
+>b : any
 >2 : 2
 
                 break l0;
@@ -198,8 +198,8 @@ function foo() {
             }
             
             () => b
->() => b : () => undefined
->b : undefined
+>() => b : () => any
+>b : any
 
             return 100;
 >100 : 100
@@ -207,8 +207,8 @@ function foo() {
 
         
         () => a;
->() => a : () => undefined
->a : undefined
+>() => a : () => any
+>a : any
     }
     
     use(x);
@@ -236,19 +236,19 @@ function foo2() {
 >foo2 : () => void
 
     for (let x of []) {
->x : undefined
+>x : any
 >[] : undefined[]
 
         if (x === 1) {
 >x === 1 : boolean
->x : undefined
+>x : any
 >1 : 1
 
             break;
         }
         else if (x === 2) {
 >x === 2 : boolean
->x : undefined
+>x : any
 >2 : 2
 
             continue;
@@ -260,7 +260,7 @@ function foo2() {
 >1 : 1
 
             if (x) {
->x : undefined
+>x : any
 
                 break;
             }
@@ -270,7 +270,7 @@ function foo2() {
         }
         
         switch(x) {
->x : undefined
+>x : any
 
             case 1: break;
 >1 : 1
@@ -280,11 +280,11 @@ function foo2() {
         }
         
         for (let y of []) {
->y : undefined
+>y : any
 >[] : undefined[]
 
             switch(y) {
->y : undefined
+>y : any
 
                 case 1: break;
 >1 : 1
@@ -336,7 +336,7 @@ function foo3 () {
 >length : number
 
     for (let y of []) {
->y : undefined
+>y : any
 >[] : undefined[]
 
         let z = arguments.length;
@@ -350,7 +350,7 @@ function foo3 () {
 >function() { return y + z + arguments.length; } : () => any
 >y + z + arguments.length : any
 >y + z : any
->y : undefined
+>y : any
 >z : number
 >arguments.length : number
 >arguments : IArguments

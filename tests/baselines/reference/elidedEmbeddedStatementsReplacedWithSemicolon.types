@@ -36,7 +36,7 @@ for (let _ in [])
 >F : F
 
 for (let _ of [])
->_ : undefined
+>_ : any
 >[] : undefined[]
 
     const enum G {}
