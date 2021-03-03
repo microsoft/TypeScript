@@ -36442,13 +36442,6 @@ namespace ts {
             if (indexInfos) {
                 forEach(getPropertiesOfObjectType(type), prop => {
                     const propType = getTypeOfSymbol(prop);
-                    // TODO: Well known symbols should _probably_ be subject to a symbol indexer, but unfortunately they have no associated literal
-                    // type right now, so they're very difficult to check/flow. They're on the chopping block for removal thanks to advancements,
-                    // and other issues though, so it's probably OK to just let their removal and simultaneous replacement with `unique symbol`s
-                    // fix this.
-                    if (isKnownSymbol(prop)) {
-                        return;
-                    }
                     checkIndexConstraintForProperty(prop, getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique, /*retainNonpublicNames*/ true), propType, type, declaredIndexers);
                 });
 
@@ -36533,7 +36526,7 @@ namespace ts {
                 let errorNode: Node | undefined;
                 if (propDeclaration && name &&
                     (propDeclaration.kind === SyntaxKind.BinaryExpression ||
-                     name.kind === SyntaxKind.ComputedPropertyName ||
+                     (name.kind === SyntaxKind.ComputedPropertyName && name.parent.parent === containingType.symbol.valueDeclaration) ||
                      prop.parent === containingType.symbol)) {
                     errorNode = propDeclaration;
                 }
