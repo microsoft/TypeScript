@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypedef1.js",
-      "position": 189
+      "position": 189,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -57,7 +58,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/jsDocTypedef1.js",
-      "position": 424
+      "position": 424,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "parameter",

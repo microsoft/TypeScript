@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
-      "position": 7
+      "position": 7,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "alias",
@@ -59,7 +60,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
-      "position": 20
+      "position": 20,
+      "name": "mod1"
     },
     "quickInfo": {
       "kind": "module",
@@ -88,7 +90,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
-      "position": 77
+      "position": 77,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "alias",
@@ -145,7 +148,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
-      "position": 102
+      "position": 102,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "alias",
@@ -202,7 +206,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
-      "position": 115
+      "position": 115,
+      "name": "mod2"
     },
     "quickInfo": {
       "kind": "module",
@@ -231,7 +236,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts",
-      "position": 172
+      "position": 172,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "alias",

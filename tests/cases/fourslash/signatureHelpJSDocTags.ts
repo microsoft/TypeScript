@@ -49,40 +49,14 @@
 ////      */
 ////     newMethod() {}
 //// }
-//// var foo = new /*1*/Foo(/*10*/4);
-//// /*2*/Foo./*3*/method1(/*11*/);
-//// foo./*4*/method2(/*12*/);
-//// foo./*5*/method3(/*13*/);
-//// foo./*6*/method4();
-//// foo./*7*/property1;
-//// foo./*8*/property2;
-//// foo./*9*/method5();
-//// foo.newMet/*14*/
+//// var foo = new Foo(/*10*/4);
+//// Foo.method1(/*11*/);
+//// foo.method2(/*12*/);
+//// foo.method3(/*13*/);
+//// foo.method4();
+//// foo.property1;
+//// foo.property2;
+//// foo.method5();
+//// foo.newMet
 
-verify.baselineQuickInfo();
-
-verify.signatureHelp(
-    {
-        marker: "10",
-        docComment: "This is the constructor.",
-        tags: [{ name: "myjsdoctag", text:"this is a comment" }],
-    },
-    {
-        marker: "11",
-        docComment: "method1 documentation",
-        tags: [{ name: "mytag", text: "comment1 comment2" }],
-    },
-    { marker: "12", tags: [{ name: "mytag", text: undefined }] },
-    { marker: "13", tags: [{ name: "returns", text: "a value" }] },
-);
-
-verify.completions({
-    marker: "14",
-    includes: {
-        name: "newMethod",
-        text: "(method) Foo.newMethod(): void",
-        documentation: "method documentation",
-        kind: "method",
-        tags: [{ name: "mytag", text: "a JSDoc tag" }],
-    },
-});
+verify.baselineSignatureHelp()
