@@ -145,7 +145,7 @@ namespace ts.refactor {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
                     const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    if (symbol) {
+                    if (symbol?.declarations) {
                         const declaration = cast(first(symbol.declarations), isTypeParameterDeclaration);
                         if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
                             pushIfUnique(result, declaration);
@@ -168,7 +168,7 @@ namespace ts.refactor {
             else if (isTypeQueryNode(node)) {
                 if (isIdentifier(node.exprName)) {
                     const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /* excludeGlobals */ false);
-                    if (symbol && rangeContainsSkipTrivia(statement, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
+                    if (symbol?.valueDeclaration && rangeContainsSkipTrivia(statement, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
                         return true;
                     }
                 }

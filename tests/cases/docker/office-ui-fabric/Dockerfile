@@ -12,9 +12,7 @@ COPY --from=typescript/typescript /typescript/typescript-*.tgz typescript.tgz
 WORKDIR /office-ui-fabric-react
 # Sync up all TS versions used internally to the new one (we use `npm` because `yarn` chokes on tarballs installed
 # into multiple places in a workspace in a short timeframe (some kind of data race))
-RUN npx lerna exec --stream --concurrency 1 -- npm install /typescript.tgz --exact --ignore-scripts
+RUN sed -i -e 's/"resolutions": {/"resolutions": { "\*\*\/typescript": "file:\/typescript\.tgz",/g' package.json
 RUN npx yarn
-# Perform scss task to generate scss code if present
-RUN npx lerna exec --stream --concurrency 1 --bail=false -- yarn run just scss
 ENTRYPOINT [ "npx" ]
 CMD [ "lerna", "exec", "--stream", "--concurrency", "1", "--loglevel", "error", "--bail=false", "--", "yarn", "run", "just", "ts"]
