@@ -18948,9 +18948,17 @@ namespace ts {
                     return indexTypesIdenticalTo(source, target, kind);
                 }
                 const targetType = getIndexTypeOfType(target, kind);
-                if (!targetType || targetType.flags & TypeFlags.Any && !sourceIsPrimitive && kind === IndexKind.String) {
-                    // Index signature of type any permits assignment from everything but primitives
+                if (!targetType) {
                     return Ternary.True;
+                }
+                if (targetType.flags & TypeFlags.Any && !sourceIsPrimitive) {
+                    // An index signature of type `any` permits assignment from everything but primitives,
+                    // provided that there is also a `string` index signature of type `any`.
+                    const stringIndexType = kind === IndexKind.String ? targetType : getIndexTypeOfType(target, IndexKind.String);
+                    if (stringIndexType && stringIndexType.flags & TypeFlags.Any) {
+                        return Ternary.True;
+                    }
+
                 }
                 if (isGenericMappedType(source)) {
                     // A generic mapped type { [P in K]: T } is related to a type with an index signature
