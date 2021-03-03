@@ -26407,7 +26407,7 @@ namespace ts {
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
                     if (symbolHasNonMethodDeclaration(prop)) {
-                        if(reportError) {
+                        if (reportError) {
                             error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         }
                         return false;
@@ -26418,7 +26418,7 @@ namespace ts {
                     // This error could mask a private property access error. But, a member
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
-                    if(reportError) {
+                    if (reportError) {
                         error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
                     }
                     return false;
@@ -26429,7 +26429,7 @@ namespace ts {
             if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
                 if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(node)) {
-                    if(reportError) {
+                    if (reportError) {
                         error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!)); // TODO: GH#18217
                     }
                     return false;
@@ -26447,7 +26447,7 @@ namespace ts {
             if (flags & ModifierFlags.Private) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!)!;
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
-                    if(reportError) {
+                    if (reportError) {
                         error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
                     }
                     return false;
@@ -26474,7 +26474,7 @@ namespace ts {
                 // static member access is disallow
                 let thisParameter: ParameterDeclaration | undefined;
                 if (flags & ModifierFlags.Static || !(thisParameter = getThisParameterFromNodeContext(node)) || !thisParameter.type) {
-                    if(reportError) {
+                    if (reportError) {
                         error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
                     }
                     return false;
@@ -26492,7 +26492,7 @@ namespace ts {
                 type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type)! : getBaseConstraintOfType(<TypeParameter>type)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
             }
             if (!type || !hasBaseType(type, enclosingClass)) {
-                if(reportError) {
+                if (reportError) {
                     error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
                 }
                 return false;
@@ -26683,7 +26683,7 @@ namespace ts {
             let prop: Symbol | undefined;
             if (isPrivateIdentifier(right)) {
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
-                if(assignmentKind && lexicallyScopedSymbol && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
+                if (assignmentKind && lexicallyScopedSymbol && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
                 if (isAnyLike) {
@@ -26973,13 +26973,14 @@ namespace ts {
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
             let props = getPropertiesOfType(containingType);
-            if(typeof name !== "string") {
+            if (typeof name !== "string") {
                 const parent = name.parent;
-                if(isPropertyAccessExpression(parent)) {
+                if (isPropertyAccessExpression(parent)) {
                     props = filter(props, prop => isValidPropertyAccessForCompletions(parent, containingType, prop));
                 }
+                name = idText(name);
             }
-            return getSpellingSuggestionForName(isString(name) ? name : idText(name), props, SymbolFlags.Value);
+            return getSpellingSuggestionForName(name, props, SymbolFlags.Value);
         }
 
         function getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
