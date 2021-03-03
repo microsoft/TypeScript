@@ -1,4 +1,4 @@
-describe("unittests:: evaluation:: namespaces", () => {
+describe("unittests:: evaluation:: externalModules", () => {
     // https://github.com/microsoft/TypeScript/issues/35420
     it("Correct 'this' in function exported from external module", async () => {
         const result = evaluator.evaluateTypeScript({
@@ -22,7 +22,7 @@ describe("unittests:: evaluation:: namespaces", () => {
                     import * as other from "./other";
 
                     // 1
-                    f(undefined, output);
+                    f(undefined);
 
                     // 2
                     const obj = {};
@@ -63,7 +63,7 @@ describe("unittests:: evaluation:: namespaces", () => {
                     import * as other from "./other";
 
                     // 1
-                    f(undefined, output);
+                    f(undefined);
 
                     // 2
                     const obj = {};
