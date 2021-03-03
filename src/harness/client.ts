@@ -536,17 +536,6 @@ namespace ts.server {
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
-        // private decodeLinks(links: protocol.JSDocLinkInfo[]): JSDocLinkInfo[] {
-        //     return links.map(link => ({
-        //             ...link,
-        //             name: link.name as unknown as TextSpan,
-        //             target: {
-        //                 // TODO: The JSDocLinkInfo tag data mismatches the type!! (probably wasn't correctly encoded in the first place?)
-        //                 textSpan: link.target as unknown as TextSpan,
-        //                 fileName: link.target.file,
-        //             }
-        //     }));
-        // }
         private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
             return tags.map(tag => typeof tag.text === "string" ? {
                 ...tag,
@@ -574,7 +563,6 @@ namespace ts.server {
 
             const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
 
-            // TODO: Same here, it doesn't actually seem to be encoded
             const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
             const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({ ...item, tags: this.decodeLinkDisplayParts(item.tags) }));
 

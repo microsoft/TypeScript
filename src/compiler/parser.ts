@@ -7599,7 +7599,7 @@ namespace ts {
                         if (!margin) {
                             margin = indent;
                         }
-                        comments.push(text); // TODO: finishNode???
+                        comments.push(text);
                         indent += text.length;
                     }
                     if (initialMargin !== undefined) {
