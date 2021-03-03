@@ -5795,6 +5795,7 @@ namespace ts {
         FixedPollingInterval,
         PriorityPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
         UseFsEvents,
         UseFsEventsOnParentDirectory,
     }
@@ -5803,12 +5804,14 @@ namespace ts {
         UseFsEvents,
         FixedPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
     }
 
     export enum PollingWatchKind {
         FixedInterval,
         PriorityInterval,
         DynamicPriority,
+        FixedChunkSize,
     }
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
