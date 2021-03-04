@@ -517,12 +517,20 @@ namespace ts {
         const resolutions: T[] = [];
         const cache = new Map<string, T>();
         for (const name of names) {
+            let _name = name;
+
+            // Remove URL search path from module name if present (`./mod?test` becomes `./mod`)
+            const match = _name.match(/^(.*?)\?.*$/);
+            if (match) {
+                _name = match[1];
+            }
+
             let result: T;
-            if (cache.has(name)) {
-                result = cache.get(name)!;
+            if (cache.has(_name)) {
+                result = cache.get(_name)!;
             }
             else {
-                cache.set(name, result = loader(name, containingFile, redirectedReference));
+                cache.set(_name, result = loader(_name, containingFile, redirectedReference));
             }
             resolutions.push(result);
         }
@@ -1804,7 +1812,7 @@ namespace ts {
         }
 
         function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
-           return sourceFile
+            return sourceFile
                 ? cachedBindAndCheckDiagnosticsForFile.perFile?.get(sourceFile.path)
                 : cachedBindAndCheckDiagnosticsForFile.allDiagnostics;
         }
