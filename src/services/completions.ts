@@ -1727,7 +1727,8 @@ namespace ts.Completions {
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*useAutoImportProvider*/ true);
             exportInfo.forEach((info, key) => {
                 const [symbolName] = key.split("|");
-                if (stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
+                const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
+                if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
                     // If we don't need to resolve module specifiers, it doesn't matter which SymbolExportInfo
                     // we use. Each is importable by the same name and resolves to the same declaration.
                     const { moduleSpecifier, exportInfo } = resolveModuleSpecifiers
