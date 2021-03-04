@@ -31,5 +31,5 @@ React.createElement(React.Fragment, null,
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
-renderer_1.dom(React.Fragment, null,
-    renderer_1.dom("h", null));
+(0, renderer_1.dom)(React.Fragment, null,
+    (0, renderer_1.dom)("h", null));
