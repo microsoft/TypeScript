@@ -9,7 +9,7 @@ class Alias {
 module.exports = Alias;
 >module.exports = Alias : typeof Alias
 >module.exports : typeof Alias
->module : { "\"tests/cases/conformance/salsa/mod1\"": typeof Alias; }
+>module : { exports: typeof Alias; }
 >exports : typeof Alias
 >Alias : typeof Alias
 

@@ -28,7 +28,7 @@ exports = module.exports = C
 >exports : typeof C
 >module.exports = C : typeof C
 >module.exports : typeof C
->module : { "\"tests/cases/conformance/salsa/semver\"": typeof C; }
+>module : { exports: typeof C; }
 >exports : typeof C
 >C : typeof C
 

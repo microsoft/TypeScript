@@ -55,8 +55,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = exports.y = exports.x = void 0;
-exports.x = (import.meta);
-exports.y = (import.metal);
+exports.x = import.meta;
+exports.y = import.metal;
 exports.z = import.import.import.malkovich;
 //// [scriptLookingFile01.js]
 "use strict";

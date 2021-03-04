@@ -93,7 +93,7 @@ node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' 
 node_modules/lodash/_cloneArrayBuffer.js(11,20): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: Buffer, isDeep?: boolean | undefined) => Buffer'.
-node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer\"": (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
 node_modules/lodash/_cloneBuffer.js(29,56): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/lodash/_createAggregator.js(19,60): error TS2554: Expected 0-1 arguments, but got 2.
@@ -172,7 +172,7 @@ node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is 
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
-node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_nodeUtil\"": any; }'.
+node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: any; }'.
 node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'false | (Global & typeof globalThis)'.
   Property 'process' does not exist on type 'false'.
 node_modules/lodash/_overRest.js(15,32): error TS1016: A required parameter cannot follow an optional parameter.
@@ -361,7 +361,7 @@ node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ attempt:
 node_modules/lodash/inRange.js(43,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/includes.js(40,49): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/intersectionBy.js(41,55): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/isBuffer\"": any; }'.
+node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: any; }'.
 node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
 node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.
 node_modules/lodash/iteratee.js(50,74): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.

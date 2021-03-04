@@ -1,0 +1,207 @@
+=== tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts ===
+export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
+>ThenArg : ThenArg<T>
+
+export interface InterfaceA<T> {
+    filter(callback: (newValue: T, oldValue: T) => boolean): InterfaceA<T>;
+>filter : (callback: (newValue: T, oldValue: T) => boolean) => InterfaceA<T>
+>callback : (newValue: T, oldValue: T) => boolean
+>newValue : T
+>oldValue : T
+
+    map<D>(callback: (value: T) => D): InterfaceA<D>;
+>map : <D>(callback: (value: T) => D) => InterfaceA<D>
+>callback : (value: T) => D
+>value : T
+
+    await<R extends ThenArg<T>>(): InterfaceA<R>;
+>await : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitLatest<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitLatest : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered2<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered2 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered3<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered3 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered4<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered4 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered5<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered5 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered6<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered6 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered7<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered7 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered8<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered8 : <R extends ThenArg<T>>() => InterfaceA<R>
+
+    awaitOrdered9<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered9 : <R extends ThenArg<T>>() => InterfaceA<R>
+}
+
+export interface InterfaceB<T> extends InterfaceA<T> {
+    map<D>(callback: (value: T) => D): InterfaceB<D>;
+>map : <D>(callback: (value: T) => D) => InterfaceB<D>
+>callback : (value: T) => D
+>value : T
+
+    await<R extends ThenArg<T>>(): InterfaceB<R>;
+>await : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitLatest<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitLatest : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered2<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered2 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered3<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered3 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered4<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered4 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered5<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered5 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered6<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered6 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered7<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered7 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered8<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered8 : <R extends ThenArg<T>>() => InterfaceB<R>
+
+    awaitOrdered9<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered9 : <R extends ThenArg<T>>() => InterfaceB<R>
+}
+
+export class A<T> implements InterfaceB<T> {
+>A : A<T>
+
+    public filter(callback: (newValue: T, oldValue: T) => boolean): B<T> {
+>filter : (callback: (newValue: T, oldValue: T) => boolean) => B<T>
+>callback : (newValue: T, oldValue: T) => boolean
+>newValue : T
+>oldValue : T
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public map<D>(callback: (value: T) => D): B<D> {
+>map : <D>(callback: (value: T) => D) => B<D>
+>callback : (value: T) => D
+>value : T
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public await<R extends ThenArg<T>>(): B<R> {
+>await : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered2<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered2 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered3<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered3 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered4<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered4 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered5<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered5 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered6<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered6 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered7<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered7 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered8<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered8 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitOrdered9<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered9 : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+
+    public awaitLatest<R extends ThenArg<T>>(): B<R> {
+>awaitLatest : <R extends ThenArg<T>>() => B<R>
+
+        return undefined as any;
+>undefined as any : any
+>undefined : undefined
+    }
+}
+
+export class B<T> extends A<T> { }
+>B : B<T>
+>A : A<T>
+
