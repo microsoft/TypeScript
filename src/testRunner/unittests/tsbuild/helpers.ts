@@ -322,7 +322,6 @@ interface Symbol {
         filesByName: MapLike<string | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile> | undefined;
         projectReferences: readonly ProjectReference[] | undefined;
         resolvedProjectReferences: readonly (ReadablePersistedProgramResolvedProjectReference | undefined)[] | undefined;
-        missingPaths: readonly string[] | undefined;
         resolvedTypeReferenceDirectives: readonly ReadablePersistedProgramResolutionEntry[] | undefined;
         fileProcessingDiagnostics: readonly ReadablePersistedProgramFilePreprocessingDiagnostic[] | undefined;
         resolutions: readonly ReadablePersistedProgramResolution[] | undefined;
@@ -379,7 +378,6 @@ interface Symbol {
                 filesByName,
                 projectReferences: buildInfo.program.peristedProgram.projectReferences?.map(toProjectReference),
                 resolvedProjectReferences: buildInfo.program.peristedProgram.resolvedProjectReferences?.map(toReadablePersistedProgramResolvedProjectReference),
-                missingPaths: buildInfo.program.peristedProgram.missingPaths?.map(toFileName),
                 resolvedTypeReferenceDirectives: buildInfo.program.peristedProgram.resolvedTypeReferenceDirectives?.map(toReadablePersistedProgramResolutionEntry),
                 fileProcessingDiagnostics: buildInfo.program.peristedProgram.fileProcessingDiagnostics?.map(toReadablePersistedProgramFilePreprocessingDiagnostic),
                 resolutions

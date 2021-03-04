@@ -87,7 +87,6 @@ namespace ts {
         sourceFileToPackageName: ESMap<Path, string>;
         projectReferences: readonly ProjectReference[] | undefined;
         resolvedProjectReferences: readonly (ResolvedProjectReferenceOfProgramFromBuildInfo | undefined)[] | undefined;
-        missingPaths: readonly Path[];
         resolvedTypeReferenceDirectives: ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
         fileProcessingDiagnostics: FilePreprocessingDiagnostic[] | undefined;
     }
@@ -351,7 +350,6 @@ namespace ts {
             sourceFileToPackageName: state.program.sourceFileToPackageName,
             projectReferences: state.program.getProjectReferences(),
             resolvedProjectReferences: state.program.getResolvedProjectReferences()?.map(toResolvedProjectReferenceOfProgramFromBuildInfo),
-            missingPaths: state.program.getMissingFilePaths(),
             resolvedTypeReferenceDirectives: state.program.getResolvedTypeReferenceDirectives(),
             fileProcessingDiagnostics: state.program.getFileProcessingDiagnostics(),
         };
@@ -920,7 +918,6 @@ namespace ts {
         filesByName: readonly PersistedProgramFileByNameEntry[] | undefined;
         projectReferences: readonly PersistedProgramProjectReference[] | undefined;
         resolvedProjectReferences: readonly (PersistedProgramResolvedProjectReference | undefined)[] | undefined;
-        missingPaths: readonly ProgramBuildInfoFileId[] | undefined;
         resolvedTypeReferenceDirectives: readonly PersistedProgramResolutionEntry[] | undefined;
         fileProcessingDiagnostics: readonly PersistedProgramFilePreprocessingDiagnostic[] | undefined;
         resolutions: readonly PersistedProgramResolution[] | undefined;
@@ -1032,7 +1029,6 @@ namespace ts {
                 filesByName,
                 projectReferences: program.getProjectReferences()?.map(toPersistedProgramProjectReference),
                 resolvedProjectReferences: program.getResolvedProjectReferences()?.map(toPersistedProgramResolvedProjectReference),
-                missingPaths: mapToReadonlyArrayOrUndefined(program.getMissingFilePaths(), toFileId),
                 resolvedTypeReferenceDirectives: toPersistedProgramResolutionMap(program.getResolvedTypeReferenceDirectives()),
                 fileProcessingDiagnostics: mapToReadonlyArrayOrUndefined(program.getFileProcessingDiagnostics(), toPersistedProgramFilePreprocessingDiagnostic),
                 resolutions: mapToReadonlyArrayOrUndefined(resolutions, toPersistedProgramResolution),
@@ -1691,7 +1687,6 @@ namespace ts {
                 sourceFileToPackageName,
                 projectReferences: program.peristedProgram.projectReferences?.map(toProjectReference),
                 resolvedProjectReferences: program.peristedProgram.resolvedProjectReferences?.map(toResolvedProjectReference),
-                missingPaths: mapToReadonlyArray(program.peristedProgram.missingPaths, toFilePath),
                 resolvedTypeReferenceDirectives: toResolutionMap(program.peristedProgram.resolvedTypeReferenceDirectives) || new Map(),
                 fileProcessingDiagnostics: map(program.peristedProgram.fileProcessingDiagnostics, toFileProcessingDiagnostic),
             };
@@ -1827,6 +1822,7 @@ namespace ts {
     }
 
     function createProgramFromBuildInfo(persistedProgramInfo: PersistedProgramState, compilerOptions: CompilerOptions): ProgramFromBuildInfo {
+        let missingFilePaths: readonly Path[] | undefined;
         return {
             programFromBuildInfo: true,
             getCompilerOptions: () => compilerOptions,
@@ -1838,7 +1834,7 @@ namespace ts {
             },
             getProjectReferences: () => persistedProgramInfo.projectReferences,
             getResolvedProjectReferences: () => persistedProgramInfo.resolvedProjectReferences,
-            getMissingFilePaths: () => persistedProgramInfo.missingPaths,
+            getMissingFilePaths: () => missingFilePaths ||= getMissingFilePaths(persistedProgramInfo.filesByName),
             getFileIncludeReasons: () => persistedProgramInfo.fileIncludeReasons,
             getResolvedTypeReferenceDirectives: () => persistedProgramInfo.resolvedTypeReferenceDirectives,
             getFilesByNameMap: () => persistedProgramInfo.filesByName,
