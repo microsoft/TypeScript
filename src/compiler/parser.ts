@@ -1541,13 +1541,6 @@ namespace ts {
                 return;
             }
 
-            // Specialized diagnostics for a keyword expression are redundant if the related token is already complaining.
-            const lastError = lastOrUndefined(parseDiagnostics);
-            if (lastError && scanner.getTokenPos() < lastError.start + 2) {
-                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
-                return;
-            }
-
             // Tagged template literals are sometimes used in places where only simple strings are allowed, e.g.:
             //   module `M1` {
             //   ^^^^^^^^^^^ This block is parsed as a template literal as with module`M1`.
