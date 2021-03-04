@@ -246,7 +246,7 @@ namespace ts.formatting {
                     return scanner.scanJsxIdentifier();
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
-                    return scanner.reScanJsxToken(/* isFormatting */ true);
+                    return scanner.reScanJsxToken(/* allowMultilineJsxText */ false);
                 case ScanAction.RescanJsxAttributeValue:
                     lastScanAction = ScanAction.RescanJsxAttributeValue;
                     return scanner.reScanJsxAttributeValue();

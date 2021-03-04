@@ -40,7 +40,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(isFormatting?: boolean): JsxTokenSyntaxKind;
+        reScanJsxToken(allowMultilineJsxText?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
         reScanInvalidIdentifier(): SyntaxKind;
@@ -2223,9 +2223,9 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
-        function reScanJsxToken(isFormatting?: boolean): JsxTokenSyntaxKind {
+        function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
-            return token = scanJsxToken(isFormatting);
+            return token = scanJsxToken(allowMultilineJsxText);
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2242,7 +2242,7 @@ namespace ts {
             return token = SyntaxKind.QuestionToken;
         }
 
-        function scanJsxToken(isFormatting?: boolean): JsxTokenSyntaxKind {
+        function scanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
             if (pos >= end) {
@@ -2298,7 +2298,7 @@ namespace ts {
                 if (isLineBreak(char) && firstNonWhitespace === 0) {
                     firstNonWhitespace = -1;
                 }
-                else if (isFormatting && isLineBreak(char) && firstNonWhitespace > 0) {
+                else if (!allowMultilineJsxText && isLineBreak(char) && firstNonWhitespace > 0) {
                     // Stop JsxText on each line during formatting. This allows the formatter to
                     // indent each line correctly.
                     break;
@@ -2395,7 +2395,7 @@ namespace ts {
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                // falls through
+                    // falls through
                 case CharacterCodes.lineFeed:
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
