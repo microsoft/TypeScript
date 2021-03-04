@@ -178,6 +178,19 @@ namespace ts {
         persistedProgramInfo?: PersistedProgramState;
     }
 
+    let diagnosticKeyMap: Map<keyof typeof Diagnostics> | undefined;
+    function ensureDiagnosticKeyMap(): Map<keyof typeof Diagnostics> {
+        if (!diagnosticKeyMap) {
+            diagnosticKeyMap = new Map();
+            for (const propName in Diagnostics) {
+                if (Diagnostics.hasOwnProperty(propName)) {
+                    diagnosticKeyMap.set(Diagnostics[propName as keyof typeof Diagnostics].key, propName as keyof typeof Diagnostics);
+                }
+            }
+        }
+        return diagnosticKeyMap;
+    }
+
     function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: ReadonlyCollection<string> | undefined): boolean {
         // Has same size and every key is present in both maps
         return map1 === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
@@ -1108,14 +1121,14 @@ namespace ts {
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
                     return {
                         ...d,
-                        diagnostic: d.diagnostic.key as keyof typeof Diagnostics,
+                        diagnostic: ensureDiagnosticKeyMap().get(d.diagnostic.key)!,
                         file: d.file && toFileId(d.file),
                         fileProcessingReason: toPersistedProgramFileIncludeReason(d.fileProcessingReason),
                     };
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
                     return {
                         ...d,
-                        diagnostic: d.diagnostic.key as keyof typeof Diagnostics,
+                        diagnostic: ensureDiagnosticKeyMap().get(d.diagnostic.key)!,
                         reason: toPersistedProgramReferencedFile(d.reason),
                     };
                 default:
