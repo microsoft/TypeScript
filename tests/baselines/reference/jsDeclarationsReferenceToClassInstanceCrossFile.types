@@ -41,10 +41,10 @@ class Rectangle {
 }
 
 module.exports = { Rectangle };
->module.exports = { Rectangle } : typeof import("tests/cases/conformance/jsdoc/declarations/rectangle")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/rectangle")
->module : { "\"tests/cases/conformance/jsdoc/declarations/rectangle\"": typeof import("tests/cases/conformance/jsdoc/declarations/rectangle"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/rectangle")
+>module.exports = { Rectangle } : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{ Rectangle } : { Rectangle: typeof Rectangle; }
 >Rectangle : typeof Rectangle
 
@@ -98,10 +98,10 @@ class Render {
 }
 
 module.exports = { Render };
->module.exports = { Render } : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports = { Render } : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{ Render } : { Render: typeof Render; }
 >Render : typeof Render
 

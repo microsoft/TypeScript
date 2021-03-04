@@ -402,7 +402,7 @@ namespace ts.codefix {
 
     function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo) {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, info.token, info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
+        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
     }
 }

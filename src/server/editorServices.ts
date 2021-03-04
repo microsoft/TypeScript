@@ -207,7 +207,7 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            match: /jquery(-[\d\.]+)?(\.intellisense)?(\.min)?\.js$/i,
             types: ["jquery"]
         },
         "WinJS": {
@@ -2707,7 +2707,7 @@ namespace ts.server {
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
-                return snap.getText(0, snap.getLength());
+                return getSnapshotText(snap);
             };
             const projectName = project.projectName;
             const documentPositionMapper = getDocumentPositionMapper(
@@ -2929,7 +2929,7 @@ namespace ts.server {
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
-         * If the there is no existing project it just opens the configured project for the config file
+         * If there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {

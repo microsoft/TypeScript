@@ -607,7 +607,7 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
-        tracing.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
+        tracing?.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -622,7 +622,7 @@ namespace ts {
 
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
-        tracing.pop();
+        tracing?.pop();
         return result;
     }
 
@@ -819,7 +819,7 @@ namespace ts {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
-                convertToObjectWorker(result, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+                convertToObjectWorker(result, result.statements[0]?.expression, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
                 result.referencedFiles = emptyArray;
                 result.typeReferenceDirectives = emptyArray;
                 result.libReferenceDirectives = emptyArray;
@@ -862,36 +862,56 @@ namespace ts {
                 endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
             else {
-                let expression;
-                switch (token()) {
-                    case SyntaxKind.OpenBracketToken:
-                        expression = parseArrayLiteralExpression();
-                        break;
-                    case SyntaxKind.TrueKeyword:
-                    case SyntaxKind.FalseKeyword:
-                    case SyntaxKind.NullKeyword:
-                        expression = parseTokenNode<BooleanLiteral | NullLiteral>();
-                        break;
-                    case SyntaxKind.MinusToken:
-                        if (lookAhead(() => nextToken() === SyntaxKind.NumericLiteral && nextToken() !== SyntaxKind.ColonToken)) {
-                            expression = parsePrefixUnaryExpression() as JsonMinusNumericLiteral;
-                        }
-                        else {
-                            expression = parseObjectLiteralExpression();
-                        }
-                        break;
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.StringLiteral:
-                        if (lookAhead(() => nextToken() !== SyntaxKind.ColonToken)) {
-                            expression = parseLiteralNode() as StringLiteral | NumericLiteral;
+                // Loop and synthesize an ArrayLiteralExpression if there are more than
+                // one top-level expressions to ensure all input text is consumed.
+                let expressions: Expression[] | Expression | undefined;
+                while (token() !== SyntaxKind.EndOfFileToken) {
+                    let expression;
+                    switch (token()) {
+                        case SyntaxKind.OpenBracketToken:
+                            expression = parseArrayLiteralExpression();
                             break;
+                        case SyntaxKind.TrueKeyword:
+                        case SyntaxKind.FalseKeyword:
+                        case SyntaxKind.NullKeyword:
+                            expression = parseTokenNode<BooleanLiteral | NullLiteral>();
+                            break;
+                        case SyntaxKind.MinusToken:
+                            if (lookAhead(() => nextToken() === SyntaxKind.NumericLiteral && nextToken() !== SyntaxKind.ColonToken)) {
+                                expression = parsePrefixUnaryExpression() as JsonMinusNumericLiteral;
+                            }
+                            else {
+                                expression = parseObjectLiteralExpression();
+                            }
+                            break;
+                        case SyntaxKind.NumericLiteral:
+                        case SyntaxKind.StringLiteral:
+                            if (lookAhead(() => nextToken() !== SyntaxKind.ColonToken)) {
+                                expression = parseLiteralNode() as StringLiteral | NumericLiteral;
+                                break;
+                            }
+                            // falls through
+                        default:
+                            expression = parseObjectLiteralExpression();
+                            break;
+                    }
+
+                    // Error recovery: collect multiple top-level expressions
+                    if (expressions && isArray(expressions)) {
+                        expressions.push(expression);
+                    }
+                    else if (expressions) {
+                        expressions = [expressions, expression];
+                    }
+                    else {
+                        expressions = expression;
+                        if (token() !== SyntaxKind.EndOfFileToken) {
+                            parseErrorAtCurrentToken(Diagnostics.Unexpected_token);
                         }
-                        // falls through
-                    default:
-                        expression = parseObjectLiteralExpression();
-                        break;
+                    }
                 }
 
+                const expression = isArray(expressions) ? finishNode(factory.createArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
                 const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
                 finishNode(statement, pos);
                 statements = createNodeArray([statement], pos);
@@ -1637,8 +1657,8 @@ namespace ts {
         // with magic property names like '__proto__'. The 'identifiers' object is used to share a single string instance for
         // each identifier in order to reduce memory consumption.
         function createIdentifier(isIdentifier: boolean, diagnosticMessage?: DiagnosticMessage, privateIdentifierDiagnosticMessage?: DiagnosticMessage): Identifier {
-            identifierCount++;
             if (isIdentifier) {
+                identifierCount++;
                 const pos = getNodePos();
                 // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
                 const originalKeywordKind = token();
@@ -1652,6 +1672,12 @@ namespace ts {
                 return createIdentifier(/*isIdentifier*/ true);
             }
 
+            if (token() === SyntaxKind.Unknown && scanner.tryScan(() => scanner.reScanInvalidIdentifier() === SyntaxKind.Identifier)) {
+                // Scanner has already recorded an 'Invalid character' error, so no need to add another from the parser.
+                return createIdentifier(/*isIdentifier*/ true);
+            }
+
+            identifierCount++;
             // Only for end of file because the error gets reported incorrectly on embedded script tags.
             const reportAtCurrentPosition = token() === SyntaxKind.EndOfFileToken;
 
@@ -8037,6 +8063,9 @@ namespace ts {
                 function parseTemplateTagTypeParameter() {
                     const typeParameterPos = getNodePos();
                     const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
+                    if (nodeIsMissing(name)) {
+                        return undefined;
+                    }
                     return finishNode(factory.createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined), typeParameterPos);
                 }
 
@@ -8045,7 +8074,10 @@ namespace ts {
                     const typeParameters = [];
                     do {
                         skipWhitespace();
-                        typeParameters.push(parseTemplateTagTypeParameter());
+                        const node = parseTemplateTagTypeParameter();
+                        if (node !== undefined) {
+                            typeParameters.push(node);
+                        }
                         skipWhitespaceOrAsterisk();
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
                     return createNodeArray(typeParameters, pos);
