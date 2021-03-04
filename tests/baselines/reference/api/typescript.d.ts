@@ -6034,14 +6034,14 @@ declare namespace ts {
     }
     interface JSDocTagInfo {
         name: string;
-        text?: (SymbolDisplayPart | JSDocLinkPart)[];
+        text?: SymbolDisplayPart[];
     }
     interface QuickInfo {
         kind: ScriptElementKind;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
-        documentation?: (SymbolDisplayPart | JSDocLinkPart)[];
+        documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

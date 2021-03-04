@@ -6034,14 +6034,14 @@ declare namespace ts {
     }
     interface JSDocTagInfo {
         name: string;
-        text?: (SymbolDisplayPart | JSDocLinkPart)[];
+        text?: SymbolDisplayPart[];
     }
     interface QuickInfo {
         kind: ScriptElementKind;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
-        documentation?: (SymbolDisplayPart | JSDocLinkPart)[];
+        documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
@@ -7310,13 +7310,16 @@ declare namespace ts.server.protocol {
         file: string;
     }
     interface JSDocTagInfo {
+        /** Name of the JSDoc tag */
         name: string;
+        /** Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
         text?: string;
     }
-    /** Like ts.JSDocTagInfo, but with JSDocLinkParts translated to line+offset */
     interface RichJSDocTagInfo {
+        /** Name of the JSDoc tag */
         name: string;
-        text?: (SymbolDisplayPart | JSDocLinkPart)[];
+        /** Comment display parts after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
+        text?: SymbolDisplayPart[];
     }
     interface TextSpanWithContext extends TextSpan {
         contextStart?: Location;
@@ -8074,9 +8077,6 @@ declare namespace ts.server.protocol {
          */
         tags: JSDocTagInfo[];
     }
-    /**
-     * RICH Body of QuickInfoResponse.
-     */
     interface RichQuickInfoResponseBody {
         /**
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
@@ -8294,8 +8294,11 @@ declare namespace ts.server.protocol {
          */
         kind: string;
     }
+    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
     interface JSDocLinkPart extends SymbolDisplayPart {
+        /** The name of the linked declaration. Includes the location inside the @link tag. */
         name: FileSpan;
+        /** The location of the declaration that the @link tag links to. */
         target: FileSpan;
     }
     /**
@@ -8401,7 +8404,7 @@ declare namespace ts.server.protocol {
         source?: SymbolDisplayPart[];
     }
     /**
-     * RICH Additional completion entry details, available on demand
+     * Additional completion entry details, available on demand
      */
     interface RichCompletionEntryDetails {
         /**
