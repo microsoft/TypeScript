@@ -2266,10 +2266,6 @@ namespace ts {
 
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
-            let lastNonWhitespace = -1;
-
-            // Keeps track for the last line break in jsx text.
-            let seenLineBreakInJsxText = false;
 
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
@@ -2302,36 +2298,19 @@ namespace ts {
                 if (isLineBreak(char) && firstNonWhitespace === 0) {
                     firstNonWhitespace = -1;
                 }
+                else if (isFormatting && isLineBreak(char) && firstNonWhitespace > 0) {
+                    // Stop JsxText on each line during formatting. This allows the formatter to
+                    // indent each line correctly.
+                    break;
+                }
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
-                    seenLineBreakInJsxText = false;
                 }
 
                 pos++;
-
-                // If is not formatting, just continue capturing the non whitespace.
-                // Stop JsxText on the last linebreak if it exists otherwise just continue capturing the position.
-                if(!isFormatting) {
-                    lastNonWhitespace = pos;
-                }
-                else if (firstNonWhitespace > 0 && !seenLineBreakInJsxText) {
-                    if (isLineBreak(char)) {
-                        seenLineBreakInJsxText = true;
-                    }
-                    else {
-                        lastNonWhitespace = pos;
-                    }
-                }
             }
 
-            const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
-            tokenValue = text.substring(startPos, endPosition);
-
-            // Update pos if it is rescanning for formatting. This will allow the next node to include
-            // all whitespace as trivia instead of being part of jsx text node.
-            if(isFormatting) {
-                pos = endPosition;
-            }
+            tokenValue = text.substring(startPos, pos);
 
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
@@ -2416,7 +2395,7 @@ namespace ts {
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // falls through
+                // falls through
                 case CharacterCodes.lineFeed:
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
