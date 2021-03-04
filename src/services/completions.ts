@@ -1742,7 +1742,7 @@ namespace ts.Completions {
                         kind: resolveModuleSpecifiers ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                         moduleSpecifier,
                         symbolName,
-                        exportName: exportInfo.symbol.name,
+                        exportName: exportInfo.isExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
                         fileName: isAmbientModule ? undefined : cast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile).fileName,
                         isDefaultExport,
                         moduleSymbol: exportInfo.moduleSymbol,
