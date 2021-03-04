@@ -1632,7 +1632,7 @@ namespace ts.server {
                         (newLS as any)[k] = (this.languageService as any)[k];
                     }
                 }
-                this.projectService.logger.info(`Plugin validation succeded`);
+                this.projectService.logger.info(`Plugin validation succeeded`);
                 this.languageService = newLS;
                 this.plugins.push({ name: configEntry.name, module: pluginModule });
             }

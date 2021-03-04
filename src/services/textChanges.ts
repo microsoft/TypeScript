@@ -1037,11 +1037,12 @@ namespace ts.textChanges {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine);
-        const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
+        const onBeforeEmitNode: PrintHandlers["onBeforeEmitNode"] = node => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);
             }
-            printCallback(hint, node);
+        };
+        const onAfterEmitNode: PrintHandlers["onAfterEmitNode"] = node => {
             if (node) {
                 setEnd(node, lastNonTriviaPosition);
             }
@@ -1163,7 +1164,8 @@ namespace ts.textChanges {
         }
 
         return {
-            onEmitNode,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
             onBeforeEmitToken,

@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts" />
 // @allowJs: true
-// @Filename: 31298.js
+// @Filename: jsDocDontBreakWithNamespaces.js
 /////**
 //// * @returns {module:@nodefuel/web~Webserver~wsServer#hello} Websocket server object
 //// */
@@ -16,6 +16,9 @@
 /////** @type {function(module:xxxx, module:xxxx): module:xxxxx} */
 ////function zee() { }
 ////zee(''/*zee*/);
+
+// #31298
+verify.baselineSignatureHelp()
 
 
 verify.signatureHelp({

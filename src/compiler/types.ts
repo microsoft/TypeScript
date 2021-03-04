@@ -361,17 +361,14 @@ namespace ts {
         // JSDoc nodes
         JSDocTypeExpression,
         JSDocNameReference,
-        // The * type
-        JSDocAllType,
-        // The ? type
-        JSDocUnknownType,
+        JSDocAllType, // The * type
+        JSDocUnknownType, // The ? type
         JSDocNullableType,
         JSDocNonNullableType,
         JSDocOptionalType,
         JSDocFunctionType,
         JSDocVariadicType,
-        // https://jsdoc.app/about-namepaths.html
-        JSDocNamepathType,
+        JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
         JSDocComment,
         JSDocTypeLiteral,
         JSDocSignature,
@@ -1117,6 +1114,8 @@ namespace ts {
     export type EntityName = Identifier | QualifiedName;
 
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+
+    export type MemberName = Identifier | PrivateIdentifier;
 
     export type DeclarationName =
         | Identifier
@@ -2224,7 +2223,7 @@ namespace ts {
         readonly kind: SyntaxKind.PropertyAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
-        readonly name: Identifier | PrivateIdentifier;
+        readonly name: MemberName;
     }
 
     /*@internal*/
@@ -2234,7 +2233,7 @@ namespace ts {
 
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
-        readonly name: Identifier | PrivateIdentifier;
+        readonly name: MemberName;
     }
 
     /* @internal */
@@ -4047,7 +4046,7 @@ namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
 
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
@@ -4124,9 +4123,9 @@ namespace ts {
          */
         /* @internal */ tryGetMemberInModuleExportsAndProperties(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
-        /* @internal */ getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentProperty(name: MemberName | string, containingType: Type): Symbol | undefined;
         /* @internal */ getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | string, containingType: Type): Symbol | undefined;
-        /* @internal */ getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): string | undefined;
+        /* @internal */ getSuggestionForNonexistentProperty(name: MemberName | string, containingType: Type): string | undefined;
         /* @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         /* @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
@@ -4166,6 +4165,7 @@ namespace ts {
         /* @internal */ createSymbol(flags: SymbolFlags, name: __String): TransientSymbol;
         /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
         /* @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
+        /* @internal */ tryFindAmbientModule(moduleName: string): Symbol | undefined;
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
         /* @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
@@ -4713,8 +4713,8 @@ namespace ts {
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
-        declarations: Declaration[];            // Declarations associated with this symbol
-        valueDeclaration: Declaration;          // First value declaration of the symbol
+        declarations?: Declaration[];           // Declarations associated with this symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
@@ -5292,6 +5292,10 @@ namespace ts {
         regularType?: UnionType;
         /* @internal */
         origin?: Type;  // Denormalized union, intersection, or index type in which union originates
+        /* @internal */
+        keyPropertyName?: __String;  // Property with unique unit type that exists in every object/intersection in union type
+        /* @internal */
+        constituentMap?: ESMap<TypeId, Type>;  // Constituents keyed by unit type discriminants
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -5549,6 +5553,8 @@ namespace ts {
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
+        baseSignatureCache?: Signature;      // Base version of signature (deferred)
+        /* @internal */
         optionalCallSignatureCache?: { inner?: Signature, outer?: Signature }; // Optional chained call version of signature (deferred)
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
@@ -5788,6 +5794,7 @@ namespace ts {
         FixedPollingInterval,
         PriorityPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
         UseFsEvents,
         UseFsEventsOnParentDirectory,
     }
@@ -5796,12 +5803,14 @@ namespace ts {
         UseFsEvents,
         FixedPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
     }
 
     export enum PollingWatchKind {
         FixedInterval,
         PriorityInterval,
         DynamicPriority,
+        FixedChunkSize,
     }
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
@@ -6567,7 +6576,7 @@ namespace ts {
         /*@internal*/ IgnoreSourceNewlines = 1 << 27,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
     }
 
-    export interface EmitHelper {
+    export interface EmitHelperBase {
         readonly name: string;                                          // A unique name for this helper.
         readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);  // ES3-compatible raw script text, or a function yielding such a string
@@ -6575,12 +6584,18 @@ namespace ts {
         readonly dependencies?: EmitHelper[]
     }
 
-    export interface UnscopedEmitHelper extends EmitHelper {
+    export interface ScopedEmitHelper extends EmitHelperBase {
+        readonly scoped: true;
+    }
+
+    export interface UnscopedEmitHelper extends EmitHelperBase {
         readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
         /* @internal */
         readonly importName?: string;                                   // The name of the helper to use when importing via `--importHelpers`.
         readonly text: string;                                          // ES3-compatible raw script text, or a function yielding such a string
     }
+
+    export type EmitHelper = ScopedEmitHelper | UnscopedEmitHelper;
 
     /* @internal */
     export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
@@ -6940,10 +6955,10 @@ namespace ts {
         updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression;
         createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
         updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression;
-        createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier): PropertyAccessExpression;
-        updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier): PropertyAccessExpression;
-        createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier): PropertyAccessChain;
-        updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier): PropertyAccessChain;
+        createPropertyAccessExpression(expression: Expression, name: string | MemberName): PropertyAccessExpression;
+        updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: MemberName): PropertyAccessExpression;
+        createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName): PropertyAccessChain;
+        updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: MemberName): PropertyAccessChain;
         createElementAccessExpression(expression: Expression, index: number | Expression): ElementAccessExpression;
         updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
         createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression): ElementAccessChain;
@@ -7381,7 +7396,7 @@ namespace ts {
          * @param allowComments A value indicating whether comments may be emitted for the name.
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        /* @internal */ getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+        /* @internal */ getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
          * Gets a namespace-qualified name for use in expressions.
          *
@@ -7779,13 +7794,13 @@ namespace ts {
          * });
          * ```
          */
-        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        onEmitNode?(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
 
         /**
          * A hook used to check if an emit notification is required for a node.
          * @param node The node to emit.
          */
-        isEmitNotificationEnabled?(node: Node | undefined): boolean;
+        isEmitNotificationEnabled?(node: Node): boolean;
         /**
          * A hook used by the Printer to perform just-in-time substitution of a node. This is
          * primarily used by node transformations that need to substitute one node for another,
@@ -7807,6 +7822,8 @@ namespace ts {
         /*@internal*/ onEmitSourceMapOfToken?: (node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, pos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, pos: number) => number) => number;
         /*@internal*/ onEmitSourceMapOfPosition?: (pos: number) => void;
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
+        /*@internal*/ onBeforeEmitNode?: (node: Node | undefined) => void;
+        /*@internal*/ onAfterEmitNode?: (node: Node | undefined) => void;
         /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any> | undefined) => void;
         /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any> | undefined) => void;
         /*@internal*/ onBeforeEmitToken?: (node: Node) => void;

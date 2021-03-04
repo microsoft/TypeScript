@@ -734,9 +734,9 @@ namespace ts {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
-    function isShorthandAmbientModule(node: Node): boolean {
+    function isShorthandAmbientModule(node: Node | undefined): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -767,7 +767,7 @@ namespace ts {
     }
 
     export function getNonAugmentationDeclaration(symbol: Symbol) {
-        return find(symbol.declarations, d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
+        return symbol.declarations?.find(d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
@@ -3186,11 +3186,11 @@ namespace ts {
         }
     }
     export function getTextOfIdentifierOrLiteral(node: PropertyNameLiteral): string {
-        return isIdentifierOrPrivateIdentifier(node) ? idText(node) : node.text;
+        return isMemberName(node) ? idText(node) : node.text;
     }
 
     export function getEscapedTextOfIdentifierOrLiteral(node: PropertyNameLiteral): __String {
-        return isIdentifierOrPrivateIdentifier(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
+        return isMemberName(node) ? node.escapedText : escapeLeadingUnderscores(node.text);
     }
 
     export function getPropertyNameForUniqueESSymbol(symbol: Symbol): __String {
@@ -3574,6 +3574,7 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
+            case SyntaxKind.MetaProperty:
                 return OperatorPrecedence.Member;
 
             case SyntaxKind.AsExpression:
@@ -4836,9 +4837,12 @@ namespace ts {
     }
 
     export function isDottedName(node: Expression): boolean {
-        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
-            node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
-            node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
+        return node.kind === SyntaxKind.Identifier
+            || node.kind === SyntaxKind.ThisKeyword
+            || node.kind === SyntaxKind.SuperKeyword
+            || node.kind === SyntaxKind.MetaProperty
+            || node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression)
+            || node.kind === SyntaxKind.ParenthesizedExpression && isDottedName((<ParenthesizedExpression>node).expression);
     }
 
     export function isPropertyAccessEntityNameExpression(node: Node): node is PropertyAccessEntityNameExpression {
@@ -4884,7 +4888,7 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        if (!isExportDefaultSymbol(symbol)) return undefined;
+        if (!isExportDefaultSymbol(symbol) || !symbol.declarations) return undefined;
         for (const decl of symbol.declarations) {
             if (decl.localSymbol) return decl.localSymbol;
         }
@@ -4892,7 +4896,7 @@ namespace ts {
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && length(symbol.declarations) > 0 && hasSyntacticModifier(symbol.declarations[0], ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasSyntacticModifier(symbol.declarations![0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
@@ -5441,7 +5445,7 @@ namespace ts {
     }
 
     export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
-        return find(symbol.declarations, isClassLike);
+        return symbol.declarations?.find(isClassLike);
     }
 
     export function getObjectFlags(type: Type): ObjectFlags {
@@ -7092,5 +7096,72 @@ namespace ts {
 
     export function containsIgnoredPath(path: string) {
         return some(ignoredPaths, p => stringContains(path, p));
+    }
+
+    export function getContainingNodeArray(node: Node): NodeArray<Node> | undefined {
+        if (!node.parent) return undefined;
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+                const { parent } = node as TypeParameterDeclaration;
+                return parent.kind === SyntaxKind.InferType ? undefined : parent.typeParameters;
+            case SyntaxKind.Parameter:
+                return (node as ParameterDeclaration).parent.parameters;
+            case SyntaxKind.TemplateLiteralTypeSpan:
+                return (node as TemplateLiteralTypeSpan).parent.templateSpans;
+            case SyntaxKind.TemplateSpan:
+                return (node as TemplateSpan).parent.templateSpans;
+            case SyntaxKind.Decorator:
+                return (node as Decorator).parent.decorators;
+            case SyntaxKind.HeritageClause:
+                return (node as HeritageClause).parent.heritageClauses;
+        }
+
+        const { parent } = node;
+        if (isJSDocTag(node)) {
+            return isJSDocTypeLiteral(node.parent) ? undefined : node.parent.tags;
+        }
+
+        switch (parent.kind) {
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.InterfaceDeclaration:
+                return isTypeElement(node) ? (parent as TypeLiteralNode | InterfaceDeclaration).members : undefined;
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+                return (parent as UnionOrIntersectionTypeNode).types;
+            case SyntaxKind.TupleType:
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.CommaListExpression:
+            case SyntaxKind.NamedImports:
+            case SyntaxKind.NamedExports:
+                return (parent as TupleTypeNode | ArrayLiteralExpression | CommaListExpression | NamedImports | NamedExports).elements;
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.JsxAttributes:
+                return (parent as ObjectLiteralExpressionBase<ObjectLiteralElement>).properties;
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.NewExpression:
+                return isTypeNode(node) ? (parent as CallExpression | NewExpression).typeArguments :
+                    (parent as CallExpression | NewExpression).expression === node ? undefined :
+                    (parent as CallExpression | NewExpression).arguments;
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxFragment:
+                return isJsxChild(node) ? (parent as JsxElement | JsxFragment).children : undefined;
+            case SyntaxKind.JsxOpeningElement:
+            case SyntaxKind.JsxSelfClosingElement:
+                return isTypeNode(node) ? (parent as JsxOpeningElement | JsxSelfClosingElement).typeArguments : undefined;
+            case SyntaxKind.Block:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.ModuleBlock:
+                return (parent as Block | CaseOrDefaultClause | ModuleBlock).statements;
+            case SyntaxKind.CaseBlock:
+                return (parent as CaseBlock).clauses;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+                return isClassElement(node) ? (parent as ClassLikeDeclaration).members : undefined;
+            case SyntaxKind.EnumDeclaration:
+                return isEnumMember(node) ? (parent as EnumDeclaration).members : undefined;
+            case SyntaxKind.SourceFile:
+                return (parent as SourceFile).statements;
+        }
     }
 }
