@@ -10814,7 +10814,7 @@ namespace ts {
         }
 
         function getIndexInfoOfIndexSymbol(indexSymbol: Symbol, indexKind: IndexKind) {
-            const declaration = indexSymbol && getIndexDeclarationOfSymbol(indexSymbol, indexKind);
+            const declaration = getIndexDeclarationOfIndexSymbol(indexSymbol, indexKind);
             if (!declaration) return undefined;
             return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
                 hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration);
@@ -12373,8 +12373,12 @@ namespace ts {
         }
 
         function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): IndexSignatureDeclaration | undefined {
-            const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             const indexSymbol = getIndexSymbol(symbol);
+            return indexSymbol && getIndexDeclarationOfIndexSymbol(indexSymbol, kind);
+        }
+
+        function getIndexDeclarationOfIndexSymbol(indexSymbol: Symbol, kind: IndexKind): IndexSignatureDeclaration | undefined {
+            const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             if (indexSymbol?.declarations) {
                 for (const decl of indexSymbol.declarations) {
                     const node = cast(decl, isIndexSignatureDeclaration);
@@ -12386,6 +12390,7 @@ namespace ts {
                     }
                 }
             }
+
             return undefined;
         }
 
