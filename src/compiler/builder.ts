@@ -438,7 +438,21 @@ namespace ts {
                     removeSemanticDiagnosticsOf(state, f.resolvedPath)
                 );
             }
+            // When file is added to affected file because of global file change, the signature will not be update
+            // we need to update the signature to reflect correctness of the signature(which is output d.ts emit) of this file
+            BuilderState.updateShapeSignature(
+                state,
+                Debug.checkDefined(state.program),
+                affectedFile,
+                Debug.checkDefined(state.currentAffectedFilesSignatures),
+                cancellationToken,
+                computeHash,
+                state.currentAffectedFilesExportedModulesMap
+            );
             return;
+        }
+        else {
+            Debug.assert(state.hasCalledUpdateShapeSignature.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affeted file: ${affectedFile.fileName}`);
         }
 
         if (!state.compilerOptions.assumeChangesOnlyAffectDirectDependencies) {
