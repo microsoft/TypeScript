@@ -26766,7 +26766,7 @@ namespace ts {
                             relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                         }
                         else {
-                            const diagnostic = containerSeemstoBeEmptyDomElement(containingType)
+                            const diagnostic = containerSeemsToBeEmptyDomElement(containingType)
                                 ? Diagnostics.Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom
                                 : Diagnostics.Property_0_does_not_exist_on_type_1;
                             errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), diagnostic, missingProperty, container);
@@ -26781,7 +26781,7 @@ namespace ts {
             diagnostics.add(resultDiagnostic);
         }
 
-        function containerSeemstoBeEmptyDomElement(containingType: Type) {
+        function containerSeemsToBeEmptyDomElement(containingType: Type) {
             return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
                 everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(type.symbol.escapedName.toString())) &&
                 checker.getPropertiesOfType(containingType).length === 0;
