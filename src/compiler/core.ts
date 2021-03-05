@@ -292,7 +292,7 @@ namespace ts {
         return -1;
     }
 
-    export function countWhere<T>(array: readonly T[], predicate: (x: T, i: number) => boolean): number {
+    export function countWhere<T>(array: readonly T[] | undefined, predicate: (x: T, i: number) => boolean): number {
         let count = 0;
         if (array) {
             for (let i = 0; i < array.length; i++) {

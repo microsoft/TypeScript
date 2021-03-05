@@ -2,7 +2,7 @@ tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts(17
   Property 'y' is incompatible with index signature.
     Property 'a' is missing in type 'B' but required in type 'A'.
 tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts(27,10): error TS2339: Property 'b' does not exist on type '{ a: string; }'.
-tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts(29,7): error TS2322: Type 'constr<{}, { [key: string]: { a: string; }; }>' is not assignable to type '{ [key: string]: { a: string; b: string; }; }'.
+tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts(29,7): error TS2322: Type 's' is not assignable to type '{ [key: string]: { a: string; b: string; }; }'.
   Index signatures are incompatible.
     Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
 tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts(35,1): error TS2322: Type '{ a: string; } & { b: number; }' is not assignable to type '{ [key: string]: string; }'.
@@ -48,7 +48,7 @@ tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts(35
     
     const d: { [key: string]: {a: string, b: string} } = q;  // Error
           ~
-!!! error TS2322: Type 'constr<{}, { [key: string]: { a: string; }; }>' is not assignable to type '{ [key: string]: { a: string; b: string; }; }'.
+!!! error TS2322: Type 's' is not assignable to type '{ [key: string]: { a: string; b: string; }; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts:29:39: 'b' is declared here.

@@ -70,6 +70,13 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Tips
 
+### Using a development container
+
+This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
+
+- Clone the TypeScript repository locally and use the `Open Folder in Container` command.
+- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
+
 ### Faster clones
 
 The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
@@ -153,17 +160,17 @@ gulp runtests --tests=2dArrays
 
 ## Debugging the tests
 
-You can debug with VS Code or Node instead with `gulp runtests --inspect`:
+You can debug with VS Code or Node instead with `gulp runtests -i`:
 
 ```Shell
-gulp runtests --tests=2dArrays --inspect
+gulp runtests --tests=2dArrays -i
 ```
 
 You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
 
 ## Adding a Test
 
-To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the your bug is now fixed, or your new feature now works.
+To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the bug is now fixed, or your new feature now works.
 
 These files support metadata tags in the format  `// @metaDataName: value`.
 The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
@@ -189,15 +196,24 @@ import { f as g } from "file1";
 var x = g();
 ```
 
-## Managing the Baselines
+## Managing the baselines
 
-Compiler tests generate baselines: one file each for the emitted `.js`, the errors produced by the compiler, the type of each expression, and symbol for each identifier. Additionally, some tests generate baselines for the source map output.
+Most tests generate "baselines" to find differences in output.
+As an example, compiler tests usually emit one file each for
+
+- the `.js` and `.d.ts` output (all in the same `.js` output file),
+- the errors produced by the compiler (in an `.errors.txt` file),
+- the types of each expression (in a `.types` file),
+- the symbols for each identifier (in a `.symbols` file), and
+- the source map outputs for files if a test opts into them (in a `.js.map` file).
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
 ```Shell
-gulp diff
+git diff --diff-filter=AM --no-index ./tests/baselines/reference ./tests/baselines/local
 ```
+
+Alternatively, you can set the `DIFF` environment variable and run `gulp diff`, or manually run your favorite folder diffing tool between `tests/baselines/reference` and `tests/baselines/local`. Our team largely uses Beyond Compare and WinMerge.
 
 After verifying that the changes in the baselines are correct, run
 

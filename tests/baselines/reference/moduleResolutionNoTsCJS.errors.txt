@@ -1,0 +1,33 @@
+tests/cases/compiler/user.ts(1,15): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './x' instead.
+tests/cases/compiler/user.ts(2,15): error TS2691: An import path cannot end with a '.tsx' extension. Consider importing './y' instead.
+tests/cases/compiler/user.ts(3,15): error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './z' instead.
+
+
+==== tests/cases/compiler/x.ts (0 errors) ====
+    // CommonJS output
+    
+    export default 0;
+    
+==== tests/cases/compiler/y.tsx (0 errors) ====
+    export default 0;
+    
+==== tests/cases/compiler/z.d.ts (0 errors) ====
+    declare const x: number;
+    export default x;
+    
+==== tests/cases/compiler/user.ts (3 errors) ====
+    import x from "./x.ts";
+                  ~~~~~~~~
+!!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './x' instead.
+    import y from "./y.tsx";
+                  ~~~~~~~~~
+!!! error TS2691: An import path cannot end with a '.tsx' extension. Consider importing './y' instead.
+    import z from "./z.d.ts";
+                  ~~~~~~~~~~
+!!! error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './z' instead.
+    
+    // Making sure the suggested fixes are valid:
+    import x2 from "./x";
+    import y2 from "./y";
+    import z2 from "./z";
+    

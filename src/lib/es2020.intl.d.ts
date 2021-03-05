@@ -1,13 +1,12 @@
 declare namespace Intl {
 
     /**
-     * [BCP 47 language tag](http://tools.ietf.org/html/rfc5646) definition.
+     * [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers) definition.
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      *
-     * [Wikipedia](https://en.wikipedia.org/wiki/IETF_language_tag).
      */
-    type BCP47LanguageTag = string;
+    type UnicodeBCP47LocaleIdentifier = string;
 
     /**
      * Unit to use in the relative time internationalized message.
@@ -78,7 +77,7 @@ declare namespace Intl {
      * [Specification](https://tc39.es/ecma402/#table-relativetimeformat-resolvedoptions-properties)
      */
     interface ResolvedRelativeTimeFormatOptions {
-        locale: BCP47LanguageTag;
+        locale: UnicodeBCP47LocaleIdentifier;
         style: RelativeTimeFormatStyle;
         numeric: RelativeTimeFormatNumeric;
         numberingSystem: string;
@@ -221,7 +220,7 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-intl-relativetimeformat-constructor).
          */
         new(
-            locales?: BCP47LanguageTag | BCP47LanguageTag[],
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
         ): RelativeTimeFormat;
 
@@ -257,9 +256,9 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-Intl.RelativeTimeFormat.supportedLocalesOf).
          */
         supportedLocalesOf(
-            locales: BCP47LanguageTag | BCP47LanguageTag[],
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
-        ): BCP47LanguageTag[];
+        ): UnicodeBCP47LocaleIdentifier[];
     };
 
     interface NumberFormatOptions {
@@ -281,23 +280,10 @@ declare namespace Intl {
     interface DateTimeFormatOptions {
         dateStyle?: "full" | "long" | "medium" | "short";
         timeStyle?: "full" | "long" | "medium" | "short";
-        calendar?: "buddhist" | "chinese" | " coptic" | "ethiopia" | "ethiopic" | "gregory" | " hebrew" | "indian" | "islamic" | "iso8601" | " japanese" | "persian" | "roc";
-        dayPeriod?: "narrow" | "short" | " long";
-        numberingSystem?: "arab" | "arabext" | " bali" | "beng" | "deva" | "fullwide" | " gujr" | "guru" | "hanidec" | "khmr" | " knda" | "laoo" | "latn" | "limb" | "mlym" | " mong" | "mymr" | "orya" | "tamldec" | " telu" | "thai" | "tibt";
-        localeMatcher?: "best fit" | "lookup";
-        timeZone?: string;
-        hour12?: boolean;
+        calendar?: string;
+        dayPeriod?: "narrow" | "short" | "long";
+        numberingSystem?: string;
         hourCycle?: "h11" | "h12" | "h23" | "h24";
-        formatMatcher?: "best fit" | "basic";
-        weekday?: "long" | "short" | "narrow";
-        era?: "long" | "short" | "narrow";
-        year?: "numeric" | "2-digit";
-        month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
-        day?: "numeric" | "2-digit";
-        hour?: "numeric" | "2-digit";
-        minute?: "numeric" | "2-digit";
-        second?: "numeric" | "2-digit";
         fractionalSecondDigits?: 0 | 1 | 2 | 3;
-        timeZoneName?: "long" | "short";
     }
 }

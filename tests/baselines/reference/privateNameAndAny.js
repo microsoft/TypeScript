@@ -4,6 +4,17 @@ class A {
     method(thing: any) {
         thing.#foo; // OK
         thing.#bar; // Error
+        thing.#foo();
+    }
+    methodU(thing: unknown) {
+        thing.#foo;
+        thing.#bar;
+        thing.#foo();
+    }
+    methodN(thing: never) {
+        thing.#foo;
+        thing.#bar;
+        thing.#foo();
     }
 };
 
@@ -24,6 +35,18 @@ class A {
     method(thing) {
         __classPrivateFieldGet(thing, _foo); // OK
         thing.; // Error
+        __classPrivateFieldGet(thing, _foo).call(// Error
+        thing);
+    }
+    methodU(thing) {
+        __classPrivateFieldGet(thing, _foo);
+        thing.;
+        __classPrivateFieldGet(thing, _foo).call(thing);
+    }
+    methodN(thing) {
+        __classPrivateFieldGet(thing, _foo);
+        thing.;
+        __classPrivateFieldGet(thing, _foo).call(thing);
     }
 }
 _foo = new WeakMap();

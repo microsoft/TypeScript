@@ -25,7 +25,7 @@ BaseFactory.Base = Base;
 module.exports = BaseFactory;
 >module.exports = BaseFactory : { (): Base; Base: typeof Base; }
 >module.exports : { (): Base; Base: typeof Base; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/base\"": { (): Base; Base: typeof Base; }; }
+>module : { exports: { (): Base; Base: typeof Base; }; }
 >exports : { (): Base; Base: typeof Base; }
 >BaseFactory : { (): Base; Base: typeof Base; }
 

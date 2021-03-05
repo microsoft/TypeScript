@@ -18,7 +18,7 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, pos);
         const checker = program.getTypeChecker();
         const symbol = checker.getSymbolAtLocation(token);
-        if (symbol) {
+        if (symbol?.valueDeclaration) {
             return symbol.valueDeclaration.parent.parent as VariableStatement;
         }
     }

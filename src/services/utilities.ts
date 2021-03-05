@@ -1588,9 +1588,11 @@ namespace ts {
         return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
-    export function getNodeModifiers(node: Node): string {
-        const flags = isDeclaration(node) ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) : ModifierFlags.None;
+    export function getNodeModifiers(node: Node, excludeFlags = ModifierFlags.None): string {
         const result: string[] = [];
+        const flags = isDeclaration(node)
+            ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) & ~excludeFlags
+            : ModifierFlags.None;
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
@@ -1832,8 +1834,8 @@ namespace ts {
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
-            getCompilerOptions: () => program.getCompilerOptions(),
             getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
+            getFileIncludeReasons: () => program.getFileIncludeReasons(),
         };
     }
 
@@ -1902,6 +1904,14 @@ namespace ts {
             const name = getNameOfDeclaration(decl);
             return name && name.kind === SyntaxKind.Identifier ? name.escapedText : undefined;
         });
+    }
+
+    export function isModuleSpecifierLike(node: Node): node is StringLiteralLike {
+        return isStringLiteralLike(node) && (
+            isExternalModuleReference(node.parent) ||
+            isImportDeclaration(node.parent) ||
+            isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) && node.parent.arguments[0] === node ||
+            isImportCall(node.parent) && node.parent.arguments[0] === node);
     }
 
     export type ObjectBindingElementWithoutPropertyName = BindingElement & { name: Identifier };
@@ -2493,7 +2503,7 @@ namespace ts {
         // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
         const quotePreference = getQuotePreference(sourceFile, preferences);
         const quoted = JSON.stringify(text);
-        return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'` : quoted;
+        return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
     }
 
     export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
@@ -2878,10 +2888,10 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
-    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget) {
-        if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
+    export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined) {
+        if (!(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default)) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
-            return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
+            return firstDefined(symbol.declarations, d => isExportAssignment(d) ? tryCast(skipOuterExpressions(d.expression), isIdentifier)?.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
         }
         return symbol.name;

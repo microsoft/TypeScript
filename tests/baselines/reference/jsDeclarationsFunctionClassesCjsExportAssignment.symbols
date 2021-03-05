@@ -13,7 +13,7 @@ function Timer(timeout) {
 >timeout : Symbol(timeout, Decl(timer.js, 3, 15))
 }
 module.exports = Timer;
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/timer", Decl(timer.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(timer.js, 0, 0))
 >module : Symbol(export=, Decl(timer.js, 5, 1))
 >exports : Symbol(export=, Decl(timer.js, 5, 1))
 >Timer : Symbol(Timer, Decl(timer.js, 0, 0))
@@ -36,7 +36,7 @@ function Hook(handle) {
 >handle : Symbol(handle, Decl(hook.js, 6, 14))
 }
 module.exports = Hook;
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/hook", Decl(hook.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(hook.js, 0, 0))
 >module : Symbol(export=, Decl(hook.js, 8, 1))
 >exports : Symbol(export=, Decl(hook.js, 8, 1))
 >Hook : Symbol(Hook, Decl(hook.js, 0, 0))
@@ -112,7 +112,7 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/context", Decl(context.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(context.js, 0, 0))
 >module : Symbol(export=, Decl(context.js, 46, 1))
 >exports : Symbol(export=, Decl(context.js, 46, 1))
 >Context : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
