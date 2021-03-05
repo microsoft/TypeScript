@@ -905,7 +905,6 @@ namespace ts.projectSystem {
                         compileOnSave: true,
                         compilerOptions: {
                             declaration,
-                            disableLazyShapeComputation: true,
                             module: hasModule ? undefined : "none"
                         },
                     })
@@ -951,11 +950,17 @@ function bar() {
                     verifyFileSave(module);
                 }
 
+                // Change file1 get affected file list = will return only file1 if --declaration otherwise all files
+                verifyLocalEdit(file1, "hello", "world", /*returnsAllFilesAsAffected*/ !declaration);
+
                 // Change file1 get affected file list
-                verifyLocalEdit(file1, "hello", "world");
+                verifyLocalEdit(file1, "world", "earth");
 
                 // Change file2 get affected file list = will return only file2 if --declaration otherwise all files
                 verifyLocalEdit(file2, "world", "hello", /*returnsAllFilesAsAffected*/ !declaration);
+
+                // Change file2 get affected file list
+                verifyLocalEdit(file2, "hello", "hey");
 
                 function verifyFileSave(file: File) {
                     const response = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
