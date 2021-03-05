@@ -42,16 +42,20 @@ namespace ts.Completions {
 
     interface SymbolOriginInfo {
         kind: SymbolOriginInfoKind;
+        symbolName?: string;
+        moduleSymbol?: Symbol;
+        isDefaultExport?: boolean;
+        isFromPackageJson?: boolean;
+        exportName?: string;
+        fileName?: string;
+        moduleSpecifier?: string;
     }
 
     interface SymbolOriginInfoExport extends SymbolOriginInfo {
-        kind: SymbolOriginInfoKind;
         symbolName: string;
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
-        isFromPackageJson?: boolean;
         exportName: string;
-        fileName?: string;
     }
 
     interface SymbolOriginInfoResolvedExport extends SymbolOriginInfoExport {
@@ -99,7 +103,7 @@ namespace ts.Completions {
      * Map from symbol id -> SymbolOriginInfo.
      * Only populated for symbols that come from other modules.
      */
-    type SymbolOriginInfoMap = Record<number, SymbolOriginInfo | SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | undefined>;
+    type SymbolOriginInfoMap = Record<number, SymbolOriginInfo | SymbolOriginInfo[]>;
 
     type SymbolSortTextMap = (SortText | undefined)[];
 
@@ -580,40 +584,42 @@ namespace ts.Completions {
         // So adding a completion for a local will prevent us from adding completions for external module exports sharing the same name.
         const uniques = new Map<string, boolean>();
         for (const symbol of symbols) {
-            const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
-            if (!info) {
-                continue;
-            }
-            const { name, needsConvertPropertyAccess } = info;
-            if (uniques.get(name)) {
-                continue;
-            }
+            const origins = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
+            for (const origin of toArray(origins)) {
+                const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
+                if (!info) {
+                    continue;
+                }
+                const { name, needsConvertPropertyAccess } = info;
+                if (uniques.get(name)) {
+                    continue;
+                }
 
-            const entry = createCompletionEntry(
-                symbol,
-                symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)] || SortText.LocationPriority,
-                contextToken,
-                location,
-                sourceFile,
-                typeChecker,
-                name,
-                needsConvertPropertyAccess,
-                origin,
-                recommendedCompletion,
-                propertyAccessToConvert,
-                isJsxInitializer,
-                preferences
-            );
-            if (!entry) {
-                continue;
+                const entry = createCompletionEntry(
+                    symbol,
+                    symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)] || SortText.LocationPriority,
+                    contextToken,
+                    location,
+                    sourceFile,
+                    typeChecker,
+                    name,
+                    needsConvertPropertyAccess,
+                    origin,
+                    recommendedCompletion,
+                    propertyAccessToConvert,
+                    isJsxInitializer,
+                    preferences
+                );
+                if (!entry) {
+                    continue;
+                }
+
+                /** True for locals; false for globals, module exports from other files, `this.` completions. */
+                const shouldShadowLaterSymbols = !origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location!.getSourceFile()));
+                uniques.set(name, shouldShadowLaterSymbols);
+
+                entries.push(entry);
             }
-
-            /** True for locals; false for globals, module exports from other files, `this.` completions. */
-            const shouldShadowLaterSymbols = !origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location!.getSourceFile()));
-            uniques.set(name, shouldShadowLaterSymbols);
-
-            entries.push(entry);
         }
 
         log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
@@ -664,7 +670,7 @@ namespace ts.Completions {
         type: "symbol";
         symbol: Symbol;
         location: Node | undefined;
-        symbolToOriginInfoMap: SymbolOriginInfoMap;
+        origin: SymbolOriginInfo | SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | undefined;
         previousToken: Node | undefined;
         readonly isJsxInitializer: IsJsxInitializer;
         readonly isTypeOnlyLocation: boolean;
@@ -688,9 +694,7 @@ namespace ts.Completions {
                     previousToken: findPrecedingToken(position, sourceFile, /*startNode*/ undefined)!,
                     isJsxInitializer: false,
                     isTypeOnlyLocation: false,
-                    symbolToOriginInfoMap: {
-                        [getSymbolId(autoImport.symbol)]: autoImport.origin
-                    }
+                    origin: autoImport.origin,
                 };
             }
         }
@@ -714,11 +718,13 @@ namespace ts.Completions {
         // name against 'entryName' (which is known to be good), not building a new
         // completion entry.
         return firstDefined(symbols, (symbol): SymbolCompletion | undefined => {
-            const origin = symbolToOriginInfoMap[getSymbolId(symbol)];
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind, completionData.isJsxIdentifierExpected);
-            return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
-                ? { type: "symbol" as const, symbol, location, symbolToOriginInfoMap, previousToken, isJsxInitializer, isTypeOnlyLocation }
-                : undefined;
+            const origins = symbolToOriginInfoMap[getSymbolId(symbol)];
+            return firstDefined(toArray(origins), origin => {
+                const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind, completionData.isJsxIdentifierExpected);
+                return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
+                    ? { type: "symbol" as const, symbol, location, origin, previousToken, isJsxInitializer, isTypeOnlyLocation }
+                    : undefined;
+            });
         }) || { type: "none" };
     }
 
@@ -765,8 +771,8 @@ namespace ts.Completions {
                 }
             }
             case "symbol": {
-                const { symbol, location, symbolToOriginInfoMap, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(symbolToOriginInfoMap, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, entryId.data);
+                const { symbol, location, origin, previousToken } = symbolCompletion;
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(origin, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, entryId.data);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location!, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
@@ -802,7 +808,7 @@ namespace ts.Completions {
         readonly sourceDisplay: SymbolDisplayPart[] | undefined;
     }
     function getCompletionEntryCodeActionsAndSourceDisplay(
-        symbolToOriginInfoMap: SymbolOriginInfoMap,
+        origin: SymbolOriginInfo | SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | undefined,
         symbol: Symbol,
         program: Program,
         checker: TypeChecker,
@@ -819,12 +825,11 @@ namespace ts.Completions {
             return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
         }
 
-        const symbolOriginInfo = symbolToOriginInfoMap[getSymbolId(symbol)];
-        if (!symbolOriginInfo || !originIsExport(symbolOriginInfo)) {
+        if (!origin || !originIsExport(origin)) {
             return { codeActions: undefined, sourceDisplay: undefined };
         }
 
-        const { moduleSymbol } = symbolOriginInfo;
+        const { moduleSymbol } = origin;
         const exportedSymbol = checker.getMergedSymbol(skipAlias(symbol.exportSymbol || symbol, checker));
         const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
             exportedSymbol,
@@ -1729,6 +1734,10 @@ namespace ts.Completions {
                 const [symbolName] = key.split("|");
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                 if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
+                    // if (some(info, i => i.isExportEquals && !every(i.symbol.declarations, isNonGlobalDeclaration))) {
+                    //     return;
+                    // }
+
                     // If we don't need to resolve module specifiers, it doesn't matter which SymbolExportInfo
                     // we use. Each is importable by the same name and resolves to the same declaration.
                     const { moduleSpecifier, exportInfo } = resolveModuleSpecifiers
@@ -1737,9 +1746,8 @@ namespace ts.Completions {
                     if (!exportInfo) return;
                     const isDefaultExport = exportInfo.symbol.name === InternalSymbolName.Default;
                     const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
-                    const symbolId = getSymbolId(symbol);
                     const isAmbientModule = !isExternalModuleNameRelative(stripQuotes(exportInfo.moduleSymbol.name));
-                    const origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport = {
+                    pushAutoImportSymbol(symbol, {
                         kind: resolveModuleSpecifiers ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                         moduleSpecifier,
                         symbolName,
@@ -1748,12 +1756,29 @@ namespace ts.Completions {
                         isDefaultExport,
                         moduleSymbol: exportInfo.moduleSymbol,
                         isFromPackageJson: exportInfo.isFromPackageJson,
-                    };
-                    symbols.push(symbol);
-                    symbolToOriginInfoMap[symbolId] = origin;
-                    symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+                    });
                 }
             });
+        }
+
+        function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {
+            const symbolId = getSymbolId(symbol);
+            if (symbolToSortTextMap[symbolId] === SortText.GlobalsOrKeywords) {
+                // If an auto-importable symbol is available as a global, don't add the auto import
+                return;
+            }
+            const existingOrigin = symbolToOriginInfoMap[symbolId];
+            if (existingOrigin === undefined) {
+                symbolToOriginInfoMap[symbolId] = origin;
+                symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+                symbols.push(symbol);
+            }
+            else if (isArray(existingOrigin)) {
+                existingOrigin.push(origin);
+            }
+            else {
+                symbolToOriginInfoMap[symbolId] = [existingOrigin, origin];
+            }
         }
 
         /**
