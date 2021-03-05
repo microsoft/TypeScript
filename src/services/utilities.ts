@@ -2183,24 +2183,42 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.text);
     }
 
-    /** return type subtype reduction elimination! */
-    export function linkPart(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart {
-        if (!link.name) {return textPart(`{@link ${link.text}}`);}
-        const text = `{@link ${getTextOfNode(link.name)}${link.text}}`;
-        const symbol = checker?.getSymbolAtLocation(link.name);
-        if (!symbol?.valueDeclaration) {return textPart(text);}
+    export function linkTextPart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.linkText);
+    }
+
+    export function linkNamePart(name: EntityName, target: Declaration): JSDocLinkDisplayPart {
         return {
-            text,
-            kind: SymbolDisplayPartKind[SymbolDisplayPartKind.link],
-            name: {
-                fileName: getSourceFileOfNode(link).fileName,
-                textSpan: createTextSpanFromNode(link.name),
-            },
+            text: getTextOfNode(name),
+            kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
             target: {
-                fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
-                textSpan: createTextSpanFromNode(symbol.valueDeclaration),
+                fileName: getSourceFileOfNode(target).fileName,
+                textSpan: createTextSpanFromNode(target),
             },
-        } as JSDocLinkPart;
+        };
+    }
+
+    export function linkPart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.link);
+    }
+
+    export function buildLinkParts(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart[] {
+        const parts = [linkPart("{@link ")];
+        if (!link.name) {
+            if (link.text) {parts.push(linkTextPart(link.text));}
+        }
+        else {
+            const symbol = checker?.getSymbolAtLocation(link.name);
+            if (symbol?.valueDeclaration) {
+                parts.push(linkNamePart(link.name, symbol.valueDeclaration));
+                if (link.text) {parts.push(linkTextPart(link.text));}
+            }
+            else {
+                parts.push(linkTextPart(getTextOfNode(link.name) + link.text));
+            }
+        }
+        parts.push(linkPart("}"));
+        return parts;
     }
 
     const carriageReturnLineFeed = "\r\n";

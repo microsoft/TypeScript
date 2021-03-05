@@ -70,7 +70,7 @@ namespace ts.projectSystem {
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
             };
-            assert.deepEqual<readonly protocol.CompletionEntryDetails[] | readonly protocol.RichCompletionEntryDetails[] | undefined>(detailsResponse, [
+            assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
                 {
                     codeActions: [
                         {

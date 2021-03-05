@@ -1278,7 +1278,7 @@ namespace ts.server {
             return tags ? tags.map(tag => ({ ...tag, text: tag.text && tag.text.map(part => part.text).join("") })) : [];
         }
 
-        private mapRichJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.RichJSDocTagInfo[] {
+        private mapRichJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
             return tags ? tags.map(tag => ({ ...tag, text: this.mapDisplayParts(tag.text, project) })) : [];
         }
 
@@ -1286,14 +1286,13 @@ namespace ts.server {
             if (!parts) {
                 return [];
             }
-            return parts.map(part => part.kind !== "link" ? part : {
+            return parts.map(part => part.kind !== "linkName" ? part : {
                 ...part,
-                name: this.toFileSpan((part as JSDocLinkPart).name.fileName, (part as JSDocLinkPart).name.textSpan, project),
-                target: this.toFileSpan((part as JSDocLinkPart).target.fileName, (part as JSDocLinkPart).target.textSpan, project),
+                target: this.toFileSpan((part as JSDocLinkDisplayPart).target.fileName, (part as JSDocLinkDisplayPart).target.textSpan, project),
             });
         }
 
-        private mapSignatureHelpItems(items: SignatureHelpItem[], project: Project): protocol.RichSignatureHelpItem[] {
+        private mapRichSignatureHelpItems(items: SignatureHelpItem[], project: Project): protocol.SignatureHelpItem[] {
             return items.map(item => ({
                 ...item,
                 documentation: this.mapDisplayParts(item.documentation, project),
@@ -1704,7 +1703,7 @@ namespace ts.server {
             return languageService.isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
         }
 
-        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean, richDocumentation?: boolean): protocol.QuickInfoResponseBody | protocol.RichQuickInfoResponseBody | QuickInfo | undefined {
+        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean, richDocumentation?: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
@@ -1859,7 +1858,7 @@ namespace ts.server {
             return res;
         }
 
-        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean, richDocumentation?: boolean): readonly protocol.CompletionEntryDetails[] | readonly protocol.RichCompletionEntryDetails[] | readonly CompletionEntryDetails[] {
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean, richDocumentation?: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1936,19 +1935,20 @@ namespace ts.server {
                 !emitSkipped;
         }
 
-        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean, richDocumentation?: boolean): protocol.SignatureHelpItems | protocol.RichSignatureHelpItems | SignatureHelpItems | undefined {
+        private getSignatureHelpItems(args: protocol.SignatureHelpRequestArgs, simplifiedResult: boolean, richDocumentation?: boolean): protocol.SignatureHelpItems | SignatureHelpItems | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
             const helpItems = project.getLanguageService().getSignatureHelpItems(file, position, args);
-            if (!helpItems) {
-                return undefined;
-            }
-
-            if (simplifiedResult) {
+            if (helpItems && simplifiedResult) {
+                const span = helpItems.applicableSpan;
                 return {
                     ...helpItems,
-                    items: richDocumentation ? this.mapSignatureHelpItems(helpItems.items, project) : helpItems.items,
+                    applicableSpan: {
+                        start: scriptInfo.positionToLineOffset(span.start),
+                        end: scriptInfo.positionToLineOffset(span.start + span.length)
+                    },
+                    items: richDocumentation ? this.mapRichSignatureHelpItems(helpItems.items, project) : helpItems.items,
                 };
             }
             else {

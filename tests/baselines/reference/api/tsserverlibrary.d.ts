@@ -6022,14 +6022,15 @@ declare namespace ts {
         enumMemberName = 19,
         functionName = 20,
         regularExpressionLiteral = 21,
-        link = 22
+        link = 22,
+        linkName = 23,
+        linkText = 24
     }
     interface SymbolDisplayPart {
         text: string;
         kind: string;
     }
-    interface JSDocLinkPart extends SymbolDisplayPart {
-        name: DocumentSpan;
+    interface JSDocLinkDisplayPart extends SymbolDisplayPart {
         target: DocumentSpan;
     }
     interface JSDocTagInfo {
@@ -6324,8 +6325,12 @@ declare namespace ts {
         jsxAttribute = "JSX attribute",
         /** String literal */
         string = "string",
-        /** Jsdoc {@link entityname} */
-        link = "link"
+        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        link = "link",
+        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        linkName = "link name",
+        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        linkText = "link text"
     }
     enum ScriptElementKindModifier {
         none = "",
@@ -8041,7 +8046,7 @@ declare namespace ts.server.protocol {
      */
     interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
-        /** if true - return response as with documentation as display parts instead of string */
+        /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
     /**
@@ -8278,7 +8283,7 @@ declare namespace ts.server.protocol {
     interface CompletionDetailsRequest extends FileLocationRequest {
         command: CommandTypes.CompletionDetails;
         arguments: CompletionDetailsRequestArgs;
-        /** if true - return response as with documentation as display parts instead of string */
+        /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
     /**
@@ -8295,9 +8300,7 @@ declare namespace ts.server.protocol {
         kind: string;
     }
     /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
-    interface JSDocLinkPart extends SymbolDisplayPart {
-        /** The name of the linked declaration. Includes the location inside the @link tag. */
-        name: FileSpan;
+    interface JSDocLinkDisplayPart extends SymbolDisplayPart {
         /** The location of the declaration that the @link tag links to. */
         target: FileSpan;
     }
@@ -8652,7 +8655,7 @@ declare namespace ts.server.protocol {
     interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
         arguments: SignatureHelpRequestArgs;
-        /** if true - return response as with documentation as display parts instead of string */
+        /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
     /**

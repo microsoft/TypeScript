@@ -983,14 +983,7 @@ namespace ts.server.protocol {
         /** Name of the JSDoc tag */
         name: string;
         /** Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
-        text?: string;
-    }
-
-    export interface RichJSDocTagInfo {
-        /** Name of the JSDoc tag */
-        name: string;
-        /** Comment display parts after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
-        text?: SymbolDisplayPart[];
+        text?: string | SymbolDisplayPart[];
     }
 
     export interface TextSpanWithContext extends TextSpan {
@@ -1965,7 +1958,7 @@ namespace ts.server.protocol {
      */
     export interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
-        /** if true - return response as with documentation as display parts instead of string */
+        /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
 
@@ -2001,7 +1994,7 @@ namespace ts.server.protocol {
         /**
          * Documentation associated with symbol.
          */
-        documentation: string;
+        documentation: string | SymbolDisplayPart[];
 
         /**
          * JSDoc tags associated with symbol.
@@ -2009,48 +2002,11 @@ namespace ts.server.protocol {
         tags: JSDocTagInfo[];
     }
 
-    export interface RichQuickInfoResponseBody {
-        /**
-         * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
-         */
-        kind: ScriptElementKind;
-
-        /**
-         * Optional modifiers for the kind (such as 'public').
-         */
-        kindModifiers: string;
-
-        /**
-         * Starting file location of symbol.
-         */
-        start: Location;
-
-        /**
-         * One past last character of symbol.
-         */
-        end: Location;
-
-        /**
-         * Type and kind of symbol.
-         */
-        displayString: string;
-
-        /**
-         * Documentation associated with symbol.
-         */
-        documentation: SymbolDisplayPart[];
-
-        /**
-         * JSDoc tags associated with symbol.
-         */
-        tags: RichJSDocTagInfo[];
-    }
-
     /**
      * Quickinfo response message.
      */
     export interface QuickInfoResponse extends Response {
-        body?: QuickInfoResponseBody | RichQuickInfoResponseBody;
+        body?: QuickInfoResponseBody;
     }
 
     /**
@@ -2244,7 +2200,7 @@ namespace ts.server.protocol {
     export interface CompletionDetailsRequest extends FileLocationRequest {
         command: CommandTypes.CompletionDetails;
         arguments: CompletionDetailsRequestArgs;
-        /** if true - return response as with documentation as display parts instead of string */
+        /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
 
@@ -2264,9 +2220,7 @@ namespace ts.server.protocol {
     }
 
     /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
-    export interface JSDocLinkPart extends SymbolDisplayPart {
-        /** The name of the linked declaration. Includes the location inside the @link tag. */
-        name: FileSpan;
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
         /** The location of the declaration that the @link tag links to. */
         target: FileSpan;
     }
@@ -2379,48 +2333,6 @@ namespace ts.server.protocol {
         source?: SymbolDisplayPart[];
     }
 
-    /**
-     * Additional completion entry details, available on demand
-     */
-    export interface RichCompletionEntryDetails {
-        /**
-         * The symbol's name.
-         */
-        name: string;
-        /**
-         * The symbol's kind (such as 'className' or 'parameterName').
-         */
-        kind: ScriptElementKind;
-        /**
-         * Optional modifiers for the kind (such as 'public').
-         */
-        kindModifiers: string;
-        /**
-         * Display parts of the symbol (similar to quick info).
-         */
-        displayParts: SymbolDisplayPart[];
-
-        /**
-         * Documentation strings for the symbol.
-         */
-        documentation?: SymbolDisplayPart[];
-
-        /**
-         * JSDoc tags for the symbol.
-         */
-        tags?: RichJSDocTagInfo[];
-
-        /**
-         * The associated code actions for this entry
-         */
-        codeActions?: CodeAction[];
-
-        /**
-         * Human-readable description of the `source` from the CompletionEntry.
-         */
-        source?: SymbolDisplayPart[];
-    }
-
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
     export interface CompletionsResponse extends Response {
         body?: CompletionEntry[];
@@ -2444,7 +2356,7 @@ namespace ts.server.protocol {
     }
 
     export interface CompletionDetailsResponse extends Response {
-        body?: CompletionEntryDetails[] | RichCompletionEntryDetails[];
+        body?: CompletionEntryDetails[];
     }
 
     /**
@@ -2515,47 +2427,6 @@ namespace ts.server.protocol {
     }
 
     /**
-     * Represents a single signature to show in signature help.
-     */
-    export interface RichSignatureHelpItem {
-
-        /**
-         * Whether the signature accepts a variable number of arguments.
-         */
-        isVariadic: boolean;
-
-        /**
-         * The prefix display parts.
-         */
-        prefixDisplayParts: SymbolDisplayPart[];
-
-        /**
-         * The suffix display parts.
-         */
-        suffixDisplayParts: SymbolDisplayPart[];
-
-        /**
-         * The separator display parts.
-         */
-        separatorDisplayParts: SymbolDisplayPart[];
-
-        /**
-         * The signature helps items for the parameters.
-         */
-        parameters: SignatureHelpParameter[];
-
-        /**
-         * The signature's documentation
-         */
-        documentation: SymbolDisplayPart[];
-
-        /**
-         * The signature's JSDoc tags
-         */
-        tags: RichJSDocTagInfo[];
-    }
-
-    /**
      * Signature help items found in the response of a signature help request.
      */
     export interface SignatureHelpItems {
@@ -2564,37 +2435,6 @@ namespace ts.server.protocol {
          * The signature help items.
          */
         items: SignatureHelpItem[];
-
-        /**
-         * The span for which signature help should appear on a signature
-         */
-        applicableSpan: TextSpan;
-
-        /**
-         * The item selected in the set of available help items.
-         */
-        selectedItemIndex: number;
-
-        /**
-         * The argument selected in the set of parameters.
-         */
-        argumentIndex: number;
-
-        /**
-         * The argument count
-         */
-        argumentCount: number;
-    }
-
-    /**
-     * Signature help items found in the response of a signature help request.
-     */
-    export interface RichSignatureHelpItems {
-
-        /**
-         * The signature help items.
-         */
-        items: RichSignatureHelpItem[];
 
         /**
          * The span for which signature help should appear on a signature
@@ -2679,7 +2519,7 @@ namespace ts.server.protocol {
     export interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
         arguments: SignatureHelpRequestArgs;
-        /** if true - return response as with documentation as display parts instead of string */
+        /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
 
@@ -2687,7 +2527,7 @@ namespace ts.server.protocol {
      * Response object for a SignatureHelpRequest.
      */
     export interface SignatureHelpResponse extends Response {
-        body?: SignatureHelpItems | RichSignatureHelpItems;
+        body?: SignatureHelpItems;
     }
 
     /**

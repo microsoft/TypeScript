@@ -89,18 +89,29 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const parts: SymbolDisplayPart[] = [];
+        const parts: SymbolDisplayPart[][] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                for (const part of getDisplayPartsFromComment(comment, checker)) {
-                    if (!contains(parts, part, (part1,part2) => part1.kind === part2.kind && part1.text === part2.text)) {
-                        parts.push(part);
-                    }
+                const newparts = getDisplayPartsFromComment(comment, checker);
+                if (!contains(parts, newparts, isIdenticalListOfDisplayParts)) {
+                    parts.push(newparts);
                 }
             }
         });
-        return intersperse(parts, lineBreakPart());
+        return flatten(intersperse(parts, [lineBreakPart()]));
+    }
+
+    function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: SymbolDisplayPart[]) {
+        if (parts1.length !== parts2.length) {
+            return false;
+        }
+        for (let i = 0; i < parts1.length; i++) {
+            if (parts1[i].kind !== parts2[i].kind || parts1[i].text !== parts2[i].text) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -127,8 +138,11 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getDisplayPartsFromComment(comment: readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined) {
-        return comment.map(node => node.kind === SyntaxKind.JSDocText ? textPart(node.text) : linkPart(node, checker));
+    function getDisplayPartsFromComment(comment: readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        return flatMap(
+            comment,
+            node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
+        ) as SymbolDisplayPart[];
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {

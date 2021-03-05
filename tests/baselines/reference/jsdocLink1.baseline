@@ -52,19 +52,12 @@
           "kind": "text"
         },
         {
-          "text": "\n",
-          "kind": "lineBreak"
+          "text": "{@link ",
+          "kind": "link"
         },
         {
-          "text": "{@link C}",
-          "kind": "link",
-          "name": {
-            "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
-            "textSpan": {
-              "start": 26,
-              "length": 1
-            }
-          },
+          "text": "C",
+          "kind": "linkName",
           "target": {
             "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
             "textSpan": {
@@ -72,6 +65,10 @@
               "length": 11
             }
           }
+        },
+        {
+          "text": "}",
+          "kind": "link"
         }
       ],
       "tags": [
@@ -83,15 +80,12 @@
               "kind": "text"
             },
             {
-              "text": "{@link C}",
-              "kind": "link",
-              "name": {
-                "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
-                "textSpan": {
-                  "start": 52,
-                  "length": 1
-                }
-              },
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
                 "textSpan": {
@@ -99,21 +93,22 @@
                   "length": 11
                 }
               }
+            },
+            {
+              "text": "}",
+              "kind": "link"
             },
             {
               "text": ". A default one.\n",
               "kind": "text"
             },
             {
-              "text": "{@link C()}",
-              "kind": "link",
-              "name": {
-                "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
-                "textSpan": {
-                  "start": 81,
-                  "length": 1
-                }
-              },
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
                 "textSpan": {
@@ -123,19 +118,24 @@
               }
             },
             {
+              "text": "()",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
               "text": "\n",
               "kind": "text"
             },
             {
-              "text": "{@link C|postfix text}",
-              "kind": "link",
-              "name": {
-                "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
-                "textSpan": {
-                  "start": 96,
-                  "length": 1
-                }
-              },
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
                 "textSpan": {
@@ -145,12 +145,28 @@
               }
             },
             {
+              "text": "|postfix text",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
               "text": "\n",
               "kind": "text"
             },
             {
-              "text": "{@link unformattedpostfix text}",
-              "kind": "text"
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "unformattedpostfix text",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
             }
           ]
         },
@@ -162,15 +178,12 @@
               "kind": "text"
             },
             {
-              "text": "{@link C}",
-              "kind": "link",
-              "name": {
-                "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
-                "textSpan": {
-                  "start": 163,
-                  "length": 1
-                }
-              },
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "C",
+              "kind": "linkName",
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
                 "textSpan": {
@@ -178,6 +191,10 @@
                   "length": 11
                 }
               }
+            },
+            {
+              "text": "}",
+              "kind": "link"
             },
             {
               "text": " its great",

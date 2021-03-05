@@ -1033,6 +1033,8 @@ namespace ts {
         functionName,
         regularExpressionLiteral,
         link,
+        linkName,
+        linkText,
     }
 
     export interface SymbolDisplayPart {
@@ -1040,8 +1042,7 @@ namespace ts {
         kind: string;
     }
 
-    export interface JSDocLinkPart extends SymbolDisplayPart {
-        name: DocumentSpan;
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
         target: DocumentSpan;
     }
 
@@ -1398,8 +1399,14 @@ namespace ts {
         /** String literal */
         string = "string",
 
-        /** Jsdoc {@link entityname} */
+        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
         link = "link",
+
+        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        linkName = "link name",
+
+        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        linkText = "link text",
     }
 
     export const enum ScriptElementKindModifier {

@@ -41,13 +41,9 @@ var x = 1`);
                         text: "",
                     }, {
                         kind: "link",
-                        name: {
-                            fileName: "someFile1.js",
-                            textSpan: {
-                                length: 1,
-                                start: 28,
-                            }
-                        },
+                        text: "{@link ",
+                    }, {
+                        kind: "linkName",
                         target: {
                             fileName: "someFile1.js",
                             textSpan: {
@@ -55,8 +51,11 @@ var x = 1`);
                                 start: 0,
                             }
                         },
-                        text: "{@link C}",
-                    } as SymbolDisplayPart],
+                        text: "C",
+                    } as SymbolDisplayPart, {
+                        kind: "link",
+                        text: "}"
+                    }],
                 }]
             });
         });
@@ -97,17 +96,10 @@ var x = 1`);
                     kind: "text",
                     text: "",
                 }, {
-                    kind: "lineBreak",
-                    text: "\n",
-                }, {
                     kind: "link",
-                    name: {
-                        fileName: "someFile1.js",
-                        textSpan: {
-                            length: 1,
-                            start: 23,
-                        }
-                    },
+                    text: "{@link ",
+                }, {
+                    kind: "linkName",
                     target: {
                         fileName: "someFile1.js",
                         textSpan: {
@@ -115,8 +107,11 @@ var x = 1`);
                             start: 0,
                         }
                     },
-                    text: "{@link C}"
-                } as SymbolDisplayPart],
+                    text: "C"
+                } as SymbolDisplayPart, {
+                    kind: "link",
+                    text: "}"
+                }],
                 tags: undefined,
             });
         });
