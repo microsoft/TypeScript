@@ -4757,10 +4757,6 @@
         "category": "Error",
         "code": 6238
     },
-    "Disable lazy computation of module shapes.": {
-        "category": "Message",
-        "code": 6239
-    },
 
     "Projects to reference": {
         "category": "Message",

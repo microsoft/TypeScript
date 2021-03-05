@@ -5841,7 +5841,6 @@ namespace ts {
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
         /* @internal */ extendedDiagnostics?: boolean;
-        /* @internal */ disableLazyShapeComputation?: boolean;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;

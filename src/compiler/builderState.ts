@@ -341,7 +341,7 @@ namespace ts {
                 }
             }
             else {
-                if ((prevSignature === undefined && avoidInitializingSignature) && !programOfThisState.getCompilerOptions().disableLazyShapeComputation) {
+                if (prevSignature === undefined && avoidInitializingSignature) {
                     if (exportedModulesMapCache) {
                         const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
                         exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
