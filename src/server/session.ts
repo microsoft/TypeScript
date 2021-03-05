@@ -1275,7 +1275,7 @@ namespace ts.server {
         }
 
         private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined): protocol.JSDocTagInfo[] {
-            return tags ? tags.map(tag => ({ ...tag, text: tag.text && tag.text.map(part => part.text).join("") })) : [];
+            return tags ? tags.map(tag => ({ ...tag, text: tag.text?.map(part => part.text).join("") })) : [];
         }
 
         private mapRichJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
@@ -1728,7 +1728,10 @@ namespace ts.server {
                     })};
             }
             else {
-                return quickInfo;
+                return richDocumentation ? quickInfo : {
+                    ...quickInfo,
+                    tags: this.mapJSDocTagInfo(quickInfo.tags) as JSDocTagInfo[]
+                };
             }
         }
 
@@ -1868,7 +1871,8 @@ namespace ts.server {
                 const { name, source, data } = typeof entryName === "string" ? { name: entryName, source: undefined, data: undefined } : entryName;
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
-            return fullResult ? result
+            return fullResult
+                ? (richDocumentation ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags) as JSDocTagInfo[] })))
                 : richDocumentation ? result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
@@ -1950,6 +1954,12 @@ namespace ts.server {
                     },
                     items: richDocumentation ? this.mapRichSignatureHelpItems(helpItems.items, project) : helpItems.items,
                 };
+            }
+            else if (helpItems && richDocumentation) {
+                return {
+                    ...helpItems,
+                    items: helpItems.items.map(item => ({ ...item, tags: this.mapJSDocTagInfo(item.tags) as JSDocTagInfo[] }))
+                }
             }
             else {
                 return helpItems;
@@ -2672,7 +2682,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true, request.richResponse));
             },
             [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
-                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false, request.richResponse));
             },
             [CommandNames.GetOutliningSpans]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ true));
@@ -2735,7 +2745,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ false, request.richResponse));
             },
             [CommandNames.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ true));
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ true, request.richResponse));
             },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
@@ -2747,7 +2757,7 @@ namespace ts.server {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true, request.richResponse));
             },
             [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
-                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false, request.richResponse));
             },
             [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
