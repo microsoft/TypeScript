@@ -248,7 +248,7 @@ namespace ts.projectSystem {
                         projectRootPath: useProjectRoot ? folderPath : undefined
                     }
                 });
-                appendAllScriptInfos(session.getProjectService(), session.logger.logs);
+                appendAllScriptInfos(session.getProjectService(), session);
 
                 // Since this is not js project so no typings are queued
                 host.checkTimeoutQueueLength(0);

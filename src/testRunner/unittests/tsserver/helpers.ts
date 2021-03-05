@@ -111,22 +111,22 @@ namespace ts.projectSystem {
         Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
     }
 
-    export function appendAllScriptInfos(service: server.ProjectService, logs: string[]) {
-        logs.push("");
-        logs.push(`ScriptInfos:`);
-        service.filenameToScriptInfo.forEach(info => logs.push(`path: ${info.path} fileName: ${info.fileName}`));
-        logs.push("");
+    export function appendAllScriptInfos(service: server.ProjectService, sessionOrService: TestSession | TestProjectService) {
+        sessionOrService.logger.logs.push("");
+        sessionOrService.logger.logs.push(`ScriptInfos:`);
+        service.filenameToScriptInfo.forEach(info => sessionOrService.logger.logs.push(`path: ${info.path} fileName: ${info.fileName}`));
+        sessionOrService.logger.logs.push("");
     }
 
-    export function appendProjectFileText(project: server.Project, logs: string[]) {
-        logs.push("");
-        logs.push(`Project: ${project.getProjectName()}`);
+    export function appendProjectFileText(project: server.Project, sessionOrService: TestSession | TestProjectService) {
+        sessionOrService.logger.logs.push("");
+        sessionOrService.logger.logs.push(`Project: ${project.getProjectName()}`);
         project.getCurrentProgram()?.getSourceFiles().forEach(f => {
-            logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
-            logs.push(f.text);
-            logs.push("");
+            sessionOrService.logger.logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
+            sessionOrService.logger.logs.push(f.text);
+            sessionOrService.logger.logs.push("");
         });
-        logs.push("");
+        sessionOrService.logger.logs.push("");
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
