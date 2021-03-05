@@ -208,7 +208,7 @@ namespace ts {
         SetAccessor,
         CallSignature,
         ConstructSignature,
-        ClassStaticBlock,
+        ClassStaticBlockDeclaration,
         IndexSignature,
         // Type
         TypePredicate,
@@ -1482,7 +1482,7 @@ namespace ts {
     }
 
     export interface ClassStaticBlockDeclaration extends ClassElement {
-        readonly kind: SyntaxKind.ClassStaticBlock;
+        readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
         readonly staticToken: Token<SyntaxKind.StaticKeyword>;
         readonly body: Block;
     }

@@ -1614,7 +1614,7 @@ namespace ts {
             body: Block
         ): ClassStaticBlockDeclaration {
             const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
-                SyntaxKind.ClassStaticBlock,
+                SyntaxKind.ClassStaticBlockDeclaration,
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,

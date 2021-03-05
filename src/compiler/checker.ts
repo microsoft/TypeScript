@@ -37789,6 +37789,8 @@ namespace ts {
                     return checkMappedType(<MappedTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return forEachChild(node, checkSourceElement);
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                     return checkBlock(<Block>node);
