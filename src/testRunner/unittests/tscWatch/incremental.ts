@@ -110,7 +110,7 @@ namespace ts.tscWatch {
             };
             const config: File = {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, disableLazyShapeComputation: true, module: "amd" } })
+                content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } })
             };
 
             verifyIncrementalWatchEmit({
@@ -132,9 +132,18 @@ namespace ts.tscWatch {
                 });
 
                 it("verify that state is read correctly", () => {
-                    const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
+                    const system = createWatchedSystem([libFile, file1, file2, config], { currentDirectory: project });
                     const reportDiagnostic = createDiagnosticReporter(system);
                     const parsedConfig = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
+                    performIncrementalCompilation({
+                        rootNames: parsedConfig.fileNames,
+                        options: parsedConfig.options,
+                        projectReferences: parsedConfig.projectReferences,
+                        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(parsedConfig),
+                        reportDiagnostic,
+                        system
+                    });
+                    system.writeFile(file2.path, fileModified.content);
                     performIncrementalCompilation({
                         rootNames: parsedConfig.fileNames,
                         options: parsedConfig.options,
@@ -164,7 +173,7 @@ namespace ts.tscWatch {
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
-                        signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`),
+                        signature: undefined, // this must not have a signature, as it should be lazy computed
                         affectsGlobalScope: false,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
@@ -175,7 +184,6 @@ namespace ts.tscWatch {
 
                     assert.deepEqual(state.compilerOptions, {
                         incremental: true,
-                        disableLazyShapeComputation: true,
                         module: ModuleKind.AMD,
                         configFilePath: config.path
                     });
