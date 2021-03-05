@@ -19,7 +19,7 @@ export class C
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true,"disableLazyShapeComputation":true}}
+{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -45,7 +45,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"disableLazyShapeComputation":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -117,6 +117,146 @@ console.log(b.c.d);
 
 
 
+Change:: Change type of property d of class C
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d = "hello";
+}
+
+
+Output::
+>> Screen clear
+[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/a.ts:
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
+/user/username/projects/myproject/b.ts:
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+/user/username/projects/myproject/c.ts:
+  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject:
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/c.js]
+"use strict";
+exports.__esModule = true;
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+        this.d = "hello";
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/a.js] file written with same contents
+
+Change:: Change type of property d of class C
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d = null;
+}
+
+
+Output::
+>> Screen clear
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/a.ts:
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
+/user/username/projects/myproject/b.ts:
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+/user/username/projects/myproject/c.ts:
+  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject:
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/c.js]
+"use strict";
+exports.__esModule = true;
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+        this.d = null;
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/a.js] file written with same contents
+
 Change:: Rename property d to d2 of class C
 
 Input::
@@ -129,14 +269,14 @@ export class C
 
 Output::
 >> Screen clear
-[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:11 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"disableLazyShapeComputation":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

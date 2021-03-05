@@ -33,7 +33,7 @@ export class Data {
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["app.ts"],"compilerOptions":{"baseUrl":".","assumeChangesOnlyAffectDirectDependencies":true,"disableLazyShapeComputation":true}}
+{"files":["app.ts"],"compilerOptions":{"baseUrl":".","assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -59,7 +59,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"disableLazyShapeComputation":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -191,6 +191,146 @@ exports.App = App;
 
 
 
+Change:: Add additional optional property to interface ITest
+
+Input::
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+export interface ITest {
+    foo?: number; title: string;
+}
+
+
+Output::
+>> Screen clear
+[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/app.ts"]
+Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/app.ts:
+  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/data.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.js] file written with same contents
+//// [/user/username/projects/myproject/app.js] file written with same contents
+
+Change:: Add additional optional property to interface ITest
+
+Input::
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
+export interface ITest {
+    bar?: number; title: string;
+}
+
+
+Output::
+>> Screen clear
+[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/app.ts"]
+Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/app.ts:
+  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/data.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.js] file written with same contents
+//// [/user/username/projects/myproject/app.js] file written with same contents
+
 Change:: Rename property title to title2 of interface ITest
 
 Input::
@@ -202,14 +342,14 @@ export interface ITest {
 
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:47 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"disableLazyShapeComputation":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts

@@ -73,13 +73,13 @@ namespace ts.tscWatch {
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
                 subScenario: `assumeChangesOnlyAffectDirectDependencies/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, disableLazyShapeComputation: true })
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true })
             });
 
             verifyEmitAndErrorUpdatesWorker({
                 ...input,
                 subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, disableLazyShapeComputation: true, declaration: true })
+                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, declaration: true })
             });
         }
 
@@ -97,6 +97,17 @@ console.log(b.c.d);`
                     subScenario: `deepImportChanges/${subScenario}`,
                     files: () => [aFile, bFile, cFile],
                     changes: [
+                        // we do 2 additional changes before the real change to intialize the lazy shapes
+                        {
+                            caption: "Change type of property d of class C",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("1", "\"hello\"")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Change type of property d of class C",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("1", "null")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
                         {
                             caption: "Rename property d to d2 of class C",
                             change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
@@ -197,6 +208,17 @@ getPoint().c.x;`
                 subScenario: "file not exporting a deep multilevel import that changes",
                 files: () => [aFile, bFile, cFile, dFile, eFile],
                 changes: [
+                    // we do 2 additional changes before the real change to intialize the lazy shapes
+                    {
+                        caption: "Rename property x2 to x3 of interface Coords",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x3")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Rename property x2 to x4 of interface Coords",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x4")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
                     {
                         caption: "Rename property x2 to x of interface Coords",
                         change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
@@ -260,6 +282,17 @@ export class Data {
                     files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
                     configFile: () => config,
                     changes: [
+                        // we do 2 additional changes before the real change to intialize the lazy shapes
+                        {
+                            caption: "Add additional optional property to interface ITest",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "foo?: number; title")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Add additional optional property to interface ITest",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "bar?: number; title")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
                         {
                             caption: "Rename property title to title2 of interface ITest",
                             change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
