@@ -175,8 +175,14 @@
         }
       ],
       "applicableSpan": {
-        "start": 480,
-        "length": 14
+        "start": {
+          "line": 22,
+          "offset": 3
+        },
+        "end": {
+          "line": 22,
+          "offset": 17
+        }
       },
       "selectedItemIndex": 0,
       "argumentIndex": 0,
@@ -359,8 +365,14 @@
         }
       ],
       "applicableSpan": {
-        "start": 480,
-        "length": 14
+        "start": {
+          "line": 22,
+          "offset": 3
+        },
+        "end": {
+          "line": 22,
+          "offset": 17
+        }
       },
       "selectedItemIndex": 0,
       "argumentIndex": 1,
@@ -543,8 +555,14 @@
         }
       ],
       "applicableSpan": {
-        "start": 480,
-        "length": 14
+        "start": {
+          "line": 22,
+          "offset": 3
+        },
+        "end": {
+          "line": 22,
+          "offset": 17
+        }
       },
       "selectedItemIndex": 0,
       "argumentIndex": 2,
