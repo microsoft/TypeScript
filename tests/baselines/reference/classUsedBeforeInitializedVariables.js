@@ -4,6 +4,7 @@ class Test {
     p2 = this.p1;
     p3 = this.p4;
     p4 = 0;
+    p5?: number;
 
     directlyAssigned: any = this.directlyAssigned;
 
@@ -28,6 +29,8 @@ class Test {
     };
 
     withinClassDeclarationExtension: any = (class extends this.withinClassDeclarationExtension { });
+
+    fromOptional = this.p5;
 
     // These error cases are ignored (not checked by control flow analysis)
 
@@ -94,6 +97,7 @@ var Test = /** @class */ (function () {
             }
             return class_1;
         }(this.withinClassDeclarationExtension)));
+        this.fromOptional = this.p5;
         // These error cases are ignored (not checked by control flow analysis)
         this.assignedByArrowFunction = (function () { return _this.assignedByFunction; })();
         this.assignedByFunction = (function () {

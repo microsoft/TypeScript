@@ -22,6 +22,9 @@ class Test {
 >p4 : number
 >0 : 0
 
+    p5?: number;
+>p5 : number
+
     directlyAssigned: any = this.directlyAssigned;
 >directlyAssigned : any
 >this.directlyAssigned : any
@@ -94,6 +97,12 @@ class Test {
 >this.withinClassDeclarationExtension : any
 >this : this
 >withinClassDeclarationExtension : any
+
+    fromOptional = this.p5;
+>fromOptional : number
+>this.p5 : number
+>this : this
+>p5 : number
 
     // These error cases are ignored (not checked by control flow analysis)
 
