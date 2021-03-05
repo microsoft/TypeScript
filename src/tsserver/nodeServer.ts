@@ -25,7 +25,7 @@ namespace ts.server {
         write(data: string, encoding: string): boolean;
     }
 
-    function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOptions {
+    void function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOptions {
         if (!logEnvStr) {
             return {};
         }
@@ -233,7 +233,7 @@ namespace ts.server {
 
         // Override sys.write because fs.writeSync is not reliable on Node 4
         sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
-         // REVIEW: for now this implementation uses polling.
+        // REVIEW: for now this implementation uses polling.
         // The advantage of polling is that it works reliably
         // on all os and with network mounted files.
         // For 90 referenced files, the average time to detect
@@ -300,22 +300,7 @@ namespace ts.server {
 
         // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
         function createLogger() {
-            const cmdLineLogFileName = findArgument("--logFile");
-            const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-            const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
-
-            const unsubstitutedLogFileName = cmdLineLogFileName
-                ? stripQuotes(cmdLineLogFileName)
-                : envLogOptions.logToFile
-                    ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
-                    : undefined;
-
-            const substitutedLogFileName = unsubstitutedLogFileName
-                ? unsubstitutedLogFileName.replace("PID", process.pid.toString())
-                : undefined;
-
-            const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-            return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
+            return new Logger('/Users/tomashubelbauer/Desktop/ts-esm-search/tsserver.log', false, LogLevel.verbose); // TODO: GH#18217
         }
 
         function writeMessage(buf: Buffer) {
