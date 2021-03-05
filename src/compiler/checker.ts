@@ -8847,9 +8847,11 @@ namespace ts {
             Debug.assertIsDefined(symbol.valueDeclaration);
             const declaration = symbol.valueDeclaration;
             if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-                const decl = declaration as VariableDeclaration;
-                if (!decl.type) return anyType;
-                const type = getTypeOfNode(decl.type);
+                const typeNode = getEffectiveTypeAnnotationNode(declaration);
+                if (typeNode === undefined) {
+                    return anyType;
+                }
+                const type = getTypeOfNode(typeNode);
                 // an errorType will make `checkTryStatement` issue an error
                 return isTypeAny(type) || type === unknownType ? type : errorType;
             }
@@ -36044,10 +36046,11 @@ namespace ts {
                 // Grammar checking
                 if (catchClause.variableDeclaration) {
                     const declaration = catchClause.variableDeclaration;
-                    if (declaration.type) {
+                    const typeNode = getEffectiveTypeAnnotationNode(getRootDeclaration(declaration));
+                    if (typeNode) {
                         const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false);
                         if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
-                            grammarErrorOnFirstToken(declaration.type, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
+                            grammarErrorOnFirstToken(typeNode, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
                         }
                     }
                     else if (declaration.initializer) {

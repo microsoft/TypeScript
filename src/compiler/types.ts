@@ -874,6 +874,7 @@ namespace ts {
         | FunctionDeclaration
         | ConstructorDeclaration
         | MethodDeclaration
+        | VariableDeclaration
         | PropertyDeclaration
         | AccessorDeclaration
         | ClassLikeDeclaration
@@ -1237,7 +1238,7 @@ namespace ts {
 
     export type BindingName = Identifier | BindingPattern;
 
-    export interface VariableDeclaration extends NamedDeclaration {
+    export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.VariableDeclaration;
         readonly parent: VariableDeclarationList | CatchClause;
         readonly name: BindingName;                    // Declared variable name
