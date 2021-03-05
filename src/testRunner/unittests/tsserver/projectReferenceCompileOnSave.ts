@@ -11,7 +11,7 @@ export function fn2() { }
         const dependencyConfig: File = {
             path: `${dependecyLocation}/tsconfig.json`,
             content: JSON.stringify({
-                compilerOptions: { composite: true, disableLazyShapeComputation: true, declarationDir: "../decls" },
+                compilerOptions: { composite: true, declarationDir: "../decls" },
                 compileOnSave: true
             })
         };
@@ -29,9 +29,6 @@ fn2();
             path: `${usageLocation}/tsconfig.json`,
             content: JSON.stringify({
                 compileOnSave: true,
-                compilerOptions: {
-                    disableLazyShapeComputation: true
-                },
                 references: [{ path: "../dependency" }]
             })
         };
@@ -329,10 +326,10 @@ ${appendDts}`
                     requestArgs: () => ({ file: dependencyTs.path, projectFileName: usageConfig.path }),
                     skipWithoutProject: !!isDependencyOpen,
                     initial: () => initialDependencyTs(),
-                    localChangeToDependency: () => initialDependencyTs(/*noUsageFiles*/ true),
-                    localChangeToUsage: () => initialDependencyTs(/*noUsageFiles*/ true),
+                    localChangeToDependency: () => initialDependencyTs(),
+                    localChangeToUsage: () => initialDependencyTs(),
                     changeToDependency: () => initialDependencyTs(),
-                    changeToUsage: () => initialDependencyTs(/*noUsageFiles*/ true)
+                    changeToUsage: () => initialDependencyTs()
                 }
             ];
 
@@ -368,15 +365,15 @@ ${appendDts}`
                             expectedAffectedFiles(dependencyConfig, [dependencyTs])
                         ] :
                         [
-                            expectedAffectedFiles(usageConfig, []),
+                            expectedAffectedFiles(usageConfig, [usageTs]),
                             expectedAffectedFiles(dependencyConfig, [dependencyTs])
                         ],
                     expectedEmit: expectedDependencyEmit(localChange),
                     expectedEmitOutput: expectedDependencyEmitOutput(localChange)
                 }),
-                localChangeToUsage: withProject => initial(withProject, /*noUsageFiles*/ true),
+                localChangeToUsage: withProject => initial(withProject),
                 changeToDependency: withProject => initial(withProject, /*noUsageFiles*/ undefined, changeJs, changeDts),
-                changeToUsage: withProject => initial(withProject, /*noUsageFiles*/ true)
+                changeToUsage: withProject => initial(withProject)
             };
 
             function initial(withProject: boolean, noUsageFiles?: true, appendJs?: string, appendDts?: string): SingleScenarioResult {
