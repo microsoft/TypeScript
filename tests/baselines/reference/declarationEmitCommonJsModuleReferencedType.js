@@ -30,5 +30,5 @@ exports.__esModule = true;
 exports.y = exports.x = void 0;
 var foo_1 = require("foo");
 var root_1 = require("root");
-exports.x = foo_1.foo();
-exports.y = root_1.bar();
+exports.x = (0, foo_1.foo)();
+exports.y = (0, root_1.bar)();

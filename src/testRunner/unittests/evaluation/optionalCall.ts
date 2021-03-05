@@ -188,4 +188,11 @@ describe("unittests:: evaluation:: optionalCall", () => {
         assert.strictEqual(result.output[1], 2);
         assert.strictEqual(result.output[2], result.o);
     });
+    it("(o?.f)()", async () => {
+        const result = evaluator.evaluateTypeScript(`
+            export const foo = { bar() { return this } };
+            export const output = (foo?.bar)();
+        `);
+        assert.strictEqual(result.output, result.foo);
+    });
 });
