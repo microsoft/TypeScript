@@ -1549,7 +1549,7 @@ namespace ts.Completions {
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
             if (!shouldOfferImportCompletions()) return GlobalsSearch.Fail;
-            collectAndFilterAutoImportCompletions(!!importCompletionNode);
+            collectAutoImports(!!importCompletionNode);
             return GlobalsSearch.Success;
         }
 
@@ -1617,15 +1617,7 @@ namespace ts.Completions {
                     }
                 }
             }
-            collectAndFilterAutoImportCompletions(/*resolveModuleSpecifier*/ false);
-        }
-
-        function collectAndFilterAutoImportCompletions(resolveModuleSpecifier: boolean) {
-            Debug.assert(!detailsEntryId?.data);
-            if (shouldOfferImportCompletions()) {
-                const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
-                collectAutoImports(lowerCaseTokenText, resolveModuleSpecifier);
-            }
+            collectAutoImports(/*resolveModuleSpecifier*/ false);
             if (isTypeOnly) {
                 keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
                     ? KeywordCompletionFilters.TypeAssertionKeywords
@@ -1701,8 +1693,10 @@ namespace ts.Completions {
         }
 
         /** Mutates `symbols`, `symbolToOriginInfoMap`, and `symbolToSortTextMap` */
-        function collectAutoImports(lowerCaseTokenText: string, resolveModuleSpecifiers: boolean) {
+        function collectAutoImports(resolveModuleSpecifiers: boolean) {
+            if (!shouldOfferImportCompletions()) return;
             Debug.assert(!detailsEntryId?.data);
+            const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*useAutoImportProvider*/ true);
             exportInfo.forEach((info, key) => {
                 const [symbolName] = key.split("|");
@@ -1715,14 +1709,14 @@ namespace ts.Completions {
                         ? codefix.getBestImportFixForExports(info, sourceFile, /*position*/ undefined, /*preferTypeOnlyImport*/ false, /*useRequire*/ false, program, host, preferences)
                         : { moduleSpecifier: undefined, exportInfo: info[0] };
                     if (!exportInfo) return;
-                    const isDefaultExport = exportInfo.symbol.name === InternalSymbolName.Default;
+                    const isDefaultExport = exportInfo.exportKind === codefix.ExportKind.Default;
                     const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
                     const isAmbientModule = !isExternalModuleNameRelative(stripQuotes(exportInfo.moduleSymbol.name));
                     pushAutoImportSymbol(symbol, {
                         kind: resolveModuleSpecifiers ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                         moduleSpecifier,
                         symbolName,
-                        exportName: exportInfo.isExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
+                        exportName: exportInfo.exportKind === codefix.ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
                         fileName: isAmbientModule ? undefined : cast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile).fileName,
                         isDefaultExport,
                         moduleSymbol: exportInfo.moduleSymbol,
@@ -1742,101 +1736,6 @@ namespace ts.Completions {
             symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
             symbols.push(symbol);
         }
-
-        /**
-         * Gathers symbols that can be imported from other files, de-duplicating along the way. Symbols can be "duplicates"
-         * if re-exported from another module by the same name, e.g. `export { foo } from "./a"`.
-         */
-        // function getSymbolsFromOtherSourceFileExports(target: ScriptTarget, host: LanguageServiceHost): readonly AutoImportSuggestion[] {
-        //     const cached = importSuggestionsCache && importSuggestionsCache.get(
-        //         sourceFile.fileName,
-        //         typeChecker,
-        //         detailsEntryId && host.getProjectVersion ? host.getProjectVersion() : undefined);
-
-        //     if (cached) {
-        //         log("getSymbolsFromOtherSourceFileExports: Using cached list");
-        //         return cached;
-        //     }
-
-        //     const startTime = timestamp();
-        //     log(`getSymbolsFromOtherSourceFileExports: Recomputing list${detailsEntryId ? " for details entry" : ""}`);
-        //     const seenResolvedModules = new Map<SymbolId, true>();
-        //     const results = createMultiMap<SymbolId, AutoImportSuggestion>();
-
-        //     codefix.forEachExternalModuleToImportFrom(program, host, sourceFile, !detailsEntryId, /*useAutoImportProvider*/ true, (moduleSymbol, file, program, isFromPackageJson) => {
-        //         // Perf -- ignore other modules if this is a request for details
-        //         if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
-        //             return;
-        //         }
-
-        //         const typeChecker = program.getTypeChecker();
-        //         const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
-        //         // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
-        //         if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
-        //             return;
-        //         }
-
-        //         // Don't add another completion for `export =` of a symbol that's already global.
-        //         // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
-        //         if (resolvedModuleSymbol !== moduleSymbol && every(resolvedModuleSymbol.declarations, isNonGlobalDeclaration)) {
-        //             pushSymbol(resolvedModuleSymbol, InternalSymbolName.ExportEquals, moduleSymbol, file, isFromPackageJson);
-        //         }
-
-        //         for (const symbol of typeChecker.getExportsAndPropertiesOfModule(moduleSymbol)) {
-        //             // If this is `export { _break as break };` (a keyword) -- skip this and prefer the keyword completion.
-        //             if (some(symbol.declarations, d => isExportSpecifier(d) && !!d.propertyName && isIdentifierANonContextualKeyword(d.name))) {
-        //                 continue;
-        //             }
-
-        //             pushSymbol(symbol, symbol.name, moduleSymbol, file, isFromPackageJson);
-        //         }
-        //     });
-
-        //     log(`getSymbolsFromOtherSourceFileExports: ${timestamp() - startTime}`);
-        //     return flatten(arrayFrom(results.values()));
-
-        //     function pushSymbol(symbol: Symbol, exportName: string, moduleSymbol: Symbol, file: SourceFile | undefined, isFromPackageJson: boolean) {
-        //         const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
-        //         const nonLocalSymbol = symbol;
-        //         if (isDefaultExport) {
-        //             symbol = getLocalSymbolForExportDefault(symbol) || symbol;
-        //         }
-        //         if (typeChecker.isUndefinedSymbol(symbol)) {
-        //             return;
-        //         }
-        //         const original = skipAlias(nonLocalSymbol, typeChecker);
-        //         const symbolName = getNameForExportedSymbol(symbol, target);
-        //         const existingSuggestions = results.get(getSymbolId(original));
-        //         if (!some(existingSuggestions, s => s.symbolName === symbolName && moduleSymbolsAreDuplicateOrigins(moduleSymbol, s.origin.moduleSymbol))) {
-        //             const origin: SymbolOriginInfoExport = {
-        //                 kind: SymbolOriginInfoKind.Export,
-        //                 moduleSymbol,
-        //                 symbolName,
-        //                 isDefaultExport,
-        //                 isFromPackageJson,
-        //                 exportName,
-        //                 fileName: file?.fileName
-        //             };
-        //             results.add(getSymbolId(original), {
-        //                 symbol,
-        //                 symbolName,
-        //                 origin,
-        //             });
-        //         }
-        //     }
-        // }
-
-        /**
-         * Determines whether a module symbol is redundant with another for purposes of offering
-         * auto-import completions for exports of the same symbol. Exports of the same symbol
-         * will not be offered from different external modules, but they will be offered from
-         * different ambient modules.
-         */
-        // function moduleSymbolsAreDuplicateOrigins(a: Symbol, b: Symbol) {
-        //     const ambientNameA = pathIsBareSpecifier(stripQuotes(a.name)) ? a.name : undefined;
-        //     const ambientNameB = pathIsBareSpecifier(stripQuotes(b.name)) ? b.name : undefined;
-        //     return ambientNameA === ambientNameB;
-        // }
 
         /**
          * True if you could remove some characters in `a` to get `b`.
