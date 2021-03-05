@@ -3264,6 +3264,10 @@
         "category": "Error",
         "code": 2802
     },
+    "This condition will always return false since the function is always defined. Did you mean to call it instead?": {
+        "category": "Error",
+        "code": 2803
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

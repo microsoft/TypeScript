@@ -1,0 +1,24 @@
+tests/cases/compiler/uncalledFunctionChecksDontWorkWithNegation.ts(4,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksDontWorkWithNegation.ts(8,6): error TS2803: This condition will always return false since the function is always defined. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/uncalledFunctionChecksDontWorkWithNegation.ts (2 errors) ====
+    declare function isFoo(): boolean;
+    declare const isUndefinedFoo: (() => boolean) | undefined;
+    
+    if (isFoo) {
+        ~~~~~
+!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+        // error
+    }
+    
+    if (!isFoo) {
+         ~~~~~
+!!! error TS2803: This condition will always return false since the function is always defined. Did you mean to call it instead?
+        // error
+    }
+    
+    if (!isUndefinedFoo) {
+        // no error
+    }
+    

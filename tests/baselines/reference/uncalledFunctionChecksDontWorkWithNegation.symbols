@@ -1,0 +1,25 @@
+=== tests/cases/compiler/uncalledFunctionChecksDontWorkWithNegation.ts ===
+declare function isFoo(): boolean;
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksDontWorkWithNegation.ts, 0, 0))
+
+declare const isUndefinedFoo: (() => boolean) | undefined;
+>isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksDontWorkWithNegation.ts, 1, 13))
+
+if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksDontWorkWithNegation.ts, 0, 0))
+
+    // error
+}
+
+if (!isFoo) {
+>isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksDontWorkWithNegation.ts, 0, 0))
+
+    // error
+}
+
+if (!isUndefinedFoo) {
+>isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksDontWorkWithNegation.ts, 1, 13))
+
+    // no error
+}
+
