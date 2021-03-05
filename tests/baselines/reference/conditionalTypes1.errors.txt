@@ -53,12 +53,6 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2
   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to '0 | (T extends string ? "" : false)'.
-        Type 'number' is not assignable to type 'T'.
-          'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-            Type 'string | number' is not assignable to type 'T'.
-              'string | number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-                Type 'string' is not assignable to type 'T'.
-                  'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
@@ -303,12 +297,6 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2322:   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
 !!! error TS2322:     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to '0 | (T extends string ? "" : false)'.
-!!! error TS2322:         Type 'number' is not assignable to type 'T'.
-!!! error TS2322:           'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:             Type 'string | number' is not assignable to type 'T'.
-!!! error TS2322:               'string | number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:                 Type 'string' is not assignable to type 'T'.
-!!! error TS2322:                   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
         y = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
