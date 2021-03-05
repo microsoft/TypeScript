@@ -6,7 +6,11 @@
 ////     abstract bar(): void;
 //// }
 //// class Sub extends Base {
-////     [|override bar() {}|]
+////     [|abstract bar() {}|]
 //// }
 
-verify.not.refactorAvailable();
+verify.codeFix({
+    description: "Add 'override' modifier",
+    newRangeContent: "override abstract bar() {}",
+    index: 0
+})

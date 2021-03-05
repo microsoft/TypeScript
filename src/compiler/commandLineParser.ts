@@ -676,7 +676,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
-            description: Diagnostics.Force_overriding_members_in_derived_classes_to_be_marked_with_an_override_modifier
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",

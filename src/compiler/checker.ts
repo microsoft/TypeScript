@@ -36493,24 +36493,30 @@ namespace ts {
                 const hasOverride = hasOverrideModifier(member);
                 if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
-                    if (declaredProp) {
-                        const baseClassName = typeToString(baseWithThis);
-                        const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
-                        const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
-                        if (prop && !baseProp && hasOverride) {
-                            error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
+                    if (!declaredProp) {
+                        return;
+                    }
+
+                    const baseClassName = typeToString(baseWithThis);
+                    const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
+                    const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
+                    if (prop && !baseProp && hasOverride) {
+                        error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
+                    }
+                    else if (prop && baseProp?.valueDeclaration && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+                        const baseHasAbstract = hasAbstractModifier(baseProp.valueDeclaration);
+                        if (hasOverride) {
+                            return;
                         }
-                        else if (prop && baseProp && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
-                            const baseHasAbstract = hasAbstractModifier(baseProp.valueDeclaration);
-                            if (!hasOverride && !baseHasAbstract) {
-                                const diag = memberIsParameterProperty ?
-                                    Diagnostics.This_parameter_property_must_be_rewritten_as_a_property_declaration_with_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
-                                    Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
-                                error(member, diag, baseClassName);
-                            }
-                            else if (hasOverride && !hasAbstractModifier(member) && baseHasAbstract) {
-                                error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_implemented_an_abstract_method_that_declared_in_the_base_class_0, baseClassName);
-                            }
+
+                        if (!baseHasAbstract) {
+                            const diag = memberIsParameterProperty ?
+                                Diagnostics.This_parameter_property_must_be_rewritten_as_a_property_declaration_with_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
+                                Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
+                            error(member, diag, baseClassName);
+                        }
+                        else if (hasAbstractModifier(member) && baseHasAbstract) {
+                            error(member, Diagnostics.This_member_must_have_an_override_modifier_because_it_is_override_an_abstract_method_that_is_declared_in_the_base_class_0, baseClassName);
                         }
                     }
                 }

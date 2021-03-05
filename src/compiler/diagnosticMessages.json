@@ -3657,7 +3657,7 @@
         "category": "Error",
         "code": 4115
     },
-    "This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class '{0}'.": {
+    "This member must have an 'override' modifier because it is override an abstract method that is declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4116
     },
@@ -4994,22 +4994,18 @@
         "category": "Message",
         "code": 6505
     },
-    "Require undeclared properties from index signatures to use element accesses.": {
-        "category": "Error",
-        "code": 6803
-    },
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
         "code": 6800
     },
-    "Force overriding members in derived classes to be marked with an 'override' modifier.": {
-        "category": "Error",
+    "Ensure overriding members in derived classes are marked with an 'override' modifier.": {
+        "category": "Message",
         "code": 6801
     },
     "Require undeclared properties from index signatures to use element accesses.": {
-        "category": "Error",
-        "code": 6803
+        "category": "Message",
+        "code": 6802
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -6293,21 +6289,13 @@
         "category": "Message",
         "code": 95161
     },
-    "Add all 'override' modifier": {
+    "Add all missing 'override' modifiers": {
         "category": "Message",
         "code": 95162
     },
-    "Remove all 'override' modifier": {
+    "Remove all unnecessary 'override' modifiers": {
         "category": "Message",
         "code": 95163
-    },
-    "Convert to property declaration and add 'override' modifier": {
-        "category": "Message",
-        "code": 95164
-    },
-    "Convert all to property declaration and add 'override' modifier": {
-        "category": "Message",
-        "code": 95165
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

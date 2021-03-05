@@ -37,7 +37,7 @@
 
 verify.codeFixAll({
     fixId: "fixAddOverrideModifier",
-    fixAllDescription: "Add all 'override' modifier",
+    fixAllDescription: "Add all missing 'override' modifiers",
     newFileContent: `class B {
     foo (v: string) {}
     fooo (v: string) {}
