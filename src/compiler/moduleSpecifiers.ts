@@ -469,7 +469,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions, packageNameOnly?: boolean): string | undefined {
-        if (!host.readFile) {
+        if (!host.fileExists || !host.readFile) {
             return undefined;
         }
         const parts: NodeModulePathParts = getNodeModulePathParts(path)!;
@@ -569,6 +569,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string) {
+        if (!host.fileExists) return;
         // We check all js, `node` and `json` extensions in addition to TS, since node module resolution would also choose those over the directory
         const extensions = getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]);
         for (const e of extensions) {

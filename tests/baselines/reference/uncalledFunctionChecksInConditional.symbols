@@ -5,31 +5,10 @@ declare function isFoo(): boolean;
 declare function isBar(): boolean;
 >isBar : Symbol(isBar, Decl(uncalledFunctionChecksInConditional.ts, 0, 34))
 
-declare const isUndefinedFoo: () => boolean | undefined;
->isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
-
 if (isFoo) {
 >isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
 
     // error
-}
-
-if (isUndefinedFoo) {
->isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
-
-    // no error
-}
-
-if (!isFoo) {
->isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
-
-    // error
-}
-
-if (!isUndefinedFoo) {
->isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
-
-    // no error
 }
 
 if (isFoo || isBar) {
@@ -48,20 +27,6 @@ if (isFoo || isFoo()) {
 
 if (isFoo && isFoo()) {
 >isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
->isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
-
-    // no error
-}
-
-if (!isFoo || isFoo()) {
->isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
->isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
-
-    // error
-}
-
-if (!isUndefinedFoo || isFoo()) {
->isUndefinedFoo : Symbol(isUndefinedFoo, Decl(uncalledFunctionChecksInConditional.ts, 2, 13))
 >isFoo : Symbol(isFoo, Decl(uncalledFunctionChecksInConditional.ts, 0, 0))
 
     // no error
