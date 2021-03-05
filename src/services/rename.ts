@@ -60,7 +60,7 @@ namespace ts.Rename {
             return getRenameInfoError(Diagnostics.You_cannot_rename_a_module_via_a_global_import);
         }
 
-        const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
+        const moduleSourceFile = moduleSymbol.declarations && find(moduleSymbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
         const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;

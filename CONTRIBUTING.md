@@ -70,6 +70,13 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Tips
 
+### Using a development container
+
+This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
+
+- Clone the TypeScript repository locally and use the `Open Folder in Container` command.
+- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
+
 ### Faster clones
 
 The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
@@ -163,7 +170,7 @@ You can also use the [provided VS Code launch configuration](./.vscode/launch.te
 
 ## Adding a Test
 
-To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the your bug is now fixed, or your new feature now works.
+To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the bug is now fixed, or your new feature now works.
 
 These files support metadata tags in the format  `// @metaDataName: value`.
 The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.

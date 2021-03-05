@@ -1,0 +1,10 @@
+Two comma-separated objects(1,3): error TS1012: Unexpected token.
+Two comma-separated objects(1,5): error TS1136: Property assignment expected.
+
+
+==== Two comma-separated objects (2 errors) ====
+    {}, {}
+      ~
+!!! error TS1012: Unexpected token.
+        ~
+!!! error TS1136: Property assignment expected.

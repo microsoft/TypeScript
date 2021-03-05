@@ -1,0 +1,250 @@
+=== tests/cases/conformance/types/members/objectTypeWithStringAndNumberIndexSignatureToAny.ts ===
+// When checking compatibility between two types,
+// TypeScript should not require an index signature if
+// the target side index signature maps to `any` *and*
+// the target side has *any* string index signature to `any`.
+//
+// So an index signature like in
+//
+//  { [x: number]: any }
+//
+// is still required of a source type, but neither index signature in
+//
+//  { [x: number]: any, [x: string]: any; }
+//
+// should be required; *however*, the number index signature in
+//
+//  { [x: number]: number, [x: string]: any; }
+//
+// should always be required.
+
+interface StringTo<T> {
+    [x: string]: T;
+>x : string
+}
+
+interface NumberTo<T> {
+    [x: number]: T;
+>x : number
+}
+
+interface StringAndNumberTo<T> extends StringTo<T>, NumberTo<T> {
+}
+
+interface Obj {
+    hello: string;
+>hello : string
+
+    world: number;
+>world : number
+}
+
+function f1(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNumberTo<any>, someObj: Obj) {
+>f1 : (sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringAndNumberTo<any>, someObj: Obj) => void
+>sToAny : StringTo<any>
+>nToAny : NumberTo<any>
+>bothToAny : StringAndNumberTo<any>
+>someObj : Obj
+
+    sToAny = nToAny;
+>sToAny = nToAny : NumberTo<any>
+>sToAny : StringTo<any>
+>nToAny : NumberTo<any>
+
+    sToAny = bothToAny;
+>sToAny = bothToAny : StringAndNumberTo<any>
+>sToAny : StringTo<any>
+>bothToAny : StringAndNumberTo<any>
+
+    sToAny = someObj;
+>sToAny = someObj : Obj
+>sToAny : StringTo<any>
+>someObj : Obj
+
+    nToAny = sToAny;
+>nToAny = sToAny : StringTo<any>
+>nToAny : NumberTo<any>
+>sToAny : StringTo<any>
+
+    nToAny = bothToAny;
+>nToAny = bothToAny : StringAndNumberTo<any>
+>nToAny : NumberTo<any>
+>bothToAny : StringAndNumberTo<any>
+
+    nToAny = someObj;
+>nToAny = someObj : Obj
+>nToAny : NumberTo<any>
+>someObj : Obj
+
+    bothToAny = sToAny;
+>bothToAny = sToAny : StringTo<any>
+>bothToAny : StringAndNumberTo<any>
+>sToAny : StringTo<any>
+
+    bothToAny = nToAny;
+>bothToAny = nToAny : NumberTo<any>
+>bothToAny : StringAndNumberTo<any>
+>nToAny : NumberTo<any>
+
+    bothToAny = someObj;
+>bothToAny = someObj : Obj
+>bothToAny : StringAndNumberTo<any>
+>someObj : Obj
+
+    someObj = sToAny;
+>someObj = sToAny : StringTo<any>
+>someObj : Obj
+>sToAny : StringTo<any>
+
+    someObj = nToAny;
+>someObj = nToAny : NumberTo<any>
+>someObj : Obj
+>nToAny : NumberTo<any>
+
+    someObj = bothToAny;
+>someObj = bothToAny : StringAndNumberTo<any>
+>someObj : Obj
+>bothToAny : StringAndNumberTo<any>
+}
+
+function f2(sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<any> & NumberTo<any>, someObj: Obj) {
+>f2 : (sToAny: StringTo<any>, nToAny: NumberTo<any>, bothToAny: StringTo<any> & NumberTo<any>, someObj: Obj) => void
+>sToAny : StringTo<any>
+>nToAny : NumberTo<any>
+>bothToAny : StringTo<any> & NumberTo<any>
+>someObj : Obj
+
+    sToAny = nToAny;
+>sToAny = nToAny : NumberTo<any>
+>sToAny : StringTo<any>
+>nToAny : NumberTo<any>
+
+    sToAny = bothToAny;
+>sToAny = bothToAny : StringTo<any> & NumberTo<any>
+>sToAny : StringTo<any>
+>bothToAny : StringTo<any> & NumberTo<any>
+
+    sToAny = someObj;
+>sToAny = someObj : Obj
+>sToAny : StringTo<any>
+>someObj : Obj
+
+    nToAny = sToAny;
+>nToAny = sToAny : StringTo<any>
+>nToAny : NumberTo<any>
+>sToAny : StringTo<any>
+
+    nToAny = bothToAny;
+>nToAny = bothToAny : StringTo<any> & NumberTo<any>
+>nToAny : NumberTo<any>
+>bothToAny : StringTo<any> & NumberTo<any>
+
+    nToAny = someObj;
+>nToAny = someObj : Obj
+>nToAny : NumberTo<any>
+>someObj : Obj
+
+    bothToAny = sToAny;
+>bothToAny = sToAny : StringTo<any>
+>bothToAny : StringTo<any> & NumberTo<any>
+>sToAny : StringTo<any>
+
+    bothToAny = nToAny;
+>bothToAny = nToAny : NumberTo<any>
+>bothToAny : StringTo<any> & NumberTo<any>
+>nToAny : NumberTo<any>
+
+    bothToAny = someObj;
+>bothToAny = someObj : Obj
+>bothToAny : StringTo<any> & NumberTo<any>
+>someObj : Obj
+
+    someObj = sToAny;
+>someObj = sToAny : StringTo<any>
+>someObj : Obj
+>sToAny : StringTo<any>
+
+    someObj = nToAny;
+>someObj = nToAny : NumberTo<any>
+>someObj : Obj
+>nToAny : NumberTo<any>
+
+    someObj = bothToAny;
+>someObj = bothToAny : StringTo<any> & NumberTo<any>
+>someObj : Obj
+>bothToAny : StringTo<any> & NumberTo<any>
+}
+
+type NumberToNumber = NumberTo<number>;
+>NumberToNumber : NumberToNumber
+
+interface StringToAnyNumberToNumber extends StringTo<any>, NumberToNumber {
+}
+
+function f3(sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) {
+>f3 : (sToAny: StringTo<any>, nToNumber: NumberToNumber, strToAnyNumToNum: StringToAnyNumberToNumber, someObj: Obj) => void
+>sToAny : StringTo<any>
+>nToNumber : NumberToNumber
+>strToAnyNumToNum : StringToAnyNumberToNumber
+>someObj : Obj
+
+    sToAny = nToNumber;
+>sToAny = nToNumber : NumberToNumber
+>sToAny : StringTo<any>
+>nToNumber : NumberToNumber
+
+    sToAny = strToAnyNumToNum;
+>sToAny = strToAnyNumToNum : StringToAnyNumberToNumber
+>sToAny : StringTo<any>
+>strToAnyNumToNum : StringToAnyNumberToNumber
+
+    sToAny = someObj;
+>sToAny = someObj : Obj
+>sToAny : StringTo<any>
+>someObj : Obj
+
+    nToNumber = sToAny;
+>nToNumber = sToAny : StringTo<any>
+>nToNumber : NumberToNumber
+>sToAny : StringTo<any>
+
+    nToNumber = strToAnyNumToNum;
+>nToNumber = strToAnyNumToNum : StringToAnyNumberToNumber
+>nToNumber : NumberToNumber
+>strToAnyNumToNum : StringToAnyNumberToNumber
+
+    nToNumber = someObj;
+>nToNumber = someObj : Obj
+>nToNumber : NumberToNumber
+>someObj : Obj
+
+    strToAnyNumToNum = sToAny;
+>strToAnyNumToNum = sToAny : StringTo<any>
+>strToAnyNumToNum : StringToAnyNumberToNumber
+>sToAny : StringTo<any>
+
+    strToAnyNumToNum = nToNumber;
+>strToAnyNumToNum = nToNumber : NumberToNumber
+>strToAnyNumToNum : StringToAnyNumberToNumber
+>nToNumber : NumberToNumber
+
+    strToAnyNumToNum = someObj;
+>strToAnyNumToNum = someObj : Obj
+>strToAnyNumToNum : StringToAnyNumberToNumber
+>someObj : Obj
+
+    someObj = sToAny;
+>someObj = sToAny : StringTo<any>
+>someObj : Obj
+>sToAny : StringTo<any>
+
+    someObj = nToNumber;
+>someObj = nToNumber : NumberToNumber
+>someObj : Obj
+>nToNumber : NumberToNumber
+
+    someObj = someObj;
+>someObj = someObj : Obj
+>someObj : Obj
+>someObj : Obj
+}

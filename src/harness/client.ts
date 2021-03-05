@@ -205,9 +205,9 @@ namespace ts.server {
                 isNewIdentifierLocation: false,
                 entries: response.body!.map<CompletionEntry>(entry => { // TODO: GH#18217
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, data, isRecommended } = entry;
                         // TODO: GH#241
-                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, data: data as any, isRecommended };
                         return res;
                     }
 
@@ -216,14 +216,13 @@ namespace ts.server {
             };
         }
 
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails {
-            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source }] };
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, _preferences: UserPreferences | undefined, data: unknown): CompletionEntryDetails {
+            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source, data }] };
 
-            const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
-            const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
-            Debug.assert(response.body!.length === 1, "Unexpected length of completion details response body.");
-            const convertedCodeActions = map(response.body![0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
-            return { ...response.body![0], codeActions: convertedCodeActions };
+            const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetailsFull, args);
+            const response = this.processResponse<protocol.Response>(request);
+            Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
+            return response.body[0];
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
@@ -527,6 +526,9 @@ namespace ts.server {
         private decodeSpan(span: protocol.TextSpan & { file: string }): TextSpan;
         private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap?: number[]): TextSpan;
         private decodeSpan(span: protocol.TextSpan & { file: string }, fileName?: string, lineMap?: number[]): TextSpan {
+            if (span.start.line === 1 && span.start.offset === 1 && span.end.line === 1 && span.end.offset === 1) {
+                return { start: 0, length: 0 };
+            }
             fileName = fileName || span.file;
             lineMap = lineMap || this.getLineMap(fileName);
             return createTextSpanFromBounds(

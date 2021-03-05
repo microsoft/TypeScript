@@ -166,7 +166,7 @@ namespace ts {
 
             // From ambient modules
             for (const ambientModule of program.getTypeChecker().getAmbientModules()) {
-                if (ambientModule.declarations.length > 1) {
+                if (ambientModule.declarations && ambientModule.declarations.length > 1) {
                     addReferenceFromAmbientModule(ambientModule);
                 }
             }
@@ -174,6 +174,9 @@ namespace ts {
             return referencedFiles;
 
             function addReferenceFromAmbientModule(symbol: Symbol) {
+                if (!symbol.declarations) {
+                    return;
+                }
                 // Add any file other than our own as reference
                 for (const declaration of symbol.declarations) {
                     const declarationSourceFile = getSourceFileOfNode(declaration);

@@ -1,0 +1,44 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/something.js",
+      "position": 155,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 154,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "functionName"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

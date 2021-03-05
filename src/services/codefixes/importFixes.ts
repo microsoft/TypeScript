@@ -376,7 +376,7 @@ namespace ts.codefix {
         // Can't use an es6 import for a type in JS.
         return exportedSymbolIsTypeOnly && isSourceFileJS(sourceFile) ? emptyArray : mapDefined(sourceFile.imports, (moduleSpecifier): FixAddToExistingImportInfo | undefined => {
             const i = importFromModuleSpecifier(moduleSpecifier);
-            if (isRequireVariableDeclaration(i.parent, /*requireStringLiteralLikeArgument*/ true)) {
+            if (isRequireVariableDeclaration(i.parent)) {
                 return checker.resolveExternalModuleName(moduleSpecifier) === moduleSymbol ? { declaration: i.parent, importKind } : undefined;
             }
             if (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration) {
@@ -544,11 +544,11 @@ namespace ts.codefix {
 
     function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): FixesInfo | undefined {
         const checker = program.getTypeChecker();
-        const symbolName = getSymbolName(sourceFile, checker, symbolToken);
+        const compilerOptions = program.getCompilerOptions();
+        const symbolName = getSymbolName(sourceFile, checker, symbolToken, compilerOptions);
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
 
-        const compilerOptions = program.getCompilerOptions();
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && isValidTypeOnlyAliasUseSite(symbolToken);
         const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host);
@@ -557,9 +557,9 @@ namespace ts.codefix {
         return { fixes, symbolName };
     }
 
-    function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier): string {
+    function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string {
         const parent = symbolToken.parent;
-        if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken) {
+        if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && compilerOptions.jsx !== JsxEmit.ReactJSX && compilerOptions.jsx !== JsxEmit.ReactJSXDev) {
             const jsxNamespace = checker.getJsxNamespace(sourceFile);
             if (isIntrinsicJsxName(symbolToken.text) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
                 return jsxNamespace;
@@ -1025,7 +1025,7 @@ namespace ts.codefix {
         }
 
         function allowsImportingAmbientModule(moduleSymbol: Symbol): boolean {
-            if (!packageJsons.length) {
+            if (!packageJsons.length || !moduleSymbol.valueDeclaration) {
                 return true;
             }
 
