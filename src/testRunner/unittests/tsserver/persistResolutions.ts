@@ -53,7 +53,7 @@ namespace ts.projectSystem {
                     compilerOptions: {
                         module: "amd",
                         composite: true,
-                        // persistResolutions: true,
+                        persistResolutions: true,
                         traceResolution: true,
                         outFile
                     },

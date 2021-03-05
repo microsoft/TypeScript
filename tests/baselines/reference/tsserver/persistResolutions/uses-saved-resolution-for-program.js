@@ -18,6 +18,7 @@ Config: /user/username/projects/myproject/tsconfig.json : {
  "options": {
   "module": 2,
   "composite": true,
+  "persistResolutions": true,
   "traceResolution": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
  }
@@ -45,10 +46,15 @@ File '/user/username/projects/myproject/src/fileNotFound.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileNotFound.js' does not exist.
 File '/user/username/projects/myproject/src/fileNotFound.jsx' does not exist.
 ======== Module name './fileNotFound' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was not resolved.
+======== Resolving module './filePresent' from '/user/username/projects/myproject/src/main.ts'. ========
+Resolution for module './filePresent' was found in cache from location '/user/username/projects/myproject/src'.
+======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
+======== Resolving module './filePresent' from '/user/username/projects/myproject/src/main.ts'. ========
+Resolution for module './filePresent' was found in cache from location '/user/username/projects/myproject/src'.
+======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
+======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/main.ts'. ========
+Resolution for module './fileNotFound' was found in cache from location '/user/username/projects/myproject/src'.
+======== Module name './fileNotFound' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFileNotFound.ts 500 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Missing file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
@@ -231,9 +237,6 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNe
 Scheduled: /user/username/projects/myproject/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 request:{"command":"change","arguments":{"file":"/user/username/projects/myproject/src/globalMain.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"/// <reference path=\"./globalNewFile.ts\"/>\n"},"seq":2,"type":"request"}
 response:{"responseRequired":false}
 request:{"command":"change","arguments":{"file":"/user/username/projects/myproject/src/globalMain.ts","line":6,"offset":1,"endLine":6,"endOffset":1,"insertString":"globalFoo();\n"},"seq":3,"type":"request"}
@@ -244,8 +247,9 @@ Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (10)
 	/a/lib/lib.d.ts
@@ -376,17 +380,15 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFi
 Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Running: /user/username/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFileNotFound.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (11)
 	/a/lib/lib.d.ts
@@ -520,6 +522,7 @@ request:{"command":"change","arguments":{"file":"/user/username/projects/myproje
 response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 5 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Different program with same set of files
@@ -588,9 +591,6 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.
 Scheduled: /user/username/projects/myproject/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 request:{"command":"change","arguments":{"file":"/user/username/projects/myproject/src/main.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import { foo } from \"./newFile\";\n"},"seq":5,"type":"request"}
 response:{"responseRequired":false}
 Running: /user/username/projects/myproject/tsconfig.json
@@ -598,13 +598,14 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/newFile.t
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
 ======== Resolving module './newFile' from '/user/username/projects/myproject/src/main.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/user/username/projects/myproject/src/newFile.ts' exist - use it as a name resolution result.
 ======== Module name './newFile' was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'. ========
-Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (12)
 	/a/lib/lib.d.ts
@@ -747,29 +748,20 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotF
 Scheduled: /user/username/projects/myproject/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Running: /user/username/projects/myproject/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/fileNotFound.ts' exist - use it as a name resolution result.
-======== Module name './fileNotFound' was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.ts'. ========
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 Reusing resolution of module './newFile' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.ts'.
-DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (13)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/filePresent.ts
-	/user/username/projects/myproject/src/fileNotFound.ts
 	/user/username/projects/myproject/src/anotherFileReusingResolution.ts
 	/user/username/projects/myproject/src/types.ts
 	/user/username/projects/myproject/src/fileWithRef.ts
@@ -780,6 +772,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	/user/username/projects/myproject/src/globalMain.ts
 	/user/username/projects/myproject/src/newFile.ts
 	/user/username/projects/myproject/src/main.ts
+	/user/username/projects/myproject/src/fileNotFound.ts
 
 
 	../../../../a/lib/lib.d.ts
@@ -789,10 +782,6 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	  Imported via "./filePresent" from file 'src/main.ts'
 	  Imported via "./filePresent" from file 'src/main.ts'
-	src/fileNotFound.ts
-	  Imported via "./fileNotFound" from file 'src/anotherFileReusingResolution.ts'
-	  Imported via "./fileNotFound" from file 'src/main.ts'
-	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/anotherFileReusingResolution.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/types.ts
@@ -819,6 +808,8 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	  Imported via "./newFile" from file 'src/main.ts'
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/main.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/fileNotFound.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
 -----------------------------------------------
@@ -860,9 +851,6 @@ interface Array<T> { length: number; [n: number]: T; }
 
 {"fileName":"/user/username/projects/myproject/src/filePresent.ts","version":"11598859296-export function something() { return 10; }"}
 export function something() { return 10; }
-
-{"fileName":"/user/username/projects/myproject/src/fileNotFound.ts","version":"-497034637-export function something2() { return 20; }"}
-export function something2() { return 20; }
 
 {"fileName":"/user/username/projects/myproject/src/anotherFileReusingResolution.ts","version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";"}
 import { something } from "./filePresent";
@@ -908,4 +896,7 @@ import { something as something1 } from "./filePresent";
 import { something2 } from "./fileNotFound";
 something();
 
+
+{"fileName":"/user/username/projects/myproject/src/fileNotFound.ts","version":"-497034637-export function something2() { return 20; }"}
+export function something2() { return 20; }
 
