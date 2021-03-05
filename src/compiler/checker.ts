@@ -40537,6 +40537,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
+            checkGrammarJsxName(node.tagName);
             checkGrammarTypeArguments(node, node.typeArguments);
             const seen = new Map<__String, boolean>();
 
@@ -40555,6 +40556,29 @@ namespace ts {
 
                 if (initializer && initializer.kind === SyntaxKind.JsxExpression && !initializer.expression) {
                     return grammarErrorOnNode(initializer, Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression);
+                }
+            }
+        }
+
+        function checkGrammarJsxName(node: JsxTagNameExpression) {
+            if (isPropertyAccessExpression(node)) {
+                let propName: JsxTagNameExpression = node;
+                do {
+                    const check = checkGrammarJsxNestedIdentifier(propName.name);
+                    if (check) {
+                        return check;
+                    }
+                    propName = propName.expression;
+                } while (isPropertyAccessExpression(propName));
+                const check = checkGrammarJsxNestedIdentifier(propName);
+                if (check) {
+                    return check;
+                }
+            }
+
+            function checkGrammarJsxNestedIdentifier(name: MemberName | ThisExpression) {
+                if (isIdentifier(name) && idText(name).indexOf(":") !== -1) {
+                    return grammarErrorOnNode(name, Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names);
                 }
             }
         }

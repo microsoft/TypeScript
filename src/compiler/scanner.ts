@@ -2341,6 +2341,7 @@ namespace ts {
                         tokenValue += ":";
                         pos++;
                         namespaceSeparator = true;
+                        token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
                         continue;
                     }
                     const oldPos = pos;
