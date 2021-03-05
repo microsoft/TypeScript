@@ -6547,6 +6547,17 @@ namespace ts {
             return false;
         }
 
+        function parseClassStaticBlockDeclaration(): ClassStaticBlockDeclaration {
+            const pos = getNodePos();
+            const staticKeyworkd = parseExpectedToken(SyntaxKind.StaticKeyword);
+            const body = parseClassStaticBlockBodyBlock();
+            return finishNode(factory.createClassStaticBlockDeclaration(staticKeyworkd, body), pos);
+        }
+
+        function parseClassStaticBlockBodyBlock() {
+            return parseBlock(/*ignoreMissingOpenBrace*/ false);
+        }
+
         function parseDecoratorExpression() {
             if (inAwaitContext() && token() === SyntaxKind.AwaitKeyword) {
                 // `@await` is is disallowed in an [Await] context, but can cause parsing to go off the rails
@@ -6630,6 +6641,9 @@ namespace ts {
             if (token() === SyntaxKind.SemicolonToken) {
                 nextToken();
                 return finishNode(factory.createSemicolonClassElement(), pos);
+            }
+            if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
+                return parseClassStaticBlockDeclaration();
             }
 
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -6894,6 +6908,10 @@ namespace ts {
 
         function nextTokenIsOpenParen() {
             return nextToken() === SyntaxKind.OpenParenToken;
+        }
+
+        function nextTokenIsOpenBrace() {
+            return nextToken() === SyntaxKind.OpenBraceToken;
         }
 
         function nextTokenIsSlash() {
