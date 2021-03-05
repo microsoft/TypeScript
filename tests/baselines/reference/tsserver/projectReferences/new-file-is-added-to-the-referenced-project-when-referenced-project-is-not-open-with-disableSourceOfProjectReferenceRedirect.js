@@ -46,7 +46,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 	Files (3)
 	/a/lib/lib.d.ts
@@ -79,8 +79,8 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 2 structureChanged: true Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 0
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Different program with same set of files
 Running: *ensureProjectForOpenFiles*
 Before ensureProjectForOpenFiles:
 Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
@@ -109,7 +109,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 3 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 	Files (4)
 	/a/lib/lib.d.ts
@@ -162,7 +162,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 4 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 	Files (3)
 	/a/lib/lib.d.ts
@@ -206,7 +206,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 5 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 	Files (4)
 	/a/lib/lib.d.ts

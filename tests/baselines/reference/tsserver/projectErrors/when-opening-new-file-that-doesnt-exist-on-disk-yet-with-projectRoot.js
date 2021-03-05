@@ -9,7 +9,7 @@ FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project:
 FileWatcher:: Added:: WatchInfo: /user/someuser/projects/somefolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/dev/null/inferredProject1*' (Inferred)
 	Files (2)
 	/a/lib/lib.d.ts

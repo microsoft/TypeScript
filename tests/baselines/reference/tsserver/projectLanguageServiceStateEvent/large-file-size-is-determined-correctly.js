@@ -25,7 +25,7 @@ FileWatcher:: Added:: WatchInfo: /a/extremlylarge.d.ts 500 undefined WatchType: 
 FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /a/jsconfig.json
-Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/a/jsconfig.json' (Configured)
 	Files (2)
 	/a/lib/lib.d.ts

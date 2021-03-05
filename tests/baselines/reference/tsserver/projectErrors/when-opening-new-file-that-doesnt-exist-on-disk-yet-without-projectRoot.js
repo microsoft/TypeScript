@@ -7,7 +7,7 @@ Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 FileWatcher:: Added:: WatchInfo: /src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/dev/null/inferredProject1*' (Inferred)
 	Files (2)
 	/a/lib/lib.d.ts

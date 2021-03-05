@@ -21,7 +21,7 @@ Starting updateGraphWorker: Project: /a/b/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/a/b/tsconfig.json' (Configured)
 	Files (2)
 	/a/lib/lib.d.ts
@@ -66,8 +66,8 @@ Config: /a/b/tsconfig.json : {
 }
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 2
+Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/a/b/tsconfig.json"}}
 event:
@@ -109,8 +109,8 @@ Config: /a/b/tsconfig.json : {
 }
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 2
+Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/a/b/tsconfig.json"}}
 event:

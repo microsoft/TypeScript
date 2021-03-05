@@ -24,7 +24,7 @@ Starting updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Missing file
 DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 	Files (2)
 	/a/b/projects/myproject/bar/app.ts
@@ -85,7 +85,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/projects/myproject/foo2/foo
 Running: /a/b/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/foo2/foo.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json
-Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 2 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 	Files (2)
 	/a/b/projects/myproject/bar/app.ts

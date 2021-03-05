@@ -25,7 +25,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myp
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/node_modules/@types 1 undefined Project: /users/username/projects/myproject/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/users/username/projects/myproject/tsconfig.json' (Configured)
 	Files (4)
 	/a/lib/lib.d.ts
@@ -73,8 +73,8 @@ response:{"responseRequired":false}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/users/username/projects/myproject/src/a.ts"]},"seq":3,"type":"request"}
 response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
-Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 2
+Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
 event:

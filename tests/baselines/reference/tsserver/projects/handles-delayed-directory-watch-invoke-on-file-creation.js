@@ -23,7 +23,7 @@ Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.j
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/users/username/projects/project/tsconfig.json' (Configured)
 	Files (3)
 	/a/lib/lib.d.ts
@@ -92,7 +92,7 @@ request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/users/u
 Search path: /users/username/projects/project
 For info: /users/username/projects/project/a.ts :: Config file name: /users/username/projects/project/tsconfig.json
 Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 2 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/users/username/projects/project/tsconfig.json' (Configured)
 	Files (3)
 	/a/lib/lib.d.ts
@@ -159,7 +159,7 @@ Search path: /users/username/projects/project/sub
 For info: /users/username/projects/project/sub/a.ts :: Config file name: /users/username/projects/project/tsconfig.json
 Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/a.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
-Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/users/username/projects/project/tsconfig.json' (Configured)
 	Files (2)
 	/a/lib/lib.d.ts
@@ -183,7 +183,7 @@ DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/node_
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/dev/null/inferredProject1*' (Inferred)
 	Files (2)
 	/a/lib/lib.d.ts
@@ -264,7 +264,7 @@ FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/jsconfig.j
 FileWatcher:: Close:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 FileWatcher:: Close:: WatchInfo: /users/username/projects/project/a.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
-Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 4 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/users/username/projects/project/tsconfig.json' (Configured)
 	Files (3)
 	/a/lib/lib.d.ts

@@ -61,7 +61,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/packages/A/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/user/username/projects/myproject/packages/A/tsconfig.json' (Configured)
 	Files (4)
 	/a/lib/lib.d.ts
@@ -111,8 +111,8 @@ response:{"response":true,"responseRequired":true}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/packages/A/src/test.ts"]},"seq":3,"type":"request"}
 response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 2
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/packages/A/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/packages/A/src/test.ts","diagnostics":[]}}
 event:

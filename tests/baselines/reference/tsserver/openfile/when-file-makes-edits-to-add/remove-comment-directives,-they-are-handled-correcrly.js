@@ -9,7 +9,7 @@ Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/dev/null/inferredProject1*' (Inferred)
 	Files (2)
 	/a/lib/lib.d.ts
@@ -45,8 +45,8 @@ response:{"response":true,"responseRequired":true}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/file.ts"]},"seq":3,"type":"request"}
 response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 2
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 event:
@@ -60,8 +60,8 @@ response:{"response":true,"responseRequired":true}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/user/username/projects/myproject/file.ts"]},"seq":5,"type":"request"}
 response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false Elapsed:: *ms
-Different program with same set of files:: structureIsReused:: 2
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Different program with same set of files
 event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/file.ts","diagnostics":[]}}
 event:

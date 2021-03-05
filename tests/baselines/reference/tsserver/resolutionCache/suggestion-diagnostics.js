@@ -5,7 +5,7 @@ For info: /a.js :: No config files found.
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true Elapsed:: *ms
+Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/dev/null/inferredProject1*' (Inferred)
 	Files (1)
 	/a.js

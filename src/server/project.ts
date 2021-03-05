@@ -1225,12 +1225,12 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.sendPerformanceEvent("UpdateGraph", elapsed);
-            this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
+            this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram}${this.program ? ` structureIsReused:: ${(ts as any).StructureIsReused[this.program.structureIsReused]}` : ""} Elapsed: ${elapsed}ms`);
             if (this.hasAddedorRemovedFiles) {
                 this.print(/*writeProjectFileNames*/ true);
             }
             else if (this.program !== oldProgram) {
-                this.writeLog(`Different program with same set of files:: structureIsReused:: ${this.program?.structureIsReused}`);
+                this.writeLog(`Different program with same set of files`);
             }
             return hasNewProgram;
         }
