@@ -376,7 +376,7 @@ interface Symbol {
                     }
                     if (incrementalSignatures && cleanSignatures) {
                         for (let i = 0; i < incrementalSignatures.length; i++) {
-                            if (incrementalSignatures[i] === 0) cleanSignatures[i] = 0;
+                            if (!incrementalSignatures[i]) cleanSignatures[i] = undefined;
                         }
                     }
                     assert.deepEqual(incrementalSignatures, cleanSignatures);
@@ -434,10 +434,7 @@ interface Symbol {
                 program: {
                     fileInfos: fileInfos.map(fileInfo => {
                         const { signature, ...remainingFileInfo } = fileInfo;
-                        return {
-                            signature: 0,
-                            ...remainingFileInfo
-                        };
+                        return remainingFileInfo;
                     }),
                     options: optionsRest,
                     fileNames,

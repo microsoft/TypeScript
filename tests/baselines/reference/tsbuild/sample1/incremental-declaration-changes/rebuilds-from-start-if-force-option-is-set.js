@@ -41,12 +41,10 @@ exitCode:: ExitStatus.Success
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": 0,
         "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": 0,
         "affectsGlobalScope": false
       },
       "./some_decl.d.ts": {
@@ -99,7 +97,6 @@ exitCode:: ExitStatus.Success
       },
       "./index.ts": {
         "version": "-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": 0,
         "affectsGlobalScope": false
       }
     },
@@ -162,7 +159,6 @@ exitCode:: ExitStatus.Success
       },
       "./index.ts": {
         "version": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": 0,
         "affectsGlobalScope": false
       }
     },

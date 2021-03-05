@@ -41,7 +41,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures?: ReadonlyESMap<Path, string | typeof NOT_COMPUTED_YET> | undefined;
+        currentAffectedFilesSignatures?: ReadonlyESMap<Path, string | undefined> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -110,7 +110,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures: ESMap<Path, string | typeof NOT_COMPUTED_YET> | undefined;
+        currentAffectedFilesSignatures: ESMap<Path, string | undefined> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -244,6 +244,9 @@ namespace ts {
                 }
             }
         });
+
+        // If there are a lot changed files, avoid intializing siguratures this time for performance reasons
+        if(state.changedFilesSet.size > 3) state.avoidInitializingSignatures = true;
 
         // If the global file is removed, add all files as changed
         if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => info.affectsGlobalScope && !state.fileInfos.has(sourceFilePath))) {
@@ -448,7 +451,8 @@ namespace ts {
                 Debug.checkDefined(state.currentAffectedFilesSignatures),
                 cancellationToken,
                 computeHash,
-                state.currentAffectedFilesExportedModulesMap
+                state.currentAffectedFilesExportedModulesMap,
+                /*avoidInitializingSignature*/ true
             );
             return;
         }
@@ -483,7 +487,8 @@ namespace ts {
                     Debug.checkDefined(state.currentAffectedFilesSignatures),
                     cancellationToken,
                     computeHash,
-                    state.currentAffectedFilesExportedModulesMap
+                    state.currentAffectedFilesExportedModulesMap,
+                    /*avoidInitializingSignatures*/ true
                 );
                 // If not dts emit, nothing more to do
                 if (getEmitDeclarations(state.compilerOptions)) {
@@ -511,7 +516,7 @@ namespace ts {
     function isChangedSignature(state: BuilderProgramState, path: Path) {
         const newSignature = Debug.checkDefined(state.currentAffectedFilesSignatures).get(path);
         const oldSignature = Debug.checkDefined(state.fileInfos.get(path)).signature;
-        return oldSignature === NOT_COMPUTED_YET || newSignature !== oldSignature;
+        return !oldSignature || newSignature !== oldSignature;
     }
 
     /**
