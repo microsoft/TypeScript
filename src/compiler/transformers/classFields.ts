@@ -122,11 +122,14 @@ namespace ts {
             }
         }
 
-        function visitorThisInStaticFieldContext(receiver: LeftHandSideExpression) {
-            return function staticFieldThisVisitor(node: Node): Node {
-                if (!(node.transformFlags & TransformFlags.ContainsLexicalThis)) return node;
+        function visitorThisOrSuperInStaticFieldContext(receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined) {
+            const shouldCareAboutSuper = baseClass && languageVersion >= ScriptTarget.ES2015;
+            return function staticFieldThisOrSuperVisitor(node: Node): Node {
+                if (!(node.transformFlags & (TransformFlags.ContainsLexicalThis | (shouldCareAboutSuper ? TransformFlags.ContainsLexicalSuper : TransformFlags.None)))) {
+                    return node;
+                }
 
-                // This in static field cannot cross function or class boundary.
+                // `This` access in static field cannot cross function or class boundary.
                 if (isClassLike(node) || isFunctionDeclaration(node) || isFunctionExpression(node)) {
                     return node;
                 }
@@ -134,9 +137,12 @@ namespace ts {
                 if (node.kind === SyntaxKind.ThisKeyword) {
                     return nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
                 }
+                else if (baseClass && shouldCareAboutSuper && node.kind === SyntaxKind.SuperKeyword) {
+                    return nodeIsSynthesized(baseClass) ? baseClass : factory.cloneNode(baseClass);
+                }
 
-                return visitEachChild(node, staticFieldThisVisitor, context);
-            }
+                return visitEachChild(node, staticFieldThisOrSuperVisitor, context);
+            };
         }
 
         /**
@@ -507,7 +513,7 @@ namespace ts {
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
             const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             if (some(staticProperties)) {
-                addPropertyStatements(statements, staticProperties, factory.getInternalName(node));
+                addPropertyStatements(statements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression);
             }
 
             return statements;
@@ -551,7 +557,7 @@ namespace ts {
                     }
 
                     if (pendingStatements && some(staticProperties)) {
-                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
+                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression);
                     }
                     return classExpression;
                 }
@@ -573,7 +579,7 @@ namespace ts {
                     expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
                     // Add any pending expressions leftover from elided or relocated computed property names
                     addRange(expressions, map(pendingExpressions, startOnNewLine));
-                    addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
+                    addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp, extendsClauseElement?.expression));
                     expressions.push(startOnNewLine(temp));
 
                     return factory.inlineExpressions(expressions);
@@ -727,9 +733,9 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression, baseClass?: LeftHandSideExpression) {
             for (const property of properties) {
-                const expression = transformProperty(property, receiver);
+                const expression = transformProperty(property, receiver, baseClass);
                 if (!expression) {
                     continue;
                 }
@@ -747,10 +753,10 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyExpressions(properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function generateInitializedPropertyExpressions(properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                const expression = transformProperty(property, receiver);
+                const expression = transformProperty(property, receiver, baseClass);
                 if (!expression) {
                     continue;
                 }
@@ -770,7 +776,7 @@ namespace ts {
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
+        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const emitAssignment = !context.getCompilerOptions().useDefineForClassFields;
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
@@ -808,7 +814,7 @@ namespace ts {
             }
 
             const initializer = property.initializer || emitAssignment ? visitNode(
-                hasStaticModifier(property) ? visitNode(property.initializer, visitorThisInStaticFieldContext(receiver), isExpression) : property.initializer,
+                hasStaticModifier(property) ? visitNode(property.initializer, visitorThisOrSuperInStaticFieldContext(receiver, baseClass), isExpression) : property.initializer,
                 visitor,
                 isExpression
             ) ?? factory.createVoidZero()

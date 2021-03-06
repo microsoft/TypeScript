@@ -1,5 +1,5 @@
 // @target: esnext, es2020, es6, es5
-// @useDefineForClassFields: false
+// @useDefineForClassFields: true
 class C {
     static a = 1;
     static b = this.a + 1;

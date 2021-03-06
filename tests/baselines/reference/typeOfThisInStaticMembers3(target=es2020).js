@@ -20,4 +20,4 @@ class D extends C {
 }
 D.c = 2;
 D.d = D.c + 1;
-D.e = super.a + D.c + 1;
+D.e = C.a + D.c + 1;
