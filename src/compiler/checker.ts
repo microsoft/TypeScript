@@ -11777,7 +11777,8 @@ namespace ts {
                 const propTypes: Type[] = [];
                 for (const prop of getPropertiesOfType(type)) {
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
-                        propTypes.push(getTypeOfSymbol(prop));
+                        const propType = getTypeOfSymbol(prop);
+                        propTypes.push(prop.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) : propType);
                     }
                 }
                 if (kind === IndexKind.String) {
