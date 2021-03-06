@@ -36,18 +36,16 @@ class C {
         this.readwriteCall = Symbol();
     }
 }
-(function () {
-    /**
-     * @readonly
-     */
-    C.readonlyStaticCall = Symbol();
-    /**
-     * @type {unique symbol}
-     * @readonly
-     */
-    C.readonlyStaticTypeAndCall = Symbol();
-    C.readwriteStaticCall = Symbol();
-}).call(C);
+/**
+ * @readonly
+ */
+C.readonlyStaticCall = Symbol();
+/**
+ * @type {unique symbol}
+ * @readonly
+ */
+C.readonlyStaticTypeAndCall = Symbol();
+C.readwriteStaticCall = Symbol();
 
 
 //// [uniqueSymbolsDeclarationsInJs-out.d.ts]

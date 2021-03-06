@@ -122,6 +122,23 @@ namespace ts {
             }
         }
 
+        function visitorThisInStaticFieldContext(receiver: LeftHandSideExpression) {
+            return function staticFieldThisVisitor(node: Node): Node {
+                if (!(node.transformFlags & TransformFlags.ContainsLexicalThis)) return node;
+
+                // This in static field cannot cross function or class boundary.
+                if (isClassLike(node) || isFunctionDeclaration(node) || isFunctionExpression(node)) {
+                    return node;
+                }
+
+                if (node.kind === SyntaxKind.ThisKeyword) {
+                    return nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
+                }
+
+                return visitEachChild(node, staticFieldThisVisitor, context);
+            }
+        }
+
         /**
          * If we visit a private name, this means it is an undeclared private name.
          * Replace it with an empty identifier to indicate a problem with the code.
@@ -490,7 +507,7 @@ namespace ts {
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
             const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             if (some(staticProperties)) {
-                addPropertyStatementsForStatic(statements, staticProperties, factory.getInternalName(node));
+                addPropertyStatements(statements, staticProperties, factory.getInternalName(node));
             }
 
             return statements;
@@ -534,7 +551,7 @@ namespace ts {
                     }
 
                     if (pendingStatements && some(staticProperties)) {
-                        addPropertyStatementsForStatic(pendingStatements, staticProperties, factory.getInternalName(node));
+                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
                     }
                     return classExpression;
                 }
@@ -724,33 +741,6 @@ namespace ts {
             }
         }
 
-        function addPropertyStatementsForStatic(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: Identifier) {
-            const assignmentStatements: Statement[] = [];
-            addPropertyStatements(assignmentStatements, properties, receiver);
-
-            const propertyAssignmentStatement = factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createPropertyAccessExpression(
-                        factory.createParenthesizedExpression(
-                            factory.createFunctionExpression(
-                                /*modifiers*/ undefined,
-                                /*asteriskToken*/ undefined,
-                                /*name*/ undefined,
-                                /*typeParameters*/ undefined,
-                                /*parameters*/ undefined,
-                                /*type*/ undefined,
-                                factory.createBlock(assignmentStatements, /*multiLine*/ true)
-                            )
-                        ),
-                        factory.createIdentifier("call")
-                    ),
-                    undefined,
-                    [nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver)]
-                )
-            );
-            statements.push(propertyAssignmentStatement);
-        }
-
         /**
          * Generates assignment expressions for property initializers.
          *
@@ -816,7 +806,12 @@ namespace ts {
             if (hasSyntacticModifier(propertyOriginalNode, ModifierFlags.Abstract)) {
                 return undefined;
             }
-            const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) ?? factory.createVoidZero()
+
+            const initializer = property.initializer || emitAssignment ? visitNode(
+                hasStaticModifier(property) ? visitNode(property.initializer, visitorThisInStaticFieldContext(receiver), isExpression) : property.initializer,
+                visitor,
+                isExpression
+            ) ?? factory.createVoidZero()
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : factory.createVoidZero();
 

@@ -51,10 +51,8 @@ var B = /** @class */ (function (_super) {
         return B_1.x;
     };
     var B_1;
-    (function () {
-        B.x = 1;
-        B.y = B_1.x;
-    }).call(B);
+    B.x = 1;
+    B.y = B_1.x;
     B = B_1 = __decorate([
         dec
     ], B);

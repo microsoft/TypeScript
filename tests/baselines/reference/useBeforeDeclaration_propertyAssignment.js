@@ -27,13 +27,11 @@ export class C {
 }
 class D {
 }
-(function () {
-    D.A = class extends D.B {
-        [D.D]() { } // should be an error
-    };
-    D.B = class {
-    };
-    D.C = Object.assign({ [D.D]: 1 }, { get [D.D]() { return 0; } } // should be an error
-    );
-    D.D = '';
-}).call(D);
+D.A = class extends D.B {
+    [D.D]() { } // should be an error
+};
+D.B = class {
+};
+D.C = Object.assign({ [D.D]: 1 }, { get [D.D]() { return 0; } } // should be an error
+);
+D.D = '';

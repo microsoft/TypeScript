@@ -3,9 +3,7 @@ class C {
         this.foo = 10;
     }
 }
-(function () {
-    C.bar = 20;
-}).call(C);
+C.bar = 20;
 (function (C) {
     C.x = 10;
 })(C || (C = {}));

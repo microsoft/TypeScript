@@ -36,9 +36,7 @@ System.register([], function (exports_1, context_1) {
                 static getInstance() { return MyClass2.value; }
             };
             exports_1("MyClass2", MyClass2);
-            (function () {
-                MyClass2.value = 42;
-            }).call(MyClass2);
+            MyClass2.value = 42;
         }
     };
 });

@@ -224,17 +224,14 @@ var C = /** @class */ (function () {
             this.inStaticSetter = "string";
         }
     };
-    (function () {
-        var _this = this;
-        C.prop = function () {
-            if (Math.random()) {
-                _this.inStaticPropertyDeclaration = 0;
-            }
-            else {
-                _this.inStaticPropertyDeclaration = "string";
-            }
-        };
-    }).call(C);
+    C.prop = function () {
+        if (Math.random()) {
+            C.inStaticPropertyDeclaration = 0;
+        }
+        else {
+            C.inStaticPropertyDeclaration = "string";
+        }
+    };
     return C;
 }());
 var c = new C();

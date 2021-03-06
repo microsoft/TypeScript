@@ -13,9 +13,7 @@ class C {
     static get [Symbol.toPrimitive]() { return ""; }
     static set [Symbol.toPrimitive](x) { }
 }
-(function () {
-    C[_a] = 0;
-}).call(C);
+C[_a] = 0;
 
 
 //// [symbolDeclarationEmit11.d.ts]

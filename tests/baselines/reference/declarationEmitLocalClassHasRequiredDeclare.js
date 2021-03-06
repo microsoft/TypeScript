@@ -27,9 +27,7 @@ var X = /** @class */ (function () {
 var A = /** @class */ (function () {
     function A() {
     }
-    (function () {
-        A.X = X;
-    }).call(A);
+    A.X = X;
     return A;
 }());
 exports.A = A;

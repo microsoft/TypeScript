@@ -20,6 +20,4 @@ class C {
     }
     [C.staticProp]() { }
 }
-(function () {
-    C.staticProp = 10;
-}).call(C);
+C.staticProp = 10;

@@ -178,9 +178,7 @@ function foo10() {
     var A = /** @class */ (function () {
         function A() {
         }
-        (function () {
-            A.a = x;
-        }).call(A);
+        A.a = x;
         return A;
     }());
     var x;

@@ -22,11 +22,9 @@ namespace Namespace {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    (function () {
-        Foo.enumMember = Enum.A;
-        Foo.objLiteralMember = ObjLiteral.A;
-        Foo.namespaceMember = Namespace.A;
-    }).call(Foo);
+    Foo.enumMember = Enum.A;
+    Foo.objLiteralMember = ObjLiteral.A;
+    Foo.namespaceMember = Namespace.A;
     return Foo;
 }());
 var Enum;

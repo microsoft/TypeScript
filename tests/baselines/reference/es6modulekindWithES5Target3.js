@@ -19,9 +19,7 @@ var D = /** @class */ (function () {
         this.p = 1;
     }
     D.prototype.method = function () { };
-    (function () {
-        D.s = 0;
-    }).call(D);
+    D.s = 0;
     D = __decorate([
         foo
     ], D);

@@ -43,6 +43,4 @@ class C {
     }
     #something;
 }
-(function () {
-    C.#m = "test";
-}).call(C);
+C.#m = "test";

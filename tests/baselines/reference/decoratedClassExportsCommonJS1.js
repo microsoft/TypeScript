@@ -19,9 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Testing123 = void 0;
 let Testing123 = Testing123_1 = class Testing123 {
 };
-(function () {
-    Testing123.prop1 = Testing123_1.prop0;
-}).call(Testing123);
+Testing123.prop1 = Testing123_1.prop0;
 Testing123 = Testing123_1 = __decorate([
     Something({ v: () => Testing123_1 })
 ], Testing123);

@@ -64,9 +64,7 @@ var B = /** @class */ (function (_super) {
         _this = _super.call(this) || this;
         return _this;
     }
-    (function () {
-        B.s = 9;
-    }).call(B);
+    B.s = 9;
     return B;
 }(A));
 var C = /** @class */ (function (_super) {

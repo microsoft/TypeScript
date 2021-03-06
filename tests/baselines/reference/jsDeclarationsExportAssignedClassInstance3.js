@@ -13,9 +13,7 @@ var Foo = /** @class */ (function () {
     function Foo() {
         this.member = 10;
     }
-    (function () {
-        Foo.stat = 10;
-    }).call(Foo);
+    Foo.stat = 10;
     return Foo;
 }());
 module.exports = new Foo();

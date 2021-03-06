@@ -12,9 +12,7 @@ var v = ;
 var C = /** @class */ (function () {
     function C() {
     }
-    (function () {
-        C.p = 1;
-    }).call(C);
+    C.p = 1;
     C = __decorate([
         decorate
     ], C);

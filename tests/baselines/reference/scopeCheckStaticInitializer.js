@@ -20,13 +20,11 @@ var X = /** @class */ (function () {
     function X() {
     }
     X.method = function () { };
-    (function () {
-        X.illegalBeforeProperty = X.data;
-        X.okBeforeMethod = X.method;
-        X.illegal2 = After.data;
-        X.illegal3 = After.method;
-        X.data = 13;
-    }).call(X);
+    X.illegalBeforeProperty = X.data;
+    X.okBeforeMethod = X.method;
+    X.illegal2 = After.data;
+    X.illegal3 = After.method;
+    X.data = 13;
     return X;
 }());
 var After = /** @class */ (function () {
@@ -34,8 +32,6 @@ var After = /** @class */ (function () {
     }
     After.method = function () { };
     ;
-    (function () {
-        After.data = 12;
-    }).call(After);
+    After.data = 12;
     return After;
 }());

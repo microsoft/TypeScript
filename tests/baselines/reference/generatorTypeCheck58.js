@@ -9,8 +9,6 @@ function* g() {
 function* g() {
     class C {
     }
-    (function () {
-        C.x = yield 0;
-    }).call(C);
+    C.x = yield 0;
     ;
 }

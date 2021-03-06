@@ -39,10 +39,8 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    (function () {
-        C.x = 1;
-        C.y = 1;
-    }).call(C);
+    C.x = 1;
+    C.y = 1;
     return C;
 }());
 

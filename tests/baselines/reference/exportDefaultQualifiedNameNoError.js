@@ -13,9 +13,7 @@ exports.__esModule = true;
 var C = /** @class */ (function () {
     function C() {
     }
-    (function () {
-        C.x = 0;
-    }).call(C);
+    C.x = 0;
     return C;
 }());
 ;

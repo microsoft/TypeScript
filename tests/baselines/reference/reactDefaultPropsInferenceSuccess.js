@@ -99,11 +99,9 @@ var FieldFeedback = /** @class */ (function (_super) {
     FieldFeedback.prototype.render = function () {
         return react_1["default"].createElement("div", null, "Hello");
     };
-    (function () {
-        FieldFeedback.defaultProps = {
-            when: function () { return true; }
-        };
-    }).call(FieldFeedback);
+    FieldFeedback.defaultProps = {
+        when: function () { return true; }
+    };
     return FieldFeedback;
 }(react_1["default"].Component));
 // OK
@@ -118,11 +116,9 @@ var FieldFeedbackBeta = /** @class */ (function (_super) {
     FieldFeedbackBeta.prototype.render = function () {
         return react_1["default"].createElement("div", null, "Hello");
     };
-    (function () {
-        FieldFeedbackBeta.defaultProps = {
-            when: function () { return true; }
-        };
-    }).call(FieldFeedbackBeta);
+    FieldFeedbackBeta.defaultProps = {
+        when: function () { return true; }
+    };
     return FieldFeedbackBeta;
 }(react_1["default"].Component));
 // OK
@@ -138,11 +134,9 @@ var FieldFeedback2 = /** @class */ (function (_super) {
         this.props.when("now"); // OK, always defined
         return react_1["default"].createElement("div", null, "Hello");
     };
-    (function () {
-        FieldFeedback2.defaultProps = {
-            when: function () { return true; }
-        };
-    }).call(FieldFeedback2);
+    FieldFeedback2.defaultProps = {
+        when: function () { return true; }
+    };
     return FieldFeedback2;
 }(FieldFeedback));
 // OK

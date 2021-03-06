@@ -34,9 +34,7 @@ class Parent {
     }
 }
 _foo = new WeakMap(), _bar = new WeakMap();
-(function () {
-    _bar.set(Parent, 5);
-}).call(Parent);
+_bar.set(Parent, 5);
 class Child extends Parent {
     constructor() {
         super(...arguments);

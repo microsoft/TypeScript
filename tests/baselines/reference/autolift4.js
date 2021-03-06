@@ -47,9 +47,7 @@ var Point = /** @class */ (function () {
     Point.prototype.getDist = function () {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     };
-    (function () {
-        Point.origin = new Point(0, 0);
-    }).call(Point);
+    Point.origin = new Point(0, 0);
     return Point;
 }());
 var Point3D = /** @class */ (function (_super) {

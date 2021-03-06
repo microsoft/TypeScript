@@ -293,9 +293,7 @@ var Statics = /** @class */ (function () {
     Statics.baz = function () {
         return "";
     };
-    (function () {
-        Statics.foo = 1;
-    }).call(Statics);
+    Statics.foo = 1;
     return Statics;
 }());
 var stat = new Statics();

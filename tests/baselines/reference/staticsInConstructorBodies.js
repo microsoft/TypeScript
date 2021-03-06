@@ -11,8 +11,6 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.m1 = function () { }; // ERROR
-    (function () {
-        C.p1 = 0; // ERROR
-    }).call(C);
+    C.p1 = 0; // ERROR
     return C;
 }());

@@ -75,10 +75,7 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    (function _b() {
-        var _newTarget = this && this instanceof _b ? this.constructor : void 0;
-        C.j = function () { return _newTarget; };
-    }).call(C);
+    C.j = function () { return _newTarget; };
     return C;
 }());
 var O = (_a = {},

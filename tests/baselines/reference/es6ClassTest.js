@@ -124,9 +124,7 @@ var Foo = /** @class */ (function (_super) {
     }
     Foo.prototype.bar = function () { return 0; };
     Foo.prototype.boo = function (x) { return x; };
-    (function () {
-        Foo.statVal = 0;
-    }).call(Foo);
+    Foo.statVal = 0;
     return Foo;
 }(Bar));
 var f = new Foo();

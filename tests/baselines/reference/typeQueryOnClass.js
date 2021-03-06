@@ -99,10 +99,8 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    (function () {
-        C.sa = 1;
-        C.sb = function () { return 1; };
-    }).call(C);
+    C.sa = 1;
+    C.sb = function () { return 1; };
     return C;
 }());
 var c;

@@ -30,10 +30,8 @@ var __extends = (this && this.__extends) || (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    (function () {
-        C.a = 1;
-        C.b = this.a + 1;
-    }).call(C);
+    C.a = 1;
+    C.b = C.a + 1;
     return C;
 }());
 var D = /** @class */ (function (_super) {
@@ -41,10 +39,8 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    (function () {
-        D.c = 2;
-        D.d = this.c + 1;
-        D.e = _super.a + this.c + 1;
-    }).call(D);
+    D.c = 2;
+    D.d = D.c + 1;
+    D.e = _super.a + D.c + 1;
     return D;
 }(C));

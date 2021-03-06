@@ -73,11 +73,9 @@ function ClassFactory(kind) {
 var Kinds = /** @class */ (function () {
     function Kinds() {
     }
-    (function () {
-        Kinds.A = "A";
-        Kinds.B = "B";
-        Kinds.C = "C";
-    }).call(Kinds);
+    Kinds.A = "A";
+    Kinds.B = "B";
+    Kinds.C = "C";
     return Kinds;
 }());
 var AKind = /** @class */ (function (_super) {

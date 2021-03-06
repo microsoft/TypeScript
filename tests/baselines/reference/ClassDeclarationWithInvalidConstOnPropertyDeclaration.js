@@ -7,8 +7,6 @@ class AtomicNumbers {
 var AtomicNumbers = /** @class */ (function () {
     function AtomicNumbers() {
     }
-    (function () {
-        AtomicNumbers.H = 1;
-    }).call(AtomicNumbers);
+    AtomicNumbers.H = 1;
     return AtomicNumbers;
 }());

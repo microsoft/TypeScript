@@ -12,9 +12,7 @@ var C = /** @class */ (function () {
         this.p = 1;
     }
     C.prototype.method = function () { };
-    (function () {
-        C.s = 0;
-    }).call(C);
+    C.s = 0;
     return C;
 }());
 export default C;

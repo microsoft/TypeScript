@@ -29,6 +29,4 @@ class C {
     }
 }
 _a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
-(function () {
-    C[_c] = 0;
-}).call(C);
+C[_c] = 0;

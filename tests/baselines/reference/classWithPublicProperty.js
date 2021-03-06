@@ -30,9 +30,7 @@ var C = /** @class */ (function () {
     }
     C.prototype.c = function () { return ''; };
     C.f = function () { return ''; };
-    (function () {
-        C.g = function () { return ''; };
-    }).call(C);
+    C.g = function () { return ''; };
     return C;
 }());
 // all of these are valid

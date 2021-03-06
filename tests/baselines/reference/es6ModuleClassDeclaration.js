@@ -127,10 +127,8 @@ export class c {
     static method4() {
     }
 }
-(function () {
-    c.k = 20;
-    c.l = 30;
-}).call(c);
+c.k = 20;
+c.l = 30;
 class c2 {
     constructor() {
         this.x = 10;
@@ -145,10 +143,8 @@ class c2 {
     static method4() {
     }
 }
-(function () {
-    c2.k = 20;
-    c2.l = 30;
-}).call(c2);
+c2.k = 20;
+c2.l = 30;
 new c();
 new c2();
 export var m1;
@@ -167,10 +163,8 @@ export var m1;
         static method4() {
         }
     }
-    (function () {
-        c3.k = 20;
-        c3.l = 30;
-    }).call(c3);
+    c3.k = 20;
+    c3.l = 30;
     m1.c3 = c3;
     class c4 {
         constructor() {
@@ -186,10 +180,8 @@ export var m1;
         static method4() {
         }
     }
-    (function () {
-        c4.k = 20;
-        c4.l = 30;
-    }).call(c4);
+    c4.k = 20;
+    c4.l = 30;
     new c();
     new c2();
     new c3();
@@ -211,10 +203,8 @@ var m2;
         static method4() {
         }
     }
-    (function () {
-        c3.k = 20;
-        c3.l = 30;
-    }).call(c3);
+    c3.k = 20;
+    c3.l = 30;
     m2.c3 = c3;
     class c4 {
         constructor() {
@@ -230,10 +220,8 @@ var m2;
         static method4() {
         }
     }
-    (function () {
-        c4.k = 20;
-        c4.l = 30;
-    }).call(c4);
+    c4.k = 20;
+    c4.l = 30;
     new c();
     new c2();
     new c3();

@@ -74,13 +74,11 @@ var Bug = /** @class */ (function () {
     Bug.prototype.foo = function (name) {
         this.name = name;
     };
-    (function () {
-        Bug.func = [
-            function (that, name) {
-                that.foo(name);
-            }
-        ];
-    }).call(Bug);
+    Bug.func = [
+        function (that, name) {
+            that.foo(name);
+        }
+    ];
     return Bug;
 }());
 // Valid use of this in a property bound decl

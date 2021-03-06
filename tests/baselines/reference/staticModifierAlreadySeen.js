@@ -9,8 +9,6 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.bar = function () { };
-    (function () {
-        C.foo = 1;
-    }).call(C);
+    C.foo = 1;
     return C;
 }());

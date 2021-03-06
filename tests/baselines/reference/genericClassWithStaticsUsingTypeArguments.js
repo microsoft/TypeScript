@@ -25,11 +25,9 @@ var Foo = /** @class */ (function () {
     Foo.f = function (xs) {
         return xs.reverse();
     };
-    (function () {
-        Foo.a = function (n) { };
-        Foo.c = [];
-        Foo.d = false || (function (x) { return x || undefined; })(null);
-        Foo.e = function (x) { return null; };
-    }).call(Foo);
+    Foo.a = function (n) { };
+    Foo.c = [];
+    Foo.d = false || (function (x) { return x || undefined; })(null);
+    Foo.e = function (x) { return null; };
     return Foo;
 }());

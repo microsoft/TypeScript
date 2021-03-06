@@ -75,9 +75,7 @@ var C2 = /** @class */ (function () {
     C2.foo = function (x) {
         return undefined;
     };
-    (function () {
-        C2.y = undefined;
-    }).call(C2);
+    C2.y = undefined;
     return C2;
 }());
 var N1;

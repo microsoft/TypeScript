@@ -163,12 +163,10 @@ var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
         this.myPublicProperty1 = exporter.createExportedWidget3(); // Error
         this.myPrivateProperty1 = exporter.createExportedWidget3();
     }
-    (function () {
-        publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget1(); // Error
-        publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty = exporter.createExportedWidget1();
-        publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
-        publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty1 = exporter.createExportedWidget3();
-    }).call(publicClassWithWithPrivatePropertyTypes);
+    publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget1(); // Error
+    publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty = exporter.createExportedWidget1();
+    publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
+    publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty1 = exporter.createExportedWidget3();
     return publicClassWithWithPrivatePropertyTypes;
 }());
 exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
@@ -179,12 +177,10 @@ var privateClassWithWithPrivatePropertyTypes = /** @class */ (function () {
         this.myPublicProperty1 = exporter.createExportedWidget3();
         this.myPrivateProperty1 = exporter.createExportedWidget3();
     }
-    (function () {
-        privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget1();
-        privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty = exporter.createExportedWidget1();
-        privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget3();
-        privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty1 = exporter.createExportedWidget3();
-    }).call(privateClassWithWithPrivatePropertyTypes);
+    privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget1();
+    privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty = exporter.createExportedWidget1();
+    privateClassWithWithPrivatePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget3();
+    privateClassWithWithPrivatePropertyTypes.myPrivateStaticProperty1 = exporter.createExportedWidget3();
     return privateClassWithWithPrivatePropertyTypes;
 }());
 exports.publicVarWithPrivatePropertyTypes = exporter.createExportedWidget1(); // Error
@@ -196,10 +192,8 @@ var publicClassWithPrivateModulePropertyTypes = /** @class */ (function () {
         this.myPublicProperty = exporter.createExportedWidget2(); // Error
         this.myPublicProperty1 = exporter.createExportedWidget4(); // Error
     }
-    (function () {
-        publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget2(); // Error
-        publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
-    }).call(publicClassWithPrivateModulePropertyTypes);
+    publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget2(); // Error
+    publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
     return publicClassWithPrivateModulePropertyTypes;
 }());
 exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
@@ -210,10 +204,8 @@ var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
         this.myPublicProperty = exporter.createExportedWidget2();
         this.myPublicProperty1 = exporter.createExportedWidget4();
     }
-    (function () {
-        privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget2();
-        privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4();
-    }).call(privateClassWithPrivateModulePropertyTypes);
+    privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget2();
+    privateClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4();
     return privateClassWithPrivateModulePropertyTypes;
 }());
 var privateVarWithPrivateModulePropertyTypes = exporter.createExportedWidget2();

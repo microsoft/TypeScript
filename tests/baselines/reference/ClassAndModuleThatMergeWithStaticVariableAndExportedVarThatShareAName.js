@@ -28,9 +28,7 @@ var Point = /** @class */ (function () {
         this.x = x;
         this.y = y;
     }
-    (function () {
-        Point.Origin = { x: 0, y: 0 };
-    }).call(Point);
+    Point.Origin = { x: 0, y: 0 };
     return Point;
 }());
 (function (Point) {
@@ -43,9 +41,7 @@ var A;
             this.x = x;
             this.y = y;
         }
-        (function () {
-            Point.Origin = { x: 0, y: 0 };
-        }).call(Point);
+        Point.Origin = { x: 0, y: 0 };
         return Point;
     }());
     A.Point = Point;

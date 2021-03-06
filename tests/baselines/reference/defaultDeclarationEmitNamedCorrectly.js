@@ -26,9 +26,7 @@ exports.make = make;
 var MyComponent = /** @class */ (function () {
     function MyComponent() {
     }
-    (function () {
-        MyComponent.create = make(MyComponent);
-    }).call(MyComponent);
+    MyComponent.create = make(MyComponent);
     return MyComponent;
 }());
 exports["default"] = MyComponent;

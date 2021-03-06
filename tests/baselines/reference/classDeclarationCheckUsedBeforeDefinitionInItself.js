@@ -6,6 +6,4 @@ class C3 {
 //// [classDeclarationCheckUsedBeforeDefinitionInItself.js]
 class C3 {
 }
-(function () {
-    C3.intance = new C3(); // ok
-}).call(C3);
+C3.intance = new C3(); // ok

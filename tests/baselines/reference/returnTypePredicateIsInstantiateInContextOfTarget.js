@@ -43,11 +43,9 @@ var TestComponent = /** @class */ (function (_super) {
     TestComponent.isAny = function (obj) {
         return true;
     };
-    (function () {
-        TestComponent.defaultProps = {
-            isAny: TestComponent.isAny
-        };
-    }).call(TestComponent);
+    TestComponent.defaultProps = {
+        isAny: TestComponent.isAny
+    };
     return TestComponent;
 }(React.Component));
 var TestRender = function () { return React.createElement(TestComponent, null); };

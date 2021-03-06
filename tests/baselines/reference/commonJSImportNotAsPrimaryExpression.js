@@ -39,9 +39,7 @@ var C1 = /** @class */ (function () {
     function C1() {
         this.m1 = 42;
     }
-    (function () {
-        C1.s1 = true;
-    }).call(C1);
+    C1.s1 = true;
     return C1;
 }());
 exports.C1 = C1;

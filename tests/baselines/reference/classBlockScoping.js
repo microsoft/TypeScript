@@ -63,9 +63,7 @@ function f(b) {
             Foo.prototype.m = function () {
                 new Foo();
             };
-            (function () {
-                Foo.y = new Foo();
-            }).call(Foo);
+            Foo.y = new Foo();
             return Foo;
         }());
         new Foo_1();

@@ -35,9 +35,7 @@ var C = /** @class */ (function (_super) {
         _this.known = 1;
         return _this;
     }
-    (function () {
-        C.sknown = 2;
-    }).call(C);
+    C.sknown = 2;
     return C;
 }(Base));
 var c = new C();

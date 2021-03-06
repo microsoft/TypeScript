@@ -31,15 +31,11 @@ class A {
     }
 }
 _foo = new WeakMap(), _foo_1 = new WeakMap();
-(function () {
-    _foo_1.set(A, true); // error (duplicate)
-}).call(A);
+_foo_1.set(A, true); // error (duplicate)
 class B {
     test(x) {
         __classPrivateFieldGet(x, _foo_2); // error (#foo is a static property on B, not an instance property)
     }
 }
 _foo_2 = new WeakMap();
-(function () {
-    _foo_2.set(B, true);
-}).call(B);
+_foo_2.set(B, true);

@@ -40,9 +40,7 @@ class C {
     static get h() { return new.target; }
     static set i(_) { _ = new.target; }
 }
-(function () {
-    C.j = () => new.target;
-}).call(C);
+C.j = () => new.target;
 const O = {
     [new.target]: undefined,
     k() { return new.target; },

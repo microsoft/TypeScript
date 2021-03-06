@@ -27,9 +27,7 @@ class B {
     11() { }
     interface() { }
 }
-(function () {
-    B["hi"] = 10000;
-    B[22] = "twenty-two";
-    B[0b101] = "binary";
-    B[0o3235] = "octal";
-}).call(B);
+B["hi"] = 10000;
+B[22] = "twenty-two";
+B[0b101] = "binary";
+B[0o3235] = "octal";

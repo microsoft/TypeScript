@@ -14,8 +14,6 @@ var C = /** @class */ (function () {
     }
     C.prototype.foo = function () {
     };
-    (function () {
-        C.z = 1;
-    }).call(C);
+    C.z = 1;
     return C;
 }());

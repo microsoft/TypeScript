@@ -69,11 +69,9 @@ var MyClass = /** @class */ (function () {
         this.pp = 123;
         this.ppp = 123;
     }
-    (function () {
-        MyClass.sp = 123;
-        MyClass.spp = 123;
-        MyClass.sppp = 123;
-    }).call(MyClass);
+    MyClass.sp = 123;
+    MyClass.spp = 123;
+    MyClass.sppp = 123;
     return MyClass;
 }());
 var MyGenericClass = /** @class */ (function () {

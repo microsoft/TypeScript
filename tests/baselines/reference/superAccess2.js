@@ -69,8 +69,6 @@ var Q = /** @class */ (function (_super) {
         _super.x.call(this); // error
         _super.y.call(this);
     };
-    (function () {
-        Q.yy = _super.; // error for static initializer accessing super
-    }).call(Q);
+    Q.yy = _super.; // error for static initializer accessing super
     return Q;
 }(P));

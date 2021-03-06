@@ -21,11 +21,9 @@ var A = /** @class */ (function () {
     function A() {
     }
     A["\""] = function () { };
-    (function () {
-        A.x = 1;
-        A.y = 1;
-        A._b = 2;
-    }).call(A);
+    A.x = 1;
+    A.y = 1;
+    A._b = 2;
     return A;
 }());
 var a = new A();
