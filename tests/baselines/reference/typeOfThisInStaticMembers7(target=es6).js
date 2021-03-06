@@ -1,4 +1,4 @@
-//// [typeOfThisInStaticMembers3.ts]
+//// [typeOfThisInStaticMembers7.ts]
 class C {
     static a = 1;
     static b = this.a + 1;
@@ -7,11 +7,11 @@ class C {
 class D extends C {
     static c = 2;
     static d = this.c + 1;
-    static e = super.a + this.c + 1;
+    static e = 1 + (super.a) + (this.c + 1) + 1;
 }
 
 
-//// [typeOfThisInStaticMembers3.js]
+//// [typeOfThisInStaticMembers7.js]
 class C {
 }
 C.a = 1;
@@ -20,4 +20,4 @@ class D extends C {
 }
 D.c = 2;
 D.d = D.c + 1;
-D.e = C.a + D.c + 1;
+D.e = 1 + (C.a) + (D.c + 1) + 1;

@@ -1,4 +1,4 @@
-// @target: esnext, es2020, es6, es5
+// @target: esnext, es6, es5
 // @useDefineForClassFields: false
 class C {
     static a = 1;
