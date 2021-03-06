@@ -734,9 +734,9 @@ namespace ts {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
-    function isShorthandAmbientModule(node: Node): boolean {
+    function isShorthandAmbientModule(node: Node | undefined): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -767,7 +767,7 @@ namespace ts {
     }
 
     export function getNonAugmentationDeclaration(symbol: Symbol) {
-        return find(symbol.declarations, d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
+        return symbol.declarations?.find(d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
@@ -1204,7 +1204,8 @@ namespace ts {
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction ||
-            node.kind === SyntaxKind.ParenthesizedExpression) ?
+            node.kind === SyntaxKind.ParenthesizedExpression ||
+            node.kind === SyntaxKind.VariableDeclaration) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
@@ -4907,7 +4908,7 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        if (!isExportDefaultSymbol(symbol)) return undefined;
+        if (!isExportDefaultSymbol(symbol) || !symbol.declarations) return undefined;
         for (const decl of symbol.declarations) {
             if (decl.localSymbol) return decl.localSymbol;
         }
@@ -4915,7 +4916,7 @@ namespace ts {
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && length(symbol.declarations) > 0 && hasSyntacticModifier(symbol.declarations[0], ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasSyntacticModifier(symbol.declarations![0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
@@ -5464,7 +5465,7 @@ namespace ts {
     }
 
     export function getClassLikeDeclarationOfSymbol(symbol: Symbol): ClassLikeDeclaration | undefined {
-        return find(symbol.declarations, isClassLike);
+        return symbol.declarations?.find(isClassLike);
     }
 
     export function getObjectFlags(type: Type): ObjectFlags {

@@ -1025,7 +1025,7 @@ namespace ts.codefix {
         }
 
         function allowsImportingAmbientModule(moduleSymbol: Symbol): boolean {
-            if (!packageJsons.length) {
+            if (!packageJsons.length || !moduleSymbol.valueDeclaration) {
                 return true;
             }
 

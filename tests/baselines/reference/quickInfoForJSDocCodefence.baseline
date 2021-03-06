@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocCodefence.ts",
-      "position": 54
+      "position": 54,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -57,7 +58,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocCodefence.ts",
-      "position": 129
+      "position": 129,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "function",

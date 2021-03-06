@@ -396,6 +396,14 @@ namespace FourSlashInterface {
             this.state.baselineQuickInfo();
         }
 
+        public baselineSignatureHelp() {
+            this.state.baselineSignatureHelp();
+        }
+
+        public baselineCompletions() {
+            this.state.baselineCompletions();
+        }
+
         public baselineSmartSelection() {
             this.state.baselineSmartSelection();
         }
@@ -1701,6 +1709,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
+        data?: ts.CompletionEntryData;
         description: string;
         preferences?: ts.UserPreferences;
     }

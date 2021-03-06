@@ -885,8 +885,10 @@ namespace ts {
 
         /** Create a unique temporary variable for use in a loop. */
         // @api
-        function createLoopVariable(): Identifier {
-            return createBaseGeneratedIdentifier("", GeneratedIdentifierFlags.Loop);
+        function createLoopVariable(reservedInNestedScopes?: boolean): Identifier {
+            let flags = GeneratedIdentifierFlags.Loop;
+            if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
+            return createBaseGeneratedIdentifier("", flags);
         }
 
         /** Create a unique name based on the supplied text. */
@@ -5527,7 +5529,7 @@ namespace ts {
                 : reduceLeft(expressions, factory.createComma)!;
         }
 
-        function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
+        function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
             const nodeName = getNameOfDeclaration(node);
             if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
                 // TODO(rbuckton): Does this need to be parented?
@@ -5591,7 +5593,7 @@ namespace ts {
          * @param allowComments A value indicating whether comments may be emitted for the name.
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        function getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        function getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean) {
             return getName(node, allowComments, allowSourceMaps);
         }
 
