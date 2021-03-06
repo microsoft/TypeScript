@@ -1,13 +1,4 @@
 //// [doExpressionMissingPathAnalysis.ts]
-const a = do {
-    if (1 > 2) true; // missing else
-}
-
-const b = do {
-    if (1 > 2) true;
-    else if (2 > 1) false; // missing else
-}
-
 const c = do {
     try { 1; } catch {} // catch clause missing val
 }
@@ -46,43 +37,34 @@ const h = do { 1;;;;; }
 const i = do { "val"; debugger; }
 const j = do { throw new Error(""); }
 
+
 //// [doExpressionMissingPathAnalysis.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;
-var a = ((function () {
-    if (_a = void 0, 1 > 2)
-        _a = true;
-})(), _a);
-var b = ((function () {
-    if (_b = void 0, 1 > 2)
-        _b = true;
-    else if (2 > 1)
-        _b = false; // missing else
-})(), _b);
+var _a, _b, _c, _d, _e, _f, _g;
 var c = ((function () {
+    try {
+        _a = void 0;
+        _a = 1;
+    }
+    catch (_a) { } // catch clause missing val
+})(), _a);
+var d = ((function () {
+    try {
+        _b = void 0;
+    }
+    catch (_a) {
+        _b = 1;
+    } // try clause missing val
+})(), _b);
+var e = ((function () {
     try {
         _c = void 0;
         _c = 1;
     }
-    catch (_a) { } // catch clause missing val
-})(), _c);
-var d = ((function () {
-    try {
-        _d = void 0;
-    }
     catch (_a) {
-        _d = 1;
-    } // try clause missing val
-})(), _d);
-var e = ((function () {
-    try {
-        _e = void 0;
-        _e = 1;
-    }
-    catch (_a) {
-        _e = 2;
+        _c = 2;
     }
     finally { } // this is fine
-})(), _e);
+})(), _c);
 var F;
 (function (F) {
     F[F["A"] = 0] = "A";
@@ -106,11 +88,11 @@ function f(x) {
     })(), _c);
 }
 var g = ((function () {
-    _f = console.log('') // void returning functions
+    _d = console.log('') // void returning functions
     ;
-})(), _f);
+})(), _d);
 // No problem
-var h = ((function () { _g = 1; ; ; ; ; })(), _g);
+var h = ((function () { _e = 1; ; ; ; ; })(), _e);
 // No problem
-var i = ((function () { _h = "val"; debugger; })(), _h);
-var j = ((function () { throw new Error(""); })(), _j);
+var i = ((function () { _f = "val"; debugger; })(), _f);
+var j = ((function () { throw new Error(""); })(), _g);

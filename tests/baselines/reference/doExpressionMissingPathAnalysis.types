@@ -1,32 +1,4 @@
 === tests/cases/compiler/doExpressionMissingPathAnalysis.ts ===
-const a = do {
->a : true | void
->do {    if (1 > 2) true; // missing else} : true | void
-
-    if (1 > 2) true; // missing else
->1 > 2 : boolean
->1 : 1
->2 : 2
->true : true
-}
-
-const b = do {
->b : boolean | void
->do {    if (1 > 2) true;    else if (2 > 1) false; // missing else} : boolean | void
-
-    if (1 > 2) true;
->1 > 2 : boolean
->1 : 1
->2 : 2
->true : true
-
-    else if (2 > 1) false; // missing else
->2 > 1 : boolean
->2 : 2
->1 : 1
->false : false
-}
-
 const c = do {
 >c : void | 1
 >do {    try { 1; } catch {} // catch clause missing val} : void | 1

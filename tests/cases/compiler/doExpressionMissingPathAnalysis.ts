@@ -1,14 +1,5 @@
 // @noImplicitReturns: true
 
-const a = do {
-    if (1 > 2) true; // missing else
-}
-
-const b = do {
-    if (1 > 2) true;
-    else if (2 > 1) false; // missing else
-}
-
 const c = do {
     try { 1; } catch {} // catch clause missing val
 }
