@@ -26434,7 +26434,8 @@ namespace ts {
                 // (March 2021):
                 // - All static class member can be access via super.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    if (symbolHasNonMethodDeclaration(prop)) {
+                    const isStatic = flags & ModifierFlags.Static;
+                    if (isStatic ? symbolHasNonClassMemberDeclaration(prop) : symbolHasNonMethodDeclaration(prop)) {
                         error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         return false;
                     }
@@ -26531,6 +26532,10 @@ namespace ts {
 
         function symbolHasNonMethodDeclaration(symbol: Symbol) {
             return !!forEachProperty(symbol, prop => !(prop.flags & SymbolFlags.Method));
+        }
+
+        function symbolHasNonClassMemberDeclaration(symbol: Symbol) {
+            return !!forEachProperty(symbol, prop => !(prop.flags & SymbolFlags.ClassMember));
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
