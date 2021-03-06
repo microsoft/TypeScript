@@ -1,15 +1,3 @@
-// No return
-function a() {
-    const x = do {
-        function ok() {
-            return 1;
-        }
-        return 2; // error on this node
-    };
-}
-// No break / continue across do expr
-// Todo:
-
 // No iteration / declaration at the end
 
 ;[
@@ -47,4 +35,12 @@ function a() {
     do { for (let i = 0; i < [].length; i++) {}; 1 },
     do { while(true) {}; 1 },
     do { do {} while(true); 1 }
+]
+
+// No if-without-else in the last position
+
+;[
+    do {
+        if (true) true;
+    }
 ]

@@ -1,38 +1,20 @@
-tests/cases/compiler/doExpressionsError.ts(2,10): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/doExpressionsError.ts(4,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(4,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
+tests/cases/compiler/doExpressionsError.ts(5,19): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(6,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(7,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(8,16): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(9,15): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(13,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(14,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(15,10): error TS1433: Declaration or iteration cannot present at end of the do expression
 tests/cases/compiler/doExpressionsError.ts(16,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(16,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
-tests/cases/compiler/doExpressionsError.ts(16,14): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/doExpressionsError.ts(17,19): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(17,19): error TS2393: Duplicate function implementation.
-tests/cases/compiler/doExpressionsError.ts(18,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(19,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(20,16): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(21,15): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(25,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(26,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(27,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(28,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(29,10): error TS1433: Declaration or iteration cannot present at end of the do expression
-tests/cases/compiler/doExpressionsError.ts(36,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
-tests/cases/compiler/doExpressionsError.ts(36,14): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate function implementation.
+tests/cases/compiler/doExpressionsError.ts(17,10): error TS1433: Declaration or iteration cannot present at end of the do expression
+tests/cases/compiler/doExpressionsError.ts(24,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
+tests/cases/compiler/doExpressionsError.ts(44,9): error TS1436: The last if statement in the do expression must have an else branch.
 
 
-==== tests/cases/compiler/doExpressionsError.ts (18 errors) ====
-    // No return
-    function a() {
-             ~
-!!! error TS2300: Duplicate identifier 'a'.
-        const x = do {
-            function ok() {
-                return 1;
-            }
-            return 2; // error on this node
-        };
-    }
-    // No break / continue across do expr
-    // Todo:
-    
+==== tests/cases/compiler/doExpressionsError.ts (14 errors) ====
     // No iteration / declaration at the end
     
     ;[
@@ -41,13 +23,9 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
 !!! error TS1433: Declaration or iteration cannot present at end of the do expression
              ~~~~~~~~~
 !!! error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
-                 ~
-!!! error TS2300: Duplicate identifier 'a'.
         do { function x() { } },
                       ~
 !!! error TS1433: Declaration or iteration cannot present at end of the do expression
-                      ~
-!!! error TS2393: Duplicate function implementation.
         do { const a = 1 },
              ~~~~~~~~~~~
 !!! error TS1433: Declaration or iteration cannot present at end of the do expression
@@ -87,11 +65,7 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
         do { var a = 1; a },
              ~~~~~~~~~~
 !!! error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
-                 ~
-!!! error TS2300: Duplicate identifier 'a'.
         do { function x() { }; x },
-                      ~
-!!! error TS2393: Duplicate function implementation.
         do { const a = 1; a },
         do { let a = 1; a },
         do { class T {}; T },
@@ -105,3 +79,14 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
         do { while(true) {}; 1 },
         do { do {} while(true); 1 }
     ]
+    
+    // No if-without-else in the last position
+    
+    ;[
+        do {
+            if (true) true;
+            ~~~~~~~~~~~~~~~
+!!! error TS1436: The last if statement in the do expression must have an else branch.
+        }
+    ]
+    

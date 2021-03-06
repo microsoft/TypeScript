@@ -1,16 +1,4 @@
 //// [doExpressionsError.ts]
-// No return
-function a() {
-    const x = do {
-        function ok() {
-            return 1;
-        }
-        return 2; // error on this node
-    };
-}
-// No break / continue across do expr
-// Todo:
-
 // No iteration / declaration at the end
 
 ;[
@@ -50,27 +38,24 @@ function a() {
     do { do {} while(true); 1 }
 ]
 
+// No if-without-else in the last position
+
+;[
+    do {
+        if (true) true;
+    }
+]
+
+
 //// [doExpressionsError.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
-// No return
-function a() {
-    var _a;
-    var x = ((function () {
-        function ok() {
-            return 1;
-        }
-        return 2; // error on this node
-    })(), _a);
-}
-// No break / continue across do expr
-// Todo:
 // No iteration / declaration at the end
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y;
 ;
 [
     ((function () { var a = 1; })(), _a),
     ((function () { function x() { } })(), _b),
-    ((function () { var a_1 = 1; })(), _c),
-    ((function () { var a_2 = 1; })(), _d),
+    ((function () { var a = 1; })(), _c),
+    ((function () { var a = 1; })(), _d),
     ((function () { var T = /** @class */ (function () {
         function T() {
         }
@@ -81,9 +66,9 @@ function a() {
 ];
 [
     ((function () { for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var x_1 = _a[_i];
+        var x = _a[_i];
     } })(), _g),
-    ((function () { for (var x_2 in {}) { } })(), _h),
+    ((function () { for (var x in {}) { } })(), _h),
     ((function () { for (var i = 0; i < [].length; i++) { } })(), _j),
     ((function () { while (true) { } })(), _k),
     ((function () { do { } while (true); })(), _l)
@@ -93,8 +78,8 @@ function a() {
 [
     ((function () { var a = 1; _m = a; })(), _m),
     ((function () { function x() { } ; _o = x; })(), _o),
-    ((function () { var a_3 = 1; _p = a_3; })(), _p),
-    ((function () { var a_4 = 1; _q = a_4; })(), _q),
+    ((function () { var a = 1; _p = a; })(), _p),
+    ((function () { var a = 1; _q = a; })(), _q),
     ((function () { var T = /** @class */ (function () {
         function T() {
         }
@@ -105,10 +90,16 @@ function a() {
 ];
 [
     ((function () { for (var _i = 0, _a = []; _i < _a.length; _i++) {
-        var x_3 = _a[_i];
+        var x = _a[_i];
     } ; _t = 1; })(), _t),
-    ((function () { for (var x_4 in {}) { } ; _u = 1; })(), _u),
+    ((function () { for (var x in {}) { } ; _u = 1; })(), _u),
     ((function () { for (var i = 0; i < [].length; i++) { } ; _v = 1; })(), _v),
     ((function () { while (true) { } ; _w = 1; })(), _w),
     ((function () { do { } while (true); _x = 1; })(), _x)
+];
+[
+    ((function () {
+        if (_y = void 0, true)
+            _y = true;
+    })(), _y)
 ];

@@ -1850,6 +1850,9 @@ namespace ts {
                 case SyntaxKind.CaseBlock:
                     return ContainerFlags.IsBlockScopedContainer;
 
+                case SyntaxKind.DoExpression:
+                    return ContainerFlags.IsContainer | ContainerFlags.HasLocals | ContainerFlags.IsBlockScopedContainer;
+
                 case SyntaxKind.Block:
                     // do not treat blocks directly inside a function as a block-scoped-container.
                     // Locals that reside in this block should go to the function locals. Otherwise 'x'
@@ -1926,6 +1929,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.DoExpression:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:

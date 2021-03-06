@@ -1,26 +1,4 @@
 === tests/cases/compiler/doExpressionsError.ts ===
-// No return
-function a() {
->a : () => void
-
-    const x = do {
->x : void
->do {        function ok() {            return 1;        }        return 2; // error on this node    } : void
-
-        function ok() {
->ok : () => number
-
-            return 1;
->1 : 1
-        }
-        return 2; // error on this node
->2 : 2
-
-    };
-}
-// No break / continue across do expr
-// Todo:
-
 // No iteration / declaration at the end
 
 ;[
@@ -33,7 +11,7 @@ function a() {
 
     do { function x() { } },
 >do { function x() { } } : void
->x : { (): void; (): void; }
+>x : () => void
 
     do { const a = 1 },
 >do { const a = 1 } : void
@@ -97,15 +75,15 @@ function a() {
 >[    do { var a = 1; a },    do { function x() { }; x },    do { const a = 1; a },    do { let a = 1; a },    do { class T {}; T },    do { enum T {}; T },] : (number | (() => void) | typeof T | typeof T)[]
 
     do { var a = 1; a },
->do { var a = 1; a } : () => void
+>do { var a = 1; a } : number
 >a : number
 >1 : 1
->a : () => void
+>a : number
 
     do { function x() { }; x },
->do { function x() { }; x } : { (): void; (): void; }
->x : { (): void; (): void; }
->x : { (): void; (): void; }
+>do { function x() { }; x } : () => void
+>x : () => void
+>x : () => void
 
     do { const a = 1; a },
 >do { const a = 1; a } : 1
@@ -170,3 +148,18 @@ function a() {
 >1 : 1
 
 ]
+
+// No if-without-else in the last position
+
+;[
+>[    do {        if (true) true;    }] : (boolean | void)[]
+
+    do {
+>do {        if (true) true;    } : true | void
+
+        if (true) true;
+>true : true
+>true : true
+    }
+]
+

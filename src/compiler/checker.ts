@@ -35041,7 +35041,7 @@ namespace ts {
 
             const type2 = checkSourceElementWithType(node.elseStatement);
             if (requiresStatementType) {
-                if (isVoidLikeType(type1) || isVoidLikeType(type2)) error(node, Diagnostics.Not_all_code_paths_return_a_value);
+                if (isVoidLikeType(type1) || isVoidLikeType(type2) && node.elseStatement) error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
             return getUnionType([type1 || voidType, type2 || voidType], UnionReduction.Subtype);
         }

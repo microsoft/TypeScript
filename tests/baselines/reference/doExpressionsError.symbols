@@ -1,58 +1,40 @@
 === tests/cases/compiler/doExpressionsError.ts ===
-// No return
-function a() {
->a : Symbol(a, Decl(doExpressionsError.ts, 0, 0))
-
-    const x = do {
->x : Symbol(x, Decl(doExpressionsError.ts, 2, 9))
-
-        function ok() {
->ok : Symbol(ok, Decl(doExpressionsError.ts, 2, 18))
-
-            return 1;
-        }
-        return 2; // error on this node
-    };
-}
-// No break / continue across do expr
-// Todo:
-
 // No iteration / declaration at the end
 
 ;[
     do { var a = 1 },
->a : Symbol(a, Decl(doExpressionsError.ts, 15, 12))
+>a : Symbol(a, Decl(doExpressionsError.ts, 3, 12))
 
     do { function x() { } },
->x : Symbol(x, Decl(doExpressionsError.ts, 16, 8), Decl(doExpressionsError.ts, 36, 8))
+>x : Symbol(x, Decl(doExpressionsError.ts, 4, 8))
 
     do { const a = 1 },
->a : Symbol(a, Decl(doExpressionsError.ts, 17, 14))
+>a : Symbol(a, Decl(doExpressionsError.ts, 5, 14))
 
     do { let a = 1 },
->a : Symbol(a, Decl(doExpressionsError.ts, 18, 12))
+>a : Symbol(a, Decl(doExpressionsError.ts, 6, 12))
 
     do { class T {} },
->T : Symbol(T, Decl(doExpressionsError.ts, 19, 8))
+>T : Symbol(T, Decl(doExpressionsError.ts, 7, 8))
 
     do { enum T {} },
->T : Symbol(T, Decl(doExpressionsError.ts, 20, 8))
+>T : Symbol(T, Decl(doExpressionsError.ts, 8, 8))
 
 ]
 
 ;[
     do { for (const x of []) {} },
->x : Symbol(x, Decl(doExpressionsError.ts, 24, 19))
+>x : Symbol(x, Decl(doExpressionsError.ts, 12, 19))
 
     do { for (const x in {}) {} },
->x : Symbol(x, Decl(doExpressionsError.ts, 25, 19))
+>x : Symbol(x, Decl(doExpressionsError.ts, 13, 19))
 
     do { for (let i = 0; i < [].length; i++) {} },
->i : Symbol(i, Decl(doExpressionsError.ts, 26, 17))
->i : Symbol(i, Decl(doExpressionsError.ts, 26, 17))
+>i : Symbol(i, Decl(doExpressionsError.ts, 14, 17))
+>i : Symbol(i, Decl(doExpressionsError.ts, 14, 17))
 >[].length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->i : Symbol(i, Decl(doExpressionsError.ts, 26, 17))
+>i : Symbol(i, Decl(doExpressionsError.ts, 14, 17))
 
     do { while(true) {} },
     do { do {} while(true) }
@@ -63,45 +45,54 @@ function a() {
 
 ;[
     do { var a = 1; a },
->a : Symbol(a, Decl(doExpressionsError.ts, 35, 12))
->a : Symbol(a, Decl(doExpressionsError.ts, 0, 0))
+>a : Symbol(a, Decl(doExpressionsError.ts, 23, 12))
+>a : Symbol(a, Decl(doExpressionsError.ts, 23, 12))
 
     do { function x() { }; x },
->x : Symbol(x, Decl(doExpressionsError.ts, 16, 8), Decl(doExpressionsError.ts, 36, 8))
->x : Symbol(x, Decl(doExpressionsError.ts, 16, 8), Decl(doExpressionsError.ts, 36, 8))
+>x : Symbol(x, Decl(doExpressionsError.ts, 24, 8))
+>x : Symbol(x, Decl(doExpressionsError.ts, 24, 8))
 
     do { const a = 1; a },
->a : Symbol(a, Decl(doExpressionsError.ts, 37, 14))
->a : Symbol(a, Decl(doExpressionsError.ts, 37, 14))
+>a : Symbol(a, Decl(doExpressionsError.ts, 25, 14))
+>a : Symbol(a, Decl(doExpressionsError.ts, 25, 14))
 
     do { let a = 1; a },
->a : Symbol(a, Decl(doExpressionsError.ts, 38, 12))
->a : Symbol(a, Decl(doExpressionsError.ts, 38, 12))
+>a : Symbol(a, Decl(doExpressionsError.ts, 26, 12))
+>a : Symbol(a, Decl(doExpressionsError.ts, 26, 12))
 
     do { class T {}; T },
->T : Symbol(T, Decl(doExpressionsError.ts, 39, 8))
->T : Symbol(T, Decl(doExpressionsError.ts, 39, 8))
+>T : Symbol(T, Decl(doExpressionsError.ts, 27, 8))
+>T : Symbol(T, Decl(doExpressionsError.ts, 27, 8))
 
     do { enum T {}; T },
->T : Symbol(T, Decl(doExpressionsError.ts, 40, 8))
->T : Symbol(T, Decl(doExpressionsError.ts, 40, 8))
+>T : Symbol(T, Decl(doExpressionsError.ts, 28, 8))
+>T : Symbol(T, Decl(doExpressionsError.ts, 28, 8))
 
 ]
 
 ;[
     do { for (const x of []) {}; 1 },
->x : Symbol(x, Decl(doExpressionsError.ts, 44, 19))
+>x : Symbol(x, Decl(doExpressionsError.ts, 32, 19))
 
     do { for (const x in {}) {}; 1 },
->x : Symbol(x, Decl(doExpressionsError.ts, 45, 19))
+>x : Symbol(x, Decl(doExpressionsError.ts, 33, 19))
 
     do { for (let i = 0; i < [].length; i++) {}; 1 },
->i : Symbol(i, Decl(doExpressionsError.ts, 46, 17))
->i : Symbol(i, Decl(doExpressionsError.ts, 46, 17))
+>i : Symbol(i, Decl(doExpressionsError.ts, 34, 17))
+>i : Symbol(i, Decl(doExpressionsError.ts, 34, 17))
 >[].length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->i : Symbol(i, Decl(doExpressionsError.ts, 46, 17))
+>i : Symbol(i, Decl(doExpressionsError.ts, 34, 17))
 
     do { while(true) {}; 1 },
     do { do {} while(true); 1 }
 ]
+
+// No if-without-else in the last position
+
+;[
+    do {
+        if (true) true;
+    }
+]
+

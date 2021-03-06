@@ -1,7 +1,5 @@
 tests/cases/compiler/doExpressionMissingPathAnalysis.ts(2,5): error TS1436: The last if statement in the do expression must have an else branch.
-tests/cases/compiler/doExpressionMissingPathAnalysis.ts(2,5): error TS7030: Not all code paths return a value.
 tests/cases/compiler/doExpressionMissingPathAnalysis.ts(7,10): error TS1436: The last if statement in the do expression must have an else branch.
-tests/cases/compiler/doExpressionMissingPathAnalysis.ts(7,10): error TS7030: Not all code paths return a value.
 tests/cases/compiler/doExpressionMissingPathAnalysis.ts(11,22): error TS7030: Not all code paths return a value.
 tests/cases/compiler/doExpressionMissingPathAnalysis.ts(15,9): error TS7030: Not all code paths return a value.
 tests/cases/compiler/doExpressionMissingPathAnalysis.ts(28,9): error TS7030: Not all code paths return a value.
@@ -9,13 +7,11 @@ tests/cases/compiler/doExpressionMissingPathAnalysis.ts(31,22): error TS7030: No
 tests/cases/compiler/doExpressionMissingPathAnalysis.ts(40,5): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/doExpressionMissingPathAnalysis.ts (9 errors) ====
+==== tests/cases/compiler/doExpressionMissingPathAnalysis.ts (7 errors) ====
     const a = do {
         if (1 > 2) true; // missing else
         ~~~~~~~~~~~~~~~~
 !!! error TS1436: The last if statement in the do expression must have an else branch.
-        ~~~~~~~~~~~~~~~~
-!!! error TS7030: Not all code paths return a value.
     }
     
     const b = do {
@@ -23,8 +19,6 @@ tests/cases/compiler/doExpressionMissingPathAnalysis.ts(40,5): error TS7030: Not
         else if (2 > 1) false; // missing else
              ~~~~~~~~~~~~~~~~~
 !!! error TS1436: The last if statement in the do expression must have an else branch.
-             ~~~~~~~~~~~~~~~~~
-!!! error TS7030: Not all code paths return a value.
     }
     
     const c = do {
