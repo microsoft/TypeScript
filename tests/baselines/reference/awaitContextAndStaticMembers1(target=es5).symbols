@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/members/awaitAndYieldContextAndStaticMembers/awaitContextAndStaticMembers1.ts ===
+async function wrapper (v: Promise<number>) {
+>wrapper : Symbol(wrapper, Decl(awaitContextAndStaticMembers1.ts, 0, 0))
+>v : Symbol(v, Decl(awaitContextAndStaticMembers1.ts, 0, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+
+    return class {
+        static staticField = await (v);
+>staticField : Symbol((Anonymous class).staticField, Decl(awaitContextAndStaticMembers1.ts, 1, 18))
+>v : Symbol(v, Decl(awaitContextAndStaticMembers1.ts, 0, 24))
+    }
+}
+

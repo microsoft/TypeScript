@@ -1,0 +1,12 @@
+tests/cases/conformance/classes/members/awaitAndYieldContextAndStaticMembers/awaitContextAndStaticMembers2.ts(3,17): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/classes/members/awaitAndYieldContextAndStaticMembers/awaitContextAndStaticMembers2.ts (1 errors) ====
+    async function wrapper (v: Promise<number>) {
+        return class {
+            field = await (v);
+                    ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+        }
+    }
+    

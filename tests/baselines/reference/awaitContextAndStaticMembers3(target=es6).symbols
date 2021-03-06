@@ -1,0 +1,22 @@
+=== tests/cases/conformance/classes/members/awaitAndYieldContextAndStaticMembers/awaitContextAndStaticMembers3.ts ===
+async function wrapper (v: Promise<number>) {
+>wrapper : Symbol(wrapper, Decl(awaitContextAndStaticMembers3.ts, 0, 0))
+>v : Symbol(v, Decl(awaitContextAndStaticMembers3.ts, 0, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    return class C {
+>C : Symbol(C, Decl(awaitContextAndStaticMembers3.ts, 1, 10))
+
+        static staticField1 = await (v);
+>staticField1 : Symbol(C.staticField1, Decl(awaitContextAndStaticMembers3.ts, 1, 20))
+>v : Symbol(v, Decl(awaitContextAndStaticMembers3.ts, 0, 24))
+
+        static staticField2 = await (v) + C.staticField1;
+>staticField2 : Symbol(C.staticField2, Decl(awaitContextAndStaticMembers3.ts, 2, 40))
+>v : Symbol(v, Decl(awaitContextAndStaticMembers3.ts, 0, 24))
+>C.staticField1 : Symbol(C.staticField1, Decl(awaitContextAndStaticMembers3.ts, 1, 20))
+>C : Symbol(C, Decl(awaitContextAndStaticMembers3.ts, 1, 10))
+>staticField1 : Symbol(C.staticField1, Decl(awaitContextAndStaticMembers3.ts, 1, 20))
+    }
+}
+

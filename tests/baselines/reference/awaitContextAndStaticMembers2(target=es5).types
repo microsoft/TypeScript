@@ -1,0 +1,16 @@
+=== tests/cases/conformance/classes/members/awaitAndYieldContextAndStaticMembers/awaitContextAndStaticMembers2.ts ===
+async function wrapper (v: Promise<number>) {
+>wrapper : (v: Promise<number>) => Promise<typeof (Anonymous class)>
+>v : Promise<number>
+
+    return class {
+>class {        field = await (v);    } : typeof (Anonymous class)
+
+        field = await (v);
+>field : any
+>await (v) : any
+>await : any
+>v : Promise<number>
+    }
+}
+
