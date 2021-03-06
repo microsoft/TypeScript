@@ -119,7 +119,9 @@ var Bs = /** @class */ (function (_super) {
         "use strict"; // No error
         return _super.call(this) || this;
     }
-    Bs.s = 9;
+    (function () {
+        Bs.s = 9;
+    }).call(Bs);
     return Bs;
 }(A));
 var Cs = /** @class */ (function (_super) {
@@ -129,7 +131,9 @@ var Cs = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         return _this;
     }
-    Cs.s = 9;
+    (function () {
+        Cs.s = 9;
+    }).call(Cs);
     return Cs;
 }(A));
 var Ds = /** @class */ (function (_super) {
@@ -141,6 +145,8 @@ var Ds = /** @class */ (function (_super) {
         "use strict";
         return _this;
     }
-    Ds.s = 9;
+    (function () {
+        Ds.s = 9;
+    }).call(Ds);
     return Ds;
 }(A));

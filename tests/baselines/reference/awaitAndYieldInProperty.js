@@ -27,8 +27,10 @@ async function* test(x) {
         }
     }
     _a = await x, _b = await x, _c = yield 1, _d = yield 3;
-    C[_b] = await x;
-    C[_d] = yield 4;
+    (function () {
+        C[_b] = await x;
+        C[_d] = yield 4;
+    }).call(C);
     return _j = class {
             constructor() {
                 this[_e] = await x;

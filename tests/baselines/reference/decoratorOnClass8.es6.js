@@ -15,7 +15,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 let default_1 = class default_1 {
 };
-default_1.y = 1;
+(function () {
+    default_1.y = 1;
+}).call(default_1);
 default_1 = __decorate([
     dec
 ], default_1);

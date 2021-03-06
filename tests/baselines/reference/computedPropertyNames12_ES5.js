@@ -28,6 +28,8 @@ var C = /** @class */ (function () {
     }
     var _a, _b, _c;
     _a = n, s + s, _b = s + n, +s, _c = "hello " + a + " bye";
-    C[_c] = 0;
+    (function () {
+        C[_c] = 0;
+    }).call(C);
     return C;
 }());

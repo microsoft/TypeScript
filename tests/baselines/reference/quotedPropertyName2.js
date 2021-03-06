@@ -7,6 +7,8 @@ class Test1 {
 var Test1 = /** @class */ (function () {
     function Test1() {
     }
-    Test1["prop1"] = 0;
+    (function () {
+        Test1["prop1"] = 0;
+    }).call(Test1);
     return Test1;
 }());

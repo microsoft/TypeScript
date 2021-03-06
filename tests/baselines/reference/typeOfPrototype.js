@@ -11,7 +11,9 @@ var Foo = /** @class */ (function () {
     function Foo() {
         this.bar = 3;
     }
-    Foo.bar = '';
+    (function () {
+        Foo.bar = '';
+    }).call(Foo);
     return Foo;
 }());
 Foo.prototype.bar = undefined; // Should be OK

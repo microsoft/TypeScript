@@ -147,14 +147,16 @@ var Component = /** @class */ (function (_super) {
     function Component() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Component.propTypes = {
-        foo: PropTypes.number,
-        bar: PropTypes.node,
-        baz: PropTypes.string.isRequired
-    };
-    Component.defaultProps = {
-        foo: 42
-    };
+    (function () {
+        Component.propTypes = {
+            foo: PropTypes.number,
+            bar: PropTypes.node,
+            baz: PropTypes.string.isRequired
+        };
+        Component.defaultProps = {
+            foo: 42
+        };
+    }).call(Component);
     return Component;
 }(ReactComponent));
 var a = <Component foo={12} bar="yes" baz="yeah"/>;
@@ -168,10 +170,12 @@ var JustPropTypes = /** @class */ (function (_super) {
     function JustPropTypes() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    JustPropTypes.propTypes = {
-        foo: PropTypes.number,
-        bar: PropTypes.node.isRequired
-    };
+    (function () {
+        JustPropTypes.propTypes = {
+            foo: PropTypes.number,
+            bar: PropTypes.node.isRequired
+        };
+    }).call(JustPropTypes);
     return JustPropTypes;
 }(ReactComponent));
 var g = <JustPropTypes foo={12} bar="ok"/>;
@@ -183,9 +187,11 @@ var JustDefaultProps = /** @class */ (function (_super) {
     function JustDefaultProps() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    JustDefaultProps.defaultProps = {
-        foo: 42
-    };
+    (function () {
+        JustDefaultProps.defaultProps = {
+            foo: 42
+        };
+    }).call(JustDefaultProps);
     return JustDefaultProps;
 }(ReactComponent));
 var k = <JustDefaultProps foo={12}/>;
@@ -196,14 +202,16 @@ var BothWithSpecifiedGeneric = /** @class */ (function (_super) {
     function BothWithSpecifiedGeneric() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BothWithSpecifiedGeneric.propTypes = {
-        foo: PropTypes.string,
-        bar: PropTypes.node,
-        baz: PropTypes.number.isRequired
-    };
-    BothWithSpecifiedGeneric.defaultProps = {
-        foo: "yo"
-    };
+    (function () {
+        BothWithSpecifiedGeneric.propTypes = {
+            foo: PropTypes.string,
+            bar: PropTypes.node,
+            baz: PropTypes.number.isRequired
+        };
+        BothWithSpecifiedGeneric.defaultProps = {
+            foo: "yo"
+        };
+    }).call(BothWithSpecifiedGeneric);
     return BothWithSpecifiedGeneric;
 }(ReactComponent));
 var n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12}/>;
@@ -217,10 +225,12 @@ var JustPropTypesWithSpecifiedGeneric = /** @class */ (function (_super) {
     function JustPropTypesWithSpecifiedGeneric() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    JustPropTypesWithSpecifiedGeneric.propTypes = {
-        foo: PropTypes.string,
-        bar: PropTypes.node.isRequired
-    };
+    (function () {
+        JustPropTypesWithSpecifiedGeneric.propTypes = {
+            foo: PropTypes.string,
+            bar: PropTypes.node.isRequired
+        };
+    }).call(JustPropTypesWithSpecifiedGeneric);
     return JustPropTypesWithSpecifiedGeneric;
 }(ReactComponent));
 var t = <JustPropTypesWithSpecifiedGeneric foo="nice" bar="ok"/>;
@@ -232,9 +242,11 @@ var JustDefaultPropsWithSpecifiedGeneric = /** @class */ (function (_super) {
     function JustDefaultPropsWithSpecifiedGeneric() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    JustDefaultPropsWithSpecifiedGeneric.defaultProps = {
-        foo: "no"
-    };
+    (function () {
+        JustDefaultPropsWithSpecifiedGeneric.defaultProps = {
+            foo: "no"
+        };
+    }).call(JustDefaultPropsWithSpecifiedGeneric);
     return JustDefaultPropsWithSpecifiedGeneric;
 }(ReactComponent));
 var x = <JustDefaultPropsWithSpecifiedGeneric foo="eh"/>;

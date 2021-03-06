@@ -13,8 +13,10 @@ var Foo = /** @class */ (function () {
         this.B = "b";
         this.D = 42;
     }
-    Foo.A = "a";
-    Foo.C = 42;
+    (function () {
+        Foo.A = "a";
+        Foo.C = 42;
+    }).call(Foo);
     return Foo;
 }());
 

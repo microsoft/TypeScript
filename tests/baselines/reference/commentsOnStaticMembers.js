@@ -23,13 +23,15 @@ class test {
 var test = /** @class */ (function () {
     function test() {
     }
-    /**
-     * p1 comment appears in output
-     */
-    test.p1 = "";
-    /**
-     * p3 comment appears in output
-     */
-    test.p3 = "";
+    (function () {
+        /**
+         * p1 comment appears in output
+         */
+        test.p1 = "";
+        /**
+         * p3 comment appears in output
+         */
+        test.p3 = "";
+    }).call(test);
     return test;
 }());

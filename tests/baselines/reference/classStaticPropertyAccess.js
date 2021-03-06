@@ -21,9 +21,11 @@ var A = /** @class */ (function () {
     function A() {
     }
     A["\""] = function () { };
-    A.x = 1;
-    A.y = 1;
-    A._b = 2;
+    (function () {
+        A.x = 1;
+        A.y = 1;
+        A._b = 2;
+    }).call(A);
     return A;
 }());
 var a = new A();

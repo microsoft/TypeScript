@@ -88,7 +88,9 @@ var Greeter = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Greeter.x1 = 10;
+    (function () {
+        Greeter.x1 = 10;
+    }).call(Greeter);
     __decorate([
         PropertyDecorator1,
         PropertyDecorator2(40)

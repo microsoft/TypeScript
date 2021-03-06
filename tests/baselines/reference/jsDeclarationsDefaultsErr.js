@@ -35,7 +35,9 @@ var Cls = /** @class */ (function () {
     function Cls() {
         this.x = 12;
     }
-    Cls.y = "ok";
+    (function () {
+        Cls.y = "ok";
+    }).call(Cls);
     return Cls;
 }());
 exports.default = Cls;

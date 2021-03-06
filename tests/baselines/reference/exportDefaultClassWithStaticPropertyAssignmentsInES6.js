@@ -6,4 +6,6 @@ export default class {
 //// [exportDefaultClassWithStaticPropertyAssignmentsInES6.js]
 export default class default_1 {
 }
-default_1.z = "Foo";
+(function () {
+    default_1.z = "Foo";
+}).call(default_1);

@@ -20,7 +20,9 @@ var C_1;
 let C = C_1 = class C {
     static x() { return C_1.y; }
 };
-C.y = 1;
+(function () {
+    C.y = 1;
+}).call(C);
 C = C_1 = __decorate([
     dec
 ], C);

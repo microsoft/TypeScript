@@ -40,7 +40,9 @@ class A {
         const b = () => new.target;
     }
 }
-A.c = function () { return new.target; };
+(function () {
+    A.c = function () { return new.target; };
+}).call(A);
 class B extends A {
     constructor() {
         super();

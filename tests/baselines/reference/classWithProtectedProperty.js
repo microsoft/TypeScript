@@ -52,7 +52,9 @@ var C = /** @class */ (function () {
     }
     C.prototype.c = function () { return ''; };
     C.f = function () { return ''; };
-    C.g = function () { return ''; };
+    (function () {
+        C.g = function () { return ''; };
+    }).call(C);
     return C;
 }());
 var D = /** @class */ (function (_super) {

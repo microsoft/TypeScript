@@ -185,8 +185,10 @@ var SomeBase = /** @class */ (function () {
     SomeBase.prototype.publicFunc = function () { };
     SomeBase.privateStaticFunc = function () { };
     SomeBase.publicStaticFunc = function () { };
-    SomeBase.privateStaticMember = 0;
-    SomeBase.publicStaticMember = 0;
+    (function () {
+        SomeBase.privateStaticMember = 0;
+        SomeBase.publicStaticMember = 0;
+    }).call(SomeBase);
     return SomeBase;
 }());
 //super.publicInstanceMemberNotFunction in constructor of derived class

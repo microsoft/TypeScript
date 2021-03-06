@@ -38,6 +38,8 @@ var P = /** @class */ (function (_super) {
     function P() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    P.SomeNumber = P.GetNumber();
+    (function () {
+        P.SomeNumber = P.GetNumber();
+    }).call(P);
     return P;
 }(SomeBase));

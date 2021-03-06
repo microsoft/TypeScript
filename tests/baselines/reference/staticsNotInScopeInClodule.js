@@ -11,7 +11,9 @@ module Clod {
 var Clod = /** @class */ (function () {
     function Clod() {
     }
-    Clod.x = 10;
+    (function () {
+        Clod.x = 10;
+    }).call(Clod);
     return Clod;
 }());
 (function (Clod) {

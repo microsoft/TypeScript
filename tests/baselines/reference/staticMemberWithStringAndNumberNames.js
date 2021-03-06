@@ -19,10 +19,12 @@ var C = /** @class */ (function () {
         this.x2 = C['0'];
         this.x3 = C[0];
     }
-    C["foo"] = 0;
-    C[0] = 1;
-    C.s = C['foo'];
-    C.s2 = C['0'];
-    C.s3 = C[0];
+    (function () {
+        C["foo"] = 0;
+        C[0] = 1;
+        C.s = C['foo'];
+        C.s2 = C['0'];
+        C.s3 = C[0];
+    }).call(C);
     return C;
 }());

@@ -12,10 +12,14 @@ class D {
 //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.js]
 class C {
 }
-C.z = "Foo";
+(function () {
+    C.z = "Foo";
+}).call(C);
 class D {
     constructor() {
         this.x = 20000;
     }
 }
-D.b = true;
+(function () {
+    D.b = true;
+}).call(D);

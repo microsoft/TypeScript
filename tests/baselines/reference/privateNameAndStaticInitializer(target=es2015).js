@@ -16,4 +16,6 @@ class A {
     }
 }
 _foo = new WeakMap(), _prop = new WeakMap();
-A.inst = new A();
+(function () {
+    A.inst = new A();
+}).call(A);

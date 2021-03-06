@@ -9,7 +9,9 @@ var c = C.x;
 var C = /** @class */ (function () {
     function C() {
     }
-    C.x = 1;
+    (function () {
+        C.x = 1;
+    }).call(C);
     return C;
 }());
 var c = C.x;

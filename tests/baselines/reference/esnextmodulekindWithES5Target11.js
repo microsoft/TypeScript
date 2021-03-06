@@ -23,7 +23,9 @@ var C = /** @class */ (function () {
     C.x = function () { return C_1.y; };
     C.prototype.method = function () { };
     var C_1;
-    C.y = 1;
+    (function () {
+        C.y = 1;
+    }).call(C);
     C = C_1 = __decorate([
         foo
     ], C);

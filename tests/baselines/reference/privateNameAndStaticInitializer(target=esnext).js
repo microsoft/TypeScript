@@ -16,4 +16,6 @@ class A {
     #foo;
     #prop;
 }
-A.inst = new A();
+(function () {
+    A.inst = new A();
+}).call(A);

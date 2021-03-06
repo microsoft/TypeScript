@@ -2381,9 +2381,11 @@ var Harness;
                 errorHandlerStack[errorHandlerStack.length - 1](e);
             }
         };
-        // The current stack of Runnable objects
-        Runnable.currentStack = [];
-        Runnable.errorHandlerStack = [];
+        (function () {
+            // The current stack of Runnable objects
+            Runnable.currentStack = [];
+            Runnable.errorHandlerStack = [];
+        }).call(Runnable);
         return Runnable;
     }());
     Harness.Runnable = Runnable;

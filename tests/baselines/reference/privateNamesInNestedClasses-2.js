@@ -42,4 +42,6 @@ class A {
     }
 }
 _x = new WeakMap();
-_x.set(A, 5);
+(function () {
+    _x.set(A, 5);
+}).call(A);

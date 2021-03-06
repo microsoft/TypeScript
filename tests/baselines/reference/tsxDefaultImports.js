@@ -23,7 +23,9 @@ var SomeEnum;
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
-    SomeClass.E = SomeEnum;
+    (function () {
+        SomeClass.E = SomeEnum;
+    }).call(SomeClass);
     return SomeClass;
 }());
 exports["default"] = SomeClass;

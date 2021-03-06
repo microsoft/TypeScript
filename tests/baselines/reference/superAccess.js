@@ -34,7 +34,9 @@ var MyBase = /** @class */ (function () {
         this.S2 = "test";
         this.f = function () { return 5; };
     }
-    MyBase.S1 = 5;
+    (function () {
+        MyBase.S1 = 5;
+    }).call(MyBase);
     return MyBase;
 }());
 var MyDerived = /** @class */ (function (_super) {

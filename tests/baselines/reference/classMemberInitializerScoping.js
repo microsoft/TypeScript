@@ -27,7 +27,9 @@ var CCC = /** @class */ (function () {
         this.y = aaa;
         this.y = ''; // was: error, cannot assign string to number
     }
-    CCC.staticY = aaa; // This shouldnt be error
+    (function () {
+        CCC.staticY = aaa; // This shouldnt be error
+    }).call(CCC);
     return CCC;
 }());
 // above is equivalent to this:

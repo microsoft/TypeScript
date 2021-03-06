@@ -27,8 +27,10 @@ var C;
     var Name = /** @class */ (function () {
         function Name(parameters) {
         }
-        Name.funcData = A.AA.func();
-        Name.someConst = A.AA.foo;
+        (function () {
+            Name.funcData = A.AA.func();
+            Name.someConst = A.AA.foo;
+        }).call(Name);
         return Name;
     }());
     C.Name = Name;

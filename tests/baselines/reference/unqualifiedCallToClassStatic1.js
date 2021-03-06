@@ -10,9 +10,11 @@ class Vector {
 var Vector = /** @class */ (function () {
     function Vector() {
     }
-    Vector.foo = function () {
-        // 'foo' cannot be called in an unqualified manner.
-        foo();
-    };
+    (function () {
+        Vector.foo = function () {
+            // 'foo' cannot be called in an unqualified manner.
+            foo();
+        };
+    }).call(Vector);
     return Vector;
 }());

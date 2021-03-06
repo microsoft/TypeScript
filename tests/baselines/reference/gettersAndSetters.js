@@ -65,7 +65,9 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    C.barBack = "";
+    (function () {
+        C.barBack = "";
+    }).call(C);
     return C;
 }());
 var c = new C();

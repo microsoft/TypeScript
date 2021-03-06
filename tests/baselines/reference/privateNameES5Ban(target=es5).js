@@ -34,6 +34,8 @@ var A = /** @class */ (function () {
     });
     var _field, _sField;
     _field = new WeakMap(), _sField = new WeakMap();
-    _sField.set(A, "hello world");
+    (function () {
+        _sField.set(A, "hello world");
+    }).call(A);
     return A;
 }());

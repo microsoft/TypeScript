@@ -16,7 +16,9 @@ var _loop_1 = function (row) {
         function RowClass() {
             this.row = row;
         }
-        RowClass.factory = function () { return new RowClass(); };
+        (function () {
+            RowClass.factory = function () { return new RowClass(); };
+        }).call(RowClass);
         return RowClass;
     }());
     classesByRow[row] = RowClass;

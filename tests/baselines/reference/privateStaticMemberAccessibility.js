@@ -36,6 +36,8 @@ var Derived = /** @class */ (function (_super) {
         _this.bing = function () { return Base.foo; }; // error
         return _this;
     }
-    Derived.bar = Base.foo; // error
+    (function () {
+        Derived.bar = Base.foo; // error
+    }).call(Derived);
     return Derived;
 }(Base));

@@ -621,217 +621,289 @@ var x48 = /** @class */ (function () {
 var x49 = /** @class */ (function () {
     function x49() {
     }
-    x49.member = function () { return [d1, d2]; };
+    (function () {
+        x49.member = function () { return [d1, d2]; };
+    }).call(x49);
     return x49;
 }());
 var x50 = /** @class */ (function () {
     function x50() {
     }
-    x50.member = function () { return [d1, d2]; };
+    (function () {
+        x50.member = function () { return [d1, d2]; };
+    }).call(x50);
     return x50;
 }());
 var x51 = /** @class */ (function () {
     function x51() {
     }
-    x51.member = function named() { return [d1, d2]; };
+    (function () {
+        x51.member = function named() { return [d1, d2]; };
+    }).call(x51);
     return x51;
 }());
 var x52 = /** @class */ (function () {
     function x52() {
     }
-    x52.member = function () { return [d1, d2]; };
+    (function () {
+        x52.member = function () { return [d1, d2]; };
+    }).call(x52);
     return x52;
 }());
 var x53 = /** @class */ (function () {
     function x53() {
     }
-    x53.member = function () { return [d1, d2]; };
+    (function () {
+        x53.member = function () { return [d1, d2]; };
+    }).call(x53);
     return x53;
 }());
 var x54 = /** @class */ (function () {
     function x54() {
     }
-    x54.member = function named() { return [d1, d2]; };
+    (function () {
+        x54.member = function named() { return [d1, d2]; };
+    }).call(x54);
     return x54;
 }());
 var x55 = /** @class */ (function () {
     function x55() {
     }
-    x55.member = [d1, d2];
+    (function () {
+        x55.member = [d1, d2];
+    }).call(x55);
     return x55;
 }());
 var x56 = /** @class */ (function () {
     function x56() {
     }
-    x56.member = [d1, d2];
+    (function () {
+        x56.member = [d1, d2];
+    }).call(x56);
     return x56;
 }());
 var x57 = /** @class */ (function () {
     function x57() {
     }
-    x57.member = [d1, d2];
+    (function () {
+        x57.member = [d1, d2];
+    }).call(x57);
     return x57;
 }());
 var x58 = /** @class */ (function () {
     function x58() {
     }
-    x58.member = { n: [d1, d2] };
+    (function () {
+        x58.member = { n: [d1, d2] };
+    }).call(x58);
     return x58;
 }());
 var x59 = /** @class */ (function () {
     function x59() {
     }
-    x59.member = function (n) { var n; return null; };
+    (function () {
+        x59.member = function (n) { var n; return null; };
+    }).call(x59);
     return x59;
 }());
 var x60 = /** @class */ (function () {
     function x60() {
     }
-    x60.member = { func: function (n) { return [d1, d2]; } };
+    (function () {
+        x60.member = { func: function (n) { return [d1, d2]; } };
+    }).call(x60);
     return x60;
 }());
 var x61 = /** @class */ (function () {
     function x61() {
     }
-    x61.member = function () { return [d1, d2]; };
+    (function () {
+        x61.member = function () { return [d1, d2]; };
+    }).call(x61);
     return x61;
 }());
 var x62 = /** @class */ (function () {
     function x62() {
     }
-    x62.member = function () { return [d1, d2]; };
+    (function () {
+        x62.member = function () { return [d1, d2]; };
+    }).call(x62);
     return x62;
 }());
 var x63 = /** @class */ (function () {
     function x63() {
     }
-    x63.member = function named() { return [d1, d2]; };
+    (function () {
+        x63.member = function named() { return [d1, d2]; };
+    }).call(x63);
     return x63;
 }());
 var x64 = /** @class */ (function () {
     function x64() {
     }
-    x64.member = function () { return [d1, d2]; };
+    (function () {
+        x64.member = function () { return [d1, d2]; };
+    }).call(x64);
     return x64;
 }());
 var x65 = /** @class */ (function () {
     function x65() {
     }
-    x65.member = function () { return [d1, d2]; };
+    (function () {
+        x65.member = function () { return [d1, d2]; };
+    }).call(x65);
     return x65;
 }());
 var x66 = /** @class */ (function () {
     function x66() {
     }
-    x66.member = function named() { return [d1, d2]; };
+    (function () {
+        x66.member = function named() { return [d1, d2]; };
+    }).call(x66);
     return x66;
 }());
 var x67 = /** @class */ (function () {
     function x67() {
     }
-    x67.member = [d1, d2];
+    (function () {
+        x67.member = [d1, d2];
+    }).call(x67);
     return x67;
 }());
 var x68 = /** @class */ (function () {
     function x68() {
     }
-    x68.member = [d1, d2];
+    (function () {
+        x68.member = [d1, d2];
+    }).call(x68);
     return x68;
 }());
 var x69 = /** @class */ (function () {
     function x69() {
     }
-    x69.member = [d1, d2];
+    (function () {
+        x69.member = [d1, d2];
+    }).call(x69);
     return x69;
 }());
 var x70 = /** @class */ (function () {
     function x70() {
     }
-    x70.member = { n: [d1, d2] };
+    (function () {
+        x70.member = { n: [d1, d2] };
+    }).call(x70);
     return x70;
 }());
 var x71 = /** @class */ (function () {
     function x71() {
     }
-    x71.member = function (n) { var n; return null; };
+    (function () {
+        x71.member = function (n) { var n; return null; };
+    }).call(x71);
     return x71;
 }());
 var x72 = /** @class */ (function () {
     function x72() {
     }
-    x72.member = { func: function (n) { return [d1, d2]; } };
+    (function () {
+        x72.member = { func: function (n) { return [d1, d2]; } };
+    }).call(x72);
     return x72;
 }());
 var x73 = /** @class */ (function () {
     function x73() {
     }
-    x73.member = function () { return [d1, d2]; };
+    (function () {
+        x73.member = function () { return [d1, d2]; };
+    }).call(x73);
     return x73;
 }());
 var x74 = /** @class */ (function () {
     function x74() {
     }
-    x74.member = function () { return [d1, d2]; };
+    (function () {
+        x74.member = function () { return [d1, d2]; };
+    }).call(x74);
     return x74;
 }());
 var x75 = /** @class */ (function () {
     function x75() {
     }
-    x75.member = function named() { return [d1, d2]; };
+    (function () {
+        x75.member = function named() { return [d1, d2]; };
+    }).call(x75);
     return x75;
 }());
 var x76 = /** @class */ (function () {
     function x76() {
     }
-    x76.member = function () { return [d1, d2]; };
+    (function () {
+        x76.member = function () { return [d1, d2]; };
+    }).call(x76);
     return x76;
 }());
 var x77 = /** @class */ (function () {
     function x77() {
     }
-    x77.member = function () { return [d1, d2]; };
+    (function () {
+        x77.member = function () { return [d1, d2]; };
+    }).call(x77);
     return x77;
 }());
 var x78 = /** @class */ (function () {
     function x78() {
     }
-    x78.member = function named() { return [d1, d2]; };
+    (function () {
+        x78.member = function named() { return [d1, d2]; };
+    }).call(x78);
     return x78;
 }());
 var x79 = /** @class */ (function () {
     function x79() {
     }
-    x79.member = [d1, d2];
+    (function () {
+        x79.member = [d1, d2];
+    }).call(x79);
     return x79;
 }());
 var x80 = /** @class */ (function () {
     function x80() {
     }
-    x80.member = [d1, d2];
+    (function () {
+        x80.member = [d1, d2];
+    }).call(x80);
     return x80;
 }());
 var x81 = /** @class */ (function () {
     function x81() {
     }
-    x81.member = [d1, d2];
+    (function () {
+        x81.member = [d1, d2];
+    }).call(x81);
     return x81;
 }());
 var x82 = /** @class */ (function () {
     function x82() {
     }
-    x82.member = { n: [d1, d2] };
+    (function () {
+        x82.member = { n: [d1, d2] };
+    }).call(x82);
     return x82;
 }());
 var x83 = /** @class */ (function () {
     function x83() {
     }
-    x83.member = function (n) { var n; return null; };
+    (function () {
+        x83.member = function (n) { var n; return null; };
+    }).call(x83);
     return x83;
 }());
 var x84 = /** @class */ (function () {
     function x84() {
     }
-    x84.member = { func: function (n) { return [d1, d2]; } };
+    (function () {
+        x84.member = { func: function (n) { return [d1, d2]; } };
+    }).call(x84);
     return x84;
 }());
 var x85 = /** @class */ (function () {

@@ -25,7 +25,9 @@ var Test = /** @class */ (function () {
         var a = b; // Property 'b' is used before its initialization.
         var b = 3;
     };
-    Test._B = Test._A; // undefined, no error/warning
-    Test._A = 3;
+    (function () {
+        Test._B = Test._A; // undefined, no error/warning
+        Test._A = 3;
+    }).call(Test);
     return Test;
 }());

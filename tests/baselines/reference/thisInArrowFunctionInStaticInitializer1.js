@@ -9,14 +9,16 @@ class Vector {
 }
 
 //// [thisInArrowFunctionInStaticInitializer1.js]
-var _this = this;
 function log(a) { }
 var Vector = /** @class */ (function () {
     function Vector() {
     }
-    Vector.foo = function () {
-        // 'this' should not be available in a static initializer.
-        log(_this);
-    };
+    (function () {
+        var _this = this;
+        Vector.foo = function () {
+            // 'this' should not be available in a static initializer.
+            log(_this);
+        };
+    }).call(Vector);
     return Vector;
 }());

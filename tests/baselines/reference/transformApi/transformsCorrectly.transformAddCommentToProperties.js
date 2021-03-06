@@ -8,5 +8,7 @@ class Clazz {
         this.instanceProp = 2;
     }
 }
-/*comment*/
-Clazz.staticProp = 1;
+(function () {
+    /*comment*/
+    Clazz.staticProp = 1;
+}).call(Clazz);

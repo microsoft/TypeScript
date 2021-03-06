@@ -75,7 +75,10 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    C.j = function () { return _newTarget; };
+    (function _b() {
+        var _newTarget = this && this instanceof _b ? this.constructor : void 0;
+        C.j = function () { return _newTarget; };
+    }).call(C);
     return C;
 }());
 var O = (_a = {},

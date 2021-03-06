@@ -222,18 +222,22 @@ exports.A = A;
 var B = /** @class */ (function () {
     function B() {
     }
-    B.cat = "cat";
+    (function () {
+        B.cat = "cat";
+    }).call(B);
     return B;
 }());
 exports.B = B;
 var C = /** @class */ (function () {
     function C() {
     }
-    C.Cls = /** @class */ (function () {
-        function class_1() {
-        }
-        return class_1;
-    }());
+    (function () {
+        C.Cls = /** @class */ (function () {
+            function class_1() {
+            }
+            return class_1;
+        }());
+    }).call(C);
     return C;
 }());
 exports.C = C;
@@ -314,7 +318,9 @@ var E = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    E.staticInitializedField = 12;
+    (function () {
+        E.staticInitializedField = 12;
+    }).call(E);
     return E;
 }());
 exports.E = E;

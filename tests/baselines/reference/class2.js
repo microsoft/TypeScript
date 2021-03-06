@@ -5,6 +5,8 @@ class foo { constructor() { static f = 3; } }
 var foo = /** @class */ (function () {
     function foo() {
     }
-    foo.f = 3;
+    (function () {
+        foo.f = 3;
+    }).call(foo);
     return foo;
 }());

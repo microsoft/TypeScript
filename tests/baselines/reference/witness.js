@@ -258,7 +258,9 @@ var c2inst;
 var C3 = /** @class */ (function () {
     function C3() {
     }
-    C3.q = C3.q;
+    (function () {
+        C3.q = C3.q;
+    }).call(C3);
     return C3;
 }());
 var qq = C3.q;

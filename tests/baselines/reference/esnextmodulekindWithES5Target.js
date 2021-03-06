@@ -31,7 +31,9 @@ var C = /** @class */ (function () {
         this.p = 1;
     }
     C.prototype.method = function () { };
-    C.s = 0;
+    (function () {
+        C.s = 0;
+    }).call(C);
     return C;
 }());
 export { C };
@@ -41,7 +43,9 @@ var D = /** @class */ (function () {
         this.p = 1;
     }
     D.prototype.method = function () { };
-    D.s = 0;
+    (function () {
+        D.s = 0;
+    }).call(D);
     D = __decorate([
         foo
     ], D);

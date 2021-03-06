@@ -20,7 +20,9 @@ exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    Foo.CONSTANT = "Foo";
+    (function () {
+        Foo.CONSTANT = "Foo";
+    }).call(Foo);
     return Foo;
 }());
 exports.Foo = Foo;

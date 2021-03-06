@@ -40,10 +40,12 @@ var Test = /** @class */ (function () {
             console.log(field); // Using field here shouldnt be error
         };
     }
-    Test.staticMessageHandler = function () {
-        var field = Test.field;
-        console.log(field); // Using field here shouldnt be error
-    };
+    (function () {
+        Test.staticMessageHandler = function () {
+            var field = Test.field;
+            console.log(field); // Using field here shouldnt be error
+        };
+    }).call(Test);
     return Test;
 }());
 var field1;
@@ -56,8 +58,10 @@ var Test1 = /** @class */ (function () {
             // it would resolve to private field1 and thats not what user intended here. 
         };
     }
-    Test1.staticMessageHandler = function () {
-        console.log(field1); // This shouldnt be error as its a static property
-    };
+    (function () {
+        Test1.staticMessageHandler = function () {
+            console.log(field1); // This shouldnt be error as its a static property
+        };
+    }).call(Test1);
     return Test1;
 }());

@@ -148,7 +148,9 @@ function outer(x) {
     var Inner = /** @class */ (function () {
         function Inner() {
         }
-        Inner.y = x;
+        (function () {
+            Inner.y = x;
+        }).call(Inner);
         return Inner;
     }());
     return Inner;

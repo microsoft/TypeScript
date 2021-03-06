@@ -61,7 +61,9 @@ var MyClass = /** @class */ (function () {
     }
     var _a, _b;
     _a = TopLevelSym, _b = InnerSym;
-    MyClass[_a] = 12;
+    (function () {
+        MyClass[_a] = 12;
+    }).call(MyClass);
     return MyClass;
 }());
 exports.MyClass = MyClass;

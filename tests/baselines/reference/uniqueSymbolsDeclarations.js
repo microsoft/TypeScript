@@ -288,9 +288,11 @@ class C {
         this.readwriteCall = Symbol();
     }
 }
-C.readonlyStaticCall = Symbol();
-C.readonlyStaticTypeAndCall = Symbol();
-C.readwriteStaticCall = Symbol();
+(function () {
+    C.readonlyStaticCall = Symbol();
+    C.readonlyStaticTypeAndCall = Symbol();
+    C.readwriteStaticCall = Symbol();
+}).call(C);
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
@@ -353,12 +355,14 @@ class C0 {
     *method4() { yield s; }
     method5(p = s) { return p; }
 }
-C0.a = s;
-C0.b = N.s;
-C0.c = N["s"];
-C0.d = s;
-C0.e = N.s;
-C0.f = N["s"];
+(function () {
+    C0.a = s;
+    C0.b = N.s;
+    C0.c = N["s"];
+    C0.d = s;
+    C0.e = N.s;
+    C0.f = N["s"];
+}).call(C0);
 // non-widening positions
 // element access
 o[s];

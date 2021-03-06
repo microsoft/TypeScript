@@ -261,61 +261,63 @@ sourceFile:sourceMap-FileWithComments.ts
 27>Emitted(12, 102) Source(15, 74) + SourceIndex(0)
 28>Emitted(12, 103) Source(15, 75) + SourceIndex(0)
 ---
->>>        // Static member
-1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^
-3 >                        ^^^^^^^^^^^^^^^^->
+>>>        (function () {
+>>>            // Static member
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^
+3 >                            ^^^^^^^^^^^^^^^^->
 1 >
   >
   >        
-2 >        // Static member
-1 >Emitted(13, 9) Source(17, 9) + SourceIndex(0)
-2 >Emitted(13, 25) Source(17, 25) + SourceIndex(0)
+2 >            // Static member
+1 >Emitted(14, 13) Source(17, 9) + SourceIndex(0)
+2 >Emitted(14, 29) Source(17, 25) + SourceIndex(0)
 ---
->>>        Point.origin = new Point(0, 0);
-1->^^^^^^^^
-2 >        ^^^^^^^^^^^^
-3 >                    ^^^
-4 >                       ^^^^
-5 >                           ^^^^^
-6 >                                ^
-7 >                                 ^
-8 >                                  ^^
-9 >                                    ^
-10>                                     ^
-11>                                      ^
+>>>            Point.origin = new Point(0, 0);
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^
+3 >                        ^^^
+4 >                           ^^^^
+5 >                               ^^^^^
+6 >                                    ^
+7 >                                     ^
+8 >                                      ^^
+9 >                                        ^
+10>                                         ^
+11>                                          ^
 1->
   >        static 
-2 >        origin
-3 >                     = 
-4 >                       new 
-5 >                           Point
-6 >                                (
-7 >                                 0
-8 >                                  , 
-9 >                                    0
-10>                                     )
-11>                                      ;
-1->Emitted(14, 9) Source(18, 16) + SourceIndex(0)
-2 >Emitted(14, 21) Source(18, 22) + SourceIndex(0)
-3 >Emitted(14, 24) Source(18, 25) + SourceIndex(0)
-4 >Emitted(14, 28) Source(18, 29) + SourceIndex(0)
-5 >Emitted(14, 33) Source(18, 34) + SourceIndex(0)
-6 >Emitted(14, 34) Source(18, 35) + SourceIndex(0)
-7 >Emitted(14, 35) Source(18, 36) + SourceIndex(0)
-8 >Emitted(14, 37) Source(18, 38) + SourceIndex(0)
-9 >Emitted(14, 38) Source(18, 39) + SourceIndex(0)
-10>Emitted(14, 39) Source(18, 40) + SourceIndex(0)
-11>Emitted(14, 40) Source(18, 41) + SourceIndex(0)
+2 >            origin
+3 >                         = 
+4 >                           new 
+5 >                               Point
+6 >                                    (
+7 >                                     0
+8 >                                      , 
+9 >                                        0
+10>                                         )
+11>                                          ;
+1->Emitted(15, 13) Source(18, 16) + SourceIndex(0)
+2 >Emitted(15, 25) Source(18, 22) + SourceIndex(0)
+3 >Emitted(15, 28) Source(18, 25) + SourceIndex(0)
+4 >Emitted(15, 32) Source(18, 29) + SourceIndex(0)
+5 >Emitted(15, 37) Source(18, 34) + SourceIndex(0)
+6 >Emitted(15, 38) Source(18, 35) + SourceIndex(0)
+7 >Emitted(15, 39) Source(18, 36) + SourceIndex(0)
+8 >Emitted(15, 41) Source(18, 38) + SourceIndex(0)
+9 >Emitted(15, 42) Source(18, 39) + SourceIndex(0)
+10>Emitted(15, 43) Source(18, 40) + SourceIndex(0)
+11>Emitted(15, 44) Source(18, 41) + SourceIndex(0)
 ---
+>>>        }).call(Point);
 >>>        return Point;
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^
 1 >
   >    
 2 >        }
-1 >Emitted(15, 9) Source(19, 5) + SourceIndex(0)
-2 >Emitted(15, 21) Source(19, 6) + SourceIndex(0)
+1 >Emitted(17, 9) Source(19, 5) + SourceIndex(0)
+2 >Emitted(17, 21) Source(19, 6) + SourceIndex(0)
 ---
 >>>    }());
 1 >^^^^^
@@ -334,9 +336,9 @@ sourceFile:sourceMap-FileWithComments.ts
   >             // Static member
   >             static origin = new Point(0, 0);
   >         }
-1 >Emitted(16, 6) Source(19, 6) + SourceIndex(0)
-2 >Emitted(16, 6) Source(10, 5) + SourceIndex(0)
-3 >Emitted(16, 10) Source(19, 6) + SourceIndex(0)
+1 >Emitted(18, 6) Source(19, 6) + SourceIndex(0)
+2 >Emitted(18, 6) Source(10, 5) + SourceIndex(0)
+3 >Emitted(18, 10) Source(19, 6) + SourceIndex(0)
 ---
 >>>    Shapes.Point = Point;
 1->^^^^
@@ -357,10 +359,10 @@ sourceFile:sourceMap-FileWithComments.ts
   >                        static origin = new Point(0, 0);
   >                    }
 4 >                        
-1->Emitted(17, 5) Source(10, 18) + SourceIndex(0)
-2 >Emitted(17, 17) Source(10, 23) + SourceIndex(0)
-3 >Emitted(17, 25) Source(19, 6) + SourceIndex(0)
-4 >Emitted(17, 26) Source(19, 6) + SourceIndex(0)
+1->Emitted(19, 5) Source(10, 18) + SourceIndex(0)
+2 >Emitted(19, 17) Source(10, 23) + SourceIndex(0)
+3 >Emitted(19, 25) Source(19, 6) + SourceIndex(0)
+4 >Emitted(19, 26) Source(19, 6) + SourceIndex(0)
 ---
 >>>    // Variable comment after class
 1->^^^^
@@ -369,8 +371,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >
   >    
 2 >    // Variable comment after class
-1->Emitted(18, 5) Source(21, 5) + SourceIndex(0)
-2 >Emitted(18, 36) Source(21, 36) + SourceIndex(0)
+1->Emitted(20, 5) Source(21, 5) + SourceIndex(0)
+2 >Emitted(20, 36) Source(21, 36) + SourceIndex(0)
 ---
 >>>    var a = 10;
 1 >^^^^
@@ -387,12 +389,12 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >          = 
 5 >            10
 6 >              ;
-1 >Emitted(19, 5) Source(22, 5) + SourceIndex(0)
-2 >Emitted(19, 9) Source(22, 9) + SourceIndex(0)
-3 >Emitted(19, 10) Source(22, 10) + SourceIndex(0)
-4 >Emitted(19, 13) Source(22, 13) + SourceIndex(0)
-5 >Emitted(19, 15) Source(22, 15) + SourceIndex(0)
-6 >Emitted(19, 16) Source(22, 16) + SourceIndex(0)
+1 >Emitted(21, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(21, 9) Source(22, 9) + SourceIndex(0)
+3 >Emitted(21, 10) Source(22, 10) + SourceIndex(0)
+4 >Emitted(21, 13) Source(22, 13) + SourceIndex(0)
+5 >Emitted(21, 15) Source(22, 15) + SourceIndex(0)
+6 >Emitted(21, 16) Source(22, 16) + SourceIndex(0)
 ---
 >>>    function foo() {
 1->^^^^
@@ -403,9 +405,9 @@ sourceFile:sourceMap-FileWithComments.ts
   >    
 2 >    export function 
 3 >             foo
-1->Emitted(20, 5) Source(24, 5) + SourceIndex(0)
-2 >Emitted(20, 14) Source(24, 21) + SourceIndex(0)
-3 >Emitted(20, 17) Source(24, 24) + SourceIndex(0)
+1->Emitted(22, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(22, 14) Source(24, 21) + SourceIndex(0)
+3 >Emitted(22, 17) Source(24, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -414,8 +416,8 @@ sourceFile:sourceMap-FileWithComments.ts
 1 >() {
   >    
 2 >    }
-1 >Emitted(21, 5) Source(25, 5) + SourceIndex(0)
-2 >Emitted(21, 6) Source(25, 6) + SourceIndex(0)
+1 >Emitted(23, 5) Source(25, 5) + SourceIndex(0)
+2 >Emitted(23, 6) Source(25, 6) + SourceIndex(0)
 ---
 >>>    Shapes.foo = foo;
 1->^^^^
@@ -428,10 +430,10 @@ sourceFile:sourceMap-FileWithComments.ts
 3 >              () {
   >                  }
 4 >                    
-1->Emitted(22, 5) Source(24, 21) + SourceIndex(0)
-2 >Emitted(22, 15) Source(24, 24) + SourceIndex(0)
-3 >Emitted(22, 21) Source(25, 6) + SourceIndex(0)
-4 >Emitted(22, 22) Source(25, 6) + SourceIndex(0)
+1->Emitted(24, 5) Source(24, 21) + SourceIndex(0)
+2 >Emitted(24, 15) Source(24, 24) + SourceIndex(0)
+3 >Emitted(24, 21) Source(25, 6) + SourceIndex(0)
+4 >Emitted(24, 22) Source(25, 6) + SourceIndex(0)
 ---
 >>>    /**  comment after function
 1->^^^^
@@ -439,7 +441,7 @@ sourceFile:sourceMap-FileWithComments.ts
 1->
   >
   >    
-1->Emitted(23, 5) Source(27, 5) + SourceIndex(0)
+1->Emitted(25, 5) Source(27, 5) + SourceIndex(0)
 ---
 >>>    * this is another comment
 >>>    */
@@ -448,7 +450,7 @@ sourceFile:sourceMap-FileWithComments.ts
 1->/**  comment after function
   >    * this is another comment 
   >    */
-1->Emitted(25, 7) Source(29, 7) + SourceIndex(0)
+1->Emitted(27, 7) Source(29, 7) + SourceIndex(0)
 ---
 >>>    var b = 10;
 1->^^^^
@@ -465,12 +467,12 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >          = 
 5 >            10
 6 >              ;
-1->Emitted(26, 5) Source(30, 5) + SourceIndex(0)
-2 >Emitted(26, 9) Source(30, 9) + SourceIndex(0)
-3 >Emitted(26, 10) Source(30, 10) + SourceIndex(0)
-4 >Emitted(26, 13) Source(30, 13) + SourceIndex(0)
-5 >Emitted(26, 15) Source(30, 15) + SourceIndex(0)
-6 >Emitted(26, 16) Source(30, 16) + SourceIndex(0)
+1->Emitted(28, 5) Source(30, 5) + SourceIndex(0)
+2 >Emitted(28, 9) Source(30, 9) + SourceIndex(0)
+3 >Emitted(28, 10) Source(30, 10) + SourceIndex(0)
+4 >Emitted(28, 13) Source(30, 13) + SourceIndex(0)
+5 >Emitted(28, 15) Source(30, 15) + SourceIndex(0)
+6 >Emitted(28, 16) Source(30, 16) + SourceIndex(0)
 ---
 >>>})(Shapes || (Shapes = {}));
 1->
@@ -512,13 +514,13 @@ sourceFile:sourceMap-FileWithComments.ts
   >                        */
   >                        var b = 10;
   >                    }
-1->Emitted(27, 1) Source(31, 1) + SourceIndex(0)
-2 >Emitted(27, 2) Source(31, 2) + SourceIndex(0)
-3 >Emitted(27, 4) Source(7, 8) + SourceIndex(0)
-4 >Emitted(27, 10) Source(7, 14) + SourceIndex(0)
-5 >Emitted(27, 15) Source(7, 8) + SourceIndex(0)
-6 >Emitted(27, 21) Source(7, 14) + SourceIndex(0)
-7 >Emitted(27, 29) Source(31, 2) + SourceIndex(0)
+1->Emitted(29, 1) Source(31, 1) + SourceIndex(0)
+2 >Emitted(29, 2) Source(31, 2) + SourceIndex(0)
+3 >Emitted(29, 4) Source(7, 8) + SourceIndex(0)
+4 >Emitted(29, 10) Source(7, 14) + SourceIndex(0)
+5 >Emitted(29, 15) Source(7, 8) + SourceIndex(0)
+6 >Emitted(29, 21) Source(7, 14) + SourceIndex(0)
+7 >Emitted(29, 29) Source(31, 2) + SourceIndex(0)
 ---
 >>>/** Local Variable */
 1 >
@@ -528,8 +530,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >
   >
 2 >/** Local Variable */
-1 >Emitted(28, 1) Source(33, 1) + SourceIndex(0)
-2 >Emitted(28, 22) Source(33, 22) + SourceIndex(0)
+1 >Emitted(30, 1) Source(33, 1) + SourceIndex(0)
+2 >Emitted(30, 22) Source(33, 22) + SourceIndex(0)
 ---
 >>>var p = new Shapes.Point(3, 4);
 1->
@@ -561,20 +563,20 @@ sourceFile:sourceMap-FileWithComments.ts
 12>                            4
 13>                             )
 14>                              ;
-1->Emitted(29, 1) Source(34, 1) + SourceIndex(0)
-2 >Emitted(29, 5) Source(34, 5) + SourceIndex(0)
-3 >Emitted(29, 6) Source(34, 6) + SourceIndex(0)
-4 >Emitted(29, 9) Source(34, 17) + SourceIndex(0)
-5 >Emitted(29, 13) Source(34, 21) + SourceIndex(0)
-6 >Emitted(29, 19) Source(34, 27) + SourceIndex(0)
-7 >Emitted(29, 20) Source(34, 28) + SourceIndex(0)
-8 >Emitted(29, 25) Source(34, 33) + SourceIndex(0)
-9 >Emitted(29, 26) Source(34, 34) + SourceIndex(0)
-10>Emitted(29, 27) Source(34, 35) + SourceIndex(0)
-11>Emitted(29, 29) Source(34, 37) + SourceIndex(0)
-12>Emitted(29, 30) Source(34, 38) + SourceIndex(0)
-13>Emitted(29, 31) Source(34, 39) + SourceIndex(0)
-14>Emitted(29, 32) Source(34, 40) + SourceIndex(0)
+1->Emitted(31, 1) Source(34, 1) + SourceIndex(0)
+2 >Emitted(31, 5) Source(34, 5) + SourceIndex(0)
+3 >Emitted(31, 6) Source(34, 6) + SourceIndex(0)
+4 >Emitted(31, 9) Source(34, 17) + SourceIndex(0)
+5 >Emitted(31, 13) Source(34, 21) + SourceIndex(0)
+6 >Emitted(31, 19) Source(34, 27) + SourceIndex(0)
+7 >Emitted(31, 20) Source(34, 28) + SourceIndex(0)
+8 >Emitted(31, 25) Source(34, 33) + SourceIndex(0)
+9 >Emitted(31, 26) Source(34, 34) + SourceIndex(0)
+10>Emitted(31, 27) Source(34, 35) + SourceIndex(0)
+11>Emitted(31, 29) Source(34, 37) + SourceIndex(0)
+12>Emitted(31, 30) Source(34, 38) + SourceIndex(0)
+13>Emitted(31, 31) Source(34, 39) + SourceIndex(0)
+14>Emitted(31, 32) Source(34, 40) + SourceIndex(0)
 ---
 >>>var dist = p.getDist();
 1 >
@@ -597,14 +599,14 @@ sourceFile:sourceMap-FileWithComments.ts
 7 >             getDist
 8 >                    ()
 9 >                      ;
-1 >Emitted(30, 1) Source(35, 1) + SourceIndex(0)
-2 >Emitted(30, 5) Source(35, 5) + SourceIndex(0)
-3 >Emitted(30, 9) Source(35, 9) + SourceIndex(0)
-4 >Emitted(30, 12) Source(35, 12) + SourceIndex(0)
-5 >Emitted(30, 13) Source(35, 13) + SourceIndex(0)
-6 >Emitted(30, 14) Source(35, 14) + SourceIndex(0)
-7 >Emitted(30, 21) Source(35, 21) + SourceIndex(0)
-8 >Emitted(30, 23) Source(35, 23) + SourceIndex(0)
-9 >Emitted(30, 24) Source(35, 24) + SourceIndex(0)
+1 >Emitted(32, 1) Source(35, 1) + SourceIndex(0)
+2 >Emitted(32, 5) Source(35, 5) + SourceIndex(0)
+3 >Emitted(32, 9) Source(35, 9) + SourceIndex(0)
+4 >Emitted(32, 12) Source(35, 12) + SourceIndex(0)
+5 >Emitted(32, 13) Source(35, 13) + SourceIndex(0)
+6 >Emitted(32, 14) Source(35, 14) + SourceIndex(0)
+7 >Emitted(32, 21) Source(35, 21) + SourceIndex(0)
+8 >Emitted(32, 23) Source(35, 23) + SourceIndex(0)
+9 >Emitted(32, 24) Source(35, 24) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-FileWithComments.js.map

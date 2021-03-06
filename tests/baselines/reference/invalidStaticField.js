@@ -12,6 +12,8 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function () {
     function B() {
     }
-    B.NOT_NULL = new B();
+    (function () {
+        B.NOT_NULL = new B();
+    }).call(B);
     return B;
 }());

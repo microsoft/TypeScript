@@ -14,7 +14,9 @@ var foo = /** @class */ (function () {
     foo.bar = function () {
         return this.x;
     };
-    foo.x = 3;
+    (function () {
+        foo.x = 3;
+    }).call(foo);
     return foo;
 }());
 var x = foo.bar();

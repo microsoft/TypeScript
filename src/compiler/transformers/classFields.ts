@@ -490,7 +490,7 @@ namespace ts {
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
             const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
             if (some(staticProperties)) {
-                addPropertyStatements(statements, staticProperties, factory.getInternalName(node));
+                addPropertyStatementsForStatic(statements, staticProperties, factory.getInternalName(node));
             }
 
             return statements;
@@ -534,7 +534,7 @@ namespace ts {
                     }
 
                     if (pendingStatements && some(staticProperties)) {
-                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node));
+                        addPropertyStatementsForStatic(pendingStatements, staticProperties, factory.getInternalName(node));
                     }
                     return classExpression;
                 }
@@ -722,6 +722,33 @@ namespace ts {
                 setOriginalNode(statement, property);
                 statements.push(statement);
             }
+        }
+
+        function addPropertyStatementsForStatic(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: Identifier) {
+            const assignmentStatements: Statement[] = [];
+            addPropertyStatements(assignmentStatements, properties, receiver);
+
+            const propertyAssignmentStatement = factory.createExpressionStatement(
+                factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
+                        factory.createParenthesizedExpression(
+                            factory.createFunctionExpression(
+                                /*modifiers*/ undefined,
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                /*parameters*/ undefined,
+                                /*type*/ undefined,
+                                factory.createBlock(assignmentStatements, /*multiLine*/ true)
+                            )
+                        ),
+                        factory.createIdentifier("call")
+                    ),
+                    undefined,
+                    [nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver)]
+                )
+            );
+            statements.push(propertyAssignmentStatement);
         }
 
         /**

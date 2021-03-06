@@ -12,7 +12,9 @@ let o = { n: 12 };
 var C = /** @class */ (function () {
     function C() {
     }
-    C.s = 2;
+    (function () {
+        C.s = 2;
+    }).call(C);
     return C;
 }());
 var o2;

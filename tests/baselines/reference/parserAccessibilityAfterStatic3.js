@@ -9,6 +9,8 @@ static public = 1;
 var Outer = /** @class */ (function () {
     function Outer() {
     }
-    Outer.public = 1;
+    (function () {
+        Outer.public = 1;
+    }).call(Outer);
     return Outer;
 }());
