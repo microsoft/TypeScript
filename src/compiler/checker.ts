@@ -31633,7 +31633,7 @@ namespace ts {
 
         function checkDoExpression(node: DoExpression): Type {
             // grammar check
-            checkEndsInIterationOrDeclaration(node.block.statements, [], /** isLast */ true);
+            checkEndsInIterationOrBareIfOrDeclaration(node.block.statements, [], /** isLast */ true);
 
             const type = startRequireStatementTypeContext(() => {
                 requiresStatementType = true;
@@ -31650,16 +31650,16 @@ namespace ts {
 
         type LabelSet = readonly (__String | undefined)[];
         // https://bakkot.github.io/do-expressions-v2/#sec-endsiniterationordeclaration
-        function checkEndsInIterationOrDeclaration(node: undefined | Node | readonly Statement[], labelSet: LabelSet, isLast: boolean): boolean {
+        function checkEndsInIterationOrBareIfOrDeclaration(node: undefined | Node | readonly Statement[], labelSet: LabelSet, isLast: boolean): boolean {
             if (!node) return false;
             if (isArray(node)) {
                 if (!node.length) return false;
                 const statementList = node.slice(0, -1);
                 const statementListItem = last(node);
-                if (isEmpty(statementListItem, [])) return checkEndsInIterationOrDeclaration(statementList, labelSet, isLast);
-                if (isBreak(statementListItem, labelSet)) return checkEndsInIterationOrDeclaration(statementList, labelSet, /** last */ true);
-                if (checkEndsInIterationOrDeclaration(statementList, labelSet, /** isLast */ false)) return true;
-                return checkEndsInIterationOrDeclaration(statementListItem, labelSet, isLast);
+                if (isEmpty(statementListItem, [])) return checkEndsInIterationOrBareIfOrDeclaration(statementList, labelSet, isLast);
+                if (isBreak(statementListItem, labelSet)) return checkEndsInIterationOrBareIfOrDeclaration(statementList, labelSet, /** last */ true);
+                if (checkEndsInIterationOrBareIfOrDeclaration(statementList, labelSet, /** isLast */ false)) return true;
+                return checkEndsInIterationOrBareIfOrDeclaration(statementListItem, labelSet, isLast);
             }
             else {
                 if (isDeclaration(node) || isVariableStatement(node) || isIterationStatement(node, /** lookInLabeledStatements */ false) || (isLabeledStatement(node) && isFunctionDeclaration(node.statement))) {
@@ -31667,24 +31667,27 @@ namespace ts {
                     return isLast;
                 }
                 // Not mentioned in the spec
-                else if (isBlock(node)) return checkEndsInIterationOrDeclaration(node.statements, labelSet, isLast);
+                else if (isBlock(node)) return checkEndsInIterationOrBareIfOrDeclaration(node.statements, labelSet, isLast);
                 else if (isIfStatement(node)) {
-                    const left = checkEndsInIterationOrDeclaration(node.thenStatement, labelSet, isLast);
-                    const right = checkEndsInIterationOrDeclaration(node.elseStatement, labelSet, isLast);
+                    if (!node.elseStatement) {
+                        if (isLast) grammarErrorOnNode(node, Diagnostics.The_last_if_statement_in_the_do_expression_must_have_an_else_branch);
+                    }
+                    const left = checkEndsInIterationOrBareIfOrDeclaration(node.thenStatement, labelSet, isLast);
+                    const right = checkEndsInIterationOrBareIfOrDeclaration(node.elseStatement, labelSet, isLast);
                     return left || right;
                 }
-                else if (isWithStatement(node)) return checkEndsInIterationOrDeclaration(node.statement, labelSet, isLast);
+                else if (isWithStatement(node)) return checkEndsInIterationOrBareIfOrDeclaration(node.statement, labelSet, isLast);
                 else if (isLabeledStatement(node)) {
                     const label = node.label.escapedText;
-                    return checkEndsInIterationOrDeclaration(node.statement, isLast ? [...labelSet, label] : labelSet, isLast);
+                    return checkEndsInIterationOrBareIfOrDeclaration(node.statement, isLast ? [...labelSet, label] : labelSet, isLast);
                 }
-                else if (isSwitchStatement(node)) return checkEndsInIterationOrDeclaration(node.caseBlock, labelSet, isLast);
+                else if (isSwitchStatement(node)) return checkEndsInIterationOrBareIfOrDeclaration(node.caseBlock, labelSet, isLast);
                 else if (isCaseBlock(node)) {
                     const newLabelSet = isLast ? [...labelSet, undefined] : labelSet.filter(nonNullable);
                     let result = false;
                     forEachRight(node.clauses, clause => {
                         if (isEmpty(clause, [])) return;
-                        if (checkEndsInIterationOrDeclaration(clause, newLabelSet, isLast)) {
+                        if (checkEndsInIterationOrBareIfOrDeclaration(clause, newLabelSet, isLast)) {
                             result = true;
                             return;
                         }
@@ -31694,11 +31697,11 @@ namespace ts {
                 }
                 else if (isCaseClause(node) || isDefaultClause(node)) {
                     if (!node.statements) return false;
-                    return checkEndsInIterationOrDeclaration(node.statements, labelSet, isLast);
+                    return checkEndsInIterationOrBareIfOrDeclaration(node.statements, labelSet, isLast);
                 }
                 else if (isTryStatement(node)) {
-                    const left = checkEndsInIterationOrDeclaration(node.tryBlock, labelSet, isLast);
-                    const right = checkEndsInIterationOrDeclaration(node.catchClause, labelSet, isLast);
+                    const left = checkEndsInIterationOrBareIfOrDeclaration(node.tryBlock, labelSet, isLast);
+                    const right = checkEndsInIterationOrBareIfOrDeclaration(node.catchClause, labelSet, isLast);
                     return left || right;
                 }
                 return false;
@@ -36091,8 +36094,8 @@ namespace ts {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 return;
             }
-            if (findDirectDoExpressionAncestorUnderFunctionBoundary(node)) {
-                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_within_a_do_expression);
+            if (findDirectDoExpressionAncestorUnderFunctionBoundary(node)?.async) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_within_an_async_do_expression);
                 return;
             }
 

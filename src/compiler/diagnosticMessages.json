@@ -1364,13 +1364,17 @@
         "category": "Error",
         "code": 1433
     },
-    "A return statement cannot be used within a do expression": {
+    "A return statement cannot be used within an async do expression": {
         "category": "Error",
         "code": 1434
     },
     "A var declaration cannot be used within a do expression unless the target is ESNext.": {
         "category": "Error",
         "code": 1435
+    },
+    "The last if statement in the do expression must have an else branch.": {
+        "category": "Error",
+        "code": 1436
     },
 
     "The types of '{0}' are incompatible between these types.": {

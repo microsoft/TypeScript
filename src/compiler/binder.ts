@@ -1195,7 +1195,7 @@ namespace ts {
                     addAntecedent(currentReturnTarget, currentFlow);
                 }
             }
-            if (node.kind === SyntaxKind.ReturnStatement && findDirectDoExpressionAncestorUnderFunctionBoundary(node)) {
+            if (node.kind === SyntaxKind.ReturnStatement && findDirectDoExpressionAncestorUnderFunctionBoundary(node)?.async) {
                 // DoExpression should not affect the control flow by return
             }
             else currentFlow = unreachableFlow;
