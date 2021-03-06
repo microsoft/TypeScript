@@ -32,12 +32,12 @@ class D extends C {
 >1 : 1
 
     static e = super.a + this.c + 1;
->e : any
->super.a + this.c + 1 : any
->super.a + this.c : any
->super.a : any
->super : any
->a : any
+>e : number
+>super.a + this.c + 1 : number
+>super.a + this.c : number
+>super.a : number
+>super : typeof C
+>a : number
 >this.c : number
 >this : typeof D
 >c : number

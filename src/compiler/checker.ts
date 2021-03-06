@@ -23940,13 +23940,6 @@ namespace ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                    if (hasSyntacticModifier(container, ModifierFlags.Static) && !(compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields)) {
-                        error(node, Diagnostics.this_cannot_be_referenced_in_a_static_property_initializer);
-                        // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
-                    }
-                    break;
                 case SyntaxKind.ComputedPropertyName:
                     error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
                     break;
@@ -24289,6 +24282,8 @@ namespace ts {
                     // 'super' property access is allowed
                     // - In a constructor, instance member function, instance member accessor, or instance member variable initializer where this references a derived class instance
                     // - In a static member function or static member accessor
+                    // (March 2021)
+                    // - In a static property declaration
 
                     // topmost container must be something that is directly nested in the class declaration\object literal expression
                     if (isClassLike(container.parent) || container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -24296,7 +24291,8 @@ namespace ts {
                             return container.kind === SyntaxKind.MethodDeclaration ||
                                 container.kind === SyntaxKind.MethodSignature ||
                                 container.kind === SyntaxKind.GetAccessor ||
-                                container.kind === SyntaxKind.SetAccessor;
+                                container.kind === SyntaxKind.SetAccessor ||
+                                container.kind === SyntaxKind.PropertyDeclaration;
                         }
                         else {
                             return container.kind === SyntaxKind.MethodDeclaration ||
