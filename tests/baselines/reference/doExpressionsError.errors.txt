@@ -1,5 +1,4 @@
 tests/cases/compiler/doExpressionsError.ts(2,10): error TS2300: Duplicate identifier 'a'.
-tests/cases/compiler/doExpressionsError.ts(7,9): error TS1434: A return statement cannot be used within a do expression
 tests/cases/compiler/doExpressionsError.ts(16,10): error TS1433: Declaration or iteration cannot present at end of the do expression
 tests/cases/compiler/doExpressionsError.ts(16,10): error TS1435: A var declaration cannot be used within a do expression unless the target is ESNext.
 tests/cases/compiler/doExpressionsError.ts(16,14): error TS2300: Duplicate identifier 'a'.
@@ -19,7 +18,7 @@ tests/cases/compiler/doExpressionsError.ts(36,14): error TS2300: Duplicate ident
 tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/compiler/doExpressionsError.ts (19 errors) ====
+==== tests/cases/compiler/doExpressionsError.ts (18 errors) ====
     // No return
     function a() {
              ~
@@ -29,8 +28,6 @@ tests/cases/compiler/doExpressionsError.ts(37,19): error TS2393: Duplicate funct
                 return 1;
             }
             return 2; // error on this node
-            ~~~~~~
-!!! error TS1434: A return statement cannot be used within a do expression
         };
     }
     // No break / continue across do expr
