@@ -6440,7 +6440,7 @@ namespace ts {
         ): PropertyDeclaration {
             const exclamationToken = !questionToken && !scanner.hasPrecedingLineBreak() ? parseOptionalToken(SyntaxKind.ExclamationToken) : undefined;
             const type = parseTypeAnnotation();
-            const initializer = doOutsideOfContext(NodeFlags.DisallowInContext, parseInitializer);
+            const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
             parseSemicolon();
             const node = factory.createPropertyDeclaration(decorators, modifiers, name, questionToken || exclamationToken, type, initializer);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
