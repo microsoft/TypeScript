@@ -1829,6 +1829,7 @@ namespace ts {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
                 case SyntaxKind.FunctionExpression:
@@ -1846,9 +1847,6 @@ namespace ts {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.CaseBlock:
                     return ContainerFlags.IsBlockScopedContainer;
-
-                case SyntaxKind.ClassStaticBlockDeclaration:
-                    return ContainerFlags.IsBlockScopedContainer | ContainerFlags.HasLocals;
 
                 case SyntaxKind.Block:
                     // do not treat blocks directly inside a function as a block-scoped-container.

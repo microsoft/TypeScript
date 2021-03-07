@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts ===
+class C {
+>C : C
+
+    static {
+        await 1;
+>await 1 : 1
+>1 : 1
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+
+        return 1;
+>1 : 1
+    }
+}
+

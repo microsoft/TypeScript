@@ -457,6 +457,14 @@ namespace ts {
                     visitParameterList(node.parameters, visitor, context, nodesVisitor),
                     visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                Debug.type<ClassStaticBlockDeclaration>(node);
+                context.startLexicalEnvironment();
+                context.suspendLexicalEnvironment();
+                return factory.updateClassStaticBlockDeclaration(node,
+                        nodeVisitor(node.staticToken, visitor, isStaticModifier),
+                        visitFunctionBody(node.body, visitor, context, nodeVisitor));
+
             case SyntaxKind.CallSignature:
                 Debug.type<CallSignatureDeclaration>(node);
                 return factory.updateCallSignature(node,

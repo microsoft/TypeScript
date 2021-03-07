@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts ===
+class B {
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+    static a = 1;
+>a : Symbol(B.a, Decl(classStaticBlock6.ts, 0, 9))
+}
+
+class C extends B {
+>C : Symbol(C, Decl(classStaticBlock6.ts, 2, 1))
+>B : Symbol(B, Decl(classStaticBlock6.ts, 0, 0))
+
+    static {
+        var await = 1;
+>await : Symbol(await, Decl(classStaticBlock6.ts, 6, 11))
+
+        var arguments = 1;
+>arguments : Symbol(arguments, Decl(classStaticBlock6.ts, 7, 11))
+
+        var eval = 1;
+>eval : Symbol(eval, Decl(classStaticBlock6.ts, 8, 11))
+
+
+        await: if (true) {
+
+        }
+
+        arguments;
+>arguments : Symbol(arguments, Decl(classStaticBlock6.ts, 7, 11))
+
+        await;
+>await : Symbol(await, Decl(classStaticBlock6.ts, 6, 11))
+
+        super();
+    }
+}
+

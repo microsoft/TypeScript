@@ -25,10 +25,16 @@ namespace ts {
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
                         return transformLogicalAssignment(binaryExpression);
                     }
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return visitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                 // falls through
                 default:
                     return visitEachChild(node, visitor, context);
             }
+        }
+
+        function visitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration): Node | undefined {
+            return node ? undefined : undefined;
         }
 
         function transformLogicalAssignment(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
