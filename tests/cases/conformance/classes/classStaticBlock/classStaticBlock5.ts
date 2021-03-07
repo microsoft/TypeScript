@@ -1,3 +1,5 @@
+// @target: esnext, es2015, es5
+
 class B {
     static a = 1;
     static b = 2;

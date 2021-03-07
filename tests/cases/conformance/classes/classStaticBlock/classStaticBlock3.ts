@@ -1,3 +1,5 @@
+// @target: esnext, es2015, es5
+
 const a = 1;
 
 class C {

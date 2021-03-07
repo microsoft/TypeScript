@@ -1,0 +1,27 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(5,14): error TS2576: Property 's1' does not exist on type 'C'. Did you mean to access the static member 'C.s1' instead?
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(8,14): error TS2576: Property 's2' does not exist on type 'C'. Did you mean to access the static member 'C.s2' instead?
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(13,18): error TS2334: 'this' cannot be referenced in a static property initializer.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts (3 errors) ====
+    class C {
+        static s1 = 1;
+    
+        static {
+            this.s1;
+                 ~~
+!!! error TS2576: Property 's1' does not exist on type 'C'. Did you mean to access the static member 'C.s1' instead?
+            C.s1;
+    
+            this.s2;
+                 ~~
+!!! error TS2576: Property 's2' does not exist on type 'C'. Did you mean to access the static member 'C.s2' instead?
+            C.s2;
+        }
+    
+        static s2 = 2;
+        static ss2 = this.s1;
+                     ~~~~
+!!! error TS2334: 'this' cannot be referenced in a static property initializer.
+    }
+    
