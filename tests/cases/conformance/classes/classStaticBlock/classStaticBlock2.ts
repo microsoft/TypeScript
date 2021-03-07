@@ -11,22 +11,4 @@ class C {
         b;
         c;
     }
-
-    static {
-        const a = 111;
-        var b = 222;
-
-        a;
-        b;
-        c;
-    }
-
-    static {
-        const a = 1111;
-        var b = 2222;
-
-        a;
-        b;
-        c;
-    }
 }

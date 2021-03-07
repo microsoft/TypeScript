@@ -170,7 +170,7 @@ namespace ts {
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.ClassStaticBlockDeclaration:
                 return visitNode(cbNode, (<ClassStaticBlockDeclaration>node).staticToken) ||
-                    visitNode(cbNode, (<ClassStaticBlockDeclaration>node).body)
+                    visitNode(cbNode, (<ClassStaticBlockDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
@@ -6557,7 +6557,7 @@ namespace ts {
             return finishNode(factory.createClassStaticBlockDeclaration(staticKeyworkd, body), pos);
         }
 
-        function parseClassStaticBlockBodyBlock () {
+        function parseClassStaticBlockBodyBlock() {
             const savedYieldContext = inYieldContext();
             setYieldContext(false);
 
