@@ -874,6 +874,7 @@ namespace ts {
         | FunctionDeclaration
         | ConstructorDeclaration
         | MethodDeclaration
+        | VariableDeclaration
         | PropertyDeclaration
         | AccessorDeclaration
         | ClassLikeDeclaration
@@ -1237,7 +1238,7 @@ namespace ts {
 
     export type BindingName = Identifier | BindingPattern;
 
-    export interface VariableDeclaration extends NamedDeclaration {
+    export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.VariableDeclaration;
         readonly parent: VariableDeclarationList | CatchClause;
         readonly name: BindingName;                    // Declared variable name
@@ -4064,7 +4065,7 @@ namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
 
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
@@ -4733,7 +4734,7 @@ namespace ts {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
-        valueDeclaration: Declaration;          // First value declaration of the symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
@@ -5813,6 +5814,7 @@ namespace ts {
         FixedPollingInterval,
         PriorityPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
         UseFsEvents,
         UseFsEventsOnParentDirectory,
     }
@@ -5821,12 +5823,14 @@ namespace ts {
         UseFsEvents,
         FixedPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
     }
 
     export enum PollingWatchKind {
         FixedInterval,
         PriorityInterval,
         DynamicPriority,
+        FixedChunkSize,
     }
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
@@ -6800,19 +6804,30 @@ namespace ts {
         /* @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
 
-        /** Create a unique temporary variable. */
-        createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
-        /* @internal */ createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+        /**
+         * Create a unique temporary variable.
+         * @param recordTempVariable An optional callback used to record the temporary variable name. This
+         * should usually be a reference to `hoistVariableDeclaration` from a `TransformationContext`, but
+         * can be `undefined` if you plan to record the temporary variable manually.
+         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * during emit so that the variable can be referenced in a nested function body. This is an alternative to
+         * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
+         */
+        createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier;
 
-        /** Create a unique temporary variable for use in a loop. */
-        createLoopVariable(): Identifier;
+        /**
+         * Create a unique temporary variable for use in a loop.
+         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * during emit so that the variable can be referenced in a nested function body. This is an alternative to
+         * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
+         */
+        createLoopVariable(reservedInNestedScopes?: boolean): Identifier;
 
         /** Create a unique name based on the supplied text. */
         createUniqueName(text: string, flags?: GeneratedIdentifierFlags): Identifier;
 
         /** Create a unique name generated for a node. */
-        getGeneratedNameForNode(node: Node | undefined): Identifier;
-        /* @internal */ getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+        getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier;
 
         createPrivateIdentifier(text: string): PrivateIdentifier
 
@@ -7412,7 +7427,7 @@ namespace ts {
          * @param allowComments A value indicating whether comments may be emitted for the name.
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        /* @internal */ getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+        /* @internal */ getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
          * Gets a namespace-qualified name for use in expressions.
          *

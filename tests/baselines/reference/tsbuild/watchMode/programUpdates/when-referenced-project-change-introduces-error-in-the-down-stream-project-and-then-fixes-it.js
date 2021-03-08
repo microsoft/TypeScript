@@ -144,7 +144,7 @@ export {};
 "use strict";
 exports.__esModule = true;
 var library_1 = require("../Library/library");
-library_1.createSomeObject().message;
+(0, library_1.createSomeObject)().message;
 
 
 

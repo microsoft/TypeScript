@@ -329,8 +329,10 @@ declare namespace FourSlashInterface {
         baselineSyntacticDiagnostics(): void;
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
+        baselineCompletions(): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
+        baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[], kind?: "comment" | "region" | "code" | "imports"): void;
         outliningHintSpansInCurrentFile(spans: Range[]): void;

@@ -360,7 +360,7 @@ namespace ts.FindAllReferences {
         const checker = program.getTypeChecker();
         for (const referencingFile of sourceFiles) {
             const searchSourceFile = searchModuleSymbol.valueDeclaration;
-            if (searchSourceFile.kind === SyntaxKind.SourceFile) {
+            if (searchSourceFile?.kind === SyntaxKind.SourceFile) {
                 for (const ref of referencingFile.referencedFiles) {
                     if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
                         refs.push({ kind: "reference", referencingFile, ref });
@@ -582,7 +582,7 @@ namespace ts.FindAllReferences {
             return Debug.checkDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
-        const decl = importedSymbol.valueDeclaration;
+        const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
         if (isExportAssignment(decl)) { // `export = class {}`
             return Debug.checkDefined(decl.expression.symbol);
         }

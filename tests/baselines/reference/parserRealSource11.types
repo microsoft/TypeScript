@@ -733,7 +733,7 @@ module TypeScript {
                     var charCode = parseInt(name.substr(i + 2, 4), 16);
 >charCode : number
 >parseInt(name.substr(i + 2, 4), 16) : number
->parseInt : (s: string, radix?: number) => number
+>parseInt : (string: string, radix?: number) => number
 >name.substr(i + 2, 4) : string
 >name.substr : (from: number, length?: number) => string
 >name : string
