@@ -7411,7 +7411,7 @@ namespace ts {
                                 state = JSDocState.SavingComments;
                                 const commentEnd = scanner.getStartPos();
                                 const linkStart = scanner.getTextPos() - 1;
-                                const link = parseLink(linkStart);
+                                const link = parseJSDocLink(linkStart);
                                 if (link) {
                                     if (!linkEnd) {
                                         removeLeadingNewlines(comments);
@@ -7646,7 +7646,7 @@ namespace ts {
                                 state = JSDocState.SavingComments;
                                 const commentEnd = scanner.getStartPos();
                                 const linkStart = scanner.getTextPos() - 1;
-                                const link = parseLink(linkStart);
+                                const link = parseJSDocLink(linkStart);
                                 if (link) {
                                     parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos, commentEnd));
                                     parts.push(link);
@@ -7696,8 +7696,8 @@ namespace ts {
                     }
                 }
 
-                function parseLink(start: number) {
-                    if (!tryParse(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link")) {
+                function parseJSDocLink(start: number) {
+                    if (!tryParse(parseJSDocLinkPrefix)) {
                         return undefined;
                     }
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
@@ -7712,6 +7712,14 @@ namespace ts {
                         nextTokenJSDoc();
                     }
                     return finishNode(factory.createJSDocLink(name, text.join("")), start, scanner.getTextPos());
+                }
+
+                function parseJSDocLinkPrefix() {
+                    skipWhitespaceOrAsterisk();
+                    return token() === SyntaxKind.OpenBraceToken
+                        && nextTokenJSDoc() === SyntaxKind.AtToken
+                        && tokenIsIdentifierOrKeyword(nextTokenJSDoc())
+                        && scanner.getTokenValue() === "link";
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {
@@ -7781,7 +7789,7 @@ namespace ts {
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     const indentText = skipWhitespaceOrAsterisk();
 
-                    if (isNameFirst) {
+                    if (isNameFirst && !lookAhead(parseJSDocLinkPrefix)) {
                         typeExpression = tryParseTypeExpression();
                     }
 
