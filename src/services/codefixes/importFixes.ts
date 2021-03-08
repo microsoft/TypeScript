@@ -180,7 +180,7 @@ namespace ts.codefix {
         readonly exportInfo?: SymbolExportInfo;
     }
 
-    const enum ImportKind {
+    export const enum ImportKind {
         Named,
         Default,
         Namespace,
@@ -630,7 +630,7 @@ namespace ts.codefix {
             : undefined;
     }
 
-    function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions): ImportKind {
+    export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions): ImportKind {
         switch (exportKind) {
             case ExportKind.Named: return ImportKind.Named;
             case ExportKind.Default: return ImportKind.Default;

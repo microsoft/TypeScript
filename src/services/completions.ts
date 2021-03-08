@@ -192,6 +192,9 @@ namespace ts.Completions {
             symbolToOriginInfoMap,
             recommendedCompletion,
             isJsxInitializer,
+            isTypeOnlyLocation,
+            isJsxIdentifierExpected,
+            importCompletionNode,
             insideJsDocTagTypeExpression,
             symbolToSortTextMap,
         } = completionData;
@@ -219,10 +222,11 @@ namespace ts.Completions {
                 completionKind,
                 preferences,
                 compilerOptions,
-                completionData.isTypeOnlyLocation,
+                isTypeOnlyLocation,
                 propertyAccessToConvert,
-                completionData.isJsxIdentifierExpected,
+                isJsxIdentifierExpected,
                 isJsxInitializer,
+                importCompletionNode,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
                 symbolToSortTextMap
@@ -246,10 +250,11 @@ namespace ts.Completions {
                 completionKind,
                 preferences,
                 compilerOptions,
-                completionData.isTypeOnlyLocation,
+                isTypeOnlyLocation,
                 propertyAccessToConvert,
-                completionData.isJsxIdentifierExpected,
+                isJsxIdentifierExpected,
                 isJsxInitializer,
+                importCompletionNode,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
                 symbolToSortTextMap
@@ -386,6 +391,8 @@ namespace ts.Completions {
         recommendedCompletion: Symbol | undefined,
         propertyAccessToConvert: PropertyAccessExpression | undefined,
         isJsxInitializer: IsJsxInitializer | undefined,
+        importCompletionNode: Node | undefined,
+        options: CompilerOptions,
         preferences: UserPreferences,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
@@ -438,7 +445,8 @@ namespace ts.Completions {
         }
 
         if (originIsResolvedExport(origin)) {
-            insertText = `${origin.symbolName} from "${origin.moduleSpecifier}"`;
+            Debug.assertIsDefined(importCompletionNode);
+            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, options, preferences));
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
@@ -476,6 +484,23 @@ namespace ts.Completions {
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
             data,
         };
+    }
+
+    function getInsertTextAndReplacementSpanForImportCompletion(name: string, importCompletionNode: Node, origin: SymbolOriginInfoResolvedExport, options: CompilerOptions, preferences: UserPreferences) {
+        const sourceFile = importCompletionNode.getSourceFile();
+        const replacementSpan = createTextSpanFromNode(importCompletionNode, sourceFile);
+        const quotedModuleSpecifier = quote(sourceFile, preferences, origin.moduleSpecifier);
+        const exportKind =
+            origin.isDefaultExport ? codefix.ExportKind.Default :
+            origin.exportName === InternalSymbolName.ExportEquals ? codefix.ExportKind.ExportEquals :
+            codefix.ExportKind.Named;
+        const importKind = codefix.getImportKind(sourceFile, exportKind, options);
+        switch (importKind) {
+            case codefix.ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name} = require(${quotedModuleSpecifier})` };
+            case codefix.ImportKind.Default: return { replacementSpan, insertText: `import ${name} from ${quotedModuleSpecifier}` };
+            case codefix.ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name} from ${quotedModuleSpecifier}` };
+            case codefix.ImportKind.Named: return { replacementSpan, insertText: `import { ${name} } from ${quotedModuleSpecifier}` };
+        }
     }
 
     function quotePropertyName(sourceFile: SourceFile, preferences: UserPreferences, name: string,): string {
@@ -519,6 +544,7 @@ namespace ts.Completions {
         propertyAccessToConvert?: PropertyAccessExpression,
         jsxIdentifierExpected?: boolean,
         isJsxInitializer?: IsJsxInitializer,
+        importCompletionNode?: Node,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
         symbolToSortTextMap?: SymbolSortTextMap,
@@ -552,6 +578,8 @@ namespace ts.Completions {
                 recommendedCompletion,
                 propertyAccessToConvert,
                 isJsxInitializer,
+                importCompletionNode,
+                compilerOptions,
                 preferences
             );
             if (!entry) {
@@ -866,6 +894,7 @@ namespace ts.Completions {
         readonly isTypeOnlyLocation: boolean;
         /** In JSX tag name and attribute names, identifiers like "my-tag" or "aria-name" is valid identifier. */
         readonly isJsxIdentifierExpected: boolean;
+        readonly importCompletionNode?: Node;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -1046,18 +1075,18 @@ namespace ts.Completions {
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
         let isJsxIdentifierExpected = false;
-        let importCompletionNode: ImportEqualsDeclaration | ImportDeclaration | Token<SyntaxKind.ImportKeyword> | undefined;
+        let importCompletionNode: Node | undefined;
 
         let location = getTouchingPropertyName(sourceFile, position);
         if (contextToken) {
+            importCompletionNode = getImportCompletionNode(contextToken);
             // Bail out if this is a known invalid completion location
-            if (isCompletionListBlocker(contextToken)) {
+            if (!importCompletionNode && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
                 return undefined;
             }
 
             let parent = contextToken.parent;
-            importCompletionNode = getImportCompletionNode(contextToken);
             if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
                 isRightOfDot = contextToken.kind === SyntaxKind.DotToken;
                 isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
@@ -1239,6 +1268,7 @@ namespace ts.Completions {
             symbolToSortTextMap,
             isTypeOnlyLocation: isTypeOnly,
             isJsxIdentifierExpected,
+            importCompletionNode,
         };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
@@ -1451,12 +1481,12 @@ namespace ts.Completions {
 
         function tryGetGlobalSymbols(): boolean {
             const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
+                || tryGetImportCompletionSymbols()
                 || tryGetImportOrExportClauseCompletionSymbols()
                 || tryGetLocalNamedExportCompletionSymbols()
                 || tryGetConstructorCompletion()
                 || tryGetClassLikeCompletionSymbols()
                 || tryGetJsxCompletionSymbols()
-                || tryGetImportCompletionSymbols()
                 || (getGlobalCompletions(), GlobalsSearch.Success);
             return result === GlobalsSearch.Success;
         }
@@ -1488,7 +1518,7 @@ namespace ts.Completions {
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
             if (!shouldOfferImportCompletions()) return GlobalsSearch.Fail;
-            collectAutoImports(!!importCompletionNode);
+            collectAutoImports(/*resolveModuleSpecifiers*/ true);
             return GlobalsSearch.Success;
         }
 
@@ -2830,11 +2860,13 @@ namespace ts.Completions {
             return nodeIsMissing(parent.moduleReference) ? parent : undefined;
         }
         if (isNamedImports(parent) || isNamespaceImport(parent)) {
-            return nodeIsMissing(parent.parent.parent.moduleSpecifier) ? parent.parent.parent : undefined;
+            return nodeIsMissing(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2)
+                ? parent.parent.parent
+                : undefined;
         }
         if (isImportKeyword(contextToken) && isSourceFile(parent)) {
             // A lone import keyword with nothing following it does not parse as a statement at all
-            return contextToken;
+            return contextToken as Token<SyntaxKind.ImportKeyword>;
         }
         return undefined;
     }
