@@ -12,7 +12,7 @@ abstract class AbstractClass {
 >this : this
 >method : (num: number) => void
 >parseInt(str) : number
->parseInt : (s: string, radix?: number) => number
+>parseInt : (string: string, radix?: number) => number
 >str : string
 
         let val = this.prop.toLowerCase();

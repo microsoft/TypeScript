@@ -9074,7 +9074,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -9145,7 +9145,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -9170,7 +9170,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -14220,7 +14220,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -14291,7 +14291,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -14316,7 +14316,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -22774,7 +22774,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -22845,7 +22845,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -22870,7 +22870,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -26780,7 +26780,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -26851,7 +26851,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -26876,7 +26876,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -30786,7 +30786,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -30857,7 +30857,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -30882,7 +30882,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -34792,7 +34792,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -34863,7 +34863,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -34888,7 +34888,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -38798,7 +38798,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -38869,7 +38869,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -38894,7 +38894,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -42804,7 +42804,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -42875,7 +42875,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "s",
+                  "text": "string",
                   "kind": "text"
                 },
                 {
@@ -42900,7 +42900,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]

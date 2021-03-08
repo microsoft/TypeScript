@@ -6,17 +6,12 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(5,5): error TS2322: Type
   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(6,5): error TS2322: Type 'T' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-    Type 'Date' is not assignable to type 'V'.
-      'V' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(7,5): error TS2322: Type 'V' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(8,5): error TS2322: Type 'U' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-    Type 'Date' is not assignable to type 'V'.
-      'V' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type 'Object' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Object'.
-    The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 
 
 ==== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts (6 errors) ====
@@ -37,8 +32,6 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'V'.
 !!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'V'.
-!!! error TS2322:       'V' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
         y = z;  // Error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
@@ -47,13 +40,10 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
 !!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'V'.
-!!! error TS2322:       'V' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
         x = zz;  // Error
         ~
 !!! error TS2322: Type 'Object' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Object'.
-!!! error TS2322:     The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
         zz = x;  // Ok
     }
     
