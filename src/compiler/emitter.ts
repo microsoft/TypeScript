@@ -3216,6 +3216,10 @@ namespace ts {
                 writeSpace();
             }
             emit(node.moduleSpecifier);
+            if (node.assertClause) {
+                writeSpace();
+                emit(node.assertClause);
+            }
             writeTrailingSemicolon();
         }
 
@@ -3281,6 +3285,10 @@ namespace ts {
                 emitTokenWithComment(SyntaxKind.FromKeyword, fromPos, writeKeyword, node);
                 writeSpace();
                 emit(node.moduleSpecifier);
+            }
+            if (node.assertClause) {
+                writeSpace();
+                emit(node.assertClause);
             }
             writeTrailingSemicolon();
         }

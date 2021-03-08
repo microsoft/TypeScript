@@ -1,7 +1,7 @@
 tests/cases/compiler/excessivelyLargeTupleSpread.ts(6,10): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/excessivelyLargeTupleSpread.ts(6,10): error TS2799: Type produces a tuple type that is too large to represent.
-tests/cases/compiler/excessivelyLargeTupleSpread.ts(22,12): error TS2799: Type produces a tuple type that is too large to represent.
-tests/cases/compiler/excessivelyLargeTupleSpread.ts(38,13): error TS2800: Expression produces a tuple type that is too large to represent.
+tests/cases/compiler/excessivelyLargeTupleSpread.ts(6,10): error TS2800: Type produces a tuple type that is too large to represent.
+tests/cases/compiler/excessivelyLargeTupleSpread.ts(22,12): error TS2800: Type produces a tuple type that is too large to represent.
+tests/cases/compiler/excessivelyLargeTupleSpread.ts(38,13): error TS2801: Expression produces a tuple type that is too large to represent.
 
 
 ==== tests/cases/compiler/excessivelyLargeTupleSpread.ts (4 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/excessivelyLargeTupleSpread.ts(38,13): error TS2800: Expres
              ~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
              ~~~~~~~~~~~~~
-!!! error TS2799: Type produces a tuple type that is too large to represent.
+!!! error TS2800: Type produces a tuple type that is too large to represent.
     
     type T0 = [any];
     type T1 = [...T0, ...T0];
@@ -32,7 +32,7 @@ tests/cases/compiler/excessivelyLargeTupleSpread.ts(38,13): error TS2800: Expres
     type T13 = [...T12, ...T12];
     type T14 = [...T13, ...T13]; // 2^14 > 10,000
                ~~~~~~~~~~~~~~~~
-!!! error TS2799: Type produces a tuple type that is too large to represent.
+!!! error TS2800: Type produces a tuple type that is too large to represent.
     
     const a0 = [0] as const;
     const a1 = [...a0, ...a0] as const;
@@ -50,5 +50,5 @@ tests/cases/compiler/excessivelyLargeTupleSpread.ts(38,13): error TS2800: Expres
     const a13 = [...a12, ...a12] as const;
     const a14 = [...a13, ...a13] as const; // 2^14 > 10,000
                 ~~~~~~~~~~~~~~~~
-!!! error TS2800: Expression produces a tuple type that is too large to represent.
+!!! error TS2801: Expression produces a tuple type that is too large to represent.
     
