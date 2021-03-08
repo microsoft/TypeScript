@@ -25,6 +25,7 @@
 //// /** {@link /*use5*/[|d|] }dd*/
 //// const e = ""
 
+// Without lookahead, ambiguous between suffix type and link tag
 //// /** @param x {@link /*use6*/[|Foo|]} */
 //// function foo(x) { }
 
