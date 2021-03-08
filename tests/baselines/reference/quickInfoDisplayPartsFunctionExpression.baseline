@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts",
-      "position": 4
+      "position": 4,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "var",
@@ -63,7 +64,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts",
-      "position": 17
+      "position": 17,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "local function",
@@ -120,7 +122,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts",
-      "position": 29
+      "position": 29,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "local function",
@@ -177,7 +180,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts",
-      "position": 43
+      "position": 43,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "var",
@@ -238,7 +242,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts",
-      "position": 74
+      "position": 74,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "local function",
@@ -295,7 +300,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts",
-      "position": 87
+      "position": 87,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "local function",

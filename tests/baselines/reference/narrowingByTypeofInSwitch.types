@@ -173,7 +173,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >'boolean' : "boolean"
 >assertBoolean(x) : boolean
 >assertBoolean : (x: boolean) => boolean
->x : (T & false) | (T & true)
+>x : T & boolean
 
         case 'function': assertAll(x); return;
 >'function' : "function"
@@ -370,7 +370,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >'boolean' : "boolean"
 >assertBoolean(x) : boolean
 >assertBoolean : (x: boolean) => boolean
->x : (T & false) | (T & true)
+>x : T & boolean
 
         case 'function': assertAll(x); return;
 >'function' : "function"
@@ -393,7 +393,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 }
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
->testExtendsImplicitDefault : <T extends Basic>(x: T) => string | number | boolean | symbol | object | undefined
+>testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
 >x : T
 
     switch (typeof x) {
@@ -410,7 +410,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >'boolean' : "boolean"
 >assertBoolean(x) : boolean
 >assertBoolean : (x: boolean) => boolean
->x : (T & false) | (T & true)
+>x : T & boolean
 
         case 'function': assertAll(x); return;
 >'function' : "function"

@@ -13,12 +13,12 @@ declare function eval(x: string): any;
 
 /**
  * Converts a string to an integer.
- * @param s A string to convert into a number.
- * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+ * @param string A string to convert into a number.
+ * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
  * All other strings are considered decimal.
  */
-declare function parseInt(s: string, radix?: number): number;
+declare function parseInt(string: string, radix?: number): number;
 
 /**
  * Converts a string to a floating-point number.
@@ -4331,8 +4331,8 @@ declare namespace Intl {
 
     interface DateTimeFormatOptions {
         localeMatcher?: "best fit" | "lookup";
-        weekday?: "long" | "short" | "narrow";
-        era?: "long" | "short" | "narrow";
+        weekday?: "long" | "short" | "narrow";
+        era?: "long" | "short" | "narrow";
         year?: "numeric" | "2-digit";
         month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
         day?: "numeric" | "2-digit";

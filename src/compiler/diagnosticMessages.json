@@ -307,7 +307,7 @@
         "category": "Error",
         "code": 1102
     },
-    "A 'for-await-of' statement is only allowed within an async function or async generator.": {
+    "'for await' loops are only allowed within async functions and at the top levels of modules.": {
         "category": "Error",
         "code": 1103
     },
@@ -503,7 +503,7 @@
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
+    "A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1166
     },
@@ -1356,6 +1356,14 @@
         "category": "Error",
         "code": 1431
     },
+    "'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
+        "category": "Error",
+        "code": 1432
+    },
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+        "category": "Error",
+        "code": 1433
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1630,7 +1638,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of an 'in' expression must not be a primitive.": {
         "category": "Error",
         "code": 2361
     },
@@ -3240,6 +3248,30 @@
         "category": "Error",
         "code": 2797
     },
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+        "category": "Error",
+        "code": 2798
+    },
+    "The declaration was marked as deprecated here.": {
+        "category": "Error",
+        "code": 2799
+    },
+    "Type produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2800
+    },
+    "Expression produces a tuple type that is too large to represent.": {
+        "category": "Error",
+        "code": 2801
+    },
+    "This condition will always return true since the Promise is always truthy.": {
+        "category": "Error",
+        "code": 2802
+    },
+    "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
+        "category": "Error",
+        "code": 2803
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3529,6 +3561,10 @@
         "category": "Error",
         "code": 4083
     },
+    "Exported type alias '{0}' has or is using private name '{1}' from module {2}.": {
+        "category": "Error",
+        "code": 4084
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
         "code": 4090
@@ -3817,6 +3853,14 @@
     "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
         "category": "Error",
         "code": 5090
+    },
+    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 5091
+    },
+    "The root value of a '{0}' file must be an object.": {
+        "category": "Error",
+        "code": 5092
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4665,15 +4709,15 @@
         "category": "Message",
         "code": 6224
     },
-    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
         "category": "Message",
         "code": 6225
     },
-    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling'.": {
         "category": "Message",
         "code": 6226
     },
-    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority', 'FixedChunkSize'.": {
         "category": "Message",
         "code": 6227
     },
@@ -4899,7 +4943,7 @@
         "category": "Message",
         "code": 6384
     },
-    "'{0}' is deprecated": {
+    "'{0}' is deprecated.": {
         "category": "Suggestion",
         "code": 6385,
         "reportsDeprecated": true
@@ -4907,6 +4951,11 @@
     "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
         "category": "Message",
         "code": 6386
+    },
+    "The signature '{0}' of '{1}' is deprecated.": {
+        "category": "Suggestion",
+        "code": 6387,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6200,6 +6249,23 @@
         "category": "Message",
         "code": 95155
     },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95156
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95157
+    },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95158
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95159
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

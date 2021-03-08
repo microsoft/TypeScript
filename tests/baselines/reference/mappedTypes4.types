@@ -61,35 +61,35 @@ type C = { c: string };
 >c : string
 
 function f1(x: A | B | C | undefined) {
->f1 : (x: A | B | C | undefined) => Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>f1 : (x: A | B | C | undefined) => Boxified<A | B | C | undefined>
 >x : A | B | C | undefined
 
     return boxify(x);
->boxify(x) : Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>boxify(x) : Boxified<A | B | C | undefined>
 >boxify : <T>(obj: T) => Boxified<T>
 >x : A | B | C | undefined
 }
 
 type T00 = Partial<A | B | C>;
->T00 : Partial<A> | Partial<B> | Partial<C>
+>T00 : T00
 
 type T01 = Readonly<A | B | C | null | undefined>;
->T01 : Readonly<A> | Readonly<B> | Readonly<C> | null | undefined
+>T01 : T01
 >null : null
 
 type T02 = Boxified<A | B[] | C | string>
->T02 : string | Boxified<A> | Boxified<C> | Box<B>[]
+>T02 : T02
 
 type T03 = Readonly<string | number | boolean | null | undefined | void>;
->T03 : string | number | boolean | void | null | undefined
+>T03 : T03
 >null : null
 
 type T04 = Boxified<string | number | boolean | null | undefined | void>;
->T04 : string | number | boolean | void | null | undefined
+>T04 : T04
 >null : null
 
 type T05 = Partial<"hello" | "world" | 42>;
->T05 : "hello" | "world" | 42
+>T05 : T05
 
 type BoxifiedWithSentinel<T, U> = {
 >BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
@@ -98,11 +98,11 @@ type BoxifiedWithSentinel<T, U> = {
 }
 
 type T10 = BoxifiedWithSentinel<A | B | C, null>;
->T10 : BoxifiedWithSentinel<A, null> | BoxifiedWithSentinel<B, null> | BoxifiedWithSentinel<C, null>
+>T10 : T10
 >null : null
 
 type T11 = BoxifiedWithSentinel<A | B | C, undefined>;
->T11 : BoxifiedWithSentinel<A, undefined> | BoxifiedWithSentinel<B, undefined> | BoxifiedWithSentinel<C, undefined>
+>T11 : T11
 
 type T12 = BoxifiedWithSentinel<string, undefined>;
 >T12 : string

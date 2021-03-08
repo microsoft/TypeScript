@@ -1,5 +1,5 @@
 tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(7,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error TS2367: This condition will always return 'false' since the types '"a" | "b"' and '"c"' have no overlap.
+tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error TS2367: This condition will always return 'false' since the types 'keyof O' and '"c"' have no overlap.
 
 
 ==== tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts (2 errors) ====
@@ -241,7 +241,7 @@ tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error
         }
         k === 'c';  // Error
         ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"a" | "b"' and '"c"' have no overlap.
+!!! error TS2367: This condition will always return 'false' since the types 'keyof O' and '"c"' have no overlap.
         return o[k];
     }
     

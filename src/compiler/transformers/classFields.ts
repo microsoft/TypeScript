@@ -337,6 +337,15 @@ namespace ts {
             if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.expression)) {
                 // Transform call expressions of private names to properly bind the `this` parameter.
                 const { thisArg, target } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
+                if (isCallChain(node)) {
+                    return factory.updateCallChain(
+                        node,
+                        factory.createPropertyAccessChain(visitNode(target, visitor), node.questionDotToken, "call"),
+                        /*questionDotToken*/ undefined,
+                        /*typeArguments*/ undefined,
+                        [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
+                    );
+                }
                 return factory.updateCallExpression(
                     node,
                     factory.createPropertyAccessExpression(visitNode(target, visitor), "call"),

@@ -176,7 +176,7 @@ var pixelStringWithTemplate = pixelValue + "px";
 
 //// [templateLiteralTypes2.d.ts]
 declare function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T): void;
-declare function ft2(s: string): `abc${string}`;
+declare function ft2(s: string): string;
 declare function ft10(s: string): void;
 declare function ft11(s: string, cond: boolean): void;
 declare function ft12(s: string): void;
@@ -190,11 +190,11 @@ declare const t1: "baz";
 declare const id2 = "foo.bar.baz";
 declare const t2: "baz";
 declare const someString: string;
-declare const t3: string;
+declare const t3: unknown;
 declare const id4: string;
-declare const t4: string;
+declare const t4: unknown;
 declare const someUnion: 'abc' | 'def' | 'ghi';
-declare const t5: "abc" | "def" | "ghi";
+declare const t5: unknown;
 declare const pixelValue: number;
 declare type PixelValueType = `${number}px`;
 declare const pixelString: PixelValueType;

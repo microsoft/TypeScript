@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTags4.ts",
-      "position": 309
+      "position": 309,
+      "name": ""
     },
     "quickInfo": {
       "kind": "method",
