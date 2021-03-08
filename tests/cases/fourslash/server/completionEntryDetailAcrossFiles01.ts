@@ -20,10 +20,7 @@ const entry = (text: string): FourSlashInterface.ExpectedCompletionEntry => ({
     documentation: "Modify the parameter",
     tags: [{
         name: "param",
-        text: [{
-            "kind": "text",
-            "text": "p1",
-        }],
+        text: "p1",
     }]
 });
 verify.completions(

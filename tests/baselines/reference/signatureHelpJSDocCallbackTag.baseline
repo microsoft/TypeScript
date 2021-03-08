@@ -158,15 +158,7 @@
               "name": "type",
               "text": [
                 {
-                  "text": "{FooHandler}",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "callback",
+                  "text": "{FooHandler} callback",
                   "kind": "text"
                 }
               ]
@@ -348,15 +340,7 @@
               "name": "type",
               "text": [
                 {
-                  "text": "{FooHandler}",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "callback",
+                  "text": "{FooHandler} callback",
                   "kind": "text"
                 }
               ]
@@ -538,15 +522,7 @@
               "name": "type",
               "text": [
                 {
-                  "text": "{FooHandler}",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "callback",
+                  "text": "{FooHandler} callback",
                   "kind": "text"
                 }
               ]

@@ -1274,12 +1274,11 @@ namespace ts.server {
                 result;
         }
 
-        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined): protocol.JSDocTagInfo[] {
-            return tags ? tags.map(tag => ({ ...tag, text: tag.text?.map(part => part.text).join("") })) : [];
-        }
-
-        private mapRichJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
-            return tags ? tags.map(tag => ({ ...tag, text: this.mapDisplayParts(tag.text, project) })) : [];
+        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project, richResponse: boolean): protocol.JSDocTagInfo[] {
+            return tags ? tags.map(tag => ({
+                ...tag,
+                text: richResponse ? this.mapDisplayParts(tag.text, project) : tag.text?.map(part => part.text).join("")
+            })) : [];
         }
 
         private mapDisplayParts(parts: SymbolDisplayPart[] | undefined, project: Project): protocol.SymbolDisplayPart[] {
@@ -1292,11 +1291,12 @@ namespace ts.server {
             });
         }
 
-        private mapRichSignatureHelpItems(items: SignatureHelpItem[], project: Project): protocol.SignatureHelpItem[] {
+        private mapSignatureHelpItems(items: SignatureHelpItem[], project: Project, richResponse: boolean): protocol.SignatureHelpItem[] {
             return items.map(item => ({
                 ...item,
                 documentation: this.mapDisplayParts(item.documentation, project),
-                tags: this.mapRichJSDocTagInfo(item.tags, project),
+                parameters: item.parameters.map(p => ({ ...p, documentation: this.mapDisplayParts(p.documentation, project) })),
+                tags: this.mapJSDocTagInfo(item.tags, project, richResponse),
             }));
         }
 
@@ -1719,18 +1719,14 @@ namespace ts.server {
                     start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
                     end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
-                    ...(richDocumentation ? {
-                        documentation: this.mapDisplayParts(quickInfo.documentation, project),
-                        tags: this.mapRichJSDocTagInfo(quickInfo.tags, project),
-                    } : {
-                        documentation: displayPartsToString(quickInfo.documentation),
-                        tags: this.mapJSDocTagInfo(quickInfo.tags),
-                    })};
+                    documentation: richDocumentation ? this.mapDisplayParts(quickInfo.documentation, project) : displayPartsToString(quickInfo.documentation),
+                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, !!richDocumentation),
+                };
             }
             else {
                 return richDocumentation ? quickInfo : {
                     ...quickInfo,
-                    tags: this.mapJSDocTagInfo(quickInfo.tags) as JSDocTagInfo[]
+                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, /*richDocumentation*/ false) as JSDocTagInfo[]
                 };
             }
         }
@@ -1872,18 +1868,12 @@ namespace ts.server {
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
             return fullResult
-                ? (richDocumentation ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags) as JSDocTagInfo[] })))
-                : richDocumentation ? result.map(details => ({
-                    ...details,
-                    codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
-                    documentation: this.mapDisplayParts(details.documentation, project),
-                    tags: this.mapRichJSDocTagInfo(details.tags, project),
-                }))
+                ? (richDocumentation ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richDocumentation*/ false) as JSDocTagInfo[] })))
                 : result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
                     documentation: this.mapDisplayParts(details.documentation, project),
-                    tags: this.mapJSDocTagInfo(details.tags)
+                    tags: this.mapJSDocTagInfo(details.tags, project, !!richDocumentation),
                 }));
         }
 
@@ -1952,17 +1942,17 @@ namespace ts.server {
                         start: scriptInfo.positionToLineOffset(span.start),
                         end: scriptInfo.positionToLineOffset(span.start + span.length)
                     },
-                    items: richDocumentation ? this.mapRichSignatureHelpItems(helpItems.items, project) : helpItems.items,
+                    items: this.mapSignatureHelpItems(helpItems.items, project, !!richDocumentation),
                 };
             }
-            else if (helpItems && richDocumentation) {
-                return {
-                    ...helpItems,
-                    items: helpItems.items.map(item => ({ ...item, tags: this.mapJSDocTagInfo(item.tags) as JSDocTagInfo[] }))
-                }
+            else if (richDocumentation || !helpItems) {
+                return helpItems;
             }
             else {
-                return helpItems;
+                return {
+                    ...helpItems,
+                    items: helpItems.items.map(item => ({ ...item, tags: this.mapJSDocTagInfo(item.tags, project, /*richDocumentation*/ false) as JSDocTagInfo[] }))
+                };
             }
         }
 

@@ -25,6 +25,9 @@
 //// /** {@link /*use5*/[|d|] }dd*/
 //// const e = ""
 
+//// /** @param x {@link /*use6*/[|Foo|]} */
+//// function foo(x) { }
+
 goTo.marker("use1");
 verify.goToDefinitionIs("def1");
 
@@ -38,3 +41,7 @@ goTo.marker("use4");
 verify.goToDefinitionIs("def2");
 
 goTo.marker("use5");
+verify.goToDefinitionIs("def3");
+
+goTo.marker("use6");
+verify.goToDefinitionIs("def1");

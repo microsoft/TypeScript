@@ -10166,9 +10166,8 @@ declare namespace ts.server {
         private getDefinitionAndBoundSpan;
         private getEmitOutput;
         private mapJSDocTagInfo;
-        private mapRichJSDocTagInfo;
         private mapDisplayParts;
-        private mapRichSignatureHelpItems;
+        private mapSignatureHelpItems;
         private mapDefinitionInfo;
         private static mapToOriginalLocation;
         private toFileSpan;

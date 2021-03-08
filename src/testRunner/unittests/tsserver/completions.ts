@@ -117,7 +117,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         }
                     ],
-                    tags: undefined,
+                    tags: [],
                     ...detailsCommon,
                 }
             ]);
