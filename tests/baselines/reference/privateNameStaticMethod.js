@@ -20,15 +20,15 @@ var __classStaticPrivateMethodGet = (this && this.__classStaticPrivateMethodGet)
     }
     return fn;
 };
-var _A1_method;
+var _a, _A1_method;
 class A1 {
     constructor() {
-        __classStaticPrivateMethodGet(A1, A1, _A1_method).call(A1, "");
-        __classStaticPrivateMethodGet(A1, A1, _A1_method).call(A1, 1); // Error
-        __classStaticPrivateMethodGet(A1, A1, _A1_method).call(// Error
+        __classStaticPrivateMethodGet(A1, _a, _A1_method).call(A1, "");
+        __classStaticPrivateMethodGet(A1, _a, _A1_method).call(A1, 1); // Error
+        __classStaticPrivateMethodGet(A1, _a, _A1_method).call(// Error
         A1); // Error 
     }
 }
-_A1_method = function _A1_method(param) {
+_a = A1, _A1_method = function _A1_method(param) {
     return "";
 };

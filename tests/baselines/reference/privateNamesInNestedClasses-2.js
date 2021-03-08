@@ -24,7 +24,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _A_x;
+var _a, _A_x;
 class A {
     constructor() {
         var _B_x;
@@ -41,4 +41,5 @@ class A {
         _B_x = new WeakMap();
     }
 }
+_a = A;
 _A_x = { value: 5 };

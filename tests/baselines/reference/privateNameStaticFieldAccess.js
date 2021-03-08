@@ -18,11 +18,12 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     }
     return propertyDescriptor.value;
 };
-var _A_myField;
+var _a, _A_myField;
 class A {
     constructor() {
-        console.log(__classStaticPrivateFieldGet(A, A, _A_myField)); //Ok
-        console.log(__classStaticPrivateFieldGet(this, A, _A_myField)); //Error
+        console.log(__classStaticPrivateFieldGet(A, _a, _A_myField)); //Ok
+        console.log(__classStaticPrivateFieldGet(this, _a, _A_myField)); //Error
     }
 }
+_a = A;
 _A_myField = { value: "hello world" };

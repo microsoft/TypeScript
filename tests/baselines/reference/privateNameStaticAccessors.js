@@ -32,13 +32,13 @@ var __classStaticPrivateAccessorGet = (this && this.__classStaticPrivateAccessor
     }
     return fn.call(receiver);
 };
-var _A1_prop_get, _A1_prop_set, _A1_roProp_get;
+var _a, _A1_prop_get, _A1_prop_set, _A1_roProp_get;
 class A1 {
     constructor(name) {
-        __classStaticPrivateAccessorSet(A1, A1, _A1_prop_set, "");
+        __classStaticPrivateAccessorSet(A1, _a, _A1_prop_set, "");
         __classStaticPrivateReadonly(A1, ""); // Error
-        console.log(__classStaticPrivateAccessorGet(A1, A1, _A1_prop_get));
-        console.log(__classStaticPrivateAccessorGet(A1, A1, _A1_roProp_get));
+        console.log(__classStaticPrivateAccessorGet(A1, _a, _A1_prop_get));
+        console.log(__classStaticPrivateAccessorGet(A1, _a, _A1_roProp_get));
     }
 }
-_A1_prop_get = function _A1_prop_get() { return ""; }, _A1_prop_set = function _A1_prop_set(param) { }, _A1_roProp_get = function _A1_roProp_get() { return ""; };
+_a = A1, _A1_prop_get = function _A1_prop_get() { return ""; }, _A1_prop_set = function _A1_prop_set(param) { }, _A1_roProp_get = function _A1_roProp_get() { return ""; };

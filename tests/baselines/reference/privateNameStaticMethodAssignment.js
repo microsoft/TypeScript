@@ -22,19 +22,19 @@ var __classStaticPrivateMethodGet = (this && this.__classStaticPrivateMethodGet)
     }
     return fn;
 };
-var _A3_method;
+var _a, _A3_method;
 class A3 {
     constructor(a, b) {
-        var _a;
+        var _b;
         __classStaticPrivateReadonly(A3, () => { }); // Error, not writable 
         __classStaticPrivateReadonly(// Error, not writable 
         a, () => { }); // Error, not writable 
         __classStaticPrivateReadonly(// Error, not writable 
         b, () => { }); //Error, not writable 
-        ({ x: ({ set value(_a) { __classStaticPrivateReadonly(A3, _a); } }).value } = { x: () => { } }); //Error, not writable 
-        let x = __classStaticPrivateMethodGet(A3, A3, _A3_method);
-        __classStaticPrivateReadonly(_a = b, +__classStaticPrivateMethodGet(_a, A3, _A3_method) + 1); //Error, not writable 
+        ({ x: ({ set value(_b) { __classStaticPrivateReadonly(A3, _b); } }).value } = { x: () => { } }); //Error, not writable 
+        let x = __classStaticPrivateMethodGet(A3, _a, _A3_method);
+        __classStaticPrivateReadonly(_b = b, +__classStaticPrivateMethodGet(_b, _a, _A3_method) + 1); //Error, not writable 
     }
     ;
 }
-_A3_method = function _A3_method() { };
+_a = A3, _A3_method = function _A3_method() { };

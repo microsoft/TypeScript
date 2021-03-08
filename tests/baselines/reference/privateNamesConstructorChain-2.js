@@ -32,17 +32,17 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     }
     return propertyDescriptor.value;
 };
-var _Parent_foo, _Parent_bar, _Child_foo, _Child_bar;
+var _a, _Parent_foo, _Parent_bar, _Child_foo, _Child_bar;
 class Parent {
     constructor() {
         _Parent_foo.set(this, 3);
     }
     accessChildProps() {
         __classPrivateFieldGet(new Child(), _Parent_foo); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
-        __classStaticPrivateFieldGet(Child, Parent, _Parent_bar); // Error: not found
+        __classStaticPrivateFieldGet(Child, _a, _Parent_bar); // Error: not found
     }
 }
-_Parent_foo = new WeakMap();
+_a = Parent, _Parent_foo = new WeakMap();
 _Parent_bar = { value: 5 };
 class Child extends Parent {
     constructor() {

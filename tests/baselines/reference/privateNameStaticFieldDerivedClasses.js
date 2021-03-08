@@ -36,19 +36,21 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     }
     return propertyDescriptor.value;
 };
-var _Base_prop, _Derived_derivedProp;
+var _a, _Base_prop, _b, _Derived_derivedProp;
 class Base {
     static method(x) {
         Derived.; // error
         __classStaticPrivateFieldSet(// error
-        Base, Base, _Base_prop, 10);
+        Base, _a, _Base_prop, 10);
     }
 }
+_a = Base;
 _Base_prop = { value: 123 };
 class Derived extends Base {
     static method(x) {
-        __classStaticPrivateFieldGet(Derived, Derived, _Derived_derivedProp);
+        __classStaticPrivateFieldGet(Derived, _b, _Derived_derivedProp);
         Base. = 10; // error
     }
 }
+_b = Derived;
 _Derived_derivedProp = { value: 10 };

@@ -691,9 +691,18 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
-            getPrivateIdentifierEnvironment().classConstructor = factory.getInternalName(node);
             if (!forEach(node.members, doesClassElementNeedTransform)) {
                 return visitEachChild(node, visitor, context);
+            }
+
+            const staticProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ true);
+            if (shouldTransformPrivateElements && some(node.members, m => hasStaticModifier(m) && !!m.name && isPrivateIdentifier(m.name))) {
+                const temp = factory.createTempVariable(hoistVariableDeclaration, /* reservedInNestedScopes */ true);
+                getPrivateIdentifierEnvironment().classConstructor = factory.cloneNode(temp);
+                getPendingExpressions().push(factory.createAssignment(
+                    temp,
+                    factory.getInternalName(node)
+                ));
             }
 
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
@@ -721,7 +730,6 @@ namespace ts {
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            const staticProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ true);
 
             if (some(staticProperties)) {
                 addPropertyStatements(statements, staticProperties, factory.getInternalName(node));

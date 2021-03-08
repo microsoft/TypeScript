@@ -50,35 +50,35 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     }
     return propertyDescriptor.value;
 };
-var _A_foo, _A_baz, _A_m;
+var _a, _A_foo, _A_baz, _A_m;
 class A {
     constructor() {
         _A_foo.set(this, true);
     }
     method(thing) {
         __classPrivateFieldGet(thing, _A_foo); // OK
-        __classStaticPrivateMethodGet(thing, A, _A_m).call(// OK
+        __classStaticPrivateMethodGet(thing, _a, _A_m).call(// OK
         thing);
-        __classStaticPrivateFieldGet(thing, A, _A_baz);
+        __classStaticPrivateFieldGet(thing, _a, _A_baz);
         thing.; // Error
         __classPrivateFieldGet(thing, _A_foo).call(// Error
         thing);
     }
     methodU(thing) {
         __classPrivateFieldGet(thing, _A_foo);
-        __classStaticPrivateMethodGet(thing, A, _A_m).call(thing);
-        __classStaticPrivateFieldGet(thing, A, _A_baz);
+        __classStaticPrivateMethodGet(thing, _a, _A_m).call(thing);
+        __classStaticPrivateFieldGet(thing, _a, _A_baz);
         thing.;
         __classPrivateFieldGet(thing, _A_foo).call(thing);
     }
     methodN(thing) {
         __classPrivateFieldGet(thing, _A_foo);
-        __classStaticPrivateMethodGet(thing, A, _A_m).call(thing);
-        __classStaticPrivateFieldGet(thing, A, _A_baz);
+        __classStaticPrivateMethodGet(thing, _a, _A_m).call(thing);
+        __classStaticPrivateFieldGet(thing, _a, _A_baz);
         thing.;
         __classPrivateFieldGet(thing, _A_foo).call(thing);
     }
 }
-_A_foo = new WeakMap(), _A_m = function _A_m() { };
+_a = A, _A_foo = new WeakMap(), _A_m = function _A_m() { };
 _A_baz = { value: 10 };
 ;

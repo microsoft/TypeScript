@@ -14,9 +14,9 @@ var __classStaticPrivateMethodGet = (this && this.__classStaticPrivateMethodGet)
     }
     return fn;
 };
-var _C_method;
+var _a, _C_method;
 class C {
 }
-_C_method = function _C_method() { return 42; };
-C.s = __classStaticPrivateMethodGet(C, C, _C_method).call(C);
+_a = C, _C_method = function _C_method() { return 42; };
+C.s = __classStaticPrivateMethodGet(C, _a, _C_method).call(C);
 console.log(C.s);

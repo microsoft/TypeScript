@@ -24,7 +24,7 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     }
     return propertyDescriptor.value;
 };
-var _A_foo, _A_foo_1, _B_foo;
+var _a, _A_foo, _A_foo_1, _b, _B_foo;
 class A {
     constructor() {
         _A_foo_1 = { value: 1 };
@@ -33,11 +33,12 @@ class A {
         // https://tc39.es/proposal-class-fields/#prod-ClassBody
     }
 }
-_A_foo = new WeakMap();
+_a = A, _A_foo = new WeakMap();
 _A_foo_1 = { value: true }; // error (duplicate)
 class B {
     test(x) {
-        __classStaticPrivateFieldGet(x, B, _B_foo); // error (#foo is a static property on B, not an instance property)
+        __classStaticPrivateFieldGet(x, _b, _B_foo); // error (#foo is a static property on B, not an instance property)
     }
 }
+_b = B;
 _B_foo = { value: true };

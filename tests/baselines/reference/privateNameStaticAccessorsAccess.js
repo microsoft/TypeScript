@@ -34,18 +34,18 @@ var __classStaticPrivateAccessorGet = (this && this.__classStaticPrivateAccessor
     }
     return fn.call(receiver);
 };
-var _A2_prop_get, _A2_prop_set;
+var _a, _A2_prop_get, _A2_prop_set;
 class A2 {
     constructor() {
-        console.log(__classStaticPrivateAccessorGet(A2, A2, _A2_prop_get));
+        console.log(__classStaticPrivateAccessorGet(A2, _a, _A2_prop_get));
         let a = A2;
-        __classStaticPrivateAccessorGet(a, A2, _A2_prop_get);
+        __classStaticPrivateAccessorGet(a, _a, _A2_prop_get);
         function foo() {
-            __classStaticPrivateAccessorGet(a, A2, _A2_prop_get);
+            __classStaticPrivateAccessorGet(a, _a, _A2_prop_get);
         }
     }
 }
-_A2_prop_get = function _A2_prop_get() { return ""; }, _A2_prop_set = function _A2_prop_set(param) { };
+_a = A2, _A2_prop_get = function _A2_prop_get() { return ""; }, _A2_prop_set = function _A2_prop_set(param) { };
 A2.; // Error
 function foo() {
     A2.; // Error

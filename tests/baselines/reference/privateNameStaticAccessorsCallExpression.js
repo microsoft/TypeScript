@@ -35,21 +35,21 @@ var __classStaticPrivateAccessorGet = (this && this.__classStaticPrivateAccessor
     }
     return fn.call(receiver);
 };
-var _A_fieldFunc_get, _A_fieldFunc2_get, _A_x;
+var _a, _A_fieldFunc_get, _A_fieldFunc2_get, _A_x;
 class A {
     static test() {
-        var _a;
-        __classStaticPrivateAccessorGet(this, A, _A_fieldFunc_get).call(this);
-        const func = __classStaticPrivateAccessorGet(this, A, _A_fieldFunc_get);
+        var _b;
+        __classStaticPrivateAccessorGet(this, _a, _A_fieldFunc_get).call(this);
+        const func = __classStaticPrivateAccessorGet(this, _a, _A_fieldFunc_get);
         func();
-        new (__classStaticPrivateAccessorGet(this, A, _A_fieldFunc_get))();
+        new (__classStaticPrivateAccessorGet(this, _a, _A_fieldFunc_get))();
         const arr = [1, 2];
-        __classStaticPrivateAccessorGet(this, A, _A_fieldFunc2_get).call(this, 0, ...arr, 3);
-        const b = new (__classStaticPrivateAccessorGet(this, A, _A_fieldFunc2_get))(0, ...arr, 3);
-        const str = __classStaticPrivateAccessorGet(this, A, _A_fieldFunc2_get).bind(this) `head${1}middle${2}tail`;
-        __classStaticPrivateAccessorGet((_a = this.getClass()), A, _A_fieldFunc2_get).bind(_a) `test${1}and${2}`;
+        __classStaticPrivateAccessorGet(this, _a, _A_fieldFunc2_get).call(this, 0, ...arr, 3);
+        const b = new (__classStaticPrivateAccessorGet(this, _a, _A_fieldFunc2_get))(0, ...arr, 3);
+        const str = __classStaticPrivateAccessorGet(this, _a, _A_fieldFunc2_get).bind(this) `head${1}middle${2}tail`;
+        __classStaticPrivateAccessorGet((_b = this.getClass()), _a, _A_fieldFunc2_get).bind(_b) `test${1}and${2}`;
     }
     static getClass() { return A; }
 }
-_A_fieldFunc_get = function _A_fieldFunc_get() { return function () { __classStaticPrivateFieldSet(A, A, _A_x, 10); }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };
+_a = A, _A_fieldFunc_get = function _A_fieldFunc_get() { return function () { __classStaticPrivateFieldSet(A, _a, _A_x, 10); }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };
 _A_x = { value: 1 };

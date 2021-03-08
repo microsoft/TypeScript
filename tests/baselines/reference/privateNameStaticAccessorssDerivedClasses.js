@@ -19,13 +19,13 @@ var __classStaticPrivateAccessorGet = (this && this.__classStaticPrivateAccessor
     }
     return fn.call(receiver);
 };
-var _Base_prop_get;
+var _a, _Base_prop_get;
 class Base {
     static method(x) {
-        console.log(__classStaticPrivateAccessorGet(x, Base, _Base_prop_get));
+        console.log(__classStaticPrivateAccessorGet(x, _a, _Base_prop_get));
     }
 }
-_Base_prop_get = function _Base_prop_get() { return 123; };
+_a = Base, _Base_prop_get = function _Base_prop_get() { return 123; };
 class Derived extends Base {
     static method(x) {
         console.log(x.);

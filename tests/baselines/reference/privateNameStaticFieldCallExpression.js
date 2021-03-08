@@ -30,26 +30,27 @@ var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) |
     }
     return propertyDescriptor.value;
 };
-var _A_fieldFunc, _A_fieldFunc2;
+var _a, _A_fieldFunc, _A_fieldFunc2;
 class A {
     constructor() {
         this.x = 1;
     }
     test() {
-        var _a;
         var _b;
-        __classStaticPrivateFieldGet(A, A, _A_fieldFunc).call(A);
-        (_a = __classStaticPrivateFieldGet(A, A, _A_fieldFunc)) === null || _a === void 0 ? void 0 : _a.call(A);
-        const func = __classStaticPrivateFieldGet(A, A, _A_fieldFunc);
+        var _c;
+        __classStaticPrivateFieldGet(A, _a, _A_fieldFunc).call(A);
+        (_b = __classStaticPrivateFieldGet(A, _a, _A_fieldFunc)) === null || _b === void 0 ? void 0 : _b.call(A);
+        const func = __classStaticPrivateFieldGet(A, _a, _A_fieldFunc);
         func();
-        new (__classStaticPrivateFieldGet(A, A, _A_fieldFunc))();
+        new (__classStaticPrivateFieldGet(A, _a, _A_fieldFunc))();
         const arr = [1, 2];
-        __classStaticPrivateFieldGet(A, A, _A_fieldFunc2).call(A, 0, ...arr, 3);
-        const b = new (__classStaticPrivateFieldGet(A, A, _A_fieldFunc2))(0, ...arr, 3);
-        const str = __classStaticPrivateFieldGet(A, A, _A_fieldFunc2).bind(A) `head${1}middle${2}tail`;
-        __classStaticPrivateFieldGet((_b = this.getClass()), A, _A_fieldFunc2).bind(_b) `test${1}and${2}`;
+        __classStaticPrivateFieldGet(A, _a, _A_fieldFunc2).call(A, 0, ...arr, 3);
+        const b = new (__classStaticPrivateFieldGet(A, _a, _A_fieldFunc2))(0, ...arr, 3);
+        const str = __classStaticPrivateFieldGet(A, _a, _A_fieldFunc2).bind(A) `head${1}middle${2}tail`;
+        __classStaticPrivateFieldGet((_c = this.getClass()), _a, _A_fieldFunc2).bind(_c) `test${1}and${2}`;
     }
     getClass() { return A; }
 }
+_a = A;
 _A_fieldFunc = { value: function () { this.x = 10; } };
 _A_fieldFunc2 = { value: function (a, ...b) { } };
