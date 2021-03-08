@@ -1216,6 +1216,10 @@ namespace ts {
         return node.kind === SyntaxKind.ClassStaticBlockDeclaration;
     }
 
+    export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is (SignatureDeclaration | ClassStaticBlockDeclaration) {
+        return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
+    }
+
     /* @internal */
     export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
         return node && isFunctionLikeDeclarationKind(node.kind);

@@ -40804,7 +40804,7 @@ namespace ts {
         function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
             let current: Node = node;
             while (current) {
-                if (isFunctionLike(current)) {
+                if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
                     return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
                 }
 
