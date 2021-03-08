@@ -305,7 +305,7 @@ namespace ts {
         /* @internal */
         getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
-        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
+        getImportSuggestionsCache?(): codefix.ImportSuggestionsForFileCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */

@@ -245,7 +245,7 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
+        private importSuggestionsCache = codefix.createImportSuggestionsForFileCache();
         /*@internal*/
         private dirtyFilesForSuggestions: Set<Path> | undefined;
         /*@internal*/

@@ -122,67 +122,6 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
-    export interface AutoImportSuggestion {
-        symbol: Symbol;
-        symbolName: string;
-        origin: SymbolOriginInfoExport;
-    }
-    export interface AutoImportSuggestionWithModuleSpecifier {
-        symbol: Symbol;
-        symbolName: string;
-        moduleSpecifier: string;
-    }
-    export interface ImportSuggestionsForFileCache {
-        clear(): void;
-        get(fileName: string, checker: TypeChecker, projectVersion?: string): readonly AutoImportSuggestion[] | undefined;
-        set(fileName: string, suggestions: readonly AutoImportSuggestion[], projectVersion?: string): void;
-        isEmpty(): boolean;
-    }
-    export function createImportSuggestionsForFileCache(): ImportSuggestionsForFileCache {
-        let cache: readonly AutoImportSuggestion[] | undefined;
-        let projectVersion: string | undefined;
-        let fileName: string | undefined;
-        return {
-            isEmpty() {
-                return !cache;
-            },
-            clear: () => {
-                cache = undefined;
-                fileName = undefined;
-                projectVersion = undefined;
-            },
-            set: (file, suggestions, version) => {
-                cache = suggestions;
-                fileName = file;
-                if (version) {
-                    projectVersion = version;
-                }
-            },
-            get: (file, checker, version) => {
-                if (file !== fileName) {
-                    return undefined;
-                }
-                if (version) {
-                    return projectVersion === version ? cache : undefined;
-                }
-                forEach(cache, suggestion => {
-                    // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
-                    // in the checker, even though the symbols to merge are the same (guaranteed by
-                    // cache invalidation in synchronizeHostData).
-                    if (suggestion.symbol.declarations?.length) {
-                        suggestion.symbol = checker.getMergedSymbol(suggestion.origin.isDefaultExport
-                            ? suggestion.symbol.declarations[0].localSymbol ?? suggestion.symbol.declarations[0].symbol
-                            : suggestion.symbol.declarations[0].symbol);
-                    }
-                    if (suggestion.origin.moduleSymbol.declarations?.length) {
-                        suggestion.origin.moduleSymbol = checker.getMergedSymbol(suggestion.origin.moduleSymbol.declarations[0].symbol);
-                    }
-                });
-                return cache;
-            },
-        };
-    }
-
     export function getCompletionsAtPosition(
         host: LanguageServiceHost,
         program: Program,
@@ -1696,8 +1635,10 @@ namespace ts.Completions {
         function collectAutoImports(resolveModuleSpecifiers: boolean) {
             if (!shouldOfferImportCompletions()) return;
             Debug.assert(!detailsEntryId?.data);
+            const start = timestamp();
+            host.log?.(`collectAutoImports: starting, ${resolveModuleSpecifiers ? "" : "not "}resolving module specifiers`);
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
-            const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*useAutoImportProvider*/ true);
+            const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*filterByPackageJson*/ !detailsEntryId);
             exportInfo.forEach((info, key) => {
                 const [symbolName] = key.split("|");
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
@@ -1724,6 +1665,7 @@ namespace ts.Completions {
                     });
                 }
             });
+            host.log?.(`collectAutoImports: done in ${timestamp() - start} ms`);
         }
 
         function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {

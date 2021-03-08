@@ -196,19 +196,72 @@ namespace ts.codefix {
 
     /** Information about how a symbol is exported from a module. */
     export interface SymbolExportInfo {
-        readonly symbol: Symbol;
-        readonly moduleSymbol: Symbol;
-        readonly exportKind: ExportKind;
+        symbol: Symbol;
+        moduleSymbol: Symbol;
+        exportKind: ExportKind;
         /** If true, can't use an es6 import from a js file. */
-        readonly exportedSymbolIsTypeOnly: boolean;
+        exportedSymbolIsTypeOnly: boolean;
         /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
-        readonly isFromPackageJson: boolean;
+        isFromPackageJson: boolean;
     }
 
     /** Information needed to augment an existing import declaration. */
     interface FixAddToExistingImportInfo {
         readonly declaration: AnyImportOrRequire;
         readonly importKind: ImportKind;
+    }
+
+    export interface ImportSuggestionsForFileCache {
+        clear(): void;
+        get(fileName: string, checker: TypeChecker, projectVersion?: string): MultiMap<string, SymbolExportInfo> | undefined;
+        set(fileName: string, suggestions: MultiMap<string, SymbolExportInfo>, projectVersion?: string): void;
+        isEmpty(): boolean;
+    }
+    export function createImportSuggestionsForFileCache(): ImportSuggestionsForFileCache {
+        let cache: MultiMap<string, SymbolExportInfo> | undefined;
+        let projectVersion: string | undefined;
+        let fileName: string | undefined;
+        return {
+            isEmpty() {
+                return !cache;
+            },
+            clear: () => {
+                cache = undefined;
+                fileName = undefined;
+                projectVersion = undefined;
+            },
+            set: (file, suggestions, version) => {
+                cache = suggestions;
+                fileName = file;
+                if (version) {
+                    projectVersion = version;
+                }
+            },
+            get: (file, checker, version) => {
+                if (file !== fileName) {
+                    return undefined;
+                }
+                if (version) {
+                    return projectVersion === version ? cache : undefined;
+                }
+                cache?.forEach(infos => {
+                    for (const info of infos) {
+                        // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
+                        // in the checker, even though the symbols to merge are the same (guaranteed by
+                        // cache invalidation in synchronizeHostData).
+                        if (info.symbol.declarations?.length) {
+                            info.symbol = checker.getMergedSymbol(info.exportKind === ExportKind.Default
+                                ? info.symbol.declarations[0].localSymbol ?? info.symbol.declarations[0].symbol
+                                : info.symbol.declarations[0].symbol);
+                        }
+                        if (info.moduleSymbol.declarations?.length) {
+                            info.moduleSymbol = checker.getMergedSymbol(info.moduleSymbol.declarations[0].symbol);
+                        }
+                    }
+                });
+                return cache;
+            },
+        };
     }
 
     export function getImportCompletionAction(
@@ -290,11 +343,25 @@ namespace ts.codefix {
         return getBestFix(getNewImportFixes(program, importingFile, position, preferTypeOnlyImport, useRequire, exportInfo, host, preferences), importingFile, program, host);
     }
 
-    export function getSymbolToExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, useAutoImportProvider: boolean) {
+    export function getSymbolToExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, filterByPackageJson: boolean) {
+        host.log?.(`getSymbolToExportInfoMap: starting for ${importingFile.fileName}`);
+        const start = timestamp();
+        const cache = host.getImportSuggestionsCache?.();
+        if (cache) {
+            const cached = cache.get(importingFile.fileName, program.getTypeChecker(), host.getProjectVersion?.());
+            if (cached) {
+                host.log?.("getSymbolToExportInfoMap: cache hit");
+                return cached;
+            }
+            else {
+                host.log?.("getSymbolToExportInfoMap: cache miss or empty; calculating new results");
+            }
+        }
+
         const result: MultiMap<string, SymbolExportInfo> = createMultiMap();
         const compilerOptions = program.getCompilerOptions();
         const target = getEmitScriptTarget(compilerOptions);
-        forEachExternalModuleToImportFrom(program, host, importingFile, /*filterByPackageJson*/ true, useAutoImportProvider, (moduleSymbol, _moduleFile, program, isFromPackageJson) => {
+        forEachExternalModuleToImportFrom(program, host, importingFile, filterByPackageJson, /*useAutoImportProvider*/ true, (moduleSymbol, _moduleFile, program, isFromPackageJson) => {
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             if (defaultInfo) {
@@ -308,6 +375,12 @@ namespace ts.codefix {
                 }
             }
         });
+
+        if (cache && filterByPackageJson) {
+            host.log?.("getSymbolToExportInfoMap: caching results");
+            cache.set(importingFile.fileName, result, host.getProjectVersion?.());
+        }
+        host.log?.(`getSymbolToExportInfoMap: done in ${timestamp() - start} ms`);
         return result;
 
         function key(name: string, alias: Symbol, moduleSymbol: Symbol, checker: TypeChecker) {
