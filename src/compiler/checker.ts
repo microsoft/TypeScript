@@ -23569,6 +23569,32 @@ namespace ts {
             return type;
         }
 
+        function containsTypeVariable(type: Type, typeVariable: TypeVariable): boolean {
+            return type === typeVariable ||
+                !!(type.flags & TypeFlags.UnionOrIntersection) && some((<UnionOrIntersectionType>type).types, t => containsTypeVariable(t, typeVariable));
+        }
+
+        function getConstraintForReference(type: Type, reference: Identifier | ElementAccessExpression | PropertyAccessExpression | QualifiedName, checkMode: CheckMode | undefined) {
+            // When the type of a reference is a type variable with a union type constraint, and when the reference
+            // is contextually typed by a type that doesn't contain that type variable, we substitute the union type
+            // constraint for the type variable to give control flow analysis an opportunity to narrow it further.
+            // (This transformation causes no type errors because a type variable with a union constraint is only
+            // assignable to itself and its constraint, and we already know the type variable doesn't occur in the
+            // contextual type.) For example, for a reference of a type parameter type 'T extends string | undefined'
+            // with a contextual type 'string', we substitute 'string | undefined' to give control flow analysis the
+            // opportunity to narrow to type 'string'.
+            if (type.flags & TypeFlags.TypeVariable && reference.kind !== SyntaxKind.QualifiedName && !(checkMode && checkMode & CheckMode.Inferential)) {
+                const constraint = getConstraintOfType(type);
+                if (constraint && constraint.flags & TypeFlags.Union) {
+                    const contextualType = getContextualType(reference);
+                    if (contextualType && !containsTypeVariable(contextualType, <TypeVariable>type)) {
+                        return constraint;
+                    }
+                }
+            }
+            return getConstraintForLocation(type, reference);
+        }
+
         function isExportOrExportExpression(location: Node) {
             return !!findAncestor(location, e => e.parent && isExportAssignment(e.parent) && e.parent.expression === e && isEntityNameExpression(e));
         }
@@ -23593,7 +23619,7 @@ namespace ts {
             }
         }
 
-        function checkIdentifier(node: Identifier): Type {
+        function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
                 return errorType;
@@ -23671,7 +23697,7 @@ namespace ts {
 
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
+            let type = getTypeOfSymbol(localOrExportSymbol);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -23710,6 +23736,8 @@ namespace ts {
             if (!declaration) {
                 return type;
             }
+
+            type = getConstraintForReference(type, node, checkMode);
 
             // The declaration container is the innermost function that encloses the declaration of the variable
             // or parameter. The flow container is the innermost function starting with which we analyze the control
@@ -26598,19 +26626,19 @@ namespace ts {
             return nonNullType;
         }
 
-        function checkPropertyAccessExpression(node: PropertyAccessExpression) {
-            return node.flags & NodeFlags.OptionalChain ? checkPropertyAccessChain(node as PropertyAccessChain) :
-                checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullExpression(node.expression), node.name);
+        function checkPropertyAccessExpression(node: PropertyAccessExpression, checkMode: CheckMode | undefined) {
+            return node.flags & NodeFlags.OptionalChain ? checkPropertyAccessChain(node as PropertyAccessChain, checkMode) :
+                checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullExpression(node.expression), node.name, checkMode);
         }
 
-        function checkPropertyAccessChain(node: PropertyAccessChain) {
+        function checkPropertyAccessChain(node: PropertyAccessChain, checkMode: CheckMode | undefined) {
             const leftType = checkExpression(node.expression);
             const nonOptionalType = getOptionalExpressionType(leftType, node.expression);
-            return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullType(nonOptionalType, node.expression), node.name), node, nonOptionalType !== leftType);
+            return propagateOptionalTypeMarker(checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullType(nonOptionalType, node.expression), node.name, checkMode), node, nonOptionalType !== leftType);
         }
 
-        function checkQualifiedName(node: QualifiedName) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, checkNonNullExpression(node.left), node.right);
+        function checkQualifiedName(node: QualifiedName, checkMode: CheckMode | undefined) {
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, checkNonNullExpression(node.left), node.right, checkMode);
         }
 
         function isMethodAccessForCall(node: Node) {
@@ -26702,7 +26730,7 @@ namespace ts {
                 && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
         }
 
-        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier) {
+        function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier, checkMode: CheckMode | undefined) {
             const parentSymbol = getNodeLinks(left).resolvedSymbol;
             const assignmentKind = getAssignmentTargetKind(node);
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
@@ -26787,12 +26815,12 @@ namespace ts {
                     error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
                     return errorType;
                 }
-                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : getConstraintForLocation(getTypeOfSymbol(prop), node);
+                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : getTypeOfSymbol(prop);
             }
-            return getFlowTypeOfAccessExpression(node, prop, propType, right);
+            return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
         }
 
-        function getFlowTypeOfAccessExpression(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, propType: Type, errorNode: Node) {
+        function getFlowTypeOfAccessExpression(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, propType: Type, errorNode: Node, checkMode: CheckMode | undefined) {
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
@@ -26804,6 +26832,7 @@ namespace ts {
             if (propType === autoType) {
                 return getFlowTypeOfProperty(node, prop);
             }
+            propType = getConstraintForReference(propType, node, checkMode);
             // If strict null checks and strict property initialization checks are enabled, if we have
             // a this.xxx property access, if the property is an instance property without an initializer,
             // and if we are in a constructor of the same class as the property declaration, assume that
@@ -27221,18 +27250,18 @@ namespace ts {
             return false;
         }
 
-        function checkIndexedAccess(node: ElementAccessExpression): Type {
-            return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain) :
-                checkElementAccessExpression(node, checkNonNullExpression(node.expression));
+        function checkIndexedAccess(node: ElementAccessExpression, checkMode: CheckMode | undefined): Type {
+            return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain, checkMode) :
+                checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
         }
 
-        function checkElementAccessChain(node: ElementAccessChain) {
+        function checkElementAccessChain(node: ElementAccessChain, checkMode: CheckMode | undefined) {
             const exprType = checkExpression(node.expression);
             const nonOptionalType = getOptionalExpressionType(exprType, node.expression);
-            return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression)), node, nonOptionalType !== exprType);
+            return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression), checkMode), node, nonOptionalType !== exprType);
         }
 
-        function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type): Type {
+        function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type, checkMode: CheckMode | undefined): Type {
             const objectType = getAssignmentTargetKind(node) !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(exprType) : exprType;
             const indexExpression = node.argumentExpression;
             const indexType = checkExpression(indexExpression);
@@ -27251,7 +27280,7 @@ namespace ts {
                 AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
                 AccessFlags.None;
             const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, /*noUncheckedIndexedAccessCandidate*/ undefined, node, accessFlags | AccessFlags.ExpressionPosition) || errorType;
-            return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, indexedAccessType.symbol, indexedAccessType, indexExpression), node);
+            return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
         }
 
         function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
@@ -32070,7 +32099,7 @@ namespace ts {
             }
             switch (kind) {
                 case SyntaxKind.Identifier:
-                    return checkIdentifier(<Identifier>node);
+                    return checkIdentifier(<Identifier>node, checkMode);
                 case SyntaxKind.ThisKeyword:
                     return checkThisExpression(node);
                 case SyntaxKind.SuperKeyword:
@@ -32099,11 +32128,11 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                     return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
-                    return checkPropertyAccessExpression(<PropertyAccessExpression>node);
+                    return checkPropertyAccessExpression(<PropertyAccessExpression>node, checkMode);
                 case SyntaxKind.QualifiedName:
-                    return checkQualifiedName(<QualifiedName>node);
+                    return checkQualifiedName(<QualifiedName>node, checkMode);
                 case SyntaxKind.ElementAccessExpression:
-                    return checkIndexedAccess(<ElementAccessExpression>node);
+                    return checkIndexedAccess(<ElementAccessExpression>node, checkMode);
                 case SyntaxKind.CallExpression:
                     if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
                         return checkImportCallExpression(<ImportCall>node);
@@ -38467,10 +38496,10 @@ namespace ts {
                     }
 
                     if (name.kind === SyntaxKind.PropertyAccessExpression) {
-                        checkPropertyAccessExpression(name);
+                        checkPropertyAccessExpression(name, CheckMode.Normal);
                     }
                     else {
-                        checkQualifiedName(name);
+                        checkQualifiedName(name, CheckMode.Normal);
                     }
                     return links.resolvedSymbol;
                 }
