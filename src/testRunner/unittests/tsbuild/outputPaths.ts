@@ -62,7 +62,7 @@ namespace ts {
                     ...noChangeProject,
                     cleanBuildDiscrepancies: () => new Map([
                         ["/src/dist/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent], // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
-                        ["/src/dist/tsconfig.tsbuildinfo.program.baseline.txt", CleanBuildDescrepancy.CleanFileTextDifferent] // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
+                        ["/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt", CleanBuildDescrepancy.CleanFileTextDifferent] // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
                     ]),
                 }
             ],

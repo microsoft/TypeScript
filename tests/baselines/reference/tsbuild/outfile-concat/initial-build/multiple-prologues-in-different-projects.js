@@ -620,6 +620,82 @@ declare class C {
 
 ======================================================================
 
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 15,
+          "end": 29,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 31,
+          "end": 316,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "\"myPrologue\"",
+            "directives": [
+              {
+                "pos": 0,
+                "end": 12,
+                "expression": {
+                  "pos": 0,
+                  "end": 12,
+                  "text": "myPrologue"
+                }
+              }
+            ]
+          },
+          {
+            "file": 1,
+            "text": "\"myPrologue2\";",
+            "directives": [
+              {
+                "pos": 0,
+                "end": 14,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue2"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 100,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
@@ -955,6 +1031,62 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 125,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -1815,4 +1947,122 @@ text: (257-276)
 declare var c: C;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 46,
+          "end": 156,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 46,
+              "end": 156,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 156,
+          "end": 441,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 156,
+              "end": 441,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 441,
+          "end": 477,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 157,
+          "end": 257,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 157,
+              "end": 257,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 257,
+          "end": 276,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

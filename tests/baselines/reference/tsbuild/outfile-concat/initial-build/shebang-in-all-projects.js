@@ -605,6 +605,36 @@ declare class C {
 
 ======================================================================
 
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 35,
+          "end": 320,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 35,
+          "end": 135,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/first/bin/first-output.d.ts]
 #!someshebang first first_PART1
 interface TheFirst {
@@ -942,6 +972,37 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 143,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 190,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 #!someshebang first first_PART1
@@ -1764,4 +1825,85 @@ text: (290-309)
 declare var c: C;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 143,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 33,
+              "end": 143,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 143,
+          "end": 428,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 143,
+              "end": 428,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 428,
+          "end": 464,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 190,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 33,
+              "end": 190,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 190,
+          "end": 290,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 190,
+              "end": 290,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 290,
+          "end": 309,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

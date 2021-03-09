@@ -409,6 +409,77 @@ declare function f(): string;
 
 ======================================================================
 
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 139,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "\"myPrologue\"",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
+                "pos": 0,
+                "end": 12,
+                "expression": {
+                  "pos": 0,
+                  "end": 12,
+                  "text": "myPrologue"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 156,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
     none: any;
@@ -1294,4 +1365,146 @@ text: (256-275)
 declare var c: C;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 46,
+          "end": 60,
+          "kind": "prologue",
+          "data": "myPrologue3"
+        },
+        {
+          "pos": 62,
+          "end": 171,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 62,
+              "end": 171,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 171,
+          "end": 456,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 171,
+              "end": 456,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 456,
+          "end": 492,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "\"myPrologue3\";\n\"myPrologue\";",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
+                "pos": 0,
+                "end": 14,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue3"
+                }
+              },
+              {
+                "pos": 14,
+                "end": 28,
+                "expression": {
+                  "pos": 14,
+                  "end": 27,
+                  "text": "myPrologue"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 156,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 156,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 156,
+          "end": 256,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 156,
+              "end": 256,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 256,
+          "end": 275,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

@@ -639,6 +639,42 @@ declare class C {
 
 ======================================================================
 
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 336,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 49,
+          "kind": "reference",
+          "data": "../second/tripleRef.d.ts"
+        },
+        {
+          "pos": 51,
+          "end": 205,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
@@ -969,6 +1005,37 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 /// <reference path="../../../second/tripleRef.d.ts" />
@@ -1840,4 +1907,91 @@ text: (368-387)
 declare var c: C;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 110,
+          "end": 446,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 110,
+              "end": 446,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 446,
+          "end": 482,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 55,
+          "kind": "reference",
+          "data": "../../../second/tripleRef.d.ts"
+        },
+        {
+          "pos": 57,
+          "end": 214,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 57,
+              "end": 214,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 214,
+          "end": 368,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 214,
+              "end": 368,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 368,
+          "end": 387,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

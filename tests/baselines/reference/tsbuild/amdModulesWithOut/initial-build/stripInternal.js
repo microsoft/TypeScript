@@ -2131,6 +2131,62 @@ declare const myVar = 30;
 
 ======================================================================
 
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 4382,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 4382,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 4382,
+          "end": 4608,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 217,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 217,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 217,
+          "end": 299,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare module "file1" {
@@ -4701,4 +4757,71 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 4382,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 26,
+          "kind": "internal"
+        },
+        {
+          "pos": 28,
+          "end": 108,
+          "kind": "text"
+        },
+        {
+          "pos": 108,
+          "end": 233,
+          "kind": "internal"
+        },
+        {
+          "pos": 235,
+          "end": 274,
+          "kind": "text"
+        },
+        {
+          "pos": 274,
+          "end": 742,
+          "kind": "internal"
+        },
+        {
+          "pos": 744,
+          "end": 751,
+          "kind": "text"
+        },
+        {
+          "pos": 751,
+          "end": 1240,
+          "kind": "internal"
+        },
+        {
+          "pos": 1242,
+          "end": 1333,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

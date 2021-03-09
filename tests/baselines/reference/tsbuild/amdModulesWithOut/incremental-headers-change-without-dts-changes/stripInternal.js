@@ -2047,6 +2047,62 @@ declare const myVar = 30;
 
 ======================================================================
 
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 4396,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 4396,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 4396,
+          "end": 4622,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 191,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 191,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 191,
+          "end": 273,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAc,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;IAClC,MAAM,OAAO,OAAO;;QAEF,IAAI,EAAE,MAAM,CAAC;QACb,MAAM;QACN,IAAI,CAAC,IACM,MAAM,CADK;QACtB,IAAI,CAAC,CAAC,KAAK,MAAM,EAAK;KACvC;IACD,MAAM,WAAW,OAAO,CAAC;QACP,MAAa,CAAC;SAAI;QAClB,SAAgB,GAAG,SAAK;QACxB,UAAiB,aAAa,CAAC;YAAE,MAAa,CAAC;aAAG;SAAE;QACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;YAAE,MAAa,SAAS;aAAG;SAAE;QAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;QAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;QAC9B,MAAM,aAAa,KAAK,CAAC;QAChC,KAAY,YAAY;YAAG,CAAC,IAAA;YAAE,CAAC,IAAA;YAAE,CAAC,IAAA;SAAE;KACrD;IACa,MAAM,OAAO,SAAS;KAAG;IACzB,MAAM,UAAU,WAAW,SAAK;IAChC,MAAM,WAAW,iBAAiB,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAChE,MAAM,WAAW,aAAa,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACtE,MAAM,QAAQ,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;IAC3D,MAAM,MAAM,YAAY,GAAG,SAAS,CAAC;IACrC,MAAM,CAAC,MAAM,aAAa,KAAK,CAAC;IAChC,MAAM,MAAM,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;;;ICzBlD,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
@@ -4571,4 +4627,81 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 4396,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 26,
+          "kind": "internal"
+        },
+        {
+          "pos": 28,
+          "end": 54,
+          "kind": "text"
+        },
+        {
+          "pos": 54,
+          "end": 78,
+          "kind": "internal"
+        },
+        {
+          "pos": 80,
+          "end": 108,
+          "kind": "text"
+        },
+        {
+          "pos": 108,
+          "end": 233,
+          "kind": "internal"
+        },
+        {
+          "pos": 235,
+          "end": 274,
+          "kind": "text"
+        },
+        {
+          "pos": 274,
+          "end": 742,
+          "kind": "internal"
+        },
+        {
+          "pos": 744,
+          "end": 751,
+          "kind": "text"
+        },
+        {
+          "pos": 751,
+          "end": 1240,
+          "kind": "internal"
+        },
+        {
+          "pos": 1242,
+          "end": 1333,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

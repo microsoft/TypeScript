@@ -529,6 +529,62 @@ declare const myVar = 30;
 
 ======================================================================
 
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 459,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 459,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 459,
+          "end": 685,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 171,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 171,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 171,
+          "end": 253,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare module "file1" {
@@ -834,4 +890,36 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 459,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 171,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

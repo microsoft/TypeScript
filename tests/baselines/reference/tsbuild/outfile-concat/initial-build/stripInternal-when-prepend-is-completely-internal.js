@@ -166,6 +166,35 @@ internal: (0-20)
 declare const A = 1;
 ======================================================================
 
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 28,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 20,
+          "kind": "internal"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare const B = 2;
 
@@ -268,4 +297,53 @@ text: (0-22)
 declare const B = 2;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 28,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 28,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 28,
+          "end": 40,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 0,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": []
+        },
+        {
+          "pos": 0,
+          "end": 22,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

@@ -157,6 +157,35 @@ type Nominal<T, Name> = T & {
 
 ======================================================================
 
+//// [/src/common/common.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "./nominal.js"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 84,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 64,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/sub-project/sub-project.d.ts]
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
@@ -221,6 +250,61 @@ declare const c: any;
 type MyNominal = Nominal<string, 'MyNominal'>;
 
 ======================================================================
+
+//// [/src/sub-project/sub-project.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "./index.js"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 84,
+          "kind": "prepend",
+          "data": "../common/common.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 84,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 84,
+          "end": 182,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 64,
+          "kind": "prepend",
+          "data": "../common/common.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 64,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 64,
+          "end": 199,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/sub-project-2/sub-project-2.d.ts]
 type Nominal<T, Name> = T & {
@@ -318,4 +402,59 @@ declare namespace variable {
 }
 
 ======================================================================
+
+//// [/src/sub-project-2/sub-project-2.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "./index.js"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 182,
+          "kind": "prepend",
+          "data": "../sub-project/sub-project.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 182,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 182,
+          "end": 338,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "../sub-project/sub-project.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 199,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 199,
+          "end": 356,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

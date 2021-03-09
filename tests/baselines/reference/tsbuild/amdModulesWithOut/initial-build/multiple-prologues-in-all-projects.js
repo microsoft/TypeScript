@@ -637,6 +637,114 @@ declare const myVar = 30;
 
 ======================================================================
 
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue3"
+        },
+        {
+          "pos": 46,
+          "end": 60,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 62,
+          "end": 544,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 62,
+              "end": 544,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 544,
+          "end": 789,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 1,
+            "text": "\"myPrologue2\";",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
+                "pos": 0,
+                "end": 14,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue2"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 171,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 171,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 171,
+          "end": 253,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare module "file1" {
@@ -1007,4 +1115,97 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue3"
+        },
+        {
+          "pos": 46,
+          "end": 528,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "\"myPrologue\"",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
+                "pos": 0,
+                "end": 12,
+                "expression": {
+                  "pos": 0,
+                  "end": 12,
+                  "text": "myPrologue"
+                }
+              }
+            ]
+          },
+          {
+            "file": 3,
+            "text": "\"myPrologue3\"",
+            "directives": [
+              {
+                "pos": 0,
+                "end": 13,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue3"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 171,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

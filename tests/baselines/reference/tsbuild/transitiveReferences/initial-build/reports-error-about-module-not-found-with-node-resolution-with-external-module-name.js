@@ -87,83 +87,85 @@ exports.A = A;
 //// [/src/tsconfig.a.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-9529994156-export declare class A {\r\n}\r\n","affectsGlobalScope":false}],"options":{"composite":true,"listFiles":true,"configFilePath":"./tsconfig.a.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1]},"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.a.tsbuildinfo.program.baseline.txt]
+//// [/src/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
- "program": {
-  "fileInfos": {
-   "../lib/lib.d.ts": {
-    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "affectsGlobalScope": true
-   },
-   "./a.ts": {
-    "version": "-8566332115-export class A {}\r\n",
-    "signature": "-9529994156-export declare class A {\r\n}\r\n",
-    "affectsGlobalScope": false
-   }
+  "program": {
+    "fileInfos": {
+      "../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./a.ts": {
+        "version": "-8566332115-export class A {}\r\n",
+        "signature": "-9529994156-export declare class A {\r\n}\r\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "composite": true,
+      "listFiles": true,
+      "configFilePath": "./tsconfig.a.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../lib/lib.d.ts",
+      "./a.ts"
+    ]
   },
-  "options": {
-   "composite": true,
-   "listFiles": true,
-   "configFilePath": "./tsconfig.a.json"
-  },
-  "referencedMap": {},
-  "exportedModulesMap": {},
-  "semanticDiagnosticsPerFile": [
-   "../lib/lib.d.ts",
-   "./a.ts"
-  ]
- }
+  "version": "FakeTSVersion"
 }
 
 //// [/src/tsconfig.b.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","signature":"-6598996556-export declare const b: any;\r\n","affectsGlobalScope":false}],"options":{"composite":true,"moduleResolution":2,"listFiles":true,"configFilePath":"./tsconfig.b.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,[1,[{"file":"./b.ts","start":16,"length":3,"messageText":"Cannot find module 'a' or its corresponding type declarations.","category":1,"code":2307}]]],"affectedFilesPendingEmit":[[1,1]]},"version":"FakeTSVersion"}
 
-//// [/src/tsconfig.b.tsbuildinfo.program.baseline.txt]
+//// [/src/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
- "program": {
-  "fileInfos": {
-   "../lib/lib.d.ts": {
-    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-    "affectsGlobalScope": true
-   },
-   "./b.ts": {
-    "version": "-17186364832-import {A} from 'a';\nexport const b = new A();",
-    "signature": "-6598996556-export declare const b: any;\r\n",
-    "affectsGlobalScope": false
-   }
-  },
-  "options": {
-   "composite": true,
-   "moduleResolution": 2,
-   "listFiles": true,
-   "configFilePath": "./tsconfig.b.json"
-  },
-  "referencedMap": {},
-  "exportedModulesMap": {},
-  "semanticDiagnosticsPerFile": [
-   "../lib/lib.d.ts",
-   [
-    "./b.ts",
-    [
-     {
-      "file": "./b.ts",
-      "start": 16,
-      "length": 3,
-      "messageText": "Cannot find module 'a' or its corresponding type declarations.",
-      "category": 1,
-      "code": 2307
-     }
+  "program": {
+    "fileInfos": {
+      "../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./b.ts": {
+        "version": "-17186364832-import {A} from 'a';\nexport const b = new A();",
+        "signature": "-6598996556-export declare const b: any;\r\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "composite": true,
+      "moduleResolution": 2,
+      "listFiles": true,
+      "configFilePath": "./tsconfig.b.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../lib/lib.d.ts",
+      [
+        "./b.ts",
+        [
+          {
+            "file": "./b.ts",
+            "start": 16,
+            "length": 3,
+            "messageText": "Cannot find module 'a' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ]
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "./b.ts",
+        1
+      ]
     ]
-   ]
-  ],
-  "affectedFilesPendingEmit": [
-   [
-    "./b.ts",
-    1
-   ]
-  ]
- }
+  },
+  "version": "FakeTSVersion"
 }
 

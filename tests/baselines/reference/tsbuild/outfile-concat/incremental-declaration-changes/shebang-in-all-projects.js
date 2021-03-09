@@ -393,6 +393,37 @@ declare function f(): string;
 
 ======================================================================
 
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 142,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 189,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/third/thirdjs/output/third-output.d.ts]
 #!someshebang first first_PART1
 interface TheFirst {
@@ -1214,4 +1245,85 @@ text: (289-308)
 declare var c: C;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 142,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 33,
+              "end": 142,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 142,
+          "end": 427,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 142,
+              "end": 427,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 427,
+          "end": 463,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 33,
+          "end": 189,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 33,
+              "end": 189,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 189,
+          "end": 289,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 189,
+              "end": 289,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 289,
+          "end": 308,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

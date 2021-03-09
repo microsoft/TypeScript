@@ -237,7 +237,6 @@ interface Symbol {
     }
 
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
-        if (!buildInfo.program) return;
         type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
         type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
         interface ProgramBuildInfo {
@@ -249,29 +248,32 @@ interface Symbol {
             affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         }
         const fileInfos: ProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program.fileInfos.forEach((fileInfo, index) => {
+        buildInfo.program?.fileInfos.forEach((fileInfo, index) => {
             fileInfos[buildInfo.program!.fileNames[index]] = fileInfo;
         });
-        const fileNamesList = buildInfo.program.fileNamesList?.map(list => list.map(index => buildInfo.program!.fileNames[index]));
-        const result: { program: ProgramBuildInfo } = {
-            program: {
-                fileInfos,
-                options: buildInfo.program.options,
-                referencedMap: getMapOfReferencedSet(buildInfo.program.referencedMap),
-                exportedModulesMap: getMapOfReferencedSet(buildInfo.program.exportedModulesMap),
-                semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
-                    isNumber(d) ?
-                        buildInfo.program!.fileNames[d] :
-                        [buildInfo.program!.fileNames[d[0]], d[1]]
-                ),
-                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([file, kind]) => [
-                    buildInfo.program!.fileNames[file],
-                    kind
-                ]),
-            }
+        const fileNamesList = buildInfo.program?.fileNamesList?.map(list => list.map(index => buildInfo.program!.fileNames[index]));
+        const program: ProgramBuildInfo | undefined = buildInfo.program && {
+            fileInfos,
+            options: buildInfo.program.options,
+            referencedMap: getMapOfReferencedSet(buildInfo.program.referencedMap),
+            exportedModulesMap: getMapOfReferencedSet(buildInfo.program.exportedModulesMap),
+            semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
+                isNumber(d) ?
+                    buildInfo.program!.fileNames[d] :
+                    [buildInfo.program!.fileNames[d[0]], d[1]]
+            ),
+            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([file, kind]) => [
+                buildInfo.program!.fileNames[file],
+                kind
+            ]),
+        };
+        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; } = {
+            bundle: buildInfo.bundle,
+            program,
+            version: buildInfo.version === version ? fakes.version : buildInfo.version,
         };
         // For now its just JSON.stringify
-        originalWriteFile.call(sys, `${buildInfoPath}.program.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+        originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function getMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
             if (!referenceMap) return undefined;

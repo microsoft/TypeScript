@@ -840,6 +840,54 @@ declare class C {
 
 ======================================================================
 
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 504,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 506,
+          "end": 697,
+          "kind": "emitHelpers",
+          "data": "typescript:spreadArray"
+        },
+        {
+          "pos": 699,
+          "end": 1267,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:read",
+          "typescript:spreadArray"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 214,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
@@ -1333,6 +1381,48 @@ declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
 
 ======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 500,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 502,
+          "end": 729,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -2691,4 +2781,108 @@ declare var c: C;
 declare function forthirdthird_part1Rest(): void;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 500,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 502,
+          "end": 1006,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 1008,
+          "end": 1199,
+          "kind": "emitHelpers",
+          "data": "typescript:spreadArray"
+        },
+        {
+          "pos": 1201,
+          "end": 1428,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 1201,
+              "end": 1428,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1428,
+          "end": 1996,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 1428,
+              "end": 1996,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1996,
+          "end": 2149,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 208,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 208,
+          "end": 422,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 208,
+              "end": 422,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 422,
+          "end": 492,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
