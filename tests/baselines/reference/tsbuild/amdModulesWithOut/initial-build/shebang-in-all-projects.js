@@ -483,60 +483,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file3.ts",
-      "./file4.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 484,
-          "kind": "prepend",
-          "data": "../lib/module.js",
-          "texts": [
-            {
-              "pos": 25,
-              "end": 484,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 484,
-          "end": 710,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 196,
-          "kind": "prepend",
-          "data": "../lib/module.d.ts",
-          "texts": [
-            {
-              "pos": 25,
-              "end": 196,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 196,
-          "end": 278,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":25,"end":484,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":25,"end":484,"kind":"text"}]},{"pos":484,"end":710,"kind":"text"}]},"dts":{"sections":[{"pos":25,"end":196,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":25,"end":196,"kind":"text"}]},{"pos":196,"end":278,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -871,36 +818,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 484,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 196,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":25,"end":484,"kind":"text"}]},"dts":{"sections":[{"pos":25,"end":196,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================

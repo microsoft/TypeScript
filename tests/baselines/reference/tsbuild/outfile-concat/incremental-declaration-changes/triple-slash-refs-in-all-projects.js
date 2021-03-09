@@ -415,41 +415,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "..",
-    "sourceFiles": [
-      "../first_PART1.ts",
-      "../first_part2.ts",
-      "../first_part3.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 157,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 42,
-          "kind": "reference",
-          "data": "../tripleRef.d.ts"
-        },
-        {
-          "pos": 44,
-          "end": 251,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":157,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":251,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1386,103 +1352,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../..",
-    "sourceFiles": [
-      "../../third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 157,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 157,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 157,
-          "end": 493,
-          "kind": "prepend",
-          "data": "../../../2/second-output.js",
-          "texts": [
-            {
-              "pos": 157,
-              "end": 493,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 493,
-          "end": 577,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 45,
-          "kind": "reference",
-          "data": "../../tripleRef.d.ts"
-        },
-        {
-          "pos": 47,
-          "end": 101,
-          "kind": "reference",
-          "data": "../../../first/tripleRef.d.ts"
-        },
-        {
-          "pos": 103,
-          "end": 158,
-          "kind": "reference",
-          "data": "../../../second/tripleRef.d.ts"
-        },
-        {
-          "pos": 160,
-          "end": 367,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 160,
-              "end": 367,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 367,
-          "end": 521,
-          "kind": "prepend",
-          "data": "../../../2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 367,
-              "end": 521,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 521,
-          "end": 591,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":157,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":157,"kind":"text"}]},{"pos":157,"end":493,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":157,"end":493,"kind":"text"}]},{"pos":493,"end":577,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":367,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":367,"kind":"text"}]},{"pos":367,"end":521,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":367,"end":521,"kind":"text"}]},{"pos":521,"end":591,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================

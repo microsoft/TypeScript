@@ -606,72 +606,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file3.ts",
-      "./file4.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 534,
-          "kind": "prepend",
-          "data": "../lib/module.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 534,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 534,
-          "end": 835,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 39,
-          "kind": "reference",
-          "data": "tripleRef.d.ts"
-        },
-        {
-          "pos": 41,
-          "end": 87,
-          "kind": "reference",
-          "data": "../lib/tripleRef.d.ts"
-        },
-        {
-          "pos": 89,
-          "end": 297,
-          "kind": "prepend",
-          "data": "../lib/module.d.ts",
-          "texts": [
-            {
-              "pos": 89,
-              "end": 297,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 297,
-          "end": 416,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":534,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":534,"kind":"text"}]},{"pos":534,"end":835,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"reference","data":"tripleRef.d.ts"},{"pos":41,"end":87,"kind":"reference","data":"../lib/tripleRef.d.ts"},{"pos":89,"end":297,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":89,"end":297,"kind":"text"}]},{"pos":297,"end":416,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1073,42 +1008,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 534,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 39,
-          "kind": "reference",
-          "data": "tripleRef.d.ts"
-        },
-        {
-          "pos": 41,
-          "end": 249,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":534,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"reference","data":"tripleRef.d.ts"},{"pos":41,"end":249,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
