@@ -110,6 +110,52 @@ var y = 20;
   "version": "FakeTSVersion"
 }
 
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "./file1.ts": {
+    "version": "5029505981-const x = 10;",
+    "signature": "-4001438729-declare const x = 10;\n",
+    "affectsGlobalScope": true
+   },
+   "./file2.ts": {
+    "version": "2414573776-const y: string = 20;",
+    "signature": "509180395-declare const y: string;\n",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "incremental": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   "./file1.ts",
+   [
+    "./file2.ts",
+    [
+     {
+      "file": "./file2.ts",
+      "start": 6,
+      "length": 1,
+      "code": 2322,
+      "category": 1,
+      "messageText": "Type 'number' is not assignable to type 'string'."
+     }
+    ]
+   ]
+  ]
+ }
+}
+
 
 Change::
 
@@ -200,5 +246,51 @@ var z = 10;
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "./file1.ts": {
+    "version": "3317474623-const z = 10;",
+    "signature": "-368931399-declare const z = 10;\n",
+    "affectsGlobalScope": true
+   },
+   "./file2.ts": {
+    "version": "2414573776-const y: string = 20;",
+    "signature": "509180395-declare const y: string;\n",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "incremental": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   "./file1.ts",
+   [
+    "./file2.ts",
+    [
+     {
+      "file": "./file2.ts",
+      "start": 6,
+      "length": 1,
+      "code": 2322,
+      "category": 1,
+      "messageText": "Type 'number' is not assignable to type 'string'."
+     }
+    ]
+   ]
+  ]
+ }
 }
 

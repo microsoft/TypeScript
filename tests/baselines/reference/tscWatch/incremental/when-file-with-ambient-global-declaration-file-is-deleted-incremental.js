@@ -88,6 +88,40 @@ console.log(Config.value);
   "version": "FakeTSVersion"
 }
 
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "./globals.d.ts": {
+    "version": "-6314871648-declare namespace Config { const value: string;} ",
+    "signature": "-6314871648-declare namespace Config { const value: string;} ",
+    "affectsGlobalScope": true
+   },
+   "./index.ts": {
+    "version": "5371023861-console.log(Config.value);",
+    "signature": "5381-",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "incremental": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   "./globals.d.ts",
+   "./index.ts"
+  ]
+ }
+}
+
 
 Change::
 
@@ -163,5 +197,45 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "./index.ts": {
+    "version": "5371023861-console.log(Config.value);",
+    "signature": "5381-",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "incremental": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   [
+    "./index.ts",
+    [
+     {
+      "file": "./index.ts",
+      "start": 12,
+      "length": 6,
+      "messageText": "Cannot find name 'Config'.",
+      "category": 1,
+      "code": 2304
+     }
+    ]
+   ]
+  ]
+ }
 }
 

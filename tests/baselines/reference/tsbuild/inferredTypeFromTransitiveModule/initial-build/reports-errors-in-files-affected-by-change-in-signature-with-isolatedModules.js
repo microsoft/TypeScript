@@ -228,6 +228,78 @@ var bar_2 = require("./bar");
   "version": "FakeTSVersion"
 }
 
+//// [/src/obj/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "../bar.ts": {
+    "version": "5936740878-interface RawAction {\r\n    (...args: any[]): Promise<any> | void;\r\n}\r\ninterface ActionFactory {\r\n    <T extends RawAction>(target: T): T;\r\n}\r\ndeclare function foo<U extends any[] = any[]>(): ActionFactory;\r\nexport default foo()(function foobar(param: string): void {\r\n});",
+    "signature": "11191036521-declare const _default: (param: string) => void;\r\nexport default _default;\r\n",
+    "affectsGlobalScope": false
+   },
+   "../bundling.ts": {
+    "version": "-21659820217-export class LazyModule<TModule> {\r\n    constructor(private importCallback: () => Promise<TModule>) {}\r\n}\r\n\r\nexport class LazyAction<\r\n    TAction extends (...args: any[]) => any,\r\n    TModule\r\n>  {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction) {\r\n    }\r\n}\r\n",
+    "signature": "-40032907372-export declare class LazyModule<TModule> {\r\n    private importCallback;\r\n    constructor(importCallback: () => Promise<TModule>);\r\n}\r\nexport declare class LazyAction<TAction extends (...args: any[]) => any, TModule> {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction);\r\n}\r\n",
+    "affectsGlobalScope": false
+   },
+   "../global.d.ts": {
+    "version": "-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}",
+    "signature": "-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}",
+    "affectsGlobalScope": true
+   },
+   "../lazyindex.ts": {
+    "version": "3017320451-export { default as bar } from './bar';\n\nimport { default as bar } from './bar';\nbar(\"hello\");",
+    "signature": "-6224542381-export { default as bar } from './bar';\r\n",
+    "affectsGlobalScope": false
+   },
+   "../index.ts": {
+    "version": "-11602502901-import { LazyAction, LazyModule } from './bundling';\r\nconst lazyModule = new LazyModule(() =>\r\n    import('./lazyIndex')\r\n);\r\nexport const lazyBar = new LazyAction(lazyModule, m => m.bar);",
+    "signature": "18468008756-import { LazyAction } from './bundling';\r\nexport declare const lazyBar: LazyAction<(param: string) => void, typeof import(\"./lazyIndex\")>;\r\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "target": 1,
+   "declaration": true,
+   "outDir": "./",
+   "incremental": true,
+   "isolatedModules": true,
+   "configFilePath": "../tsconfig.json"
+  },
+  "referencedMap": {
+   "../index.ts": [
+    "../bundling.ts",
+    "../lazyindex.ts"
+   ],
+   "../lazyindex.ts": [
+    "../bar.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "../index.ts": [
+    "../bundling.ts",
+    "../lazyindex.ts"
+   ],
+   "../lazyindex.ts": [
+    "../bar.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../lib/lib.d.ts",
+   "../bar.ts",
+   "../bundling.ts",
+   "../global.d.ts",
+   "../index.ts",
+   "../lazyindex.ts"
+  ]
+ }
+}
+
 
 
 Change:: incremental-declaration-changes
@@ -364,6 +436,104 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
   "version": "FakeTSVersion"
 }
 
+//// [/src/obj/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "../bar.ts": {
+    "version": "747071916-interface RawAction {\r\n    (...args: any[]): Promise<any> | void;\r\n}\r\ninterface ActionFactory {\r\n    <T extends RawAction>(target: T): T;\r\n}\r\ndeclare function foo<U extends any[] = any[]>(): ActionFactory;\r\nexport default foo()(function foobar(): void {\r\n});",
+    "signature": "-9232740537-declare const _default: () => void;\r\nexport default _default;\r\n",
+    "affectsGlobalScope": false
+   },
+   "../bundling.ts": {
+    "version": "-21659820217-export class LazyModule<TModule> {\r\n    constructor(private importCallback: () => Promise<TModule>) {}\r\n}\r\n\r\nexport class LazyAction<\r\n    TAction extends (...args: any[]) => any,\r\n    TModule\r\n>  {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction) {\r\n    }\r\n}\r\n",
+    "signature": "-40032907372-export declare class LazyModule<TModule> {\r\n    private importCallback;\r\n    constructor(importCallback: () => Promise<TModule>);\r\n}\r\nexport declare class LazyAction<TAction extends (...args: any[]) => any, TModule> {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction);\r\n}\r\n",
+    "affectsGlobalScope": false
+   },
+   "../global.d.ts": {
+    "version": "-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}",
+    "signature": "-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}",
+    "affectsGlobalScope": true
+   },
+   "../lazyindex.ts": {
+    "version": "3017320451-export { default as bar } from './bar';\n\nimport { default as bar } from './bar';\nbar(\"hello\");",
+    "signature": "-6224542381-export { default as bar } from './bar';\r\n",
+    "affectsGlobalScope": false
+   },
+   "../index.ts": {
+    "version": "-11602502901-import { LazyAction, LazyModule } from './bundling';\r\nconst lazyModule = new LazyModule(() =>\r\n    import('./lazyIndex')\r\n);\r\nexport const lazyBar = new LazyAction(lazyModule, m => m.bar);",
+    "signature": "6256067474-import { LazyAction } from './bundling';\r\nexport declare const lazyBar: LazyAction<() => void, typeof import(\"./lazyIndex\")>;\r\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "target": 1,
+   "declaration": true,
+   "outDir": "./",
+   "incremental": true,
+   "isolatedModules": true,
+   "configFilePath": "../tsconfig.json"
+  },
+  "referencedMap": {
+   "../index.ts": [
+    "../bundling.ts",
+    "../lazyindex.ts"
+   ],
+   "../lazyindex.ts": [
+    "../bar.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "../index.ts": [
+    "../bundling.ts",
+    "../lazyindex.ts"
+   ],
+   "../lazyindex.ts": [
+    "../bar.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../lib/lib.d.ts",
+   "../bar.ts",
+   "../bundling.ts",
+   "../global.d.ts",
+   "../index.ts",
+   [
+    "../lazyindex.ts",
+    [
+     {
+      "file": "../lazyindex.ts",
+      "start": 85,
+      "length": 7,
+      "messageText": "Expected 0 arguments, but got 1.",
+      "category": 1,
+      "code": 2554
+     }
+    ]
+   ]
+  ],
+  "affectedFilesPendingEmit": [
+   [
+    "../bar.ts",
+    1
+   ],
+   [
+    "../index.ts",
+    0
+   ],
+   [
+    "../lazyindex.ts",
+    0
+   ]
+  ]
+ }
+}
+
 
 
 Change:: Fix Error
@@ -489,5 +659,77 @@ var bar_2 = require("./bar");
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/src/obj/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "../bar.ts": {
+    "version": "747071916-interface RawAction {\r\n    (...args: any[]): Promise<any> | void;\r\n}\r\ninterface ActionFactory {\r\n    <T extends RawAction>(target: T): T;\r\n}\r\ndeclare function foo<U extends any[] = any[]>(): ActionFactory;\r\nexport default foo()(function foobar(): void {\r\n});",
+    "signature": "-9232740537-declare const _default: () => void;\r\nexport default _default;\r\n",
+    "affectsGlobalScope": false
+   },
+   "../bundling.ts": {
+    "version": "-21659820217-export class LazyModule<TModule> {\r\n    constructor(private importCallback: () => Promise<TModule>) {}\r\n}\r\n\r\nexport class LazyAction<\r\n    TAction extends (...args: any[]) => any,\r\n    TModule\r\n>  {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction) {\r\n    }\r\n}\r\n",
+    "signature": "-40032907372-export declare class LazyModule<TModule> {\r\n    private importCallback;\r\n    constructor(importCallback: () => Promise<TModule>);\r\n}\r\nexport declare class LazyAction<TAction extends (...args: any[]) => any, TModule> {\r\n    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction);\r\n}\r\n",
+    "affectsGlobalScope": false
+   },
+   "../global.d.ts": {
+    "version": "-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}",
+    "signature": "-9780226215-interface PromiseConstructor {\r\n    new <T>(): Promise<T>;\r\n}\r\ndeclare var Promise: PromiseConstructor;\r\ninterface Promise<T> {\r\n}",
+    "affectsGlobalScope": true
+   },
+   "../lazyindex.ts": {
+    "version": "-3721262293-export { default as bar } from './bar';\n\nimport { default as bar } from './bar';\nbar();",
+    "signature": "-6224542381-export { default as bar } from './bar';\r\n",
+    "affectsGlobalScope": false
+   },
+   "../index.ts": {
+    "version": "-11602502901-import { LazyAction, LazyModule } from './bundling';\r\nconst lazyModule = new LazyModule(() =>\r\n    import('./lazyIndex')\r\n);\r\nexport const lazyBar = new LazyAction(lazyModule, m => m.bar);",
+    "signature": "6256067474-import { LazyAction } from './bundling';\r\nexport declare const lazyBar: LazyAction<() => void, typeof import(\"./lazyIndex\")>;\r\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "target": 1,
+   "declaration": true,
+   "outDir": "./",
+   "incremental": true,
+   "isolatedModules": true,
+   "configFilePath": "../tsconfig.json"
+  },
+  "referencedMap": {
+   "../index.ts": [
+    "../bundling.ts",
+    "../lazyindex.ts"
+   ],
+   "../lazyindex.ts": [
+    "../bar.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "../index.ts": [
+    "../bundling.ts",
+    "../lazyindex.ts"
+   ],
+   "../lazyindex.ts": [
+    "../bar.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../lib/lib.d.ts",
+   "../bar.ts",
+   "../bundling.ts",
+   "../global.d.ts",
+   "../index.ts",
+   "../lazyindex.ts"
+  ]
+ }
 }
 

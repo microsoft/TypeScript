@@ -222,7 +222,7 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -312,5 +312,41 @@ export declare function bar(): void;
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "./a.ts": {
+    "version": "-3260843409-export function fooBar() { }",
+    "signature": "-6611919720-export declare function fooBar(): void;\n",
+    "affectsGlobalScope": false
+   },
+   "./b.ts": {
+    "version": "1045484683-export function bar() { }",
+    "signature": "-2904461644-export declare function bar(): void;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   "./a.ts",
+   "./b.ts"
+  ]
+ }
 }
 

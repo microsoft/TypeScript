@@ -116,15 +116,15 @@ Output::
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:03 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist
+[[90m12:01:05 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist
 
-[[90m12:01:04 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90m12:01:06 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist
+[[90m12:01:17 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist
 
-[[90m12:01:14 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:01:18 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -272,6 +272,44 @@ export declare function multiply(a: number, b: number): number;
   "version": "FakeTSVersion"
 }
 
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "./anothermodule.ts": {
+    "version": "-2676574883-export const World = \"hello\";\r\n",
+    "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "./index.ts": {
+    "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
+    "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "declarationMap": true,
+   "skipDefaultLibCheck": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../../a/lib/lib.d.ts",
+   "./anothermodule.ts",
+   "./index.ts"
+  ]
+ }
+}
+
 //// [/user/username/projects/sample1/logic/index.js.map]
 {"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
@@ -347,6 +385,60 @@ export declare const m: typeof mod;
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "../core/index.d.ts": {
+    "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../core/anothermodule.d.ts": {
+    "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "./index.ts": {
+    "version": "-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
+    "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "sourceMap": true,
+   "forceConsistentCasingInFileNames": true,
+   "skipDefaultLibCheck": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "./index.ts": [
+    "../core/anothermodule.d.ts",
+    "../core/index.d.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "./index.ts": [
+    "../core/anothermodule.d.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../../../../a/lib/lib.d.ts",
+   "../core/anothermodule.d.ts",
+   "../core/index.d.ts",
+   "./index.ts"
+  ]
+ }
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -433,6 +525,72 @@ export declare const m: typeof mod;
   "version": "FakeTSVersion"
 }
 
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "../core/index.d.ts": {
+    "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../core/anothermodule.d.ts": {
+    "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../logic/index.d.ts": {
+    "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+    "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+    "affectsGlobalScope": false
+   },
+   "./index.ts": {
+    "version": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
+    "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "forceConsistentCasingInFileNames": true,
+   "skipDefaultLibCheck": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "../logic/index.d.ts": [
+    "../core/anothermodule.d.ts"
+   ],
+   "./index.ts": [
+    "../core/anothermodule.d.ts",
+    "../core/index.d.ts",
+    "../logic/index.d.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "../logic/index.d.ts": [
+    "../core/anothermodule.d.ts"
+   ],
+   "./index.ts": [
+    "../core/anothermodule.d.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../../../../a/lib/lib.d.ts",
+   "../core/anothermodule.d.ts",
+   "../core/index.d.ts",
+   "../logic/index.d.ts",
+   "./index.ts"
+  ]
+ }
+}
+
 
 Change:: Make non dts change
 
@@ -450,17 +608,17 @@ function someFn() { }
 
 Output::
 >> Screen clear
-[[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:26 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
+[[90m12:01:32 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
 
-[[90m12:01:27 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90m12:01:33 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:01:40 AM[0m] Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:49 AM[0m] Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:42 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:01:51 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -575,6 +733,60 @@ function someFn() { }
   "version": "FakeTSVersion"
 }
 
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "../core/index.d.ts": {
+    "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../core/anothermodule.d.ts": {
+    "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "./index.ts": {
+    "version": "937092231-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n\nfunction someFn() { }",
+    "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "sourceMap": true,
+   "forceConsistentCasingInFileNames": true,
+   "skipDefaultLibCheck": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "./index.ts": [
+    "../core/anothermodule.d.ts",
+    "../core/index.d.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "./index.ts": [
+    "../core/anothermodule.d.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../../../../a/lib/lib.d.ts",
+   "../core/anothermodule.d.ts",
+   "../core/index.d.ts",
+   "./index.ts"
+  ]
+ }
+}
+
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
 //// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
@@ -595,17 +807,17 @@ export function someFn() { }
 
 Output::
 >> Screen clear
-[[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:56 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:48 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
+[[90m12:01:57 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
 
-[[90m12:01:49 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
+[[90m12:01:58 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-[[90m12:02:02 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
+[[90m12:02:14 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
 
-[[90m12:02:03 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
+[[90m12:02:15 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
 
-[[90m12:02:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -741,6 +953,60 @@ export declare function someFn(): void;
   "version": "FakeTSVersion"
 }
 
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "../core/index.d.ts": {
+    "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../core/anothermodule.d.ts": {
+    "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "./index.ts": {
+    "version": "-3093967383-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n\nexport function someFn() { }",
+    "signature": "-8742548750-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\nexport declare function someFn(): void;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "sourceMap": true,
+   "forceConsistentCasingInFileNames": true,
+   "skipDefaultLibCheck": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "./index.ts": [
+    "../core/anothermodule.d.ts",
+    "../core/index.d.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "./index.ts": [
+    "../core/anothermodule.d.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../../../../a/lib/lib.d.ts",
+   "../core/anothermodule.d.ts",
+   "../core/index.d.ts",
+   "./index.ts"
+  ]
+ }
+}
+
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
 //// [/user/username/projects/sample1/tests/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
@@ -808,5 +1074,71 @@ export declare function someFn(): void;
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../../a/lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "../core/index.d.ts": {
+    "version": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../core/anothermodule.d.ts": {
+    "version": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
+    "affectsGlobalScope": false
+   },
+   "../logic/index.d.ts": {
+    "version": "-8742548750-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\nexport declare function someFn(): void;\n",
+    "signature": "-8742548750-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\nexport declare function someFn(): void;\n",
+    "affectsGlobalScope": false
+   },
+   "./index.ts": {
+    "version": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
+    "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "composite": true,
+   "declaration": true,
+   "forceConsistentCasingInFileNames": true,
+   "skipDefaultLibCheck": true,
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "../logic/index.d.ts": [
+    "../core/anothermodule.d.ts"
+   ],
+   "./index.ts": [
+    "../core/anothermodule.d.ts",
+    "../core/index.d.ts",
+    "../logic/index.d.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "../logic/index.d.ts": [
+    "../core/anothermodule.d.ts"
+   ],
+   "./index.ts": [
+    "../core/anothermodule.d.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../../../../a/lib/lib.d.ts",
+   "../core/anothermodule.d.ts",
+   "../core/index.d.ts",
+   "../logic/index.d.ts",
+   "./index.ts"
+  ]
+ }
 }
 

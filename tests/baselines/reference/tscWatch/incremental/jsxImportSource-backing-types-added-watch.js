@@ -120,6 +120,50 @@ exports.App = App;
   "version": "FakeTSVersion"
 }
 
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "./index.tsx": {
+    "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+    "signature": "-11175433774-export declare const App: () => any;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "module": 1,
+   "jsx": 4,
+   "incremental": true,
+   "jsxImportSource": "react",
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   [
+    "./index.tsx",
+    [
+     {
+      "file": "./index.tsx",
+      "start": 25,
+      "length": 24,
+      "messageText": "Cannot find module 'react/jsx-runtime' or its corresponding type declarations.",
+      "category": 1,
+      "code": 2307
+     }
+    ]
+   ]
+  ]
+ }
+}
+
 
 Change::
 
@@ -144,9 +188,9 @@ export const Fragment: unique symbol;
 
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] Starting compilation in watch mode...
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -230,5 +274,51 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../../../a/lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "./node_modules/react/jsx-runtime/index.d.ts": {
+    "version": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
+    "signature": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
+    "affectsGlobalScope": false
+   },
+   "./index.tsx": {
+    "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+    "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "module": 1,
+   "jsx": 4,
+   "incremental": true,
+   "jsxImportSource": "react",
+   "watch": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "./index.tsx": [
+    "./node_modules/react/jsx-runtime/index.d.ts"
+   ]
+  },
+  "exportedModulesMap": {
+   "./index.tsx": [
+    "./node_modules/react/jsx-runtime/index.d.ts"
+   ]
+  },
+  "semanticDiagnosticsPerFile": [
+   "../../../../a/lib/lib.d.ts",
+   "./index.tsx",
+   "./node_modules/react/jsx-runtime/index.d.ts"
+  ]
+ }
 }
 

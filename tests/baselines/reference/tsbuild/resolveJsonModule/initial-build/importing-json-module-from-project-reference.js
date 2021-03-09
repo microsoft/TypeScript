@@ -153,6 +153,50 @@ console.log(foo_json_1.foo);
   "version": "FakeTSVersion"
 }
 
+//// [/src/main/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "../strings/foo.json": {
+    "version": "4395333385-{\n    \"foo\": \"bar baz\"\n}",
+    "affectsGlobalScope": true
+   },
+   "./index.ts": {
+    "version": "-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);",
+    "signature": "-4882119183-export {};\r\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "target": 1,
+   "module": 1,
+   "rootDir": "..",
+   "composite": true,
+   "resolveJsonModule": true,
+   "strict": true,
+   "esModuleInterop": true,
+   "explainFiles": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {
+   "./index.ts": [
+    "../strings/foo.json"
+   ]
+  },
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../lib/lib.d.ts",
+   "./index.ts",
+   "../strings/foo.json"
+  ]
+ }
+}
+
 //// [/src/strings/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -187,6 +231,41 @@ console.log(foo_json_1.foo);
     ]
   },
   "version": "FakeTSVersion"
+}
+
+//// [/src/strings/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../../lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "./foo.json": {
+    "version": "4395333385-{\n    \"foo\": \"bar baz\"\n}",
+    "signature": "-13565045515-export const foo: string;\r\n",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "target": 1,
+   "module": 1,
+   "rootDir": "..",
+   "composite": true,
+   "resolveJsonModule": true,
+   "strict": true,
+   "esModuleInterop": true,
+   "explainFiles": true,
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "../../lib/lib.d.ts",
+   "./foo.json"
+  ]
+ }
 }
 
 

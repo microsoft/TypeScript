@@ -43,21 +43,22 @@ namespace ts {
     }
     export function commandLineCallbacks(
         sys: System & { writtenFiles: ReadonlyCollection<string>; },
-        originalReadCall?: System["readFile"]
+        originalReadCall?: System["readFile"],
+        originalWriteFile?: System["writeFile"],
     ): CommandLineCallbacks {
         let programs: CommandLineProgram[] | undefined;
 
         return {
             cb: program => {
                 if (isAnyProgram(program)) {
-                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
+                    baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall, originalWriteFile);
                     (programs || (programs = [])).push(isBuilderProgram(program) ?
                         [program.getProgram(), program] :
                         [program]
                     );
                 }
                 else {
-                    baselineBuildInfo(program.options, sys, originalReadCall);
+                    baselineBuildInfo(program.options, sys, originalReadCall, originalWriteFile);
                 }
             },
             getPrograms: () => {
@@ -102,7 +103,7 @@ namespace ts {
 
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        const { cb, getPrograms } = commandLineCallbacks(sys, originalReadFile);
+        const { cb, getPrograms } = commandLineCallbacks(sys, originalReadFile, originalWriteFile);
         executeCommandLine(
             sys,
             cb,

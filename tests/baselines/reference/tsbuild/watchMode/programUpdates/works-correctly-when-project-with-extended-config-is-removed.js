@@ -51,11 +51,11 @@ Output::
 
 [[90m12:00:30 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:41 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
+[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
 
-[[90m12:00:42 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -159,6 +159,41 @@ declare let y: number;
   "version": "FakeTSVersion"
 }
 
+//// [/a/b/project1.tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "./commonfile1.ts": {
+    "version": "2167136208-let x = 1",
+    "signature": "2842409786-declare let x: number;\n",
+    "affectsGlobalScope": true
+   },
+   "./commonfile2.ts": {
+    "version": "2168322129-let y = 1",
+    "signature": "784887931-declare let y: number;\n",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "composite": true,
+   "watch": true,
+   "configFilePath": "./project1.tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "./commonfile1.ts",
+   "./commonfile2.ts",
+   "../lib/lib.d.ts"
+  ]
+ }
+}
+
 //// [/a/b/other.js]
 var z = 0;
 
@@ -197,6 +232,35 @@ declare let z: number;
   "version": "FakeTSVersion"
 }
 
+//// [/a/b/project2.tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../lib/lib.d.ts": {
+    "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "affectsGlobalScope": true
+   },
+   "./other.ts": {
+    "version": "2874288940-let z = 0;",
+    "signature": "-1272633924-declare let z: number;\n",
+    "affectsGlobalScope": true
+   }
+  },
+  "options": {
+   "composite": true,
+   "watch": true,
+   "configFilePath": "./project2.tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": [
+   "./other.ts",
+   "../lib/lib.d.ts"
+  ]
+ }
+}
+
 
 Change:: Remove project2 from base config
 
@@ -207,9 +271,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

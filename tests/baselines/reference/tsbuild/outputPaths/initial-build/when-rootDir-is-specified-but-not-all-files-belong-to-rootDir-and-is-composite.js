@@ -132,6 +132,39 @@ exports.x = 10;
   "version": "FakeTSVersion"
 }
 
+//// [/src/tsconfig.tsbuildinfo.program.baseline.txt]
+{
+ "program": {
+  "fileInfos": {
+   "../lib/lib.d.ts": {
+    "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "affectsGlobalScope": true
+   },
+   "./src/index.ts": {
+    "version": "-10726455937-export const x = 10;",
+    "signature": "-6057683066-export declare const x = 10;\r\n",
+    "affectsGlobalScope": false
+   },
+   "./types/type.ts": {
+    "version": "-4885977236-export type t = string;",
+    "signature": "-4409762125-export declare type t = string;\r\n",
+    "affectsGlobalScope": false
+   }
+  },
+  "options": {
+   "outDir": "./dist",
+   "rootDir": "./src",
+   "composite": true,
+   "project": "./tsconfig.json",
+   "configFilePath": "./tsconfig.json"
+  },
+  "referencedMap": {},
+  "exportedModulesMap": {},
+  "semanticDiagnosticsPerFile": []
+ }
+}
+
 //// [/src/types/type.d.ts]
 export declare type t = string;
 
