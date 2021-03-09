@@ -159,38 +159,58 @@ export { C } from "./c";
       "emitDeclarationOnly": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/b.ts": [
-        "./src/c.ts"
+      [
+        1
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        3
       ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/b.ts": [
-        "./src/c.ts"
+      [
+        2,
+        1
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        1,
+        2
       ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
+      [
+        4,
+        3
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        4,
+        3
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       3,
@@ -258,9 +278,9 @@ export { C } from "./c";
     "./src/a.ts"
    ],
    "./src/index.ts": [
-    "./src/a.ts",
+    "./src/c.ts",
     "./src/b.ts",
-    "./src/c.ts"
+    "./src/a.ts"
    ]
   },
   "exportedModulesMap": {
@@ -274,9 +294,9 @@ export { C } from "./c";
     "./src/a.ts"
    ],
    "./src/index.ts": [
-    "./src/a.ts",
+    "./src/c.ts",
     "./src/b.ts",
-    "./src/c.ts"
+    "./src/a.ts"
    ]
   },
   "semanticDiagnosticsPerFile": [
@@ -378,38 +398,58 @@ export interface A {
       "emitDeclarationOnly": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/b.ts": [
-        "./src/c.ts"
+      [
+        1
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        3
       ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "./src/a.ts": [
-        "./src/b.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/b.ts": [
-        "./src/c.ts"
+      [
+        2,
+        1
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        1,
+        2
       ],
-      "./src/index.ts": [
-        "./src/a.ts",
-        "./src/b.ts",
-        "./src/c.ts"
+      [
+        4,
+        3
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        4,
+        3
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       3,
@@ -477,9 +517,9 @@ export interface A {
     "./src/a.ts"
    ],
    "./src/index.ts": [
-    "./src/a.ts",
+    "./src/c.ts",
     "./src/b.ts",
-    "./src/c.ts"
+    "./src/a.ts"
    ]
   },
   "exportedModulesMap": {
@@ -493,9 +533,9 @@ export interface A {
     "./src/a.ts"
    ],
    "./src/index.ts": [
-    "./src/a.ts",
+    "./src/c.ts",
     "./src/b.ts",
-    "./src/c.ts"
+    "./src/a.ts"
    ]
   },
   "semanticDiagnosticsPerFile": [

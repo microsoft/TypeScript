@@ -86,8 +86,8 @@ exports.App = App;
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       2,

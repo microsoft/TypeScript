@@ -82,8 +82,8 @@ console.log(Config.value);
       "incremental": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -186,8 +186,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       "incremental": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       [

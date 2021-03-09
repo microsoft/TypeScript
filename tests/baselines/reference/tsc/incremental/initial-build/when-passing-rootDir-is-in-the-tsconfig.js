@@ -66,8 +66,8 @@ exports.x = 10;
       "project": "..",
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1

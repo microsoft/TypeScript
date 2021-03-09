@@ -63,8 +63,8 @@ exports.bar = bar;
       "declaration": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,

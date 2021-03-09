@@ -103,8 +103,8 @@ var y = 20;
       "project": "./tsconfig.json",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -235,8 +235,8 @@ var z = 10;
       "project": "./tsconfig.json",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,

@@ -122,12 +122,18 @@ exports.__esModule = true;
       "composite": true,
       "configFilePath": "../../../src/common/tsconfig.json"
     },
-    "referencedMap": {
-      "../../../src/common/nominal.ts": [
-        "../../../src/common/types.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -224,22 +230,34 @@ exports.__esModule = true;
       "composite": true,
       "configFilePath": "../../../src/subProject/tsconfig.json"
     },
-    "referencedMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
+    "fileNamesList": [
+      [
+        1
       ],
-      "../../../src/subproject/index.ts": [
-        "../common/nominal.d.ts"
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../../../src/subproject/index.ts": [
-        "../common/nominal.d.ts"
+      [
+        3,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -371,28 +389,45 @@ exports.getVar = getVar;
       "composite": true,
       "configFilePath": "../../../src/subProject2/tsconfig.json"
     },
-    "referencedMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
+    "fileNamesList": [
+      [
+        1
       ],
-      "../subproject/index.d.ts": [
-        "../common/nominal.d.ts"
+      [
+        2
       ],
-      "../../../src/subproject2/index.ts": [
-        "../subproject/index.d.ts"
+      [
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../common/nominal.d.ts": [
-        "../../../src/common/types.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../subproject/index.d.ts": [
-        "../common/nominal.d.ts"
+      [
+        3,
+        1
       ],
-      "../../../src/subproject2/index.ts": [
-        "../subproject/index.d.ts"
+      [
+        4,
+        2
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,

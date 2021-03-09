@@ -117,8 +117,8 @@ exports.Other = 0;
       "skipDefaultLibCheck": true,
       "configFilePath": "../src/other/tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1

@@ -143,12 +143,18 @@ console.log(foo_json_1.foo);
       "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../strings/foo.json"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -232,8 +238,8 @@ console.log(foo_json_1.foo);
       "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1

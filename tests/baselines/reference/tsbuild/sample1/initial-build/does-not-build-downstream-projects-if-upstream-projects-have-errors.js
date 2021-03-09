@@ -190,8 +190,8 @@ exports.multiply = multiply;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -284,17 +284,27 @@ exports.multiply = multiply;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -366,8 +376,8 @@ exports.multiply = multiply;
   },
   "referencedMap": {
    "./index.ts": [
-    "../core/anothermodule.d.ts",
-    "../core/index.d.ts"
+    "../core/index.d.ts",
+    "../core/anothermodule.d.ts"
    ]
   },
   "exportedModulesMap": {

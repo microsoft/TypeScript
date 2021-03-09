@@ -324,28 +324,43 @@ exitCode:: ExitStatus.undefined
       "watch": true,
       "configFilePath": "../../core/tsconfig.json"
     },
-    "referencedMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts",
-        "../../core/utilities.ts"
+    "fileNamesList": [
+      [
+        3,
+        4
       ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
+      [
+        1,
+        2
       ],
-      "../../core/utilities.ts": [
-        "../../animals/index.ts"
+      [
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -678,28 +693,43 @@ exitCode:: ExitStatus.undefined
       "watch": true,
       "configFilePath": "../../core/tsconfig.json"
     },
-    "referencedMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts",
-        "../../core/utilities.ts"
+    "fileNamesList": [
+      [
+        3,
+        4
       ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
+      [
+        1,
+        2
       ],
-      "../../core/utilities.ts": [
-        "../../animals/index.ts"
+      [
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

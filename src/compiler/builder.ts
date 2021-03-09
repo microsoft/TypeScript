@@ -692,12 +692,14 @@ namespace ts {
 
     export type ProgramBuildInfoDiagnostic = number | [number, readonly ReusableDiagnostic[]];
     export type ProgramBuilderInfoFilePendingEmit = [number, BuilderFileEmit];
+    export type ProgramBuildInfoReferencedMap = [FileName: number, FileNameList: number][];
     export interface ProgramBuildInfo {
         fileNames: readonly string[];
         fileInfos: readonly BuilderState.FileInfo[];
         options: CompilerOptions;
-        referencedMap?: MapLike<string[]>;
-        exportedModulesMap?: MapLike<string[]>;
+        fileNamesList?: readonly (readonly number[])[];
+        referencedMap?: ProgramBuildInfoReferencedMap;
+        exportedModulesMap?: ProgramBuildInfoReferencedMap;
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
     }
@@ -711,6 +713,8 @@ namespace ts {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileNames: string[] = [];
         const fileNamesMap = new Map<string, number>();
+        let fileNamesList: (readonly number[])[] | undefined;
+        let fileNamesListMap: ESMap<string, number> | undefined;
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]) => {
             // Ensure file name index
             const index = toFileNameIndex(key);
@@ -719,24 +723,23 @@ namespace ts {
             return signature === undefined ? value : { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope };
         });
 
-        let referencedMap: MapLike<string[]> | undefined;
+        let referencedMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.referencedMap) {
-            referencedMap = {};
-            for (const key of arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive)) {
-                referencedMap[relativeToBuildInfo(key)] = arrayFrom(state.referencedMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-            }
+            referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
+                toFileNameIndex(key),
+                toFileNamesListIndex(state.referencedMap!.get(key)!)
+            ]);
         }
 
-        let exportedModulesMap: MapLike<string[]> | undefined;
+        let exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.exportedModulesMap) {
-            exportedModulesMap = {};
-            for (const key of arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive)) {
+            exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
                 const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(state.exportedModulesMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
+                if (newValue === undefined) return [toFileNameIndex(key), toFileNamesListIndex(state.exportedModulesMap!.get(key)!)];
                 // Value in cache and has updated value map, use that
-                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-            }
+                else if (newValue) return [toFileNameIndex(key), toFileNamesListIndex(newValue)];
+            });
         }
 
         let semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
@@ -770,6 +773,7 @@ namespace ts {
             fileNames,
             fileInfos,
             options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
+            fileNamesList,
             referencedMap,
             exportedModulesMap,
             semanticDiagnosticsPerFile,
@@ -789,6 +793,15 @@ namespace ts {
             if (existing !== undefined) return existing;
             fileNamesMap.set(path, fileNames.length);
             return fileNames.push(relativeToBuildInfo(path)) - 1;
+        }
+
+        function toFileNamesListIndex(set: ReadonlySet<Path>): number {
+            const paths = arrayFrom(set.keys(), toFileNameIndex).sort(compareValues);
+            const key = paths.join();
+            const existing = fileNamesListMap?.get(key);
+            if (existing !== undefined) return existing;
+            (fileNamesListMap ||= new Map()).set(key, fileNamesList?.length || 0);
+            return (fileNamesList ||= []).push(paths) - 1;
         }
     }
 
@@ -1181,17 +1194,8 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
-        if (!mapLike) return undefined;
-        const map = new Map<Path, BuilderState.ReferencedSet>();
-        // Copies keys/values from template. Note that for..in will not throw if
-        // template is undefined, and instead will just exit the loop.
-        for (const key in mapLike) {
-            if (hasProperty(mapLike, key)) {
-                map.set(toPath(key), new Set(mapLike[key].map(toPath)));
-            }
-        }
-        return map;
+    function getMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined, fileNames: readonly Path[], fileNamesList: readonly ReadonlySet<Path>[] | undefined): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
+        return referenceMap && arrayToMap(referenceMap, value => fileNames[value[0]], value => fileNamesList![value[1]]);
     }
 
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
@@ -1199,13 +1203,14 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
         const fileNames = program.fileNames.map(toPath);
+        const fileNamesList = program.fileNamesList?.map(list => new Set(list.map(index => fileNames[index])));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
         program.fileInfos.forEach((fileInfo, index) => fileInfos.set(fileNames[index], fileInfo));
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
-            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
+            referencedMap: getMapOfReferencedSet(program.referencedMap, fileNames, fileNamesList),
+            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, fileNames, fileNamesList),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => fileNames[isNumber(value) ? value : value[0]], value => isNumber(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => fileNames[value[0]]),

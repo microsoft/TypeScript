@@ -177,19 +177,30 @@ exports.m = common_1["default"];
       "composite": true,
       "configFilePath": "../../src/sub-project/tsconfig.json"
     },
-    "referencedMap": {
-      "../../src/common/index.d.ts": [
-        "../../src/common/obj.json"
+    "fileNamesList": [
+      [
+        1
       ],
-      "../../src/sub-project/index.js": [
-        "../../src/common/index.d.ts"
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "../../src/common/index.d.ts": [
-        "../../src/common/obj.json"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -317,12 +328,18 @@ exports.getVar = getVar;
       "composite": true,
       "configFilePath": "../../src/sub-project-2/tsconfig.json"
     },
-    "referencedMap": {
-      "../../src/sub-project-2/index.js": [
-        "../sub-project/index.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -426,16 +443,23 @@ module.exports = x;
       "composite": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "./obj.json"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "./obj.json"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,

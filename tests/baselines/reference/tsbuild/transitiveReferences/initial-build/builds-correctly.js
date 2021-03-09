@@ -145,8 +145,8 @@ a_1.X;
       "listFiles": true,
       "configFilePath": "./tsconfig.a.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1
@@ -221,16 +221,23 @@ a_1.X;
       "listFiles": true,
       "configFilePath": "./tsconfig.b.json"
     },
-    "referencedMap": {
-      "./b.ts": [
-        "./a.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./b.ts": [
-        "./a.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

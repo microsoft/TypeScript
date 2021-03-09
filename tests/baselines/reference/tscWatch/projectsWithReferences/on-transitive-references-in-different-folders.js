@@ -79,8 +79,8 @@ export declare class A {
       "composite": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1
@@ -138,16 +138,23 @@ export declare const b: A;
       "pathsBasePath": "/user/username/projects/transitiveReferences/b",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -310,16 +317,23 @@ export declare function gfoo(): void;
       "pathsBasePath": "/user/username/projects/transitiveReferences/b",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../a/index.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

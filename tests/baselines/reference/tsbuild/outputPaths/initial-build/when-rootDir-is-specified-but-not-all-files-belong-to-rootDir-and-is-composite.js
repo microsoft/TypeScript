@@ -130,8 +130,8 @@ exports.x = 10;
       "project": "./tsconfig.json",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {}
+    "referencedMap": [],
+    "exportedModulesMap": []
   },
   "version": "FakeTSVersion"
 }

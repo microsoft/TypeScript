@@ -115,12 +115,18 @@ exports.b = 0;
       "skipDefaultLibCheck": true,
       "configFilePath": "../../src/main/tsconfig.json"
     },
-    "referencedMap": {
-      "../../src/main/a.ts": [
-        "../../src/main/b.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -210,8 +216,8 @@ exports.Other = 0;
       "skipDefaultLibCheck": true,
       "configFilePath": "../../src/other/tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1

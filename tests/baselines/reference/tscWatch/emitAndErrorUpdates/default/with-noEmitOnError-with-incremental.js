@@ -133,12 +133,18 @@ exitCode:: ExitStatus.undefined
       "incremental": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -311,12 +317,18 @@ exitCode:: ExitStatus.undefined
       "incremental": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -440,12 +452,18 @@ exitCode:: ExitStatus.undefined
       "incremental": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -615,12 +633,18 @@ exitCode:: ExitStatus.undefined
       "incremental": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,

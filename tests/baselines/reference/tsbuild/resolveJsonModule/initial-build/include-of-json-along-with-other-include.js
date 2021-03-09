@@ -129,12 +129,18 @@ exports["default"] = hello_json_1["default"].hello;
       "explainFiles": true,
       "configFilePath": "../tsconfig_withIncludeOfJson.json"
     },
-    "referencedMap": {
-      "../src/index.ts": [
-        "../src/hello.json"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,

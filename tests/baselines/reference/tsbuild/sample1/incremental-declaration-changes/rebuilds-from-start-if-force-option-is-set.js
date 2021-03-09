@@ -112,8 +112,8 @@ exitCode:: ExitStatus.Success
   },
   "referencedMap": {
    "./index.ts": [
-    "../core/anothermodule.d.ts",
-    "../core/index.d.ts"
+    "../core/index.d.ts",
+    "../core/anothermodule.d.ts"
    ]
   },
   "exportedModulesMap": {
@@ -175,8 +175,8 @@ exitCode:: ExitStatus.Success
     "../core/anothermodule.d.ts"
    ],
    "./index.ts": [
-    "../core/anothermodule.d.ts",
     "../core/index.d.ts",
+    "../core/anothermodule.d.ts",
     "../logic/index.d.ts"
    ]
   },

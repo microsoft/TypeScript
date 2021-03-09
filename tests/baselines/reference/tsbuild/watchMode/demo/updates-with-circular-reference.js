@@ -369,8 +369,8 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
       "watch": true,
       "configFilePath": "../../core/tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1
@@ -523,25 +523,39 @@ export declare function createDog(): Dog;
       "watch": true,
       "configFilePath": "../../animals/tsconfig.json"
     },
-    "referencedMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts",
-        "../core/utilities.d.ts"
+    "fileNamesList": [
+      [
+        2,
+        3
       ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ]
-    },
-    "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
+      [
+        1,
+        4
       ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
+      [
+        2
       ]
-    },
+    ],
+    "referencedMap": [
+      [
+        4,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "exportedModulesMap": [
+      [
+        4,
+        2
+      ],
+      [
+        2,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -697,30 +711,43 @@ export declare function createZoo(): Array<Dog>;
       "watch": true,
       "configFilePath": "../../zoo/tsconfig.json"
     },
-    "referencedMap": {
-      "../animals/dog.d.ts": [
-        "../animals/index.d.ts"
+    "fileNamesList": [
+      [
+        3
       ],
-      "../animals/index.d.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
-      ],
-      "../../zoo/zoo.ts": [
-        "../animals/index.d.ts"
+      [
+        1,
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "../animals/dog.d.ts": [
-        "../animals/index.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../animals/index.d.ts": [
-        "../animals/animal.d.ts",
-        "../animals/dog.d.ts"
+      [
+        3,
+        1
       ],
-      "../../zoo/zoo.ts": [
-        "../animals/index.d.ts"
+      [
+        4,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

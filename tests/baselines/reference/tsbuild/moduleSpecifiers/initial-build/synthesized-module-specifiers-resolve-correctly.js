@@ -175,8 +175,8 @@ exports.__esModule = true;
       "composite": true,
       "configFilePath": "../../../solution/common/tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1
@@ -258,16 +258,23 @@ exports.__esModule = true;
       "composite": true,
       "configFilePath": "../../../solution/sub-project/tsconfig.json"
     },
-    "referencedMap": {
-      "../../../solution/sub-project/index.ts": [
-        "../common/nominal.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../../../solution/sub-project/index.ts": [
-        "../common/nominal.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -382,22 +389,34 @@ exports.getVar = getVar;
       "composite": true,
       "configFilePath": "../../../solution/sub-project-2/tsconfig.json"
     },
-    "referencedMap": {
-      "../sub-project/index.d.ts": [
-        "../common/nominal.d.ts"
+    "fileNamesList": [
+      [
+        1
       ],
-      "../../../solution/sub-project-2/index.ts": [
-        "../sub-project/index.d.ts"
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "../sub-project/index.d.ts": [
-        "../common/nominal.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../../../solution/sub-project-2/index.ts": [
-        "../sub-project/index.d.ts"
+      [
+        3,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

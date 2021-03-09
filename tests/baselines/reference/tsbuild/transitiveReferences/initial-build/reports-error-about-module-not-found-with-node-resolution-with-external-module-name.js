@@ -108,8 +108,8 @@ exports.A = A;
       "listFiles": true,
       "configFilePath": "./tsconfig.a.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1
@@ -172,8 +172,8 @@ exports.A = A;
       "listFiles": true,
       "configFilePath": "./tsconfig.b.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       [

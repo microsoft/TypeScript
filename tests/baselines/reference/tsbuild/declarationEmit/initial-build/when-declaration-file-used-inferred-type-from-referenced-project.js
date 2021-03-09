@@ -102,8 +102,8 @@ exports.__esModule = true;
       "outDir": "./",
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1
@@ -200,16 +200,23 @@ exports.fn4 = fn4;
       "outDir": "./",
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../src/index.ts": [
-        "../../pkg1/lib/src/index.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../src/index.ts": [
-        "../../pkg1/lib/src/index.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

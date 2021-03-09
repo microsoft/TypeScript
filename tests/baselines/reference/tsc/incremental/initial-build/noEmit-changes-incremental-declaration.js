@@ -202,22 +202,34 @@ function someFunc(arguments) {
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/directuse.ts": [
-        "./src/indirectclass.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+      [
+        1
+      ]
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/indirectuse.ts": [
-        "./src/indirectclass.ts"
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
       ]
-    },
-    "exportedModulesMap": {
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        1
       ]
-    },
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -448,22 +460,34 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       "noEmit": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/directuse.ts": [
-        "./src/indirectclass.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+      [
+        1
+      ]
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/indirectuse.ts": [
-        "./src/indirectclass.ts"
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
       ]
-    },
-    "exportedModulesMap": {
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        1
       ]
-    },
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -787,22 +811,34 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/directuse.ts": [
-        "./src/indirectclass.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+      [
+        1
+      ]
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/indirectuse.ts": [
-        "./src/indirectclass.ts"
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
       ]
-    },
-    "exportedModulesMap": {
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        1
       ]
-    },
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -1098,22 +1134,34 @@ exports.classC = classC;
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/directuse.ts": [
-        "./src/indirectclass.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+      [
+        1
+      ]
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/indirectuse.ts": [
-        "./src/indirectclass.ts"
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
       ]
-    },
-    "exportedModulesMap": {
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        1
       ]
-    },
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -1533,22 +1581,34 @@ exitCode:: ExitStatus.Success
       "noEmit": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/directuse.ts": [
-        "./src/indirectclass.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+      [
+        1
+      ]
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/indirectuse.ts": [
-        "./src/indirectclass.ts"
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
       ]
-    },
-    "exportedModulesMap": {
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        1
       ]
-    },
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -1796,22 +1856,34 @@ exports.classC = classC;
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/directuse.ts": [
-        "./src/indirectclass.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+      [
+        1
+      ]
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/indirectuse.ts": [
-        "./src/indirectclass.ts"
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        0
       ]
-    },
-    "exportedModulesMap": {
-      "./src/indirectclass.ts": [
-        "./src/class.ts"
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        1
       ]
-    },
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

@@ -202,24 +202,35 @@ Object.defineProperty(exports, "bar", { enumerable: true, get: function () { ret
       "isolatedModules": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
+    "fileNamesList": [
+      [
+        2,
+        4
       ],
-      "../lazyindex.ts": [
-        "../bar.ts"
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
+    ],
+    "referencedMap": [
+      [
+        5,
+        0
       ],
-      "../lazyindex.ts": [
-        "../bar.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        5,
+        0
+      ],
+      [
+        4,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -404,24 +415,35 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
       "isolatedModules": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
+    "fileNamesList": [
+      [
+        2,
+        4
       ],
-      "../lazyindex.ts": [
-        "../bar.ts"
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../index.ts": [
-        "../bundling.ts",
-        "../lazyindex.ts"
+    ],
+    "referencedMap": [
+      [
+        5,
+        0
       ],
-      "../lazyindex.ts": [
-        "../bar.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        5,
+        0
+      ],
+      [
+        4,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

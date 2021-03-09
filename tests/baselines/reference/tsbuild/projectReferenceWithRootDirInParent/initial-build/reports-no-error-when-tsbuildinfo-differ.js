@@ -117,12 +117,18 @@ exports.Other = 0;
       "outDir": "./",
       "configFilePath": "../src/main/tsconfig.main.json"
     },
-    "referencedMap": {
-      "../src/main/a.ts": [
-        "../src/main/b.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -195,8 +201,8 @@ exports.Other = 0;
       "outDir": "./",
       "configFilePath": "../src/other/tsconfig.other.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1

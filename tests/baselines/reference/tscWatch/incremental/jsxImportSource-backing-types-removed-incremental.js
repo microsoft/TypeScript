@@ -104,16 +104,23 @@ exports.App = App;
       "jsxImportSource": "react",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.tsx": [
-        "./node_modules/react/jsx-runtime/index.d.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./index.tsx": [
-        "./node_modules/react/jsx-runtime/index.d.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -231,8 +238,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       "jsxImportSource": "react",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       [

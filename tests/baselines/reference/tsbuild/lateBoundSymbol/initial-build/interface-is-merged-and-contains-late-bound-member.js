@@ -106,16 +106,23 @@ var x = 10;
       "incremental": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
+    "fileNamesList": [
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -250,16 +257,23 @@ var sym = Symbol();
       "incremental": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
+    "fileNamesList": [
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./src/main.ts": [
-        "./src/hkt.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

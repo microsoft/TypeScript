@@ -154,25 +154,41 @@ exports.getVar = getVar;
       "composite": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../src/common/nominal.ts": [
-        "../src/common/types.d.ts"
+    "fileNamesList": [
+      [
+        1
       ],
-      "../src/subproject/index.ts": [
-        "../src/common/nominal.ts"
+      [
+        2
       ],
-      "../src/subproject2/index.ts": [
-        "../src/subproject/index.ts"
+      [
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../src/subproject/index.ts": [
-        "../src/common/nominal.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ],
-      "../src/subproject2/index.ts": [
-        "../src/subproject/index.ts"
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        2
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,

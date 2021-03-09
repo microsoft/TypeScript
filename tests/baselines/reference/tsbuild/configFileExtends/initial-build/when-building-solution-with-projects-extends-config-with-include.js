@@ -104,8 +104,8 @@ exports.a = 1;
       "listFiles": true,
       "configFilePath": "../../shared/tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -195,8 +195,8 @@ exports.b = 1;
       "listFiles": true,
       "configFilePath": "../../webpack/tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       2,

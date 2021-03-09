@@ -158,8 +158,8 @@ export declare function multiply(a: number, b: number): number;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -231,17 +231,27 @@ export declare const m: typeof mod;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -313,24 +323,36 @@ export declare const m: typeof mod;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/index.d.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -482,17 +504,27 @@ function foo() { }
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -650,17 +682,27 @@ export declare function gfoo(): void;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -790,24 +832,36 @@ exitCode:: ExitStatus.undefined
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/index.d.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -863,8 +917,8 @@ exitCode:: ExitStatus.undefined
     "../core/anothermodule.d.ts"
    ],
    "./index.ts": [
-    "../core/anothermodule.d.ts",
     "../core/index.d.ts",
+    "../core/anothermodule.d.ts",
     "../logic/index.d.ts"
    ]
   },
@@ -946,17 +1000,27 @@ exports.gfoo = gfoo;
       "declarationDir": "./decls",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -1093,24 +1157,36 @@ exitCode:: ExitStatus.undefined
       "project": "./",
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "../logic/decls/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/decls/index.d.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../logic/decls/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -1166,8 +1242,8 @@ exitCode:: ExitStatus.undefined
     "../core/anothermodule.d.ts"
    ],
    "./index.ts": [
-    "../core/anothermodule.d.ts",
     "../core/index.d.ts",
+    "../core/anothermodule.d.ts",
     "../logic/decls/index.d.ts"
    ]
   },

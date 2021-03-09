@@ -147,8 +147,8 @@ declare let y: number;
       "watch": true,
       "configFilePath": "./project1.tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       1,
       2,
@@ -225,8 +225,8 @@ declare let z: number;
       "watch": true,
       "configFilePath": "./project2.tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       1,
       0

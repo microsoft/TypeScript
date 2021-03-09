@@ -175,16 +175,23 @@ export type { TheNum } from 'const';
       "traceResolution": true,
       "configFilePath": "../tsconfig.json"
     },
-    "referencedMap": {
-      "../index.ts": [
-        "../const.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../index.ts": [
-        "../const.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,

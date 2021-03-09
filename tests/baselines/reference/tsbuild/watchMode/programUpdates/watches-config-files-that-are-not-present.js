@@ -181,8 +181,8 @@ export declare function multiply(a: number, b: number): number;
       "watch": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -359,17 +359,27 @@ export declare const m: typeof mod;
       "watch": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -416,8 +426,8 @@ export declare const m: typeof mod;
   },
   "referencedMap": {
    "./index.ts": [
-    "../core/anothermodule.d.ts",
-    "../core/index.d.ts"
+    "../core/index.d.ts",
+    "../core/anothermodule.d.ts"
    ]
   },
   "exportedModulesMap": {
@@ -549,24 +559,36 @@ export declare const m: typeof mod;
       "watch": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/index.d.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -621,8 +643,8 @@ export declare const m: typeof mod;
     "../core/anothermodule.d.ts"
    ],
    "./index.ts": [
-    "../core/anothermodule.d.ts",
     "../core/index.d.ts",
+    "../core/anothermodule.d.ts",
     "../logic/index.d.ts"
    ]
   },

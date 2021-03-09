@@ -201,16 +201,23 @@ export * from "./session";
       "watch": true,
       "configFilePath": "../../src/pure/tsconfig.json"
     },
-    "referencedMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -404,16 +411,23 @@ export interface Session {
       "watch": true,
       "configFilePath": "../../src/pure/tsconfig.json"
     },
-    "referencedMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -589,16 +603,23 @@ export interface Session {
       "watch": true,
       "configFilePath": "../../src/pure/tsconfig.json"
     },
-    "referencedMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        2,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,

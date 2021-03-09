@@ -191,8 +191,8 @@ exports.multiply = multiply;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {},
-    "exportedModulesMap": {},
+    "referencedMap": [],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -307,17 +307,27 @@ exports.m = mod;
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts"
+    "fileNamesList": [
+      [
+        1,
+        2
+      ],
+      [
+        2
       ]
-    },
-    "exportedModulesMap": {
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -363,8 +373,8 @@ exports.m = mod;
   },
   "referencedMap": {
    "./index.ts": [
-    "../core/anothermodule.d.ts",
-    "../core/index.d.ts"
+    "../core/index.d.ts",
+    "../core/anothermodule.d.ts"
    ]
   },
   "exportedModulesMap": {
@@ -443,24 +453,36 @@ exports.m = mod;
       "esModuleInterop": false,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/index.d.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -515,8 +537,8 @@ exports.m = mod;
     "../core/anothermodule.d.ts"
    ],
    "./index.ts": [
-    "../core/anothermodule.d.ts",
     "../core/index.d.ts",
+    "../core/anothermodule.d.ts",
     "../logic/index.d.ts"
    ]
   },
@@ -655,24 +677,36 @@ exports.m = mod;
       "esModuleInterop": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts",
-        "../core/index.d.ts",
-        "../logic/index.d.ts"
+      [
+        1,
+        2,
+        3
       ]
-    },
-    "exportedModulesMap": {
-      "../logic/index.d.ts": [
-        "../core/anothermodule.d.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./index.ts": [
-        "../core/anothermodule.d.ts"
+      [
+        4,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       2,
@@ -727,8 +761,8 @@ exports.m = mod;
     "../core/anothermodule.d.ts"
    ],
    "./index.ts": [
-    "../core/anothermodule.d.ts",
     "../core/index.d.ts",
+    "../core/anothermodule.d.ts",
     "../logic/index.d.ts"
    ]
   },

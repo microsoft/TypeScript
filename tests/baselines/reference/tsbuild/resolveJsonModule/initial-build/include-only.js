@@ -115,12 +115,18 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       "explainFiles": true,
       "configFilePath": "../tsconfig_withInclude.json"
     },
-    "referencedMap": {
-      "../src/index.ts": [
-        "../src/hello.json"
+    "fileNamesList": [
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {},
+    ],
+    "referencedMap": [
+      [
+        2,
+        0
+      ]
+    ],
+    "exportedModulesMap": [],
     "semanticDiagnosticsPerFile": [
       0,
       1,

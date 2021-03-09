@@ -252,12 +252,13 @@ interface Symbol {
         buildInfo.program.fileInfos.forEach((fileInfo, index) => {
             fileInfos[buildInfo.program!.fileNames[index]] = fileInfo;
         });
+        const fileNamesList = buildInfo.program.fileNamesList?.map(list => list.map(index => buildInfo.program!.fileNames[index]));
         const result: { program: ProgramBuildInfo } = {
             program: {
                 fileInfos,
                 options: buildInfo.program.options,
-                referencedMap: buildInfo.program.referencedMap,
-                exportedModulesMap: buildInfo.program.exportedModulesMap,
+                referencedMap: getMapOfReferencedSet(buildInfo.program.referencedMap),
+                exportedModulesMap: getMapOfReferencedSet(buildInfo.program.exportedModulesMap),
                 semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
                     isNumber(d) ?
                         buildInfo.program!.fileNames[d] :
@@ -271,6 +272,15 @@ interface Symbol {
         };
         // For now its just JSON.stringify
         originalWriteFile.call(sys, `${buildInfoPath}.program.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, " "));
+
+        function getMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
+            if (!referenceMap) return undefined;
+            const result: MapLike<string[]> = {};
+            for (const [fileNamesKey, fileNamesListKey] of referenceMap) {
+                result[buildInfo.program!.fileNames[fileNamesKey]] = fileNamesList![fileNamesListKey];
+            }
+            return result;
+        }
     }
 
     export function baselineBuildInfo(

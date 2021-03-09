@@ -153,22 +153,34 @@ export interface C {
       "emitDeclarationOnly": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        2,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -325,22 +337,34 @@ exitCode:: ExitStatus.Success
       "emitDeclarationOnly": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        2,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
@@ -508,22 +532,34 @@ export interface A {
       "emitDeclarationOnly": true,
       "configFilePath": "./tsconfig.json"
     },
-    "referencedMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
+    "fileNamesList": [
+      [
+        2
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        1
       ]
-    },
-    "exportedModulesMap": {
-      "./src/b.ts": [
-        "./src/c.ts"
+    ],
+    "referencedMap": [
+      [
+        3,
+        0
       ],
-      "./src/c.ts": [
-        "./src/a.ts"
+      [
+        2,
+        1
       ]
-    },
+    ],
+    "exportedModulesMap": [
+      [
+        3,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ],
     "semanticDiagnosticsPerFile": [
       0,
       1,
