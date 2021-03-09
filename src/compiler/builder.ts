@@ -452,7 +452,7 @@ namespace ts {
             return;
         }
         else {
-            Debug.assert(state.hasCalledUpdateShapeSignature.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affeted file: ${affectedFile.fileName}`);
+            Debug.assert(state.hasCalledUpdateShapeSignature.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affected file: ${affectedFile.fileName}`);
         }
 
         if (!state.compilerOptions.assumeChangesOnlyAffectDirectDependencies) {
