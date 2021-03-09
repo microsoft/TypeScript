@@ -271,7 +271,7 @@ interface Symbol {
             }
         };
         // For now its just JSON.stringify
-        originalWriteFile.call(sys, `${buildInfoPath}.program.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, " "));
+        originalWriteFile.call(sys, `${buildInfoPath}.program.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function getMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
             if (!referenceMap) return undefined;
