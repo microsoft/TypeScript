@@ -936,7 +936,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "The second argument of an import call is only supported when the module flag is not available in the current module flag.": {
         "category": "Error",
         "code": 1324
     },

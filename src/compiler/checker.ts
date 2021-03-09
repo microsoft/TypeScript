@@ -41329,7 +41329,7 @@ namespace ts {
         function checkGrammarImportCallArguments(node: ImportCall, nodeArguments: NodeArray<Expression>): boolean {
             if (moduleKind !== ModuleKind.ESNext) {
                 if (nodeArguments.length !== 1) {
-                    return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+                    return grammarErrorOnNode(node, Diagnostics.The_second_argument_of_an_import_call_is_only_supported_when_the_module_flag_is_not_available_in_the_current_module_flag);
                 }
                 checkGrammarForDisallowedTrailingComma(nodeArguments);
             }

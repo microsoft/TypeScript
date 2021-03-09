@@ -3,12 +3,12 @@ tests/cases/conformance/esnext/importAssertion/1.ts(2,28): error TS2803: Import 
 tests/cases/conformance/esnext/importAssertion/1.ts(3,28): error TS2803: Import assertions are only supported when the '--module' flag is set to 'esnext'.
 tests/cases/conformance/esnext/importAssertion/2.ts(1,28): error TS2803: Import assertions are only supported when the '--module' flag is set to 'esnext'.
 tests/cases/conformance/esnext/importAssertion/2.ts(2,38): error TS2803: Import assertions are only supported when the '--module' flag is set to 'esnext'.
-tests/cases/conformance/esnext/importAssertion/3.ts(2,11): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/esnext/importAssertion/3.ts(3,11): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/esnext/importAssertion/3.ts(4,11): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/esnext/importAssertion/3.ts(6,11): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/esnext/importAssertion/3.ts(7,11): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1324: Dynamic import must have one specifier as an argument.
+tests/cases/conformance/esnext/importAssertion/3.ts(2,11): error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
+tests/cases/conformance/esnext/importAssertion/3.ts(3,11): error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
+tests/cases/conformance/esnext/importAssertion/3.ts(4,11): error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
+tests/cases/conformance/esnext/importAssertion/3.ts(6,11): error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
+tests/cases/conformance/esnext/importAssertion/3.ts(7,11): error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
+tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
 
 
 ==== tests/cases/conformance/esnext/importAssertion/0.ts (0 errors) ====
@@ -46,21 +46,21 @@ tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1324: Dynamic
     const a = import('./0')
     const b = import('./0', { type: "json" })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic import must have one specifier as an argument.
+!!! error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
     const c = import('./0', { type: "json", ttype: "typo" })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic import must have one specifier as an argument.
+!!! error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
     const d = import('./0', { })
               ~~~~~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic import must have one specifier as an argument.
+!!! error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
     declare function foo(): any;
     const e = import('./0', foo())
               ~~~~~~~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic import must have one specifier as an argument.
+!!! error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
     const f = import()
               ~~~~~~~~
-!!! error TS1324: Dynamic import must have one specifier as an argument.
+!!! error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
     const g = import('./0', {}, {})
               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1324: Dynamic import must have one specifier as an argument.
+!!! error TS1324: The second argument of an import call is only supported when the module flag is not available in the current module flag.
     
