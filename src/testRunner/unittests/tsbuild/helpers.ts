@@ -248,23 +248,23 @@ interface Symbol {
             affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         }
         const fileInfos: ProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, index) => {
-            fileInfos[buildInfo.program!.fileNames[index]] = fileInfo;
+        buildInfo.program?.fileInfos.forEach((fileInfo, fileId) => {
+            fileInfos[toFileName(fileId)] = fileInfo;
         });
-        const fileNamesList = buildInfo.program?.fileNamesList?.map(list => list.map(index => buildInfo.program!.fileNames[index]));
+        const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ProgramBuildInfo | undefined = buildInfo.program && {
             fileInfos,
             options: buildInfo.program.options,
-            referencedMap: getMapOfReferencedSet(buildInfo.program.referencedMap),
-            exportedModulesMap: getMapOfReferencedSet(buildInfo.program.exportedModulesMap),
+            referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
+            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
             semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
                 isNumber(d) ?
-                    buildInfo.program!.fileNames[d] :
-                    [buildInfo.program!.fileNames[d[0]], d[1]]
+                    toFileName(d) :
+                    [toFileName(d[0]), d[1]]
             ),
-            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([file, kind]) => [
-                buildInfo.program!.fileNames[file],
-                kind
+            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
+                toFileName(fileId),
+                emitKind
             ]),
         };
         const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; } = {
@@ -275,11 +275,19 @@ interface Symbol {
         // For now its just JSON.stringify
         originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
-        function getMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
+        function toFileName(fileId: number) {
+            return buildInfo.program!.fileNames[fileId];
+        }
+
+        function toFileNames(fileIdsListId: number) {
+            return fileNamesList![fileIdsListId];
+        }
+
+        function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
             if (!referenceMap) return undefined;
             const result: MapLike<string[]> = {};
             for (const [fileNamesKey, fileNamesListKey] of referenceMap) {
-                result[buildInfo.program!.fileNames[fileNamesKey]] = fileNamesList![fileNamesListKey];
+                result[toFileName(fileNamesKey)] = toFileNames(fileNamesListKey);
             }
             return result;
         }

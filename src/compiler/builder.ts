@@ -690,14 +690,14 @@ namespace ts {
         return filterSemanticDiagnotics(diagnostics, state.compilerOptions);
     }
 
-    export type ProgramBuildInfoDiagnostic = number | [number, readonly ReusableDiagnostic[]];
-    export type ProgramBuilderInfoFilePendingEmit = [number, BuilderFileEmit];
-    export type ProgramBuildInfoReferencedMap = [FileName: number, FileNameList: number][];
+    export type ProgramBuildInfoDiagnostic = number | [fileId: number, diagnostics: readonly ReusableDiagnostic[]];
+    export type ProgramBuilderInfoFilePendingEmit = [fileId: number, emitKind: BuilderFileEmit];
+    export type ProgramBuildInfoReferencedMap = [fileId: number, fileIdListId: number][];
     export interface ProgramBuildInfo {
         fileNames: readonly string[];
         fileInfos: readonly BuilderState.FileInfo[];
         options: CompilerOptions;
-        fileNamesList?: readonly (readonly number[])[];
+        fileIdsList?: readonly (readonly number[])[];
         referencedMap?: ProgramBuildInfoReferencedMap;
         exportedModulesMap?: ProgramBuildInfoReferencedMap;
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
@@ -712,13 +712,13 @@ namespace ts {
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileNames: string[] = [];
-        const fileNamesMap = new Map<string, number>();
-        let fileNamesList: (readonly number[])[] | undefined;
-        let fileNamesListMap: ESMap<string, number> | undefined;
+        const fileNameToFileId = new Map<string, number>();
+        let fileIdsList: (readonly number[])[] | undefined;
+        let fileNamesToFileIdListId: ESMap<string, number> | undefined;
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]) => {
-            // Ensure file name index
-            const index = toFileNameIndex(key);
-            Debug.assert(fileNames[index] === relativeToBuildInfo(key));
+            // Ensure fileId
+            const fileId = toFileId(key);
+            Debug.assert(fileNames[fileId] === relativeToBuildInfo(key));
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
             return signature === undefined ? value : { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope };
         });
@@ -726,8 +726,8 @@ namespace ts {
         let referencedMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.referencedMap) {
             referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
-                toFileNameIndex(key),
-                toFileNamesListIndex(state.referencedMap!.get(key)!)
+                toFileId(key),
+                toFileIdListId(state.referencedMap!.get(key)!)
             ]);
         }
 
@@ -736,9 +736,9 @@ namespace ts {
             exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
                 const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) return [toFileNameIndex(key), toFileNamesListIndex(state.exportedModulesMap!.get(key)!)];
+                if (newValue === undefined) return [toFileId(key), toFileIdListId(state.exportedModulesMap!.get(key)!)];
                 // Value in cache and has updated value map, use that
-                else if (newValue) return [toFileNameIndex(key), toFileNamesListIndex(newValue)];
+                else if (newValue) return [toFileId(key), toFileIdListId(newValue)];
             });
         }
 
@@ -749,12 +749,12 @@ namespace ts {
                 (semanticDiagnosticsPerFile ||= []).push(
                     value.length ?
                         [
-                            toFileNameIndex(key),
+                            toFileId(key),
                             state.hasReusableDiagnostic ?
                                 value as readonly ReusableDiagnostic[] :
                                 convertToReusableDiagnostics(value as readonly Diagnostic[], relativeToBuildInfo)
                         ] :
-                        toFileNameIndex(key)
+                        toFileId(key)
                 );
             }
         }
@@ -764,7 +764,7 @@ namespace ts {
             const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
-                    (affectedFilesPendingEmit ||= []).push([toFileNameIndex(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+                    (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
                 }
             }
         }
@@ -773,7 +773,7 @@ namespace ts {
             fileNames,
             fileInfos,
             options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
-            fileNamesList,
+            fileIdsList,
             referencedMap,
             exportedModulesMap,
             semanticDiagnosticsPerFile,
@@ -788,20 +788,20 @@ namespace ts {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
         }
 
-        function toFileNameIndex(path: Path): number {
-            const existing = fileNamesMap.get(path);
+        function toFileId(path: Path): number {
+            const existing = fileNameToFileId.get(path);
             if (existing !== undefined) return existing;
-            fileNamesMap.set(path, fileNames.length);
+            fileNameToFileId.set(path, fileNames.length);
             return fileNames.push(relativeToBuildInfo(path)) - 1;
         }
 
-        function toFileNamesListIndex(set: ReadonlySet<Path>): number {
-            const paths = arrayFrom(set.keys(), toFileNameIndex).sort(compareValues);
-            const key = paths.join();
-            const existing = fileNamesListMap?.get(key);
+        function toFileIdListId(set: ReadonlySet<Path>): number {
+            const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
+            const key = fileIds.join();
+            const existing = fileNamesToFileIdListId?.get(key);
             if (existing !== undefined) return existing;
-            (fileNamesListMap ||= new Map()).set(key, fileNamesList?.length || 0);
-            return (fileNamesList ||= []).push(paths) - 1;
+            (fileNamesToFileIdListId ||= new Map()).set(key, fileIdsList?.length || 0);
+            return (fileIdsList ||= []).push(fileIds) - 1;
         }
     }
 
@@ -1194,27 +1194,23 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined, fileNames: readonly Path[], fileNamesList: readonly ReadonlySet<Path>[] | undefined): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
-        return referenceMap && arrayToMap(referenceMap, value => fileNames[value[0]], value => fileNamesList![value[1]]);
-    }
-
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
-        const fileNames = program.fileNames.map(toPath);
-        const fileNamesList = program.fileNamesList?.map(list => new Set(list.map(index => fileNames[index])));
+        const filePaths = program.fileNames.map(toPath);
+        const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(fileNames[index], fileInfo));
+        program.fileInfos.forEach((fileInfo, fileId) => fileInfos.set(toFilePath(fileId), fileInfo));
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
-            referencedMap: getMapOfReferencedSet(program.referencedMap, fileNames, fileNamesList),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, fileNames, fileNamesList),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => fileNames[isNumber(value) ? value : value[0]], value => isNumber(value) ? emptyArray : value[1]),
+            referencedMap: toMapOfReferencedSet(program.referencedMap),
+            exportedModulesMap: toMapOfReferencedSet(program.exportedModulesMap),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
-            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => fileNames[value[0]]),
-            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => fileNames[value[0]], value => value[1]),
+            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
+            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
             affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
         };
         return {
@@ -1248,6 +1244,18 @@ namespace ts {
 
         function toAbsolutePath(path: string) {
             return getNormalizedAbsolutePath(path, buildInfoDirectory);
+        }
+
+        function toFilePath(fileId: number) {
+            return filePaths[fileId];
+        }
+
+        function toFilePathsSet(fileIdsListId: number) {
+            return filePathsSetList![fileIdsListId];
+        }
+
+        function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
+            return referenceMap && arrayToMap(referenceMap, value => toFilePath(value[0]), value => toFilePathsSet(value[1]));
         }
     }
 
