@@ -208,25 +208,25 @@ namespace ts.server {
             try {
                 if (this.operationHost.isCancellationRequested()) {
                     stop = true;
-                    tracing.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId, early: true });
+                    tracing?.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId, early: true });
                 }
                 else {
-                    tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
+                    tracing?.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
                     action(this);
-                    tracing.pop();
+                    tracing?.pop();
                 }
             }
             catch (e) {
                 // Cancellation or an error may have left incomplete events on the tracing stack.
-                tracing.popAll();
+                tracing?.popAll();
 
                 stop = true;
                 // ignore cancellation request
                 if (e instanceof OperationCanceledException) {
-                    tracing.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId });
+                    tracing?.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId });
                 }
                 else {
-                    tracing.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (<Error>e).message });
+                    tracing?.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (<Error>e).message });
                     this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
                 }
             }
@@ -947,7 +947,7 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
-            tracing.instant(tracing.Phase.Session, "event", { eventName });
+            tracing?.instant(tracing.Phase.Session, "event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -1115,7 +1115,8 @@ namespace ts.server {
 
         private getEncodedSemanticClassifications(args: protocol.EncodedSemanticClassificationsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEncodedSemanticClassifications(file, args);
+            const format = args.format === "2020" ? SemanticClassificationFormat.TwentyTwenty : SemanticClassificationFormat.Original;
+            return project.getLanguageService().getEncodedSemanticClassifications(file, args, format);
         }
 
         private getProject(projectFileName: string | undefined): Project | undefined {
@@ -1640,7 +1641,7 @@ namespace ts.server {
         private getDocCommentTemplate(args: protocol.FileLocationRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            return languageService.getDocCommentTemplateAtPosition(file, position);
+            return languageService.getDocCommentTemplateAtPosition(file, position, this.getPreferences(file));
         }
 
         private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
@@ -1807,14 +1808,14 @@ namespace ts.server {
             if (kind === protocol.CommandTypes.CompletionsFull) return completions;
 
             const prefix = args.prefix || "";
-            const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
+            const entries = stableSort(mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended, isPackageJsonImport } = entry;
+                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended, isPackageJsonImport, data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended, isPackageJsonImport };
+                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended, isPackageJsonImport, data };
                 }
-            }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
+            }), (a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
             if (kind === protocol.CommandTypes.Completions) {
                 if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;
@@ -1836,8 +1837,8 @@ namespace ts.server {
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
             const result = mapDefined(args.entryNames, entryName => {
-                const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
-                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file));
+                const { name, source, data } = typeof entryName === "string" ? { name: entryName, source: undefined, data: undefined } : entryName;
+                return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
             return simplifiedResult
                 ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(action)) }))
@@ -2961,12 +2962,12 @@ namespace ts.server {
                 request = this.parseMessage(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
-                tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
+                tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
                 perfLogger.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
 
-                tracing.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
+                tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
                 const { response, responseRequired } = this.executeCommand(request);
-                tracing.pop();
+                tracing?.pop();
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
                     const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
@@ -2980,7 +2981,7 @@ namespace ts.server {
 
                 // Note: Log before writing the response, else the editor can complete its activity before the server does
                 perfLogger.logStopCommand("" + request.command, "Success");
-                tracing.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
+                tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
@@ -2990,19 +2991,19 @@ namespace ts.server {
             }
             catch (err) {
                 // Cancellation or an error may have left incomplete events on the tracing stack.
-                tracing.popAll();
+                tracing?.popAll();
 
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
                     perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
-                    tracing.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
+                    tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-                tracing.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
+                tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
 
                 this.doOutput(
                     /*info*/ undefined,
@@ -3116,5 +3117,13 @@ namespace ts.server {
             isWriteAccess,
             isDefinition
         };
+    }
+
+    function isCompletionEntryData(data: any): data is CompletionEntryData {
+        return data === undefined || data && typeof data === "object"
+            && typeof data.exportName === "string"
+            && (data.fileName === undefined || typeof data.fileName === "string")
+            && (data.ambientModuleName === undefined || typeof data.ambientModuleName === "string"
+            && (data.isPackageJsonImport === undefined || typeof data.isPackageJsonImport === "boolean"));
     }
 }

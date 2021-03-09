@@ -249,7 +249,7 @@ match(() => expected, (x = expected) => void 0);
 module.exports = x;
 >module.exports = x : typeof x
 >module.exports : typeof x
->module : { "\"tests/cases/conformance/jsdoc/index\"": typeof x; }
+>module : { exports: typeof x; }
 >exports : typeof x
 >x : typeof x
 

@@ -318,6 +318,9 @@ namespace ts {
         return getCombinedFlags(node, n => n.flags);
     }
 
+    /* @internal */
+    export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -326,7 +329,8 @@ namespace ts {
         locale: string,
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
         errors?: Push<Diagnostic>) {
-        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
+        const lowerCaseLocale = locale.toLowerCase();
+        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
 
         if (!matchResult) {
             if (errors) {
@@ -340,7 +344,7 @@ namespace ts {
 
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
-        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+        if (contains(supportedLocaleDirectories, lowerCaseLocale) && !trySetLanguageAndTerritory(language, territory, errors)) {
             trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
 
@@ -610,7 +614,7 @@ namespace ts {
         return (declaration as NamedDeclaration).name;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
             (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
@@ -926,7 +930,7 @@ namespace ts {
 
     // #region
 
-    export function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier {
+    export function isMemberName(node: Node): node is MemberName {
         return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateIdentifier;
     }
 
@@ -1052,12 +1056,21 @@ namespace ts {
     }
 
     /**
+     * True if kind is of some token syntax kind.
+     * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+     */
+    export function isTokenKind(kind: SyntaxKind): boolean {
+        return kind >= SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken;
+    }
+
+    /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     export function isToken(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+        return isTokenKind(n.kind);
     }
 
     // Node Arrays
@@ -1195,8 +1208,8 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is SignatureDeclaration {
-        return node && isFunctionLikeKind(node.kind);
+    export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration {
+        return !!node && isFunctionLikeKind(node.kind);
     }
 
     /* @internal */

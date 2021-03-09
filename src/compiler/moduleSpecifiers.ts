@@ -103,6 +103,9 @@ namespace ts.moduleSpecifiers {
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
+        if (!moduleSourceFile) {
+            return [];
+        }
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
 
@@ -255,16 +258,8 @@ namespace ts.moduleSpecifiers {
         return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSFileExtension(text) : undefined) || false;
     }
 
-    function numberOfDirectorySeparators(str: string) {
-        const match = str.match(/\//g);
-        return match ? match.length : 0;
-    }
-
     function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: ModulePath) {
-        return compareBooleans(b.isRedirect, a.isRedirect) || compareValues(
-            numberOfDirectorySeparators(a.path),
-            numberOfDirectorySeparators(b.path)
-        );
+        return compareBooleans(b.isRedirect, a.isRedirect) || compareNumberOfDirectorySeparators(a.path, b.path);
     }
 
     function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string) {
@@ -290,10 +285,12 @@ namespace ts.moduleSpecifiers {
         const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
+        let shouldFilterIgnoredPaths = !every(targets, containsIgnoredPath);
+
         if (!preferSymlinks) {
             // Symlinks inside ignored paths are already filtered out of the symlink cache,
             // so we only need to remove them from the realpath filenames.
-            const result = forEach(targets, p => !containsIgnoredPath(p) && cb(p, referenceRedirect === p));
+            const result = forEach(targets, p => !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
         const links = host.getSymlinkCache
@@ -320,12 +317,13 @@ namespace ts.moduleSpecifiers {
                 for (const symlinkDirectory of symlinkDirectories) {
                     const option = resolvePath(symlinkDirectory, relative);
                     const result = cb(option, target === referenceRedirect);
+                    shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
                     if (result) return result;
                 }
             });
         });
         return result || (preferSymlinks
-            ? forEach(targets, p => containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
+            ? forEach(targets, p => shouldFilterIgnoredPaths && containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
             : undefined);
     }
 
@@ -390,7 +388,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
-        const decl = find(moduleSymbol.declarations,
+        const decl = moduleSymbol.declarations?.find(
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
         if (decl) {

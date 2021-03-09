@@ -207,7 +207,7 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            match: /jquery(-[\d\.]+)?(\.intellisense)?(\.min)?\.js$/i,
             types: ["jquery"]
         },
         "WinJS": {
@@ -922,13 +922,12 @@ namespace ts.server {
                 case ActionSet:
                     // Update the typing files and update the project
                     project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
-                    break;
+                    return;
                 case ActionInvalidate:
                     // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
                     this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
                     return;
             }
-            this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
 
         /*@internal*/
@@ -1982,28 +1981,17 @@ namespace ts.server {
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension: ts.hasTSFileExtension, host: this.host }, totalNonTsFileSize)); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                    const top5LargestFiles = fileNames.map(f => propertyReader.getFileName(f))
+                        .filter(name => !hasTSFileExtension(name))
+                        .map(name => ({ name, size: this.host.getFileSize!(name) }))
+                        .sort((a, b) => b.size - a.size)
+                        .slice(0, 5);
+                    this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
             }
-
             this.projectToSizeMap.set(name, totalNonTsFileSize);
-
-            return;
-
-            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
-                const files = getTop5LargestFiles(context);
-
-                return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
-            }
-            function getTop5LargestFiles({ propertyReader, hasTSFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }) {
-                return fileNames.map(f => propertyReader.getFileName(f))
-                    .filter(name => hasTSFileExtension(name))
-                    .map(name => ({ name, size: host.getFileSize!(name) })) // TODO: GH#18217
-                    .sort((a, b) => b.size - a.size)
-                    .slice(0, 5);
-            }
         }
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
@@ -2719,7 +2707,7 @@ namespace ts.server {
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
-                return snap.getText(0, snap.getLength());
+                return getSnapshotText(snap);
             };
             const projectName = project.projectName;
             const documentPositionMapper = getDocumentPositionMapper(
@@ -2941,7 +2929,7 @@ namespace ts.server {
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
-         * If the there is no existing project it just opens the configured project for the config file
+         * If there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {

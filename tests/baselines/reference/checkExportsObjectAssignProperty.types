@@ -251,13 +251,13 @@ Object.defineProperty(exports, "setonlyAccessor", {
 
 === tests/cases/conformance/jsdoc/mod2.js ===
 Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
->Object.defineProperty(module.exports, "thing", { value: "yes", writable: true }) : typeof import("tests/cases/conformance/jsdoc/mod2")
+>Object.defineProperty(module.exports, "thing", { value: "yes", writable: true }) : typeof module.exports
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod2")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >"thing" : "thing"
 >{ value: "yes", writable: true } : { value: string; writable: true; }
 >value : string
@@ -266,13 +266,13 @@ Object.defineProperty(module.exports, "thing", { value: "yes", writable: true })
 >true : true
 
 Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
->Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false }) : typeof import("tests/cases/conformance/jsdoc/mod2")
+>Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false }) : typeof module.exports
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod2")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >"readonlyProp" : "readonlyProp"
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
 >value : string
@@ -281,13 +281,13 @@ Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable
 >false : false
 
 Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof import("tests/cases/conformance/jsdoc/mod2")
+>Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } }) : typeof module.exports
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod2")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >"rwAccessors" : "rwAccessors"
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
 >get : () => number
@@ -296,26 +296,26 @@ Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, s
 >_ : any
 
 Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
->Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } }) : typeof import("tests/cases/conformance/jsdoc/mod2")
+>Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } }) : typeof module.exports
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod2")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >"readonlyAccessor" : "readonlyAccessor"
 >{ get() { return 21.75 } } : { get(): number; }
 >get : () => number
 >21.75 : 21.75
 
 Object.defineProperty(module.exports, "setonlyAccessor", {
->Object.defineProperty(module.exports, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }}) : typeof import("tests/cases/conformance/jsdoc/mod2")
+>Object.defineProperty(module.exports, "setonlyAccessor", {    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }}) : typeof module.exports
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
->exports : typeof import("tests/cases/conformance/jsdoc/mod2")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >"setonlyAccessor" : "setonlyAccessor"
 >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
 
