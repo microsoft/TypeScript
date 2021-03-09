@@ -1178,6 +1178,7 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
+        /*@internal*/resetCurrentDirectory(): void;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
         getModifiedTime?(path: string): Date | undefined;
@@ -1278,7 +1279,7 @@ namespace ts {
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
-            const getCurrentDirectory = memoize(() => process.cwd());
+            const [getCurrentDirectory, resetCurrentDirectory] = memoizeWithClear(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
                 pollingWatchFile: createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames),
                 getModifiedTime,
@@ -1335,6 +1336,7 @@ namespace ts {
                     return __filename;
                 },
                 getCurrentDirectory,
+                resetCurrentDirectory,
                 getDirectories,
                 getEnvironmentVariable(name: string) {
                     return process.env[name] || "";

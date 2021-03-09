@@ -248,6 +248,7 @@ namespace Harness.LanguageService {
         }
 
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
+        resetCurrentDirectory() { /*noop*/ }
 
         getDefaultLibFileName(): string { return Compiler.defaultLibFileName; }
 
@@ -369,6 +370,7 @@ namespace Harness.LanguageService {
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
+        resetCurrentDirectory() { this.nativeHost.resetCurrentDirectory(); }
         getDirectories(path: string): string { return JSON.stringify(this.nativeHost.getDirectories(path)); }
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
@@ -772,6 +774,10 @@ namespace Harness.LanguageService {
         }
 
         getCurrentDirectory(): string {
+            return this.host.getCurrentDirectory();
+        }
+
+        resetCurrentDirectory(): string {
             return this.host.getCurrentDirectory();
         }
 

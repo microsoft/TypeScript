@@ -78,6 +78,8 @@ namespace fakes {
             return this.vfs.cwd();
         }
 
+        public resetCurrentDirectory() { /*noop*/ }
+
         public getDirectories(path: string) {
             const result: string[] = [];
             try {

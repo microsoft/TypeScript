@@ -1112,6 +1112,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
+        readonly resetCurrentDirectory = noop;
         exit(exitCode?: number) {
             this.exitCode = exitCode;
             throw new Error(this.exitMessage);

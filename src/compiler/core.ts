@@ -1653,6 +1653,23 @@ namespace ts {
     }
 
     /**
+     * A version of `memoize` that can be cleared on demand.
+     *
+     * @remarks
+     * Don't use in repeated (memory leakable) blocks: the callback reference is preserved.
+     */
+    export function memoizeWithClear<T>(callback: () => T): [() => T, () => void] {
+        let getValue = memoize(callback);
+
+        return [
+            () => getValue(),
+            () => {
+                getValue = memoize(callback);
+            },
+        ];
+    }
+
+    /**
      * High-order function, composes functions. Note that functions are composed inside-out;
      * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
      *

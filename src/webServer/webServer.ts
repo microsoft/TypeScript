@@ -129,6 +129,7 @@ namespace ts.server {
 
             getExecutingFilePath: () => directorySeparator,
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
+            resetCurrentDirectory: noop,
 
             /* eslint-disable no-restricted-globals */
             setTimeout,

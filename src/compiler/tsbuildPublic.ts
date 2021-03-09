@@ -512,6 +512,10 @@ namespace ts {
             disableCache(state);
         }
 
+        // Public implementers may process.chdir between builds
+        // https://github.com/microsoft/TypeScript/issues/43120
+        sys.resetCurrentDirectory();
+
         const { compilerHost, host } = state;
 
         const originalReadFileWithCache = state.readFileWithCache;

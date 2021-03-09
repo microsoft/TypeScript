@@ -17,6 +17,7 @@ namespace ts.server {
         createDirectory: noop,
         getExecutingFilePath(): string { return ""; },
         getCurrentDirectory(): string { return ""; },
+        resetCurrentDirectory: noop,
         getEnvironmentVariable(): string { return ""; },
         readDirectory() { return []; },
         exit: noop,
