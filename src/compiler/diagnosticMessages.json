@@ -1352,15 +1352,15 @@
         "category": "Message",
         "code": 1430
     },
-    "Dynamic import must have a specifier as arguments and an optional assertion": {
+    "'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1431
     },
-    "'for await' loops are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.": {
+    "Dynamic import must have a specifier as arguments and an optional assertion": {
         "category": "Error",
         "code": 1433
     },
@@ -3244,31 +3244,31 @@
         "category": "Error",
         "code": 2796
     },
-    "Import assertions are only supported when the '--module' flag is set to 'esnext'.": {
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
         "category": "Error",
         "code": 2797
     },
-    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+    "The declaration was marked as deprecated here.": {
         "category": "Error",
         "code": 2798
     },
-    "The declaration was marked as deprecated here.": {
+    "Type produces a tuple type that is too large to represent.": {
         "category": "Error",
         "code": 2799
     },
-    "Type produces a tuple type that is too large to represent.": {
+    "Expression produces a tuple type that is too large to represent.": {
         "category": "Error",
         "code": 2800
     },
-    "Expression produces a tuple type that is too large to represent.": {
+    "This condition will always return true since the Promise is always truthy.": {
         "category": "Error",
         "code": 2801
     },
-    "This condition will always return true since the Promise is always truthy.": {
+    "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
         "category": "Error",
         "code": 2802
     },
-    "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
+    "Import assertions are only supported when the '--module' flag is set to 'esnext'.": {
         "category": "Error",
         "code": 2803
     },
