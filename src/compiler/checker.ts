@@ -36521,7 +36521,7 @@ namespace ts {
                             error(member, diag, baseClassName);
                         }
                         else if (hasAbstractModifier(member) && baseHasAbstract) {
-                            error(member, Diagnostics.This_member_must_have_an_override_modifier_because_it_is_override_an_abstract_method_that_is_declared_in_the_base_class_0, baseClassName);
+                            error(member, Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0, baseClassName);
                         }
                     }
                 }
@@ -39918,6 +39918,9 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
+                        }
+                        if (node.kind === SyntaxKind.Parameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
                         }
                         flags |= ModifierFlags.Override;
                         lastOverride = modifier;

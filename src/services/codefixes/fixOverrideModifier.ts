@@ -14,7 +14,7 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code,
         Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code,
-        Diagnostics.This_member_must_have_an_override_modifier_because_it_is_override_an_abstract_method_that_is_declared_in_the_base_class_0.code,
+        Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0.code,
         Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code
     ];
 
@@ -25,7 +25,7 @@ namespace ts.codefix {
         [Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code]: [
             Diagnostics.Remove_override_modifier, fixRemoveOverrideId, Diagnostics.Remove_all_unnecessary_override_modifiers
         ],
-        [Diagnostics.This_member_must_have_an_override_modifier_because_it_is_override_an_abstract_method_that_is_declared_in_the_base_class_0.code]: [
+        [Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0.code]: [
             Diagnostics.Add_override_modifier, fixAddOverrideId, Diagnostics.Remove_all_unnecessary_override_modifiers
         ],
         [Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code]: [
@@ -69,7 +69,7 @@ namespace ts.codefix {
         pos: number) {
         switch (errorCode) {
             case Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code:
-            case Diagnostics.This_member_must_have_an_override_modifier_because_it_is_override_an_abstract_method_that_is_declared_in_the_base_class_0.code:
+            case Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0.code:
                 return doAddOverrideModifierChange(changeTracker, context.sourceFile, pos);
             case Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code:
             case Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code:

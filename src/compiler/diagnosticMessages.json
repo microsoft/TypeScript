@@ -3657,7 +3657,7 @@
         "category": "Error",
         "code": 4115
     },
-    "This member must have an 'override' modifier because it is override an abstract method that is declared in the base class '{0}'.": {
+    "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4116
     },
