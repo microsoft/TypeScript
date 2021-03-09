@@ -1180,7 +1180,9 @@ namespace ts.FindAllReferences {
             for (const indirectUser of indirectUsers) {
                 for (const node of getPossibleSymbolReferenceNodes(indirectUser, isDefaultExport ? "default" : exportName)) {
                     // Import specifiers should be handled by importSearches
-                    if (isIdentifier(node) && !isImportOrExportSpecifier(node.parent) && checker.getSymbolAtLocation(node) === exportSymbol) {
+                    const symbol = checker.getSymbolAtLocation(node);
+                    const hasExportAssignmentDeclaration = some(symbol?.declarations, d => tryCast(d, isExportAssignment) ? true : false);
+                    if (isIdentifier(node) && !isImportOrExportSpecifier(node.parent) && (symbol === exportSymbol || hasExportAssignmentDeclaration)) {
                         cb(node);
                     }
                 }
