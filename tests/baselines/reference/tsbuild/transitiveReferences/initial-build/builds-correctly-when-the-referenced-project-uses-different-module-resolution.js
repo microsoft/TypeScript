@@ -112,18 +112,22 @@ a_1.X;
 //// [/src/tsconfig.a.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../lib/lib.d.ts": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./a.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./a.ts": {
+      {
         "version": "-8566332115-export class A {}\r\n",
         "signature": "-9529994156-export declare class A {\r\n}\r\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "composite": true,
       "listFiles": true,
@@ -132,8 +136,8 @@ a_1.X;
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
-      "./a.ts"
+      0,
+      1
     ]
   },
   "version": "FakeTSVersion"
@@ -171,23 +175,28 @@ a_1.X;
 //// [/src/tsconfig.b.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../lib/lib.d.ts": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./a.d.ts",
+      "./b.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./a.d.ts": {
+      {
         "version": "-9529994156-export declare class A {\r\n}\r\n",
         "signature": "-9529994156-export declare class A {\r\n}\r\n",
         "affectsGlobalScope": false
       },
-      "./b.ts": {
+      {
         "version": "-17186364832-import {A} from 'a';\nexport const b = new A();",
         "signature": "-9520743082-import { A } from 'a';\r\nexport declare const b: A;\r\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "composite": true,
       "moduleResolution": 1,
@@ -205,9 +214,9 @@ a_1.X;
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../lib/lib.d.ts",
-      "./a.d.ts",
-      "./b.ts"
+      0,
+      1,
+      2
     ]
   },
   "version": "FakeTSVersion"

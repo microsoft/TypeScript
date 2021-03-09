@@ -238,6 +238,8 @@ interface Symbol {
 
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
         if (!buildInfo.program) return;
+        type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
+        type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
         interface ProgramBuildInfo {
             fileInfos: MapLike<BuilderState.FileInfo>;
             options: CompilerOptions;
@@ -246,7 +248,27 @@ interface Symbol {
             semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
             affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         }
-        const result: { program: ProgramBuildInfo } = { program: buildInfo.program };
+        const fileInfos: ProgramBuildInfo["fileInfos"] = {};
+        buildInfo.program.fileInfos.forEach((fileInfo, index) => {
+            fileInfos[buildInfo.program!.fileNames[index]] = fileInfo;
+        });
+        const result: { program: ProgramBuildInfo } = {
+            program: {
+                fileInfos,
+                options: buildInfo.program.options,
+                referencedMap: buildInfo.program.referencedMap,
+                exportedModulesMap: buildInfo.program.exportedModulesMap,
+                semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
+                    isNumber(d) ?
+                        buildInfo.program!.fileNames[d] :
+                        [buildInfo.program!.fileNames[d[0]], d[1]]
+                ),
+                affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([file, kind]) => [
+                    buildInfo.program!.fileNames[file],
+                    kind
+                ]),
+            }
+        };
         // For now its just JSON.stringify
         originalWriteFile.call(sys, `${buildInfoPath}.program.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, " "));
     }

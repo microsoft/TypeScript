@@ -216,33 +216,40 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 //// [/src/lib/core/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../lib/lib.d.ts": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "../../animals/animal.ts",
+      "../../animals/dog.ts",
+      "../../animals/index.ts",
+      "../../core/utilities.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../../animals/animal.ts": {
+      {
         "version": "-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
         "signature": "13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n",
         "affectsGlobalScope": false
       },
-      "../../animals/dog.ts": {
+      {
         "version": "-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n",
         "signature": "10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n",
         "affectsGlobalScope": false
       },
-      "../../animals/index.ts": {
+      {
         "version": "-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
         "signature": "4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n",
         "affectsGlobalScope": false
       },
-      "../../core/utilities.ts": {
+      {
         "version": "-15713992787-import * as A from '../animals';\n\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n",
         "signature": "-8177343116-export declare function makeRandomName(): string;\r\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\r\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "declaration": true,
       "target": 1,
@@ -280,12 +287,12 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../lib/lib.d.ts",
-      "../../animals/animal.ts",
-      "../../animals/dog.ts",
-      "../../animals/index.ts",
+      0,
+      1,
+      2,
+      3,
       [
-        "../../core/utilities.ts",
+        4,
         [
           {
             "file": "../../core/utilities.ts",
@@ -301,19 +308,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ],
     "affectedFilesPendingEmit": [
       [
-        "../../animals/animal.ts",
+        1,
         1
       ],
       [
-        "../../animals/dog.ts",
+        2,
         1
       ],
       [
-        "../../animals/index.ts",
+        3,
         1
       ],
       [
-        "../../core/utilities.ts",
+        4,
         1
       ]
     ]

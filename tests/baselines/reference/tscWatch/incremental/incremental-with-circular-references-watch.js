@@ -123,33 +123,40 @@ export { C } from "./c";
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./c.ts": {
+      {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
         "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
         "affectsGlobalScope": false
       },
-      "./b.ts": {
+      {
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
         "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
         "affectsGlobalScope": false
       },
-      "./a.ts": {
+      {
         "version": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
         "signature": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
         "affectsGlobalScope": false
       },
-      "./index.ts": {
+      {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
         "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "incremental": true,
       "target": 1,
@@ -192,11 +199,11 @@ export { C } from "./c";
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./index.ts"
+      0,
+      3,
+      2,
+      1,
+      4
     ]
   },
   "version": "FakeTSVersion"
@@ -358,33 +365,40 @@ export interface A {
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./c.ts": {
+      {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
         "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
         "affectsGlobalScope": false
       },
-      "./b.ts": {
+      {
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
         "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
         "affectsGlobalScope": false
       },
-      "./a.ts": {
+      {
         "version": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
         "signature": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
         "affectsGlobalScope": false
       },
-      "./index.ts": {
+      {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
         "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "incremental": true,
       "target": 1,
@@ -427,11 +441,11 @@ export interface A {
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts",
-      "./index.ts"
+      0,
+      3,
+      2,
+      1,
+      4
     ]
   },
   "version": "FakeTSVersion"

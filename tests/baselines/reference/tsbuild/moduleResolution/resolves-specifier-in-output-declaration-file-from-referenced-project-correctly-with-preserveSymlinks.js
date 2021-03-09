@@ -145,23 +145,28 @@ export type { TheNum } from 'const';
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../../../../a/lib/lib.d.ts",
+      "../const.ts",
+      "../index.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "../const.ts": {
+      {
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-9649133742-export declare type TheNum = 42;\n",
         "affectsGlobalScope": false
       },
-      "../index.ts": {
+      {
         "version": "-10837689162-export type { TheNum } from 'const';",
         "signature": "-9751391360-export type { TheNum } from 'const';\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "composite": true,
       "outDir": "./",
@@ -181,9 +186,9 @@ export type { TheNum } from 'const';
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../const.ts",
-      "../index.ts"
+      0,
+      1,
+      2
     ]
   },
   "version": "FakeTSVersion"

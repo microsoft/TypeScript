@@ -33,23 +33,28 @@ exitCode:: ExitStatus.Success
 //// [/src/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/another.d.ts",
+      "./src/main.d.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./src/another.d.ts": {
+      {
         "version": "-13729955264-export const y = 10;",
         "signature": "-13729955264-export const y = 10;",
         "affectsGlobalScope": false
       },
-      "./src/main.d.ts": {
+      {
         "version": "-10726455937-export const x = 10;",
         "signature": "-10726455937-export const x = 10;",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "incremental": true,
       "project": "./",
@@ -58,9 +63,9 @@ exitCode:: ExitStatus.Success
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/another.d.ts",
-      "./src/main.d.ts"
+      0,
+      1,
+      2
     ]
   },
   "version": "FakeTSVersion"
@@ -129,23 +134,28 @@ exitCode:: ExitStatus.Success
 //// [/src/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/another.d.ts",
+      "./src/main.d.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./src/another.d.ts": {
+      {
         "version": "-13729955264-export const y = 10;",
         "signature": "-13729955264-export const y = 10;",
         "affectsGlobalScope": false
       },
-      "./src/main.d.ts": {
+      {
         "version": "-10808461502-export const x = 10;export const xy = 100;",
         "signature": "-10808461502-export const x = 10;export const xy = 100;",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "incremental": true,
       "project": "./",
@@ -154,9 +164,9 @@ exitCode:: ExitStatus.Success
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./src/another.d.ts",
-      "./src/main.d.ts"
+      0,
+      1,
+      2
     ]
   },
   "version": "FakeTSVersion"

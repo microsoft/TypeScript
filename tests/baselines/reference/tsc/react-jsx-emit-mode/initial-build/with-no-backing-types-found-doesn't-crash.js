@@ -56,23 +56,28 @@ exports.App = App;
 //// [/src/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/index.tsx",
+      "./node_modules/@types/react/index.d.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./src/index.tsx": {
+      {
         "version": "-14760199789-export const App = () => <div propA={true}></div>;",
         "signature": "-8716173275-/// <reference types=\"react\" />\r\nexport declare const App: () => JSX.Element;\r\n",
         "affectsGlobalScope": false
       },
-      "./node_modules/@types/react/index.d.ts": {
+      {
         "version": "-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}",
         "signature": "-16587767667-\nexport {};\ndeclare global {\n    namespace JSX {\n        interface Element {}\n        interface IntrinsicElements {\n            div: {\n                propA?: boolean;\n            };\n        }\n    }\n}",
         "affectsGlobalScope": true
       }
-    },
+    ],
     "options": {
       "module": 1,
       "jsx": 4,
@@ -84,9 +89,9 @@ exports.App = App;
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "./node_modules/@types/react/index.d.ts",
-      "./src/index.tsx"
+      0,
+      2,
+      1
     ]
   },
   "version": "FakeTSVersion"

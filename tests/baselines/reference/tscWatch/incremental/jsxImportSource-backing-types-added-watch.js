@@ -78,18 +78,22 @@ exports.App = App;
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./index.tsx"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./index.tsx": {
+      {
         "version": "-14760199789-export const App = () => <div propA={true}></div>;",
         "signature": "-11175433774-export declare const App: () => any;\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "module": 1,
       "jsx": 4,
@@ -101,9 +105,9 @@ exports.App = App;
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
+      0,
       [
-        "./index.tsx",
+        1,
         [
           {
             "file": "./index.tsx",
@@ -232,23 +236,28 @@ exitCode:: ExitStatus.undefined
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./node_modules/react/jsx-runtime/index.d.ts",
+      "./index.tsx"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./node_modules/react/jsx-runtime/index.d.ts": {
+      {
         "version": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
         "signature": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
         "affectsGlobalScope": false
       },
-      "./index.tsx": {
+      {
         "version": "-14760199789-export const App = () => <div propA={true}></div>;",
         "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "module": 1,
       "jsx": 4,
@@ -268,9 +277,9 @@ exitCode:: ExitStatus.undefined
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./index.tsx",
-      "./node_modules/react/jsx-runtime/index.d.ts"
+      0,
+      2,
+      1
     ]
   },
   "version": "FakeTSVersion"

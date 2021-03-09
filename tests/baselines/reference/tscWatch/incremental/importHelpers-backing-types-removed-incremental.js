@@ -63,23 +63,28 @@ exports.x = (0, tslib_1.__assign)({});
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./node_modules/tslib/index.d.ts",
+      "./index.tsx"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./node_modules/tslib/index.d.ts": {
+      {
         "version": "1620578607-export function __assign(...args: any[]): any;",
         "signature": "1620578607-export function __assign(...args: any[]): any;",
         "affectsGlobalScope": false
       },
-      "./index.tsx": {
+      {
         "version": "-14168389096-export const x = {...{}};",
         "signature": "-6508651827-export declare const x: {};\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "importHelpers": true,
       "incremental": true,
@@ -92,9 +97,9 @@ exports.x = (0, tslib_1.__assign)({});
     },
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./index.tsx",
-      "./node_modules/tslib/index.d.ts"
+      0,
+      2,
+      1
     ]
   },
   "version": "FakeTSVersion"
@@ -179,18 +184,22 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./index.tsx"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./index.tsx": {
+      {
         "version": "-14168389096-export const x = {...{}};",
         "signature": "-6508651827-export declare const x: {};\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "importHelpers": true,
       "incremental": true,
@@ -199,9 +208,9 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
+      0,
       [
-        "./index.tsx",
+        1,
         [
           {
             "file": "./index.tsx",

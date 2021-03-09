@@ -101,23 +101,28 @@ exports.x = 10;
 //// [/src/tsconfig.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../lib/lib.d.ts": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./src/index.ts",
+      "./types/type.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./src/index.ts": {
+      {
         "version": "-10726455937-export const x = 10;",
         "signature": "-6057683066-export declare const x = 10;\r\n",
         "affectsGlobalScope": false
       },
-      "./types/type.ts": {
+      {
         "version": "-4885977236-export type t = string;",
         "signature": "-4409762125-export declare type t = string;\r\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "outDir": "./dist",
       "rootDir": "./src",
@@ -126,8 +131,7 @@ exports.x = 10;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": []
+    "exportedModulesMap": {}
   },
   "version": "FakeTSVersion"
 }
@@ -160,8 +164,7 @@ exports.x = 10;
    "configFilePath": "./tsconfig.json"
   },
   "referencedMap": {},
-  "exportedModulesMap": {},
-  "semanticDiagnosticsPerFile": []
+  "exportedModulesMap": {}
  }
 }
 

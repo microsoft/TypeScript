@@ -91,23 +91,28 @@ exports["default"] = index_json_1["default"].hello;
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo]
 {
   "program": {
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../src/index.json",
+      "../src/index.ts"
+    ],
+    "fileInfos": [
+      {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../src/index.json": {
+      {
         "version": "-2379406821-{\"hello\":\"world\"}",
         "signature": "-17173785019-export const hello: string;\r\n",
         "affectsGlobalScope": true
       },
-      "../src/index.ts": {
+      {
         "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
         "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n",
         "affectsGlobalScope": false
       }
-    },
+    ],
     "options": {
       "composite": true,
       "moduleResolution": 2,
@@ -127,9 +132,9 @@ exports["default"] = index_json_1["default"].hello;
     },
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "../src/index.json",
-      "../src/index.ts"
+      0,
+      1,
+      2
     ]
   },
   "version": "FakeTSVersion"
