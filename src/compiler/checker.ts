@@ -39920,7 +39920,7 @@ namespace ts {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
                         }
                         flags |= ModifierFlags.Override;
                         lastOverride = modifier;
