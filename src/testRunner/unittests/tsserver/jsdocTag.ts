@@ -24,11 +24,11 @@ namespace ts.projectSystem {
             const indexOfX = file.content.indexOf("x");
             const quickInfo = session.executeCommandSeq<protocol.QuickInfoRequest>({
                 command: command as protocol.CommandTypes.Quickinfo,
-                richResponse,
                 arguments: {
                     file: file.path,
                     position: indexOfX,
-                } as protocol.FileLocationRequestArgs
+                    richResponse,
+                } as protocol.QuickInfoRequestArgs
             }).response;
             const summaryAndLocation = command === protocol.CommandTypes.Quickinfo ? {
                 displayString: "var x: number",
@@ -289,13 +289,13 @@ x(1)`
             const indexOfX = linkInParamTag.content.lastIndexOf("1");
             const signatureHelp = session.executeCommandSeq<protocol.SignatureHelpRequest>({
                 command: command as protocol.CommandTypes.SignatureHelp,
-                richResponse,
                 arguments: {
                     triggerReason: {
                         kind: "invoked"
                     },
                     file: linkInParamTag.path,
                     position: indexOfX,
+                    richResponse,
                 } as protocol.SignatureHelpRequestArgs
             }).response;
             const applicableSpan = command === protocol.CommandTypes.SignatureHelp ? {
@@ -541,11 +541,11 @@ foo`
             const indexOfFoo = linkInParamJSDoc.content.lastIndexOf("fo");
             const completions = session.executeCommandSeq<protocol.CompletionDetailsRequest>({
                 command: command as protocol.CommandTypes.CompletionDetails,
-                richResponse,
                 arguments: {
                     entryNames: ["foo"],
                     file: linkInParamJSDoc.path,
                     position: indexOfFoo,
+                    richResponse,
                 } as protocol.CompletionDetailsRequestArgs
             }).response;
             assert.deepEqual(completions, [{
