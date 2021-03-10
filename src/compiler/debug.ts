@@ -275,6 +275,14 @@ namespace ts {
             }
         }
 
+        /**
+         * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
+         * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
+         * as a result can reduce the number of unnecessary casts.
+         */
+        export function type<T>(value: unknown): asserts value is T;
+        export function type(_value: unknown) { }
+
         export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";

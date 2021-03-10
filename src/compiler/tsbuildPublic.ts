@@ -1339,7 +1339,7 @@ namespace ts {
 
     function checkConfigFileUpToDateStatus(state: SolutionBuilderState, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
         // Check tsconfig time
-        const tsconfigTime = state.host.getModifiedTime(configFile) || missingFileModifiedTime;
+        const tsconfigTime = getModifiedTime(state.host, configFile);
         if (oldestOutputFileTime < tsconfigTime) {
             return {
                 type: UpToDateStatusType.OutOfDateWithSelf,
@@ -1362,7 +1362,7 @@ namespace ts {
                 };
             }
 
-            const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
+            const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
             if (inputTime > newestInputFileTime) {
                 newestInputFileName = inputFile;
                 newestInputFileTime = inputTime;
@@ -1395,7 +1395,7 @@ namespace ts {
                 break;
             }
 
-            const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
+            const outputTime = getModifiedTime(host, output);
             if (outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
@@ -1418,7 +1418,7 @@ namespace ts {
             // had its file touched but not had its contents changed - this allows us
             // to skip a downstream typecheck
             if (isDeclarationFile(output)) {
-                const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                const outputModifiedTime = getModifiedTime(host, output);
                 newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
             }
         }
@@ -1576,7 +1576,7 @@ namespace ts {
                 }
 
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, getModifiedTime(host, file));
                 }
 
                 host.setModifiedTime(file, now);

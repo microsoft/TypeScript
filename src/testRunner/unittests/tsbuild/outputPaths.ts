@@ -60,11 +60,10 @@ namespace ts {
                 noChangeRun,
                 {
                     ...noChangeProject,
-                    cleanBuildDiscrepancies: () => {
-                        const map = new Map<string, CleanBuildDescrepancy>();
-                        map.set("/src/dist/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent); // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
-                        return map;
-                    }
+                    cleanBuildDiscrepancies: () => new Map([
+                        ["/src/dist/tsconfig.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent], // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
+                        ["/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt", CleanBuildDescrepancy.CleanFileTextDifferent] // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
+                    ]),
                 }
             ],
         }, ["/src/dist/src/index.js", "/src/dist/src/index.d.ts"]);
