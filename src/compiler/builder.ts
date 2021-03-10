@@ -823,8 +823,8 @@ namespace ts {
     export interface PersistedProgramSourceFile {
         fileName: string;
         originalFileName: string;
-        path: string;
-        resolvedPath: string;
+        path: ProgramBuildInfoFileId;
+        resolvedPath: ProgramBuildInfoFileId;
         // This currently is set to sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags but cant be set in type
         // Change this if it changes in reusing program
         flags: NodeFlags;
@@ -840,7 +840,7 @@ namespace ts {
 
         resolvedModules?: MapLike<number>;
         resolvedTypeReferenceDirectiveNames?: MapLike<number>;
-        redirectInfo?: { readonly redirectTarget: { readonly path: string }; };
+        redirectInfo?: { readonly redirectTarget: { readonly path: ProgramBuildInfoFileId; }; };
 
         includeReasons: readonly PersistedProgramFileIncludeReason[];
         isSourceFileFromExternalLibraryPath?: true;
@@ -857,7 +857,7 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
     export interface PersistedProgramReferencedFile {
         kind: ReferencedFileKind;
-        file: string;
+        file: ProgramBuildInfoFileId;
         index: number;
     }
     export type PersistedProgramFileIncludeReason =
@@ -1056,12 +1056,11 @@ namespace ts {
         function toPersistedProgramSourceFile(sourceFile: SourceFile): PersistedProgramSourceFile {
             if (programFilesByName.get(sourceFile.path) === sourceFile) programFilesByName.delete(sourceFile.path);
             if (programFilesByName.get(sourceFile.resolvedPath) === sourceFile) programFilesByName.delete(sourceFile.resolvedPath);
-            const resolvedPath = relativeToBuildInfo(sourceFile.resolvedPath);
             return {
                 fileName: relativeToBuildInfoEnsuringAbsolutePath(sourceFile.fileName),
                 originalFileName: relativeToBuildInfoEnsuringAbsolutePath(sourceFile.originalFileName),
-                path: relativeToBuildInfo(sourceFile.path),
-                resolvedPath,
+                path: toFileId(sourceFile.path),
+                resolvedPath: toFileId(sourceFile.resolvedPath),
                 version: sourceFile.version,
                 flags: sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags,
                 typeReferenceDirectives: mapToReadonlyArrayOrUndefined(sourceFile.typeReferenceDirectives, toPersistedProgramFileReference),
@@ -1071,7 +1070,7 @@ namespace ts {
                 moduleAugmentations: mapToReadonlyArrayOrUndefined(sourceFile.moduleAugmentations, toModuleNameOfProgramFromBuildInfo),
                 ambientModuleNames: sourceFile.ambientModuleNames.length ? sourceFile.ambientModuleNames : undefined,
                 hasNoDefaultLib: sourceFile.hasNoDefaultLib ? true : undefined,
-                redirectInfo: sourceFile.redirectInfo && { redirectTarget: { path: relativeToBuildInfo(sourceFile.redirectInfo.redirectTarget.path) } },
+                redirectInfo: sourceFile.redirectInfo && { redirectTarget: { path: toFileId(sourceFile.redirectInfo.redirectTarget.path) } },
                 resolvedModules: toPersistedProgramResolutionMap(sourceFile.resolvedModules),
                 resolvedTypeReferenceDirectiveNames: toPersistedProgramResolutionMap(sourceFile.resolvedTypeReferenceDirectiveNames),
                 redirectTargets: mapToReadonlyArrayOrUndefined(program.redirectTargetsMap.get(sourceFile.path), relativeToBuildInfoEnsuringAbsolutePath),
@@ -1082,7 +1081,7 @@ namespace ts {
         }
 
         function toPersistedProgramReferencedFile(reason: ReferencedFile): PersistedProgramReferencedFile {
-            return { ...reason, file: relativeToBuildInfo(reason.file) };
+            return { ...reason, file: toFileId(reason.file) };
         }
 
         function toPersistedProgramFileIncludeReason(reason: FileIncludeReason): PersistedProgramFileIncludeReason {
@@ -1673,8 +1672,8 @@ namespace ts {
             return programFromBuildInfo = createProgramFromBuildInfo(state.persistedProgramInfo, state.compilerOptions);
 
             function toSourceFileOfProgramFromBuildInfo(file: PersistedProgramSourceFile): SourceFileOfProgramFromBuildInfo {
-                const path = toPath(file.path);
-                const resolvedPath = toPath(file.resolvedPath);
+                const path = toFilePath(file.path);
+                const resolvedPath = toFilePath(file.resolvedPath);
 
                 fileIncludeReasons.set(path, file.includeReasons.map(toFileIncludeReason));
                 if (file.isSourceFileFromExternalLibraryPath) (sourceFileFromExternalLibraryPath ||= new Set()).add(path);
@@ -1697,7 +1696,7 @@ namespace ts {
                     hasNoDefaultLib: file.hasNoDefaultLib || false,
                     resolvedModules: toResolutionMap(file.resolvedModules),
                     resolvedTypeReferenceDirectiveNames: toResolutionMap(file.resolvedTypeReferenceDirectiveNames),
-                    redirectInfo: file.redirectInfo && { redirectTarget: { path: toPath(file.redirectInfo.redirectTarget.path) } }
+                    redirectInfo: file.redirectInfo && { redirectTarget: { path: toFilePath(file.redirectInfo.redirectTarget.path) } }
                 };
 
                 if (!filesByName.has(path)) filesByName.set(path, sourceFile);
@@ -1738,7 +1737,7 @@ namespace ts {
         }
 
         function toReferencedFile(reason: PersistedProgramReferencedFile): ReferencedFile {
-            return { ...reason, file: toPath(reason.file) };
+            return { ...reason, file: toFilePath(reason.file) };
         }
 
         function toFileIncludeReason(reason: PersistedProgramFileIncludeReason): FileIncludeReason {

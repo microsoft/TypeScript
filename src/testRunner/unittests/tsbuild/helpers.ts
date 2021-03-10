@@ -238,8 +238,41 @@ interface Symbol {
 
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
+    interface ReadablePersistedProgramSourceFile {
+        fileName: string;
+        originalFileName: string;
+        path: string;
+        resolvedPath: string;
+        flags: NodeFlags;
+        version: string;
+        typeReferenceDirectives?: readonly string[];
+        libReferenceDirectives?: readonly string[];
+        referencedFiles?: readonly string[];
+        imports?: readonly StringLiteralLikeOfProgramFromBuildInfo[];
+        moduleAugmentations?: readonly ModuleNameOfProgramFromBuildInfo[];
+        ambientModuleNames?: readonly string[];
+        hasNoDefaultLib?: true;
+        resolvedModules?: MapLike<number>;
+        resolvedTypeReferenceDirectiveNames?: MapLike<number>;
+        redirectInfo?: { readonly redirectTarget: { readonly path: string }; };
+        includeReasons: readonly ReadablePersistedProgramFileIncludeReason[];
+        isSourceFileFromExternalLibraryPath?: true;
+        redirectTargets?: readonly string[];
+        packageName?: string;
+    }
+    interface ReadablePersistedProgramReferencedFile {
+        kind: ReferencedFileKind;
+        file: string;
+        index: number;
+    }
+    type ReadablePersistedProgramFileIncludeReason =
+        RootFile |
+        LibFile |
+        ProjectReferenceFile |
+        ReadablePersistedProgramReferencedFile |
+        AutomaticTypeDirectiveFile;
     interface ReadablePersistedProgram {
-        files: readonly PersistedProgramSourceFile[] | undefined;
+        files: readonly ReadablePersistedProgramSourceFile[] | undefined;
         rootFileNames: readonly string[] | undefined;
         filesByName: MapLike<string | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile> | undefined;
         projectReferences: readonly ProjectReference[] | undefined;
@@ -295,6 +328,7 @@ interface Symbol {
             ]),
             peristedProgram: buildInfo.program.peristedProgram && {
                 ...buildInfo.program.peristedProgram,
+                files: buildInfo.program.peristedProgram.files?.map(toReadablePersistedProgramSourceFile),
                 filesByName,
                 missingPaths: buildInfo.program.peristedProgram.missingPaths?.map(toFileName),
             },
@@ -324,6 +358,20 @@ interface Symbol {
                 result[toFileName(fileNamesKey)] = toFileNames(fileNamesListKey);
             }
             return result;
+        }
+
+        function toReadablePersistedProgramSourceFile(file: PersistedProgramSourceFile): ReadablePersistedProgramSourceFile {
+            return {
+                ...file,
+                path: toFileName(file.path),
+                resolvedPath: toFileName(file.resolvedPath),
+                redirectInfo: file.redirectInfo && { redirectTarget: { path: toFileName(file.redirectInfo.redirectTarget.path) } },
+                includeReasons: file.includeReasons.map(toReadablePersistedProgramFileIncludeReason),
+            };
+        }
+
+        function toReadablePersistedProgramFileIncludeReason(reason: PersistedProgramFileIncludeReason): ReadablePersistedProgramFileIncludeReason {
+            return isReferencedFile(reason) ? { ...reason, file: toFileName(reason.file) } : reason;
         }
     }
 
