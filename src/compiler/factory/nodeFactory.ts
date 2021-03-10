@@ -883,8 +883,10 @@ namespace ts {
 
         /** Create a unique temporary variable for use in a loop. */
         // @api
-        function createLoopVariable(): Identifier {
-            return createBaseGeneratedIdentifier("", GeneratedIdentifierFlags.Loop);
+        function createLoopVariable(reservedInNestedScopes?: boolean): Identifier {
+            let flags = GeneratedIdentifierFlags.Loop;
+            if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
+            return createBaseGeneratedIdentifier("", flags);
         }
 
         /** Create a unique name based on the supplied text. */
