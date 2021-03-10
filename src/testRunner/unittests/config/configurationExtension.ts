@@ -19,6 +19,11 @@ namespace ts {
                             strict: false,
                         }
                     }),
+                    "dev/node_modules/config-box/with-comments.jsonc": JSON.stringify({
+                        compilerOptions: {
+                            strict: true,
+                        }
+                    }) + "// ...",
                     "dev/tsconfig.extendsBox.json": JSON.stringify({
                         extends: "config-box",
                         files: [
@@ -39,6 +44,12 @@ namespace ts {
                     }),
                     "dev/tsconfig.extendsStrictExtension.json": JSON.stringify({
                         extends: "config-box/strict.json",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsCommentExtension.json": JSON.stringify({
+                        extends: "config-box/with-comments.jsonc",
                         files: [
                             "main.ts",
                         ]
@@ -329,6 +340,7 @@ namespace ts {
                     testSuccess("can lookup via package-relative path", "tsconfig.extendsStrict.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
                     testSuccess("can lookup via non-redirected-to package-relative path", "tsconfig.extendsUnStrict.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
                     testSuccess("can lookup via package-relative path with extension", "tsconfig.extendsStrictExtension.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via package-relative path with extension that has comments", "tsconfig.extendsCommentExtension.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
                     testSuccess("can lookup via an implicit tsconfig", "tsconfig.extendsBoxImplied.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
                     testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
                     testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [combinePaths(basePath, "main.ts")]);

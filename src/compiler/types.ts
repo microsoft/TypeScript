@@ -6357,6 +6357,7 @@ namespace ts {
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
+        Jsonc = ".jsonc",
         TsBuildInfo = ".tsbuildinfo"
     }
 

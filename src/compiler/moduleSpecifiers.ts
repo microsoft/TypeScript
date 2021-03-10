@@ -678,8 +678,9 @@ namespace ts.moduleSpecifiers {
             case Extension.Jsx:
             case Extension.Json:
                 return ext;
+            case Extension.Jsonc:
             case Extension.TsBuildInfo:
-                return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported:: FileName:: ${fileName}`);
+                return Debug.fail(`Extension ${ext} is unsupported:: FileName:: ${fileName}`);
             default:
                 return Debug.assertNever(ext);
         }
