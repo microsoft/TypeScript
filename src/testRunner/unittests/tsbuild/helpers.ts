@@ -238,6 +238,17 @@ interface Symbol {
 
     type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
+    interface ReadablePersistedProgram {
+        files: readonly PersistedProgramSourceFile[] | undefined;
+        rootFileNames: readonly string[] | undefined;
+        filesByName: MapLike<string | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile> | undefined;
+        projectReferences: readonly ProjectReference[] | undefined;
+        resolvedProjectReferences: readonly (PersistedProgramResolvedProjectReference | undefined)[] | undefined;
+        missingPaths: readonly string[] | undefined;
+        resolvedTypeReferenceDirectives: MapLike<number> | undefined;
+        fileProcessingDiagnostics: readonly PersistedProgramFilePreprocessingDiagnostic[] | undefined;
+        resolutions: readonly PersistedProgramResolution[] | undefined;
+    }
     interface ReadableProgramBuildInfo {
         fileNames: readonly string[];
         fileNamesList: readonly (readonly string[])[] | undefined;
@@ -247,13 +258,23 @@ interface Symbol {
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
-        peristedProgram?: PersistedProgram;
+        peristedProgram?: ReadablePersistedProgram;
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
         const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
         buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
+        const filesByName: ReadablePersistedProgram["filesByName"] = buildInfo.program?.peristedProgram?.filesByName ? {} : undefined;
+        buildInfo.program?.peristedProgram?.filesByName?.forEach(entry => {
+            if (isArray(entry)) {
+                filesByName![toFileName(entry[0])] = entry[1] ? toFileName(entry[1]) :entry[1] as typeof missingSourceOfProjectReferenceRedirect | typeof missingFile;
+            }
+            else {
+                const path = toFileName(entry);
+                filesByName![path] = path;
+            }
+        });
         const program: ReadableProgramBuildInfo | undefined = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,
             fileNamesList,
@@ -272,7 +293,11 @@ interface Symbol {
                     emitKind === BuilderFileEmit.Full ? "Full" :
                         Debug.assertNever(emitKind)
             ]),
-            peristedProgram: buildInfo.program.peristedProgram,
+            peristedProgram: buildInfo.program.peristedProgram && {
+                ...buildInfo.program.peristedProgram,
+                filesByName,
+                missingPaths: buildInfo.program.peristedProgram.missingPaths?.map(toFileName),
+            },
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
         const result: ReadableBuildInfo = {
