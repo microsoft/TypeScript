@@ -377,6 +377,34 @@ D();
                 },
                 libFile);
 
+                testOrganizeImports("Syntax_Error_Imports",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1, F2 class class class; } from "lib";
+import * as NS from "lib";
+class class class;
+import D from "lib";
+
+D;
+`,
+                },
+                libFile);
+
+                testOrganizeImports("Syntax_Error_Body",
+                {
+                    path: "/test.ts",
+                    content: `
+import { F1, F2 } from "lib";
+import * as NS from "lib";
+import D from "lib";
+
+class class class;
+D;
+`,
+                },
+                libFile);
+
                 it("doesn't return any changes when the text would be identical", () => {
                     const testFile = {
                         path: "/a.ts",

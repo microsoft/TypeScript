@@ -84,6 +84,11 @@ namespace ts.OrganizeImports {
     }
 
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
+        // As a precaution, if there are *syntax* errors in the file, don't trust unused import detection (GH #43051)
+        if (program.getSyntacticDiagnostics(sourceFile).length) {
+            return oldImports;
+        }
+
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
