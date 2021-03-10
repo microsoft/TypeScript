@@ -240,6 +240,8 @@ interface Symbol {
         type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
         type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
         interface ProgramBuildInfo {
+            fileNames: readonly string[];
+            fileNamesList: readonly (readonly string[])[] | undefined;
             fileInfos: MapLike<BuilderState.FileInfo>;
             options: CompilerOptions;
             referencedMap?: MapLike<string[]>;
@@ -251,6 +253,8 @@ interface Symbol {
         buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = fileInfo);
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ProgramBuildInfo | undefined = buildInfo.program && {
+            fileNames: buildInfo.program.fileNames,
+            fileNamesList,
             fileInfos,
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),

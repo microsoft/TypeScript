@@ -102,6 +102,19 @@ function main() { }
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts",
+      "./src/filenotfound.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -240,6 +253,19 @@ something();
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/main.ts",
+      "./src/filenotfound.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -372,6 +398,25 @@ function foo() { return 20; }
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/newfile.ts",
+      "./src/main.ts",
+      "./src/filenotfound.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ],
+      [
+        "./src/filepresent.ts",
+        "./src/newfile.ts",
+        "./src/filenotfound.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -493,6 +538,25 @@ declare function main(): void;
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/filenotfound.ts",
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/newfile.ts",
+      "./src/main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ],
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts",
+        "./src/newfile.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -603,6 +667,25 @@ something();
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/filenotfound.ts",
+      "./src/anotherfilewithsamereferenes.ts",
+      "./src/newfile.ts",
+      "./src/main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
+      ],
+      [
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts",
+        "./src/newfile.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

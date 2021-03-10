@@ -113,6 +113,29 @@ export { C } from "./c";
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./src/c.ts",
+      "./src/b.ts",
+      "./src/a.ts",
+      "./src/index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/b.ts"
+      ],
+      [
+        "./src/c.ts"
+      ],
+      [
+        "./src/a.ts"
+      ],
+      [
+        "./src/c.ts",
+        "./src/b.ts",
+        "./src/a.ts"
+      ]
+    ],
     "fileInfos": {
       "../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -242,6 +265,29 @@ export interface A {
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./src/c.ts",
+      "./src/b.ts",
+      "./src/a.ts",
+      "./src/index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/b.ts"
+      ],
+      [
+        "./src/c.ts"
+      ],
+      [
+        "./src/a.ts"
+      ],
+      [
+        "./src/c.ts",
+        "./src/b.ts",
+        "./src/a.ts"
+      ]
+    ],
     "fileInfos": {
       "../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

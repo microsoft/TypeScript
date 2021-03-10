@@ -105,6 +105,29 @@ export { C } from "./c";
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./b.ts"
+      ],
+      [
+        "./c.ts"
+      ],
+      [
+        "./a.ts"
+      ],
+      [
+        "./c.ts",
+        "./b.ts",
+        "./a.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -241,6 +264,29 @@ export interface A {
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./b.ts"
+      ],
+      [
+        "./c.ts"
+      ],
+      [
+        "./a.ts"
+      ],
+      [
+        "./c.ts",
+        "./b.ts",
+        "./a.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",

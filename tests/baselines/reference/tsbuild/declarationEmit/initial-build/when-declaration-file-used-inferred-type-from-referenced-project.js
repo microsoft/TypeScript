@@ -77,6 +77,10 @@ exports.__esModule = true;
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../src/index.ts"
+    ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -133,6 +137,16 @@ exports.fn4 = fn4;
 //// [/src/packages/pkg2/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../pkg1/lib/src/index.d.ts",
+      "../src/index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../pkg1/lib/src/index.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

@@ -157,6 +157,23 @@ Object.defineProperty(exports, "bar", { enumerable: true, get: function () { ret
 //// [/src/obj/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../bar.ts",
+      "../bundling.ts",
+      "../global.d.ts",
+      "../lazyindex.ts",
+      "../index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../bundling.ts",
+        "../lazyindex.ts"
+      ],
+      [
+        "../bar.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -283,6 +300,23 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 //// [/src/obj/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../bar.ts",
+      "../bundling.ts",
+      "../global.d.ts",
+      "../lazyindex.ts",
+      "../index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../bundling.ts",
+        "../lazyindex.ts"
+      ],
+      [
+        "../bar.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

@@ -462,6 +462,23 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../core/index.d.ts",
+      "../core/anothermodule.d.ts",
+      "../logic/index.d.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../core/anothermodule.d.ts"
+      ],
+      [
+        "../core/index.d.ts",
+        "../core/anothermodule.d.ts",
+        "../logic/index.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -640,6 +657,23 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "../core/index.d.ts",
+      "../core/anothermodule.d.ts",
+      "../logic/decls/index.d.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../core/anothermodule.d.ts"
+      ],
+      [
+        "../core/index.d.ts",
+        "../core/anothermodule.d.ts",
+        "../logic/decls/index.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",

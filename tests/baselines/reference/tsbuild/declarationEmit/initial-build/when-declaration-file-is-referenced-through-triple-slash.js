@@ -97,6 +97,16 @@ exports.__esModule = true;
 //// [/src/solution/lib/src/common/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../lib/lib.d.ts",
+      "../../../src/common/types.d.ts",
+      "../../../src/common/nominal.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../../src/common/types.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -152,6 +162,20 @@ exports.__esModule = true;
 //// [/src/solution/lib/src/subProject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../lib/lib.d.ts",
+      "../../../src/common/types.d.ts",
+      "../common/nominal.d.ts",
+      "../../../src/subproject/index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../../src/common/types.d.ts"
+      ],
+      [
+        "../common/nominal.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -235,6 +259,24 @@ exports.getVar = getVar;
 //// [/src/solution/lib/src/subProject2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../lib/lib.d.ts",
+      "../../../src/common/types.d.ts",
+      "../common/nominal.d.ts",
+      "../subproject/index.d.ts",
+      "../../../src/subproject2/index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../../src/common/types.d.ts"
+      ],
+      [
+        "../common/nominal.d.ts"
+      ],
+      [
+        "../subproject/index.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

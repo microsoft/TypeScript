@@ -102,6 +102,13 @@ export function multiply(a, b) { return a * b; }
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.esnext.d.ts",
+      "../../lib/lib.esnext.full.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
+    ],
     "fileInfos": {
       "../../lib/lib.esnext.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -210,6 +217,13 @@ exports.multiply = multiply;
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../../lib/lib.esnext.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />",

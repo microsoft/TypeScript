@@ -66,6 +66,16 @@ exports.x = (0, tslib_1.__assign)({});
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./node_modules/tslib/index.d.ts",
+      "./index.tsx"
+    ],
+    "fileNamesList": [
+      [
+        "./node_modules/tslib/index.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -147,6 +157,10 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./index.tsx"
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

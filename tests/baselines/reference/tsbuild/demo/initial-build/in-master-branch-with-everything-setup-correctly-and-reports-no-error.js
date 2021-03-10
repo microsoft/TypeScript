@@ -225,6 +225,26 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
 //// [/src/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "../../animals/animal.ts",
+      "../../animals/index.ts",
+      "../core/utilities.d.ts",
+      "../../animals/dog.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../animals/index.ts",
+        "../core/utilities.d.ts"
+      ],
+      [
+        "../../animals/animal.ts",
+        "../../animals/dog.ts"
+      ],
+      [
+        "../../animals/index.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -303,6 +323,10 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
 //// [/src/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "../../core/utilities.ts"
+    ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -367,6 +391,22 @@ exports.lastElementOf = lastElementOf;
 //// [/src/lib/zoo/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "../animals/animal.d.ts",
+      "../animals/dog.d.ts",
+      "../animals/index.d.ts",
+      "../../zoo/zoo.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../animals/index.d.ts"
+      ],
+      [
+        "../animals/animal.d.ts",
+        "../animals/dog.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",

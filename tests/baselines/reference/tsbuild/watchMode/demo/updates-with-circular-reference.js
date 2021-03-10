@@ -341,6 +341,10 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
 //// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../../core/utilities.ts"
+    ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -438,6 +442,26 @@ export declare function createDog(): Dog;
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../../animals/animal.ts",
+      "../../animals/index.ts",
+      "../core/utilities.d.ts",
+      "../../animals/dog.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../animals/index.ts",
+        "../core/utilities.d.ts"
+      ],
+      [
+        "../../animals/animal.ts",
+        "../../animals/dog.ts"
+      ],
+      [
+        "../../animals/index.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -535,6 +559,22 @@ export declare function createZoo(): Array<Dog>;
 //// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../animals/animal.d.ts",
+      "../animals/dog.d.ts",
+      "../animals/index.d.ts",
+      "../../zoo/zoo.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../animals/index.d.ts"
+      ],
+      [
+        "../animals/animal.d.ts",
+        "../animals/dog.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
