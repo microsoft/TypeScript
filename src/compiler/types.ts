@@ -1204,7 +1204,7 @@ namespace ts {
         expression?: Expression;
 
         // If this is not empty, it is a type constructor.
-        tParamDeclarations?: NodeArray<TypeParameterDeclaration>;
+        hkTypeParamDeclarations?: NodeArray<TypeParameterDeclaration>;
     }
 
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
@@ -2795,6 +2795,7 @@ namespace ts {
         | InterfaceDeclaration
         | TypeAliasDeclaration
         | JSDocTemplateTag
+        | TypeParameterDeclaration // HKT, an example: interface HKT3<Functor<Generic<T>>>, parent of `Generic` is `Functor`.
         ;
 
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {

@@ -1094,7 +1094,7 @@ namespace ts {
             node.constraint = constraint;
             node.default = defaultType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
-            node.tParamDeclarations = tParams;
+            node.hkTypeParamDeclarations = tParams;
             return node;
         }
 
