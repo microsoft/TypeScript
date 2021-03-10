@@ -2959,9 +2959,16 @@ namespace ts {
         function parseParameterWorker(inOuterAwaitContext: boolean): ParameterDeclaration {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
+
+            // FormalParameter [Yield,Await]:
+            //      BindingElement[?Yield,?Await]
+
+            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
+            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
+
             if (token() === SyntaxKind.ThisKeyword) {
                 const node = factory.createParameterDeclaration(
-                    /*decorators*/ undefined,
+                    decorators,
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
                     createIdentifier(/*isIdentifier*/ true),
@@ -2972,11 +2979,6 @@ namespace ts {
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
             }
 
-            // FormalParameter [Yield,Await]:
-            //      BindingElement[?Yield,?Await]
-
-            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
             const savedTopLevel = topLevel;
             topLevel = false;
             const modifiers = parseModifiers();
