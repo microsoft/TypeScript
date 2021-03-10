@@ -8053,6 +8053,9 @@ declare namespace ts.server.protocol {
      */
     interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
+        arguments: QuickInfoRequestArgs;
+    }
+    interface QuickInfoRequestArgs extends FileLocationRequestArgs {
         /** if true - return response with documentation as display parts instead of string */
         richResponse?: boolean;
     }
@@ -8245,6 +8248,8 @@ declare namespace ts.server.protocol {
          * Names of one or more entries for which to obtain details.
          */
         entryNames: (string | CompletionEntryIdentifier)[];
+        /** if true - return response with documentation as display parts instead of string */
+        richResponse?: boolean;
     }
     interface CompletionEntryIdentifier {
         name: string;
@@ -8260,8 +8265,6 @@ declare namespace ts.server.protocol {
     interface CompletionDetailsRequest extends FileLocationRequest {
         command: CommandTypes.CompletionDetails;
         arguments: CompletionDetailsRequestArgs;
-        /** if true - return response with documentation as display parts instead of string */
-        richResponse?: boolean;
     }
     /**
      * Part of a symbol description.
@@ -8495,6 +8498,8 @@ declare namespace ts.server.protocol {
          * See each individual possible
          */
         triggerReason?: SignatureHelpTriggerReason;
+        /** if true - return response with documentation as display parts instead of string */
+        richResponse?: boolean;
     }
     type SignatureHelpTriggerReason = SignatureHelpInvokedReason | SignatureHelpCharacterTypedReason | SignatureHelpRetriggeredReason;
     /**
@@ -8537,8 +8542,6 @@ declare namespace ts.server.protocol {
     interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
         arguments: SignatureHelpRequestArgs;
-        /** if true - return response with documentation as display parts instead of string */
-        richResponse?: boolean;
     }
     /**
      * Response object for a SignatureHelpRequest.
