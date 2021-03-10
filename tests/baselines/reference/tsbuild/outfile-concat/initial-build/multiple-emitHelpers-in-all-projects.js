@@ -921,59 +921,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../second",
-    "sourceFiles": [
-      "../second/second_part1.ts",
-      "../second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 500,
-          "kind": "emitHelpers",
-          "data": "typescript:rest"
-        },
-        {
-          "pos": 502,
-          "end": 1006,
-          "kind": "emitHelpers",
-          "data": "typescript:read"
-        },
-        {
-          "pos": 1008,
-          "end": 1199,
-          "kind": "emitHelpers",
-          "data": "typescript:spreadArray"
-        },
-        {
-          "pos": 1201,
-          "end": 1888,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:rest",
-          "typescript:read",
-          "typescript:spreadArray"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 267,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1199,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1201,"end":1888,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":267,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1062,6 +1010,61 @@ declare function secondsecond_part2Spread(...b: number[]): void;
 declare const secondsecond_part2_ar: number[];
 
 ======================================================================
+
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 500,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 502,
+          "end": 1006,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 1008,
+          "end": 1199,
+          "kind": "emitHelpers",
+          "data": "typescript:spreadArray"
+        },
+        {
+          "pos": 1201,
+          "end": 1888,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest",
+          "typescript:read",
+          "typescript:spreadArray"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 267,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
@@ -1730,60 +1733,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "..",
-    "sourceFiles": [
-      "../first_PART1.ts",
-      "../first_part2.ts",
-      "../first_part3.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 500,
-          "kind": "emitHelpers",
-          "data": "typescript:rest"
-        },
-        {
-          "pos": 502,
-          "end": 1006,
-          "kind": "emitHelpers",
-          "data": "typescript:read"
-        },
-        {
-          "pos": 1008,
-          "end": 1199,
-          "kind": "emitHelpers",
-          "data": "typescript:spreadArray"
-        },
-        {
-          "pos": 1201,
-          "end": 1703,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:rest",
-          "typescript:read",
-          "typescript:spreadArray"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 318,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1199,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1201,"end":1703,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1864,6 +1814,62 @@ declare function firstfirst_part3Spread(...b: number[]): void;
 declare const firstfirst_part3_ar: number[];
 
 ======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "../first_PART1.ts",
+      "../first_part2.ts",
+      "../first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 500,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 502,
+          "end": 1006,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 1008,
+          "end": 1199,
+          "kind": "emitHelpers",
+          "data": "typescript:spreadArray"
+        },
+        {
+          "pos": 1201,
+          "end": 1703,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest",
+          "typescript:read",
+          "typescript:spreadArray"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 318,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -3572,110 +3578,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../..",
-    "sourceFiles": [
-      "../../third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 500,
-          "kind": "emitHelpers",
-          "data": "typescript:rest"
-        },
-        {
-          "pos": 502,
-          "end": 1006,
-          "kind": "emitHelpers",
-          "data": "typescript:read"
-        },
-        {
-          "pos": 1008,
-          "end": 1199,
-          "kind": "emitHelpers",
-          "data": "typescript:spreadArray"
-        },
-        {
-          "pos": 1201,
-          "end": 1703,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 1201,
-              "end": 1703,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 1703,
-          "end": 2390,
-          "kind": "prepend",
-          "data": "../../../2/second-output.js",
-          "texts": [
-            {
-              "pos": 1703,
-              "end": 2390,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 2390,
-          "end": 2818,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:rest",
-          "typescript:read",
-          "typescript:spreadArray"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 318,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 318,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 318,
-          "end": 585,
-          "kind": "prepend",
-          "data": "../../../2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 318,
-              "end": 585,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 585,
-          "end": 765,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1199,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1201,"end":1703,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1201,"end":1703,"kind":"text"}]},{"pos":1703,"end":2390,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1703,"end":2390,"kind":"text"}]},{"pos":2390,"end":2818,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":318,"kind":"text"}]},{"pos":318,"end":585,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":318,"end":585,"kind":"text"}]},{"pos":585,"end":765,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3829,4 +3732,110 @@ declare function thirdthird_part1Spread(...b: number[]): void;
 declare const thirdthird_part1_ar: number[];
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 500,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 502,
+          "end": 1006,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 1008,
+          "end": 1199,
+          "kind": "emitHelpers",
+          "data": "typescript:spreadArray"
+        },
+        {
+          "pos": 1201,
+          "end": 1703,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 1201,
+              "end": 1703,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1703,
+          "end": 2390,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 1703,
+              "end": 2390,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 2390,
+          "end": 2818,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest",
+          "typescript:read",
+          "typescript:spreadArray"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 318,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 318,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 318,
+          "end": 585,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 318,
+              "end": 585,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 585,
+          "end": 765,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
