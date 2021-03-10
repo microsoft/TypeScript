@@ -1962,7 +1962,7 @@
         "category": "Error",
         "code": 2445
     },
-    "Property '{0}' is protected and only accessible through an instance of class '{1}'.": {
+    "Property '{0}' is protected and only accessible through an instance of class '{1}'. This is an instance of class '{2}'.": {
         "category": "Error",
         "code": 2446
     },

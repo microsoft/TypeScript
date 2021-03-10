@@ -663,7 +663,7 @@ namespace ts {
 
     /*@internal*/
     export function getBuildInfoText(buildInfo: BuildInfo) {
-        return JSON.stringify(buildInfo, undefined, 2);
+        return JSON.stringify(buildInfo);
     }
 
     /*@internal*/

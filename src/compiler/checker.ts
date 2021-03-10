@@ -6816,14 +6816,26 @@ namespace ts {
                     for (const sig of signatures) {
                         // Each overload becomes a separate function declaration, in order
                         const decl = signatureToSignatureDeclarationHelper(sig, SyntaxKind.FunctionDeclaration, context, { name: factory.createIdentifier(localName), privateSymbolVisitor: includePrivateSymbol, bundledImports: bundled }) as FunctionDeclaration;
-                        // for expressions assigned to `var`s, use the `var` as the text range
-                        addResult(setTextRange(decl, sig.declaration && isVariableDeclaration(sig.declaration.parent) && sig.declaration.parent.parent || sig.declaration), modifierFlags);
+                        addResult(setTextRange(decl, getSignatureTextRangeLocation(sig)), modifierFlags);
                     }
                     // Module symbol emit will take care of module-y members, provided it has exports
                     if (!(symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && !!symbol.exports && !!symbol.exports.size)) {
                         const props = filter(getPropertiesOfType(type), isNamespaceMember);
                         serializeAsNamespaceDeclaration(props, localName, modifierFlags, /*suppressNewPrivateContext*/ true);
                     }
+                }
+
+                function getSignatureTextRangeLocation(signature: Signature) {
+                    if (signature.declaration && signature.declaration.parent) {
+                        if (isBinaryExpression(signature.declaration.parent) && getAssignmentDeclarationKind(signature.declaration.parent) === AssignmentDeclarationKind.Property) {
+                            return signature.declaration.parent;
+                        }
+                        // for expressions assigned to `var`s, use the `var` as the text range
+                        if (isVariableDeclaration(signature.declaration.parent) && signature.declaration.parent.parent) {
+                            return signature.declaration.parent.parent;
+                        }
+                    }
+                    return signature.declaration;
                 }
 
                 function serializeAsNamespaceDeclaration(props: readonly Symbol[], localName: string, modifierFlags: ModifierFlags, suppressNewPrivateContext: boolean) {
@@ -7422,7 +7434,8 @@ namespace ts {
                                         modifiers: flag ? factory.createModifiersFromModifierFlags(flag) : undefined
                                     }
                                 );
-                                results.push(setTextRange(decl, sig.declaration));
+                                const location = sig.declaration && isPrototypePropertyAssignment(sig.declaration.parent) ? sig.declaration.parent : sig.declaration;
+                                results.push(setTextRange(decl, location));
                             }
                             return results as unknown as T[];
                         }
@@ -26525,7 +26538,7 @@ namespace ts {
                 type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(<TypeParameter>type)! : getBaseConstraintOfType(<TypeParameter>type)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
             }
             if (!type || !hasBaseType(type, enclosingClass)) {
-                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
+                error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1_This_is_an_instance_of_class_2, symbolToString(prop), typeToString(enclosingClass), typeToString(type));
                 return false;
             }
             return true;
@@ -34665,8 +34678,8 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.BindingElement) {
-                if (node.parent.kind === SyntaxKind.ObjectBindingPattern && languageVersion < ScriptTarget.ESNext) {
+            if (isBindingElement(node)) {
+                if (isObjectBindingPattern(node.parent) && node.dotDotDotToken && languageVersion < ScriptTarget.ES2018) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Rest);
                 }
                 // check computed properties inside property names of binding elements
