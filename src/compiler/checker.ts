@@ -2451,13 +2451,7 @@ namespace ts {
                     return true;
                 }
                 else if(isFunctionLike(n)) {
-                    const iife = getImmediatelyInvokedFunctionExpression(n);
-                    if (iife) {
-                        return isSameScopeDescendentOf(iife, parent, stopAt);
-                    }
-                    else {
-                        return "quit";
-                    }
+                    return getImmediatelyInvokedFunctionExpression(n) ? false : "quit";
                 }
                 else {
                     return false;
