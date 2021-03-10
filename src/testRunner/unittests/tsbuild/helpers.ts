@@ -236,18 +236,78 @@ interface Symbol {
         }
     }
 
+    function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
+        type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
+        type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
+        interface ProgramBuildInfo {
+            fileInfos: MapLike<BuilderState.FileInfo>;
+            options: CompilerOptions;
+            referencedMap?: MapLike<string[]>;
+            exportedModulesMap?: MapLike<string[]>;
+            semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
+            affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
+        }
+        const fileInfos: ProgramBuildInfo["fileInfos"] = {};
+        buildInfo.program?.fileInfos.forEach((fileInfo, fileId) => {
+            fileInfos[toFileName(fileId)] = fileInfo;
+        });
+        const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
+        const program: ProgramBuildInfo | undefined = buildInfo.program && {
+            fileInfos,
+            options: buildInfo.program.options,
+            referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
+            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
+            semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
+                isNumber(d) ?
+                    toFileName(d) :
+                    [toFileName(d[0]), d[1]]
+            ),
+            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
+                toFileName(fileId),
+                emitKind
+            ]),
+        };
+        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; } = {
+            bundle: buildInfo.bundle,
+            program,
+            version: buildInfo.version === version ? fakes.version : buildInfo.version,
+        };
+        // For now its just JSON.stringify
+        originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+
+        function toFileName(fileId: number) {
+            return buildInfo.program!.fileNames[fileId];
+        }
+
+        function toFileNames(fileIdsListId: number) {
+            return fileNamesList![fileIdsListId];
+        }
+
+        function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
+            if (!referenceMap) return undefined;
+            const result: MapLike<string[]> = {};
+            for (const [fileNamesKey, fileNamesListKey] of referenceMap) {
+                result[toFileName(fileNamesKey)] = toFileNames(fileNamesListKey);
+            }
+            return result;
+        }
+    }
+
     export function baselineBuildInfo(
         options: CompilerOptions,
         sys: System & { writtenFiles: ReadonlyCollection<string>; },
-        originalReadCall?: System["readFile"]
+        originalReadCall?: System["readFile"],
+        originalWriteFile?: System["writeFile"],
     ) {
-        const out = outFile(options);
-        if (!out) return;
-        const { buildInfoPath, jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
         if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        generateBuildInfoProgramBaseline(sys, originalWriteFile || sys.writeFile, buildInfoPath, buildInfo);
+
+        if (!outFile(options)) return;
+        const { jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
         const bundle = buildInfo.bundle;
         if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) return;
 
@@ -256,9 +316,8 @@ interface Symbol {
         generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
         generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
         baselineRecorder.Close();
-
         const text = baselineRecorder.lines.join("\r\n");
-        sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
+        (originalWriteFile || sys.writeFile).call(sys, `${buildInfoPath}.baseline.txt`, text);
     }
 
     interface VerifyIncrementalCorrectness {
@@ -295,7 +354,7 @@ interface Symbol {
                 const cleanBuildText = sys.readFile(outputFile);
                 const incrementalBuildText = newSys.readFile(outputFile);
                 const descrepancyInClean = discrepancies?.get(outputFile);
-                if (!isBuildInfoFile(outputFile)) {
+                if (!isBuildInfoFile(outputFile) && !fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
                     verifyTextEqual(incrementalBuildText, cleanBuildText, descrepancyInClean, `File: ${outputFile}`);
                 }
                 else if (incrementalBuildText !== cleanBuildText) {
