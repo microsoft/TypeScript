@@ -438,8 +438,9 @@ namespace ts {
                     removeSemanticDiagnosticsOf(state, f.resolvedPath)
                 );
             }
-            // When file is added to affected file because of global file change, the signature will not be update
-            // we need to update the signature to reflect correctness of the signature(which is output d.ts emit) of this file
+            // When a change affects the global scope, all files are considered to be affected without updating their signature
+            // That means when affected file is handled, its signature can be out of date
+            // To avoid this, ensure that we update the signature for any affected file in this scenario.
             BuilderState.updateShapeSignature(
                 state,
                 Debug.checkDefined(state.program),
