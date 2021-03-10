@@ -23582,7 +23582,7 @@ namespace ts {
         }
 
         function hasContextualTypeWithNoTypeVariables(node: Expression) {
-            const contextualType = getContextualType(node);
+            const contextualType = !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) && getContextualType(node);
             return contextualType && !someType(contextualType, containsTypeVariable);
         }
 
