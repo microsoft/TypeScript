@@ -2713,7 +2713,7 @@ namespace ts {
                 node.transformFlags |= TransformFlags.ContainsES2016;
             }
             else if (isLogicalOrCoalescingAssignmentOperator(operatorKind)) {
-                node.transformFlags |= TransformFlags.ContainsESNext;
+                node.transformFlags |= TransformFlags.ContainsES2021;
             }
             return node;
         }
