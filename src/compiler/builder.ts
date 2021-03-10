@@ -874,7 +874,7 @@ namespace ts {
     }
     export interface PersistedProgramFilePreprocessingFileExplainingDiagnostic {
         kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
-        file?: string;
+        file?: ProgramBuildInfoFileId;
         fileProcessingReason: PersistedProgramFileIncludeReason;
         diagnostic: keyof typeof Diagnostics;
         args?: (string | number | undefined)[];
@@ -886,9 +886,9 @@ namespace ts {
             options: CompilerOptions;
             projectReferences: readonly ProjectReference[] | undefined;
         };
-        sourceFile: { version: string; path: string; };
+        sourceFile: { version: string; path: ProgramBuildInfoFileId; };
         references: readonly (PersistedProgramResolvedProjectReference | undefined)[] | undefined;
-    };
+    }
     export interface PersistedProgram {
         files: readonly PersistedProgramSourceFile[] | undefined;
         rootFileNames: readonly string[] | undefined;
@@ -1094,7 +1094,7 @@ namespace ts {
                     return {
                         ...d,
                         diagnostic: d.diagnostic.key as keyof typeof Diagnostics,
-                        file: d.file && relativeToBuildInfo(d.file),
+                        file: d.file && toFileId(d.file),
                         fileProcessingReason: toPersistedProgramFileIncludeReason(d.fileProcessingReason),
                     };
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
@@ -1115,7 +1115,7 @@ namespace ts {
                     options: convertToProgramBuildInfoCompilerOptions(ref.commandLine.options, relativeToBuildInfoEnsuringAbsolutePath, /*filterOptions*/ false)!,
                     projectReferences: mapToReadonlyArrayOrUndefined(ref.commandLine.projectReferences, toProjectReference)
                 },
-                sourceFile: { version: ref.sourceFile.version, path: relativeToBuildInfo(ref.sourceFile.path) },
+                sourceFile: { version: ref.sourceFile.version, path: toFileId(ref.sourceFile.path) },
                 references: mapToReadonlyArrayOrUndefined(ref.references, toPersistedProgramResolvedProjectReference)
             };
         }
@@ -1779,7 +1779,7 @@ namespace ts {
                     options: convertToOptionsWithAbsolutePaths(ref.commandLine.options, toAbsolutePath),
                     projectReferences: ref.commandLine.projectReferences?.map(toProjectReference)
                 },
-                sourceFile: { version: ref.sourceFile.version, path: toPath(ref.sourceFile.path) },
+                sourceFile: { version: ref.sourceFile.version, path: toFilePath(ref.sourceFile.path) },
                 references: ref.references?.map(toResolvedProjectReference)
             };
         }
@@ -1790,7 +1790,7 @@ namespace ts {
                     return {
                         ...d,
                         diagnostic: Diagnostics[d.diagnostic],
-                        file: d.file ? toPath(d.file) : undefined,
+                        file: d.file ? toFilePath(d.file) : undefined,
                         fileProcessingReason: toFileIncludeReason(d.fileProcessingReason),
                     };
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
