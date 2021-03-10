@@ -438,7 +438,22 @@ namespace ts {
                     removeSemanticDiagnosticsOf(state, f.resolvedPath)
                 );
             }
+            // When a change affects the global scope, all files are considered to be affected without updating their signature
+            // That means when affected file is handled, its signature can be out of date
+            // To avoid this, ensure that we update the signature for any affected file in this scenario.
+            BuilderState.updateShapeSignature(
+                state,
+                Debug.checkDefined(state.program),
+                affectedFile,
+                Debug.checkDefined(state.currentAffectedFilesSignatures),
+                cancellationToken,
+                computeHash,
+                state.currentAffectedFilesExportedModulesMap
+            );
             return;
+        }
+        else {
+            Debug.assert(state.hasCalledUpdateShapeSignature.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affected file: ${affectedFile.fileName}`);
         }
 
         if (!state.compilerOptions.assumeChangesOnlyAffectDirectDependencies) {
