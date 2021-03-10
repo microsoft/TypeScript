@@ -187,6 +187,7 @@ export declare class myClass {
       "./filewithouterror.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1459
 }
 

@@ -337,7 +337,8 @@ declare function f(): string;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 445
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -1025,6 +1026,7 @@ declare var c: C;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 914
 }
 

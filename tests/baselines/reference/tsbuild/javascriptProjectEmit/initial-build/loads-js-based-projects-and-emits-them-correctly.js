@@ -167,7 +167,8 @@ module.exports = {};
       "../../src/common/nominal.js"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1991
 }
 
 //// [/lib/sub-project/index.d.ts]
@@ -228,7 +229,8 @@ exports.__esModule = true;
       "../../src/sub-project/index.js"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2325
 }
 
 //// [/lib/sub-project-2/index.d.ts]
@@ -317,6 +319,7 @@ exports.getVar = getVar;
       "../../src/sub-project-2/index.js"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2907
 }
 

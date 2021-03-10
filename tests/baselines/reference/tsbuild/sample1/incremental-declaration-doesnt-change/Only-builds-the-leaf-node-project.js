@@ -62,6 +62,7 @@ var m = 10;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1377
 }
 

@@ -247,7 +247,8 @@ function f() {
       "./first_part3.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2082
 }
 
 //// [/src/second/second_part1.d.ts]
@@ -337,7 +338,8 @@ var C = (function () {
       "./second_part2.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1913
 }
 
 //// [/src/third/third_part1.d.ts]
@@ -420,6 +422,7 @@ c.doSomething();
       "./third_part1.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3010
 }
 

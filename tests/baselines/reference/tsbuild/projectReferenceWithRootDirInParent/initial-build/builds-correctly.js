@@ -125,7 +125,8 @@ exports.b = 0;
       "../../src/main/b.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1603
 }
 
 //// [/src/dist/other/other.d.ts]
@@ -172,6 +173,7 @@ exports.Other = 0;
       "../../src/other/other.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1431
 }
 

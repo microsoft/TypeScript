@@ -187,7 +187,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1807
 }
 
 
@@ -334,7 +335,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2382
 }
 
 
@@ -474,6 +476,7 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2729
 }
 

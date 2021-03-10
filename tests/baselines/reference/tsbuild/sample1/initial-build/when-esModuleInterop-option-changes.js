@@ -197,7 +197,8 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2106
 }
 
 //// [/src/logic/index.d.ts]
@@ -276,7 +277,8 @@ exports.m = mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2540
 }
 
 //// [/src/tests/index.d.ts]
@@ -363,7 +365,8 @@ exports.m = mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2919
 }
 
 
@@ -505,6 +508,7 @@ exports.m = mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2918
 }
 

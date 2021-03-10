@@ -90,7 +90,8 @@ var y = 20;
       "./file2.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1270
 }
 
 
@@ -165,6 +166,7 @@ var z = 10;
       "./file2.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1269
 }
 

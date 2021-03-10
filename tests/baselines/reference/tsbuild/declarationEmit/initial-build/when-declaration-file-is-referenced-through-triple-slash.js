@@ -132,7 +132,8 @@ exports.__esModule = true;
       "../../../src/common/types.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1895
 }
 
 //// [/src/solution/lib/src/subProject/index.d.ts]
@@ -202,7 +203,8 @@ exports.__esModule = true;
       "../../../src/subproject/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2270
 }
 
 //// [/src/solution/lib/src/subProject2/index.d.ts]
@@ -296,6 +298,7 @@ exports.getVar = getVar;
       "../../../src/subproject2/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2772
 }
 

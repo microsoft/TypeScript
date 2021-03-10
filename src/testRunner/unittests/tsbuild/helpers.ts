@@ -265,10 +265,12 @@ interface Symbol {
                 emitKind
             ]),
         };
-        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; } = {
+        const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
+        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; size: number; } = {
             bundle: buildInfo.bundle,
             program,
-            version: buildInfo.version === version ? fakes.version : buildInfo.version,
+            version,
+            size: getBuildInfoText({ ...buildInfo, version }).length,
         };
         // For now its just JSON.stringify
         originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));

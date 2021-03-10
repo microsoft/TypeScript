@@ -205,7 +205,8 @@ function someFunc(arguments) {
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2818
 }
 
 
@@ -411,7 +412,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3490
 }
 
 
@@ -527,7 +529,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2818
 }
 
 
@@ -779,7 +782,8 @@ exports.classC = classC;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3435
 }
 
 
@@ -1042,7 +1046,8 @@ exitCode:: ExitStatus.Success
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2873
 }
 
 
@@ -1165,7 +1170,8 @@ exports.classC = classC;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2818
 }
 
 

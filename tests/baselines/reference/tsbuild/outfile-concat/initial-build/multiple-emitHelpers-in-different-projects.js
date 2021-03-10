@@ -885,7 +885,8 @@ declare class C {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 466
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -1421,7 +1422,8 @@ declare function f(): string;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 362
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -2883,6 +2885,7 @@ declare function forthirdthird_part1Rest(): void;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 988
 }
 

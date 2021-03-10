@@ -120,7 +120,8 @@ exports.App = App;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1585
 }
 
 
@@ -235,6 +236,7 @@ exitCode:: ExitStatus.undefined
       "./node_modules/react/jsx-runtime/index.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2176
 }
 

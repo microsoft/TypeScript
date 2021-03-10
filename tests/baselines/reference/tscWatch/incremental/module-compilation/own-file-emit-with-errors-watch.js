@@ -136,7 +136,8 @@ define(["require", "exports"], function (require, exports) {
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1478
 }
 
 
@@ -249,6 +250,7 @@ define(["require", "exports"], function (require, exports) {
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1478
 }
 

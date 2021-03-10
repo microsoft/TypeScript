@@ -113,6 +113,7 @@ exports.App = App;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2260
 }
 

@@ -321,6 +321,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3584
 }
 

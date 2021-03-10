@@ -153,7 +153,8 @@ declare let y: number;
       "../lib/lib.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1282
 }
 
 //// [/a/b/other.js]
@@ -194,7 +195,8 @@ declare let z: number;
       "../lib/lib.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1147
 }
 
 

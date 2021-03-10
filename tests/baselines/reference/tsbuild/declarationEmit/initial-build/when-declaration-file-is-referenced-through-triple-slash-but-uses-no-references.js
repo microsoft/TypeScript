@@ -177,6 +177,7 @@ exports.getVar = getVar;
       "../src/subproject2/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2681
 }
 

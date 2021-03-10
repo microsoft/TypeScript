@@ -189,7 +189,8 @@ export type { TheNum } from 'const';
       "../index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1428
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]

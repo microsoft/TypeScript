@@ -199,7 +199,8 @@ console.log("hi");
       "../src/other.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1769
 }
 
 

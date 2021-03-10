@@ -101,6 +101,7 @@ exports.multiply = multiply;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1492
 }
 

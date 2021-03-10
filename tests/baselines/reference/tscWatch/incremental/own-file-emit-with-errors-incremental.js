@@ -110,7 +110,8 @@ var y = 20;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1417
 }
 
 
@@ -205,6 +206,7 @@ var z = 10;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1416
 }
 

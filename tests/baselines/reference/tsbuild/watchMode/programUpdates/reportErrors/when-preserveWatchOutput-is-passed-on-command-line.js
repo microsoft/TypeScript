@@ -255,7 +255,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1834
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
@@ -336,7 +337,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2409
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -424,7 +426,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2756
 }
 
 
@@ -566,7 +569,8 @@ exitCode:: ExitStatus.undefined
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2605
 }
 
 
@@ -693,6 +697,7 @@ exitCode:: ExitStatus.undefined
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2030
 }
 

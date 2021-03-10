@@ -110,7 +110,8 @@ exports.a = 1;
       "../../shared/typings-base/globals.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1573
 }
 
 //// [/src/target-tsc-build/webpack/index.d.ts]
@@ -162,6 +163,7 @@ exports.b = 1;
       "../../webpack/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1576
 }
 

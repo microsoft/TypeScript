@@ -134,7 +134,8 @@ Semantic diagnostics in builder refreshed for::
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1835
 }
 
 
@@ -266,7 +267,8 @@ console.log("hi");
       "../src/other.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1784
 }
 
 

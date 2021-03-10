@@ -90,6 +90,7 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2108
 }
 

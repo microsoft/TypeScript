@@ -375,7 +375,8 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
       "../../core/utilities.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1856
 }
 
 //// [/user/username/projects/demo/lib/animals/animal.js]
@@ -506,7 +507,8 @@ export declare function createDog(): Dog;
       "../core/utilities.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3203
 }
 
 //// [/user/username/projects/demo/lib/zoo/zoo.js]
@@ -607,6 +609,7 @@ export declare function createZoo(): Array<Dog>;
       "../../zoo/zoo.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2908
 }
 

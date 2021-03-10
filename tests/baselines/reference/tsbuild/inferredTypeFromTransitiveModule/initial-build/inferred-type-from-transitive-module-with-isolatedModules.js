@@ -224,7 +224,8 @@ Object.defineProperty(exports, "bar", { enumerable: true, get: function () { ret
       "../lazyindex.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3496
 }
 
 
@@ -349,6 +350,7 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
       "../lazyindex.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3455
 }
 

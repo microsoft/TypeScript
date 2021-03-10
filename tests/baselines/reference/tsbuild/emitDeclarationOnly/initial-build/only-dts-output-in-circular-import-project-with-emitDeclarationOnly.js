@@ -195,7 +195,8 @@ export { C } from "./c";
       "./src/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2403
 }
 
 
@@ -323,6 +324,7 @@ export interface A {
       "./src/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2430
 }
 

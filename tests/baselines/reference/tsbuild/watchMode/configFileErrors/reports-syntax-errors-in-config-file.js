@@ -314,6 +314,7 @@ export declare function bar(): void;
       "./b.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1355
 }
 

@@ -181,7 +181,8 @@ exports.__esModule = true;
       "../../../solution/common/nominal.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1985
 }
 
 //// [/src/lib/solution/sub-project/index.d.ts]
@@ -240,7 +241,8 @@ exports.__esModule = true;
       "../../../solution/sub-project/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2354
 }
 
 //// [/src/lib/solution/sub-project-2/index.d.ts]
@@ -323,6 +325,7 @@ exports.getVar = getVar;
       "../../../solution/sub-project-2/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2863
 }
 

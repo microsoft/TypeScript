@@ -88,7 +88,8 @@ console.log(Config.value);
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1480
 }
 
 
@@ -168,6 +169,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1399
 }
 

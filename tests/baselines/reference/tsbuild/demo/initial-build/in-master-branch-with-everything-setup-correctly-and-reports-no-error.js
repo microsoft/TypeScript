@@ -293,7 +293,8 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
       "../core/utilities.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3213
 }
 
 //// [/src/lib/core/tsconfig.tsbuildinfo]
@@ -335,7 +336,8 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
       "../../core/utilities.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1835
 }
 
 //// [/src/lib/core/utilities.d.ts]
@@ -438,7 +440,8 @@ exports.lastElementOf = lastElementOf;
       "../../zoo/zoo.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2945
 }
 
 //// [/src/lib/zoo/zoo.d.ts]

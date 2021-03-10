@@ -131,7 +131,8 @@ exports.x = 10;
     "referencedMap": {},
     "exportedModulesMap": {}
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1496
 }
 
 //// [/src/types/type.d.ts]

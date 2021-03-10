@@ -194,7 +194,8 @@ exports.m = common_1["default"];
       "../../src/sub-project/index.js"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2339
 }
 
 //// [/out/sub-project-2/index.d.ts]
@@ -266,7 +267,8 @@ exports.getVar = getVar;
       "../../src/sub-project-2/index.js"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2329
 }
 
 //// [/src/common/index.d.ts]
@@ -331,6 +333,7 @@ module.exports = x;
       "./obj.json"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2105
 }
 

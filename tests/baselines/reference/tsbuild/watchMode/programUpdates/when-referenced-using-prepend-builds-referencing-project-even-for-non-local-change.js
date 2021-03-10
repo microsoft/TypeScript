@@ -110,7 +110,8 @@ declare function foo(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 203
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -195,7 +196,8 @@ declare function bar(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 417
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -310,7 +312,8 @@ declare function myFunc(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 203
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -439,7 +442,8 @@ declare function bar(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 418
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -552,7 +556,8 @@ function myFunc() { return 100; }
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 203
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -666,7 +671,8 @@ function bar() { return foo() + 1; }
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 418
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]

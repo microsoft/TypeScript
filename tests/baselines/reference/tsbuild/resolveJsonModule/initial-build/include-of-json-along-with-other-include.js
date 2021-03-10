@@ -139,6 +139,7 @@ exports["default"] = hello_json_1["default"].hello;
       "../src/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1771
 }
 

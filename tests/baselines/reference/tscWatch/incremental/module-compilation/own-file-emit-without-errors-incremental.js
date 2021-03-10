@@ -101,7 +101,8 @@ define(["require", "exports"], function (require, exports) {
       "./file2.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1315
 }
 
 
@@ -179,6 +180,7 @@ define(["require", "exports"], function (require, exports) {
       "./file2.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1315
 }
 

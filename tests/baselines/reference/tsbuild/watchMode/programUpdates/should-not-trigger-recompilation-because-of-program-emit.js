@@ -151,7 +151,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1807
 }
 
 
@@ -280,7 +281,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1989
 }
 
 //// [/user/username/projects/sample1/core/file3.js]

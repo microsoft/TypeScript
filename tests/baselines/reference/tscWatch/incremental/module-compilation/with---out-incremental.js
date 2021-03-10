@@ -80,7 +80,8 @@ define("file2", ["require", "exports"], function (require, exports) {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 163
 }
 
 //// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]

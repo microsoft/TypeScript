@@ -215,7 +215,8 @@ export * from "./session";
       "../../src/pure/session.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1660
 }
 
 //// [/user/username/projects/reexport/out/main/index.js]
@@ -371,7 +372,8 @@ export interface Session {
       "../../src/pure/session.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1673
 }
 
 
@@ -509,7 +511,8 @@ export interface Session {
       "../../src/pure/session.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1660
 }
 
 //// [/user/username/projects/reexport/out/main/index.js] file changed its modified time

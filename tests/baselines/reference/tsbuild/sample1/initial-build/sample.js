@@ -361,7 +361,8 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2106
 }
 
 //// [/src/logic/index.d.ts]
@@ -565,7 +566,8 @@ sourceFile:index.ts
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2540
 }
 
 //// [/src/tests/index.d.ts]
@@ -651,7 +653,8 @@ exports.m = mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2895
 }
 
 
@@ -914,7 +917,8 @@ exports.someClass = someClass;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2174
 }
 
 //// [/src/logic/index.d.ts] file written with same contents
@@ -975,7 +979,8 @@ exports.someClass = someClass;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2620
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -1046,7 +1051,8 @@ exports.someClass = someClass;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2975
 }
 
 
@@ -1167,7 +1173,8 @@ var someClass2 = /** @class */ (function () {
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2196
 }
 
 
@@ -1289,7 +1296,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2647
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -1360,7 +1368,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2981
 }
 
 

@@ -142,7 +142,8 @@ exports.App = App;
       "./node_modules/react/jsx-runtime/index.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2183
 }
 
 
@@ -271,6 +272,7 @@ exports.App = App;
       "./node_modules/preact/jsx-runtime/index.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2531
 }
 

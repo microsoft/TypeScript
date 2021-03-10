@@ -103,6 +103,7 @@ exitCode:: ExitStatus.Success
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2906
 }
 

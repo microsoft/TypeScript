@@ -92,6 +92,7 @@ exports.App = App;
       "./src/index.tsx"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2006
 }
 

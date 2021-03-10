@@ -695,7 +695,8 @@ declare const firstfirst_part3_ar: number[];
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 463
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
@@ -2546,6 +2547,7 @@ declare const thirdthird_part1_ar: number[];
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1029
 }
 

@@ -69,6 +69,7 @@ exports.bar = bar;
       "./b.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1488
 }
 

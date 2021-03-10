@@ -381,7 +381,8 @@ exitCode:: ExitStatus.undefined
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3577
 }
 
 
@@ -623,6 +624,7 @@ exitCode:: ExitStatus.undefined
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3579
 }
 

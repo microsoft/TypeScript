@@ -128,7 +128,8 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1988
 }
 
 
@@ -212,6 +213,7 @@ export declare function multiply(a: number, b: number): number;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2007
 }
 

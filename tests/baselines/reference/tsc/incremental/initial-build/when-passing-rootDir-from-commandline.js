@@ -71,7 +71,8 @@ exports.x = 10;
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1365
 }
 
 

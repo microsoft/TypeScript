@@ -192,7 +192,8 @@ declare const A = 1;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 214
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -344,6 +345,7 @@ declare const B = 2;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 432
 }
 

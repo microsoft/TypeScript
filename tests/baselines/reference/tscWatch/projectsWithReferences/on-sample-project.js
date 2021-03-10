@@ -524,7 +524,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2824
 }
 
 
@@ -701,6 +702,7 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2830
 }
 

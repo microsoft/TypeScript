@@ -147,7 +147,8 @@ function main() { }
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2065
 }
 
 
@@ -284,7 +285,8 @@ something();
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2077
 }
 
 
@@ -422,7 +424,8 @@ function foo() { return 20; }
       "./src/newfile.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2335
 }
 
 
@@ -548,7 +551,8 @@ declare function main(): void;
       "./src/newfile.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2594
 }
 
 
@@ -657,6 +661,7 @@ something();
       "./src/newfile.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2603
 }
 

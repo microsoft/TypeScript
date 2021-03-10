@@ -71,7 +71,8 @@ exitCode:: ExitStatus.Success
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2106
 }
 
 //// [/src/logic/index.d.ts] file written with same contents
@@ -129,7 +130,8 @@ exitCode:: ExitStatus.Success
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2540
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -198,6 +200,7 @@ exitCode:: ExitStatus.Success
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2895
 }
 

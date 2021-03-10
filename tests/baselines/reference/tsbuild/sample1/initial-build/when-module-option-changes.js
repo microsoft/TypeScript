@@ -128,7 +128,8 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1972
 }
 
 
@@ -221,6 +222,7 @@ define(["require", "exports"], function (require, exports) {
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1972
 }
 

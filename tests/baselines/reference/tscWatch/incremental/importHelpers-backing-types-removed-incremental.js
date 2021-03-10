@@ -100,7 +100,8 @@ exports.x = (0, tslib_1.__assign)({});
       "./node_modules/tslib/index.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1575
 }
 
 
@@ -182,6 +183,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1509
 }
 

@@ -103,6 +103,7 @@ exports.Other = 0;
       "../src/other/other.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1354
 }
 

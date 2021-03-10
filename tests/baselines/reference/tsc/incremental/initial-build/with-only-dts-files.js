@@ -66,7 +66,8 @@ exitCode:: ExitStatus.Success
       "./src/main.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1466
 }
 
 
@@ -130,6 +131,7 @@ exitCode:: ExitStatus.Success
       "./src/main.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1510
 }
 

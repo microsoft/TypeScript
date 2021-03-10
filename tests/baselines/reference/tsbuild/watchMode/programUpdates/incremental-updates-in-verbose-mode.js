@@ -272,7 +272,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1807
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
@@ -352,7 +353,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2382
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -439,7 +441,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2729
 }
 
 
@@ -584,7 +587,8 @@ function someFn() { }
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2403
 }
 
 //// [/user/username/projects/sample1/tests/index.js] file changed its modified time
@@ -753,7 +757,8 @@ export declare function someFn(): void;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2453
 }
 
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
@@ -825,6 +830,7 @@ export declare function someFn(): void;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2811
 }
 

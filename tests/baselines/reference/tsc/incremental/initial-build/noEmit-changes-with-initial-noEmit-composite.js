@@ -165,7 +165,8 @@ exitCode:: ExitStatus.Success
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2895
 }
 
 
@@ -362,7 +363,8 @@ function someFunc(arguments) {
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2816
 }
 
 
@@ -563,7 +565,8 @@ exports.classC = classC;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3433
 }
 
 
@@ -688,7 +691,8 @@ exitCode:: ExitStatus.Success
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2883
 }
 
 
@@ -820,6 +824,7 @@ exports.classC = classC;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2816
 }
 

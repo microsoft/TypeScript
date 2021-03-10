@@ -120,7 +120,8 @@ var x = 10;
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2184
 }
 
 
@@ -212,6 +213,7 @@ var sym = Symbol();
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2171
 }
 

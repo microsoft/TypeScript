@@ -183,7 +183,8 @@ type Nominal<T, Name> = T & {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 205
 }
 
 //// [/src/sub-project/sub-project.d.ts]
@@ -303,7 +304,8 @@ type MyNominal = Nominal<string, 'MyNominal'>;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 425
 }
 
 //// [/src/sub-project-2/sub-project-2.d.ts]
@@ -455,7 +457,8 @@ declare namespace variable {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 451
 }
 
 
@@ -583,7 +586,8 @@ type MyNominal = Nominal<string, 'MyNominal'>;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 425
 }
 
 //// [/src/sub-project-2/sub-project-2.js]
@@ -717,6 +721,7 @@ declare namespace variable {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 451
 }
 

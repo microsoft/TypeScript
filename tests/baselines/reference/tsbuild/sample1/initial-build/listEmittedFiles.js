@@ -194,7 +194,8 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2130
 }
 
 //// [/src/logic/index.d.ts]
@@ -274,7 +275,8 @@ exports.m = mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2564
 }
 
 //// [/src/tests/index.d.ts]
@@ -361,7 +363,8 @@ exports.m = mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2919
 }
 
 
@@ -466,7 +469,8 @@ exports.someClass = someClass;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2198
 }
 
 //// [/src/logic/index.d.ts] file written with same contents
@@ -527,7 +531,8 @@ exports.someClass = someClass;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2644
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -599,7 +604,8 @@ exports.someClass = someClass;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2999
 }
 
 
@@ -694,6 +700,7 @@ var someClass2 = /** @class */ (function () {
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2220
 }
 

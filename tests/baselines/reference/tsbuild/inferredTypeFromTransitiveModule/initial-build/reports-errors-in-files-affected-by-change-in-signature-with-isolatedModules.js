@@ -228,7 +228,8 @@ var bar_2 = require("./bar");
       "../lazyindex.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3553
 }
 
 
@@ -367,7 +368,8 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3686
 }
 
 
@@ -497,6 +499,7 @@ var bar_2 = require("./bar");
       "../lazyindex.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 3504
 }
 

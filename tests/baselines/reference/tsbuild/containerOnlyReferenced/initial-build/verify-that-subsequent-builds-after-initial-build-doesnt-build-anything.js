@@ -140,7 +140,8 @@ exports.x = 10;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1312
 }
 
 //// [/src/src/folder2/index.d.ts]
@@ -183,7 +184,8 @@ exports.x = 10;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1312
 }
 
 //// [/src/tests/index.d.ts]
@@ -226,7 +228,8 @@ exports.x = 10;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1309
 }
 
 

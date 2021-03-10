@@ -255,7 +255,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1807
 }
 
 //// [/user/username/projects/sample1/logic/index.js.map]
@@ -335,7 +336,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2382
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -422,7 +424,8 @@ export declare const m: typeof mod;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2729
 }
 
 
@@ -550,7 +553,8 @@ export declare class someClass {
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1872
 }
 
 
@@ -657,7 +661,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2456
 }
 
 
@@ -779,7 +784,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2803
 }
 
 
@@ -898,7 +904,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1807
 }
 
 
@@ -1005,7 +1012,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2382
 }
 
 
@@ -1127,7 +1135,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2729
 }
 
 
@@ -1264,7 +1273,8 @@ export declare class someClass2 {
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1938
 }
 
 
@@ -1371,7 +1381,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2532
 }
 
 
@@ -1493,6 +1504,7 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2879
 }
 

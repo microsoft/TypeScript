@@ -114,7 +114,8 @@ exports.A = A;
       "./a.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1322
 }
 
 //// [/src/tsconfig.b.tsbuildinfo]
@@ -166,6 +167,7 @@ exports.A = A;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1552
 }
 

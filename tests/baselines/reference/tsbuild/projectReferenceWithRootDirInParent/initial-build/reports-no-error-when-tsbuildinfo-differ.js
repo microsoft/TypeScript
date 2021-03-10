@@ -127,7 +127,8 @@ exports.Other = 0;
       "../src/main/b.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1528
 }
 
 //// [/src/dist/tsconfig.other.tsbuildinfo]
@@ -160,6 +161,7 @@ exports.Other = 0;
       "../src/other/other.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1360
 }
 

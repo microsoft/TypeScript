@@ -196,7 +196,8 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2106
 }
 
 //// [/src/logic/tsconfig.tsbuildinfo]
@@ -279,6 +280,7 @@ exports.multiply = multiply;
       ]
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2746
 }
 

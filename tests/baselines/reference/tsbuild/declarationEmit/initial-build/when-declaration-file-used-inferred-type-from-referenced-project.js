@@ -108,7 +108,8 @@ exports.__esModule = true;
       "../src/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1571
 }
 
 //// [/src/packages/pkg2/lib/src/index.d.ts]
@@ -177,6 +178,7 @@ exports.fn4 = fn4;
       "../src/index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1937
 }
 

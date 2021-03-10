@@ -153,7 +153,8 @@ console.log(foo_json_1.foo);
       "../strings/foo.json"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1583
 }
 
 //// [/src/strings/tsconfig.tsbuildinfo]
@@ -192,7 +193,8 @@ console.log(foo_json_1.foo);
       "./foo.json"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1433
 }
 
 

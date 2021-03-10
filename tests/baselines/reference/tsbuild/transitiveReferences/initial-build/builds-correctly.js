@@ -151,7 +151,8 @@ a_1.X;
       "./a.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1322
 }
 
 //// [/src/tsconfig.b.tsbuildinfo]
@@ -205,6 +206,7 @@ a_1.X;
       "./b.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1644
 }
 

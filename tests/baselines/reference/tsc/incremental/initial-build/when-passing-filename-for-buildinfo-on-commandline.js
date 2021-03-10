@@ -73,7 +73,8 @@ exitCode:: ExitStatus.Success
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1406
 }
 
 //// [/src/project/src/main.js]

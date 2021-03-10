@@ -173,7 +173,8 @@ export interface C {
       "./src/c.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2244
 }
 
 
@@ -276,7 +277,8 @@ exitCode:: ExitStatus.Success
       "./src/c.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2256
 }
 
 
@@ -390,6 +392,7 @@ export interface A {
       "./src/c.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2281
 }
 
