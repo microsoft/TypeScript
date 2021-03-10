@@ -20532,7 +20532,7 @@ namespace ts {
 
         function isStringLiteralTypeValueParsableAsType(s: StringLiteralType, target: Type): boolean {
             if (target.flags & TypeFlags.Union) {
-                return !!forEachType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
+                return someType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
             }
             switch (target) {
                 case stringType: return true;
@@ -21973,6 +21973,10 @@ namespace ts {
 
         function forEachType<T>(type: Type, f: (t: Type) => T | undefined): T | undefined {
             return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
+        }
+
+        function someType(type: Type, f: (t: Type) => boolean): boolean {
+            return type.flags & TypeFlags.Union ? some((<UnionType>type).types, f) : f(type);
         }
 
         function everyType(type: Type, f: (t: Type) => boolean): boolean {
@@ -23553,7 +23557,7 @@ namespace ts {
         }
 
         function typeHasNullableConstraint(type: Type) {
-            return type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.Nullable);
+            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.Nullable);
         }
 
         function getConstraintForLocation(type: Type, node: Node): Type;
@@ -23563,36 +23567,38 @@ namespace ts {
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
-            if (type && isConstraintPosition(node) && forEachType(type, typeHasNullableConstraint)) {
+            if (type && isConstraintPosition(node) && someType(type, typeHasNullableConstraint)) {
                 return mapType(getWidenedType(type), getBaseConstraintOrType);
             }
             return type;
         }
 
-        function containsTypeVariable(type: Type, typeVariable: TypeVariable): boolean {
-            return type === typeVariable ||
-                !!(type.flags & TypeFlags.UnionOrIntersection) && some((<UnionOrIntersectionType>type).types, t => containsTypeVariable(t, typeVariable));
+        function isTypeVariableWithUnionConstraint(type: Type) {
+            return !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & TypeFlags.Union);
+        }
+
+        function containsTypeVariable(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, containsTypeVariable));
+        }
+
+        function hasContextualTypeWithNoTypeVariables(node: Expression) {
+            const contextualType = getContextualType(node);
+            return contextualType && !someType(contextualType, containsTypeVariable);
         }
 
         function getConstraintForReference(type: Type, reference: Identifier | ElementAccessExpression | PropertyAccessExpression | QualifiedName, checkMode: CheckMode | undefined) {
-            // When the type of a reference is a type variable with a union type constraint, and when the reference
-            // is contextually typed by a type that doesn't contain that type variable, we substitute the union type
-            // constraint for the type variable to give control flow analysis an opportunity to narrow it further.
-            // (This transformation causes no type errors because a type variable with a union constraint is only
-            // assignable to itself and its constraint, and we already know the type variable doesn't occur in the
-            // contextual type.) For example, for a reference of a type parameter type 'T extends string | undefined'
-            // with a contextual type 'string', we substitute 'string | undefined' to give control flow analysis the
-            // opportunity to narrow to type 'string'.
-            if (type.flags & TypeFlags.TypeVariable && reference.kind !== SyntaxKind.QualifiedName && !(checkMode && checkMode & CheckMode.Inferential)) {
-                const constraint = getConstraintOfType(type);
-                if (constraint && constraint.flags & TypeFlags.Union) {
-                    const contextualType = getContextualType(reference);
-                    if (contextualType && !containsTypeVariable(contextualType, <TypeVariable>type)) {
-                        return constraint;
-                    }
-                }
-            }
-            return getConstraintForLocation(type, reference);
+            // When the type of a reference is or contains an instantiable type with a union type constraint, and
+            // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
+            // has a contextual type containing no instantiables (meaning constraints will determine assignability),
+            // we substitute constraints for all instantiables in the type of the reference to give control flow
+            // analysis an opportunity to narrow it further. For example, for a reference of a type parameter type
+            // 'T extends string | undefined' with a contextual type 'string', we substitute 'string | undefined'
+            // to give control flow analysis the opportunity to narrow to type 'string'.
+            const substituteConstraints = reference.kind !== SyntaxKind.QualifiedName &&
+                !(checkMode && checkMode & CheckMode.Inferential) &&
+                someType(type, isTypeVariableWithUnionConstraint) &&
+                (isConstraintPosition(reference) || hasContextualTypeWithNoTypeVariables(reference));
+            return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
         }
 
         function isExportOrExportExpression(location: Node) {
@@ -25470,7 +25476,7 @@ namespace ts {
             if (inDestructuringPattern) {
                 return createTupleType(elementTypes, elementFlags);
             }
-            if (forceTuple || inConstContext || contextualType && forEachType(contextualType, isTupleLikeType)) {
+            if (forceTuple || inConstContext || contextualType && someType(contextualType, isTupleLikeType)) {
                 return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
             }
             return createArrayLiteralType(createArrayType(elementTypes.length ?
@@ -25956,7 +25962,7 @@ namespace ts {
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                     const childrenPropSymbol = createSymbol(SymbolFlags.Property, jsxChildrenPropertyName);
                     childrenPropSymbol.type = childrenTypes.length === 1 ? childrenTypes[0] :
-                        childrenContextualType && forEachType(childrenContextualType, isTupleLikeType) ? createTupleType(childrenTypes) :
+                        childrenContextualType && someType(childrenContextualType, isTupleLikeType) ? createTupleType(childrenTypes) :
                         createArrayType(getUnionType(childrenTypes));
                     // Fake up a property declaration for the children
                     childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
@@ -41383,7 +41389,7 @@ namespace ts {
         }
 
         function findBestTypeForObjectLiteral(source: Type, unionTarget: UnionOrIntersectionType) {
-            if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && forEachType(unionTarget, isArrayLikeType)) {
+            if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && someType(unionTarget, isArrayLikeType)) {
                 return find(unionTarget.types, t => !isArrayLikeType(t));
             }
         }
