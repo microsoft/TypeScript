@@ -195,7 +195,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[], additionalInfo?: string) {
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: readonly string[], additionalInfo?: string) {
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
 
@@ -251,7 +251,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         else {
             recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
             checkMap(
-                `fsWatches{recursive ? " recursive" : ""}`,
+                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
                 recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
                 [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
@@ -395,6 +395,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
+        public defaultWatchFileKind?: () => WatchFileKind | undefined;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(
@@ -433,12 +434,14 @@ interface Array<T> { length: number; [n: number]: T; }`
                 fsWatch: this.fsWatch.bind(this),
                 fileExists: this.fileExists.bind(this),
                 useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
+                getCurrentDirectory: this.getCurrentDirectory.bind(this),
                 fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !runWithoutRecursiveWatches,
                 directoryExists: this.directoryExists.bind(this),
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                 realpath: this.realpath.bind(this),
                 tscWatchFile,
-                tscWatchDirectory
+                tscWatchDirectory,
+                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
@@ -827,9 +830,9 @@ interface Array<T> { length: number; [n: number]: T; }`
                 return undefined;
             }
 
-            const realpath = this.realpath(path);
+            const realpath = this.toPath(this.realpath(path));
             if (path !== realpath) {
-                return this.getRealFsEntry(isFsEntry, this.toPath(realpath));
+                return this.getRealFsEntry(isFsEntry, realpath);
             }
 
             return undefined;
@@ -1000,15 +1003,23 @@ interface Array<T> { length: number; [n: number]: T; }`
 
             // base folder has to be present
             const base = getDirectoryPath(file.path);
-            const folder = this.fs.get(base) as FsFolder;
-            Debug.assert(isFsFolder(folder));
+            const folder = Debug.checkDefined(this.getRealFolder(base));
 
-            if (!this.fs.has(file.path)) {
-                this.addFileOrFolderInFolder(folder, file);
+            if (folder.path === base) {
+                if (!this.fs.has(file.path)) {
+                    this.addFileOrFolderInFolder(folder, file);
+                }
+                else {
+                    this.modifyFile(path, content);
+                }
             }
             else {
-                this.modifyFile(path, content);
+                this.writeFile(this.realpath(path), content);
             }
+        }
+
+        prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+            this.modifyFile(path, content + this.readFile(path), options);
         }
 
         appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
@@ -1092,7 +1103,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 return this.realpath(fsEntry.symLink);
             }
 
-            return realFullPath;
+            // realpath supports non-existent files, so there may not be an fsEntry
+            return fsEntry?.fullPath || realFullPath;
         }
 
         readonly exitMessage = "System Exit";

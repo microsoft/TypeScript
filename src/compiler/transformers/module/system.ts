@@ -1495,13 +1495,17 @@ namespace ts {
             //         }
             //     };
             // });
+            const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+            const firstArgument = visitNode(firstOrUndefined(node.arguments), destructuringAndImportCallVisitor);
+            // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
+            const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
             return factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                     contextObject,
                     factory.createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
+                argument ? [argument] : []
             );
         }
 
@@ -1678,7 +1682,7 @@ namespace ts {
                             factory.createPropertyAssignment(
                                 factory.cloneNode(name),
                                 factory.createPropertyAccessExpression(
-                                    factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                    factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                     factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                                 ),
                             ),
@@ -1747,7 +1751,7 @@ namespace ts {
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                             ),
                             /*location*/ node

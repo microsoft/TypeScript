@@ -2,7 +2,7 @@
 module.exports = class {
 >module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 
@@ -26,7 +26,7 @@ module.exports.Sub = class {
 >module.exports.Sub = class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
 >module.exports.Sub : typeof Sub
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >Sub : typeof Sub
 >class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
@@ -39,7 +39,7 @@ module.exports.Sub = class {
 >instance : any
 >new module.exports(10) : import("tests/cases/conformance/jsdoc/declarations/index")
 >module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >10 : 10
     }

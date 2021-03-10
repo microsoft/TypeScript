@@ -25,22 +25,22 @@ const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
 
 module.exports[_sym] = "ok";
->module.exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
 
 module.exports[_str] = "ok";
->module.exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))
 
 module.exports.S = _sym;
 >module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 >module.exports : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 >S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
 

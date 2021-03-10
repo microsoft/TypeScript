@@ -78,11 +78,11 @@ var p = {};
 declare const p: XMLObject<{
     foo: string;
 }>;
-type JsonArray = readonly Json[];
+type JsonArray = ReadonlyArray<Json>;
 type JsonRecord = {
     readonly [key: string]: Json;
 };
-type Json = string | number | boolean | JsonRecord | JsonArray | readonly [];
+type Json = boolean | number | string | null | JsonRecord | readonly Json[] | readonly [];
 /**
  * <T>
  */

@@ -26,5 +26,5 @@ exports.f = f;
 Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("./m1");
 var m1_2 = require("./m1");
-m1_2.f();
-m1_1.default();
+(0, m1_2.f)();
+(0, m1_1.default)();

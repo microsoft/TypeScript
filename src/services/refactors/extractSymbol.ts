@@ -1,39 +1,56 @@
 /* @internal */
 namespace ts.refactor.extractSymbol {
     const refactorName = "Extract Symbol";
-    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
+
+    const extractConstantAction = {
+        name: "Extract Constant",
+        description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
+        kind: "refactor.extract.constant",
+    };
+    const extractFunctionAction = {
+        name: "Extract Function",
+        description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+        kind: "refactor.extract.function",
+    };
+    registerRefactor(refactorName, {
+        kinds: [
+            extractConstantAction.kind,
+            extractFunctionAction.kind
+        ],
+        getAvailableActions,
+        getEditsForAction
+    });
 
     /**
      * Compute the associated code actions
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+        const requestedRefactor = context.kind;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
-
         const targetRange = rangeToExtract.targetRange;
+
         if (targetRange === undefined) {
             if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorNotApplicableReason) {
                 return emptyArray;
             }
 
-            return [{
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: [{
-                    description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                    name: "function_extract_error",
-                    notApplicableReason: getStringError(rangeToExtract.errors)
-                }]
-            },
-            {
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                actions: [{
-                    description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                    name: "constant_extract_error",
-                    notApplicableReason: getStringError(rangeToExtract.errors)
-                }]
-            }];
+            const errors = [];
+            if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
+                errors.push({
+                    name: refactorName,
+                    description: extractFunctionAction.description,
+                    actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
+                });
+            }
+            if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
+                errors.push({
+                    name: refactorName,
+                    description: extractConstantAction.description,
+                    actions: [{ ...extractConstantAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
+                });
+            }
+            return errors;
         }
 
         const extractions = getPossibleExtractions(targetRange, context);
@@ -53,46 +70,53 @@ namespace ts.refactor.extractSymbol {
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
             const description = functionExtraction.description;
-            if (functionExtraction.errors.length === 0) {
-                // Don't issue refactorings with duplicated names.
-                // Scopes come back in "innermost first" order, so extractions will
-                // preferentially go into nearer scopes
-                if (!usedFunctionNames.has(description)) {
-                    usedFunctionNames.set(description, true);
-                    functionActions.push({
-                        description,
-                        name: `function_scope_${i}`
-                    });
+            if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
+                if (functionExtraction.errors.length === 0) {
+                    // Don't issue refactorings with duplicated names.
+                    // Scopes come back in "innermost first" order, so extractions will
+                    // preferentially go into nearer scopes
+                    if (!usedFunctionNames.has(description)) {
+                        usedFunctionNames.set(description, true);
+                        functionActions.push({
+                            description,
+                            name: `function_scope_${i}`,
+                            kind: extractFunctionAction.kind
+                        });
+                    }
                 }
-            }
-            else if (!innermostErrorFunctionAction) {
-                innermostErrorFunctionAction = {
-                    description,
-                    name: `function_scope_${i}`,
-                    notApplicableReason: getStringError(functionExtraction.errors)
-                };
+                else if (!innermostErrorFunctionAction) {
+                    innermostErrorFunctionAction = {
+                        description,
+                        name: `function_scope_${i}`,
+                        notApplicableReason: getStringError(functionExtraction.errors),
+                        kind: extractFunctionAction.kind
+                    };
+                }
             }
 
-            // Skip these since we don't have a way to report errors yet
-            if (constantExtraction.errors.length === 0) {
-                // Don't issue refactorings with duplicated names.
-                // Scopes come back in "innermost first" order, so extractions will
-                // preferentially go into nearer scopes
-                const description = constantExtraction.description;
-                if (!usedConstantNames.has(description)) {
-                    usedConstantNames.set(description, true);
-                    constantActions.push({
-                        description,
-                        name: `constant_scope_${i}`
-                    });
+            if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
+                if (constantExtraction.errors.length === 0) {
+                    // Don't issue refactorings with duplicated names.
+                    // Scopes come back in "innermost first" order, so extractions will
+                    // preferentially go into nearer scopes
+                    const description = constantExtraction.description;
+                    if (!usedConstantNames.has(description)) {
+                        usedConstantNames.set(description, true);
+                        constantActions.push({
+                            description,
+                            name: `constant_scope_${i}`,
+                            kind: extractConstantAction.kind
+                        });
+                    }
                 }
-            }
-            else if (!innermostErrorConstantAction) {
-                innermostErrorConstantAction = {
-                    description,
-                    name: `constant_scope_${i}`,
-                    notApplicableReason: getStringError(constantExtraction.errors)
-                };
+                else if (!innermostErrorConstantAction) {
+                    innermostErrorConstantAction = {
+                        description,
+                        name: `constant_scope_${i}`,
+                        notApplicableReason: getStringError(constantExtraction.errors),
+                        kind: extractConstantAction.kind
+                    };
+                }
             }
 
             // *do* increment i anyway because we'll look for the i-th scope
@@ -106,7 +130,7 @@ namespace ts.refactor.extractSymbol {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
+                actions: functionActions,
             });
         }
         else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorFunctionAction) {
@@ -240,24 +264,30 @@ namespace ts.refactor.extractSymbol {
     /**
      * getRangeToExtract takes a span inside a text file and returns either an expression or an array
      * of statements representing the minimum set of nodes needed to extract the entire span. This
-     * process may fail, in which case a set of errors is returned instead (these are currently
-     * not shown to the user, but can be used by us diagnostically)
+     * process may fail, in which case a set of errors is returned instead. These errors are shown to
+     * users if they have the provideRefactorNotApplicableReason option set.
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, considerEmptySpans = true): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoked = true): RangeToExtract {
         const { length } = span;
-        if (length === 0 && !considerEmptySpans) {
+        if (length === 0 && !invoked) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
-        const cursorRequest = length === 0 && considerEmptySpans;
+        const cursorRequest = length === 0 && invoked;
+
+        const startToken = getTokenAtPosition(sourceFile, span.start);
+        const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
+        /* If the refactoring command is invoked through a keyboard action it's safe to assume that the user is actively looking for
+        refactoring actions at the span location. As they may not know the exact range that will trigger a refactoring, we expand the
+        searched span to cover a real node range making it more likely that something useful will show up. */
+        const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const startToken = getTokenAtPosition(sourceFile, span.start);
-        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, span);
+        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
+
         // Do the same for the ending position
-        const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
-        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, span);
+        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
 
         const declarations: Symbol[] = [];
 
@@ -268,6 +298,10 @@ namespace ts.refactor.extractSymbol {
         if (!start || !end) {
             // cannot find either start or end node
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+        }
+
+        if (isJSDoc(start)) {
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
         if (start.parent !== end.parent) {
@@ -305,10 +339,6 @@ namespace ts.refactor.extractSymbol {
             }
 
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
-        }
-
-        if (isJSDoc(start)) {
-            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
         if (isReturnStatement(start) && !start.expression) {
@@ -578,6 +608,19 @@ namespace ts.refactor.extractSymbol {
                 permittedJumps = savedPermittedJumps;
             }
         }
+    }
+
+    /**
+     * Includes the final semicolon so that the span covers statements in cases where it would otherwise
+     * only cover the declaration list.
+     */
+    function getAdjustedSpanFromNodes(startNode: Node, endNode: Node, sourceFile: SourceFile): TextSpan {
+        const start = startNode.getStart(sourceFile);
+        let end = endNode.getEnd();
+        if (sourceFile.text.charCodeAt(end) === CharacterCodes.semicolon) {
+            end++;
+        }
+        return { start, length: end - start };
     }
 
     function getStatementOrExpressionRange(node: Node): Statement[] | Expression | undefined {

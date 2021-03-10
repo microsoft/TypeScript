@@ -241,7 +241,7 @@ namespace ts.server {
                 this.reloadWithFileText();
             }
 
-            // At this point if svc is present its valid
+            // At this point if svc is present it's valid
             return this.svc;
         }
 
@@ -559,7 +559,7 @@ namespace ts.server {
             }
         }
 
-        getLatestVersion() {
+        getLatestVersion(): string {
             // Ensure we have updated snapshot to give back latest version
             this.textStorage.getSnapshot();
             return this.textStorage.getVersion();

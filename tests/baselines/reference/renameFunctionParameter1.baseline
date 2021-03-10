@@ -1,0 +1,10 @@
+/*====== /tests/cases/fourslash/renameFunctionParameter1.ts ======*/
+
+function Foo() {
+    /**
+     * @param {number} RENAME
+     */
+    this.foo = function foo([|RENAME|]) {
+        return RENAME;
+    }
+}

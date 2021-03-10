@@ -75,5 +75,44 @@ declare type MyNominal<T, Name extends string> = T & {
             }),
             commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"]
         });
+
+        verifyTsc({
+            scenario: "declarationEmit",
+            subScenario: "when declaration file used inferred type from referenced project",
+            fs: () => loadProjectFromFiles({
+                "/src/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        baseUrl: ".",
+                        paths: { "@fluentui/*": ["packages/*/src"] }
+                    }
+                }),
+                "/src/packages/pkg1/src/index.ts": Utils.dedent`
+export interface IThing {
+  a: string;
+}
+export interface IThings {
+  thing1: IThing;
+}`,
+                "/src/packages/pkg1/tsconfig.json": JSON.stringify({
+                    extends: "../../tsconfig",
+                    compilerOptions: { outDir: "lib" },
+                    include: ["src"]
+                }),
+                "/src/packages/pkg2/src/index.ts": Utils.dedent`
+import { IThings } from '@fluentui/pkg1';
+export function fn4() {
+  const a: IThings = { thing1: { a: 'b' } };
+  return a.thing1;
+}`,
+                "/src/packages/pkg2/tsconfig.json": JSON.stringify({
+                    extends: "../../tsconfig",
+                    compilerOptions: { outDir: "lib" },
+                    include: ["src"],
+                    references: [{ path: "../pkg1" }]
+                }),
+            }),
+            commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"]
+        });
     });
 }

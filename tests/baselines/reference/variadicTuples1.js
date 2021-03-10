@@ -4,7 +4,7 @@
 type TV0<T extends unknown[]> = [string, ...T];
 type TV1<T extends unknown[]> = [string, ...T, number];
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
+type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
 
 // Normalization
 
@@ -206,11 +206,18 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 // Inference between variadic tuple types
 
-type First<T extends readonly unknown[]> = T[0];
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+type First<T extends readonly unknown[]> =
+    T extends readonly [unknown, ...unknown[]] ? T[0] :
+    T[0] | undefined;
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+
+type Last<T extends readonly unknown[]> =
+    T extends readonly [...unknown[], infer U] ? U :
+    T extends readonly [unknown, ...unknown[]] ? T[number] :
+    T[number] | undefined;
+
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 
 type T00 = First<[number, symbol, string]>;
 type T01 = First<[symbol, string]>;
@@ -241,8 +248,8 @@ type T23 = Last<[number, symbol, ...string[]]>;
 type T24 = Last<[symbol, ...string[]]>;
 type T25 = Last<[string?]>;
 type T26 = Last<string[]>;
-type T27 = Last<[]>;  // unknown, maybe should undefined
-type T28 = Last<any>;  // unknown, maybe should be any
+type T27 = Last<[]>;
+type T28 = Last<any>;
 type T29 = Last<never>;
 
 type T30 = DropLast<[number, symbol, string]>;
@@ -340,10 +347,6 @@ ft(['a', 'b'], ['c', 'd', 42])
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 
 call('hello', 32, (a, b) => 42);
-
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-
 call(...sa, (...x) => 42);
 
 // No inference to ending optional elements (except with identical structure)
@@ -392,7 +395,7 @@ callApi(getOrgUser);
 
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
-const data: Unbounded = [false, false];
+const data: Unbounded = [false, false];  // Error
 
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
@@ -402,41 +405,39 @@ type U3 = [...[string, number], boolean];
 //// [variadicTuples1.js]
 "use strict";
 // Variadics in tuple types
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 // Variadics in array literals
 function tup2(t, u) {
-    return __spreadArrays([1], t, [2], u, [3]);
+    return __spreadArray(__spreadArray(__spreadArray(__spreadArray([1], t), [2]), u), [3]);
 }
 var t2 = tup2(['hello'], [10, true]);
 function concat(t, u) {
-    return __spreadArrays(t, u);
+    return __spreadArray(__spreadArray([], t), u);
 }
 var tc1 = concat([], []);
 var tc2 = concat(['hello'], [42]);
 var tc3 = concat([1, 2, 3], sa);
 var tc4 = concat(sa, [1, 2, 3]); // Ideally would be [...string[], number, number, number]
 function concat2(t, u) {
-    return __spreadArrays(t, u); // (T[number] | U[number])[]
+    return __spreadArray(__spreadArray([], t), u); // (T[number] | U[number])[]
 }
 var tc5 = concat2([1, 2, 3], [4, 5, 6]); // (1 | 2 | 3 | 4 | 5 | 6)[]
 function foo2(t1, t2, a1) {
     foo1(1, 'abc', true, 42, 43, 44);
-    foo1.apply(void 0, __spreadArrays(t1, [true, 42, 43, 44]));
-    foo1.apply(void 0, __spreadArrays(t1, t2, [42, 43, 44]));
-    foo1.apply(void 0, __spreadArrays(t1, t2, a1));
+    foo1.apply(void 0, __spreadArray(__spreadArray([], t1), [true, 42, 43, 44]));
+    foo1.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], t1), t2), [42, 43, 44]));
+    foo1.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], t1), t2), a1));
     foo1.apply(void 0, t1); // Error
-    foo1.apply(void 0, __spreadArrays(t1, [45])); // Error
+    foo1.apply(void 0, __spreadArray(__spreadArray([], t1), [45])); // Error
 }
 function foo4(u) {
     foo3(1, 2);
     foo3(1, 'hello', true, 2);
-    foo3.apply(void 0, __spreadArrays([1], u, ['hi', 2]));
+    foo3.apply(void 0, __spreadArray(__spreadArray([1], u), ['hi', 2]));
     foo3(1);
 }
 ft1(['hello', 42]); // (string | number)[]
@@ -470,17 +471,17 @@ function f3(t) {
 var tm1 = fm1([['abc'], [42], [true], ['def']]); // [boolean, string]
 function gx1(u, v) {
     fx1('abc'); // []
-    fx1.apply(void 0, __spreadArrays(['abc'], u)); // U
-    fx1.apply(void 0, __spreadArrays(['abc'], v)); // [...V]
-    fx1.apply(void 0, __spreadArrays(['abc'], u)); // U
-    fx1.apply(void 0, __spreadArrays(['abc'], v)); // Error
+    fx1.apply(void 0, __spreadArray(['abc'], u)); // U
+    fx1.apply(void 0, __spreadArray(['abc'], v)); // [...V]
+    fx1.apply(void 0, __spreadArray(['abc'], u)); // U
+    fx1.apply(void 0, __spreadArray(['abc'], v)); // Error
 }
 function gx2(u, v) {
     fx2('abc'); // []
-    fx2.apply(void 0, __spreadArrays(['abc'], u)); // U
-    fx2.apply(void 0, __spreadArrays(['abc'], v)); // [...V]
-    fx2.apply(void 0, __spreadArrays(['abc'], u)); // U
-    fx2.apply(void 0, __spreadArrays(['abc'], v)); // V
+    fx2.apply(void 0, __spreadArray(['abc'], u)); // U
+    fx2.apply(void 0, __spreadArray(['abc'], v)); // [...V]
+    fx2.apply(void 0, __spreadArray(['abc'], u)); // U
+    fx2.apply(void 0, __spreadArray(['abc'], v)); // V
 }
 // Relations involving variadic tuple types
 function f10(x, y, z) {
@@ -547,7 +548,7 @@ function curry(f) {
         for (var _i = 0; _i < arguments.length; _i++) {
             b[_i] = arguments[_i];
         }
-        return f.apply(void 0, __spreadArrays(a, b));
+        return f.apply(void 0, __spreadArray(__spreadArray([], a), b));
     };
 }
 var fn1 = function (a, b, c, d) { return 0; };
@@ -576,10 +577,10 @@ var fn3 = function () {
 };
 var c20 = curry(fn3); // (...args: string[]) => number
 var c21 = curry(fn3, 'abc', 'def'); // (...args: string[]) => number
-var c22 = curry.apply(void 0, __spreadArrays([fn3], sa)); // (...args: string[]) => number
+var c22 = curry.apply(void 0, __spreadArray([fn3], sa)); // (...args: string[]) => number
 // No inference to [...T, ...U] when there is no implied arity
 function curry2(f, t, u) {
-    return f.apply(void 0, __spreadArrays(t, u));
+    return f.apply(void 0, __spreadArray(__spreadArray([], t), u));
 }
 curry2(fn10, ['hello', 42], [true]);
 curry2(fn10, ['hello'], [42, true]);
@@ -588,9 +589,7 @@ ft([1, 2], [1, 2, 3]);
 ft(['a', 'b'], ['c', 'd']);
 ft(['a', 'b'], ['c', 'd', 42]);
 call('hello', 32, function (a, b) { return 42; });
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-call.apply(void 0, __spreadArrays(sa, [function () {
+call.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
@@ -614,12 +613,12 @@ function callApi(method) {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return method.apply(void 0, __spreadArrays(args, [{}]));
+        return method.apply(void 0, __spreadArray(__spreadArray([], args), [{}]));
     };
 }
 callApi(getUser);
 callApi(getOrgUser);
-var data = [false, false];
+var data = [false, false]; // Error
 
 
 //// [variadicTuples1.d.ts]
@@ -641,7 +640,7 @@ declare const sa: string[];
 declare const tc1: [];
 declare const tc2: [string, number];
 declare const tc3: [number, number, number, ...string[]];
-declare const tc4: (string | number)[];
+declare const tc4: [...string[], number, number, number];
 declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
 declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
@@ -674,10 +673,10 @@ declare function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly 
 declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
-declare type First<T extends readonly unknown[]> = T[0];
-declare type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
-declare type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+declare type First<T extends readonly unknown[]> = T extends readonly [unknown, ...unknown[]] ? T[0] : T[0] | undefined;
+declare type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+declare type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer U] ? U : T extends readonly [unknown, ...unknown[]] ? T[number] : T[number] | undefined;
+declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 declare type T00 = First<[number, symbol, string]>;
 declare type T01 = First<[symbol, string]>;
 declare type T02 = First<[string]>;

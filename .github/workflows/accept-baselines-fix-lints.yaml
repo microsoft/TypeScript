@@ -1,0 +1,29 @@
+name: Accept Baselines and Fix Lints
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use node version 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+
+    - name: Configure Git, Run Tests, Update Baselines, Apply Fixes
+      run: |
+        git config user.email "typescriptbot@microsoft.com"
+        git config user.name "TypeScript Bot"
+        npm install
+        gulp runtests-parallel --ci --fix || true
+        gulp baseline-accept
+        git add ./src
+        git add ./tests/baselines/reference
+        git diff --cached
+        git commit -m "Update Baselines and/or Applied Lint Fixes"
+        git push

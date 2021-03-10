@@ -4,8 +4,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-    Type 'V' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(17,5): error TS2322: Type 'V' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(20,5): error TS2322: Type 'V' is not assignable to type 'U'.
@@ -54,8 +52,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(70,5): error TS2322: Type 'T' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-    Type 'U' is not assignable to type 'V'.
-      'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(71,5): error TS2322: Type 'U' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
@@ -84,8 +80,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! error TS2322:     Type 'V' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
         u = t;
     
         t = v; // error
@@ -208,8 +202,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'V'.
 !!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! error TS2322:     Type 'U' is not assignable to type 'V'.
-!!! error TS2322:       'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         v = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
