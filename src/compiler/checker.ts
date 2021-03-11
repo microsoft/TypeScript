@@ -23587,11 +23587,11 @@ namespace ts {
         function getConstraintForReference(type: Type, reference: Identifier | ElementAccessExpression | PropertyAccessExpression | QualifiedName, checkMode: CheckMode | undefined) {
             // When the type of a reference is or contains an instantiable type with a union type constraint, and
             // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
-            // has a contextual type containing no instantiables (meaning constraints will determine assignability),
-            // we substitute constraints for all instantiables in the type of the reference to give control flow
-            // analysis an opportunity to narrow it further. For example, for a reference of a type parameter type
-            // 'T extends string | undefined' with a contextual type 'string', we substitute 'string | undefined'
-            // to give control flow analysis the opportunity to narrow to type 'string'.
+            // has a contextual type containing no top-level instantiables (meaning constraints will determine
+            // assignability), we substitute constraints for all instantiables in the type of the reference to give
+            // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
+            // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
+            // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
             const substituteConstraints = reference.kind !== SyntaxKind.QualifiedName &&
                 !(checkMode && checkMode & CheckMode.Inferential) &&
                 someType(type, isTypeVariableWithUnionConstraint) &&
