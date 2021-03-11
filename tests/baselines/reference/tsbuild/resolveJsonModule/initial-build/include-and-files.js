@@ -56,7 +56,21 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig_withIncludeAndFiles.json
+/lib/tsc --b /src/tsconfig_withIncludeAndFiles.json --v --explainFiles
+[[90m12:00:00 AM[0m] Projects in this build: 
+    * src/tsconfig_withIncludeAndFiles.json
+
+[[90m12:00:00 AM[0m] Project 'src/tsconfig_withIncludeAndFiles.json' is out of date because output file 'src/dist/src/hello.json' does not exist
+
+[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeAndFiles.json'...
+
+lib/lib.d.ts
+  Default library
+src/src/hello.json
+  Part of 'files' list in tsconfig.json
+  Imported via "./hello.json" from file 'src/src/index.ts'
+src/src/index.ts
+  Matched by include pattern 'src/**/*' in 'src/tsconfig_withIncludeAndFiles.json'
 exitCode:: ExitStatus.Success
 
 
@@ -82,6 +96,9 @@ exports["default"] = hello_json_1["default"].hello;
 
 
 //// [/src/dist/tsconfig_withIncludeAndFiles.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6651571919-{\n  \"hello\": \"world\"\n}","signature":"-17173785019-export const hello: string;\r\n","affectsGlobalScope":true},{"version":"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello","signature":"-1680156224-declare const _default: string;\r\nexport default _default;\r\n","affectsGlobalScope":false}],"options":{"composite":true,"moduleResolution":2,"module":1,"resolveJsonModule":true,"esModuleInterop":true,"allowSyntheticDefaultImports":true,"outDir":"./","skipDefaultLibCheck":true,"explainFiles":true,"configFilePath":"../tsconfig_withIncludeAndFiles.json"},"fileIdsList":[[1]],"referencedMap":[[2,0]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1,2]},"version":"FakeTSVersion"}
+
+//// [/src/dist/tsconfig_withIncludeAndFiles.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -110,6 +127,7 @@ exports["default"] = hello_json_1["default"].hello;
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "explainFiles": true,
       "configFilePath": "../tsconfig_withIncludeAndFiles.json"
     },
     "referencedMap": {

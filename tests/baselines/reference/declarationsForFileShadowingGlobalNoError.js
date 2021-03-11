@@ -32,6 +32,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -39,7 +41,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.mixin = void 0;
-exports.mixin = function (Base) {
+var mixin = function (Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
@@ -49,6 +51,7 @@ exports.mixin = function (Base) {
         return class_1;
     }(Base));
 };
+exports.mixin = mixin;
 
 
 //// [dom.d.ts]

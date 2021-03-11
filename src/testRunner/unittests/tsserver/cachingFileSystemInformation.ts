@@ -240,8 +240,8 @@ namespace ts.projectSystem {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 1);
             const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code);
-            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar' or its corresponding type declarations.");
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option.code);
+            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?");
             callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
 
@@ -544,7 +544,7 @@ namespace ts.projectSystem {
                 const otherFiles = [packageJson];
                 const host = createServerHost(projectFiles.concat(otherFiles));
                 const projectService = createProjectService(host);
-                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "none" } });
+                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
                 const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
@@ -712,6 +712,41 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
             checkProjectActualFiles(project, files.map(f => f.path));
             assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
+        });
+
+        it("when creating new file in symlinked folder", () => {
+            const module1: File = {
+                path: `${tscWatch.projectRoot}/client/folder1/module1.ts`,
+                content: `export class Module1Class { }`
+            };
+            const module2: File = {
+                path: `${tscWatch.projectRoot}/folder2/module2.ts`,
+                content: `import * as M from "folder1/module1";`
+            };
+            const symlink: SymLink = {
+                path: `${tscWatch.projectRoot}/client/linktofolder2`,
+                symLink: `${tscWatch.projectRoot}/folder2`,
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        baseUrl: "client",
+                        paths: { "*": ["*"] },
+                    },
+                    include: ["client/**/*", "folder2"]
+                })
+            };
+            const host = createServerHost([module1, module2, symlink, config, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(`${symlink.path}/module2.ts`);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = Debug.checkDefined(service.configuredProjects.get(config.path));
+            checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path]);
+            host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            checkProjectActualFiles(project, [module1.path, `${symlink.path}/module2.ts`, config.path, libFile.path, `${symlink.path}/module3.ts`]);
         });
     });
 }

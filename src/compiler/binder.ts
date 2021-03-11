@@ -174,12 +174,14 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+        tracing?.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
+        tracing?.pop();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -215,6 +217,9 @@ namespace ts {
         // or if compiler options contain alwaysStrict.
         let inStrictMode: boolean;
 
+        // If we are binding an assignment pattern, we will bind certain expressions differently.
+        let inAssignmentPattern = false;
+
         let symbolCount = 0;
 
         let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
@@ -222,6 +227,7 @@ namespace ts {
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
+        const bindBinaryExpressionFlow = createBindBinaryExpressionFlow();
 
         /**
          * Inside the binder, we may create a diagnostic for an as-yet unbound node (with potentially no parent pointers, implying no accessible source file)
@@ -272,6 +278,7 @@ namespace ts {
             currentExceptionTarget = undefined;
             activeLabelList = undefined;
             hasExplicitReturn = false;
+            inAssignmentPattern = false;
             emitFlags = NodeFlags.None;
         }
 
@@ -338,12 +345,9 @@ namespace ts {
                     if (isSignedNumericLiteral(nameExpression)) {
                         return tokenToString(nameExpression.operator) + nameExpression.operand.text as __String;
                     }
-
-                    Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
-                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-                }
-                if (isWellKnownSymbolSyntactically(name)) {
-                    return getPropertyNameForKnownSymbolName(idText(name.name));
+                    else {
+                        Debug.fail("Only computed properties with literal names have declaration names");
+                    }
                 }
                 if (isPrivateIdentifier(name)) {
                     // containingClass exists because private names only allowed inside classes
@@ -541,7 +545,7 @@ namespace ts {
         }
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
+            const hasExportModifier = !!(getCombinedModifierFlags(node) & ModifierFlags.Export) || jsdocTreatAsExported(node);
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
@@ -567,7 +571,7 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
+                if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     if (!container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
@@ -581,6 +585,24 @@ namespace ts {
                     return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
+        }
+
+        function jsdocTreatAsExported(node: Node) {
+            if (node.parent && isModuleDeclaration(node)) {
+                node = node.parent;
+            }
+            if (!isJSDocTypeAlias(node)) return false;
+            // jsdoc typedef handling is a bit of a doozy, but to summarize, treat the typedef as exported if:
+            // 1. It has an explicit name (since by default typedefs are always directly exported, either at the top level or in a container), or
+            if (!isJSDocEnumTag(node) && !!node.fullName) return true;
+            // 2. The thing a nameless typedef pulls its name from is implicitly a direct export (either by assignment or actual export flag).
+            const declName = getNameOfDeclaration(node);
+            if (!declName) return false;
+            if (isPropertyAccessEntityNameExpression(declName.parent) && isTopLevelNamespaceAssignment(declName.parent)) return true;
+            if (isDeclaration(declName.parent) && getCombinedModifierFlags(declName.parent) & ModifierFlags.Export) return true;
+            // This could potentially be simplified by having `delayedBindJSDocTypedefTag` pass in an override for `hasExportModifier`, since it should
+            // already have calculated and branched on most of this.
+            return false;
         }
 
         // All container nodes are kept on a linked list in declaration order. This list is used by
@@ -645,7 +667,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || (isInJSFile && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -666,7 +688,7 @@ namespace ts {
                 if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
-                    if (node.kind === SyntaxKind.Constructor || (isInJSFile && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                    if (node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
                         (<FunctionLikeDeclaration>node).returnFlowNode = currentFlow;
                     }
                 }
@@ -712,9 +734,14 @@ namespace ts {
         }
 
         function bindChildren(node: Node): void {
+            const saveInAssignmentPattern = inAssignmentPattern;
+            // Most nodes aren't valid in an assignment pattern, so we clear the value here
+            // and set it before we descend into nodes that could actually be part of an assignment pattern.
+            inAssignmentPattern = false;
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 bindJSDoc(node);
+                inAssignmentPattern = saveInAssignmentPattern;
                 return;
             }
             if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
@@ -770,6 +797,13 @@ namespace ts {
                     bindPostfixUnaryExpressionFlow(<PostfixUnaryExpression>node);
                     break;
                 case SyntaxKind.BinaryExpression:
+                    if (isDestructuringAssignment(node)) {
+                        // Carry over whether we are in an assignment pattern to
+                        // binary expressions that could actually be an initializer
+                        inAssignmentPattern = saveInAssignmentPattern;
+                        bindDestructuringAssignmentFlow(node);
+                        return;
+                    }
                     bindBinaryExpressionFlow(<BinaryExpression>node);
                     break;
                 case SyntaxKind.DeleteExpression:
@@ -806,16 +840,29 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     bindEachFunctionsFirst((node as Block).statements);
                     break;
+                case SyntaxKind.BindingElement:
+                    bindBindingElementFlow(<BindingElement>node);
+                    break;
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.SpreadElement:
+                    // Carry over whether we are in an assignment pattern of Object and Array literals
+                    // as well as their children that are valid assignment targets.
+                    inAssignmentPattern = saveInAssignmentPattern;
+                    // falls through
                 default:
                     bindEachChild(node);
                     break;
             }
             bindJSDoc(node);
+            inAssignmentPattern = saveInAssignmentPattern;
         }
 
         function isNarrowingExpression(expr: Expression): boolean {
             switch (expr.kind) {
                 case SyntaxKind.Identifier:
+                case SyntaxKind.PrivateIdentifier:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
@@ -823,7 +870,8 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     return hasNarrowableArgument(<CallExpression>expr);
                 case SyntaxKind.ParenthesizedExpression:
-                    return isNarrowingExpression((<ParenthesizedExpression>expr).expression);
+                case SyntaxKind.NonNullExpression:
+                    return isNarrowingExpression((<ParenthesizedExpression | NonNullExpression>expr).expression);
                 case SyntaxKind.BinaryExpression:
                     return isNarrowingBinaryExpression(<BinaryExpression>expr);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -835,9 +883,11 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
-                (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
-                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression);
+            return isDottedName(expr)
+                || (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression)
+                || isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right)
+                || isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression)
+                || isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }
 
         function containsNarrowableReference(expr: Expression): boolean {
@@ -1312,11 +1362,15 @@ namespace ts {
 
         function bindExpressionStatement(node: ExpressionStatement): void {
             bind(node.expression);
-            // A top level call expression with a dotted function name and at least one argument
+            maybeBindExpressionFlowIfCall(node.expression);
+        }
+
+        function maybeBindExpressionFlowIfCall(node: Expression) {
+            // A top level or LHS of comma expression call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
-            if (node.expression.kind === SyntaxKind.CallExpression) {
-                const call = <CallExpression>node.expression;
-                if (isDottedName(call.expression) && call.expression.kind !== SyntaxKind.SuperKeyword) {
+            if (node.kind === SyntaxKind.CallExpression) {
+                const call = <CallExpression>node;
+                if (call.expression.kind !== SyntaxKind.SuperKeyword && isDottedName(call.expression)) {
                     currentFlow = createFlowCall(currentFlow, call);
                 }
             }
@@ -1426,129 +1480,128 @@ namespace ts {
             }
         }
 
-        const enum BindBinaryExpressionFlowState {
-            BindThenBindChildren,
-            MaybeBindLeft,
-            BindToken,
-            BindRight,
-            FinishBind
+        function bindDestructuringAssignmentFlow(node: DestructuringAssignment) {
+            if (inAssignmentPattern) {
+                inAssignmentPattern = false;
+                bind(node.operatorToken);
+                bind(node.right);
+                inAssignmentPattern = true;
+                bind(node.left);
+            }
+            else {
+                inAssignmentPattern = true;
+                bind(node.left);
+                inAssignmentPattern = false;
+                bind(node.operatorToken);
+                bind(node.right);
+            }
+            bindAssignmentTargetFlow(node.left);
         }
 
-        function bindBinaryExpressionFlow(node: BinaryExpression) {
-            const workStacks: {
-                expr: BinaryExpression[],
-                state: BindBinaryExpressionFlowState[],
-                inStrictMode: (boolean | undefined)[],
-                parent: (Node | undefined)[],
-            } = {
-                expr: [node],
-                state: [BindBinaryExpressionFlowState.MaybeBindLeft],
-                inStrictMode: [undefined],
-                parent: [undefined],
-            };
-            let stackIndex = 0;
-            while (stackIndex >= 0) {
-                node = workStacks.expr[stackIndex];
-                switch (workStacks.state[stackIndex]) {
-                    case BindBinaryExpressionFlowState.BindThenBindChildren: {
-                        // This state is used only when recuring, to emulate the work that `bind` does before
-                        // reaching `bindChildren`. A normal call to `bindBinaryExpressionFlow` will already have done this work.
-                        setParent(node, parent);
-                        const saveInStrictMode = inStrictMode;
-                        bindWorker(node);
-                        const saveParent = parent;
-                        parent = node;
-
-                        advanceState(BindBinaryExpressionFlowState.MaybeBindLeft, saveInStrictMode, saveParent);
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.MaybeBindLeft: {
-                        const operator = node.operatorToken.kind;
-                        // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
-                        // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
-                        // For now, though, since the common cases are chained `+`, leaving it recursive is fine
-                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken ||
-                            isLogicalOrCoalescingAssignmentOperator(operator)) {
-                            if (isTopLevelLogicalExpression(node)) {
-                                const postExpressionLabel = createBranchLabel();
-                                bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
-                                currentFlow = finishFlowLabel(postExpressionLabel);
-                            }
-                            else {
-                                bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
-                            }
-                            completeNode();
-                        }
-                        else {
-                            advanceState(BindBinaryExpressionFlowState.BindToken);
-                            maybeBind(node.left);
-                        }
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.BindToken: {
-                        advanceState(BindBinaryExpressionFlowState.BindRight);
-                        maybeBind(node.operatorToken);
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.BindRight: {
-                        advanceState(BindBinaryExpressionFlowState.FinishBind);
-                        maybeBind(node.right);
-                        break;
-                    }
-                    case BindBinaryExpressionFlowState.FinishBind: {
-                        const operator = node.operatorToken.kind;
-                        if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
-                            bindAssignmentTargetFlow(node.left);
-                            if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
-                                const elementAccess = <ElementAccessExpression>node.left;
-                                if (isNarrowableOperand(elementAccess.expression)) {
-                                    currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
-                                }
-                            }
-                        }
-                        completeNode();
-                        break;
-                    }
-                    default: return Debug.fail(`Invalid state ${workStacks.state[stackIndex]} for bindBinaryExpressionFlow`);
-                }
+        function createBindBinaryExpressionFlow() {
+            interface WorkArea {
+                stackIndex: number;
+                skip: boolean;
+                inStrictModeStack: (boolean | undefined)[];
+                parentStack: (Node | undefined)[];
             }
 
-            /**
-             * Note that `advanceState` sets the _current_ head state, and that `maybeBind` potentially pushes on a new
-             * head state; so `advanceState` must be called before any `maybeBind` during a state's execution.
-             */
-            function advanceState(state: BindBinaryExpressionFlowState, isInStrictMode?: boolean, parent?: Node) {
-                workStacks.state[stackIndex] = state;
-                if (isInStrictMode !== undefined) {
-                    workStacks.inStrictMode[stackIndex] = isInStrictMode;
-                }
-                if (parent !== undefined) {
-                    workStacks.parent[stackIndex] = parent;
-                }
-            }
+            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, /*foldState*/ undefined);
 
-            function completeNode() {
-                if (workStacks.inStrictMode[stackIndex] !== undefined) {
-                    inStrictMode = workStacks.inStrictMode[stackIndex]!;
-                    parent = workStacks.parent[stackIndex]!;
-                }
-                stackIndex--;
-            }
-
-            /**
-             * If `node` is a BinaryExpression, adds it to the local work stack, otherwise recursively binds it
-             */
-            function maybeBind(node: Node) {
-                if (node && isBinaryExpression(node)) {
-                    stackIndex++;
-                    workStacks.expr[stackIndex] = node;
-                    workStacks.state[stackIndex] = BindBinaryExpressionFlowState.BindThenBindChildren;
-                    workStacks.inStrictMode[stackIndex] = undefined;
-                    workStacks.parent[stackIndex] = undefined;
+            function onEnter(node: BinaryExpression, state: WorkArea | undefined) {
+                if (state) {
+                    state.stackIndex++;
+                    // Emulate the work that `bind` does before reaching `bindChildren`. A normal call to
+                    // `bindBinaryExpressionFlow` will already have done this work.
+                    setParent(node, parent);
+                    const saveInStrictMode = inStrictMode;
+                    bindWorker(node);
+                    const saveParent = parent;
+                    parent = node;
+                    state.skip = false;
+                    state.inStrictModeStack[state.stackIndex] = saveInStrictMode;
+                    state.parentStack[state.stackIndex] = saveParent;
                 }
                 else {
-                    bind(node);
+                    state = {
+                        stackIndex: 0,
+                        skip: false,
+                        inStrictModeStack: [undefined],
+                        parentStack: [undefined]
+                    };
                 }
+                // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
+                // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
+                // For now, though, since the common cases are chained `+`, leaving it recursive is fine
+                const operator = node.operatorToken.kind;
+                if (operator === SyntaxKind.AmpersandAmpersandToken ||
+                    operator === SyntaxKind.BarBarToken ||
+                    operator === SyntaxKind.QuestionQuestionToken ||
+                    isLogicalOrCoalescingAssignmentOperator(operator)) {
+                    if (isTopLevelLogicalExpression(node)) {
+                        const postExpressionLabel = createBranchLabel();
+                        bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
+                        currentFlow = finishFlowLabel(postExpressionLabel);
+                    }
+                    else {
+                        bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
+                    }
+                    state.skip = true;
+                }
+                return state;
+            }
+
+            function onLeft(left: Expression, state: WorkArea, _node: BinaryExpression) {
+                if (!state.skip) {
+                    return maybeBind(left);
+                }
+            }
+
+            function onOperator(operatorToken: BinaryOperatorToken, state: WorkArea, node: BinaryExpression) {
+                if (!state.skip) {
+                    if (operatorToken.kind === SyntaxKind.CommaToken) {
+                        maybeBindExpressionFlowIfCall(node.left);
+                    }
+                    bind(operatorToken);
+                }
+            }
+
+            function onRight(right: Expression, state: WorkArea, _node: BinaryExpression) {
+                if (!state.skip) {
+                    return maybeBind(right);
+                }
+            }
+
+            function onExit(node: BinaryExpression, state: WorkArea) {
+                if (!state.skip) {
+                    const operator = node.operatorToken.kind;
+                    if (isAssignmentOperator(operator) && !isAssignmentTarget(node)) {
+                        bindAssignmentTargetFlow(node.left);
+                        if (operator === SyntaxKind.EqualsToken && node.left.kind === SyntaxKind.ElementAccessExpression) {
+                            const elementAccess = <ElementAccessExpression>node.left;
+                            if (isNarrowableOperand(elementAccess.expression)) {
+                                currentFlow = createFlowMutation(FlowFlags.ArrayMutation, currentFlow, node);
+                            }
+                        }
+                    }
+                }
+                const savedInStrictMode = state.inStrictModeStack[state.stackIndex];
+                const savedParent = state.parentStack[state.stackIndex];
+                if (savedInStrictMode !== undefined) {
+                    inStrictMode = savedInStrictMode;
+                }
+                if (savedParent !== undefined) {
+                    parent = savedParent;
+                }
+                state.skip = false;
+                state.stackIndex--;
+            }
+
+            function maybeBind(node: Node) {
+                if (node && isBinaryExpression(node) && !isDestructuringAssignment(node)) {
+                    return node;
+                }
+                bind(node);
             }
         }
 
@@ -1591,6 +1644,25 @@ namespace ts {
             bindEachChild(node);
             if (node.initializer || isForInOrOfStatement(node.parent.parent)) {
                 bindInitializedVariableFlow(node);
+            }
+        }
+
+        function bindBindingElementFlow(node: BindingElement) {
+            if (isBindingPattern(node.name)) {
+                // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
+                // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
+                //   - `BindingElement: BindingPattern Initializer?`
+                // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
+                //   - `BindingElement: BindingPattern Initializer?`
+                bindEach(node.decorators);
+                bindEach(node.modifiers);
+                bind(node.dotDotDotToken);
+                bind(node.propertyName);
+                bind(node.initializer);
+                bind(node.name);
+            }
+            else {
+                bindEachChild(node);
             }
         }
 
@@ -2051,8 +2123,8 @@ namespace ts {
             const saveCurrentFlow = currentFlow;
             for (const typeAlias of delayedTypeAliases) {
                 const host = getJSDocHost(typeAlias);
-                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
-                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
+                container = (host && findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer))) || file;
+                blockScopeContainer = (host && getEnclosingBlockScopeContainer(host)) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
@@ -2444,6 +2516,12 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkContextualIdentifier(<Identifier>node);
+                case SyntaxKind.QualifiedName:
+                    if (currentFlow && parent.kind === SyntaxKind.TypeQuery) {
+                        node.flowNode = currentFlow;
+                    }
+                    break;
+                case SyntaxKind.MetaProperty:
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
@@ -2461,7 +2539,7 @@ namespace ts {
                     if (isInJSFile(expr) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsAccessExpression(expr) &&
-                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        !lookupSymbolForName(blockScopeContainer, "module" as __String)) {
                         declareSymbol(file.locals!, /*parent*/ undefined, expr.expression,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
@@ -2485,6 +2563,14 @@ namespace ts {
                             bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
                             break;
                         case AssignmentDeclarationKind.Property:
+                            const expression = ((node as BinaryExpression).left as AccessExpression).expression;
+                            if (isInJSFile(node) && isIdentifier(expression)) {
+                                const symbol = lookupSymbolForName(blockScopeContainer, expression.escapedText);
+                                if (isThisInitializedDeclaration(symbol?.valueDeclaration)) {
+                                    bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
+                                    break;
+                                }
+                            }
                             bindSpecialPropertyAssignment(node as BindablePropertyAssignmentExpression);
                             break;
                         case AssignmentDeclarationKind.None:
@@ -2781,9 +2867,9 @@ namespace ts {
                 return symbol;
             });
             if (symbol) {
-                const flags = isClassExpression(node.right) ?
-                    SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
-                    SymbolFlags.Property | SymbolFlags.ExportValue;
+                const isAlias = isAliasableExpression(node.right) && (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
+                const flags = isAlias ? SymbolFlags.Alias : SymbolFlags.Property | SymbolFlags.ExportValue;
+                setParent(node.left, node);
                 declareSymbol(symbol.exports!, symbol, node.left, flags, SymbolFlags.None);
             }
         }
@@ -2801,12 +2887,21 @@ namespace ts {
                 return;
             }
 
+            if (isObjectLiteralExpression(assignedExpression) && every(assignedExpression.properties, isShorthandPropertyAssignment)) {
+                forEach(assignedExpression.properties, bindExportAssignedObjectMemberAlias);
+                return;
+            }
+
             // 'module.exports = expr' assignment
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
             const symbol = declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
             setValueDeclaration(symbol, node);
+        }
+
+        function bindExportAssignedObjectMemberAlias(node: ShorthandPropertyAssignment) {
+            declareSymbol(file.symbol.exports!, file.symbol, node, SymbolFlags.Alias | SymbolFlags.Assignment, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
@@ -2950,6 +3045,10 @@ namespace ts {
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
+            const rootExpr = getLeftmostAccessExpression(node.left);
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+                return;
+            }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             setParent(node.left, node);
             setParent(node.right, node);
@@ -3088,7 +3187,7 @@ namespace ts {
                 undefined;
             init = init && getRightMostAssignedExpression(init);
             if (init) {
-                const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
+                const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node!) ? node.name : isBinaryExpression(node!) ? node.left : node!);
                 return !!getExpandoInitializer(isBinaryExpression(init) && (init.operatorToken.kind === SyntaxKind.BarBarToken || init.operatorToken.kind === SyntaxKind.QuestionQuestionToken) ? init.right : init, isPrototypeAssignment);
             }
             return false;
@@ -3103,7 +3202,7 @@ namespace ts {
 
         function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: Node = container): Symbol | undefined {
             if (isIdentifier(node)) {
-                return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
+                return lookupSymbolForName(lookupContainer, node.escapedText);
             }
             else {
                 const symbol = lookupSymbolForPropertyAccess(node.expression);
@@ -3167,7 +3266,7 @@ namespace ts {
                 if (node.name) {
                     setParent(node.name, node);
                 }
-                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations[0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
+                file.bindDiagnostics.push(createDiagnosticForNode(symbolExport.declarations![0], Diagnostics.Duplicate_identifier_0, symbolName(prototypeSymbol)));
             }
             symbol.exports!.set(prototypeSymbol.escapedName, prototypeSymbol);
             prototypeSymbol.parent = symbol;
@@ -3185,7 +3284,10 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isBlockOrCatchScoped(node)) {
+                if (isInJSFile(node) && isRequireVariableDeclaration(node) && !getJSDocTypeTag(node)) {
+                    declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                }
+                else if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
@@ -3315,7 +3417,7 @@ namespace ts {
 
         function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
             const instanceState = getModuleInstanceState(node);
-            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && !!options.preserveConstEnums);
+            return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && shouldPreserveConstEnums(options));
         }
 
         function checkUnreachable(node: Node): boolean {
@@ -3403,7 +3505,7 @@ namespace ts {
                 return true;
             }
             else if (isIdentifier(node)) {
-                const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
+                const symbol = lookupSymbolForName(sourceFile, node.escapedText);
                 if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
                     q.push(init);
@@ -3417,7 +3519,7 @@ namespace ts {
         return false;
     }
 
-    function lookupSymbolForNameWorker(container: Node, name: __String): Symbol | undefined {
+    function lookupSymbolForName(container: Node, name: __String): Symbol | undefined {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;

@@ -99,7 +99,7 @@ namespace ts {
             );
             setOriginalNode(importDecl, node.exportClause);
 
-            const exportDecl = factory.createExportDeclaration(
+            const exportDecl = isExportNamespaceAsDefaultDeclaration(node) ? factory.createExportDefault(synthName) : factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,

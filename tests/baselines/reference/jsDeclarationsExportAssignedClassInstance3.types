@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+class Foo {
+>Foo : Foo
+
+    static stat = 10;
+>stat : number
+>10 : 10
+
+    member = 10;
+>member : number
+>10 : 10
+}
+
+module.exports = new Foo();
+>module.exports = new Foo() : { member: number; additional: number; }
+>module.exports : { member: number; additional: number; }
+>module : { exports: { member: number; additional: number; }; }
+>exports : { member: number; additional: number; }
+>new Foo() : Foo
+>Foo : typeof Foo
+
+module.exports.additional = 20;
+>module.exports.additional = 20 : 20
+>module.exports.additional : number
+>module.exports : { member: number; additional: number; }
+>module : { exports: { member: number; additional: number; }; }
+>exports : { member: number; additional: number; }
+>additional : number
+>20 : 20
+

@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts(3,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts(3,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts(6,15): error TS2339: Property '#bar' does not exist on type 'typeof Child'.
 
 
@@ -7,7 +7,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChai
         #foo = 3;
         static #bar = 5;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         accessChildProps() {
             new Child().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
             Child.#bar;       // Error: not found

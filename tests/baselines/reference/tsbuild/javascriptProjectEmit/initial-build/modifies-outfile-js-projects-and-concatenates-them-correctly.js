@@ -35,7 +35,8 @@ interface Symbol {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "outFile": "common.js"
+        "outFile": "common.js",
+        
     },
     "include": ["nominal.js"]
 }
@@ -52,7 +53,8 @@ const c = /** @type {*} */(null);
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "outFile": "sub-project.js"
+        "outFile": "sub-project.js",
+        
     },
     "references": [
         { "path": "../common", "prepend": true }
@@ -78,7 +80,8 @@ function getVar() {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "outFile": "sub-project-2.js"
+        "outFile": "sub-project-2.js",
+        
     },
     "references": [
         { "path": "../sub-project", "prepend": true }
@@ -131,6 +134,30 @@ type Nominal<T, Name> = T & {
 
 
 //// [/src/common/common.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./nominal.js"],"js":{"sections":[{"pos":0,"end":84,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":64,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/common/common.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/common/common.js
+----------------------------------------------------------------------
+text: (0-84)
+/**
+ * @template T, Name
+ * @typedef {T & {[Symbol.species]: Name}} Nominal
+ */
+
+======================================================================
+======================================================================
+File:: /src/common/common.d.ts
+----------------------------------------------------------------------
+text: (0-64)
+type Nominal<T, Name> = T & {
+    [Symbol.species]: Name;
+};
+
+======================================================================
+
+//// [/src/common/common.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "..",
@@ -159,27 +186,6 @@ type Nominal<T, Name> = T & {
   "version": "FakeTSVersion"
 }
 
-//// [/src/common/common.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/common/common.js
-----------------------------------------------------------------------
-text: (0-84)
-/**
- * @template T, Name
- * @typedef {T & {[Symbol.species]: Name}} Nominal
- */
-
-======================================================================
-======================================================================
-File:: /src/common/common.d.ts
-----------------------------------------------------------------------
-text: (0-64)
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-
-======================================================================
-
 //// [/src/sub-project/sub-project.d.ts]
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
@@ -188,9 +194,7 @@ type Nominal<T, Name> = T & {
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
 declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
+type MyNominal = Nominal<string, 'MyNominal'>;
 
 
 //// [/src/sub-project/sub-project.js]
@@ -205,6 +209,49 @@ var c = /** @type {*} */ (null);
 
 
 //// [/src/sub-project/sub-project.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":84,"kind":"prepend","data":"../common/common.js","texts":[{"pos":0,"end":84,"kind":"text"}]},{"pos":84,"end":182,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../common/common.d.ts","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":199,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/sub-project/sub-project.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/sub-project/sub-project.js
+----------------------------------------------------------------------
+prepend: (0-84):: ../common/common.js texts:: 1
+>>--------------------------------------------------------------------
+text: (0-84)
+/**
+ * @template T, Name
+ * @typedef {T & {[Symbol.species]: Name}} Nominal
+ */
+
+----------------------------------------------------------------------
+text: (84-182)
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+var c = /** @type {*} */ (null);
+
+======================================================================
+======================================================================
+File:: /src/sub-project/sub-project.d.ts
+----------------------------------------------------------------------
+prepend: (0-64):: ../common/common.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-64)
+type Nominal<T, Name> = T & {
+    [Symbol.species]: Name;
+};
+
+----------------------------------------------------------------------
+text: (64-199)
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+declare const c: any;
+type MyNominal = Nominal<string, 'MyNominal'>;
+
+======================================================================
+
+//// [/src/sub-project/sub-project.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "..",
@@ -250,7 +297,7 @@ var c = /** @type {*} */ (null);
         },
         {
           "pos": 64,
-          "end": 220,
+          "end": 199,
           "kind": "text"
         }
       ]
@@ -258,48 +305,6 @@ var c = /** @type {*} */ (null);
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/sub-project/sub-project.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/sub-project/sub-project.js
-----------------------------------------------------------------------
-prepend: (0-84):: ../common/common.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-84)
-/**
- * @template T, Name
- * @typedef {T & {[Symbol.species]: Name}} Nominal
- */
-
-----------------------------------------------------------------------
-text: (84-182)
-/**
- * @typedef {Nominal<string, 'MyNominal'>} MyNominal
- */
-var c = /** @type {*} */ (null);
-
-======================================================================
-======================================================================
-File:: /src/sub-project/sub-project.d.ts
-----------------------------------------------------------------------
-prepend: (0-64):: ../common/common.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-64)
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-
-----------------------------------------------------------------------
-text: (64-220)
-/**
- * @typedef {Nominal<string, 'MyNominal'>} MyNominal
- */
-declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
-
-======================================================================
 
 //// [/src/sub-project-2/sub-project-2.d.ts]
 type Nominal<T, Name> = T & {
@@ -309,9 +314,7 @@ type Nominal<T, Name> = T & {
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
 declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
+type MyNominal = Nominal<string, 'MyNominal'>;
 /**
  * @return {keyof typeof variable}
  */
@@ -342,59 +345,7 @@ function getVar() {
 
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "..",
-    "sourceFiles": [
-      "./index.js"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 182,
-          "kind": "prepend",
-          "data": "../sub-project/sub-project.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 182,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 182,
-          "end": 338,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 220,
-          "kind": "prepend",
-          "data": "../sub-project/sub-project.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 220,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 220,
-          "end": 377,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":182,"kind":"prepend","data":"../sub-project/sub-project.js","texts":[{"pos":0,"end":182,"kind":"text"}]},{"pos":182,"end":338,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":199,"kind":"prepend","data":"../sub-project/sub-project.d.ts","texts":[{"pos":0,"end":199,"kind":"text"}]},{"pos":199,"end":356,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -428,9 +379,9 @@ function getVar() {
 ======================================================================
 File:: /src/sub-project-2/sub-project-2.d.ts
 ----------------------------------------------------------------------
-prepend: (0-220):: ../sub-project/sub-project.d.ts texts:: 1
+prepend: (0-199):: ../sub-project/sub-project.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-220)
+text: (0-199)
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
 };
@@ -438,12 +389,10 @@ type Nominal<T, Name> = T & {
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
 declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
+type MyNominal = Nominal<string, 'MyNominal'>;
 
 ----------------------------------------------------------------------
-text: (220-377)
+text: (199-356)
 /**
  * @return {keyof typeof variable}
  */
@@ -453,6 +402,61 @@ declare namespace variable {
 }
 
 ======================================================================
+
+//// [/src/sub-project-2/sub-project-2.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "./index.js"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 182,
+          "kind": "prepend",
+          "data": "../sub-project/sub-project.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 182,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 182,
+          "end": 338,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "../sub-project/sub-project.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 199,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 199,
+          "end": 356,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 
 
@@ -485,6 +489,49 @@ var c = /** @type {*} */ (undefined);
 
 
 //// [/src/sub-project/sub-project.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":84,"kind":"prepend","data":"../common/common.js","texts":[{"pos":0,"end":84,"kind":"text"}]},{"pos":84,"end":187,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../common/common.d.ts","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":199,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/sub-project/sub-project.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/sub-project/sub-project.js
+----------------------------------------------------------------------
+prepend: (0-84):: ../common/common.js texts:: 1
+>>--------------------------------------------------------------------
+text: (0-84)
+/**
+ * @template T, Name
+ * @typedef {T & {[Symbol.species]: Name}} Nominal
+ */
+
+----------------------------------------------------------------------
+text: (84-187)
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+var c = /** @type {*} */ (undefined);
+
+======================================================================
+======================================================================
+File:: /src/sub-project/sub-project.d.ts
+----------------------------------------------------------------------
+prepend: (0-64):: ../common/common.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-64)
+type Nominal<T, Name> = T & {
+    [Symbol.species]: Name;
+};
+
+----------------------------------------------------------------------
+text: (64-199)
+/**
+ * @typedef {Nominal<string, 'MyNominal'>} MyNominal
+ */
+declare const c: any;
+type MyNominal = Nominal<string, 'MyNominal'>;
+
+======================================================================
+
+//// [/src/sub-project/sub-project.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "..",
@@ -530,7 +577,7 @@ var c = /** @type {*} */ (undefined);
         },
         {
           "pos": 64,
-          "end": 220,
+          "end": 199,
           "kind": "text"
         }
       ]
@@ -538,48 +585,6 @@ var c = /** @type {*} */ (undefined);
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/sub-project/sub-project.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/sub-project/sub-project.js
-----------------------------------------------------------------------
-prepend: (0-84):: ../common/common.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-84)
-/**
- * @template T, Name
- * @typedef {T & {[Symbol.species]: Name}} Nominal
- */
-
-----------------------------------------------------------------------
-text: (84-187)
-/**
- * @typedef {Nominal<string, 'MyNominal'>} MyNominal
- */
-var c = /** @type {*} */ (undefined);
-
-======================================================================
-======================================================================
-File:: /src/sub-project/sub-project.d.ts
-----------------------------------------------------------------------
-prepend: (0-64):: ../common/common.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-64)
-type Nominal<T, Name> = T & {
-    [Symbol.species]: Name;
-};
-
-----------------------------------------------------------------------
-text: (64-220)
-/**
- * @typedef {Nominal<string, 'MyNominal'>} MyNominal
- */
-declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
-
-======================================================================
 
 //// [/src/sub-project-2/sub-project-2.js]
 /**
@@ -602,59 +607,7 @@ function getVar() {
 
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "..",
-    "sourceFiles": [
-      "./index.js"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 187,
-          "kind": "prepend",
-          "data": "../sub-project/sub-project.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 187,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 187,
-          "end": 343,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 220,
-          "kind": "prepend",
-          "data": "../sub-project/sub-project.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 220,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 220,
-          "end": 377,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["./index.js"],"js":{"sections":[{"pos":0,"end":187,"kind":"prepend","data":"../sub-project/sub-project.js","texts":[{"pos":0,"end":187,"kind":"text"}]},{"pos":187,"end":343,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":199,"kind":"prepend","data":"../sub-project/sub-project.d.ts","texts":[{"pos":0,"end":199,"kind":"text"}]},{"pos":199,"end":356,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/sub-project-2/sub-project-2.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -688,9 +641,9 @@ function getVar() {
 ======================================================================
 File:: /src/sub-project-2/sub-project-2.d.ts
 ----------------------------------------------------------------------
-prepend: (0-220):: ../sub-project/sub-project.d.ts texts:: 1
+prepend: (0-199):: ../sub-project/sub-project.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-220)
+text: (0-199)
 type Nominal<T, Name> = T & {
     [Symbol.species]: Name;
 };
@@ -698,12 +651,10 @@ type Nominal<T, Name> = T & {
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
 declare const c: any;
-type MyNominal = string & {
-    [Symbol.species]: "MyNominal";
-};
+type MyNominal = Nominal<string, 'MyNominal'>;
 
 ----------------------------------------------------------------------
-text: (220-377)
+text: (199-356)
 /**
  * @return {keyof typeof variable}
  */
@@ -713,4 +664,59 @@ declare namespace variable {
 }
 
 ======================================================================
+
+//// [/src/sub-project-2/sub-project-2.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "..",
+    "sourceFiles": [
+      "./index.js"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 187,
+          "kind": "prepend",
+          "data": "../sub-project/sub-project.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 187,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 187,
+          "end": 343,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "../sub-project/sub-project.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 199,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 199,
+          "end": 356,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

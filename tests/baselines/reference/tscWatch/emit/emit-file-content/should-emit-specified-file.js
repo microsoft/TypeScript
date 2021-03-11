@@ -30,13 +30,13 @@ Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -84,7 +84,7 @@ exports.Foo = Foo;
 exports.__esModule = true;
 exports.y = void 0;
 var f1_1 = require("./f1");
-exports.y = f1_1.Foo();
+exports.y = (0, f1_1.Foo)();
 
 
 //// [/a/b/f3.js]
@@ -106,13 +106,13 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts","/a/b/f2.ts","/a/b/f3.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts

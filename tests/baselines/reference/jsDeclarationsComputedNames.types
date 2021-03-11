@@ -12,7 +12,7 @@ const InnerSym = Symbol();
 module.exports = {
 >module.exports = {    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
 >module.exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
+>module : { exports: { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
 >exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
 >{    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
 

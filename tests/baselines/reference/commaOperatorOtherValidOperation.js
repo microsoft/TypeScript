@@ -4,7 +4,7 @@ for (var i = 0, j = 10; i < j; i++, j--)
 {
 }
 
-//Comma operator in fuction arguments and return
+//Comma operator in function arguments and return
 function foo(x: number, y: string)
 {
     return x, y;
@@ -25,7 +25,7 @@ function foo1<T1, T2>()
 //Comma operator in for loop
 for (var i = 0, j = 10; i < j; i++, j--) {
 }
-//Comma operator in fuction arguments and return
+//Comma operator in function arguments and return
 function foo(x, y) {
     return x, y;
 }

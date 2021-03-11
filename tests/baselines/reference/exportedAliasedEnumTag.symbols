@@ -1,9 +1,9 @@
 === tests/cases/conformance/jsdoc/exportedAliasedEnumTag.js ===
 var middlewarify = module.exports = {};
 >middlewarify : Symbol(middlewarify, Decl(exportedAliasedEnumTag.js, 0, 3))
->module.exports : Symbol("tests/cases/conformance/jsdoc/exportedAliasedEnumTag", Decl(exportedAliasedEnumTag.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(exportedAliasedEnumTag.js, 0, 0))
 >module : Symbol(module, Decl(exportedAliasedEnumTag.js, 0, 18))
->exports : Symbol("tests/cases/conformance/jsdoc/exportedAliasedEnumTag", Decl(exportedAliasedEnumTag.js, 0, 0))
+>exports : Symbol(module.exports, Decl(exportedAliasedEnumTag.js, 0, 0))
 
 /** @enum */
 middlewarify.Type = {

@@ -58,6 +58,7 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -91,6 +92,7 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -117,6 +119,7 @@ Output::
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"incremental":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -150,6 +153,9 @@ console.log("hi");
 
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-6245214333-export interface A {\r\n    name: string;\r\n}\r\n","affectsGlobalScope":false},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-4882119183-export {};\r\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-4882119183-export {};\r\n","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[1]],"referencedMap":[[2,0]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1,2,3]},"version":"FakeTSVersion"}
+
+//// [/src/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {

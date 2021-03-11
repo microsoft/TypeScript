@@ -175,3 +175,22 @@ l.push('ok')
 >l : Symbol(l, Decl(a.js, 45, 3))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
+/** @type {(v: unknown) => v is undefined} */
+const isUndef = v => v === undefined;
+>isUndef : Symbol(isUndef, Decl(a.js, 55, 5))
+>v : Symbol(v, Decl(a.js, 55, 15))
+>v : Symbol(v, Decl(a.js, 55, 15))
+>undefined : Symbol(undefined)
+
+const e = [1, undefined];
+>e : Symbol(e, Decl(a.js, 56, 5))
+>undefined : Symbol(undefined)
+
+// should be  undefined[]
+const g = e.filter(isUndef);
+>g : Symbol(g, Decl(a.js, 59, 5))
+>e.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(a.js, 56, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isUndef : Symbol(isUndef, Decl(a.js, 55, 5))
+

@@ -1,0 +1,67 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+const myTypes = {
+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
+
+    // SOME PROPS HERE
+};
+
+/** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
+
+/**
+ * @typedef myTypes.typeB
+ * @property {myTypes.typeA}    prop1 - Prop 1.
+ * @property {string}           prop2 - Prop 2.
+ */
+
+/** @typedef {myTypes.typeB|Function} myTypes.typeC */
+
+export {myTypes};
+>myTypes : Symbol(myTypes, Decl(file.js, 19, 8), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
+
+=== tests/cases/conformance/jsdoc/declarations/file2.js ===
+import {myTypes} from './file.js';
+>myTypes : Symbol(myTypes, Decl(file2.js, 0, 8))
+
+/**
+ * @namespace testFnTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+const testFnTypes = {
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 37))
+
+    // SOME PROPS HERE
+};
+
+/** @typedef {boolean|myTypes.typeC} testFnTypes.input */
+
+/**
+ * @function testFn
+ * @description A test function.
+ * @param {testFnTypes.input} input - Input.
+ * @returns {number|null} Result.
+ */
+function testFn(input) {
+>testFn : Symbol(testFn, Decl(file2.js, 9, 2))
+>input : Symbol(input, Decl(file2.js, 19, 16))
+
+    if (typeof input === 'number') {
+>input : Symbol(input, Decl(file2.js, 19, 16))
+
+        return 2 * input;
+>input : Symbol(input, Decl(file2.js, 19, 16))
+
+    } else {
+        return null;
+    }
+}
+
+export {testFn, testFnTypes};
+>testFn : Symbol(testFn, Decl(file2.js, 27, 8))
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 15), Decl(file2.js, 11, 37))
+

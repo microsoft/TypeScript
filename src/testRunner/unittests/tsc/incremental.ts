@@ -16,7 +16,7 @@ namespace ts {
                         ]
                     }`,
             }),
-            commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo"],
+            commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
             incrementalScenarios: noChangeOnlyRuns
         });
 
@@ -234,6 +234,95 @@ const a: string = 10;`, "utf-8"),
                     });
                 }
             }
+        });
+
+        verifyTscSerializedIncrementalEdits({
+            scenario: "incremental",
+            subScenario: `when global file is added, the signatures are updated`,
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": Utils.dedent`
+                    /// <reference path="./filePresent.ts"/>
+                    /// <reference path="./fileNotFound.ts"/>
+                    function main() { }
+                `,
+                "/src/project/src/anotherFileWithSameReferenes.ts": Utils.dedent`
+                    /// <reference path="./filePresent.ts"/>
+                    /// <reference path="./fileNotFound.ts"/>
+                    function anotherFileWithSameReferenes() { }
+                `,
+                "/src/project/src/filePresent.ts": `function something() { return 10; }`,
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: { composite: true, },
+                    include: ["src/**/*.ts"]
+                }),
+            }),
+            commandLineArgs: ["--p", "src/project"],
+            incrementalScenarios: [
+                noChangeRun,
+                {
+                    subScenario: "Modify main file",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                },
+                {
+                    subScenario: "Add new file and update main file",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => {
+                        fs.writeFileSync(`/src/project/src/newFile.ts`, "function foo() { return 20; }");
+                        prependText(fs, `/src/project/src/main.ts`, `/// <reference path="./newFile.ts"/>
+`);
+                        appendText(fs, `/src/project/src/main.ts`, `foo();`);
+                    },
+                },
+                {
+                    subScenario: "Write file that could not be resolved",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "function something2() { return 20; }"),
+                },
+                {
+                    subScenario: "Modify main file",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                },
+            ],
+            baselinePrograms: true,
+        });
+
+        const jsxLibraryContent = `
+export {};
+declare global {
+    namespace JSX {
+        interface Element {}
+        interface IntrinsicElements {
+            div: {
+                propA?: boolean;
+            };
+        }
+    }
+}`;
+
+        verifyTsc({
+            scenario: "react-jsx-emit-mode",
+            subScenario: "with no backing types found doesn't crash",
+            fs: () => loadProjectFromFiles({
+                "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
+                "/src/project/node_modules/@types/react/index.d.ts": jsxLibraryContent, // doesn't contain a jsx-runtime definition
+                "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
+            }),
+            commandLineArgs: ["--p", "src/project"]
+        });
+
+        verifyTsc({
+            scenario: "react-jsx-emit-mode",
+            subScenario: "with no backing types found doesn't crash under --strict",
+            fs: () => loadProjectFromFiles({
+                "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
+                "/src/project/node_modules/@types/react/index.d.ts": jsxLibraryContent, // doesn't contain a jsx-runtime definition
+                "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
+            }),
+            commandLineArgs: ["--p", "src/project", "--strict"]
         });
     });
 }

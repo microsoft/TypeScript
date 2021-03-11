@@ -27,12 +27,10 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
-[96ma.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2732: [0mCannot find module './data.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+[96ma.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2732: [0mCannot find module './data.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 
 [7m1[0m import * as data from './data.json'
 [7m [0m [91m                      ~~~~~~~~~~~~~[0m
-
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
@@ -40,6 +38,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"moduleResolution":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -87,13 +86,13 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"moduleResolution":2,"resolveJsonModule":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/data.json

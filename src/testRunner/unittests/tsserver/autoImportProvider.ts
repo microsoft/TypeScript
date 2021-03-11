@@ -229,6 +229,26 @@ namespace ts.projectSystem {
             host.writeFile(packageJson.path, packageJson.content);
             assert.ok(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         });
+
+        it("Does not create an auto import provider if there are too many dependencies", () => {
+            const createPackage = (i: number): File[] => ([
+                { path: `/node_modules/package${i}/package.json`, content: `{ "name": "package${i}" }` },
+                { path: `/node_modules/package${i}/index.d.ts`, content: `` }
+            ]);
+
+            const packages = [];
+            for (let i = 0; i < 11; i++) {
+                packages.push(createPackage(i));
+            }
+
+            const dependencies = packages.reduce((hash, p) => ({ ...hash, [JSON.parse(p[0].content).name]: "*" }), {});
+            const packageJson: File = { path: "/package.json", content: JSON.stringify(dependencies) };
+            const { projectService, session } = setup([ ...flatten(packages), indexTs, tsconfig, packageJson ]);
+
+            openFilesForSession([indexTs], session);
+            const project = projectService.configuredProjects.get(tsconfig.path)!;
+            assert.isUndefined(project.getPackageJsonAutoImportProvider());
+        });
     });
 
     describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
@@ -262,6 +282,25 @@ namespace ts.projectSystem {
 
             // Project for A is created - ensure it doesn't have an autoImportProvider
             assert.isUndefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getLanguageService().getAutoImportProvider());
+        });
+
+        it("Does not close when root files are redirects that don't actually exist", () => {
+            const files = [
+                // packages/a
+                { path: "/packages/a/package.json", content: `{ "dependencies": { "b": "*" } }` },
+                { path: "/packages/a/tsconfig.json", content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "./node_modules/b" }] }` },
+                { path: "/packages/a/index.ts", content: "" },
+
+                // packages/b
+                { path: "/packages/a/node_modules/b/package.json", content: `{ "types": "dist/index.d.ts" }` },
+                { path: "/packages/a/node_modules/b/tsconfig.json", content: `{ "compilerOptions": { "composite": true, "outDir": "dist" } }` },
+                { path: "/packages/a/node_modules/b/index.ts", content: `export class B {}` }
+            ];
+
+            const { projectService, session } = setup(files);
+            openFilesForSession([files[2]], session);
+            assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
+            assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
         });
     });
 

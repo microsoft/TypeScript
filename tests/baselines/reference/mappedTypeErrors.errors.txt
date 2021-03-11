@@ -3,17 +3,17 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: T
   Type 'Date' is not assignable to type 'number'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
   Type 'Date' is not assignable to type 'number'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-  Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(28,24): error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-  Type '"x"' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(30,24): error TS2344: Type 'undefined' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(33,24): error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
+  Type '"foo"' is not assignable to type 'keyof Shape'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(28,24): error TS2344: Type 'keyof Point' does not satisfy the constraint 'keyof Shape'.
+  Type '"x"' is not assignable to type 'keyof Shape'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(30,24): error TS2344: Type 'undefined' does not satisfy the constraint 'keyof Shape'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(33,24): error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
   Type 'T' is not assignable to type '"visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(37,24): error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-  Type 'string | number' is not assignable to type '"name" | "width" | "height" | "visible"'.
-    Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(37,24): error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+  Type 'string | number' is not assignable to type 'keyof Shape'.
+    Type 'string' is not assignable to type 'keyof Shape'.
       Type 'T' is not assignable to type '"visible"'.
         Type 'string | number' is not assignable to type '"visible"'.
           Type 'string' is not assignable to type '"visible"'.
@@ -28,11 +28,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(77,59): error TS2345: A
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(83,58): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
   Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(106,17): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
-  Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(106,17): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(123,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,14): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
-  Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(124,14): error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(128,16): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,25): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,39): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
@@ -78,34 +78,34 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error
                            ~~~~~
-!!! error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type '"foo"' does not satisfy the constraint 'keyof Shape'.
     type T12 = Pick<Shape, "name" | "foo">;  // Error
                            ~~~~~~~~~~~~~~
-!!! error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:   Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type '"name" | "foo"' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344:   Type '"foo"' is not assignable to type 'keyof Shape'.
     type T13 = Pick<Shape, keyof Named>;
     type T14 = Pick<Shape, keyof Point>;  // Error
                            ~~~~~~~~~~~
-!!! error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:   Type '"x"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type 'keyof Point' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344:   Type '"x"' is not assignable to type 'keyof Shape'.
     type T15 = Pick<Shape, never>;
     type T16 = Pick<Shape, undefined>;  // Error
                            ~~~~~~~~~
-!!! error TS2344: Type 'undefined' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type 'undefined' does not satisfy the constraint 'keyof Shape'.
     
     function f1<T>(x: T) {
         let y: Pick<Shape, T>;  // Error
                            ~
-!!! error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
 !!! error TS2344:   Type 'T' is not assignable to type '"visible"'.
     }
     
     function f2<T extends string | number>(x: T) {
         let y: Pick<Shape, T>;  // Error
                            ~
-!!! error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:   Type 'string | number' is not assignable to type '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:     Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+!!! error TS2344:   Type 'string | number' is not assignable to type 'keyof Shape'.
+!!! error TS2344:     Type 'string' is not assignable to type 'keyof Shape'.
 !!! error TS2344:       Type 'T' is not assignable to type '"visible"'.
 !!! error TS2344:         Type 'string | number' is not assignable to type '"visible"'.
 !!! error TS2344:           Type 'string' is not assignable to type '"visible"'.
@@ -204,8 +204,8 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     setState(foo, { c: true });  // Error
                     ~~~~~~~
-!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
-!!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
+!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+!!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
     
     class C<T> {
         state: T;
@@ -228,8 +228,8 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     c.setState({ c: true });  // Error
                  ~~~~~~~
-!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
-!!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
+!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, keyof Foo>'.
+!!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
     
     type T2 = { a?: number, [key: string]: any };
     

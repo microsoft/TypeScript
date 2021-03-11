@@ -10,7 +10,7 @@ namespace ts.formatting {
         kind: T;
     }
 
-    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaKind>;
+    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaSyntaxKind>;
 
     export interface TokenInfo {
         leadingTrivia: TextRangeWithTriviaKind[] | undefined;
@@ -390,7 +390,8 @@ namespace ts.formatting {
                 sourceFile));
     }
 
-    function formatSpanWorker(originalRange: TextRange,
+    function formatSpanWorker(
+        originalRange: TextRange,
         enclosingNode: Node,
         initialIndentation: number,
         delta: number,
@@ -424,14 +425,18 @@ namespace ts.formatting {
         }
 
         if (!formattingScanner.isOnToken()) {
+            const indentation = SmartIndenter.nodeWillIndentChild(options, enclosingNode, /*child*/ undefined, sourceFile, /*indentByDefault*/ false)
+                ? initialIndentation + options.indentSize!
+                : initialIndentation;
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
-                indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
+                indentTriviaItems(leadingTrivia, indentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-                if (options.trimTrailingWhitespace !== false) {
-                    trimTrailingWhitespacesForRemainingRange();
-                }
             }
+        }
+
+        if (options.trimTrailingWhitespace !== false) {
+            trimTrailingWhitespacesForRemainingRange();
         }
 
         return edits;
@@ -498,10 +503,11 @@ namespace ts.formatting {
                     // - we need to get the indentation on last line and the delta of parent
                     return { indentation: indentationOnLastIndentedLine, delta: parentDynamicIndentation.getDelta(node) };
                 }
-                else if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                    return { indentation: parentDynamicIndentation.getIndentation(), delta };
-                }
-                else if (SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)) {
+                else if (
+                    SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile) ||
+                    SmartIndenter.childIsUnindentedBranchOfConditionalExpression(parent, node, startLine, sourceFile) ||
+                    SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)
+                ) {
                     return { indentation: parentDynamicIndentation.getIndentation(), delta };
                 }
                 else {
@@ -592,6 +598,7 @@ namespace ts.formatting {
                             case SyntaxKind.JsxOpeningElement:
                             case SyntaxKind.JsxClosingElement:
                             case SyntaxKind.JsxSelfClosingElement:
+                            case SyntaxKind.ExpressionWithTypeArguments:
                                 return false;
                         }
                         break;
@@ -720,6 +727,9 @@ namespace ts.formatting {
                     // proceed any parent tokens that are located prior to child.getStart()
                     const tokenInfo = formattingScanner.readTokenInfo(node);
                     if (tokenInfo.token.end > childStartPos) {
+                        if (tokenInfo.token.pos > childStartPos) {
+                            formattingScanner.skipToStartOf(child);
+                        }
                         // stop when formatting scanner advances past the beginning of the child
                         break;
                     }
@@ -731,13 +741,15 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                // JSX text shouldn't affect indenting
-                if (isToken(child) && child.kind !== SyntaxKind.JsxText) {
+                if (isToken(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     const tokenInfo = formattingScanner.readTokenInfo(child);
-                    Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
-                    return inheritedIndentation;
+                    // JSX text shouldn't affect indenting
+                    if (child.kind !== SyntaxKind.JsxText) {
+                        Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
+                        consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
+                        return inheritedIndentation;
+                    }
                 }
 
                 const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;

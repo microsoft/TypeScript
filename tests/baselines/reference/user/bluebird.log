@@ -10,6 +10,8 @@ node_modules/bluebird/js/release/debuggability.js(301,9): error TS2322: Type 'Pr
 node_modules/bluebird/js/release/debuggability.js(301,28): error TS2684: The 'this' context of type '((...args: any[]) => Process) | ((name: any, ...args: any[]) => boolean)' is not assignable to method's 'this' of type '(this: null, args_0?: any, ...args_1: any[]) => Process'.
   Type '(name: any, ...args: any[]) => boolean' is not assignable to type '(this: null, args_0?: any, ...args_1: any[]) => Process'.
     Type 'boolean' is not assignable to type 'Process'.
+node_modules/bluebird/js/release/debuggability.js(456,14): error TS2339: Property '_setBoundTo' does not exist on type 'cancellationPropagateFrom'.
+node_modules/bluebird/js/release/debuggability.js(482,42): error TS2339: Property '_peekContext' does not exist on type 'longStackTracesCaptureStackTrace'.
 node_modules/bluebird/js/release/debuggability.js(562,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/debuggability.js(633,59): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/debuggability.js(807,5): error TS2721: Cannot invoke an object which is possibly 'null'.
@@ -18,11 +20,17 @@ node_modules/bluebird/js/release/debuggability.js(831,37): error TS2339: Propert
 node_modules/bluebird/js/release/debuggability.js(870,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(950,4): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/finally.js(50,24): error TS2339: Property 'promise' does not exist on type 'finallyHandler'.
+node_modules/bluebird/js/release/finally.js(51,24): error TS2339: Property 'handler' does not exist on type 'finallyHandler'.
+node_modules/bluebird/js/release/finally.js(55,24): error TS2339: Property 'isFinallyHandler' does not exist on type 'finallyHandler'.
+node_modules/bluebird/js/release/finally.js(64,26): error TS2339: Property 'cancelPromise' does not exist on type 'finallyHandler'.
 node_modules/bluebird/js/release/generators.js(159,21): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(208,15): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/generators.js(218,17): error TS2554: Expected 4 arguments, but got 2.
 node_modules/bluebird/js/release/generators.js(220,16): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/map.js(14,10): error TS2339: Property 'constructor$' does not exist on type 'MappingPromiseArray'.
+node_modules/bluebird/js/release/map.js(15,10): error TS2339: Property '_promise' does not exist on type 'MappingPromiseArray'.
+node_modules/bluebird/js/release/map.js(19,26): error TS2339: Property 'length' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(37,10): error TS2551: Property '_init$' does not exist on type 'MappingPromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/map.js(43,23): error TS2339: Property '_values' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(44,23): error TS2339: Property 'length' does not exist on type 'MappingPromiseArray'.
@@ -48,6 +56,8 @@ node_modules/bluebird/js/release/promise.js(44,5): error TS2322: Type '() => { d
     Type '{ domain: NodeJS.Domain | null; async: AsyncResource; }' is not assignable to type 'null'.
 node_modules/bluebird/js/release/promise.js(86,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(89,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promise.js(104,10): error TS2339: Property '_promiseCreated' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(105,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(130,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(152,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(177,14): error TS2551: Property 'isFulfilled' does not exist on type 'Promise'. Did you mean '_setFulfilled'?
@@ -56,9 +66,7 @@ node_modules/bluebird/js/release/promise.js(180,21): error TS2551: Property 'isR
 node_modules/bluebird/js/release/promise.js(181,36): error TS2339: Property 'reason' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(189,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(206,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
-node_modules/bluebird/js/release/promise.js(211,13): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(236,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
-node_modules/bluebird/js/release/promise.js(237,9): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(243,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(267,63): error TS2339: Property '_boundTo' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(270,14): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
@@ -99,6 +107,8 @@ node_modules/bluebird/js/release/promisify.js(252,24): error TS2722: Cannot invo
 node_modules/bluebird/js/release/promisify.js(264,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/release/promisify.js(270,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promisify.js(285,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/props.js(56,10): error TS2339: Property 'constructor$' does not exist on type 'PropertiesPromiseArray'.
+node_modules/bluebird/js/release/props.js(58,10): error TS2551: Property '_init$' does not exist on type 'PropertiesPromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/props.js(65,10): error TS2339: Property '_values' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(66,32): error TS2339: Property '_totalResolved' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(67,31): error TS2339: Property '_length' does not exist on type 'PropertiesPromiseArray'.
@@ -109,14 +119,23 @@ node_modules/bluebird/js/release/props.js(75,26): error TS2339: Property '_value
 node_modules/bluebird/js/release/props.js(75,57): error TS2339: Property '_values' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(78,14): error TS2339: Property '_resolve' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(102,53): error TS2339: Property 'promise' does not exist on type 'PropertiesPromiseArray'.
+node_modules/bluebird/js/release/reduce.js(12,10): error TS2339: Property 'constructor$' does not exist on type 'ReductionPromiseArray'.
+node_modules/bluebird/js/release/reduce.js(22,39): error TS2339: Property '_length' does not exist on type 'ReductionPromiseArray'.
+node_modules/bluebird/js/release/reduce.js(28,10): error TS2339: Property '_promise' does not exist on type 'ReductionPromiseArray'.
+node_modules/bluebird/js/release/reduce.js(29,10): error TS2551: Property '_init$' does not exist on type 'ReductionPromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/reduce.js(43,9): error TS2532: Object is possibly 'undefined'.
 node_modules/bluebird/js/release/reduce.js(60,10): error TS2339: Property '_promise' does not exist on type 'ReductionPromiseArray'.
 node_modules/bluebird/js/release/reduce.js(65,52): error TS2339: Property '_cancel' does not exist on type 'ReductionPromiseArray'.
 node_modules/bluebird/js/release/reduce.js(66,14): error TS2339: Property '_isResolved' does not exist on type 'ReductionPromiseArray'.
 node_modules/bluebird/js/release/reduce.js(67,10): error TS2551: Property '_resultCancelled$' does not exist on type 'ReductionPromiseArray'. Did you mean '_resultCancelled'?
 node_modules/bluebird/js/release/reduce.js(144,18): error TS2339: Property 'promise' does not exist on type 'ReductionPromiseArray'.
+node_modules/bluebird/js/release/reduce.js(149,10): error TS2339: Property 'array' does not exist on type 'gotAccum'.
+node_modules/bluebird/js/release/reduce.js(150,42): error TS2339: Property 'value' does not exist on type 'gotAccum'.
+node_modules/bluebird/js/release/reduce.js(150,54): error TS2339: Property 'array' does not exist on type 'gotAccum'.
+node_modules/bluebird/js/release/reduce.js(152,14): error TS2339: Property 'array' does not exist on type 'gotAccum'.
 node_modules/bluebird/js/release/schedule.js(23,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
 node_modules/bluebird/js/release/schedule.js(23,52): error TS2339: Property 'cordova' does not exist on type 'Window & typeof globalThis'.
+node_modules/bluebird/js/release/settle.js(8,10): error TS2339: Property 'constructor$' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(13,10): error TS2339: Property '_values' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(14,32): error TS2339: Property '_totalResolved' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(15,31): error TS2339: Property '_length' does not exist on type 'SettledPromiseArray'.
@@ -124,6 +143,7 @@ node_modules/bluebird/js/release/settle.js(16,14): error TS2339: Property '_reso
 node_modules/bluebird/js/release/settle.js(16,28): error TS2339: Property '_values' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(37,46): error TS2339: Property 'promise' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(41,46): error TS2339: Property 'promise' does not exist on type 'SettledPromiseArray'.
+node_modules/bluebird/js/release/some.js(12,10): error TS2339: Property 'constructor$' does not exist on type 'SomePromiseArray'.
 node_modules/bluebird/js/release/some.js(24,14): error TS2339: Property '_resolve' does not exist on type 'SomePromiseArray'.
 node_modules/bluebird/js/release/some.js(27,10): error TS2551: Property '_init$' does not exist on type 'SomePromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/some.js(28,40): error TS2339: Property '_values' does not exist on type 'SomePromiseArray'.
@@ -155,6 +175,7 @@ node_modules/bluebird/js/release/some.js(121,12): error TS2350: Only a void func
 node_modules/bluebird/js/release/some.js(125,10): error TS2551: Property '_reject' does not exist on type 'SomePromiseArray'. Did you mean '_rejected'?
 node_modules/bluebird/js/release/some.js(133,23): error TS2339: Property 'promise' does not exist on type 'SomePromiseArray'.
 node_modules/bluebird/js/release/using.js(78,20): error TS2339: Property 'doDispose' does not exist on type 'Disposer'.
+node_modules/bluebird/js/release/using.js(92,14): error TS2339: Property 'constructor$' does not exist on type 'FunctionDisposer'.
 node_modules/bluebird/js/release/using.js(97,23): error TS2339: Property 'data' does not exist on type 'FunctionDisposer'.
 node_modules/bluebird/js/release/using.js(223,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/util.js(279,45): error TS2345: Argument of type 'PropertyDescriptor | { value: any; } | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.

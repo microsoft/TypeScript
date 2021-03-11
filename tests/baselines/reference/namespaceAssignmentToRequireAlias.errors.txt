@@ -1,0 +1,14 @@
+tests/cases/conformance/salsa/bug40140.js(1,19): error TS7016: Could not find a declaration file for module 'untyped'. 'tests/cases/conformance/salsa/node_modules/untyped/index.js' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/salsa/bug40140.js (1 errors) ====
+    const u = require('untyped');
+                      ~~~~~~~~~
+!!! error TS7016: Could not find a declaration file for module 'untyped'. 'tests/cases/conformance/salsa/node_modules/untyped/index.js' implicitly has an 'any' type.
+    u.assignment.nested = true
+    u.noError()
+    
+    
+==== tests/cases/conformance/salsa/node_modules/untyped/index.js (0 errors) ====
+    module.exports = {}
+    

@@ -1,6 +1,6 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(3,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(3,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(3,12): error TS2300: Duplicate identifier '#foo'.
-tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(9,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(9,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(11,11): error TS2339: Property '#foo' does not exist on type 'B'.
 
 
@@ -9,7 +9,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(11,
         #foo = 1;
         static #foo = true; // error (duplicate)
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
                ~~~~
 !!! error TS2300: Duplicate identifier '#foo'.
                             // because static and instance private names
@@ -19,7 +19,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesUnique-3.ts(11,
     class B {
         static #foo = true;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         test(x: B) {
             x.#foo; // error (#foo is a static property on B, not an instance property)
               ~~~~

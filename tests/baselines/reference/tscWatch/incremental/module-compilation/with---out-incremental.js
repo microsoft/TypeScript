@@ -28,6 +28,7 @@ Output::
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"module":2,"outFile":"/users/username/projects/project/out.js","configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
@@ -59,6 +60,9 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":334,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",

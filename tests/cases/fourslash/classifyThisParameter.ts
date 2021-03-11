@@ -2,7 +2,7 @@
 
 ////function f(this){}
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.keyword("function"),
     c.identifier("f"),

@@ -469,7 +469,7 @@ namespace Harness {
                 if (vpath.isDeclaration(file.unitName) || vpath.isJson(file.unitName)) {
                     dtsFiles.push(file);
                 }
-                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && options.allowJs)) {
+                else if (vpath.isTypeScript(file.unitName) || (vpath.isJavaScript(file.unitName) && ts.getAllowJSCompilerOption(options))) {
                     const declFile = findResultCodeFile(file.unitName);
                     if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                         dtsFiles.push({ unitName: declFile.file, content: Utils.removeByteOrderMark(declFile.text) });
@@ -1381,7 +1381,7 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                if (require && opts && opts.PrintDiff) {
+                if (!!require && opts && opts.PrintDiff) {
                     const Diff = require("diff");
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
                     throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);

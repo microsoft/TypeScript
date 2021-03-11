@@ -1,0 +1,45 @@
+=== tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS.js ===
+const _sym = Symbol("_sym");
+>_sym : unique symbol
+>Symbol("_sym") : unique symbol
+>Symbol : SymbolConstructor
+>"_sym" : "_sym"
+
+export class MyClass {
+>MyClass : MyClass
+
+    constructor() {
+        var self = this
+>self : this
+>this : this
+
+        self[_sym] = "ok";
+>self[_sym] = "ok" : "ok"
+>self[_sym] : string
+>self : this
+>_sym : unique symbol
+>"ok" : "ok"
+    }
+
+    method() {
+>method : () => void
+
+        var self = this
+>self : this
+>this : this
+
+        self[_sym] = "yep";
+>self[_sym] = "yep" : "yep"
+>self[_sym] : string
+>self : this
+>_sym : unique symbol
+>"yep" : "yep"
+
+        const x = self[_sym];
+>x : string
+>self[_sym] : string
+>self : this
+>_sym : unique symbol
+    }
+}
+

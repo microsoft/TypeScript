@@ -29,6 +29,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -56,12 +58,12 @@ declare class Bar {
 }
 //// [cls.d.ts]
 export = Foo;
-declare const Foo_base: typeof import("./bar");
-declare class Foo extends Foo_base {
+declare class Foo extends Bar {
 }
 declare namespace Foo {
     export { Strings };
 }
+import Bar = require("./bar");
 declare namespace Strings {
     const a: string;
     const b: string;
