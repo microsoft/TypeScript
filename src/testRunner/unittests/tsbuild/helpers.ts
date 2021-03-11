@@ -248,9 +248,7 @@ interface Symbol {
             affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         }
         const fileInfos: ProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, fileId) => {
-            fileInfos[toFileName(fileId)] = fileInfo;
-        });
+        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = fileInfo);
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ProgramBuildInfo | undefined = buildInfo.program && {
             fileInfos,
@@ -276,11 +274,11 @@ interface Symbol {
         originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function toFileName(fileId: number) {
-            return buildInfo.program!.fileNames[fileId];
+            return buildInfo.program!.fileNames[fileId - 1];
         }
 
         function toFileNames(fileIdsListId: number) {
-            return fileNamesList![fileIdsListId];
+            return fileNamesList![fileIdsListId - 1];
         }
 
         function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
