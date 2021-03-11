@@ -26,7 +26,7 @@ var Component = /** @class */ (function () {
     function Component() {
     }
     Component.prototype.render = function () {
-        return _a.jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
+        return (0, _a.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
     };
     return Component;
 }());

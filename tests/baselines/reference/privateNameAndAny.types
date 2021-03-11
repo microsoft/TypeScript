@@ -17,6 +17,45 @@ class A {
         thing.#bar; // Error
 >thing.#bar : any
 >thing : any
+
+        thing.#foo();
+>thing.#foo() : any
+>thing.#foo : any
+>thing : any
+    }
+    methodU(thing: unknown) {
+>methodU : (thing: unknown) => void
+>thing : unknown
+
+        thing.#foo;
+>thing.#foo : any
+>thing : unknown
+
+        thing.#bar;
+>thing.#bar : any
+>thing : unknown
+
+        thing.#foo();
+>thing.#foo() : any
+>thing.#foo : any
+>thing : unknown
+    }
+    methodN(thing: never) {
+>methodN : (thing: never) => void
+>thing : never
+
+        thing.#foo;
+>thing.#foo : any
+>thing : never
+
+        thing.#bar;
+>thing.#bar : any
+>thing : never
+
+        thing.#foo();
+>thing.#foo() : any
+>thing.#foo : any
+>thing : never
     }
 };
 

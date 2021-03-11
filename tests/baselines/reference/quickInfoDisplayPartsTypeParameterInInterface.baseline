@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 10
+      "position": 10,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "interface",
@@ -43,7 +44,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 12
+      "position": 12,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -108,7 +110,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 26
+      "position": 26,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -237,7 +240,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 29
+      "position": 29,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -286,7 +290,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 32
+      "position": 32,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -415,7 +420,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 35
+      "position": 35,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -464,7 +470,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 38
+      "position": 38,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -529,7 +536,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 42
+      "position": 42,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -658,7 +666,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 50
+      "position": 50,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -779,7 +788,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 53
+      "position": 53,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -828,7 +838,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 56
+      "position": 56,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -949,7 +960,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 59
+      "position": 59,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -998,7 +1010,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 62
+      "position": 62,
+      "name": "13"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -1063,7 +1076,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 66
+      "position": 66,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -1184,7 +1198,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 73
+      "position": 73,
+      "name": "15"
     },
     "quickInfo": {
       "kind": "method",
@@ -1313,7 +1328,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 80
+      "position": 80,
+      "name": "16"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -1458,7 +1474,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 83
+      "position": 83,
+      "name": "17"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1507,7 +1524,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 86
+      "position": 86,
+      "name": "18"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -1652,7 +1670,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 89
+      "position": 89,
+      "name": "19"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -1701,7 +1720,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 92
+      "position": 92,
+      "name": "20"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -1766,7 +1786,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 96
+      "position": 96,
+      "name": "21"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -1911,7 +1932,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 105
+      "position": 105,
+      "name": "22"
     },
     "quickInfo": {
       "kind": "var",
@@ -1964,7 +1986,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 111
+      "position": 111,
+      "name": "23"
     },
     "quickInfo": {
       "kind": "interface",
@@ -2005,7 +2028,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 126
+      "position": 126,
+      "name": "24"
     },
     "quickInfo": {
       "kind": "var",
@@ -2134,7 +2158,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 150
+      "position": 150,
+      "name": "25"
     },
     "quickInfo": {
       "kind": "var",
@@ -2255,7 +2280,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 174
+      "position": 174,
+      "name": "26"
     },
     "quickInfo": {
       "kind": "var",
@@ -2308,7 +2334,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 179
+      "position": 179,
+      "name": "27"
     },
     "quickInfo": {
       "kind": "method",
@@ -2437,7 +2464,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 215
+      "position": 215,
+      "name": "28"
     },
     "quickInfo": {
       "kind": "interface",
@@ -2506,7 +2534,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 218
+      "position": 218,
+      "name": "29"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -2599,7 +2628,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 228
+      "position": 228,
+      "name": "30"
     },
     "quickInfo": {
       "kind": "interface",
@@ -2640,7 +2670,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 250
+      "position": 250,
+      "name": "31"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -2797,7 +2828,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 260
+      "position": 260,
+      "name": "32"
     },
     "quickInfo": {
       "kind": "interface",
@@ -2838,7 +2870,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 271
+      "position": 271,
+      "name": "33"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -2915,7 +2948,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 274
+      "position": 274,
+      "name": "34"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -3072,7 +3106,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 277
+      "position": 277,
+      "name": "35"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3149,7 +3184,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 280
+      "position": 280,
+      "name": "36"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -3242,7 +3278,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 284
+      "position": 284,
+      "name": "37"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -3399,7 +3436,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 292
+      "position": 292,
+      "name": "38"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -3548,7 +3586,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 302
+      "position": 302,
+      "name": "39"
     },
     "quickInfo": {
       "kind": "interface",
@@ -3589,7 +3628,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 313
+      "position": 313,
+      "name": "40"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3666,7 +3706,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 316
+      "position": 316,
+      "name": "41"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -3815,7 +3856,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 319
+      "position": 319,
+      "name": "42"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -3892,7 +3934,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 322
+      "position": 322,
+      "name": "43"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -3985,7 +4028,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 326
+      "position": 326,
+      "name": "44"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -4134,7 +4178,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 333
+      "position": 333,
+      "name": "45"
     },
     "quickInfo": {
       "kind": "method",
@@ -4319,7 +4364,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 340
+      "position": 340,
+      "name": "46"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -4520,7 +4566,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 350
+      "position": 350,
+      "name": "47"
     },
     "quickInfo": {
       "kind": "interface",
@@ -4561,7 +4608,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 361
+      "position": 361,
+      "name": "48"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -4638,7 +4686,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 364
+      "position": 364,
+      "name": "49"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -4839,7 +4888,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 367
+      "position": 367,
+      "name": "50"
     },
     "quickInfo": {
       "kind": "parameter",
@@ -4916,7 +4966,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 370
+      "position": 370,
+      "name": "51"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -5009,7 +5060,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 374
+      "position": 374,
+      "name": "52"
     },
     "quickInfo": {
       "kind": "type parameter",
@@ -5210,7 +5262,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 383
+      "position": 383,
+      "name": "53"
     },
     "quickInfo": {
       "kind": "var",
@@ -5275,7 +5328,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 390
+      "position": 390,
+      "name": "54"
     },
     "quickInfo": {
       "kind": "interface",
@@ -5344,7 +5398,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 393
+      "position": 393,
+      "name": "55"
     },
     "quickInfo": {
       "kind": "interface",
@@ -5385,7 +5440,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 409
+      "position": 409,
+      "name": "56"
     },
     "quickInfo": {
       "kind": "var",
@@ -5562,7 +5618,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 415
+      "position": 415,
+      "name": "57"
     },
     "quickInfo": {
       "kind": "var",
@@ -5615,7 +5672,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 421
+      "position": 421,
+      "name": "58"
     },
     "quickInfo": {
       "kind": "var",
@@ -5668,7 +5726,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 428
+      "position": 428,
+      "name": "59"
     },
     "quickInfo": {
       "kind": "var",
@@ -5837,7 +5896,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 434
+      "position": 434,
+      "name": "60"
     },
     "quickInfo": {
       "kind": "var",
@@ -5890,7 +5950,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 440
+      "position": 440,
+      "name": "61"
     },
     "quickInfo": {
       "kind": "var",
@@ -5943,7 +6004,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 447
+      "position": 447,
+      "name": "62"
     },
     "quickInfo": {
       "kind": "var",
@@ -6008,7 +6070,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 453
+      "position": 453,
+      "name": "63"
     },
     "quickInfo": {
       "kind": "method",
@@ -6197,7 +6260,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 460
+      "position": 460,
+      "name": "64"
     },
     "quickInfo": {
       "kind": "var",
@@ -6250,7 +6314,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts",
-      "position": 466
+      "position": 466,
+      "name": "65"
     },
     "quickInfo": {
       "kind": "var",

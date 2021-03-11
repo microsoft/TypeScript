@@ -629,40 +629,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../second",
-    "sourceFiles": [
-      "../second/second_part1.ts",
-      "../second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 336,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 49,
-          "kind": "reference",
-          "data": "../second/tripleRef.d.ts"
-        },
-        {
-          "pos": 51,
-          "end": 205,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":336,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":49,"kind":"reference","data":"../second/tripleRef.d.ts"},{"pos":51,"end":205,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -704,6 +671,42 @@ declare class C {
 }
 
 ======================================================================
+
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 336,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 49,
+          "kind": "reference",
+          "data": "../second/tripleRef.d.ts"
+        },
+        {
+          "pos": 51,
+          "end": 205,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/first/bin/first-output.d.ts]
 /// <reference path="../tripleRef.d.ts" />
@@ -1063,6 +1066,42 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":158,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":42,"kind":"reference","data":"../tripleRef.d.ts"},{"pos":44,"end":252,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-158)
+var s = "Hello, world";
+console.log(s);
+var first_part2Const = new firstfirst_part2();
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+reference: (0-42):: ../tripleRef.d.ts
+/// <reference path="../tripleRef.d.ts" />
+----------------------------------------------------------------------
+text: (44-252)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare const first_part2Const: firstfirst_part2;
+declare function f(): string;
+
+======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "..",
@@ -1098,39 +1137,6 @@ sourceFile:../first_part3.ts
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/first/bin/first-output.js
-----------------------------------------------------------------------
-text: (0-158)
-var s = "Hello, world";
-console.log(s);
-var first_part2Const = new firstfirst_part2();
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-======================================================================
-======================================================================
-File:: /src/first/bin/first-output.d.ts
-----------------------------------------------------------------------
-reference: (0-42):: ../tripleRef.d.ts
-/// <reference path="../tripleRef.d.ts" />
-----------------------------------------------------------------------
-text: (44-252)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare const first_part2Const: firstfirst_part2;
-declare function f(): string;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 /// <reference path="../../tripleRef.d.ts" />
@@ -2034,6 +2040,97 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":158,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":158,"kind":"text"}]},{"pos":158,"end":494,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":158,"end":494,"kind":"text"}]},{"pos":494,"end":578,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":45,"kind":"reference","data":"../../tripleRef.d.ts"},{"pos":47,"end":101,"kind":"reference","data":"../../../first/tripleRef.d.ts"},{"pos":103,"end":158,"kind":"reference","data":"../../../second/tripleRef.d.ts"},{"pos":160,"end":368,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":160,"end":368,"kind":"text"}]},{"pos":368,"end":522,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":368,"end":522,"kind":"text"}]},{"pos":522,"end":592,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prepend: (0-158):: ../../../first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (0-158)
+var s = "Hello, world";
+console.log(s);
+var first_part2Const = new firstfirst_part2();
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+prepend: (158-494):: ../../../2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (158-494)
+var second_part1Const = new secondsecond_part1();
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (494-578)
+var third_part1Const = new thirdthird_part1();
+var c = new C();
+c.doSomething();
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+reference: (0-45):: ../../tripleRef.d.ts
+/// <reference path="../../tripleRef.d.ts" />
+----------------------------------------------------------------------
+reference: (47-101):: ../../../first/tripleRef.d.ts
+/// <reference path="../../../first/tripleRef.d.ts" />
+----------------------------------------------------------------------
+reference: (103-158):: ../../../second/tripleRef.d.ts
+/// <reference path="../../../second/tripleRef.d.ts" />
+----------------------------------------------------------------------
+prepend: (160-368):: ../../../first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (160-368)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare const first_part2Const: firstfirst_part2;
+declare function f(): string;
+
+----------------------------------------------------------------------
+prepend: (368-522):: ../../../2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (368-522)
+declare const second_part1Const: secondsecond_part1;
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (522-592)
+declare const third_part1Const: thirdthird_part1;
+declare var c: C;
+
+======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "../..",
@@ -2131,92 +2228,4 @@ sourceFile:../../third_part1.ts
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-prepend: (0-158):: ../../../first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-158)
-var s = "Hello, world";
-console.log(s);
-var first_part2Const = new firstfirst_part2();
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-prepend: (158-494):: ../../../2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (158-494)
-var second_part1Const = new secondsecond_part1();
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (494-578)
-var third_part1Const = new thirdthird_part1();
-var c = new C();
-c.doSomething();
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-reference: (0-45):: ../../tripleRef.d.ts
-/// <reference path="../../tripleRef.d.ts" />
-----------------------------------------------------------------------
-reference: (47-101):: ../../../first/tripleRef.d.ts
-/// <reference path="../../../first/tripleRef.d.ts" />
-----------------------------------------------------------------------
-reference: (103-158):: ../../../second/tripleRef.d.ts
-/// <reference path="../../../second/tripleRef.d.ts" />
-----------------------------------------------------------------------
-prepend: (160-368):: ../../../first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (160-368)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare const first_part2Const: firstfirst_part2;
-declare function f(): string;
-
-----------------------------------------------------------------------
-prepend: (368-522):: ../../../2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (368-522)
-declare const second_part1Const: secondsecond_part1;
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (522-592)
-declare const third_part1Const: thirdthird_part1;
-declare var c: C;
-
-======================================================================
 

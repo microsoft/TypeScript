@@ -168,7 +168,10 @@ namespace ts.codefix {
                 // so we push an entry for 'response'.
                 if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                     const firstParameter = firstOrUndefined(lastCallSignature.parameters);
-                    const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
+                    const ident = firstParameter?.valueDeclaration
+                        && isParameter(firstParameter.valueDeclaration)
+                        && tryCast(firstParameter.valueDeclaration.name, isIdentifier)
+                        || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
                     collidingSymbolMap.add(ident.text, symbol);
