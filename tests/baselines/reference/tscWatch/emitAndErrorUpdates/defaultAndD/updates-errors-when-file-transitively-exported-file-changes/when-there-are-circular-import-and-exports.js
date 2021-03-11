@@ -272,7 +272,7 @@ Output::
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-[[90m12:01:40 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:55 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -335,10 +335,15 @@ export interface ITest {
 
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.js] file written with same contents
 //// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/app.js] file written with same contents
 //// [/user/username/projects/myproject/app.d.ts] file written with same contents
 
 Change:: Rename property title2 to title of interface ITest to revert back to original text
@@ -352,9 +357,9 @@ export interface ITest {
 
 Output::
 >> Screen clear
-[[90m12:01:44 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:59 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:12 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -434,7 +439,7 @@ export interface ITest {
 
 Output::
 >> Screen clear
-[[90m12:02:16 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:31 AM[0m] File change detected. Starting incremental compilation...
 
 [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
@@ -442,7 +447,7 @@ Output::
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-[[90m12:02:44 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:02:59 AM[0m] Found 1 error. Watching for file changes.
 
 
 

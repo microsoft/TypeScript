@@ -199,6 +199,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

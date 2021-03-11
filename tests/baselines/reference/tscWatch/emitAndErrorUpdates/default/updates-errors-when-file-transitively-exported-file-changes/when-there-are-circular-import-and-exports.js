@@ -232,7 +232,7 @@ Output::
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:20 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -288,6 +288,11 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
 //// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.js] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.js] file written with same contents
+//// [/user/username/projects/myproject/app.js] file written with same contents
 
 Change:: Rename property title2 to title of interface ITest to revert back to original text
 
@@ -300,9 +305,9 @@ export interface ITest {
 
 Output::
 >> Screen clear
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:24 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -370,7 +375,7 @@ export interface ITest {
 
 Output::
 >> Screen clear
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
 [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ title: string; }' is not assignable to type 'ITest'.
   Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
@@ -378,7 +383,7 @@ Output::
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~~~~~~~~~~[0m
 
-[[90m12:01:27 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:42 AM[0m] Found 1 error. Watching for file changes.
 
 
 

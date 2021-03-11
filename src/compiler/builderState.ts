@@ -45,6 +45,12 @@ namespace ts {
          * Otherwise undefined
          */
         readonly exportedModulesMap: ESMap<Path, BuilderState.ReferencedSet> | undefined;
+
+        /**
+         * true if file version is used as signature
+         * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
+         */
+        useFileVersionAsSignature: boolean;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
@@ -236,7 +242,8 @@ namespace ts {
                 fileInfos,
                 referencedMap,
                 exportedModulesMap,
-                hasCalledUpdateShapeSignature
+                hasCalledUpdateShapeSignature,
+                useFileVersionAsSignature: !useOldState
             };
         }
 
@@ -258,6 +265,7 @@ namespace ts {
                 referencedMap: state.referencedMap && new Map(state.referencedMap),
                 exportedModulesMap: state.exportedModulesMap && new Map(state.exportedModulesMap),
                 hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
+                useFileVersionAsSignature: state.useFileVersionAsSignature,
             };
         }
 
@@ -317,7 +325,7 @@ namespace ts {
 
             const prevSignature = info.signature;
             let latestSignature: string | undefined;
-            if (!sourceFile.isDeclarationFile) {
+            if (!sourceFile.isDeclarationFile && !state.useFileVersionAsSignature) {
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,

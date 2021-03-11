@@ -90,7 +90,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n","affectsGlobalScope":false},{"version":"2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"affectedFilesPendingEmit":[[2,1],[3,1],[4,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-9621097780-export interface A {\r\n    name: string;\r\n}","affectsGlobalScope":false},{"version":"2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","signature":"2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"11373096570-console.log(\"hi\");\r\nexport { }","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"affectedFilesPendingEmit":[[2,1],[3,1],[4,1]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -114,17 +114,17 @@ exitCode:: ExitStatus.undefined
       },
       "../shared/types/db.ts": {
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "signature": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
         "version": "2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;",
-        "signature": "-3531856636-export {};\n",
+        "signature": "2626879346-import { A } from \"../shared/types/db\";\r\nconst a = {\r\n    lastName: 'sdsd'\r\n;",
         "affectsGlobalScope": false
       },
       "../src/other.ts": {
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-        "signature": "-3531856636-export {};\n",
+        "signature": "11373096570-console.log(\"hi\");\r\nexport { }",
         "affectsGlobalScope": false
       }
     },
@@ -141,7 +141,11 @@ exitCode:: ExitStatus.undefined
         "../shared/types/db.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "../src/main.ts": [
+        "../shared/types/db.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../shared/types/db.ts",
@@ -164,7 +168,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1883
+  "size": 1984
 }
 
 
@@ -278,7 +282,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n","affectsGlobalScope":false},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-9621097780-export interface A {\r\n    name: string;\r\n}","affectsGlobalScope":false},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"11373096570-console.log(\"hi\");\r\nexport { }","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -302,7 +306,7 @@ exitCode:: ExitStatus.undefined
       },
       "../shared/types/db.ts": {
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "signature": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
@@ -312,7 +316,7 @@ exitCode:: ExitStatus.undefined
       },
       "../src/other.ts": {
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-        "signature": "-3531856636-export {};\n",
+        "signature": "11373096570-console.log(\"hi\");\r\nexport { }",
         "affectsGlobalScope": false
       }
     },
@@ -338,7 +342,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1832
+  "size": 1856
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
@@ -417,7 +421,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n","affectsGlobalScope":false},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-9621097780-export interface A {\r\n    name: string;\r\n}","affectsGlobalScope":false},{"version":"-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"11373096570-console.log(\"hi\");\r\nexport { }","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"../src/main.ts","start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]],4],"affectedFilesPendingEmit":[[3,1]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -441,7 +445,7 @@ exitCode:: ExitStatus.undefined
       },
       "../shared/types/db.ts": {
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "signature": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
@@ -451,7 +455,7 @@ exitCode:: ExitStatus.undefined
       },
       "../src/other.ts": {
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-        "signature": "-3531856636-export {};\n",
+        "signature": "11373096570-console.log(\"hi\");\r\nexport { }",
         "affectsGlobalScope": false
       }
     },
@@ -495,7 +499,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1995
+  "size": 2019
 }
 
 
@@ -602,7 +606,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-5014788164-export interface A {\n    name: string;\n}\n","affectsGlobalScope":false},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-9621097780-export interface A {\r\n    name: string;\r\n}","affectsGlobalScope":false},{"version":"-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","signature":"-3531856636-export {};\n","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"11373096570-console.log(\"hi\");\r\nexport { }","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -626,7 +630,7 @@ exitCode:: ExitStatus.undefined
       },
       "../shared/types/db.ts": {
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "signature": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
@@ -636,7 +640,7 @@ exitCode:: ExitStatus.undefined
       },
       "../src/other.ts": {
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-        "signature": "-3531856636-export {};\n",
+        "signature": "11373096570-console.log(\"hi\");\r\nexport { }",
         "affectsGlobalScope": false
       }
     },
@@ -662,7 +666,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1823
+  "size": 1847
 }
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]

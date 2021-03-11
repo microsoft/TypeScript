@@ -61,7 +61,7 @@ exports.x = (0, tslib_1.__assign)({});
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/tslib/index.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1620578607-export function __assign(...args: any[]): any;","signature":"1620578607-export function __assign(...args: any[]): any;","affectsGlobalScope":false},{"version":"-14168389096-export const x = {...{}};","signature":"-6508651827-export declare const x: {};\n","affectsGlobalScope":false}],"options":{"importHelpers":true,"incremental":true,"configFilePath":"./tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/tslib/index.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"1620578607-export function __assign(...args: any[]): any;","signature":"1620578607-export function __assign(...args: any[]): any;","affectsGlobalScope":false},{"version":"-14168389096-export const x = {...{}};","signature":"-14168389096-export const x = {...{}};","affectsGlobalScope":false}],"options":{"importHelpers":true,"incremental":true,"configFilePath":"./tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -89,7 +89,7 @@ exports.x = (0, tslib_1.__assign)({});
       },
       "./index.tsx": {
         "version": "-14168389096-export const x = {...{}};",
-        "signature": "-6508651827-export declare const x: {};\n",
+        "signature": "-14168389096-export const x = {...{}};",
         "affectsGlobalScope": false
       }
     },
@@ -103,7 +103,11 @@ exports.x = (0, tslib_1.__assign)({});
         "./node_modules/tslib/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "./index.tsx": [
+        "./node_modules/tslib/index.d.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./index.tsx",
@@ -111,7 +115,7 @@ exports.x = (0, tslib_1.__assign)({});
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1575
+  "size": 1577
 }
 
 

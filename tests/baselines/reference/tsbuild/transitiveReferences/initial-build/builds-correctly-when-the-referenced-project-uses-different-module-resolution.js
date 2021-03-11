@@ -110,7 +110,7 @@ a_1.X;
 
 
 //// [/src/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-9529994156-export declare class A {\r\n}\r\n","affectsGlobalScope":false}],"options":{"composite":true,"listFiles":true,"configFilePath":"./tsconfig.a.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-8566332115-export class A {}\r\n","affectsGlobalScope":false}],"options":{"composite":true,"listFiles":true,"configFilePath":"./tsconfig.a.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -127,7 +127,7 @@ a_1.X;
       },
       "./a.ts": {
         "version": "-8566332115-export class A {}\r\n",
-        "signature": "-9529994156-export declare class A {\r\n}\r\n",
+        "signature": "-8566332115-export class A {}\r\n",
         "affectsGlobalScope": false
       }
     },
@@ -144,11 +144,11 @@ a_1.X;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1322
+  "size": 1310
 }
 
 //// [/src/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9529994156-export declare class A {\r\n}\r\n","signature":"-9529994156-export declare class A {\r\n}\r\n","affectsGlobalScope":false},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","signature":"-9520743082-import { A } from 'a';\r\nexport declare const b: A;\r\n","affectsGlobalScope":false}],"options":{"composite":true,"moduleResolution":1,"listFiles":true,"configFilePath":"./tsconfig.b.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9529994156-export declare class A {\r\n}\r\n","signature":"-9529994156-export declare class A {\r\n}\r\n","affectsGlobalScope":false},{"version":"-17186364832-import {A} from 'a';\nexport const b = new A();","signature":"-17186364832-import {A} from 'a';\nexport const b = new A();","affectsGlobalScope":false}],"options":{"composite":true,"moduleResolution":1,"listFiles":true,"configFilePath":"./tsconfig.b.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -176,7 +176,7 @@ a_1.X;
       },
       "./b.ts": {
         "version": "-17186364832-import {A} from 'a';\nexport const b = new A();",
-        "signature": "-9520743082-import { A } from 'a';\r\nexport declare const b: A;\r\n",
+        "signature": "-17186364832-import {A} from 'a';\nexport const b = new A();",
         "affectsGlobalScope": false
       }
     },
@@ -203,6 +203,6 @@ a_1.X;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1583
+  "size": 1575
 }
 

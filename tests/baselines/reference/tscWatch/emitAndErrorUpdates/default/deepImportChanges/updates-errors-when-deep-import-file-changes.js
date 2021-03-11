@@ -136,7 +136,7 @@ Output::
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -190,6 +190,7 @@ exports.C = C;
 
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/a.js] file written with same contents
 
 Change:: Rename property d2 to d of class C to revert back to original text
 
@@ -203,9 +204,9 @@ export class C
 
 Output::
 >> Screen clear
-[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -272,14 +273,14 @@ export class C
 
 Output::
 >> Screen clear
-[[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:01 AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:08 AM[0m] Found 1 error. Watching for file changes.
 
 
 

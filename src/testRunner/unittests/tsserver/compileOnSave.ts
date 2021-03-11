@@ -951,7 +951,7 @@ function bar() {
                 }
 
                 // Change file1 get affected file list
-                verifyLocalEdit(file1, "hello", "world");
+                verifyLocalEdit(file1, "hello", "world", /*returnsAllFilesAsAffected*/ !declaration); // Signatures are not initialized before this request
                 verifyLocalEdit(file1, "world", "hello");
                 verifyLocalEdit(file1, "hello", "world");
 

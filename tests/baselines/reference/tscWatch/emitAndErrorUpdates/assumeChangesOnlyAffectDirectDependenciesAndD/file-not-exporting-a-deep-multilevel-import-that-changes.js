@@ -209,23 +209,7 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
-  Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
-
-[7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
-
-  [96ma.ts[0m:[93m3[0m:[93m5[0m
-    [7m3[0m     c: Coords;
-    [7m [0m [96m    ~[0m
-    The expected type comes from property 'c' which is declared here on type 'PointWrapper'
-
-[96md.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'x' does not exist on type 'Coords'.
-
-[7m2[0m getPoint().c.x;
-[7m [0m [91m             ~[0m
-
-[[90m12:01:07 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -243,6 +227,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -284,6 +271,12 @@ export interface Coords {
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
+//// [/user/username/projects/myproject/c.js] file written with same contents
+//// [/user/username/projects/myproject/c.d.ts] file written with same contents
+//// [/user/username/projects/myproject/d.js] file written with same contents
+//// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/e.js] file written with same contents
+//// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
 Change:: Rename property x to x2 of interface Coords to revert back to original text
 
@@ -301,25 +294,9 @@ export interface Coords {
 
 Output::
 >> Screen clear
-[[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
 
-[96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
-  Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
-
-[7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
-
-  [96ma.ts[0m:[93m3[0m:[93m5[0m
-    [7m3[0m     c: Coords;
-    [7m [0m [96m    ~[0m
-    The expected type comes from property 'c' which is declared here on type 'PointWrapper'
-
-[96md.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'x' does not exist on type 'Coords'.
-
-[7m2[0m getPoint().c.x;
-[7m [0m [91m             ~[0m
-
-[[90m12:01:24 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -395,25 +372,9 @@ export interface Coords {
 
 Output::
 >> Screen clear
-[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
 
-[96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
-  Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
-
-[7m6[0m             x: 1,
-[7m [0m [91m            ~~~~[0m
-
-  [96ma.ts[0m:[93m3[0m:[93m5[0m
-    [7m3[0m     c: Coords;
-    [7m [0m [96m    ~[0m
-    The expected type comes from property 'c' which is declared here on type 'PointWrapper'
-
-[96md.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'x' does not exist on type 'Coords'.
-
-[7m2[0m getPoint().c.x;
-[7m [0m [91m             ~[0m
-
-[[90m12:01:41 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
