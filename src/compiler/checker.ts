@@ -17373,9 +17373,9 @@ namespace ts {
                     (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
                     const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
                     if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
-                        if (source === nullStrippedTarget) return Ternary.True;
-                        target = nullStrippedTarget;
+                        target = getNormalizedType(nullStrippedTarget, /*writing*/ true);
                     }
+                    if (source === nullStrippedTarget) return Ternary.True;
                 }
 
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
