@@ -5,7 +5,7 @@
 // module.exports.[|logWarning|] = message => { };
 
 // === /bin/serverless.js ===
-// /*FIND ALL REFS*/require('../lib/classes/Error').[|logWarning|](`CLI triage crashed with: ${error.stack}`);
+// require('../lib/classes/Error').[|log/*FIND ALL REFS*/Warning|](`CLI triage crashed with: ${error.stack}`);
 
 [
   {

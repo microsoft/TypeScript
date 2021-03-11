@@ -1,7 +1,6 @@
-// @strict: true
-// @jsx: preserve,react-jsx
-// @jsxImportSource: @emotion/react
-// @filename: /node_modules/react/index.d.ts
+//// [tests/cases/compiler/jsxNamespaceImplicitImportJSXNamespaceFromConfigPickedOverGlobalOne.tsx] ////
+
+//// [index.d.ts]
 export = React;
 export as namespace React;
 
@@ -21,10 +20,10 @@ declare global {
     }
   }
 }
-// @filename: /node_modules/@emotion/react/jsx-runtime/index.d.ts
+//// [index.d.ts]
 export { EmotionJSX as JSX } from './jsx-namespace'
 
-// @filename: /node_modules/@emotion/react/jsx-runtime/jsx-namespace.d.ts
+//// [jsx-namespace.d.ts]
 import 'react'
 
 type WithConditionalCSSProp<P> = 'className' extends keyof P
@@ -61,5 +60,13 @@ export namespace EmotionJSX {
   }
 }
 
-// @filename: /index.tsx
+//// [index.tsx]
 export const Comp = () => <div css="color: hotpink;"></div>;
+
+
+//// [index.jsx]
+"use strict";
+exports.__esModule = true;
+exports.Comp = void 0;
+var Comp = function () { return <div css="color: hotpink;"></div>; };
+exports.Comp = Comp;

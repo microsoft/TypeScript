@@ -119,8 +119,8 @@
       "containerKind": "",
       "containerName": "",
       "fileName": "/a.js",
-      "kind": "property",
-      "name": "(property) f: () => void",
+      "kind": "alias",
+      "name": "(alias) function f(): void\nimport f",
       "textSpan": {
         "start": 32,
         "length": 1
@@ -131,7 +131,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "alias",
           "kind": "text"
         },
         {
@@ -143,16 +143,16 @@
           "kind": "space"
         },
         {
-          "text": "f",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
+          "text": "function",
+          "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
         },
         {
           "text": "(",
@@ -163,11 +163,7 @@
           "kind": "punctuation"
         },
         {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
+          "text": ":",
           "kind": "punctuation"
         },
         {
@@ -177,6 +173,22 @@
         {
           "text": "void",
           "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "aliasName"
         }
       ],
       "contextSpan": {
