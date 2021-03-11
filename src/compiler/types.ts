@@ -6125,6 +6125,7 @@ namespace ts {
 
     /* @internal */
     export interface DidYouMeanOptionsDiagnostics {
+        specificDiagnosticMessages?: ReadonlyESMap<string, DiagnosticMessage>;
         optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,

@@ -1185,6 +1185,13 @@ namespace ts {
         },
     ];
 
+    const specificStandaloneDiagnosticMessages = new Map([
+        ["clean", Diagnostics.Compiler_option_0_may_only_be_used_with_build],
+        ["dry", Diagnostics.Compiler_option_0_may_only_be_used_with_build],
+        ["force", Diagnostics.Compiler_option_0_may_only_be_used_with_build],
+        ["verbose", Diagnostics.Compiler_option_0_may_only_be_used_with_build],
+    ]);
+
     /* @internal */
     export interface OptionsNameMap {
         optionsNameMap: ESMap<string, CommandLineOption>;
@@ -1291,6 +1298,11 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
+        const knownMessage = diagnostics.specificDiagnosticMessages?.get(unknownOption);
+        if (knownMessage) {
+            return createDiagnostics(knownMessage, unknownOption);
+        }
+
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
         return possibleOption ?
             createDiagnostics(diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
@@ -1458,6 +1470,7 @@ namespace ts {
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         getOptionsNameMap,
         optionDeclarations,
+        specificDiagnosticMessages: specificStandaloneDiagnosticMessages,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
         unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
         optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument

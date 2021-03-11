@@ -46,6 +46,23 @@ namespace ts {
                 });
         });
 
+        it("Handles 'may only be used with --build' flags", () => {
+            const buildFlags = ["--clean", "--dry", "--force", "--verbose"];
+
+            assertParseResult(buildFlags, {
+                errors: buildFlags.map(buildFlag => ({
+                    messageText: `Compiler option '${buildFlag}' may only be used with '--build'.`,
+                    category: Diagnostics.Compiler_option_0_may_only_be_used_with_build.category,
+                    code: Diagnostics.Compiler_option_0_may_only_be_used_with_build.code,
+                    file: undefined,
+                    start: undefined,
+                    length: undefined
+                })),
+                fileNames: [],
+                options: {}
+            });
+        });
+
         it("Handles 'did you mean?' for misspelt flags", () => {
             // --declarations --allowTS
             assertParseResult(["--declarations", "--allowTS"], {
