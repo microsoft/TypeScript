@@ -23775,12 +23775,18 @@ namespace ts {
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
-        function isInsideFunction(node: Node, threshold: Node): boolean {
-            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
+        function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
+            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n) || (
+                n.parent && isPropertyDeclaration(n.parent) && !hasStaticModifier(n.parent) && n.parent.initializer === n
+            ));
         }
 
         function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
             return findAncestor(node, n => n === container ? "quit" : n === container.initializer || n === container.condition || n === container.incrementor || n === container.statement);
+        }
+
+        function getEnclosingIterationStatement(node: Node): Node | undefined {
+            return findAncestor(node, n => (!n || nodeStartsNewLexicalEnvironment(n)) ? "quit" : isIterationStatement(n, /*lookInLabeledStatements*/ false));
         }
 
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
@@ -23798,20 +23804,11 @@ namespace ts {
             // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
             const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
-            const usedInFunction = isInsideFunction(node.parent, container);
-            let current = container;
+            const isCaptured = isInsideFunctionOrInstancePropertyInitializer(node, container);
 
-            let containedInIterationStatement = false;
-            while (current && !nodeStartsNewLexicalEnvironment(current)) {
-                if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
-                    containedInIterationStatement = true;
-                    break;
-                }
-                current = current.parent;
-            }
-
-            if (containedInIterationStatement) {
-                if (usedInFunction) {
+            const enclosingIterationStatement = getEnclosingIterationStatement(container);
+            if (enclosingIterationStatement) {
+                if (isCaptured) {
                     // mark iteration statement as containing block-scoped binding captured in some function
                     let capturesBlockScopeBindingInLoopBody = true;
                     if (isForStatement(container)) {
@@ -23832,7 +23829,7 @@ namespace ts {
                         }
                     }
                     if (capturesBlockScopeBindingInLoopBody) {
-                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
                     }
                 }
 
@@ -23849,7 +23846,7 @@ namespace ts {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
             }
 
-            if (usedInFunction) {
+            if (isCaptured) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
         }
@@ -25529,6 +25526,20 @@ namespace ts {
             const links = getNodeLinks(node.expression);
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
+                // The computed property name of a non-static class field within a loop must be stored in a block-scoped binding.
+                // (It needs to be bound at class evaluation time.)
+                if (isPropertyDeclaration(node.parent) && !hasStaticModifier(node.parent) && isClassExpression(node.parent.parent)) {
+                    const container = getEnclosingBlockScopeContainer(node.parent.parent);
+                    const enclosingIterationStatement = getEnclosingIterationStatement(container);
+                    if (enclosingIterationStatement) {
+                        // The computed field name will use a block scoped binding which can be unique for each iteration of the loop.
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                        // The generated variable which stores the computed field name must be block-scoped.
+                        getNodeLinks(node).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                        // The generated variable which stores the class must be block-scoped.
+                        getNodeLinks(node.parent.parent).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                    }
+                }
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
                 if (links.resolvedType.flags & TypeFlags.Nullable ||
@@ -32616,6 +32627,16 @@ namespace ts {
             if (isPrivateIdentifier(node.name) && languageVersion < ScriptTarget.ESNext) {
                 for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
                     getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
+                }
+
+                // If this is a private field in a class expression inside the body of a loop,
+                // then we must use a block-scoped binding to store the WeakMap.
+                if (isClassExpression(node.parent)) {
+                    const enclosingIterationStatement = getEnclosingIterationStatement(node.parent);
+                    if (enclosingIterationStatement) {
+                        getNodeLinks(node.name).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    }
                 }
             }
         }

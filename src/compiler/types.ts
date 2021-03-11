@@ -7520,6 +7520,12 @@ namespace ts {
         /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
 
+        /*@internal*/ startBlockScope(): void;
+
+        /*@internal*/ endBlockScope(): Statement[] | undefined;
+
+        /*@internal*/ addBlockScopedVariable(node: Identifier): void;
+
         /** Adds an initialization statement to the top of the lexical environment. */
         /* @internal */
         addInitializationStatement(node: Statement): void;
