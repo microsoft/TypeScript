@@ -25,6 +25,38 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
     return "hello";
 }
 
+interface Box<T> {
+    item: T;
+}
+
+declare function isBox(x: any): x is Box<unknown>;
+declare function isUndefined(x: unknown): x is undefined;
+declare function unbox<T>(x: Box<T>): T;
+
+function g1<T extends Box<T> | undefined>(x: T) {
+    if (isBox(x)) {
+        unbox(x);
+    }
+}
+
+function g2<T extends Box<T> | undefined>(x: T) {
+    if (!isUndefined(x)) {
+        unbox(x);
+    }
+}
+
+function g3<T extends Box<T> | undefined>(x: T) {
+    if (!isBox(x)) {
+        unbox(x);  // Error
+    }
+}
+
+function g4<T extends Box<T> | undefined>(x: T) {
+    if (isUndefined(x)) {
+        unbox(x);  // Error
+    }
+}
+
 // Repro from #13995
 
 declare function takeA(val: 'A'): void;
@@ -125,6 +157,26 @@ function f2(x) {
         return x;
     }
     return "hello";
+}
+function g1(x) {
+    if (isBox(x)) {
+        unbox(x);
+    }
+}
+function g2(x) {
+    if (!isUndefined(x)) {
+        unbox(x);
+    }
+}
+function g3(x) {
+    if (!isBox(x)) {
+        unbox(x); // Error
+    }
+}
+function g4(x) {
+    if (isUndefined(x)) {
+        unbox(x); // Error
+    }
 }
 function bounceAndTakeIfA(value) {
     if (value === 'A') {
