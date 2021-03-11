@@ -178,14 +178,14 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+    defineProperty<T>(o: T, p: string, attributes: PropertyDescriptor): T;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
       * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
       * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
       */
-    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+    defineProperties<T>(o: T, properties: PropertyDescriptorMap): T;
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -3938,19 +3938,26 @@ declare module Intl {
     }
 
     interface DateTimeFormatOptions {
-        localeMatcher?: string;
-        weekday?: string;
-        era?: string;
-        year?: string;
-        month?: string;
-        day?: string;
-        hour?: string;
-        minute?: string;
-        second?: string;
-        timeZoneName?: string;
-        formatMatcher?: string;
-        hour12?: boolean;
+        dateStyle?: "full" | "long" | "medium" | "short";
+        timeStyle?: "full" | "long" | "medium" | "short";
+        calendar?: "buddhist" | "chinese" | " coptic" | "ethiopia" | "ethiopic" | "gregory" | " hebrew" | "indian" | "islamic" | "iso8601" | " japanese" | "persian" | "roc";
+        dayPeriod?: "narrow" | "short" | " long";
+        numberingSystem?: "arab" | "arabext" | " bali" | "beng" | "deva" | "fullwide" | " gujr" | "guru" | "hanidec" | "khmr" | " knda" | "laoo" | "latn" | "limb" | "mlym" | " mong" | "mymr" | "orya" | "tamldec" | " telu" | "thai" | "tibt";
+        localeMatcher?: "best fit" | "lookup";
         timeZone?: string;
+        hour12?: boolean;
+        hourCycle?: "h11" | "h12" | "h23" | "h24";
+        formatMatcher?: "best fit" | "basic";
+        weekday?: "long" | "short" | "narrow";
+        era?: "long" | "short" | "narrow";
+        year?: "numeric" | "2-digit";
+        month?: "numeric" | "2-digit" |"long" | "short" | "narrow";
+        day?: "numeric" | "2-digit";
+        hour?: "numeric" | "2-digit";
+        minute?: "numeric" | "2-digit";
+        second?: "numeric" | "2-digit";
+        fractionalSecondDigits?: 0 | 1 | 2 | 3;
+        timeZoneName?: "long" | "short";
     }
 
     interface ResolvedDateTimeFormatOptions {

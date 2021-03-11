@@ -6,10 +6,10 @@ type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } 
 >key : string
 
 type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
->ObjectHasKey : StringContains<Extract<keyof O, string>, L>
+>ObjectHasKey : ObjectHasKey<O, L>
 
 type A<T> = ObjectHasKey<T, '0'>;
->A : StringContains<Extract<keyof T, string>, "0">
+>A : A<T>
 
 type B = ObjectHasKey<[string, number], '1'>;  // "true"
 >B : "true"

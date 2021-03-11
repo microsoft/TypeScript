@@ -11,7 +11,7 @@ declare var module: { exports: any};
 module.exports = C
 >module.exports = C : typeof C
 >module.exports : typeof C
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof C; }
+>module : { exports: typeof C; }
 >exports : typeof C
 >C : typeof C
 

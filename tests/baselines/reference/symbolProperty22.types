@@ -2,9 +2,9 @@
 interface I<T, U> {
     [Symbol.unscopables](x: T): U;
 >[Symbol.unscopables] : (x: T) => U
->Symbol.unscopables : symbol
+>Symbol.unscopables : unique symbol
 >Symbol : SymbolConstructor
->unscopables : symbol
+>unscopables : unique symbol
 >x : T
 }
 
@@ -19,9 +19,9 @@ foo("", { [Symbol.unscopables]: s => s.length });
 >"" : ""
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }
 >[Symbol.unscopables] : (s: string) => number
->Symbol.unscopables : symbol
+>Symbol.unscopables : unique symbol
 >Symbol : SymbolConstructor
->unscopables : symbol
+>unscopables : unique symbol
 >s => s.length : (s: string) => number
 >s : string
 >s.length : number

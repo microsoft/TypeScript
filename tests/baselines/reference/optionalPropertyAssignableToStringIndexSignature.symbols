@@ -1,0 +1,59 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts ===
+declare let optionalProperties: { k1?: string };
+>optionalProperties : Symbol(optionalProperties, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 0, 11))
+>k1 : Symbol(k1, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 0, 33))
+
+declare let undefinedProperties: { k1: string | undefined };
+>undefinedProperties : Symbol(undefinedProperties, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 1, 11))
+>k1 : Symbol(k1, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 1, 34))
+
+declare let stringDictionary: { [key: string]: string };
+>stringDictionary : Symbol(stringDictionary, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 3, 11))
+>key : Symbol(key, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 3, 33))
+
+stringDictionary = optionalProperties;  // ok
+>stringDictionary : Symbol(stringDictionary, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 3, 11))
+>optionalProperties : Symbol(optionalProperties, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 0, 11))
+
+stringDictionary = undefinedProperties; // error
+>stringDictionary : Symbol(stringDictionary, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 3, 11))
+>undefinedProperties : Symbol(undefinedProperties, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 1, 11))
+
+declare let probablyArray: { [key: number]: string };
+>probablyArray : Symbol(probablyArray, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 7, 11))
+>key : Symbol(key, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 7, 30))
+
+declare let numberLiteralKeys: { 1?: string };
+>numberLiteralKeys : Symbol(numberLiteralKeys, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 8, 11))
+>1 : Symbol(1, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 8, 32))
+
+probablyArray = numberLiteralKeys;  // error
+>probablyArray : Symbol(probablyArray, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 7, 11))
+>numberLiteralKeys : Symbol(numberLiteralKeys, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 8, 11))
+
+declare let optionalUndefined: { k1?: undefined };
+>optionalUndefined : Symbol(optionalUndefined, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 11, 11))
+>k1 : Symbol(k1, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 11, 32))
+
+let dict: { [key: string]: string } = optionalUndefined; // error
+>dict : Symbol(dict, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 12, 3))
+>key : Symbol(key, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 12, 13))
+>optionalUndefined : Symbol(optionalUndefined, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 11, 11))
+
+function f<T>() {
+>f : Symbol(f, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 12, 56))
+>T : Symbol(T, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 14, 11))
+
+	let optional: { k1?: T } = undefined!;
+>optional : Symbol(optional, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 15, 4))
+>k1 : Symbol(k1, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 15, 16))
+>T : Symbol(T, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 14, 11))
+>undefined : Symbol(undefined)
+
+	let dict: { [key: string]: T | number } = optional; // ok
+>dict : Symbol(dict, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 16, 4))
+>key : Symbol(key, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 16, 14))
+>T : Symbol(T, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 14, 11))
+>optional : Symbol(optional, Decl(optionalPropertyAssignableToStringIndexSignature.ts, 15, 4))
+}
+

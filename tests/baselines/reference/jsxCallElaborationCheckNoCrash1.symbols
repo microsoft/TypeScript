@@ -1,0 +1,31 @@
+=== tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : Symbol(React, Decl(jsxCallElaborationCheckNoCrash1.tsx, 2, 6))
+
+type Tags = "span" | "div";
+>Tags : Symbol(Tags, Decl(jsxCallElaborationCheckNoCrash1.tsx, 2, 31))
+
+export const Hoc = <Tag extends Tags>(
+>Hoc : Symbol(Hoc, Decl(jsxCallElaborationCheckNoCrash1.tsx, 6, 12))
+>Tag : Symbol(Tag, Decl(jsxCallElaborationCheckNoCrash1.tsx, 6, 20))
+>Tags : Symbol(Tags, Decl(jsxCallElaborationCheckNoCrash1.tsx, 2, 31))
+
+   TagElement: Tag,
+>TagElement : Symbol(TagElement, Decl(jsxCallElaborationCheckNoCrash1.tsx, 6, 38))
+>Tag : Symbol(Tag, Decl(jsxCallElaborationCheckNoCrash1.tsx, 6, 20))
+
+): React.SFC => {
+>React : Symbol(React, Decl(jsxCallElaborationCheckNoCrash1.tsx, 2, 6))
+>SFC : Symbol(React.SFC, Decl(react16.d.ts, 400, 9))
+
+   const Component = () => <TagElement />;
+>Component : Symbol(Component, Decl(jsxCallElaborationCheckNoCrash1.tsx, 9, 8))
+>TagElement : Symbol(TagElement, Decl(jsxCallElaborationCheckNoCrash1.tsx, 6, 38))
+
+   return Component;
+>Component : Symbol(Component, Decl(jsxCallElaborationCheckNoCrash1.tsx, 9, 8))
+
+};
+

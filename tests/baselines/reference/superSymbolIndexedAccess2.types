@@ -4,9 +4,9 @@ class Foo {
 
     [Symbol.isConcatSpreadable]() {
 >[Symbol.isConcatSpreadable] : () => number
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
         return 0;
 >0 : 0
@@ -19,16 +19,16 @@ class Bar extends Foo {
 
     [Symbol.isConcatSpreadable]() {
 >[Symbol.isConcatSpreadable] : () => number
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
         return super[Symbol.isConcatSpreadable]();
 >super[Symbol.isConcatSpreadable]() : number
 >super[Symbol.isConcatSpreadable] : () => number
 >super : Foo
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
     }
 }

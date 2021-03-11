@@ -337,17 +337,46 @@ namespace ts.codefix {
         if (!signature) {
             return;
         }
-        const paramTags = mapDefined(parameterInferences, inference => {
+
+        const inferences = mapDefined(parameterInferences, inference => {
             const param = inference.declaration;
             // only infer parameters that have (1) no type and (2) an accessible inferred type
-            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
-
+            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) {
+                return;
+            }
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            const name = factory.cloneNode(param.name);
-            setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, "");
+            if (typeNode) {
+                const name = factory.cloneNode(param.name);
+                setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+                return { name: factory.cloneNode(param.name), param, isOptional: !!inference.isOptional, typeNode };
+            }
         });
-        addJSDocTags(changes, sourceFile, signature, paramTags);
+
+        if (!inferences.length) {
+            return;
+        }
+
+        if (isArrowFunction(signature) || isFunctionExpression(signature)) {
+            const needParens = isArrowFunction(signature) && !findChildOfKind(signature, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) {
+                changes.insertNodeBefore(sourceFile, first(signature.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+            }
+
+            forEach(inferences, ({ typeNode, param }) => {
+                const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode));
+                const jsDoc = factory.createJSDocComment(/*comment*/ undefined, [typeTag]);
+                changes.insertNodeAt(sourceFile, param.getStart(sourceFile), jsDoc, { suffix: " " });
+            });
+
+            if (needParens) {
+                changes.insertNodeAfter(sourceFile, last(signature.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+            }
+        }
+        else {
+            const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
+                factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, ""));
+            addJSDocTags(changes, sourceFile, signature, paramTags);
+        }
     }
 
     export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
@@ -418,12 +447,13 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const parent = containingFunction.parent;
-                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
                     parent.name :
                     containingFunction.name;
                 break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 searchToken = containingFunction.name;
                 break;
         }
@@ -920,7 +950,7 @@ namespace ts.codefix {
             const props = createMultiMap<Type>();
             for (const anon of anons) {
                 for (const p of checker.getPropertiesOfType(anon)) {
-                    props.add(p.name, checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration));
+                    props.add(p.name, p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType());
                 }
                 calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
                 constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
@@ -1074,12 +1104,13 @@ namespace ts.codefix {
                 if (!usageParam) {
                     break;
                 }
-                let genericParamType = checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration);
+                let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration) : checker.getAnyType();
                 const elementType = isRest && checker.getElementTypeOfArrayType(genericParamType);
                 if (elementType) {
                     genericParamType = elementType;
                 }
-                const targetType = (usageParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration);
+                const targetType = (usageParam as SymbolLinks).type
+                    || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
                 types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
             }
             const genericReturn = checker.getReturnTypeOfSignature(genericSig);

@@ -30,6 +30,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -70,7 +72,7 @@ define("Class", ["require", "exports", "Configurable"], function (require, expor
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return ActualClass;
-    }(Configurable_1.Configurable(HiddenClass)));
+    }((0, Configurable_1.Configurable)(HiddenClass)));
     exports.ActualClass = ActualClass;
 });
 

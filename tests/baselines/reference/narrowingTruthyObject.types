@@ -133,9 +133,9 @@ function f1(x: unknown): any {
 >x : unknown
 >'object' : "object"
 >x.hasOwnProperty('x') : boolean
->x.hasOwnProperty : (v: string | number | symbol) => boolean
+>x.hasOwnProperty : (v: PropertyKey) => boolean
 >x : object
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >'x' : "x"
 }
 

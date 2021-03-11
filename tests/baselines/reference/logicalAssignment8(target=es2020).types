@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment8.ts ===
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts ===
 declare const bar: { value?: number[] } | undefined
 >bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
@@ -59,3 +59,4 @@ function foo3(results: number[] | undefined) {
 >push : (...items: number[]) => number
 >100 : 100
 }
+

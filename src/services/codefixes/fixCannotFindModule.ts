@@ -44,7 +44,9 @@ namespace ts.codefix {
     }
 
     function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string | undefined {
-        const moduleName = cast(getTokenAtPosition(sourceFile, pos), isStringLiteral).text;
+        const moduleSpecifierText = tryCast(getTokenAtPosition(sourceFile, pos), isStringLiteral);
+        if (!moduleSpecifierText) return undefined;
+        const moduleName = moduleSpecifierText.text;
         const { packageName } = parsePackageName(moduleName);
         return isExternalModuleNameRelative(packageName) ? undefined : packageName;
     }
@@ -52,6 +54,6 @@ namespace ts.codefix {
     function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
         return diagCode === errorCodeCannotFindModule
             ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
-            : (host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined); // TODO: GH#18217
+            : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
     }
 }

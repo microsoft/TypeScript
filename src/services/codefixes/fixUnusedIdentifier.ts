@@ -225,7 +225,7 @@ namespace ts.codefix {
         if (isIdentifier(token)) {
             FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
                 if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
-                if (!isFixAll && isBinaryExpression(ref.parent) && isExpressionStatement(ref.parent.parent) && ref.parent.left === ref) {
+                if (!isFixAll && mayDeleteExpression(ref)) {
                     changes.delete(sourceFile, ref.parent.parent);
                 }
             });
@@ -331,5 +331,10 @@ namespace ts.codefix {
         return isFixAll ?
             parameters.slice(index + 1).every(p => isIdentifier(p.name) && !p.symbol.isReferenced) :
             index === parameters.length - 1;
+    }
+
+    function mayDeleteExpression(node: Node) {
+        return ((isBinaryExpression(node.parent) && node.parent.left === node) ||
+            ((isPostfixUnaryExpression(node.parent) || isPrefixUnaryExpression(node.parent)) && node.parent.operand === node)) && isExpressionStatement(node.parent.parent);
     }
 }

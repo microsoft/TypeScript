@@ -207,7 +207,7 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            match: /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            match: /jquery(-[\d\.]+)?(\.intellisense)?(\.min)?\.js$/i,
             types: ["jquery"]
         },
         "WinJS": {
@@ -757,6 +757,9 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
+        private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
+
+        /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
@@ -919,13 +922,12 @@ namespace ts.server {
                 case ActionSet:
                     // Update the typing files and update the project
                     project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
-                    break;
+                    return;
                 case ActionInvalidate:
                     // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
                     this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
                     return;
             }
-            this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
 
         /*@internal*/
@@ -1279,7 +1281,6 @@ namespace ts.server {
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
-                        configFileSpecs: project.configFileSpecs!,
                         extraFileExtensions: this.hostConfiguration.extraFileExtensions,
                         currentDirectory: this.currentDirectory,
                         options: project.getCompilationSettings(),
@@ -1349,6 +1350,43 @@ namespace ts.server {
                 // we would need to schedule the project reload for only the root of inferred projects
                 this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);
             }
+        }
+
+        /*@internal*/
+        updateSharedExtendedConfigFileMap({ canonicalConfigFilePath }: ConfiguredProject, parsedCommandLine: ParsedCommandLine) {
+            updateSharedExtendedConfigFileWatcher(
+                canonicalConfigFilePath,
+                parsedCommandLine,
+                this.sharedExtendedConfigFileWatchers,
+                (extendedConfigFileName, extendedConfigFilePath) => this.watchFactory.watchFile(
+                    extendedConfigFileName,
+                    () => {
+                        let ensureProjectsForOpenFiles = false;
+                        this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
+                            const project = this.configuredProjects.get(canonicalPath);
+                            // Skip refresh if project is not yet loaded
+                            if (!project || project.isInitialLoadPending()) return;
+                            project.pendingReload = ConfigFileProgramReloadLevel.Full;
+                            project.pendingReloadReason = `Change in extended config file ${extendedConfigFileName} detected`;
+                            this.delayUpdateProjectGraph(project);
+                            ensureProjectsForOpenFiles = true;
+                        });
+                        if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
+                    },
+                    PollingInterval.High,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.ExtendedConfigFile
+                ),
+                fileName => this.toPath(fileName),
+            );
+        }
+
+        /*@internal*/
+        removeProjectFromSharedExtendedConfigFileMap(project: ConfiguredProject) {
+            this.sharedExtendedConfigFileWatchers.forEach(watcher => {
+                watcher.projects.delete(project.canonicalConfigFilePath);
+                watcher.close();
+            });
         }
 
         /**
@@ -1943,28 +1981,17 @@ namespace ts.server {
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension: ts.hasTSFileExtension, host: this.host }, totalNonTsFileSize)); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                    const top5LargestFiles = fileNames.map(f => propertyReader.getFileName(f))
+                        .filter(name => !hasTSFileExtension(name))
+                        .map(name => ({ name, size: this.host.getFileSize!(name) }))
+                        .sort((a, b) => b.size - a.size)
+                        .slice(0, 5);
+                    this.logger.info(`Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${top5LargestFiles.map(file => `${file.name}:${file.size}`).join(", ")}`);
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
             }
-
             this.projectToSizeMap.set(name, totalNonTsFileSize);
-
-            return;
-
-            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
-                const files = getTop5LargestFiles(context);
-
-                return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
-            }
-            function getTop5LargestFiles({ propertyReader, hasTSFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }) {
-                return fileNames.map(f => propertyReader.getFileName(f))
-                    .filter(name => hasTSFileExtension(name))
-                    .map(name => ({ name, size: host.getFileSize!(name) })) // TODO: GH#18217
-                    .sort((a, b) => b.size - a.size)
-                    .slice(0, 5);
-            }
         }
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
@@ -2052,7 +2079,6 @@ namespace ts.server {
                 this,
                 this.documentRegistry,
                 cachedDirectoryStructureHost);
-            // TODO: We probably should also watch the configFiles that are extended
             project.createConfigFileWatcher();
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
@@ -2128,7 +2154,6 @@ namespace ts.server {
                     configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined
                 };
             }
-            project.configFileSpecs = parsedCommandLine.configFileSpecs;
             project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
@@ -2136,12 +2161,14 @@ namespace ts.server {
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
                 project.stopWatchingWildCards();
+                this.removeProjectFromSharedExtendedConfigFileMap(project);
             }
             else {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
                 project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
+                this.updateSharedExtendedConfigFileMap(project, parsedCommandLine);
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
@@ -2237,11 +2264,11 @@ namespace ts.server {
          */
         /*@internal*/
         reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
-            const configFileSpecs = project.configFileSpecs!; // TODO: GH#18217
+            const configFileSpecs = project.getCompilerOptions().configFile!.configFileSpecs!;
             const configFileName = project.getConfigFilePath();
-            const fileNamesResult = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
-            project.updateErrorOnNoInputFiles(fileNamesResult);
-            this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
+            const fileNames = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
+            project.updateErrorOnNoInputFiles(fileNames);
+            this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
         }
 
@@ -2680,7 +2707,7 @@ namespace ts.server {
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
-                return snap.getText(0, snap.getLength());
+                return getSnapshotText(snap);
             };
             const projectName = project.projectName;
             const documentPositionMapper = getDocumentPositionMapper(
@@ -2902,7 +2929,7 @@ namespace ts.server {
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
-         * If the there is no existing project it just opens the configured project for the config file
+         * If there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {

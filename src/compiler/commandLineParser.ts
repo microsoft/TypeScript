@@ -28,6 +28,7 @@ namespace ts {
         ["es2018", "lib.es2018.d.ts"],
         ["es2019", "lib.es2019.d.ts"],
         ["es2020", "lib.es2020.d.ts"],
+        ["es2021", "lib.es2021.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -67,14 +68,17 @@ namespace ts {
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
+        ["es2021.promise", "lib.es2021.promise.d.ts"],
+        ["es2021.string", "lib.es2021.string.d.ts"],
+        ["es2021.weakref", "lib.es2021.weakref.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-        ["esnext.string", "lib.esnext.string.d.ts"],
-        ["esnext.promise", "lib.esnext.promise.d.ts"],
-        ["esnext.weakref", "lib.esnext.weakref.d.ts"]
+        ["esnext.string", "lib.es2021.string.d.ts"],
+        ["esnext.promise", "lib.es2021.promise.d.ts"],
+        ["esnext.weakref", "lib.es2021.weakref.d.ts"]
     ];
 
     /**
@@ -101,11 +105,12 @@ namespace ts {
                 fixedpollinginterval: WatchFileKind.FixedPollingInterval,
                 prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
                 dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
+                fixedchunksizepolling: WatchFileKind.FixedChunkSizePolling,
                 usefsevents: WatchFileKind.UseFsEvents,
                 usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
+            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_FixedChunkSizePolling_UseFsEvents_UseFsEventsOnParentDirectory,
         },
         {
             name: "watchDirectory",
@@ -113,9 +118,10 @@ namespace ts {
                 usefsevents: WatchDirectoryKind.UseFsEvents,
                 fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
                 dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
+                fixedchunksizepolling: WatchDirectoryKind.FixedChunkSizePolling,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
+            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling_FixedChunkSizePolling,
         },
         {
             name: "fallbackPolling",
@@ -123,9 +129,10 @@ namespace ts {
                 fixedinterval: PollingWatchKind.FixedInterval,
                 priorityinterval: PollingWatchKind.PriorityInterval,
                 dynamicpriority: PollingWatchKind.DynamicPriority,
+                fixedchunksize: PollingWatchKind.FixedChunkSize,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
+            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority_FixedChunkSize,
         },
         {
             name: "synchronousWatchDirectory",
@@ -196,6 +203,11 @@ namespace ts {
             description: Diagnostics.Print_names_of_files_part_of_the_compilation
         },
         {
+            name: "explainFiles",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Print_names_of_files_and_the_reason_they_are_part_of_the_compilation
+        },        {
             name: "listEmittedFiles",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
@@ -269,6 +281,32 @@ namespace ts {
     ];
 
     /* @internal */
+    export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
+        name: "target",
+        shortName: "t",
+        type: new Map(getEntries({
+            es3: ScriptTarget.ES3,
+            es5: ScriptTarget.ES5,
+            es6: ScriptTarget.ES2015,
+            es2015: ScriptTarget.ES2015,
+            es2016: ScriptTarget.ES2016,
+            es2017: ScriptTarget.ES2017,
+            es2018: ScriptTarget.ES2018,
+            es2019: ScriptTarget.ES2019,
+            es2020: ScriptTarget.ES2020,
+            es2021: ScriptTarget.ES2021,
+            esnext: ScriptTarget.ESNext,
+        })),
+        affectsSourceFile: true,
+        affectsModuleResolution: true,
+        affectsEmit: true,
+        paramType: Diagnostics.VERSION,
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Basic_Options,
+        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
+    };
+
+    /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         // CommandLine only options
         ...commonOptionsWithBuild,
@@ -330,29 +368,7 @@ namespace ts {
         },
 
         // Basic
-        {
-            name: "target",
-            shortName: "t",
-            type: new Map(getEntries({
-                es3: ScriptTarget.ES3,
-                es5: ScriptTarget.ES5,
-                es6: ScriptTarget.ES2015,
-                es2015: ScriptTarget.ES2015,
-                es2016: ScriptTarget.ES2016,
-                es2017: ScriptTarget.ES2017,
-                es2018: ScriptTarget.ES2018,
-                es2019: ScriptTarget.ES2019,
-                es2020: ScriptTarget.ES2020,
-                esnext: ScriptTarget.ESNext,
-            })),
-            affectsSourceFile: true,
-            affectsModuleResolution: true,
-            affectsEmit: true,
-            paramType: Diagnostics.VERSION,
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
-        },
+        targetOptionDeclaration,
         {
             name: "module",
             shortName: "m",
@@ -410,7 +426,7 @@ namespace ts {
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_react_native_or_react,
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_react_native_react_react_jsx_or_react_jsxdev,
         },
         {
             name: "declaration",
@@ -662,8 +678,6 @@ namespace ts {
         {
             name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
-            affectsBindDiagnostics: true,
-            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses
@@ -1063,13 +1077,6 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
-        },
-        {
-            name: "bundledPackageName",
-            type: "string",
-            affectsEmit: true,
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Provides_a_root_package_name_when_using_outFile_with_declarations,
         },
 
         {
@@ -1604,7 +1611,7 @@ namespace ts {
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
-            config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
+            config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*reportOptionsErrors*/ false, /*optionsIterator*/ undefined),
             error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
         };
     }
@@ -1768,11 +1775,35 @@ namespace ts {
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
+    function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>, reportOptionsErrors: boolean, optionsIterator: JsonConversionNotifier | undefined): any {
+        const rootExpression: Expression | undefined = sourceFile.statements[0]?.expression;
+        const knownRootOptions = reportOptionsErrors ? getTsconfigRootOptionsMap() : undefined;
+        if (rootExpression && rootExpression.kind !== SyntaxKind.ObjectLiteralExpression) {
+            errors.push(createDiagnosticForNodeInSourceFile(
+                sourceFile,
+                rootExpression,
+                Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                getBaseFileName(sourceFile.fileName) === "jsconfig.json" ? "jsconfig.json" : "tsconfig.json"
+            ));
+            // Last-ditch error recovery. Somewhat useful because the JSON parser will recover from some parse errors by
+            // synthesizing a top-level array literal expression. There's a reasonable chance the first element of that
+            // array is a well-formed configuration object, made into an array element by stray characters.
+            if (isArrayLiteralExpression(rootExpression)) {
+                const firstObject = find(rootExpression.elements, isObjectLiteralExpression);
+                if (firstObject) {
+                    return convertToObjectWorker(sourceFile, firstObject, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+                }
+            }
+            return {};
+        }
+        return convertToObjectWorker(sourceFile, rootExpression, errors, /*returnValue*/ true, knownRootOptions, optionsIterator);
+    }
+
     /**
      * Convert the json syntax tree into the json value
      */
     export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
-        return convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+        return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
     }
 
     /**
@@ -1783,15 +1814,16 @@ namespace ts {
     /*@internal*/
     export function convertToObjectWorker(
         sourceFile: JsonSourceFile,
+        rootExpression: Expression | undefined,
         errors: Push<Diagnostic>,
         returnValue: boolean,
         knownRootOptions: CommandLineOption | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
-        if (!sourceFile.statements.length) {
+        if (!rootExpression) {
             return returnValue ? {} : undefined;
         }
 
-        return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
+        return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
         function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
             return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
@@ -2032,10 +2064,10 @@ namespace ts {
         const files = map(
             filter(
                 configParseResult.fileNames,
-                (!configParseResult.configFileSpecs || !configParseResult.configFileSpecs.validatedIncludeSpecs) ? _ => true : matchesSpecs(
+                !configParseResult.options.configFile?.configFileSpecs?.validatedIncludeSpecs ? returnTrue : matchesSpecs(
                     configFileName,
-                    configParseResult.configFileSpecs.validatedIncludeSpecs,
-                    configParseResult.configFileSpecs.validatedExcludeSpecs,
+                    configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs,
+                    configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs,
                     host,
                 )
             ),
@@ -2060,9 +2092,9 @@ namespace ts {
             watchOptions: watchOptionMap && optionMapToObject(watchOptionMap),
             references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath ? r.originalPath : "", originalPath: undefined })),
             files: length(files) ? files : undefined,
-            ...(configParseResult.configFileSpecs ? {
-                include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
-                exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
+            ...(configParseResult.options.configFile?.configFileSpecs ? {
+                include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),
+                exclude: configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs
             } : {}),
             compileOnSave: !!configParseResult.compileOnSave ? true : undefined
         };
@@ -2083,7 +2115,7 @@ namespace ts {
     }
 
     function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined, excludeSpecs: readonly string[] | undefined, host: ConvertToTSConfigHost): (path: string) => boolean {
-        if (!includeSpecs) return _ => true;
+        if (!includeSpecs) return returnTrue;
         const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, host.useCaseSensitiveFileNames, host.getCurrentDirectory());
         const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, host.useCaseSensitiveFileNames);
         const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, host.useCaseSensitiveFileNames);
@@ -2096,7 +2128,7 @@ namespace ts {
         if (excludeRe) {
             return path => excludeRe.test(path);
         }
-        return _ => true;
+        return returnTrue;
     }
 
     function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): ESMap<string, string | number> | undefined {
@@ -2389,40 +2421,29 @@ namespace ts {
             parsedConfig.watchOptions || existingWatchOptions;
 
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
+        const configFileSpecs = getConfigFileSpecs();
+        if (sourceFile) sourceFile.configFileSpecs = configFileSpecs;
         setConfigFileInOptions(options, sourceFile);
-        let projectReferences: ProjectReference[] | undefined;
-        const { fileNames, wildcardDirectories, spec } = getFileNames();
+
+        const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
         return {
             options,
             watchOptions,
-            fileNames,
-            projectReferences,
+            fileNames: getFileNames(basePathForFileNames),
+            projectReferences: getProjectReferences(basePathForFileNames),
             typeAcquisition: parsedConfig.typeAcquisition || getDefaultTypeAcquisition(),
             raw,
             errors,
-            wildcardDirectories,
+            // Wildcard directories (provided as part of a wildcard path) are stored in a
+            // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
+            // or a recursive directory. This information is used by filesystem watchers to monitor for
+            // new entries in these paths.
+            wildcardDirectories: getWildcardDirectories(configFileSpecs, basePathForFileNames, host.useCaseSensitiveFileNames),
             compileOnSave: !!raw.compileOnSave,
-            configFileSpecs: spec
         };
 
-        function getFileNames(): ExpandResult {
+        function getConfigFileSpecs(): ConfigFileSpecs {
             const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
-            if (isArray(referencesOfRaw)) {
-                for (const ref of referencesOfRaw) {
-                    if (typeof ref.path !== "string") {
-                        createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
-                    }
-                    else {
-                        (projectReferences || (projectReferences = [])).push({
-                            path: getNormalizedAbsolutePath(ref.path, basePath),
-                            originalPath: ref.path,
-                            prepend: ref.prepend,
-                            circular: ref.circular
-                        });
-                    }
-                }
-            }
-
             const filesSpecs = toPropValue(getSpecsFromRaw("files"));
             if (filesSpecs) {
                 const hasZeroOrNoReferences = referencesOfRaw === "no-prop" || isArray(referencesOfRaw) && referencesOfRaw.length === 0;
@@ -2459,13 +2480,57 @@ namespace ts {
             if (filesSpecs === undefined && includeSpecs === undefined) {
                 includeSpecs = ["**/*"];
             }
+            let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
-            const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (shouldReportNoInputFiles(result, canJsonReportNoInputFiles(raw), resolutionStack)) {
-                errors.push(getErrorForNoInputFiles(result.spec, configFileName));
+            // The exclude spec list is converted into a regular expression, which allows us to quickly
+            // test whether a file or directory should be excluded before recursively traversing the
+            // file system.
+
+            if (includeSpecs) {
+                validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, sourceFile, "include");
             }
 
-            return result;
+            if (excludeSpecs) {
+                validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, sourceFile, "exclude");
+            }
+
+            return {
+                filesSpecs,
+                includeSpecs,
+                excludeSpecs,
+                validatedFilesSpec: filter(filesSpecs, isString),
+                validatedIncludeSpecs,
+                validatedExcludeSpecs,
+            };
+        }
+
+        function getFileNames(basePath: string): string[] {
+            const fileNames = getFileNamesFromConfigSpecs(configFileSpecs, basePath, options, host, extraFileExtensions);
+            if (shouldReportNoInputFiles(fileNames, canJsonReportNoInputFiles(raw), resolutionStack)) {
+                errors.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
+            }
+            return fileNames;
+        }
+
+        function getProjectReferences(basePath: string): readonly ProjectReference[] | undefined {
+            let projectReferences: ProjectReference[] | undefined;
+            const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
+            if (isArray(referencesOfRaw)) {
+                for (const ref of referencesOfRaw) {
+                    if (typeof ref.path !== "string") {
+                        createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
+                    }
+                    else {
+                        (projectReferences || (projectReferences = [])).push({
+                            path: getNormalizedAbsolutePath(ref.path, basePath),
+                            originalPath: ref.path,
+                            prepend: ref.prepend,
+                            circular: ref.circular
+                        });
+                    }
+                }
+            }
+            return projectReferences;
         }
 
         type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
@@ -2513,8 +2578,8 @@ namespace ts {
             JSON.stringify(excludeSpecs || []));
     }
 
-    function shouldReportNoInputFiles(result: ExpandResult, canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
-        return result.fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
+    function shouldReportNoInputFiles(fileNames: string[], canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
+        return fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
     }
 
     /*@internal*/
@@ -2523,9 +2588,9 @@ namespace ts {
     }
 
     /*@internal*/
-    export function updateErrorForNoInputFiles(result: ExpandResult, configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+    export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
         const existingErrors = configParseDiagnostics.length;
-        if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles)) {
+        if (shouldReportNoInputFiles(fileNames, canJsonReportNoInutFiles)) {
             configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
         }
         else {
@@ -2585,14 +2650,17 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors, extendedConfigCache);
+            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, resolutionStack, errors, extendedConfigCache);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
                 const baseRaw = extendedConfig.raw;
                 const raw = ownConfig.raw;
+                let relativeDifference: string | undefined ;
                 const setPropertyInRawIfNotUndefined = (propertyName: string) => {
-                    const value = raw[propertyName] || baseRaw[propertyName];
-                    if (value) {
-                        raw[propertyName] = value;
+                    if (!raw[propertyName] && baseRaw[propertyName]) {
+                        raw[propertyName] = map(baseRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
+                            relativeDifference ||= convertToRelativePath(getDirectoryPath(ownConfig.extendedConfigPath!), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                            path
+                        ));
                     }
                 };
                 setPropertyInRawIfNotUndefined("include");
@@ -2698,7 +2766,7 @@ namespace ts {
                 }
             }
         };
-        const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+        const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
 
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
@@ -2754,7 +2822,6 @@ namespace ts {
         sourceFile: TsConfigSourceFile | undefined,
         extendedConfigPath: string,
         host: ParseConfigHost,
-        basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
         extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
@@ -2769,25 +2836,8 @@ namespace ts {
         else {
             extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
             if (!extendedResult.parseDiagnostics.length) {
-                const extendedDirname = getDirectoryPath(extendedConfigPath);
-                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
+                extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, getDirectoryPath(extendedConfigPath),
                     getBaseFileName(extendedConfigPath), resolutionStack, errors, extendedConfigCache);
-
-                if (isSuccessfulParsedTsconfig(extendedConfig)) {
-                    // Update the paths to reflect base path
-                    const relativeDifference = convertToRelativePath(extendedDirname, basePath, identity);
-                    const updatePath = (path: string) => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
-                    const mapPropertiesInRawIfNotUndefined = (propertyName: string) => {
-                        if (raw[propertyName]) {
-                            raw[propertyName] = map(raw[propertyName], updatePath);
-                        }
-                    };
-
-                    const { raw } = extendedConfig;
-                    mapPropertiesInRawIfNotUndefined("include");
-                    mapPropertiesInRawIfNotUndefined("exclude");
-                    mapPropertiesInRawIfNotUndefined("files");
-                }
             }
             if (extendedConfigCache) {
                 extendedConfigCache.set(path, { extendedResult, extendedConfig });
@@ -3014,64 +3064,9 @@ namespace ts {
     const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
 
     /**
-     * Expands an array of file specifications.
-     *
-     * @param filesSpecs The literal file names to include.
-     * @param includeSpecs The wildcard file specifications to include.
-     * @param excludeSpecs The wildcard file specifications to exclude.
-     * @param basePath The base path for any relative file specifications.
-     * @param options Compiler options.
-     * @param host The host used to resolve files and directories.
-     * @param errors An array for diagnostic reporting.
-     */
-    function matchFileNames(
-        filesSpecs: readonly string[] | undefined,
-        includeSpecs: readonly string[] | undefined,
-        excludeSpecs: readonly string[] | undefined,
-        basePath: string,
-        options: CompilerOptions,
-        host: ParseConfigHost,
-        errors: Push<Diagnostic>,
-        extraFileExtensions: readonly FileExtensionInfo[],
-        jsonSourceFile: TsConfigSourceFile | undefined
-    ): ExpandResult {
-        basePath = normalizePath(basePath);
-        let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
-
-        // The exclude spec list is converted into a regular expression, which allows us to quickly
-        // test whether a file or directory should be excluded before recursively traversing the
-        // file system.
-
-        if (includeSpecs) {
-            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, jsonSourceFile, "include");
-        }
-
-        if (excludeSpecs) {
-            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, jsonSourceFile, "exclude");
-        }
-
-        // Wildcard directories (provided as part of a wildcard path) are stored in a
-        // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
-        // or a recursive directory. This information is used by filesystem watchers to monitor for
-        // new entries in these paths.
-        const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
-
-        const spec: ConfigFileSpecs = {
-            filesSpecs,
-            includeSpecs,
-            excludeSpecs,
-            validatedFilesSpec: filter(filesSpecs, isString),
-            validatedIncludeSpecs,
-            validatedExcludeSpecs,
-            wildcardDirectories
-        };
-        return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
-    }
-
-    /**
      * Gets the file names from the provided config file specs that contain, files, include, exclude and
      * other properties needed to resolve the file names
-     * @param spec The config file specs extracted with file names to include, wildcards to include/exclude and other details
+     * @param configFileSpecs The config file specs extracted with file names to include, wildcards to include/exclude and other details
      * @param basePath The base path for any relative file specifications.
      * @param options Compiler options.
      * @param host The host used to resolve files and directories.
@@ -3079,12 +3074,12 @@ namespace ts {
      */
     /* @internal */
     export function getFileNamesFromConfigSpecs(
-        spec: ConfigFileSpecs,
+        configFileSpecs: ConfigFileSpecs,
         basePath: string,
         options: CompilerOptions,
         host: ParseConfigHost,
         extraFileExtensions: readonly FileExtensionInfo[] = emptyArray
-    ): ExpandResult {
+    ): string[] {
         basePath = normalizePath(basePath);
 
         const keyMapper = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -3103,7 +3098,7 @@ namespace ts {
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard of *.json kind
         const wildCardJsonFileMap = new Map<string, string>();
-        const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
+        const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs } = configFileSpecs;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -3164,11 +3159,7 @@ namespace ts {
         const literalFiles = arrayFrom(literalFileMap.values());
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
 
-        return {
-            fileNames: literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values())),
-            wildcardDirectories,
-            spec
-        };
+        return literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values()));
     }
 
     /* @internal */
@@ -3253,7 +3244,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(include: readonly string[] | undefined, exclude: readonly string[] | undefined, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+    function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //

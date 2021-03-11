@@ -32,6 +32,6 @@ exports.buzz = buzz;
 exports.buzz = buzz += 3;
 var bizz = 8;
 exports.bizz = bizz;
-exports.bizz = bizz += 1; // compiles to exports.bizz = bizz += 1
-exports.bizz = bizz -= 1; // similarly
+(exports.bizz = ++bizz) - 1; // compiles to exports.bizz = bizz += 1
+(exports.bizz = --bizz) + 1; // similarly
 exports.bizz = ++bizz; // compiles to exports.bizz = ++bizz

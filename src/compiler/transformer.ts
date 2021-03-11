@@ -54,6 +54,10 @@ namespace ts {
             transformers.push(transformESNext);
         }
 
+        if (languageVersion < ScriptTarget.ES2021) {
+            transformers.push(transformES2021);
+        }
+
         if (languageVersion < ScriptTarget.ES2020) {
             transformers.push(transformES2020);
         }
@@ -223,9 +227,9 @@ namespace ts {
         // Transform each node.
         const transformed: T[] = [];
         for (const node of nodes) {
-            tracing.push(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
+            tracing?.push(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
             transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
-            tracing.pop();
+            tracing?.pop();
         }
 
         // prevent modification of the lexical environment.

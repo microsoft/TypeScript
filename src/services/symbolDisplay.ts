@@ -71,8 +71,6 @@ namespace ts.SymbolDisplay {
                     if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                         return ScriptElementKind.memberVariableElement;
                     }
-                    // May be a Function if this was from `typeof N` with `namespace N { function f();. }`.
-                    Debug.assert(!!(rootSymbolFlags & (SymbolFlags.Method | SymbolFlags.Function)));
                 });
                 if (!unionPropertyKind) {
                     // If this was union of all methods,
@@ -102,31 +100,42 @@ namespace ts.SymbolDisplay {
         return ScriptElementKind.unknown;
     }
 
+    function isDeprecatedDeclaration(decl: Declaration) {
+        return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+    }
+
+    function getNormalizedSymbolModifiers(symbol: Symbol) {
+        if (symbol.declarations && symbol.declarations.length) {
+            const [declaration, ...declarations] = symbol.declarations;
+            // omit deprecated flag if some declarations are not deprecated
+            const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d => !isDeprecatedDeclaration(d))
+                ? ModifierFlags.Deprecated
+                : ModifierFlags.None;
+            const modifiers = getNodeModifiers(declaration, excludeFlags);
+            if (modifiers) {
+                return modifiers.split(",");
+            }
+        }
+        return [];
+    }
+
     export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): string {
         if (!symbol) {
             return ScriptElementKindModifier.none;
         }
 
-        const modifiers = new Set<string>();
-        if (symbol.declarations && symbol.declarations.length > 0) {
-            const kindModifiers = getNodeModifiers(symbol.declarations[0]);
-            if (kindModifiers !== ScriptElementKindModifier.none) {
-                kindModifiers.split(",").forEach(m => modifiers.add(m));
-            }
-        }
+        const modifiers = new Set(getNormalizedSymbolModifiers(symbol));
         if (symbol.flags & SymbolFlags.Alias) {
             const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
-            if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
-                const kindModifiers = getNodeModifiers(resolvedSymbol.declarations[0]);
-                if (kindModifiers !== ScriptElementKindModifier.none) {
-                    kindModifiers.split(",").forEach(m => modifiers.add(m));
-                }
+            if (resolvedSymbol !== symbol) {
+                forEach(getNormalizedSymbolModifiers(resolvedSymbol), modifier => {
+                    modifiers.add(modifier);
+                });
             }
         }
         if (symbol.flags & SymbolFlags.Optional) {
             modifiers.add(ScriptElementKindModifier.optionalModifier);
         }
-
         return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
     }
 
@@ -211,6 +220,10 @@ namespace ts.SymbolDisplay {
                         pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
+                            if (signature.flags & SignatureFlags.Abstract) {
+                                displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                displayParts.push(spacePart());
+                            }
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                             displayParts.push(spacePart());
                         }
@@ -236,6 +249,10 @@ namespace ts.SymbolDisplay {
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
+                                if (signature.flags & SignatureFlags.Abstract) {
+                                    displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                    displayParts.push(spacePart());
+                                }
                                 displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                 displayParts.push(spacePart());
                             }
@@ -384,8 +401,8 @@ namespace ts.SymbolDisplay {
         if (symbolFlags & SymbolFlags.EnumMember) {
             symbolKind = ScriptElementKind.enumMemberElement;
             addPrefixForAnyFunctionOrVar(symbol, "enum member");
-            const declaration = symbol.declarations[0];
-            if (declaration.kind === SyntaxKind.EnumMember) {
+            const declaration = symbol.declarations?.[0];
+            if (declaration?.kind === SyntaxKind.EnumMember) {
                 const constantValue = typeChecker.getConstantValue(<EnumMember>declaration);
                 if (constantValue !== undefined) {
                     displayParts.push(spacePart());
@@ -422,25 +439,31 @@ namespace ts.SymbolDisplay {
                         documentationFromAlias = resolvedInfo.documentation;
                         tagsFromAlias = resolvedInfo.tags;
                     }
+                    else {
+                        documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
+                        tagsFromAlias = resolvedSymbol.getJsDocTags();
+                    }
                 }
             }
 
-            switch (symbol.declarations[0].kind) {
-                case SyntaxKind.NamespaceExportDeclaration:
-                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                    displayParts.push(spacePart());
-                    displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
-                    break;
-                case SyntaxKind.ExportAssignment:
-                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                    displayParts.push(spacePart());
-                    displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
-                    break;
-                case SyntaxKind.ExportSpecifier:
-                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
-                    break;
-                default:
-                    displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+            if (symbol.declarations) {
+                switch (symbol.declarations[0].kind) {
+                    case SyntaxKind.NamespaceExportDeclaration:
+                        displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                        displayParts.push(spacePart());
+                        displayParts.push(keywordPart(SyntaxKind.NamespaceKeyword));
+                        break;
+                    case SyntaxKind.ExportAssignment:
+                        displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                        displayParts.push(spacePart());
+                        displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
+                        break;
+                    case SyntaxKind.ExportSpecifier:
+                        displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                        break;
+                    default:
+                        displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
+                }
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
@@ -535,7 +558,7 @@ namespace ts.SymbolDisplay {
             // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
             // there documentation comments might be attached to the right hand side symbol of their declarations.
             // The pattern of such special property access is that the parent symbol is the symbol of the file.
-            if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+            if (symbol.parent && symbol.declarations && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
                 for (const declaration of symbol.declarations) {
                     if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
                         continue;
