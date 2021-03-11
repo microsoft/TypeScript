@@ -2322,7 +2322,7 @@
         "category": "Error",
         "code": 2538
     },
-    "Cannot assign to '{0}' because it is immutable.": {
+    "Cannot assign to '{0}' because it is not a variable.": {
         "category": "Error",
         "code": 2539
     },
@@ -2653,6 +2653,26 @@
     "Type at positions {0} through {1} in source is not compatible with type at position {2} in target.": {
         "category": "Error",
         "code": 2627
+    },
+    "Cannot assign to '{0}' because it is an enum.": {
+        "category": "Error",
+        "code": 2628
+    },
+    "Cannot assign to '{0}' because it is a class.": {
+        "category": "Error",
+        "code": 2629
+    },
+    "Cannot assign to '{0}' because it is a function.": {
+        "category": "Error",
+        "code": 2630
+    },
+    "Cannot assign to '{0}' because it is a namespace.": {
+        "category": "Error",
+        "code": 2631
+    },
+    "Cannot assign to '{0}' because it is an import.": {
+        "category": "Error",
+        "code": 2632
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
