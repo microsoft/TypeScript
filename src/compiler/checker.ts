@@ -1811,6 +1811,11 @@ namespace ts {
                             }
                         }
                         break;
+                    case SyntaxKind.TypeParameter:
+                        if (location.locals && (result = lookup(location.locals, name, meaning & SymbolFlags.Type))) {
+                            break loop;
+                        }
+                        break;
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
@@ -9462,11 +9467,11 @@ namespace ts {
                 const index = 0;// or it should be symbol.declarations.length-1 ?
                 const declration = symbol.declarations[index];
                 // this means it is typeConstructor.
-                if (isTypeParameterDeclaration(declration) && declration.hkTypeParamDeclarations && declration.hkTypeParamDeclarations.length > 0) {
+                if (isTypeParameterDeclaration(declration) && declration.typeParameters && declration.typeParameters.length > 0) {
                     tmp.flags |= TypeFlags.TypeConstructorDeclaration;
                     // This line is important, which combines Node and Type.
                     // for now Node.paras is not used but its length. So constrait is not used for now.
-                    (<TypeConstructorPolymorphismDeclaration>tmp).tParams = declration.hkTypeParamDeclarations.length;
+                    (<TypeConstructorPolymorphismDeclaration>tmp).tParams = declration.typeParameters.length;
                 }
                 links.declaredType = tmp;
             }

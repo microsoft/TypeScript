@@ -83,7 +83,7 @@ namespace ts {
                     visitNode(cbNode, (<QualifiedName>node).right);
             case SyntaxKind.TypeParameter:
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<TypeParameterDeclaration>node).hkTypeParamDeclarations)||
+                    visitNodes(cbNode, cbNodes, (<TypeParameterDeclaration>node).typeParameters)||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);

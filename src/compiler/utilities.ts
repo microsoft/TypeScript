@@ -814,6 +814,7 @@ namespace ts {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.TypeParameter:
                 return true;
             default:
                 assertType<never>(node);

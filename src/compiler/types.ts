@@ -1203,8 +1203,8 @@ namespace ts {
         // For error recovery purposes.
         expression?: Expression;
 
-        // If this is not empty, it is a type constructor.
-        hkTypeParamDeclarations?: NodeArray<TypeParameterDeclaration>;
+        /** If this is not empty, it is a type constructor. So this might be considered as hkTypeParamDeclarations*/
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
     }
 
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
