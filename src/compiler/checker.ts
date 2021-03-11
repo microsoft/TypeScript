@@ -14334,7 +14334,7 @@ namespace ts {
                         addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                     }
                     if (accessExpression) {
-                        markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
+                        markPropertyAsReferenced(prop, accessExpression, isSelfTypeAccess(accessExpression.expression, objectType.symbol));
                         if (isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression))) {
                             error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(prop));
                             return undefined;
@@ -26796,7 +26796,7 @@ namespace ts {
                     addDeprecatedSuggestion(right, prop.declarations, right.escapedText as string);
                 }
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
-                markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
+                markPropertyAsReferenced(prop, node, isSelfTypeAccess(left, parentSymbol));
                 getNodeLinks(node).resolvedSymbol = prop;
                 checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, apparentType, prop);
                 if (isAssignmentToReadonlyEntity(node as Expression, prop, assignmentKind)) {
@@ -27125,7 +27125,7 @@ namespace ts {
             }
         }
 
-        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
+        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isSelfTypeAccess: boolean) {
             const valueDeclaration = prop && (prop.flags & SymbolFlags.ClassMember) && prop.valueDeclaration;
             if (!valueDeclaration) {
                 return;
@@ -27138,8 +27138,7 @@ namespace ts {
             if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor)) {
                 return;
             }
-
-            if (isThisAccess) {
+            if (isSelfTypeAccess) {
                 // Find any FunctionLikeDeclaration because those create a new 'this' binding. But this should only matter for methods (or getters/setters).
                 const containingMethod = findAncestor(nodeForCheckWriteOnly, isFunctionLikeDeclaration);
                 if (containingMethod && containingMethod.symbol === prop) {
@@ -27148,6 +27147,11 @@ namespace ts {
             }
 
             (getCheckFlags(prop) & CheckFlags.Instantiated ? getSymbolLinks(prop).target : prop)!.isReferenced = SymbolFlags.All;
+        }
+
+        function isSelfTypeAccess(name: Expression | QualifiedName, parent: Symbol | undefined) {
+            return name.kind === SyntaxKind.ThisKeyword
+                || !!parent && isEntityNameExpression(name) && parent === getResolvedSymbol(getFirstIdentifier(name));
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: __String): boolean {
@@ -34700,7 +34704,7 @@ namespace ts {
                         const nameText = getPropertyNameFromType(exprType);
                         const property = getPropertyOfType(parentType, nameText);
                         if (property) {
-                            markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                            markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isSelfTypeAccess*/ false); // A destructuring is never a write-only reference.
                             checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
                         }
                     }
@@ -41504,5 +41508,4 @@ namespace ts {
     export function signatureHasLiteralTypes(s: Signature) {
         return !!(s.flags & SignatureFlags.HasLiteralTypes);
     }
-
 }
