@@ -21398,14 +21398,12 @@ namespace ts {
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
         // separated by dots). The key consists of the id of the symbol referenced by the
         // leftmost identifier followed by zero or more property names separated by dots.
-        // The result is undefined if the reference isn't a dotted name. We prefix nodes
-        // occurring in an apparent type position with '@' because the control flow type
-        // of such nodes may be based on the apparent type instead of the declared type.
+        // The result is undefined if the reference isn't a dotted name.
         function getFlowCacheKey(node: Node, declaredType: Type, initialType: Type, flowContainer: Node | undefined): string | undefined {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     const symbol = getResolvedSymbol(<Identifier>node);
-                    return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${isConstraintPosition(node) ? "@" : ""}${getSymbolId(symbol)}` : undefined;
+                    return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${getSymbolId(symbol)}` : undefined;
                 case SyntaxKind.ThisKeyword:
                     return `0|${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}`;
                 case SyntaxKind.NonNullExpression:
