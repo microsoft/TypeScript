@@ -46,7 +46,7 @@ namespace ts.codefix {
 
         let suggestedSymbol: Symbol | undefined;
         if (isPropertyAccessExpression(parent) && parent.name === node) {
-            Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
+            Debug.assert(isMemberName(node), "Expected an identifier for spelling (property access)");
             let containingType = checker.getTypeAtLocation(parent.expression);
             if (parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
@@ -87,7 +87,7 @@ namespace ts.codefix {
         const suggestion = symbolName(suggestedSymbol);
         if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
             const valDecl = suggestedSymbol.valueDeclaration;
-            if (isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
+            if (valDecl && isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
                 changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));
             }
             else {

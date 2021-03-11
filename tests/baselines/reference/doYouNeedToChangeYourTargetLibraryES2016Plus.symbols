@@ -111,7 +111,7 @@ const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 const testBigInt = BigInt(123);
 >testBigInt : Symbol(testBigInt, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 38, 5))
 
-// esnext
+// es2021
 const testPromiseAny = Promise.any([]);
 >testPromiseAny : Symbol(testPromiseAny, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 41, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -119,8 +119,9 @@ const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
 >testStringReplaceAll : Symbol(testStringReplaceAll, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 42, 5))
 
+// esnext
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
->testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 43, 5))
+>testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 45, 5))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

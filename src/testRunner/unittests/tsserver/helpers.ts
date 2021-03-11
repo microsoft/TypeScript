@@ -440,6 +440,13 @@ namespace ts.projectSystem {
         return iterResult.value;
     }
 
+    export function checkOrphanScriptInfos(service: server.ProjectService, expectedFiles: readonly string[]) {
+        checkArray("Orphan ScriptInfos:", arrayFrom(mapDefinedIterator(
+            service.filenameToScriptInfo.values(),
+            v => v.containingProjects.length === 0 ? v.fileName : undefined
+        )), expectedFiles);
+    }
+
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
         checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }

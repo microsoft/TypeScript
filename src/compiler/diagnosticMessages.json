@@ -503,7 +503,7 @@
         "category": "Error",
         "code": 1165
     },
-    "A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.": {
+    "A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.": {
         "category": "Error",
         "code": 1166
     },
@@ -1962,7 +1962,7 @@
         "category": "Error",
         "code": 2445
     },
-    "Property '{0}' is protected and only accessible through an instance of class '{1}'.": {
+    "Property '{0}' is protected and only accessible through an instance of class '{1}'. This is an instance of class '{2}'.": {
         "category": "Error",
         "code": 2446
     },
@@ -3260,6 +3260,10 @@
         "category": "Error",
         "code": 2801
     },
+    "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
+        "category": "Error",
+        "code": 2802
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3846,6 +3850,10 @@
         "category": "Error",
         "code": 5091
     },
+    "The root value of a '{0}' file must be an object.": {
+        "category": "Error",
+        "code": 5092
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3907,7 +3915,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -4693,15 +4701,15 @@
         "category": "Message",
         "code": 6224
     },
-    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
         "category": "Message",
         "code": 6225
     },
-    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling'.": {
         "category": "Message",
         "code": 6226
     },
-    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority', 'FixedChunkSize'.": {
         "category": "Message",
         "code": 6227
     },
@@ -6249,7 +6257,6 @@
         "category": "Message",
         "code": 95159
     },
-
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

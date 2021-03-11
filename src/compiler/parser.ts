@@ -819,7 +819,7 @@ namespace ts {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
-                convertToObjectWorker(result, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+                convertToObjectWorker(result, result.statements[0]?.expression, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
                 result.referencedFiles = emptyArray;
                 result.typeReferenceDirectives = emptyArray;
                 result.libReferenceDirectives = emptyArray;
@@ -862,36 +862,56 @@ namespace ts {
                 endOfFileToken = parseTokenNode<EndOfFileToken>();
             }
             else {
-                let expression;
-                switch (token()) {
-                    case SyntaxKind.OpenBracketToken:
-                        expression = parseArrayLiteralExpression();
-                        break;
-                    case SyntaxKind.TrueKeyword:
-                    case SyntaxKind.FalseKeyword:
-                    case SyntaxKind.NullKeyword:
-                        expression = parseTokenNode<BooleanLiteral | NullLiteral>();
-                        break;
-                    case SyntaxKind.MinusToken:
-                        if (lookAhead(() => nextToken() === SyntaxKind.NumericLiteral && nextToken() !== SyntaxKind.ColonToken)) {
-                            expression = parsePrefixUnaryExpression() as JsonMinusNumericLiteral;
-                        }
-                        else {
-                            expression = parseObjectLiteralExpression();
-                        }
-                        break;
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.StringLiteral:
-                        if (lookAhead(() => nextToken() !== SyntaxKind.ColonToken)) {
-                            expression = parseLiteralNode() as StringLiteral | NumericLiteral;
+                // Loop and synthesize an ArrayLiteralExpression if there are more than
+                // one top-level expressions to ensure all input text is consumed.
+                let expressions: Expression[] | Expression | undefined;
+                while (token() !== SyntaxKind.EndOfFileToken) {
+                    let expression;
+                    switch (token()) {
+                        case SyntaxKind.OpenBracketToken:
+                            expression = parseArrayLiteralExpression();
                             break;
+                        case SyntaxKind.TrueKeyword:
+                        case SyntaxKind.FalseKeyword:
+                        case SyntaxKind.NullKeyword:
+                            expression = parseTokenNode<BooleanLiteral | NullLiteral>();
+                            break;
+                        case SyntaxKind.MinusToken:
+                            if (lookAhead(() => nextToken() === SyntaxKind.NumericLiteral && nextToken() !== SyntaxKind.ColonToken)) {
+                                expression = parsePrefixUnaryExpression() as JsonMinusNumericLiteral;
+                            }
+                            else {
+                                expression = parseObjectLiteralExpression();
+                            }
+                            break;
+                        case SyntaxKind.NumericLiteral:
+                        case SyntaxKind.StringLiteral:
+                            if (lookAhead(() => nextToken() !== SyntaxKind.ColonToken)) {
+                                expression = parseLiteralNode() as StringLiteral | NumericLiteral;
+                                break;
+                            }
+                            // falls through
+                        default:
+                            expression = parseObjectLiteralExpression();
+                            break;
+                    }
+
+                    // Error recovery: collect multiple top-level expressions
+                    if (expressions && isArray(expressions)) {
+                        expressions.push(expression);
+                    }
+                    else if (expressions) {
+                        expressions = [expressions, expression];
+                    }
+                    else {
+                        expressions = expression;
+                        if (token() !== SyntaxKind.EndOfFileToken) {
+                            parseErrorAtCurrentToken(Diagnostics.Unexpected_token);
                         }
-                        // falls through
-                    default:
-                        expression = parseObjectLiteralExpression();
-                        break;
+                    }
                 }
 
+                const expression = isArray(expressions) ? finishNode(factory.createArrayLiteralExpression(expressions), pos) : Debug.checkDefined(expressions);
                 const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
                 finishNode(statement, pos);
                 statements = createNodeArray([statement], pos);
@@ -6259,6 +6279,7 @@ namespace ts {
 
         function parseVariableDeclaration(allowExclamation?: boolean): VariableDeclaration {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             const name = parseIdentifierOrPattern(Diagnostics.Private_identifiers_are_not_allowed_in_variable_declarations);
             let exclamationToken: ExclamationToken | undefined;
             if (allowExclamation && name.kind === SyntaxKind.Identifier &&
@@ -6268,7 +6289,7 @@ namespace ts {
             const type = parseTypeAnnotation();
             const initializer = isInOrOfKeyword(token()) ? undefined : parseInitializer();
             const node = factory.createVariableDeclaration(name, exclamationToken, type, initializer);
-            return finishNode(node, pos);
+            return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
         function parseVariableDeclarationList(inForStatementInitializer: boolean): VariableDeclarationList {
@@ -8043,6 +8064,9 @@ namespace ts {
                 function parseTemplateTagTypeParameter() {
                     const typeParameterPos = getNodePos();
                     const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
+                    if (nodeIsMissing(name)) {
+                        return undefined;
+                    }
                     return finishNode(factory.createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined), typeParameterPos);
                 }
 
@@ -8051,7 +8075,10 @@ namespace ts {
                     const typeParameters = [];
                     do {
                         skipWhitespace();
-                        typeParameters.push(parseTemplateTagTypeParameter());
+                        const node = parseTemplateTagTypeParameter();
+                        if (node !== undefined) {
+                            typeParameters.push(node);
+                        }
                         skipWhitespaceOrAsterisk();
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
                     return createNodeArray(typeParameters, pos);
