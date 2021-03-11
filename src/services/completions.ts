@@ -392,12 +392,15 @@ namespace ts.Completions {
         propertyAccessToConvert: PropertyAccessExpression | undefined,
         isJsxInitializer: IsJsxInitializer | undefined,
         importCompletionNode: Node | undefined,
+        useSemicolons: boolean,
         options: CompilerOptions,
         preferences: UserPreferences,
     ): CompletionEntry | undefined {
         let insertText: string | undefined;
         let replacementSpan = getReplacementSpanForContextToken(contextToken);
         let data: CompletionEntryData | undefined;
+        let isSnippet: true | undefined;
+        let sourceDisplay;
 
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
@@ -446,7 +449,9 @@ namespace ts.Completions {
 
         if (originIsResolvedExport(origin)) {
             Debug.assertIsDefined(importCompletionNode);
-            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, options, preferences));
+            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, useSemicolons, options, preferences));
+            sourceDisplay = [textPart(origin.moduleSpecifier)];
+            isSnippet = true;
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
@@ -481,12 +486,14 @@ namespace ts.Completions {
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
+            sourceDisplay,
+            isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
             data,
         };
     }
 
-    function getInsertTextAndReplacementSpanForImportCompletion(name: string, importCompletionNode: Node, origin: SymbolOriginInfoResolvedExport, options: CompilerOptions, preferences: UserPreferences) {
+    function getInsertTextAndReplacementSpanForImportCompletion(name: string, importCompletionNode: Node, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, options: CompilerOptions, preferences: UserPreferences) {
         const sourceFile = importCompletionNode.getSourceFile();
         const replacementSpan = createTextSpanFromNode(importCompletionNode, sourceFile);
         const quotedModuleSpecifier = quote(sourceFile, preferences, origin.moduleSpecifier);
@@ -495,11 +502,12 @@ namespace ts.Completions {
             origin.exportName === InternalSymbolName.ExportEquals ? codefix.ExportKind.ExportEquals :
             codefix.ExportKind.Named;
         const importKind = codefix.getImportKind(sourceFile, exportKind, options);
+        const suffix = useSemicolons ? ";" : "";
         switch (importKind) {
-            case codefix.ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name} = require(${quotedModuleSpecifier})` };
-            case codefix.ImportKind.Default: return { replacementSpan, insertText: `import ${name} from ${quotedModuleSpecifier}` };
-            case codefix.ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name} from ${quotedModuleSpecifier}` };
-            case codefix.ImportKind.Named: return { replacementSpan, insertText: `import { ${name} } from ${quotedModuleSpecifier}` };
+            case codefix.ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}$1 = require(${quotedModuleSpecifier})${suffix}` };
+            case codefix.ImportKind.Default: return { replacementSpan, insertText: `import ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
+            case codefix.ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
+            case codefix.ImportKind.Named: return { replacementSpan, insertText: `import { ${name}$1 } from ${quotedModuleSpecifier}${suffix}` };
         }
     }
 
@@ -551,6 +559,7 @@ namespace ts.Completions {
     ): UniqueNameSet {
         const start = timestamp();
         const variableDeclaration = getVariableDeclaration(location);
+        const useSemicolons = probablyUsesSemicolons(sourceFile);
         // Tracks unique names.
         // Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
         // true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
@@ -579,6 +588,7 @@ namespace ts.Completions {
                 propertyAccessToConvert,
                 isJsxInitializer,
                 importCompletionNode,
+                useSemicolons,
                 compilerOptions,
                 preferences
             );

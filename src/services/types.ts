@@ -1164,6 +1164,7 @@ namespace ts {
         kindModifiers?: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
         insertText?: string;
+        isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.

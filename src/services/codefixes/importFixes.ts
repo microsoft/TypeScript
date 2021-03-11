@@ -760,7 +760,8 @@ namespace ts.codefix {
         //    really hate that, so look to see if the importing file has any precedent
         //    on how to handle it.
         for (const statement of importingFile.statements) {
-            if (isImportEqualsDeclaration(statement)) {
+            // `import foo` parses as an ImportEqualsDeclaration even though it could be an ImportDeclaration
+            if (isImportEqualsDeclaration(statement) && !nodeIsMissing(statement.moduleReference)) {
                 return ImportKind.CommonJS;
             }
         }

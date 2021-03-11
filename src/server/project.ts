@@ -1168,8 +1168,8 @@ namespace ts.server {
                 }
                 else if (this.dirtyFilesForSuggestions && oldProgram && this.program) {
                     forEachKey(this.dirtyFilesForSuggestions, fileName => {
-                        const oldSourceFile = oldProgram.getSourceFile(fileName);
-                        const sourceFile = this.program!.getSourceFile(fileName);
+                        const oldSourceFile = oldProgram.getSourceFileByPath(fileName);
+                        const sourceFile = this.program!.getSourceFileByPath(fileName);
                         if (this.sourceFileHasChangedOwnImportSuggestions(oldSourceFile, sourceFile)) {
                             this.importSuggestionsCache.clear();
                             return true;
