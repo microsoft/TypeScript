@@ -2,8 +2,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/deprecatedInheritedJSDocOverload.ts",
-      "position": 1183,
-      "name": ""
+      "position": 1183
     },
     "quickInfo": {
       "kind": "method",
