@@ -111,3 +111,4 @@ async function fun(deepPromised) {
     }
 }
 baz(xx);
+export {};

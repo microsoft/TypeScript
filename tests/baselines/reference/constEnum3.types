@@ -13,7 +13,7 @@ function f1(f: TestType) { }
 >f : TestType
 
 function f2(f: TestTypeStr) { }
->f2 : (f: "foo" | "bar") => void
+>f2 : (f: TestTypeStr) => void
 >f : "foo" | "bar"
 
 f1(TestType.foo)

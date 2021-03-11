@@ -131,7 +131,7 @@ function f6(x: number, y: 1 | 2) {
 }
 
 function f7(x: number | "foo" | "bar", y: 1 | 2 | string) {
->f7 : (x: number | "foo" | "bar", y: string | 1 | 2) => void
+>f7 : (x: number | "foo" | "bar", y: 1 | 2 | string) => void
 >x : number | "foo" | "bar"
 >y : string | 1 | 2
 

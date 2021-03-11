@@ -20,15 +20,15 @@ class Derived3 extends Base { biz() { } }
 
 interface Document2 {
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>createElement : { (tagName: 'canvas'): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >tagName : "canvas"
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>createElement : { (tagName: "canvas"): Derived1; (tagName: 'div'): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >tagName : "div"
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
+>createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: 'span'): Derived3; (tagName: string): Base; }
 >tagName : "span"
 
     createElement(tagName: string): Base;

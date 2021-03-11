@@ -319,7 +319,7 @@ else {
 // Repro from #37660
 
 function foo(instance: Function | object) {
->foo : (instance: object | Function) => number
+>foo : (instance: Function | object) => number
 >instance : object | Function
 
     if (typeof instance === 'function') {

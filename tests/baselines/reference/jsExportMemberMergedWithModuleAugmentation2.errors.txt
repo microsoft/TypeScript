@@ -1,0 +1,27 @@
+/index.ts(4,16): error TS2300: Duplicate identifier 'a'.
+/index.ts(7,3): error TS2339: Property 'toFixed' does not exist on type 'string'.
+/test.js(2,3): error TS2300: Duplicate identifier 'a'.
+
+
+==== /test.js (1 errors) ====
+    module.exports = {
+      a: "ok"
+      ~
+!!! error TS2300: Duplicate identifier 'a'.
+!!! related TS6203 /index.ts:4:16: 'a' was also declared here.
+    };
+    
+==== /index.ts (2 errors) ====
+    import { a } from "./test";
+    
+    declare module "./test" {
+      export const a: number;
+                   ~
+!!! error TS2300: Duplicate identifier 'a'.
+!!! related TS6203 /test.js:2:3: 'a' was also declared here.
+    }
+    
+    a.toFixed();
+      ~~~~~~~
+!!! error TS2339: Property 'toFixed' does not exist on type 'string'.
+    

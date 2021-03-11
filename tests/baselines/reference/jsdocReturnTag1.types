@@ -13,7 +13,7 @@ function f() {
  * @returns {string=} This comment is not currently exposed
  */
 function f1() {
->f1 : () => string
+>f1 : () => string | undefined
 
     return 5;
 >5 : 5

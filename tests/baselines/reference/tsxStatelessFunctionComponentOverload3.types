@@ -8,7 +8,7 @@ declare function ZeroThingOrTwoThing(): JSX.Element;
 >JSX : any
 
 declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Context): JSX.Element;
->ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: {    yy: number;    yy1: string;}, context: Context): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string
@@ -55,19 +55,19 @@ const two5 = <ZeroThingOrTwoThing  {...obj2} yy={1000} />;  // it is just any so
 >1000 : 1000
 
 declare function ThreeThing(l: {y1: string}): JSX.Element;
->ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
+>ThreeThing : { (l: {    y1: string;}): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >l : { y1: string; }
 >y1 : string
 >JSX : any
 
 declare function ThreeThing(l: {y2: string}): JSX.Element;
->ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: {    y2: string;}): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >l : { y2: string; }
 >y2 : string
 >JSX : any
 
 declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, updater: any): JSX.Element;
->ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: {    yy: number;    yy1: string;}, context: Context, updater: any): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string

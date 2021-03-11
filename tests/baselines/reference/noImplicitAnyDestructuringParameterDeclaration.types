@@ -18,7 +18,7 @@ function f2([a = undefined], {b = null}, c = undefined, d = null) { // error
 >null : null
 }
 function f3([a]: [any], {b}: { b: any }, c: any, d: any) {
->f3 : ([a]: [any], { b }: { b: any; }, c: any, d: any) => void
+>f3 : ([a]: [any], { b }: {    b: any;}, c: any, d: any) => void
 >a : any
 >b : any
 >b : any
@@ -26,7 +26,7 @@ function f3([a]: [any], {b}: { b: any }, c: any, d: any) {
 >d : any
 }
 function f4({b}: { b }, x: { b }) { // error in type instead
->f4 : ({ b }: { b: any; }, x: { b: any; }) => void
+>f4 : ({ b }: {    b;}, x: {    b;}) => void
 >b : any
 >b : any
 >x : { b: any; }

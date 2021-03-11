@@ -4,9 +4,12 @@ class C {
     qux = this.bar // should error
     bar = this.foo // should error
     quiz = this.bar // ok
+    quench = this.m1() // ok
+    quanch = this.m3() // should error
     m1() {
         this.foo // ok
     }
+    m3 = function() { }
     constructor(public foo: string) {}
     quim = this.baz // should error
     baz = this.foo; // should error

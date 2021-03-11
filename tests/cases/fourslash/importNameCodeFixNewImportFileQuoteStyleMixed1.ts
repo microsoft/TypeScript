@@ -15,9 +15,9 @@
 //// export var v3 = 6;
 
 verify.importFixAtPosition([
-`import { v2 } from './module2';
+`import { f1 } from './module1';
+import { v2 } from './module2';
 import { v3 } from "./module3";
-import { f1 } from './module1';
 
 f1();`
 ]);

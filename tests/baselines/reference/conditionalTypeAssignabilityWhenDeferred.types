@@ -1,12 +1,12 @@
 === tests/cases/compiler/conditionalTypeAssignabilityWhenDeferred.ts ===
 export type FilterPropsByType<T, TT> = {
->FilterPropsByType : { [K in keyof T]: T[K] extends TT ? K : never; }[keyof T]
+>FilterPropsByType : FilterPropsByType<T, TT>
 
   [K in keyof T]: T[K] extends TT ? K : never
 }[keyof T];
 
 function select<
->select : <T extends string | number, TList extends object, TValueProp extends { [K in keyof TList]: TList[K] extends T ? K : never; }[keyof TList]>(property: T, list: TList[], valueProp: TValueProp) => void
+>select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
 
   T extends string | number,
   TList extends object,
@@ -17,14 +17,14 @@ function select<
 >valueProp : TValueProp
 
 export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
->func : <XX extends string>(x: XX, tipos: { value: XX; }[]) => void
+>func : <XX extends string>(x: XX, tipos: {    value: XX;}[]) => void
 >x : XX
 >tipos : { value: XX; }[]
 >value : XX
 
   select(x, tipos, "value");
 >select(x, tipos, "value") : void
->select : <T extends string | number, TList extends object, TValueProp extends { [K in keyof TList]: TList[K] extends T ? K : never; }[keyof TList]>(property: T, list: TList[], valueProp: TValueProp) => void
+>select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
 >x : XX
 >tipos : { value: XX; }[]
 >"value" : "value"
@@ -104,7 +104,7 @@ function f<T>(t: T) {
 }
 
 function f2<T>(t1: { x: T; y: T }, t2: T extends T ? { x: T; y: T } : never) {
->f2 : <T>(t1: { x: T; y: T; }, t2: T extends T ? { x: T; y: T; } : never) => void
+>f2 : <T>(t1: {    x: T;    y: T;}, t2: T extends T ? {    x: T;    y: T;} : never) => void
 >t1 : { x: T; y: T; }
 >x : T
 >y : T

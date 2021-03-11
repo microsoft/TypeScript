@@ -27,6 +27,18 @@ x(
 
 x();
 
+/* @ts-ignore */
+/*another comment
+ that could be multiline*/
+
+x();
+
+/* @ts-ignore
+continuing comment
+ that could be multiline*/
+
+x();
+
 
 
 // @ts-ignore: no call signature

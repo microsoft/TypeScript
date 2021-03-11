@@ -22,6 +22,6 @@ class fn {\r
     bar() {\r
         console.log('hello world');\r
     }\r
-}\r
+}
 `,
 });

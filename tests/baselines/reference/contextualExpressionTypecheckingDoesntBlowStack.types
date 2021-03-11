@@ -59,7 +59,7 @@ export default class Operation {
 >name : any
 
             if(innerResult && innerResult.length > 0) {
->innerResult && innerResult.length > 0 : boolean
+>innerResult && innerResult.length > 0 : any
 >innerResult : any
 >innerResult.length > 0 : boolean
 >innerResult.length : any

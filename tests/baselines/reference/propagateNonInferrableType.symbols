@@ -1,0 +1,14 @@
+=== tests/cases/compiler/propagateNonInferrableType.ts ===
+declare function resolver<T>(): () => void;
+>resolver : Symbol(resolver, Decl(propagateNonInferrableType.ts, 0, 0))
+>T : Symbol(T, Decl(propagateNonInferrableType.ts, 0, 26))
+
+declare function wrapResolver<T>(resolverFunction: () => void): void;
+>wrapResolver : Symbol(wrapResolver, Decl(propagateNonInferrableType.ts, 0, 43))
+>T : Symbol(T, Decl(propagateNonInferrableType.ts, 1, 30))
+>resolverFunction : Symbol(resolverFunction, Decl(propagateNonInferrableType.ts, 1, 33))
+
+wrapResolver(resolver() || []);
+>wrapResolver : Symbol(wrapResolver, Decl(propagateNonInferrableType.ts, 0, 43))
+>resolver : Symbol(resolver, Decl(propagateNonInferrableType.ts, 0, 0))
+

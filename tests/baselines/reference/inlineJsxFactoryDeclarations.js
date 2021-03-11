@@ -49,14 +49,14 @@ exports.__esModule = true;
 exports.prerendered = void 0;
 /** @jsx h */
 var renderer_1 = require("./renderer");
-exports.prerendered = renderer_1.dom("h", null);
+exports.prerendered = (0, renderer_1.dom)("h", null);
 //// [othernoalias.js]
 "use strict";
 exports.__esModule = true;
 exports.prerendered2 = void 0;
 /** @jsx otherdom */
 var renderer_1 = require("./renderer");
-exports.prerendered2 = renderer_1.otherdom("h", null);
+exports.prerendered2 = (0, renderer_1.otherdom)("h", null);
 //// [reacty.js]
 "use strict";
 exports.__esModule = true;
@@ -73,12 +73,12 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
-renderer_1.dom("h", null);
+(0, renderer_1.dom)("h", null);
 __exportStar(require("./other"), exports);
 __exportStar(require("./othernoalias"), exports);
 __exportStar(require("./reacty"), exports);

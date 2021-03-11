@@ -12,7 +12,7 @@ export function Point(x, y) {
 >!(this instanceof Point) : boolean
 >(this instanceof Point) : boolean
 >this instanceof Point : boolean
->this : any
+>this : this
 >Point : typeof Point
 
         return new Point(x, y);
@@ -24,14 +24,14 @@ export function Point(x, y) {
     this.x = x;
 >this.x = x : number
 >this.x : any
->this : any
+>this : this
 >x : any
 >x : number
 
     this.y = y;
 >this.y = y : number
 >this.y : any
->this : any
+>this : this
 >y : any
 >y : number
 }

@@ -1,4 +1,73 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/app/file3.ts]
+export const z = 30;
+import { x } from "lib/file1";
+
+//// [/src/app/file4.ts]
+const myVar = 30;
+
+//// [/src/app/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "strict": false,
+        "sourceMap": true,
+        "declarationMap": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"],
+    "references": [
+        { "path": "../lib", "prepend": true }
+    ]
+}
+
+//// [/src/lib/file0.ts]
+const myGlob = 20;
+
+//// [/src/lib/file1.ts]
+export const x = 10;
+
+//// [/src/lib/file2.ts]
+export const y = 20;
+
+//// [/src/lib/global.ts]
+const globalConst = 10;
+
+//// [/src/lib/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "strict": false,
+        "outFile": "../module.js", "rootDir": "../"
+    },
+    "exclude": ["module.d.ts"]
+
+}
+
+
+
+Output::
 /lib/tsc -b /src/app --verbose
 [[90m12:00:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -14,10 +83,6 @@
 
 exitCode:: ExitStatus.Success
 
-
-//// [/src/app/file3.ts]
-export const z = 30;
-import { x } from "lib/file1";
 
 //// [/src/app/module.d.ts]
 declare const myGlob = 20;
@@ -406,60 +471,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file3.ts",
-      "./file4.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 467,
-          "kind": "prepend",
-          "data": "../module.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 467,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 467,
-          "end": 693,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 179,
-          "kind": "prepend",
-          "data": "../module.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 179,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 179,
-          "end": 261,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":467,"kind":"prepend","data":"../module.js","texts":[{"pos":0,"end":467,"kind":"text"}]},{"pos":467,"end":693,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":179,"kind":"prepend","data":"../module.d.ts","texts":[{"pos":0,"end":179,"kind":"text"}]},{"pos":179,"end":261,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -518,19 +530,60 @@ declare const myVar = 30;
 
 ======================================================================
 
-//// [/src/lib/tsconfig.json]
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "strict": false,
-        "outFile": "../module.js", "rootDir": "../"
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 467,
+          "kind": "prepend",
+          "data": "../module.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 467,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 467,
+          "end": 693,
+          "kind": "text"
+        }
+      ]
     },
-    "exclude": ["module.d.ts"]
-
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 179,
+          "kind": "prepend",
+          "data": "../module.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 179,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 179,
+          "end": 261,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/module.d.ts]
@@ -802,36 +855,7 @@ sourceFile:lib/global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./lib/file0.ts",
-      "./lib/file1.ts",
-      "./lib/file2.ts",
-      "./lib/global.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 467,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 179,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./lib/file0.ts","./lib/file1.ts","./lib/file2.ts","./lib/global.ts"],"js":{"sections":[{"pos":0,"end":467,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":179,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -868,4 +892,36 @@ declare module "lib/file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./lib/file0.ts",
+      "./lib/file1.ts",
+      "./lib/file2.ts",
+      "./lib/global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 467,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 179,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

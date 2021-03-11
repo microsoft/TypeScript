@@ -10,7 +10,7 @@
         this.x = 1
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
     }

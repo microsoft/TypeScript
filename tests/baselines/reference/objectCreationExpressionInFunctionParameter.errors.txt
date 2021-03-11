@@ -1,4 +1,4 @@
-tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts(5,24): error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts(5,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts(6,2): error TS1128: Declaration or statement expected.
 
 
@@ -9,7 +9,7 @@ tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts(6,2): error 
     }
     function foo(x = new A(123)) { //should error, 123 is not string
                            ~~~
-!!! error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     }}
      ~
 !!! error TS1128: Declaration or statement expected.

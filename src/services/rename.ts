@@ -13,7 +13,21 @@ namespace ts.Rename {
 
     function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
-        if (!symbol) return;
+        if (!symbol) {
+            if (isStringLiteralLike(node)) {
+                const type = getContextualTypeOrAncestorTypeNodeType(node, typeChecker);
+                if (type && ((type.flags & TypeFlags.StringLiteral) || (
+                    (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
+                ))) {
+                    return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.string, "", node, sourceFile);
+                }
+            }
+            else if (isLabelName(node)) {
+                const name = getTextOfNode(node);
+                return getRenameInfoSuccess(name, name, ScriptElementKind.label, ScriptElementKindModifier.none, node, sourceFile);
+            }
+            return undefined;
+        }
         // Only allow a symbol to be renamed if it actually has at least one declaration.
         const { declarations } = symbol;
         if (!declarations || declarations.length === 0) return;
@@ -38,7 +52,7 @@ namespace ts.Rename {
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);
         const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
+        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker,symbol), node, sourceFile);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
@@ -46,7 +60,7 @@ namespace ts.Rename {
             return getRenameInfoError(Diagnostics.You_cannot_rename_a_module_via_a_global_import);
         }
 
-        const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
+        const moduleSourceFile = moduleSymbol.declarations && find(moduleSymbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
         const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;

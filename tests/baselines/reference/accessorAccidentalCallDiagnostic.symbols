@@ -1,0 +1,19 @@
+=== tests/cases/compiler/accessorAccidentalCallDiagnostic.ts ===
+// https://github.com/microsoft/TypeScript/issues/24554
+class Test24554 {
+>Test24554 : Symbol(Test24554, Decl(accessorAccidentalCallDiagnostic.ts, 0, 0))
+
+    get property(): number { return 1; }
+>property : Symbol(Test24554.property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
+}
+function test24554(x: Test24554) {
+>test24554 : Symbol(test24554, Decl(accessorAccidentalCallDiagnostic.ts, 3, 1))
+>x : Symbol(x, Decl(accessorAccidentalCallDiagnostic.ts, 4, 19))
+>Test24554 : Symbol(Test24554, Decl(accessorAccidentalCallDiagnostic.ts, 0, 0))
+
+    return x.property();
+>x.property : Symbol(Test24554.property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
+>x : Symbol(x, Decl(accessorAccidentalCallDiagnostic.ts, 4, 19))
+>property : Symbol(Test24554.property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
+}
+

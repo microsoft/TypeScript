@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsdoc/declarations/utils/index.js ===
+// issue arises here on compilation
+const errors = require("./errors");
+>errors : typeof errors
+>require("./errors") : typeof errors
+>require : any
+>"./errors" : "./errors"
+
+module.exports = {
+>module.exports = {    errors} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    errors} : { errors: typeof errors; }
+
+    errors
+>errors : typeof errors
+
+};
+=== tests/cases/conformance/jsdoc/declarations/utils/errors.js ===
+class FancyError extends Error {
+>FancyError : FancyError
+>Error : Error
+
+    constructor(status) {
+>status : any
+
+        super(`error with status ${status}`);
+>super(`error with status ${status}`) : void
+>super : ErrorConstructor
+>`error with status ${status}` : string
+>status : any
+    }
+}
+
+module.exports = {
+>module.exports = {    FancyError} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    FancyError} : { FancyError: typeof FancyError; }
+
+    FancyError
+>FancyError : typeof FancyError
+
+};
+

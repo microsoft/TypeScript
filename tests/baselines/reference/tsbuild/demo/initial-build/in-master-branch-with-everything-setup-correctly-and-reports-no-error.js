@@ -1,4 +1,149 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/animals/animal.ts]
+export type Size = "small" | "medium" | "large";
+export default interface Animal {
+    size: Size;
+}
+
+
+//// [/src/animals/dog.ts]
+import Animal from '.';
+import { makeRandomName } from '../core/utilities';
+
+export interface Dog extends Animal {
+    woof(): void;
+    name: string;
+}
+
+export function createDog(): Dog {
+    return ({
+        size: "medium",
+        woof: function(this: Dog) {
+            console.log(`${this.name} says "Woof"!`);
+        },
+        name: makeRandomName()
+    });
+}
+
+
+
+//// [/src/animals/index.ts]
+import Animal from './animal';
+
+export default Animal;
+import { createDog, Dog } from './dog';
+export { createDog, Dog };
+
+
+//// [/src/animals/tsconfig.json]
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../lib/animals",
+    "rootDir": ".",
+  },
+  "references": [
+    { "path": "../core" }
+  ]
+}
+
+
+//// [/src/core/tsconfig.json]
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../lib/core",
+    "rootDir": "."
+  }
+}
+
+//// [/src/core/utilities.ts]
+
+export function makeRandomName() {
+    return "Bob!?! ";
+}
+
+export function lastElementOf<T>(arr: T[]): T | undefined {
+    if (arr.length === 0) return undefined;
+    return arr[arr.length - 1];
+}
+
+
+
+//// [/src/tsconfig-base.json]
+{
+    "compilerOptions": {
+        "declaration": true,
+        "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "composite": true
+    }
+}
+
+//// [/src/tsconfig.json]
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./core"
+    },
+    {
+      "path": "./animals"
+    },
+    {
+      "path": "./zoo"
+    }
+  ]
+}
+
+//// [/src/zoo/tsconfig.json]
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "outDir": "../lib/zoo",
+    "rootDir": "."
+  },
+  "references": [
+    {
+      "path": "../animals"
+    }
+  ]
+}
+
+//// [/src/zoo/zoo.ts]
+import { Dog, createDog } from '../animals/index';
+
+export function createZoo(): Array<Dog> {
+    return [
+        createDog()
+    ];
+}
+
+
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.json --verbose
 [[90m12:00:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -53,7 +198,7 @@ function createDog() {
         woof: function () {
             console.log(this.name + " says \"Woof\"!");
         },
-        name: utilities_1.makeRandomName()
+        name: (0, utilities_1.makeRandomName)()
     });
 }
 exports.createDog = createDog;
@@ -70,12 +215,14 @@ export { createDog, Dog };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDog = void 0;
-var animal_1 = require("./animal");
 var dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 
 //// [/src/lib/animals/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","signature":"13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","affectsGlobalScope":false},{"version":"-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","signature":"4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","affectsGlobalScope":false},{"version":"-8177343116-export declare function makeRandomName(): string;\r\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\r\n","signature":"-8177343116-export declare function makeRandomName(): string;\r\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\r\n","affectsGlobalScope":false},{"version":"-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","signature":"10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n","affectsGlobalScope":false}],"options":{"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"./","rootDir":"../../animals","configFilePath":"../../animals/tsconfig.json"},"fileIdsList":[[2,3],[1,4],[2]],"referencedMap":[[4,0],[2,1]],"exportedModulesMap":[[4,2],[2,1]],"semanticDiagnosticsPerFile":[0,1,4,2,3]},"version":"FakeTSVersion"}
+
+//// [/src/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -150,6 +297,9 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
 }
 
 //// [/src/lib/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"25274411612-\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n","signature":"-8177343116-export declare function makeRandomName(): string;\r\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\r\n","affectsGlobalScope":false}],"options":{"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"./","rootDir":"../../core","configFilePath":"../../core/tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1]},"version":"FakeTSVersion"}
+
+//// [/src/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -210,6 +360,9 @@ exports.lastElementOf = lastElementOf;
 
 
 //// [/src/lib/zoo/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","../animals/animal.d.ts","../animals/dog.d.ts","../animals/index.d.ts","../../zoo/zoo.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","signature":"13427676350-export declare type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","affectsGlobalScope":false},{"version":"10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n","signature":"10854678623-import Animal from '.';\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\nexport declare function createDog(): Dog;\r\n","affectsGlobalScope":false},{"version":"4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","signature":"4477582546-import Animal from './animal';\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","affectsGlobalScope":false},{"version":"8797123924-import { Dog, createDog } from '../animals/index';\r\n\r\nexport function createZoo(): Array<Dog> {\r\n    return [\r\n        createDog()\r\n    ];\r\n}\r\n\r\n","signature":"-17433436879-import { Dog } from '../animals/index';\r\nexport declare function createZoo(): Array<Dog>;\r\n","affectsGlobalScope":false}],"options":{"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"./","rootDir":"../../zoo","configFilePath":"../../zoo/tsconfig.json"},"fileIdsList":[[3],[1,2]],"referencedMap":[[2,0],[3,1],[4,0]],"exportedModulesMap":[[2,0],[3,1],[4,0]],"semanticDiagnosticsPerFile":[0,1,2,3,4]},"version":"FakeTSVersion"}
+
+//// [/src/lib/zoo/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -300,7 +453,7 @@ exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
-        index_1.createDog()
+        (0, index_1.createDog)()
     ];
 }
 exports.createZoo = createZoo;

@@ -17,13 +17,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 function decorate(target) { }
-let Decorated = /** @class */ (() => {
-    let Decorated = class Decorated {
-    };
-    Decorated = __decorate([
-        decorate
-    ], Decorated);
-    return Decorated;
-})();
+let Decorated = class Decorated {
+};
+Decorated = __decorate([
+    decorate
+], Decorated);
 export default Decorated;
 //// [undecorated.js]
+export {};

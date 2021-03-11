@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment9.ts ===
+declare let x: { a?: boolean };
+>x : Symbol(x, Decl(logicalAssignment9.ts, 0, 11))
+>a : Symbol(a, Decl(logicalAssignment9.ts, 0, 16))
+
+x.a ??= true;
+>x.a : Symbol(a, Decl(logicalAssignment9.ts, 0, 16))
+>x : Symbol(x, Decl(logicalAssignment9.ts, 0, 11))
+>a : Symbol(a, Decl(logicalAssignment9.ts, 0, 16))
+
+x.a &&= false;
+>x.a : Symbol(a, Decl(logicalAssignment9.ts, 0, 16))
+>x : Symbol(x, Decl(logicalAssignment9.ts, 0, 11))
+>a : Symbol(a, Decl(logicalAssignment9.ts, 0, 16))
+

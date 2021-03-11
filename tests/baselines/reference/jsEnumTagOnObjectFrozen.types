@@ -75,7 +75,7 @@ exports.Thing = Thing;
  * @param {Thing} x
  */
 function useThing(x) {}
->useThing : (x: string) => void
+>useThing : (x: Thing) => void
 >x : string
 
 exports.useThing = useThing;
@@ -89,7 +89,7 @@ exports.useThing = useThing;
  * @param {(x: Thing) => void} x
  */
 function cbThing(x) {}
->cbThing : (x: (x: string) => void) => void
+>cbThing : (x: (x: Thing) => void) => void
 >x : (x: string) => void
 
 exports.cbThing = cbThing;

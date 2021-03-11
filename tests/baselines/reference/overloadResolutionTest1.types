@@ -1,11 +1,11 @@
 === tests/cases/compiler/overloadResolutionTest1.ts ===
 function foo(bar:{a:number;}[]):string;
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: number; }[]
 >a : number
 
 function foo(bar:{a:boolean;}[]):number;
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>foo : { (bar: { a: number; }[]): string; (bar: {    a: boolean;}[]): number; }
 >bar : { a: boolean; }[]
 >a : boolean
 
@@ -54,12 +54,12 @@ var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the fir
 
 
 function foo2(bar:{a:number;}):string;
->foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
+>foo2 : { (bar: {    a: number;}): string; (bar: { a: boolean; }): number; }
 >bar : { a: number; }
 >a : number
 
 function foo2(bar:{a:boolean;}):number;
->foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
+>foo2 : { (bar: { a: number; }): string; (bar: {    a: boolean;}): number; }
 >bar : { a: boolean; }
 >a : boolean
 
@@ -95,12 +95,12 @@ var x4 = foo2({a:"s"}); // error
 
 
 function foo4(bar:{a:number;}):number;
->foo4 : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>foo4 : { (bar: {    a: number;}): number; (bar: { a: string; }): string; }
 >bar : { a: number; }
 >a : number
 
 function foo4(bar:{a:string;}):string;
->foo4 : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
+>foo4 : { (bar: { a: number; }): number; (bar: {    a: string;}): string; }
 >bar : { a: string; }
 >a : string
 

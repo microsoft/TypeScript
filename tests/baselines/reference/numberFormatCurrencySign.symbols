@@ -1,0 +1,12 @@
+=== tests/cases/compiler/numberFormatCurrencySign.ts ===
+const str = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999);
+>str : Symbol(str, Decl(numberFormatCurrencySign.ts, 0, 5))
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>style : Symbol(style, Decl(numberFormatCurrencySign.ts, 0, 44))
+>currency : Symbol(currency, Decl(numberFormatCurrencySign.ts, 0, 63))
+>currencySign : Symbol(currencySign, Decl(numberFormatCurrencySign.ts, 0, 80))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
+

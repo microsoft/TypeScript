@@ -33,6 +33,10 @@ function f01(x: unknown) {
         x[0].length;
     }
     if (!!true) {
+        assertIsArrayOfStrings(false);
+        x;
+    }
+    if (!!true) {
         assert(x === undefined || typeof x === "string");
         x;  // string | undefined
         assertDefined(x);

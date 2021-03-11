@@ -6,7 +6,7 @@ declare const barProp: unique symbol;
 >barProp : unique symbol
 
 type BothProps = typeof fooProp | typeof barProp;
->BothProps : unique symbol | unique symbol
+>BothProps : BothProps
 >fooProp : unique symbol
 >barProp : unique symbol
 

@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(16,42): error TS2345: Argument of type '"0"' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(16,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(17,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(18,17): error TS2345: Argument of type '0' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(19,17): error TS2345: Argument of type '0' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(20,17): error TS2345: Argument of type '1' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(18,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(19,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(20,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error TS2304: Cannot find name 'runTestCase'.
 
 
@@ -24,19 +24,19 @@ tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error T
       var _float = -(4/3);
       var a = new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3));
                                              ~~~
-!!! error TS2345: Argument of type '"0"' is not assignable to parameter of type 'boolean'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'boolean'.
       if (a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)
                     ~~~~~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
           a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
                     ~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type 'boolean'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
           a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
                     ~~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type 'boolean'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
           a.indexOf(1) === 10 )            // a[10] =one=== 1
                     ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'boolean'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
       {
         return true;
       }

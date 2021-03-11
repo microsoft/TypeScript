@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+function foo() {}
+>foo : typeof foo
+
+foo.foo = foo;
+>foo.foo = foo : typeof foo
+>foo.foo : typeof foo
+>foo : typeof foo
+>foo : typeof foo
+>foo : typeof foo
+
+foo.default = foo;
+>foo.default = foo : typeof foo
+>foo.default : typeof foo
+>foo : typeof foo
+>default : typeof foo
+>foo : typeof foo
+
+module.exports = foo;
+>module.exports = foo : typeof foo
+>module.exports : typeof foo
+>module : { exports: typeof foo; }
+>exports : typeof foo
+>foo : typeof foo
+

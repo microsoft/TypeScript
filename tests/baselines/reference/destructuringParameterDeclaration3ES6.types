@@ -15,7 +15,7 @@ type stringOrNumArray = Array<String|Number>;
 >stringOrNumArray : stringOrNumArray
 
 function a1(...x: (number|string)[]) { }
->a1 : (...x: (string | number)[]) => void
+>a1 : (...x: (number | string)[]) => void
 >x : (string | number)[]
 
 function a2(...a) { }
@@ -23,7 +23,7 @@ function a2(...a) { }
 >a : any[]
 
 function a3(...a: Array<String>) { }
->a3 : (...a: String[]) => void
+>a3 : (...a: Array<String>) => void
 >a : String[]
 
 function a4(...a: arrayString) { }

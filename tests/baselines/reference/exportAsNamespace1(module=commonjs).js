@@ -24,6 +24,7 @@ exports.b = 2;
 //// [1.js]
 "use strict";
 exports.__esModule = true;
+exports.ns = void 0;
 exports.ns = require("./0");
 ns.a;
 ns.b;

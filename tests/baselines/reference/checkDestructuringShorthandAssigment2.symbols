@@ -1,0 +1,14 @@
+=== tests/cases/compiler/checkDestructuringShorthandAssigment2.ts ===
+// GH #38175 -- should not crash while checking
+
+let o: any, k: any;
+>o : Symbol(o, Decl(checkDestructuringShorthandAssigment2.ts, 2, 3))
+>k : Symbol(k, Decl(checkDestructuringShorthandAssigment2.ts, 2, 11))
+
+let { x } = { x: 1, ...o, [k]: 1 };
+>x : Symbol(x, Decl(checkDestructuringShorthandAssigment2.ts, 3, 5))
+>x : Symbol(x, Decl(checkDestructuringShorthandAssigment2.ts, 3, 13))
+>o : Symbol(o, Decl(checkDestructuringShorthandAssigment2.ts, 2, 3))
+>[k] : Symbol([k], Decl(checkDestructuringShorthandAssigment2.ts, 3, 25))
+>k : Symbol(k, Decl(checkDestructuringShorthandAssigment2.ts, 2, 11))
+

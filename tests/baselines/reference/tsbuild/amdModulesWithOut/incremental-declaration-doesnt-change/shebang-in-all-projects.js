@@ -1,4 +1,11 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+#!someshebang lib file1
+export const x = 10;console.log(x);
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -249,60 +256,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file3.ts",
-      "./file4.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 513,
-          "kind": "prepend",
-          "data": "../lib/module.js",
-          "texts": [
-            {
-              "pos": 25,
-              "end": 513,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 513,
-          "end": 739,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 196,
-          "kind": "prepend",
-          "data": "../lib/module.d.ts",
-          "texts": [
-            {
-              "pos": 25,
-              "end": 196,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 196,
-          "end": 278,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":25,"end":513,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":25,"end":513,"kind":"text"}]},{"pos":513,"end":739,"kind":"text"}]},"dts":{"sections":[{"pos":25,"end":196,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":25,"end":196,"kind":"text"}]},{"pos":196,"end":278,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -362,9 +316,61 @@ declare const myVar = 30;
 
 ======================================================================
 
-//// [/src/lib/file1.ts]
-#!someshebang lib file1
-export const x = 10;console.log(x);
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 25,
+          "end": 513,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 25,
+              "end": 513,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 513,
+          "end": 739,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 25,
+          "end": 196,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 25,
+              "end": 196,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 196,
+          "end": 278,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -539,36 +545,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 513,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 25,
-          "end": 196,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":25,"end":513,"kind":"text"}]},"dts":{"sections":[{"pos":25,"end":196,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -606,4 +583,36 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 25,
+          "end": 513,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 25,
+          "end": 196,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

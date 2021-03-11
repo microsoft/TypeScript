@@ -1,6 +1,6 @@
 tests/cases/conformance/salsa/a.js(14,13): error TS7008: Member 'inMethodNullable' implicitly has an 'any' type.
-tests/cases/conformance/salsa/a.js(20,9): error TS2322: Type '"string"' is not assignable to type 'number'.
-tests/cases/conformance/salsa/a.js(39,9): error TS2322: Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/salsa/a.js(20,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/salsa/a.js(39,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/salsa/a.js(93,13): error TS2334: 'this' cannot be referenced in a static property initializer.
 tests/cases/conformance/salsa/a.js(96,13): error TS2334: 'this' cannot be referenced in a static property initializer.
 
@@ -29,7 +29,7 @@ tests/cases/conformance/salsa/a.js(96,13): error TS2334: 'this' cannot be refere
             }
             this.inMultiple = "string";
             ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '"string"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
             this.inMultipleMethods = "string";
     
             var action = () => {
@@ -50,7 +50,7 @@ tests/cases/conformance/salsa/a.js(96,13): error TS2334: 'this' cannot be refere
             }
             this.inMultiple = false;
             ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
             this.inMultipleMethods = false;
         }
         set() {

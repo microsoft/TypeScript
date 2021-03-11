@@ -37,10 +37,10 @@ verify.codeFixAll({
     fixId: "fixMissingImport",
     fixAllDescription: "Add all missing imports",
     newFileContent:
-`import bd, * as b from "./b";
+`import ad, { a0 } from "./a";
+import bd, * as b from "./b";
 import cd, { c0 } from "./c";
 import dd, { d0, d1 } from "./d";
-import ad, { a0 } from "./a";
 import e = require("./e");
 
 ad; ad; a0; a0;

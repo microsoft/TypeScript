@@ -35,7 +35,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -47,5 +47,5 @@ var hybrid_1 = require("./hybrid");
 var path_1 = __importDefault(require("./path"));
 var fs = __importStar(require("./fs"));
 path_1["default"];
-hybrid_1.sayHello();
+(0, hybrid_1.sayHello)();
 fs;

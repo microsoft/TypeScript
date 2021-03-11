@@ -1,4 +1,35 @@
-//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+/*@internal*/ export const x = 10;
+export class normalC {
+    /*@internal*/ constructor() { }
+    /*@internal*/ prop: string;
+    /*@internal*/ method() { }
+    /*@internal*/ get c() { return 10; }
+    /*@internal*/ set c(val: number) { }
+}
+export namespace normalN {
+    /*@internal*/ export class C { }
+    /*@internal*/ export function foo() {}
+    /*@internal*/ export namespace someNamespace { export class C {} }
+    /*@internal*/ export namespace someOther.something { export class someClass {} }
+    /*@internal*/ export import someImport = someNamespace.C;
+    /*@internal*/ export type internalType = internalC;
+    /*@internal*/ export const internalConst = 10;
+    /*@internal*/ export enum internalEnum { a, b, c }
+}
+/*@internal*/ export class internalC {}
+/*@internal*/ export function internalfoo() {}
+/*@internal*/ export namespace internalNamespace { export class someClass {} }
+/*@internal*/ export namespace internalOther.something { export class someClass {} }
+/*@internal*/ export import internalImport = internalNamespace.someClass;
+/*@internal*/ export type internalType = internalC;
+/*@internal*/ export const internalConst = 10;
+/*@internal*/ export enum internalEnum { a, b, c }
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:08:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -1865,60 +1896,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file3.ts",
-      "./file4.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 4396,
-          "kind": "prepend",
-          "data": "../lib/module.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 4396,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 4396,
-          "end": 4622,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 191,
-          "kind": "prepend",
-          "data": "../lib/module.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 191,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 191,
-          "end": 273,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":4396,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":4396,"kind":"text"}]},{"pos":4396,"end":4622,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":191,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":191,"kind":"text"}]},{"pos":191,"end":273,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2069,33 +2047,61 @@ declare const myVar = 30;
 
 ======================================================================
 
-//// [/src/lib/file1.ts]
-/*@internal*/ export const x = 10;
-export class normalC {
-    /*@internal*/ constructor() { }
-    /*@internal*/ prop: string;
-    /*@internal*/ method() { }
-    /*@internal*/ get c() { return 10; }
-    /*@internal*/ set c(val: number) { }
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 4396,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 4396,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 4396,
+          "end": 4622,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 191,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 191,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 191,
+          "end": 273,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
 }
-export namespace normalN {
-    /*@internal*/ export class C { }
-    /*@internal*/ export function foo() {}
-    /*@internal*/ export namespace someNamespace { export class C {} }
-    /*@internal*/ export namespace someOther.something { export class someClass {} }
-    /*@internal*/ export import someImport = someNamespace.C;
-    /*@internal*/ export type internalType = internalC;
-    /*@internal*/ export const internalConst = 10;
-    /*@internal*/ export enum internalEnum { a, b, c }
-}
-/*@internal*/ export class internalC {}
-/*@internal*/ export function internalfoo() {}
-/*@internal*/ export namespace internalNamespace { export class someClass {} }
-/*@internal*/ export namespace internalOther.something { export class someClass {} }
-/*@internal*/ export import internalImport = internalNamespace.someClass;
-/*@internal*/ export type internalType = internalC;
-/*@internal*/ export const internalConst = 10;
-/*@internal*/ export enum internalEnum { a, b, c }
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map]
@@ -4425,81 +4431,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 4396,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 26,
-          "kind": "internal"
-        },
-        {
-          "pos": 28,
-          "end": 54,
-          "kind": "text"
-        },
-        {
-          "pos": 54,
-          "end": 78,
-          "kind": "internal"
-        },
-        {
-          "pos": 80,
-          "end": 108,
-          "kind": "text"
-        },
-        {
-          "pos": 108,
-          "end": 233,
-          "kind": "internal"
-        },
-        {
-          "pos": 235,
-          "end": 274,
-          "kind": "text"
-        },
-        {
-          "pos": 274,
-          "end": 742,
-          "kind": "internal"
-        },
-        {
-          "pos": 744,
-          "end": 751,
-          "kind": "text"
-        },
-        {
-          "pos": 751,
-          "end": 1240,
-          "kind": "internal"
-        },
-        {
-          "pos": 1242,
-          "end": 1333,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":4396,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":26,"kind":"internal"},{"pos":28,"end":54,"kind":"text"},{"pos":54,"end":78,"kind":"internal"},{"pos":80,"end":108,"kind":"text"},{"pos":108,"end":233,"kind":"internal"},{"pos":235,"end":274,"kind":"text"},{"pos":274,"end":742,"kind":"internal"},{"pos":744,"end":751,"kind":"text"},{"pos":751,"end":1240,"kind":"internal"},{"pos":1242,"end":1333,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -4695,4 +4627,81 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 4396,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 26,
+          "kind": "internal"
+        },
+        {
+          "pos": 28,
+          "end": 54,
+          "kind": "text"
+        },
+        {
+          "pos": 54,
+          "end": 78,
+          "kind": "internal"
+        },
+        {
+          "pos": 80,
+          "end": 108,
+          "kind": "text"
+        },
+        {
+          "pos": 108,
+          "end": 233,
+          "kind": "internal"
+        },
+        {
+          "pos": 235,
+          "end": 274,
+          "kind": "text"
+        },
+        {
+          "pos": 274,
+          "end": 742,
+          "kind": "internal"
+        },
+        {
+          "pos": 744,
+          "end": 751,
+          "kind": "text"
+        },
+        {
+          "pos": 751,
+          "end": 1240,
+          "kind": "internal"
+        },
+        {
+          "pos": 1242,
+          "end": 1333,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

@@ -10,6 +10,12 @@ var a1: string;
 var a2: number;
 >a2 : number
 
+var a3: string | number | symbol;
+>a3 : string | number | symbol
+
+var a4: any;
+>a4 : any
+
 var ra1 = x in x;
 >ra1 : boolean
 >x in x : boolean
@@ -38,6 +44,18 @@ var ra5 = 0 in x;
 >ra5 : boolean
 >0 in x : boolean
 >0 : 0
+>x : any
+
+var ra6 = a3 in x;
+>ra6 : boolean
+>a3 in x : boolean
+>a3 : string | number | symbol
+>x : any
+
+var ra7 = a4 in x;
+>ra7 : boolean
+>a4 in x : boolean
+>a4 : any
 >x : any
 
 // valid right operands
@@ -80,7 +98,7 @@ function unionCase<T, U>(t: T | U) {
 }
 
 function unionCase2<T>(t: T | object) {
->unionCase2 : <T>(t: object | T) => void
+>unionCase2 : <T>(t: T | object) => void
 >t : object | T
 
     var rb5 = x in t;

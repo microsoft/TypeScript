@@ -4,7 +4,7 @@
 ////function ident<T>: T {
 ////}
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/** "),
     c.punctuation("@"),
@@ -20,3 +20,10 @@ verify.syntacticClassificationsAre(
     c.identifier("T"),
     c.punctuation("{"),
     c.punctuation("}"));
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("function.declaration", "ident"), 
+    c2.semanticToken("typeParameter.declaration", "T"), 
+    c2.semanticToken("typeParameter", "T"), 
+);

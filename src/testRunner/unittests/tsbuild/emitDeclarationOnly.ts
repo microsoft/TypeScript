@@ -9,7 +9,7 @@ namespace ts {
         });
 
         function verifyEmitDeclarationOnly(disableMap?: true) {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,
                 fs: () => projFs,
                 scenario: "emitDeclarationOnly",
@@ -26,7 +26,7 @@ namespace ts {
         verifyEmitDeclarationOnly();
         verifyEmitDeclarationOnly(/*disableMap*/ true);
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             subScenario: `only dts output in non circular imports project with emitDeclarationOnly`,
             fs: () => projFs,
             scenario: "emitDeclarationOnly",
@@ -37,14 +37,14 @@ namespace ts {
             },
             incrementalScenarios: [
                 {
-                    buildKind: BuildKind.IncrementalDtsChange,
-                    modifyFs: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
-
-                },
-                {
                     buildKind: BuildKind.IncrementalDtsUnchanged,
                     modifyFs: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
 export interface A {`),
+
+                },
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
 
                 },
             ],

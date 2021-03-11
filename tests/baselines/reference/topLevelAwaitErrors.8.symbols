@@ -1,0 +1,12 @@
+=== tests/cases/conformance/externalModules/index.ts ===
+// await disallowed in default import
+import await from "./other";
+>await : Symbol(await, Decl(index.ts, 1, 6))
+
+=== tests/cases/conformance/externalModules/other.ts ===
+declare const _await: any;
+>_await : Symbol(_await, Decl(other.ts, 0, 13))
+
+export default _await;
+>_await : Symbol(_await, Decl(other.ts, 0, 13))
+

@@ -70,16 +70,40 @@ class User {
     }
 }
 
+abstract class C1 {
+    abstract x: string;
+    abstract y: string;
+
+    constructor() {
+        let self = this;                // ok
+        let { x, y: y1 } = this;        // error
+        ({ x, y: y1, "y": y1 } = this); // error
+    }
+}
+
+class C2 {
+    x: string;
+    y: string;
+
+    constructor() {
+        let self = this;                // ok
+        let { x, y: y1 } = this;        // ok
+        ({ x, y: y1, "y": y1 } = this); // ok
+    }
+}
+
 
 //// [abstractPropertyInConstructor.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -145,4 +169,22 @@ var User = /** @class */ (function () {
         a.method2();
     }
     return User;
+}());
+var C1 = /** @class */ (function () {
+    function C1() {
+        var _a;
+        var self = this; // ok
+        var _b = this, x = _b.x, y1 = _b.y; // error
+        (_a = this, x = _a.x, y1 = _a.y, y1 = _a["y"]); // error
+    }
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+        var _a;
+        var self = this; // ok
+        var _b = this, x = _b.x, y1 = _b.y; // ok
+        (_a = this, x = _a.x, y1 = _a.y, y1 = _a["y"]); // ok
+    }
+    return C2;
 }());

@@ -1,0 +1,136 @@
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts ===
+function foo1(results: number[] | undefined) {
+>foo1 : Symbol(foo1, Decl(logicalAssignment4.ts, 0, 0))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 0, 14))
+
+    (results ||= []).push(100);
+>(results ||= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 0, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo2(results: number[] | undefined) {
+>foo2 : Symbol(foo2, Decl(logicalAssignment4.ts, 2, 1))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
+
+    (results ??= []).push(100);
+>(results ??= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo3(results: number[] | undefined) {
+>foo3 : Symbol(foo3, Decl(logicalAssignment4.ts, 6, 1))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
+
+    results ||= [];
+>results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
+
+    results.push(100);
+>results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo4(results: number[] | undefined) {
+>foo4 : Symbol(foo4, Decl(logicalAssignment4.ts, 11, 1))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
+
+    results ??= [];
+>results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
+
+    results.push(100);
+>results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+interface ThingWithOriginal {
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+
+    name: string;
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+
+    original?: ThingWithOriginal
+>original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+}
+declare const v: number
+>v : Symbol(v, Decl(logicalAssignment4.ts, 22, 13))
+
+function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) {
+>doSomethingWithAlias : Symbol(doSomethingWithAlias, Decl(logicalAssignment4.ts, 22, 23))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+>ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
+
+    if (v === 1) {
+>v : Symbol(v, Decl(logicalAssignment4.ts, 22, 13))
+
+        if (thing &&= thing.original) {
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>thing.original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
+
+            thing.name;
+>thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+        }
+    }
+    else if (v === 2) {
+>v : Symbol(v, Decl(logicalAssignment4.ts, 22, 13))
+
+        if (thing &&= defaultValue) {
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+
+            thing.name;
+>thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+
+            defaultValue.name
+>defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+        }
+    }
+    else if (v === 3) {
+>v : Symbol(v, Decl(logicalAssignment4.ts, 22, 13))
+
+        if (thing ||= defaultValue) {
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+
+            thing.name;
+>thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+
+            defaultValue.name;
+>defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+        }
+    }
+    else {
+        if (thing ??= defaultValue) {
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+
+            thing.name;
+>thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+
+            defaultValue.name;
+>defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+>defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
+>name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
+        }
+    }
+}
+

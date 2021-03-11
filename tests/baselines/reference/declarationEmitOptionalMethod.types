@@ -1,7 +1,7 @@
 === tests/cases/compiler/declarationEmitOptionalMethod.ts ===
 export const Foo = (opts: {
->Foo : (opts: { a?(): void; b?: (() => void) | undefined; }) => { c?(): void; d?: (() => void) | undefined; }
->(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?(): void; b?: (() => void) | undefined; }) => { c?(): void; d?: (() => void) | undefined; }
+>Foo : (opts: {    a?(): void;    b?: () => void;}) => {    c?(): void;    d?: () => void;}
+>(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: {    a?(): void;    b?: () => void;}) => {    c?(): void;    d?: () => void;}
 >opts : { a?(): void; b?: (() => void) | undefined; }
 
     a?(): void,

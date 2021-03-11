@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w -verbose
+Input::
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
   "extends": "../tsconfig-base.json",
@@ -147,10 +147,10 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+/a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:47 AM[0m] Projects in this build: 
     * animals/tsconfig.json
@@ -158,12 +158,10 @@ Output::
     * core/tsconfig.json
     * tsconfig.json
 
-
 [91merror[0m[90m TS6202: [0mProject references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json
 /user/username/projects/demo/core/tsconfig.json
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
-
 
 [[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
 
@@ -172,6 +170,8 @@ Output::
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
   {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
@@ -201,8 +201,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Fix error
 
+Input::
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
   "extends": "../tsconfig-base.json",
@@ -211,6 +213,106 @@ Change:: Fix error
     "rootDir": "."
   }
 }
+
+
+Output::
+>> Screen clear
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
+
+[[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
+
+[[90m12:01:08 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
+
+[[90m12:01:09 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
+
+[[90m12:01:29 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
+
+[[90m12:01:30 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
+
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/demo/core/utilities.ts"]
+Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/core","rootDir":"/user/username/projects/demo/core","watch":true,"configFilePath":"/user/username/projects/demo/core/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/core/utilities.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/core/utilities.ts
+
+Program root files: ["/user/username/projects/demo/animals/animal.ts","/user/username/projects/demo/animals/dog.ts","/user/username/projects/demo/animals/index.ts"]
+Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/animals","rootDir":"/user/username/projects/demo/animals","watch":true,"configFilePath":"/user/username/projects/demo/animals/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/lib/core/utilities.d.ts
+/user/username/projects/demo/animals/dog.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/lib/core/utilities.d.ts
+/user/username/projects/demo/animals/dog.ts
+
+Program root files: ["/user/username/projects/demo/zoo/zoo.ts"]
+Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/zoo","rootDir":"/user/username/projects/demo/zoo","watch":true,"configFilePath":"/user/username/projects/demo/zoo/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/lib/animals/animal.d.ts
+/user/username/projects/demo/lib/animals/dog.d.ts
+/user/username/projects/demo/lib/animals/index.d.ts
+/user/username/projects/demo/zoo/zoo.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/demo/lib/animals/animal.d.ts
+/user/username/projects/demo/lib/animals/dog.d.ts
+/user/username/projects/demo/lib/animals/index.d.ts
+/user/username/projects/demo/zoo/zoo.ts
+
+WatchedFiles::
+/user/username/projects/demo/animals/tsconfig.json:
+  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
+/user/username/projects/demo/animals/animal.ts:
+  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
+/user/username/projects/demo/animals/dog.ts:
+  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
+/user/username/projects/demo/animals/index.ts:
+  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
+/user/username/projects/demo/zoo/tsconfig.json:
+  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/zoo/zoo.ts:
+  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
+/user/username/projects/demo/core/tsconfig.json:
+  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/core/utilities.ts:
+  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
+/user/username/projects/demo/tsconfig.json:
+  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/demo/animals:
+  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/demo/zoo:
+  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/demo/core:
+  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
@@ -234,6 +336,9 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
 
 
 //// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"25274411612-\r\nexport function makeRandomName() {\r\n    return \"Bob!?! \";\r\n}\r\n\r\nexport function lastElementOf<T>(arr: T[]): T | undefined {\r\n    if (arr.length === 0) return undefined;\r\n    return arr[arr.length - 1];\r\n}\r\n\r\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n","affectsGlobalScope":false}],"options":{"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"./","rootDir":"../../core","watch":true,"configFilePath":"../../core/tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -289,7 +394,6 @@ export default interface Animal {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDog = void 0;
-var animal_1 = require("./animal");
 var dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
@@ -312,7 +416,7 @@ function createDog() {
         woof: function () {
             console.log(this.name + " says \"Woof\"!");
         },
-        name: utilities_1.makeRandomName()
+        name: (0, utilities_1.makeRandomName)()
     });
 }
 exports.createDog = createDog;
@@ -328,6 +432,9 @@ export declare function createDog(): Dog;
 
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14984181202-export type Size = \"small\" | \"medium\" | \"large\";\r\nexport default interface Animal {\r\n    size: Size;\r\n}\r\n","signature":"-10510161654-export declare type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","affectsGlobalScope":false},{"version":"-5382672599-import Animal from './animal';\r\n\r\nexport default Animal;\r\nimport { createDog, Dog } from './dog';\r\nexport { createDog, Dog };\r\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","affectsGlobalScope":false},{"version":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n","affectsGlobalScope":false},{"version":"-10991948013-import Animal from '.';\r\nimport { makeRandomName } from '../core/utilities';\r\n\r\nexport interface Dog extends Animal {\r\n    woof(): void;\r\n    name: string;\r\n}\r\n\r\nexport function createDog(): Dog {\r\n    return ({\r\n        size: \"medium\",\r\n        woof: function(this: Dog) {\r\n            console.log(`${this.name} says \"Woof\"!`);\r\n        },\r\n        name: makeRandomName()\r\n    });\r\n}\r\n\r\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","affectsGlobalScope":false}],"options":{"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"./","rootDir":"../../animals","watch":true,"configFilePath":"../../animals/tsconfig.json"},"fileIdsList":[[2,3],[1,4],[2]],"referencedMap":[[4,0],[2,1]],"exportedModulesMap":[[4,2],[2,1]],"semanticDiagnosticsPerFile":[0,1,4,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -409,7 +516,7 @@ exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
-        index_1.createDog()
+        (0, index_1.createDog)()
     ];
 }
 exports.createZoo = createZoo;
@@ -421,6 +528,9 @@ export declare function createZoo(): Array<Dog>;
 
 
 //// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../animals/animal.d.ts","../animals/dog.d.ts","../animals/index.d.ts","../../zoo/zoo.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10510161654-export declare type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","signature":"-10510161654-export declare type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","affectsGlobalScope":false},{"version":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","affectsGlobalScope":false},{"version":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","affectsGlobalScope":false},{"version":"8797123924-import { Dog, createDog } from '../animals/index';\r\n\r\nexport function createZoo(): Array<Dog> {\r\n    return [\r\n        createDog()\r\n    ];\r\n}\r\n\r\n","signature":"10305066551-import { Dog } from '../animals/index';\nexport declare function createZoo(): Array<Dog>;\n","affectsGlobalScope":false}],"options":{"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"./","rootDir":"../../zoo","watch":true,"configFilePath":"../../zoo/tsconfig.json"},"fileIdsList":[[3],[1,2]],"referencedMap":[[2,0],[3,1],[4,0]],"exportedModulesMap":[[2,0],[3,1],[4,0]],"semanticDiagnosticsPerFile":[0,1,2,3,4]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -500,104 +610,3 @@ export declare function createZoo(): Array<Dog>;
   "version": "FakeTSVersion"
 }
 
-
-Output::
->> Screen clear
-[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
-
-
-[[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
-
-
-[[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
-
-
-[[90m12:01:06 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
-
-
-[[90m12:01:07 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
-
-
-[[90m12:01:25 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
-
-
-[[90m12:01:26 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
-
-
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/demo/core/utilities.ts"]
-Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/core","rootDir":"/user/username/projects/demo/core","watch":true,"configFilePath":"/user/username/projects/demo/core/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/core/utilities.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/core/utilities.ts
-
-Program root files: ["/user/username/projects/demo/animals/animal.ts","/user/username/projects/demo/animals/dog.ts","/user/username/projects/demo/animals/index.ts"]
-Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/animals","rootDir":"/user/username/projects/demo/animals","watch":true,"configFilePath":"/user/username/projects/demo/animals/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/lib/core/utilities.d.ts
-/user/username/projects/demo/animals/dog.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/lib/core/utilities.d.ts
-/user/username/projects/demo/animals/dog.ts
-
-Program root files: ["/user/username/projects/demo/zoo/zoo.ts"]
-Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/zoo","rootDir":"/user/username/projects/demo/zoo","watch":true,"configFilePath":"/user/username/projects/demo/zoo/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/lib/animals/animal.d.ts
-/user/username/projects/demo/lib/animals/dog.d.ts
-/user/username/projects/demo/lib/animals/index.d.ts
-/user/username/projects/demo/zoo/zoo.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/demo/lib/animals/animal.d.ts
-/user/username/projects/demo/lib/animals/dog.d.ts
-/user/username/projects/demo/lib/animals/index.d.ts
-/user/username/projects/demo/zoo/zoo.ts
-
-WatchedFiles::
-/user/username/projects/demo/animals/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/animals/animal.ts:
-  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
-/user/username/projects/demo/animals/dog.ts:
-  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
-/user/username/projects/demo/animals/index.ts:
-  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
-/user/username/projects/demo/zoo/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/zoo/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/zoo/zoo.ts:
-  {"fileName":"/user/username/projects/demo/zoo/zoo.ts","pollingInterval":250}
-/user/username/projects/demo/core/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/core/utilities.ts:
-  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
-/user/username/projects/demo/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/demo/zoo:
-  {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/demo/core:
-  {"directoryName":"/user/username/projects/demo/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined

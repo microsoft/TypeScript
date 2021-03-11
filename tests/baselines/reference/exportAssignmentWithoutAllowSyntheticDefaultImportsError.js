@@ -9,4 +9,6 @@ import bar from './bar';
 
 //// [bar.js]
 function bar() { }
+export {};
 //// [foo.js]
+export {};

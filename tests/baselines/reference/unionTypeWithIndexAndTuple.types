@@ -7,7 +7,7 @@ interface I {
 >someOtherProperty : number
 }
 function f(args: ["a"] | I) { }
->f : (args: I | ["a"]) => void
+>f : (args: ["a"] | I) => void
 >args : I | ["a"]
 
 f(["a"]);

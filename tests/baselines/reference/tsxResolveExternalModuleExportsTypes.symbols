@@ -1,8 +1,8 @@
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
->a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21))
->Foo : Symbol(a.Foo, Decl(index.d.ts, 1, 21))
+>a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+>Foo : Symbol(a.Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
 
 declare namespace a {
 >a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
@@ -11,7 +11,7 @@ declare namespace a {
 >Foo : Symbol(Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
 }
 export = a;
->a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21))
+>a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
 
 === /node_modules/@types/b/index.d.ts ===
 import * as a from 'a';

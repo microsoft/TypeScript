@@ -185,7 +185,7 @@ type O = {
 >O : O
 
   on<P extends keyof R>(x: P, callback: R[P]): void;
->on : <P extends "a" | "b">(x: P, callback: R[P]) => void
+>on : <P extends keyof R>(x: P, callback: R[P]) => void
 >x : P
 >callback : R[P]
 
@@ -196,9 +196,9 @@ declare var x: O;
 
 x.on('a', a => {});
 >x.on('a', a => {}) : void
->x.on : <P extends "a" | "b">(x: P, callback: R[P]) => void
+>x.on : <P extends keyof R>(x: P, callback: R[P]) => void
 >x : O
->on : <P extends "a" | "b">(x: P, callback: R[P]) => void
+>on : <P extends keyof R>(x: P, callback: R[P]) => void
 >'a' : "a"
 >a => {} : (a: number) => void
 >a : number
@@ -339,12 +339,12 @@ class Interesting {
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		});	} : () => Promise<DooDad>
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<DooDad>
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "SOMETHING" | "ELSE"
 
@@ -366,12 +366,12 @@ class Interesting {
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			return 'ELSE';		});	} : () => Promise<DooDad>
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<DooDad>
+>Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => {			return 'ELSE';		} : () => "ELSE"
 
@@ -385,12 +385,12 @@ class Interesting {
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		});	} : () => Promise<DooDad>
 
 		return Promise.resolve().then(() => {
->Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<DooDad>
+>Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"SOMETHING" | "ELSE">
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
 
@@ -444,5 +444,5 @@ assignPartial(obj, { foo(...args) {} });  // args has type [string]
 >obj : { foo(bar: string): void; }
 >{ foo(...args) {} } : { foo(bar: string): void; }
 >foo : (bar: string) => void
->args : [string]
+>args : [bar: string]
 

@@ -1,0 +1,45 @@
+=== tests/cases/compiler/argumentsAsPropertyName2.ts ===
+// target: es5
+
+function foo() {
+>foo : () => void
+
+    for (let x = 0; x < 1; ++x) {
+>x : number
+>0 : 0
+>x < 1 : boolean
+>x : number
+>1 : 1
+>++x : number
+>x : number
+
+        let i : number;
+>i : number
+
+        [].forEach(function () { i });
+>[].forEach(function () { i }) : void
+>[].forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>[] : undefined[]
+>forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>function () { i } : () => void
+>i : number
+
+        ({ arguments: 0 });
+>({ arguments: 0 }) : { arguments: number; }
+>{ arguments: 0 } : { arguments: number; }
+>arguments : number
+>0 : 0
+
+        ({ arguments });
+>({ arguments }) : { arguments: IArguments; }
+>{ arguments } : { arguments: IArguments; }
+>arguments : IArguments
+
+        ({ arguments: arguments });
+>({ arguments: arguments }) : { arguments: IArguments; }
+>{ arguments: arguments } : { arguments: IArguments; }
+>arguments : IArguments
+>arguments : IArguments
+    }
+}
+

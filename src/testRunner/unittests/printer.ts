@@ -83,7 +83,6 @@ namespace ts {
 
             // https://github.com/microsoft/TypeScript/issues/35054
             printsCorrectly("jsx attribute escaping", {}, printer => {
-                debugger;
                 return printer.printFile(createSourceFile(
                     "source.ts",
                     String.raw`<a x='\\"'/>`,
@@ -94,11 +93,38 @@ namespace ts {
             });
         });
 
+        describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {
+            it("without statements", () => {
+                const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
+                    files: {
+                        "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\n`
+                    }
+                }));
+                const program = createProgram(["/test.d.ts"], { }, host);
+                const file = program.getSourceFile("/test.d.ts")!;
+                const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed });
+                const output = printer.printFile(file);
+                assert.equal(output.split(/\r?\n/g).length, 3);
+            });
+            it("with statements", () => {
+                const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
+                    files: {
+                        "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`
+                    }
+                }));
+                const program = createProgram(["/test.d.ts"], { }, host);
+                const file = program.getSourceFile("/test.d.ts")!;
+                const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed });
+                const output = printer.printFile(file);
+                assert.equal(output.split(/\r?\n/g).length, 4);
+            });
+        });
+
         describe("printBundle", () => {
             const printsCorrectly = makePrintsCorrectly("printsBundleCorrectly");
             let bundle: Bundle;
             before(() => {
-                bundle = createBundle([
+                bundle = factory.createBundle([
                     createSourceFile("a.ts", `
                         /*! [a.ts] */
 
@@ -121,16 +147,16 @@ namespace ts {
             const printsCorrectly = makePrintsCorrectly("printsNodeCorrectly");
             printsCorrectly("class", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createClassDeclaration(
+                factory.createClassDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    /*name*/ createIdentifier("C"),
+                    /*name*/ factory.createIdentifier("C"),
                     /*typeParameters*/ undefined,
                     /*heritageClauses*/ undefined,
-                    [createProperty(
+                    [factory.createPropertyDeclaration(
                         /*decorators*/ undefined,
-                        createNodeArray([createToken(SyntaxKind.PublicKeyword)]),
-                        createIdentifier("prop"),
+                        factory.createNodeArray([factory.createToken(SyntaxKind.PublicKeyword)]),
+                        factory.createIdentifier("prop"),
                         /*questionToken*/ undefined,
                         /*type*/ undefined,
                         /*initializer*/ undefined
@@ -141,15 +167,15 @@ namespace ts {
 
             printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createNamespaceExportDeclaration("B"),
+                factory.createNamespaceExportDeclaration("B"),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 
             printsCorrectly("newExpressionWithPropertyAccessOnCallExpression", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createNew(
-                    createPropertyAccess(
-                        createCall(createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                factory.createNewExpression(
+                    factory.createPropertyAccessExpression(
+                        factory.createCallExpression(factory.createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
                         "x"),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined
@@ -159,11 +185,11 @@ namespace ts {
 
             printsCorrectly("newExpressionOnConditionalExpression", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createNew(
-                    createConditional(
-                        createIdentifier("x"), createToken(SyntaxKind.QuestionToken),
-                        createIdentifier("y"), createToken(SyntaxKind.ColonToken),
-                        createIdentifier("z")),
+                factory.createNewExpression(
+                    factory.createConditionalExpression(
+                        factory.createIdentifier("x"), factory.createToken(SyntaxKind.QuestionToken),
+                        factory.createIdentifier("y"), factory.createToken(SyntaxKind.ColonToken),
+                        factory.createIdentifier("z")),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined
                 ),
@@ -172,22 +198,22 @@ namespace ts {
 
             printsCorrectly("emptyGlobalAugmentation", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createModuleDeclaration(
+                factory.createModuleDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ [createToken(SyntaxKind.DeclareKeyword)],
-                    createIdentifier("global"),
-                    createModuleBlock(emptyArray),
+                    /*modifiers*/ [factory.createToken(SyntaxKind.DeclareKeyword)],
+                    factory.createIdentifier("global"),
+                    factory.createModuleBlock(emptyArray),
                     NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
 
             printsCorrectly("emptyGlobalAugmentationWithNoDeclareKeyword", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createModuleDeclaration(
+                factory.createModuleDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    createIdentifier("global"),
-                    createModuleBlock(emptyArray),
+                    factory.createIdentifier("global"),
+                    factory.createModuleBlock(emptyArray),
                     NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
@@ -195,30 +221,30 @@ namespace ts {
             // https://github.com/Microsoft/TypeScript/issues/15971
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createClassDeclaration(
+                factory.createClassDeclaration(
                     /*decorators*/ undefined,
-                    /*modifiers*/ [createToken(SyntaxKind.DeclareKeyword)],
-                    /*name*/ createIdentifier("X"),
+                    /*modifiers*/ [factory.createToken(SyntaxKind.DeclareKeyword)],
+                    /*name*/ factory.createIdentifier("X"),
                     /*typeParameters*/ undefined,
                     /*heritageClauses*/ undefined,
                     [
-                        createMethod(
+                        factory.createMethodDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*asteriskToken*/ undefined,
-                            /*name*/ createIdentifier("method"),
-                            /*questionToken*/ createToken(SyntaxKind.QuestionToken),
+                            /*name*/ factory.createIdentifier("method"),
+                            /*questionToken*/ factory.createToken(SyntaxKind.QuestionToken),
                             /*typeParameters*/ undefined,
                             [],
-                            /*type*/ createKeywordTypeNode(SyntaxKind.VoidKeyword),
+                            /*type*/ factory.createKeywordTypeNode(SyntaxKind.VoidKeyword),
                             /*body*/ undefined
                         ),
-                        createProperty(
+                        factory.createPropertyDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            /*name*/ createIdentifier("property"),
-                            /*questionToken*/ createToken(SyntaxKind.QuestionToken),
-                            /*type*/ createKeywordTypeNode(SyntaxKind.StringKeyword),
+                            /*name*/ factory.createIdentifier("property"),
+                            /*questionToken*/ factory.createToken(SyntaxKind.QuestionToken),
+                            /*type*/ factory.createKeywordTypeNode(SyntaxKind.StringKeyword),
                             /*initializer*/ undefined
                         ),
                     ]
@@ -229,71 +255,71 @@ namespace ts {
             // https://github.com/Microsoft/TypeScript/issues/15651
             printsCorrectly("functionTypes", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createTupleTypeNode([
-                    createFunctionTypeNode(
+                setEmitFlags(factory.createTupleTypeNode([
+                    factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
-                        [createParameter(
+                        [factory.createParameterDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
-                            createIdentifier("args")
+                            factory.createIdentifier("args")
                         )],
-                        createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                    createFunctionTypeNode(
-                        [createTypeParameterDeclaration("T")],
-                        [createParameter(
+                    factory.createFunctionTypeNode(
+                        [factory.createTypeParameterDeclaration("T")],
+                        [factory.createParameterDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
-                            createIdentifier("args")
+                            factory.createIdentifier("args")
                         )],
-                        createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                    createFunctionTypeNode(
+                    factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
-                        [createParameter(
+                        [factory.createParameterDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            createToken(SyntaxKind.DotDotDotToken),
-                            createIdentifier("args")
+                            factory.createToken(SyntaxKind.DotDotDotToken),
+                            factory.createIdentifier("args")
                         )],
-                        createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                    createFunctionTypeNode(
+                    factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
-                        [createParameter(
-                            /*decorators*/ undefined,
-                            /*modifiers*/ undefined,
-                            /*dotDotDotToken*/ undefined,
-                            createIdentifier("args"),
-                            createToken(SyntaxKind.QuestionToken)
-                        )],
-                        createKeywordTypeNode(SyntaxKind.AnyKeyword)
-                    ),
-                    createFunctionTypeNode(
-                        /*typeArguments*/ undefined,
-                        [createParameter(
+                        [factory.createParameterDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
-                            createIdentifier("args"),
+                            factory.createIdentifier("args"),
+                            factory.createToken(SyntaxKind.QuestionToken)
+                        )],
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                    ),
+                    factory.createFunctionTypeNode(
+                        /*typeArguments*/ undefined,
+                        [factory.createParameterDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*dotDotDotToken*/ undefined,
+                            factory.createIdentifier("args"),
                             /*questionToken*/ undefined,
-                            createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                            factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                         )],
-                        createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                    createFunctionTypeNode(
+                    factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
-                        [createParameter(
+                        [factory.createParameterDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
-                            createObjectBindingPattern([])
+                            factory.createObjectBindingPattern([])
                         )],
-                        createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                ]),
+                ]), EmitFlags.SingleLine),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
         });

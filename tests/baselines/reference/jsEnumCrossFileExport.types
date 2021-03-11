@@ -72,7 +72,7 @@ Other.Cls = class {
      * @param {!Host.UserMetrics.Action} p
      */
     method(p) {}
->method : (p: number) => void
+>method : (p: Host.UserMetrics.Action) => void
 >p : number
 
     usage() {

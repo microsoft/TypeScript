@@ -1,4 +1,10 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+export const x = 10;console.log(x);
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -320,72 +326,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file3.ts",
-      "./file4.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 563,
-          "kind": "prepend",
-          "data": "../lib/module.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 563,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 563,
-          "end": 864,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 39,
-          "kind": "reference",
-          "data": "tripleRef.d.ts"
-        },
-        {
-          "pos": 41,
-          "end": 87,
-          "kind": "reference",
-          "data": "../lib/tripleRef.d.ts"
-        },
-        {
-          "pos": 89,
-          "end": 297,
-          "kind": "prepend",
-          "data": "../lib/module.d.ts",
-          "texts": [
-            {
-              "pos": 89,
-              "end": 297,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 297,
-          "end": 416,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":563,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":0,"end":563,"kind":"text"}]},{"pos":563,"end":864,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"reference","data":"tripleRef.d.ts"},{"pos":41,"end":87,"kind":"reference","data":"../lib/tripleRef.d.ts"},{"pos":89,"end":297,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":89,"end":297,"kind":"text"}]},{"pos":297,"end":416,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -457,8 +398,73 @@ declare const myVar = 30;
 
 ======================================================================
 
-//// [/src/lib/file1.ts]
-export const x = 10;console.log(x);
+//// [/src/app/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file3.ts",
+      "./file4.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 563,
+          "kind": "prepend",
+          "data": "../lib/module.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 563,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 563,
+          "end": 864,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 39,
+          "kind": "reference",
+          "data": "tripleRef.d.ts"
+        },
+        {
+          "pos": 41,
+          "end": 87,
+          "kind": "reference",
+          "data": "../lib/tripleRef.d.ts"
+        },
+        {
+          "pos": 89,
+          "end": 297,
+          "kind": "prepend",
+          "data": "../lib/module.d.ts",
+          "texts": [
+            {
+              "pos": 89,
+              "end": 297,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 297,
+          "end": 416,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -667,42 +673,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file0.ts",
-      "./file1.ts",
-      "./file2.ts",
-      "./global.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 563,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 39,
-          "kind": "reference",
-          "data": "tripleRef.d.ts"
-        },
-        {
-          "pos": 41,
-          "end": 249,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":563,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":39,"kind":"reference","data":"tripleRef.d.ts"},{"pos":41,"end":249,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -746,4 +717,42 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
+
+//// [/src/lib/module.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file0.ts",
+      "./file1.ts",
+      "./file2.ts",
+      "./global.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 563,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 39,
+          "kind": "reference",
+          "data": "tripleRef.d.ts"
+        },
+        {
+          "pos": 41,
+          "end": 249,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 

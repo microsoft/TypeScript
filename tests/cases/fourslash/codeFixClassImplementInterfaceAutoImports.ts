@@ -14,7 +14,7 @@
 ////import { B, C, D } from './types2';
 ////
 ////export interface Base {
-////  a: A;
+////  a: Readonly<A> & { kind: "a"; };
 ////  b<T extends B = B>(p1: C): D<C>;
 ////}
 
@@ -32,9 +32,9 @@ import A from './types1';
 import { B, C, D } from './types2';
 
 export class C implements Base {
-    a: A;
+    a: Readonly<A> & { kind: 'a'; };
     b<T extends B = B>(p1: C): D<C> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 }`,
 });

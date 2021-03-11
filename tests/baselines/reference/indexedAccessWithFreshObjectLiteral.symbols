@@ -1,0 +1,123 @@
+=== tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts ===
+function foo (id: string) {
+>foo : Symbol(foo, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 0))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 14))
+
+  return {
+      a: 1,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 1, 10))
+
+      b: "",
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 2, 11))
+
+      c: true
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 3, 12))
+
+  }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 14))
+}
+
+function bar (id: 'a' | 'b') {
+>bar : Symbol(bar, Decl(indexedAccessWithFreshObjectLiteral.ts, 6, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 8, 14))
+
+  return {
+      a: 1,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 9, 10))
+
+      b: "",
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 10, 11))
+
+      c: false
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 11, 12))
+
+  }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 8, 14))
+}
+
+function baz (id: '1' | '2') {
+>baz : Symbol(baz, Decl(indexedAccessWithFreshObjectLiteral.ts, 14, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 16, 14))
+
+  return {
+      1: 1,
+>1 : Symbol(1, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 10))
+
+      2: "",
+>2 : Symbol(2, Decl(indexedAccessWithFreshObjectLiteral.ts, 18, 11))
+
+      3: false
+>3 : Symbol(3, Decl(indexedAccessWithFreshObjectLiteral.ts, 19, 12))
+
+  }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 16, 14))
+}
+
+function qux (id: 1 | 2) {
+>qux : Symbol(qux, Decl(indexedAccessWithFreshObjectLiteral.ts, 22, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 24, 14))
+
+  return {
+      1: 1,
+>1 : Symbol(1, Decl(indexedAccessWithFreshObjectLiteral.ts, 25, 10))
+
+      2: "",
+>2 : Symbol(2, Decl(indexedAccessWithFreshObjectLiteral.ts, 26, 11))
+
+      3: false
+>3 : Symbol(3, Decl(indexedAccessWithFreshObjectLiteral.ts, 27, 12))
+
+  }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 24, 14))
+}
+
+function quux (id: 'a' | 'b' | 'z') {
+>quux : Symbol(quux, Decl(indexedAccessWithFreshObjectLiteral.ts, 30, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 32, 15))
+
+  return {
+      a: 1,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 33, 10))
+
+      b: "",
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 34, 11))
+
+      c: false
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 35, 12))
+
+  }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 32, 15))
+}
+
+function corge(id: string) {
+>corge : Symbol(corge, Decl(indexedAccessWithFreshObjectLiteral.ts, 38, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 40, 15))
+
+  return ({
+      a: 123,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 41, 11))
+
+      b: ""
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 42, 13))
+
+  } as Record<string, number | string>)[id]
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 40, 15))
+}
+
+function grault(id: string) {
+>grault : Symbol(grault, Decl(indexedAccessWithFreshObjectLiteral.ts, 45, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 47, 16))
+
+  return ({
+      a: 123,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 48, 11))
+
+      b: ""
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 49, 13))
+
+  } as { [k: string]: string | number})[id]
+>k : Symbol(k, Decl(indexedAccessWithFreshObjectLiteral.ts, 51, 10))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 47, 16))
+}
+

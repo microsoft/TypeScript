@@ -1,0 +1,352 @@
+=== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts ===
+type CheckBooleanOnly<T extends boolean> = any;
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 0, 22))
+
+// Validate CheckBooleanOnly works - should error
+type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
+>T_ERR1 : Symbol(T_ERR1, Decl(noUncheckedIndexedAccess.ts, 0, 47))
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+
+enum NumericEnum1 { A, B, C }
+>NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+>A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+>B : Symbol(NumericEnum1.B, Decl(noUncheckedIndexedAccess.ts, 4, 22))
+>C : Symbol(NumericEnum1.C, Decl(noUncheckedIndexedAccess.ts, 4, 25))
+
+enum NumericEnum2 { A = 0, B = 1 , C = 2 }
+>NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+>A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+>B : Symbol(NumericEnum2.B, Decl(noUncheckedIndexedAccess.ts, 5, 26))
+>C : Symbol(NumericEnum2.C, Decl(noUncheckedIndexedAccess.ts, 5, 34))
+
+enum StringEnum1 { A = "Alpha", B = "Beta" }
+>StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+>A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+>B : Symbol(StringEnum1.B, Decl(noUncheckedIndexedAccess.ts, 6, 31))
+
+declare const strMap: { [s: string]: boolean };
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 8, 25))
+
+// All of these should be errors
+const e1: boolean = strMap["foo"];
+>e1 : Symbol(e1, Decl(noUncheckedIndexedAccess.ts, 11, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e2: boolean = strMap.bar;
+>e2 : Symbol(e2, Decl(noUncheckedIndexedAccess.ts, 12, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e3: boolean = strMap[0];
+>e3 : Symbol(e3, Decl(noUncheckedIndexedAccess.ts, 13, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e4: boolean = strMap[0 as string | number];
+>e4 : Symbol(e4, Decl(noUncheckedIndexedAccess.ts, 14, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e5: boolean = strMap[0 as string | 0 | 1];
+>e5 : Symbol(e5, Decl(noUncheckedIndexedAccess.ts, 15, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e6: boolean = strMap[0 as 0 | 1];
+>e6 : Symbol(e6, Decl(noUncheckedIndexedAccess.ts, 16, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e7: boolean = strMap["foo" as "foo" | "baz"];
+>e7 : Symbol(e7, Decl(noUncheckedIndexedAccess.ts, 17, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const e8: boolean = strMap[NumericEnum1.A];
+>e8 : Symbol(e8, Decl(noUncheckedIndexedAccess.ts, 18, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>NumericEnum1.A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+>NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+>A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+
+const e9: boolean = strMap[NumericEnum2.A];
+>e9 : Symbol(e9, Decl(noUncheckedIndexedAccess.ts, 19, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>NumericEnum2.A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+>NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+>A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+
+const e10: boolean = strMap[StringEnum1.A];
+>e10 : Symbol(e10, Decl(noUncheckedIndexedAccess.ts, 20, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>StringEnum1.A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+>StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+>A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+
+const e11: boolean = strMap[StringEnum1.A as StringEnum1];
+>e11 : Symbol(e11, Decl(noUncheckedIndexedAccess.ts, 21, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>StringEnum1.A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+>StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+>A : Symbol(StringEnum1.A, Decl(noUncheckedIndexedAccess.ts, 6, 18))
+>StringEnum1 : Symbol(StringEnum1, Decl(noUncheckedIndexedAccess.ts, 5, 42))
+
+const e12: boolean = strMap[NumericEnum1.A as NumericEnum1];
+>e12 : Symbol(e12, Decl(noUncheckedIndexedAccess.ts, 22, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>NumericEnum1.A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+>NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+>A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+>NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+
+const e13: boolean = strMap[NumericEnum2.A as NumericEnum2];
+>e13 : Symbol(e13, Decl(noUncheckedIndexedAccess.ts, 23, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>NumericEnum2.A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+>NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+>A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+>NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+
+const e14: boolean = strMap[null as any];
+>e14 : Symbol(e14, Decl(noUncheckedIndexedAccess.ts, 24, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+// Should be OK
+const ok1: boolean | undefined = strMap["foo"];
+>ok1 : Symbol(ok1, Decl(noUncheckedIndexedAccess.ts, 27, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+const ok2: boolean | undefined = strMap.bar;
+>ok2 : Symbol(ok2, Decl(noUncheckedIndexedAccess.ts, 28, 5))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
+>T_OK1 : Symbol(T_OK1, Decl(noUncheckedIndexedAccess.ts, 28, 44))
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+type T_OK2 = CheckBooleanOnly<(typeof strMap)["foo"]>;
+>T_OK2 : Symbol(T_OK2, Decl(noUncheckedIndexedAccess.ts, 30, 55))
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+type T_OK3 = CheckBooleanOnly<(typeof strMap)["bar" | "baz"]>;
+>T_OK3 : Symbol(T_OK3, Decl(noUncheckedIndexedAccess.ts, 31, 54))
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+type T_OK4 = CheckBooleanOnly<(typeof strMap)[number]>;
+>T_OK4 : Symbol(T_OK4, Decl(noUncheckedIndexedAccess.ts, 32, 62))
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+type T_OK5 = CheckBooleanOnly<(typeof strMap)[any]>;
+>T_OK5 : Symbol(T_OK5, Decl(noUncheckedIndexedAccess.ts, 33, 55))
+>CheckBooleanOnly : Symbol(CheckBooleanOnly, Decl(noUncheckedIndexedAccess.ts, 0, 0))
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+
+// Writes don't allow 'undefined'; all should be errors
+strMap["baz"] = undefined;
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>undefined : Symbol(undefined)
+
+strMap.qua = undefined;
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>undefined : Symbol(undefined)
+
+strMap[0] = undefined;
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>undefined : Symbol(undefined)
+
+strMap[null as any] = undefined;
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>undefined : Symbol(undefined)
+
+// Numeric lookups are unaffected
+declare const numMap: { [s: number]: boolean };
+>numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 43, 25))
+
+// All of these should be ok
+const num_ok1: boolean = numMap[0];
+>num_ok1 : Symbol(num_ok1, Decl(noUncheckedIndexedAccess.ts, 45, 5))
+>numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+
+const num_ok2: boolean = numMap[0 as number];
+>num_ok2 : Symbol(num_ok2, Decl(noUncheckedIndexedAccess.ts, 46, 5))
+>numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+
+const num_ok3: boolean = numMap[0 as 0 | 1];
+>num_ok3 : Symbol(num_ok3, Decl(noUncheckedIndexedAccess.ts, 47, 5))
+>numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+
+const num_ok4: boolean = numMap[NumericEnum1.A];
+>num_ok4 : Symbol(num_ok4, Decl(noUncheckedIndexedAccess.ts, 48, 5))
+>numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+>NumericEnum1.A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+>NumericEnum1 : Symbol(NumericEnum1, Decl(noUncheckedIndexedAccess.ts, 2, 52))
+>A : Symbol(NumericEnum1.A, Decl(noUncheckedIndexedAccess.ts, 4, 19))
+
+const num_ok5: boolean = numMap[NumericEnum2.A];
+>num_ok5 : Symbol(num_ok5, Decl(noUncheckedIndexedAccess.ts, 49, 5))
+>numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))
+>NumericEnum2.A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+>NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
+>A : Symbol(NumericEnum2.A, Decl(noUncheckedIndexedAccess.ts, 5, 19))
+
+// Generics
+function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
+>generic1 : Symbol(generic1, Decl(noUncheckedIndexedAccess.ts, 49, 48))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 52, 18))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 52, 31))
+>arg : Symbol(arg, Decl(noUncheckedIndexedAccess.ts, 52, 54))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 52, 18))
+
+    // Should error
+    return arg["blah"];
+>arg : Symbol(arg, Decl(noUncheckedIndexedAccess.ts, 52, 54))
+}
+function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
+>generic2 : Symbol(generic2, Decl(noUncheckedIndexedAccess.ts, 55, 1))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 56, 18))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 56, 31))
+>arg : Symbol(arg, Decl(noUncheckedIndexedAccess.ts, 56, 54))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 56, 18))
+
+    // Should OK
+    return arg["blah"]!;
+>arg : Symbol(arg, Decl(noUncheckedIndexedAccess.ts, 56, 54))
+}
+function generic3<T extends string>(arg: T): boolean {
+>generic3 : Symbol(generic3, Decl(noUncheckedIndexedAccess.ts, 59, 1))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 60, 18))
+>arg : Symbol(arg, Decl(noUncheckedIndexedAccess.ts, 60, 36))
+>T : Symbol(T, Decl(noUncheckedIndexedAccess.ts, 60, 18))
+
+    // Should error
+    return strMap[arg];
+>strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
+>arg : Symbol(arg, Decl(noUncheckedIndexedAccess.ts, 60, 36))
+}
+
+// Element access into known properties is ok
+declare const obj1: { x: string, y: number, [key: string]: string | number };
+>obj1 : Symbol(obj1, Decl(noUncheckedIndexedAccess.ts, 66, 13))
+>x : Symbol(x, Decl(noUncheckedIndexedAccess.ts, 66, 21))
+>y : Symbol(y, Decl(noUncheckedIndexedAccess.ts, 66, 32))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 66, 45))
+
+obj1["x"];
+>obj1 : Symbol(obj1, Decl(noUncheckedIndexedAccess.ts, 66, 13))
+>"x" : Symbol(x, Decl(noUncheckedIndexedAccess.ts, 66, 21))
+
+const y = "y";
+>y : Symbol(y, Decl(noUncheckedIndexedAccess.ts, 68, 5))
+
+obj1[y];
+>obj1 : Symbol(obj1, Decl(noUncheckedIndexedAccess.ts, 66, 13))
+>y : Symbol(y, Decl(noUncheckedIndexedAccess.ts, 68, 5))
+
+let yy = "y";
+>yy : Symbol(yy, Decl(noUncheckedIndexedAccess.ts, 70, 3))
+
+obj1[yy];
+>obj1 : Symbol(obj1, Decl(noUncheckedIndexedAccess.ts, 66, 13))
+>yy : Symbol(yy, Decl(noUncheckedIndexedAccess.ts, 70, 3))
+
+let z = "z";
+>z : Symbol(z, Decl(noUncheckedIndexedAccess.ts, 72, 3))
+
+obj1[z];
+>obj1 : Symbol(obj1, Decl(noUncheckedIndexedAccess.ts, 66, 13))
+>z : Symbol(z, Decl(noUncheckedIndexedAccess.ts, 72, 3))
+
+// Distributivity cases
+declare const strMapUnion: { [s: string]: boolean } | { [s: string]: number };
+>strMapUnion : Symbol(strMapUnion, Decl(noUncheckedIndexedAccess.ts, 76, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 76, 30))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 76, 57))
+
+// Should error
+const f1: boolean | number = strMapUnion["foo"];
+>f1 : Symbol(f1, Decl(noUncheckedIndexedAccess.ts, 78, 5))
+>strMapUnion : Symbol(strMapUnion, Decl(noUncheckedIndexedAccess.ts, 76, 13))
+
+// Symbol index signatures
+declare const s: unique symbol;
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+
+declare const symbolMap: { [s]: string };
+>symbolMap : Symbol(symbolMap, Decl(noUncheckedIndexedAccess.ts, 82, 13))
+>[s] : Symbol([s], Decl(noUncheckedIndexedAccess.ts, 82, 26))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+
+const e15: string = symbolMap[s]; // Should OK
+>e15 : Symbol(e15, Decl(noUncheckedIndexedAccess.ts, 83, 5))
+>symbolMap : Symbol(symbolMap, Decl(noUncheckedIndexedAccess.ts, 82, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+
+symbolMap[s] = undefined; // Should error
+>symbolMap : Symbol(symbolMap, Decl(noUncheckedIndexedAccess.ts, 82, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+>undefined : Symbol(undefined)
+
+// Variadic tuples
+declare const nonEmptyStringArray: [string, ...string[]];
+>nonEmptyStringArray : Symbol(nonEmptyStringArray, Decl(noUncheckedIndexedAccess.ts, 87, 13))
+
+const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
+>variadicOk1 : Symbol(variadicOk1, Decl(noUncheckedIndexedAccess.ts, 88, 5))
+>nonEmptyStringArray : Symbol(nonEmptyStringArray, Decl(noUncheckedIndexedAccess.ts, 87, 13))
+>0 : Symbol(0)
+
+const variadicError1: string = nonEmptyStringArray[1]; // Should error
+>variadicError1 : Symbol(variadicError1, Decl(noUncheckedIndexedAccess.ts, 89, 5))
+>nonEmptyStringArray : Symbol(nonEmptyStringArray, Decl(noUncheckedIndexedAccess.ts, 87, 13))
+
+// Generic index type
+declare const myRecord1: { a: string; b: string };
+>myRecord1 : Symbol(myRecord1, Decl(noUncheckedIndexedAccess.ts, 92, 13))
+>a : Symbol(a, Decl(noUncheckedIndexedAccess.ts, 92, 26))
+>b : Symbol(b, Decl(noUncheckedIndexedAccess.ts, 92, 37))
+
+declare const myRecord2: { a: string; b: string, [key: string]: string };
+>myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
+>a : Symbol(a, Decl(noUncheckedIndexedAccess.ts, 93, 26))
+>b : Symbol(b, Decl(noUncheckedIndexedAccess.ts, 93, 37))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 93, 50))
+
+const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
+>fn1 : Symbol(fn1, Decl(noUncheckedIndexedAccess.ts, 94, 5))
+>Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 94, 13))
+>myRecord1 : Symbol(myRecord1, Decl(noUncheckedIndexedAccess.ts, 92, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 94, 49))
+>Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 94, 13))
+>myRecord1 : Symbol(myRecord1, Decl(noUncheckedIndexedAccess.ts, 92, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 94, 49))
+
+const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
+>fn2 : Symbol(fn2, Decl(noUncheckedIndexedAccess.ts, 95, 5))
+>Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 95, 13))
+>myRecord1 : Symbol(myRecord1, Decl(noUncheckedIndexedAccess.ts, 92, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 95, 49))
+>Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 95, 13))
+>myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 95, 49))
+
+const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+>fn3 : Symbol(fn3, Decl(noUncheckedIndexedAccess.ts, 96, 5))
+>Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 96, 13))
+>myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 96, 49))
+>Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 96, 13))
+
+    myRecord2[key] = undefined; // Should error
+>myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 96, 49))
+>undefined : Symbol(undefined)
+
+    const v: string = myRecord2[key]; // Should error
+>v : Symbol(v, Decl(noUncheckedIndexedAccess.ts, 98, 9))
+>myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 96, 49))
+
+};
+
+

@@ -135,10 +135,10 @@ export interface B {
 export interface C<T_1, U_1> {
     new (): string;
     new (x: T_1): U_1;
-    new <Q_4>(x: Q_4): T_1 & Q_4;
+    new <Q_6>(x: Q_6): T_1 & Q_6;
     (): number;
     (x: T_1): U_1;
-    <Q_3>(x: Q_3): T_1 & Q_3;
+    <Q_4>(x: Q_4): T_1 & Q_4;
     field: T_1 & U_1;
     optionalField?: T_1;
     readonly readonlyField: T_1 & U_1;

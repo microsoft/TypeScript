@@ -1,22 +1,50 @@
 === tests/cases/conformance/directives/ts-expect-error.ts ===
 // @ts-expect-error additional commenting
-var invalidCommentedFancy: number = 'nope';
->invalidCommentedFancy : number
+var invalidCommentedFancySingle: number = 'nope';
+>invalidCommentedFancySingle : number
+>'nope' : "nope"
+
+/*
+ @ts-expect-error additional commenting */
+var invalidCommentedFancyMulti: number = 'nope';
+>invalidCommentedFancyMulti : number
 >'nope' : "nope"
 
 // @ts-expect-error additional commenting
-var validCommentedFancy: string = 'nope';
->validCommentedFancy : string
+var validCommentedFancySingle: string = 'nope';
+>validCommentedFancySingle : string
+>'nope' : "nope"
+
+/* @ts-expect-error additional commenting */
+var validCommentedFancyMulti: string = 'nope';
+>validCommentedFancyMulti : string
 >'nope' : "nope"
 
 // @ts-expect-error
-var invalidCommentedPlain: number = 'nope';
->invalidCommentedPlain : number
+var invalidCommentedPlainSingle: number = 'nope';
+>invalidCommentedPlainSingle : number
+>'nope' : "nope"
+
+/*
+ @ts-expect-error */
+var invalidCommentedPlainMulti: number = 'nope';
+>invalidCommentedPlainMulti : number
 >'nope' : "nope"
 
 // @ts-expect-error
-var validCommentedPlain: string = 'nope';
->validCommentedPlain : string
+var validCommentedPlainSingle: string = 'nope';
+>validCommentedPlainSingle : string
+>'nope' : "nope"
+
+/* @ts-expect-error */
+var validCommentedPlainMulti1: string = 'nope';
+>validCommentedPlainMulti1 : string
+>'nope' : "nope"
+
+/*
+@ts-expect-error */
+var validCommentedPlainMulti2: string = 'nope';
+>validCommentedPlainMulti2 : string
 >'nope' : "nope"
 
 var invalidPlain: number = 'nope';
@@ -26,4 +54,53 @@ var invalidPlain: number = 'nope';
 var validPlain: string = 'nope';
 >validPlain : string
 >'nope' : "nope"
+
+// @ts-expect-error
+(({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+>(({ a: true } as const).a === false) : boolean
+>({ a: true } as const).a === false : boolean
+>({ a: true } as const).a : true
+>({ a: true } as const) : { readonly a: true; }
+>{ a: true } as const : { readonly a: true; }
+>{ a: true } : { readonly a: true; }
+>a : true
+>true : true
+>a : true
+>false : false
+
+(({ a: true } as const).a === false); // Should error
+>(({ a: true } as const).a === false) : boolean
+>({ a: true } as const).a === false : boolean
+>({ a: true } as const).a : true
+>({ a: true } as const) : { readonly a: true; }
+>{ a: true } as const : { readonly a: true; }
+>{ a: true } : { readonly a: true; }
+>a : true
+>true : true
+>a : true
+>false : false
+
+(({ a: true } as const).a === false); // error
+>(({ a: true } as const).a === false) : boolean
+>({ a: true } as const).a === false : boolean
+>({ a: true } as const).a : true
+>({ a: true } as const) : { readonly a: true; }
+>{ a: true } as const : { readonly a: true; }
+>{ a: true } : { readonly a: true; }
+>a : true
+>true : true
+>a : true
+>false : false
+
+(({ a: true } as const).a === false); // error
+>(({ a: true } as const).a === false) : boolean
+>({ a: true } as const).a === false : boolean
+>({ a: true } as const).a : true
+>({ a: true } as const) : { readonly a: true; }
+>{ a: true } as const : { readonly a: true; }
+>{ a: true } : { readonly a: true; }
+>a : true
+>true : true
+>a : true
+>false : false
 

@@ -35,7 +35,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence = 0;
-        private lineMaps: Map<number[]> = createMap<number[]>();
+        private lineMaps = new Map<string, number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
 
@@ -131,6 +131,13 @@ namespace ts.server {
             this.processResponse(request, /*expectEmptyBody*/ true);
         }
 
+        /*@internal*/
+        setFormattingOptions(formatOptions: FormatCodeSettings) {
+            const args: protocol.ConfigureRequestArguments = { formatOptions };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
@@ -198,9 +205,9 @@ namespace ts.server {
                 isNewIdentifierLocation: false,
                 entries: response.body!.map<CompletionEntry>(entry => { // TODO: GH#18217
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, data, isRecommended } = entry;
                         // TODO: GH#241
-                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, data: data as any, isRecommended };
                         return res;
                     }
 
@@ -209,14 +216,13 @@ namespace ts.server {
             };
         }
 
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined): CompletionEntryDetails {
-            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source }] };
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, _options: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, _preferences: UserPreferences | undefined, data: unknown): CompletionEntryDetails {
+            const args: protocol.CompletionDetailsRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), entryNames: [{ name: entryName, source, data }] };
 
-            const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetails, args);
-            const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
-            Debug.assert(response.body!.length === 1, "Unexpected length of completion details response body.");
-            const convertedCodeActions = map(response.body![0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
-            return { ...response.body![0], codeActions: convertedCodeActions };
+            const request = this.processRequest<protocol.CompletionDetailsRequest>(CommandNames.CompletionDetailsFull, args);
+            const response = this.processResponse<protocol.Response>(request);
+            Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
+            return response.body[0];
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
@@ -336,9 +342,11 @@ namespace ts.server {
             }));
         }
 
-        findReferences(_fileName: string, _position: number): ReferencedSymbol[] {
-            // Not yet implemented.
-            return [];
+        findReferences(fileName: string, position: number): ReferencedSymbol[] {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.ReferencesFull, args);
+            const response = this.processResponse(request);
+            return response.body;
         }
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
@@ -346,6 +354,18 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.ReferencesRequest>(CommandNames.References, args);
             const response = this.processResponse<protocol.ReferencesResponse>(request);
+
+            return response.body!.refs.map(entry => ({ // TODO: GH#18217
+                fileName: entry.file,
+                textSpan: this.decodeSpan(entry),
+                isWriteAccess: entry.isWriteAccess,
+                isDefinition: entry.isDefinition,
+            }));
+        }
+
+        getFileReferences(fileName: string): ReferenceEntry[] {
+            const request = this.processRequest<protocol.FileReferencesRequest>(CommandNames.FileReferences, { file: fileName });
+            const response = this.processResponse<protocol.FileReferencesResponse>(request);
 
             return response.body!.refs.map(entry => ({ // TODO: GH#18217
                 fileName: entry.file,
@@ -388,6 +408,7 @@ namespace ts.server {
                     category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
+                    reportsDeprecated: entry.reportsDeprecated,
                 };
             });
         }
@@ -505,6 +526,9 @@ namespace ts.server {
         private decodeSpan(span: protocol.TextSpan & { file: string }): TextSpan;
         private decodeSpan(span: protocol.TextSpan, fileName: string, lineMap?: number[]): TextSpan;
         private decodeSpan(span: protocol.TextSpan & { file: string }, fileName?: string, lineMap?: number[]): TextSpan {
+            if (span.start.line === 1 && span.start.offset === 1 && span.end.line === 1 && span.end.offset === 1) {
+                return { start: 0, length: 0 };
+            }
             fileName = fileName || span.file;
             lineMap = lineMap || this.getLineMap(fileName);
             return createTextSpanFromBounds(
@@ -583,7 +607,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getDocCommentTemplateAtPosition(_fileName: string, _position: number): TextInsertion {
+        getDocCommentTemplateAtPosition(_fileName: string, _position: number, _options?: DocCommentTemplateOptions): TextInsertion {
             return notImplemented();
         }
 
@@ -739,7 +763,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan): Classifications {
+        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan, _format?: SemanticClassificationFormat): Classifications {
             return notImplemented();
         }
 
@@ -748,6 +772,8 @@ namespace ts.server {
                 file: item.file,
                 name: item.name,
                 kind: item.kind,
+                kindModifiers: item.kindModifiers,
+                containerName: item.containerName,
                 span: this.decodeSpan(item.span, item.file),
                 selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
             };
@@ -769,7 +795,7 @@ namespace ts.server {
 
         provideCallHierarchyIncomingCalls(fileName: string, position: number) {
             const args = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.ProvideCallHierarchyIncomingCalls, args);
             const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
             return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
         }
@@ -783,13 +809,17 @@ namespace ts.server {
 
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             const args = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.ProvideCallHierarchyOutgoingCalls, args);
             const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
             return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
         }
 
         getProgram(): Program {
-            throw new Error("SourceFile objects are not serializable through the server protocol.");
+            throw new Error("Program objects are not serializable through the server protocol.");
+        }
+
+        getAutoImportProvider(): Program | undefined {
+            throw new Error("Program objects are not serializable through the server protocol.");
         }
 
         getNonBoundSourceFile(_fileName: string): SourceFile {
@@ -809,6 +839,22 @@ namespace ts.server {
         }
 
         clearSourceMapperCache(): never {
+            return notImplemented();
+        }
+
+        toggleLineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        toggleMultilineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        commentSelection(): TextChange[] {
+            return notImplemented();
+        }
+
+        uncommentSelection(): TextChange[] {
             return notImplemented();
         }
 

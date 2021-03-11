@@ -1,4 +1,162 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/first/first_PART1.ts]
+/**@internal*/ interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+
+
+//// [/src/first/first_part2.ts]
+console.log(f());
+
+
+//// [/src/first/first_part3.ts]
+function f() {
+    return "JS does hoists";
+}
+
+//// [/src/first/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true,
+    "removeComments": false,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "outFile": "./bin/first-output.js",
+    "skipDefaultLibCheck": true,
+  },
+  "files": [
+    "first_PART1.ts",
+    "first_part2.ts",
+    "first_part3.ts"
+  ],
+  "references": [
+  ]
+}
+
+
+//// [/src/second/second_part1.ts]
+namespace N {
+    // Comment text
+}
+
+namespace N {
+    function f() {
+        console.log('testing');
+    }
+
+    f();
+}
+
+class normalC {
+    /**@internal*/ constructor() { }
+    /**@internal*/ prop: string;
+    /**@internal*/ method() { }
+    /**@internal*/ get c() { return 10; }
+    /**@internal*/ set c(val: number) { }
+}
+namespace normalN {
+    /**@internal*/ export class C { }
+    /**@internal*/ export function foo() {}
+    /**@internal*/ export namespace someNamespace { export class C {} }
+    /**@internal*/ export namespace someOther.something { export class someClass {} }
+    /**@internal*/ export import someImport = someNamespace.C;
+    /**@internal*/ export type internalType = internalC;
+    /**@internal*/ export const internalConst = 10;
+    /**@internal*/ export enum internalEnum { a, b, c }
+}
+/**@internal*/ class internalC {}
+/**@internal*/ function internalfoo() {}
+/**@internal*/ namespace internalNamespace { export class someClass {} }
+/**@internal*/ namespace internalOther.something { export class someClass {} }
+/**@internal*/ import internalImport = internalNamespace.someClass;
+/**@internal*/ type internalType = internalC;
+/**@internal*/ const internalConst = 10;
+/**@internal*/ enum internalEnum { a, b, c }
+
+//// [/src/second/second_part2.ts]
+class C {
+    doSomething() {
+        console.log("something got done");
+    }
+}
+
+
+//// [/src/second/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true,
+    "removeComments": false,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "declaration": true,
+    "outFile": "../2/second-output.js",
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+    { "path": "../first", "prepend": true }
+  ]
+}
+
+
+//// [/src/third/third_part1.ts]
+var c = new C();
+c.doSomething();
+
+
+//// [/src/third/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true,
+    "removeComments": false,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "declaration": true,
+    "stripInternal": true,
+    "outFile": "./thirdjs/output/third-output.js",
+    "skipDefaultLibCheck": true,
+  },
+  "files": [
+    "third_part1.ts"
+  ],
+  "references": [
+    
+    { "path": "../second", "prepend": true },
+  ]
+}
+
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
@@ -2828,95 +2986,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../second",
-    "sourceFiles": [
-      "../second/second_part1.ts",
-      "../second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 110,
-          "kind": "prepend",
-          "data": "../first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 110,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 110,
-          "end": 3545,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 172,
-          "kind": "prepend",
-          "data": "../first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 54,
-              "kind": "internal"
-            },
-            {
-              "pos": 56,
-              "end": 172,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 172,
-          "end": 249,
-          "kind": "text"
-        },
-        {
-          "pos": 249,
-          "end": 429,
-          "kind": "internal"
-        },
-        {
-          "pos": 431,
-          "end": 463,
-          "kind": "text"
-        },
-        {
-          "pos": 463,
-          "end": 975,
-          "kind": "internal"
-        },
-        {
-          "pos": 977,
-          "end": 980,
-          "kind": "text"
-        },
-        {
-          "pos": 980,
-          "end": 1513,
-          "kind": "internal"
-        },
-        {
-          "pos": 1515,
-          "end": 1563,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3545,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":172,"kind":"prepend","data":"../first/bin/first-output.d.ts","texts":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]},{"pos":172,"end":249,"kind":"text"},{"pos":249,"end":429,"kind":"internal"},{"pos":431,"end":463,"kind":"text"},{"pos":463,"end":975,"kind":"internal"},{"pos":977,"end":980,"kind":"text"},{"pos":980,"end":1513,"kind":"internal"},{"pos":1515,"end":1563,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3128,6 +3198,97 @@ declare class C {
 }
 
 ======================================================================
+
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "prepend",
+          "data": "../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 110,
+          "end": 3545,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 172,
+          "kind": "prepend",
+          "data": "../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 54,
+              "kind": "internal"
+            },
+            {
+              "pos": 56,
+              "end": 172,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 172,
+          "end": 249,
+          "kind": "text"
+        },
+        {
+          "pos": 249,
+          "end": 429,
+          "kind": "internal"
+        },
+        {
+          "pos": 431,
+          "end": 463,
+          "kind": "text"
+        },
+        {
+          "pos": 463,
+          "end": 975,
+          "kind": "internal"
+        },
+        {
+          "pos": 977,
+          "end": 980,
+          "kind": "text"
+        },
+        {
+          "pos": 980,
+          "end": 1513,
+          "kind": "internal"
+        },
+        {
+          "pos": 1515,
+          "end": 1563,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
 
 //// [/src/first/bin/first-output.d.ts]
 /**@internal*/ interface TheFirst {
@@ -3436,6 +3597,39 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-110)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+internal: (0-54)
+/**@internal*/ interface TheFirst {
+    none: any;
+}
+----------------------------------------------------------------------
+text: (56-172)
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "..",
@@ -3470,130 +3664,6 @@ sourceFile:../first_part3.ts
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/first/bin/first-output.js
-----------------------------------------------------------------------
-text: (0-110)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-======================================================================
-======================================================================
-File:: /src/first/bin/first-output.d.ts
-----------------------------------------------------------------------
-internal: (0-54)
-/**@internal*/ interface TheFirst {
-    none: any;
-}
-----------------------------------------------------------------------
-text: (56-172)
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-
-======================================================================
-
-//// [/src/first/first_PART1.ts]
-/**@internal*/ interface TheFirst {
-    none: any;
-}
-
-const s = "Hello, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-
-
-//// [/src/first/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es5",
-    "composite": true,
-    "removeComments": false,
-    "strict": false,
-    "sourceMap": true,
-    "declarationMap": true,
-    "outFile": "./bin/first-output.js",
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "first_PART1.ts",
-    "first_part2.ts",
-    "first_part3.ts"
-  ],
-  "references": [
-  ]
-}
-
-
-//// [/src/second/second_part1.ts]
-namespace N {
-    // Comment text
-}
-
-namespace N {
-    function f() {
-        console.log('testing');
-    }
-
-    f();
-}
-
-class normalC {
-    /**@internal*/ constructor() { }
-    /**@internal*/ prop: string;
-    /**@internal*/ method() { }
-    /**@internal*/ get c() { return 10; }
-    /**@internal*/ set c(val: number) { }
-}
-namespace normalN {
-    /**@internal*/ export class C { }
-    /**@internal*/ export function foo() {}
-    /**@internal*/ export namespace someNamespace { export class C {} }
-    /**@internal*/ export namespace someOther.something { export class someClass {} }
-    /**@internal*/ export import someImport = someNamespace.C;
-    /**@internal*/ export type internalType = internalC;
-    /**@internal*/ export const internalConst = 10;
-    /**@internal*/ export enum internalEnum { a, b, c }
-}
-/**@internal*/ class internalC {}
-/**@internal*/ function internalfoo() {}
-/**@internal*/ namespace internalNamespace { export class someClass {} }
-/**@internal*/ namespace internalOther.something { export class someClass {} }
-/**@internal*/ import internalImport = internalNamespace.someClass;
-/**@internal*/ type internalType = internalC;
-/**@internal*/ const internalConst = 10;
-/**@internal*/ enum internalEnum { a, b, c }
-
-//// [/src/second/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es5",
-    "composite": true,
-    "removeComments": false,
-    "strict": false,
-    "sourceMap": true,
-    "declarationMap": true,
-    "declaration": true,
-    "outFile": "../2/second-output.js",
-    "skipDefaultLibCheck": true
-  },
-  "references": [
-    { "path": "../first", "prepend": true }
-  ]
-}
-
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare const s = "Hello, world";
@@ -5732,59 +5802,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../..",
-    "sourceFiles": [
-      "../../third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 3545,
-          "kind": "prepend",
-          "data": "../../../2/second-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 3545,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 3545,
-          "end": 3581,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 276,
-          "kind": "prepend",
-          "data": "../../../2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 276,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 276,
-          "end": 295,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":3545,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":0,"end":3545,"kind":"text"}]},{"pos":3545,"end":3581,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":0,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -5937,27 +5955,58 @@ declare var c: C;
 
 ======================================================================
 
-//// [/src/third/tsconfig.json]
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
 {
-  "compilerOptions": {
-    "target": "es5",
-    "composite": true,
-    "removeComments": false,
-    "strict": false,
-    "sourceMap": true,
-    "declarationMap": true,
-    "declaration": true,
-    "stripInternal": true,
-    "outFile": "./thirdjs/output/third-output.js",
-    "skipDefaultLibCheck": true
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 3545,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 3545,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 3545,
+          "end": 3581,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 276,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 276,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 276,
+          "end": 295,
+          "kind": "text"
+        }
+      ]
+    }
   },
-  "files": [
-    "third_part1.ts"
-  ],
-  "references": [
-    
-    { "path": "../second", "prepend": true },
-  ]
+  "version": "FakeTSVersion"
 }
-
 

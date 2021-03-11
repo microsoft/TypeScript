@@ -184,15 +184,15 @@ type RecArray<T> = Array<T | RecArray<T>>;
 >RecArray : RecArray<T>
 
 declare function flat<T>(a: RecArray<T>): Array<T>;
->flat : <T>(a: RecArray<T>) => T[]
+>flat : <T>(a: RecArray<T>) => Array<T>
 >a : RecArray<T>
 
 declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
->flat1 : <T>(a: (T | T[])[]) => T[]
+>flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
 >a : (T | T[])[]
 
 declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
->flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
+>flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
 >a : (T | (T | T[])[])[]
 
 flat([1, [2, [3]]]);  // number[]

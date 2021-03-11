@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,6 +21,54 @@ export const y: string = 20;
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"module":"amd"}}
 
+
+/a/lib/tsc.js -w
+Output::
+>> Screen clear
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+
+[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m1[0m export const y: string = 20;
+[7m [0m [91m             ~[0m
+
+[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"module":2,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+WatchedFiles::
+/users/username/projects/project/tsconfig.json:
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
+/users/username/projects/project/file1.ts:
+  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
+/users/username/projects/project/file2.ts:
+  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/users/username/projects/project/node_modules/@types:
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project:
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
@@ -40,6 +88,9 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n","affectsGlobalScope":false},{"version":"-13939690350-export const y: string = 20;","signature":"-7924398419-export declare const y: string;\n","affectsGlobalScope":false}],"options":{"incremental":true,"module":2,"watch":true,"configFilePath":"./tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1,[2,[{"file":"./file2.ts","start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]]},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -79,7 +130,7 @@ define(["require", "exports"], function (require, exports) {
             "length": 1,
             "code": 2322,
             "category": 1,
-            "messageText": "Type '20' is not assignable to type 'string'."
+            "messageText": "Type 'number' is not assignable to type 'string'."
           }
         ]
       ]
@@ -89,32 +140,36 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/file1.ts]
+export const z = 10;
+
+
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90m12:00:36 AM[0m] Starting compilation in watch mode...
 
-
-[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m1[0m export const y: string = 20;
 [7m [0m [91m             ~[0m
 
-
-[[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"module":2,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
 
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
@@ -136,11 +191,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change::
-
-//// [/users/username/projects/project/file1.ts]
-export const z = 10;
-
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
@@ -151,6 +201,9 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-12438487295-export const z = 10;","signature":"-7483702853-export declare const z = 10;\n","affectsGlobalScope":false},{"version":"-13939690350-export const y: string = 20;","signature":"-7924398419-export declare const y: string;\n","affectsGlobalScope":false}],"options":{"incremental":true,"module":2,"watch":true,"configFilePath":"./tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[0,1,[2,[{"file":"./file2.ts","start":13,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]]},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
     "fileInfos": {
@@ -190,7 +243,7 @@ define(["require", "exports"], function (require, exports) {
             "length": 1,
             "code": 2322,
             "category": 1,
-            "messageText": "Type '20' is not assignable to type 'string'."
+            "messageText": "Type 'number' is not assignable to type 'string'."
           }
         ]
       ]
@@ -199,48 +252,3 @@ define(["require", "exports"], function (require, exports) {
   "version": "FakeTSVersion"
 }
 
-
-Output::
->> Screen clear
-[[90m12:00:34 AM[0m] Starting compilation in watch mode...
-
-
-[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
-
-[7m1[0m export const y: string = 20;
-[7m [0m [91m             ~[0m
-
-
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/file1.ts
-
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
