@@ -326,10 +326,7 @@ namespace ts {
                     /*customTransformers*/ undefined,
                     /*forceDtsEmit*/ true
                 );
-                const firstDts = emitOutput.outputFiles &&
-                    programOfThisState.getCompilerOptions().declarationMap ?
-                    emitOutput.outputFiles.length > 1 ? emitOutput.outputFiles[1] : undefined :
-                    emitOutput.outputFiles.length > 0 ? emitOutput.outputFiles[0] : undefined;
+                const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
                     Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
                     latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
