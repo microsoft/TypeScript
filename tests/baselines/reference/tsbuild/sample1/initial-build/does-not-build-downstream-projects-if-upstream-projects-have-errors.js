@@ -289,15 +289,15 @@ exports.multiply = multiply;
     "affectedFilesPendingEmit": [
       [
         "../core/anothermodule.d.ts",
-        1
+        "Full"
       ],
       [
         "../core/index.d.ts",
-        1
+        "Full"
       ],
       [
         "./index.ts",
-        1
+        "Full"
       ]
     ]
   },

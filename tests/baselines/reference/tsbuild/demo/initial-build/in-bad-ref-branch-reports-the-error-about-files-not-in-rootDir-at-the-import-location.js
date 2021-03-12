@@ -325,19 +325,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "affectedFilesPendingEmit": [
       [
         "../../animals/animal.ts",
-        1
+        "Full"
       ],
       [
         "../../animals/dog.ts",
-        1
+        "Full"
       ],
       [
         "../../animals/index.ts",
-        1
+        "Full"
       ],
       [
         "../../core/utilities.ts",
-        1
+        "Full"
       ]
     ]
   },

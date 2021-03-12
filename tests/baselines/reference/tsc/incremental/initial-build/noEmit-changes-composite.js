@@ -467,19 +467,19 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        1
+        "Full"
       ],
       [
         "./src/directuse.ts",
-        0
+        "DtsOnly"
       ],
       [
         "./src/indirectclass.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectuse.ts",
-        0
+        "DtsOnly"
       ]
     ]
   },
@@ -1173,19 +1173,19 @@ exitCode:: ExitStatus.Success
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        1
+        "Full"
       ],
       [
         "./src/directuse.ts",
-        0
+        "DtsOnly"
       ],
       [
         "./src/indirectclass.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectuse.ts",
-        0
+        "DtsOnly"
       ]
     ]
   },

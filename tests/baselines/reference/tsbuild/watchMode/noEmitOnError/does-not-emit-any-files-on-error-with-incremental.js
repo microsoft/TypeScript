@@ -418,7 +418,7 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "../src/main.ts",
-        1
+        "Full"
       ]
     ]
   },
