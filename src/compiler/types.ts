@@ -6124,8 +6124,14 @@ namespace ts {
     }
 
     /* @internal */
+    export interface AlternateModeDiagnostics {
+        diagnostic: DiagnosticMessage;
+        options: ReadonlySet<string>;
+    }
+
+    /* @internal */
     export interface DidYouMeanOptionsDiagnostics {
-        specificDiagnosticMessages?: ReadonlyESMap<string, DiagnosticMessage>;
+        alternateMode?: AlternateModeDiagnostics;
         optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,
