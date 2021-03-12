@@ -14204,24 +14204,28 @@ namespace ts {
                         getFlowTypeOfReference(accessExpression, propType) :
                         propType;
                 }
-                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
-                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
-                        const indexNode = getIndexNodeForAccessExpression(accessNode);
-                        if (isTupleType(objectType)) {
-                            error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
-                                typeToString(objectType), getTypeReferenceArity(objectType), unescapeLeadingUnderscores(propName));
+                if (isNumericLiteralName(propName) && +propName >= 0) {
+                    if (everyType(objectType, isTupleType)) {
+                        if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
+                            const indexNode = getIndexNodeForAccessExpression(accessNode);
+                            if (isTupleType(objectType)) {
+                                error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
+                                    typeToString(objectType), getTypeReferenceArity(objectType), unescapeLeadingUnderscores(propName));
+                            }
+                            else {
+                                error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
+                            }
                         }
-                        else {
-                            error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
-                        }
+                        errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, IndexKind.Number));
+                        return mapType(objectType, t => {
+                            const restType = getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType;
+                            return noUncheckedIndexedAccessCandidate ? getUnionType([restType, undefinedType]) : restType;
+                        });
                     }
-                    errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, IndexKind.Number));
-                    return mapType(objectType, t => {
-                        const restType = getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType;
-                        return noUncheckedIndexedAccessCandidate ? getUnionType([restType, undefinedType]) : restType;
-                    });
+                    else if (someType(objectType, isTupleType)) {
+                        return undefinedType;
+                    }
                 }
-                if (someType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) return undefinedType;
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
