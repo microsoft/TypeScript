@@ -141,7 +141,7 @@ export declare const World = "hello";
 //// [/src/core/anotherModule.d.ts.map]
 {"version":3,"file":"anotherModule.d.ts","sourceRoot":"","sources":["anotherModule.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,KAAK,UAAU,CAAC"}
 
-//// [/src/core/anotherModule.d.ts.map.baseline.txt]
+//// [/src/core/anothermodule.d.ts.map.baseline.txt]
 ===================================================================
 JsFile: anotherModule.d.ts
 mapUrl: anotherModule.d.ts.map
