@@ -34958,7 +34958,6 @@ namespace ts {
 
         function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
             if (!strictNullChecks) return;
-            if (getFalsyFlags(type)) return;
 
             if (getAwaitedTypeOfPromise(type)) {
                 errorAndMaybeSuggestAwait(
@@ -34969,39 +34968,50 @@ namespace ts {
                 return;
             }
 
-            const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
-            if (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
-                checkTestingKnownTruthyCallableOrAwaitableType(condExpr.left, type, body);
-            }
-            const testedNode = isIdentifier(location) ? location
-                : isPropertyAccessExpression(location) ? location.name
-                : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
-                : undefined;
-            const isPropertyExpressionCast = isPropertyAccessExpression(location)
-                && isAssertionExpression(skipParentheses(location.expression));
-            if (!testedNode || isPropertyExpressionCast) {
-                return;
+            helper(condExpr, body);
+            while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
+                condExpr = condExpr.left;
+                helper(condExpr, body);
             }
 
-            // While it technically should be invalid for any known-truthy value
-            // to be tested, we de-scope to functions unrefenced in the block as a
-            // heuristic to identify the most common bugs. There are too many
-            // false positives for values sourced from type definitions without
-            // strictNullChecks otherwise.
-            const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
-            if (callSignatures.length === 0) {
-                return;
-            }
+            function helper(condExpr: Expression, body: Expression | Statement | undefined) {
+                const location = isBinaryExpression(condExpr) &&
+                    (condExpr.operatorToken.kind === SyntaxKind.BarBarToken || condExpr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken)
+                    ? condExpr.right
+                    : condExpr;
+                const type = checkTruthinessExpression(location);
+                if (getFalsyFlags(type)) return;
 
-            const testedSymbol = getSymbolAtLocation(testedNode);
-            if (!testedSymbol) {
-                return;
-            }
+                // While it technically should be invalid for any known-truthy value
+                // to be tested, we de-scope to functions unrefenced in the block as a
+                // heuristic to identify the most common bugs. There are too many
+                // false positives for values sourced from type definitions without
+                // strictNullChecks otherwise.
+                const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+                if (callSignatures.length === 0) {
+                    return;
+                }
 
-            const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
-            if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                const testedNode = isIdentifier(location) ? location
+                    : isPropertyAccessExpression(location) ? location.name
+                    : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
+                    : undefined;
+                const isPropertyExpressionCast = isPropertyAccessExpression(location)
+                    && isAssertionExpression(skipParentheses(location.expression));
+                if (!testedNode || isPropertyExpressionCast) {
+                    return;
+                }
+
+                const testedSymbol = getSymbolAtLocation(testedNode);
+                if (!testedSymbol) {
+                    return;
+                }
+
+                const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+                    || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
+                if (!isUsed) {
+                    error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                }
             }
         }
 
