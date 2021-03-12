@@ -316,16 +316,8 @@ namespace ts {
             if (!info) return Debug.fail();
 
             const prevSignature = info.signature;
-            let latestSignature: string;
-            if (sourceFile.isDeclarationFile) {
-                latestSignature = sourceFile.version;
-                if (exportedModulesMapCache && latestSignature !== prevSignature) {
-                    // All the references in this file are exported
-                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
-                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
-                }
-            }
-            else {
+            let latestSignature: string | undefined;
+            if (!sourceFile.isDeclarationFile) {
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,
@@ -345,14 +337,18 @@ namespace ts {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                     }
                 }
-                else {
-                    latestSignature = prevSignature!; // TODO: GH#18217
+            }
+            // Default is to use file version as signature
+            if (latestSignature === undefined) {
+                latestSignature = sourceFile.version;
+                if (exportedModulesMapCache && latestSignature !== prevSignature) {
+                    // All the references in this file are exported
+                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
                 }
-
             }
             cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
-
-            return !prevSignature || latestSignature !== prevSignature;
+            return latestSignature !== prevSignature;
         }
 
         /**
