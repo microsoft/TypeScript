@@ -1,4 +1,12 @@
 namespace ts {
+    let fs: typeof import("fs") | undefined;
+    let path: typeof import("path") | undefined;
+    try {
+        fs = require("fs");
+        path = require("path");
+    }
+    catch {}
+
     const enum SignatureFlags {
         None = 0,
         Yield = 1 << 0,
@@ -7010,7 +7018,19 @@ namespace ts {
         function parseModuleSpecifier(): Expression {
             if (token() === SyntaxKind.StringLiteral) {
                 const result = parseLiteralNode();
-                result.text = internIdentifier(result.text);
+                const text = result.text;
+                if (fs && path && result.text.charCodeAt(0) === CharacterCodes.dot) {
+                    const initPath = path.resolve(fileName, result.text);
+                    const ext = path.extname(initPath);
+                    fs.readFile(text, noop);
+                    if (!ext) {
+                        fs.readFile(text + ".ts", noop);
+                        fs.readFile(text + ".tsx", noop);
+                        fs.readFile(text + ".d.ts", noop);
+                        fs.readFile(text + ".js", noop);
+                    }
+                }
+                result.text = internIdentifier(text);
                 return result;
             }
             else {
