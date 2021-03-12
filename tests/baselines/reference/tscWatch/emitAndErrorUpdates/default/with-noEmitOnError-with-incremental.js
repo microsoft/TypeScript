@@ -156,15 +156,15 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "../shared/types/db.ts",
-        1
+        "Full"
       ],
       [
         "../src/main.ts",
-        1
+        "Full"
       ],
       [
         "../src/other.ts",
-        1
+        "Full"
       ]
     ]
   },
@@ -493,7 +493,7 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "../src/main.ts",
-        1
+        "Full"
       ]
     ]
   },

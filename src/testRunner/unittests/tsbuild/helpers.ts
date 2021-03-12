@@ -238,7 +238,7 @@ interface Symbol {
 
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
         type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
-        type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
+        type ProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
         interface ProgramBuildInfo {
             fileNames: readonly string[];
             fileNamesList: readonly (readonly string[])[] | undefined;
@@ -266,7 +266,9 @@ interface Symbol {
             ),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
                 toFileName(fileId),
-                emitKind
+                emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
+                    emitKind === BuilderFileEmit.Full ? "Full" :
+                        Debug.assertNever(emitKind)
             ]),
         };
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;

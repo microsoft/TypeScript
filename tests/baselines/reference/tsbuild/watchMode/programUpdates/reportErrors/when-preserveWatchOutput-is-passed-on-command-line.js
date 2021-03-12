@@ -617,7 +617,7 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "./index.ts",
-        1
+        "Full"
       ]
     ]
   },
@@ -750,7 +750,7 @@ exitCode:: ExitStatus.undefined
     "affectedFilesPendingEmit": [
       [
         "./index.ts",
-        1
+        "Full"
       ]
     ]
   },

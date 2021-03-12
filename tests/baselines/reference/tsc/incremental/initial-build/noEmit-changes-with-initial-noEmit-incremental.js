@@ -158,27 +158,27 @@ exitCode:: ExitStatus.Success
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        1
+        "Full"
       ],
       [
         "./src/directuse.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectclass.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectuse.ts",
-        1
+        "Full"
       ],
       [
         "./src/nochangefile.ts",
-        1
+        "Full"
       ],
       [
         "./src/nochangefilewithemitspecificerror.ts",
-        1
+        "Full"
       ]
     ]
   },
@@ -705,11 +705,11 @@ exitCode:: ExitStatus.Success
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectclass.ts",
-        1
+        "Full"
       ]
     ]
   },

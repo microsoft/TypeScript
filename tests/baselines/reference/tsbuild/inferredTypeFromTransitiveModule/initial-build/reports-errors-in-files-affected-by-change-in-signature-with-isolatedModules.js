@@ -390,15 +390,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "affectedFilesPendingEmit": [
       [
         "../bar.ts",
-        1
+        "Full"
       ],
       [
         "../index.ts",
-        0
+        "DtsOnly"
       ],
       [
         "../lazyindex.ts",
-        0
+        "DtsOnly"
       ]
     ]
   },

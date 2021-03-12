@@ -171,7 +171,7 @@ exports.A = A;
     "affectedFilesPendingEmit": [
       [
         "./b.ts",
-        1
+        "Full"
       ]
     ]
   },

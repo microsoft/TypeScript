@@ -438,11 +438,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectclass.ts",
-        1
+        "Full"
       ]
     ]
   },
@@ -1123,11 +1123,11 @@ exitCode:: ExitStatus.Success
     "affectedFilesPendingEmit": [
       [
         "./src/class.ts",
-        1
+        "Full"
       ],
       [
         "./src/indirectclass.ts",
-        1
+        "Full"
       ]
     ]
   },

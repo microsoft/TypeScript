@@ -137,11 +137,11 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     "affectedFilesPendingEmit": [
       [
         "../src/hello.json",
-        1
+        "Full"
       ],
       [
         "../src/index.ts",
-        1
+        "Full"
       ]
     ]
   },
