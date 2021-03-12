@@ -1055,7 +1055,9 @@ namespace ts.codefix {
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
         for (const ambient of checker.getAmbientModules()) {
-            cb(ambient, /*sourceFile*/ undefined);
+            if (!stringContains(ambient.name, "*")) {
+                cb(ambient, /*sourceFile*/ undefined);
+            }
         }
         for (const sourceFile of allSourceFiles) {
             if (isExternalOrCommonJsModule(sourceFile)) {
