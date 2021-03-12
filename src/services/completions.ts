@@ -635,7 +635,8 @@ namespace ts.Completions {
                 if (!!sourceFile.externalModuleIndicator
                     && !compilerOptions.allowUmdGlobalAccess
                     && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
-                    && symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions) {
+                    && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
+                        || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)) {
                     return false;
                 }
                 // Continue with origin symbol
@@ -978,7 +979,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         isUncheckedFile: boolean,
         position: number,
-        preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText" | "includeAutomaticOptionalChainCompletions">,
+        preferences: UserPreferences,
         detailsEntryId: CompletionEntryIdentifier | undefined,
         host: LanguageServiceHost
     ): CompletionData | Request | undefined {
@@ -1089,7 +1090,13 @@ namespace ts.Completions {
 
         let location = getTouchingPropertyName(sourceFile, position);
         if (contextToken) {
-            importCompletionNode = getImportCompletionNode(contextToken);
+            // Import statement completions use `insertText`, and also require the `data` property of `CompletionEntryIdentifier`
+            // added in TypeScript 4.3 to be sent back from the client during `getCompletionEntryDetails`. Since this feature
+            // is not backward compatible with older clients, the language service defaults to disabling it, allowing newer clients
+            // to opt in with the `includeCompletionsForImportStatements` user preference.
+            importCompletionNode = preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText
+                ? getImportCompletionNode(contextToken)
+                : undefined;
             // Bail out if this is a known invalid completion location
             if (!importCompletionNode && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
@@ -1527,7 +1534,6 @@ namespace ts.Completions {
 
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
-            if (!shouldOfferImportCompletions()) return GlobalsSearch.Fail;
             collectAutoImports(/*resolveModuleSpecifiers*/ true);
             return GlobalsSearch.Success;
         }
@@ -1605,6 +1611,8 @@ namespace ts.Completions {
         }
 
         function shouldOfferImportCompletions(): boolean {
+            // If already typing an import statement, provide completions for it.
+            if (importCompletionNode) return true;
             // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
             if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
@@ -1715,7 +1723,7 @@ namespace ts.Completions {
                 return;
             }
             symbolToOriginInfoMap[symbols.length] = origin;
-            symbolToSortTextMap[symbolId] = SortText.AutoImportSuggestions;
+            symbolToSortTextMap[symbolId] = importCompletionNode ? SortText.LocationPriority : SortText.AutoImportSuggestions;
             symbols.push(symbol);
         }
 
@@ -2263,6 +2271,7 @@ namespace ts.Completions {
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.VarKeyword:
+                case SyntaxKind.ImportKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.InferKeyword:
@@ -2867,10 +2876,10 @@ namespace ts.Completions {
     function getImportCompletionNode(contextToken: Node) {
         const parent = contextToken.parent;
         if (isImportEqualsDeclaration(parent)) {
-            return nodeIsMissing(parent.moduleReference) ? parent : undefined;
+            return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
         }
         if (isNamedImports(parent) || isNamespaceImport(parent)) {
-            return nodeIsMissing(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2)
+            return isModuleSpecifierMissingOrEmpty(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2) && !parent.parent.name
                 ? parent.parent.parent
                 : undefined;
         }
@@ -2878,7 +2887,16 @@ namespace ts.Completions {
             // A lone import keyword with nothing following it does not parse as a statement at all
             return contextToken as Token<SyntaxKind.ImportKeyword>;
         }
+        if (isImportKeyword(contextToken) && isImportDeclaration(parent)) {
+            // `import s| from`
+            return isModuleSpecifierMissingOrEmpty(parent.moduleSpecifier) ? parent : undefined;
+        }
         return undefined;
+    }
+
+    function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression) {
+        if (nodeIsMissing(specifier)) return true;
+        return !tryCast(isExternalModuleReference(specifier) ? specifier.expression : specifier, isStringLiteralLike)?.text;
     }
 
     function getVariableDeclaration(property: Node): VariableDeclaration | undefined {

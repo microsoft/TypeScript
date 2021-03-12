@@ -3493,7 +3493,10 @@ namespace ts {
             const exports = getExportsOfModuleAsArray(moduleSymbol);
             const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
             if (exportEquals !== moduleSymbol) {
-                addRange(exports, getPropertiesOfType(getTypeOfSymbol(exportEquals)));
+                const type = getTypeOfSymbol(exportEquals);
+                if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
+                    addRange(exports, getPropertiesOfType(type));
+                }
             }
             return exports;
         }
@@ -3517,11 +3520,13 @@ namespace ts {
             }
 
             const type = getTypeOfSymbol(exportEquals);
-            return type.flags & TypeFlags.Primitive ||
-                getObjectFlags(type) & ObjectFlags.Class ||
-                isArrayOrTupleLikeType(type)
-                ? undefined
-                : getPropertyOfType(type, memberName);
+            return shouldTreatPropertiesOfExternalModuleAsExports(type) ? getPropertyOfType(type, memberName) : undefined;
+        }
+
+        function shouldTreatPropertiesOfExternalModuleAsExports(resolvedExternalModuleType: Type) {
+            return !(resolvedExternalModuleType.flags & TypeFlags.Primitive ||
+                    getObjectFlags(resolvedExternalModuleType) & ObjectFlags.Class ||
+                    isArrayOrTupleLikeType(resolvedExternalModuleType));
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {

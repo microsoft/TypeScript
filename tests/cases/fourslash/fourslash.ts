@@ -619,6 +619,7 @@ declare namespace FourSlashInterface {
     interface UserPreferences {
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsForImportStatements?: boolean;
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
@@ -648,6 +649,7 @@ declare namespace FourSlashInterface {
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
+        readonly isSnippet?: boolean;
 
         // details
         readonly text?: string;

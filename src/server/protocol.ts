@@ -3291,6 +3291,11 @@ namespace ts.server.protocol {
          */
         readonly includeCompletionsForModuleExports?: boolean;
         /**
+         * Enables auto-import-style completions on partially-typed import statements. E.g., allows
+         * `import write|` to be completed to `import { writeFile } from "fs"`.
+         */
+        readonly includeCompletionsForImportStatements?: boolean;
+        /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
