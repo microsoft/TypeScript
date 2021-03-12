@@ -47,12 +47,12 @@ exitCode:: ExitStatus.Success
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "signature": "-8396256275-export declare const World = \"hello\";\r\n",
         "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map",
+        "signature": "1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n",
         "affectsGlobalScope": false
       },
       "./some_decl.d.ts": {
@@ -78,7 +78,7 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2106
+  "size": 2027
 }
 
 //// [/src/logic/index.d.ts] file written with same contents

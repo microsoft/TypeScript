@@ -316,16 +316,8 @@ namespace ts {
             if (!info) return Debug.fail();
 
             const prevSignature = info.signature;
-            let latestSignature: string;
-            if (sourceFile.isDeclarationFile) {
-                latestSignature = sourceFile.version;
-                if (exportedModulesMapCache && latestSignature !== prevSignature) {
-                    // All the references in this file are exported
-                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
-                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
-                }
-            }
-            else {
+            let latestSignature: string | undefined;
+            if (!sourceFile.isDeclarationFile) {
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,
@@ -334,10 +326,7 @@ namespace ts {
                     /*customTransformers*/ undefined,
                     /*forceDtsEmit*/ true
                 );
-                const firstDts = emitOutput.outputFiles &&
-                    programOfThisState.getCompilerOptions().declarationMap ?
-                    emitOutput.outputFiles.length > 1 ? emitOutput.outputFiles[1] : undefined :
-                    emitOutput.outputFiles.length > 0 ? emitOutput.outputFiles[0] : undefined;
+                const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
                     Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
                     latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
@@ -345,14 +334,18 @@ namespace ts {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                     }
                 }
-                else {
-                    latestSignature = prevSignature!; // TODO: GH#18217
+            }
+            // Default is to use file version as signature
+            if (latestSignature === undefined) {
+                latestSignature = sourceFile.version;
+                if (exportedModulesMapCache && latestSignature !== prevSignature) {
+                    // All the references in this file are exported
+                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
                 }
-
             }
             cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
-
-            return !prevSignature || latestSignature !== prevSignature;
+            return latestSignature !== prevSignature;
         }
 
         /**
