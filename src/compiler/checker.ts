@@ -23564,6 +23564,8 @@ namespace ts {
         }
 
         function hasContextualTypeWithNoGenericTypes(node: Node) {
+            // Computing the contextual type for a child of a JSX element involves resolving the type of the
+            // element's tag name, so we exclude that here to avoid circularities.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
                 getContextualType(node);
