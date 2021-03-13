@@ -63,9 +63,12 @@ namespace ts.OrganizeImports {
                     ? coalesce(importGroup)
                     : importGroup);
 
-            // Delete or replace the first import.
+            // Delete all nodes if there are no imports.
             if (newImportDecls.length === 0) {
-                changeTracker.delete(sourceFile, oldImportDecls[0]);
+                changeTracker.deleteNodes(sourceFile, oldImportDecls, {
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                });
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
@@ -74,11 +77,11 @@ namespace ts.OrganizeImports {
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
                 });
-            }
 
-            // Delete any subsequent imports.
-            for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+                // Delete any subsequent imports.
+                changeTracker.deleteNodes(sourceFile, oldImportDecls.slice(1), {
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                });
             }
         }
     }
