@@ -18738,8 +18738,8 @@ interface WindowOrWorkerGlobalScope {
     createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
     queueMicrotask(callback: VoidFunction): void;
-    setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-    setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+    setInterval(handler: TimerHandler, timeoutInMs?: number, ...arguments: any[]): number;
+    setTimeout(handler: TimerHandler, timeoutInMs?: number, ...arguments: any[]): number;
 }
 
 interface WindowSessionStorage {
@@ -20003,8 +20003,8 @@ declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitm
 declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function queueMicrotask(callback: VoidFunction): void;
-declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
-declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+declare function setInterval(handler: TimerHandler, timeoutInMs?: number, ...arguments: any[]): number;
+declare function setTimeout(handler: TimerHandler, timeoutInMs?: number, ...arguments: any[]): number;
 declare var onafterprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeprint: ((this: Window, ev: Event) => any) | null;
 declare var onbeforeunload: ((this: Window, ev: BeforeUnloadEvent) => any) | null;
