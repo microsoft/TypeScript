@@ -17182,6 +17182,14 @@ namespace ts {
                             }
                             break;
                         }
+                        case Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target.code: {
+                            secondaryRootErrors.unshift([Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target, args[0], args[1]]);
+                            break;
+                        }
+                        case Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target.code: {
+                            secondaryRootErrors.unshift([Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, args[0], args[1], args[2]]);
+                            break;
+                        }
                         default:
                             return Debug.fail(`Unhandled Diagnostic: ${msg.code}`);
                     }
