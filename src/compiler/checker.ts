@@ -4798,7 +4798,8 @@ namespace ts {
                     }
                     function shouldWriteTypeOfFunctionSymbol() {
                         const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method) &&  // typeof static method
-                            some(symbol.declarations, declaration => hasSyntacticModifier(declaration, ModifierFlags.Static));
+                            some(symbol.declarations, declaration =>
+                                hasSyntacticModifier(declaration, ModifierFlags.Static) && isMethodDeclaration(declaration) && !isComputedPropertyName(declaration.name));
                         const isNonLocalFunctionSymbol = !!(symbol.flags & SymbolFlags.Function) &&
                             (symbol.parent || // is exported function symbol
                                 forEach(symbol.declarations, declaration =>
