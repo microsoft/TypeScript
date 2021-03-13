@@ -39,6 +39,8 @@ namespace ts.projectSystem {
                 isPackageJsonImport: undefined,
                 sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
+                sourceDisplay: undefined,
+                isSnippet: undefined,
                 data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined, moduleSpecifier: undefined }
             };
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {

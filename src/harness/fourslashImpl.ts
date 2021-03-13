@@ -933,7 +933,7 @@ namespace FourSlash {
             assert.equal(actual.isSnippet, expected.isSnippet, `Expected 'isSnippet' properties to match`);
             assert.equal(actual.source, expected.source, `Expected 'source' values to match`);
             assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `Expected 'sortText' properties to match`);
-            if (expected.sourceDisplay) {
+            if (expected.sourceDisplay && actual.sourceDisplay) {
                 assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `Expected 'sourceDisplay' properties to match`);
             }
 
@@ -945,7 +945,9 @@ namespace FourSlash {
                 // assert.equal(actualDetails.kind, actual.kind);
                 assert.equal(actualDetails.kindModifiers, actual.kindModifiers, "Expected 'kindModifiers' properties to match");
                 assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
-                assert.equal(actualDetails.sourceDisplay && ts.displayPartsToString(actualDetails.sourceDisplay), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'sourceDisplay' display parts string");
+                if (!actual.sourceDisplay) {
+                    assert.equal(actualDetails.sourceDisplay && ts.displayPartsToString(actualDetails.sourceDisplay), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'sourceDisplay' display parts string");
+                }
                 assert.deepEqual(actualDetails.tags, expected.tags);
             }
             else {

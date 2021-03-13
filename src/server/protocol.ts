@@ -2127,7 +2127,7 @@ namespace ts.server.protocol {
         arguments: FormatOnKeyRequestArgs;
     }
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
     /**
      * Arguments for completions messages.
@@ -2345,6 +2345,7 @@ namespace ts.server.protocol {
          * must be used to commit that completion entry.
          */
         readonly optionalReplacementSpan?: TextSpan;
+        readonly isIncomplete?: boolean;
         readonly entries: readonly CompletionEntry[];
     }
 

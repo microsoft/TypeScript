@@ -5614,7 +5614,7 @@ declare namespace ts {
         fileName: string;
     }
     type OrganizeImportsScope = CombinedCodeFixScope;
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
@@ -6094,6 +6094,10 @@ declare namespace ts {
          * true when the current location also allows for a new identifier
          */
         isNewIdentifierLocation: boolean;
+        /**
+         * Indicates to client to continue requesting completions on subsequent keystrokes.
+         */
+        isIncomplete?: true;
         entries: CompletionEntry[];
     }
     interface CompletionEntryData {

@@ -139,6 +139,14 @@ namespace ts.Completions {
             return undefined;
         }
 
+        if (triggerCharacter === " ") {
+            // `isValidTrigger` ensures we are at `import |`
+            if (!(preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText)) {
+                return undefined;
+            }
+            return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+        }
+
         const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, host, log, preferences);
         if (stringCompletions) {
             return stringCompletions;
@@ -1087,8 +1095,8 @@ namespace ts.Completions {
         let isJsxInitializer: IsJsxInitializer = false;
         let isJsxIdentifierExpected = false;
         let importCompletionNode: Node | undefined;
-
         let location = getTouchingPropertyName(sourceFile, position);
+
         if (contextToken) {
             // Import statement completions use `insertText`, and also require the `data` property of `CompletionEntryIdentifier`
             // added in TypeScript 4.3 to be sent back from the client during `getCompletionEntryDetails`. Since this feature
@@ -2830,6 +2838,8 @@ namespace ts.Completions {
                 return !!contextToken && (isStringLiteralLike(contextToken)
                     ? !!tryGetImportFromModuleSpecifier(contextToken)
                     : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
+            case " ":
+                return !!contextToken && isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile;
             default:
                 return Debug.assertNever(triggerCharacter);
         }

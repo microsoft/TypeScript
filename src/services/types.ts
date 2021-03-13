@@ -550,7 +550,7 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
@@ -1131,11 +1131,14 @@ namespace ts {
          * must be used to commit that completion entry.
          */
         optionalReplacementSpan?: TextSpan;
-
         /**
          * true when the current location also allows for a new identifier
          */
         isNewIdentifierLocation: boolean;
+        /**
+         * Indicates to client to continue requesting completions on subsequent keystrokes.
+         */
+        isIncomplete?: true;
         entries: CompletionEntry[];
     }
 
