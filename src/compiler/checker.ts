@@ -8167,7 +8167,7 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     const indexType = getLiteralTypeFromPropertyName(name);
-                    const declaredType = getConstraintForLocation(getIndexedAccessType(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition), declaration.name);
+                    const declaredType = getNarrowableTypeForReference(getIndexedAccessType(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition), declaration.name);
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
             }
@@ -8188,7 +8188,7 @@ namespace ts {
                 else if (isArrayLikeType(parentType)) {
                     const indexType = getLiteralType(index);
                     const accessFlags = hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0;
-                    const declaredType = getConstraintForLocation(getIndexedAccessTypeOrUndefined(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, declaration.name, accessFlags | AccessFlags.ExpressionPosition) || errorType, declaration.name);
+                    const declaredType = getNarrowableTypeForReference(getIndexedAccessTypeOrUndefined(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, declaration.name, accessFlags | AccessFlags.ExpressionPosition) || errorType, declaration.name);
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
                 else {
@@ -21762,7 +21762,8 @@ namespace ts {
             const nameType = getLiteralTypeFromPropertyName(name);
             if (!isTypeUsableAsPropertyName(nameType)) return errorType;
             const text = getPropertyNameFromType(nameType);
-            return getConstraintForLocation(getTypeOfPropertyOfType(type, text), name) ||
+            const propType = getTypeOfPropertyOfType(type, text);
+            return propType && getNarrowableTypeForReference(propType, name) ||
                 isNumericLiteralName(text) && includeUndefinedInIndexSignature(getIndexTypeOfType(type, IndexKind.Number)) ||
                 includeUndefinedInIndexSignature(getIndexTypeOfType(type, IndexKind.String)) ||
                 errorType;
@@ -22549,7 +22550,7 @@ namespace ts {
 
             function getInitialOrAssignedType(flow: FlowAssignment) {
                 const node = flow.node;
-                return getConstraintForLocation(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
+                return getNarrowableTypeForReference(node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement ?
                     getInitialType(<VariableDeclaration | BindingElement>node) :
                     getAssignedType(node), reference);
             }
@@ -23554,37 +23555,22 @@ namespace ts {
                 parent.kind === SyntaxKind.BindingElement && (<BindingElement>parent).name === node && !!(<BindingElement>parent).initializer;
         }
 
-        function typeHasNullableConstraint(type: Type) {
-            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.Nullable);
-        }
-
-        function getConstraintForLocation(type: Type, node: Node): Type;
-        function getConstraintForLocation(type: Type | undefined, node: Node): Type | undefined;
-        function getConstraintForLocation(type: Type, node: Node): Type | undefined {
-            // When a node is the left hand expression of a property access, element access, or call expression,
-            // and the type of the node includes type variables with constraints that are nullable, we fetch the
-            // apparent type of the node *before* performing control flow analysis such that narrowings apply to
-            // the constraint type.
-            if (type && isConstraintPosition(node) && someType(type, typeHasNullableConstraint)) {
-                return mapType(getWidenedType(type), getBaseConstraintOrType);
-            }
-            return type;
-        }
-
-        function isTypeVariableWithUnionConstraint(type: Type) {
+        function isGenericTypeWithUnionConstraint(type: Type) {
             return !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & TypeFlags.Union);
         }
 
-        function containsTypeVariable(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, containsTypeVariable));
+        function containsGenericType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, containsGenericType));
         }
 
-        function hasContextualTypeWithNoTypeVariables(node: Expression) {
-            const contextualType = !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) && getContextualType(node);
-            return contextualType && !someType(contextualType, containsTypeVariable);
+        function hasContextualTypeWithNoGenericTypes(node: Node) {
+            const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
+                !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
+                getContextualType(node);
+            return contextualType && !someType(contextualType, containsGenericType);
         }
 
-        function getConstraintForReference(type: Type, reference: Identifier | ElementAccessExpression | PropertyAccessExpression | QualifiedName, checkMode: CheckMode | undefined) {
+        function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
             // When the type of a reference is or contains an instantiable type with a union type constraint, and
             // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
             // has a contextual type containing no top-level instantiables (meaning constraints will determine
@@ -23592,10 +23578,9 @@ namespace ts {
             // control flow analysis an opportunity to narrow it further. For example, for a reference of a type
             // parameter type 'T extends string | undefined' with a contextual type 'string', we substitute
             // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
-            const substituteConstraints = reference.kind !== SyntaxKind.QualifiedName &&
-                !(checkMode && checkMode & CheckMode.Inferential) &&
-                someType(type, isTypeVariableWithUnionConstraint) &&
-                (isConstraintPosition(reference) || hasContextualTypeWithNoTypeVariables(reference));
+            const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
+                someType(type, isGenericTypeWithUnionConstraint) &&
+                (isConstraintPosition(reference) || hasContextualTypeWithNoGenericTypes(reference));
             return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
         }
 
@@ -23741,7 +23726,7 @@ namespace ts {
                 return type;
             }
 
-            type = getConstraintForReference(type, node, checkMode);
+            type = getNarrowableTypeForReference(type, node, checkMode);
 
             // The declaration container is the innermost function that encloses the declaration of the variable
             // or parameter. The flow container is the innermost function starting with which we analyze the control
@@ -26836,7 +26821,7 @@ namespace ts {
             if (propType === autoType) {
                 return getFlowTypeOfProperty(node, prop);
             }
-            propType = getConstraintForReference(propType, node, checkMode);
+            propType = getNarrowableTypeForReference(propType, node, checkMode);
             // If strict null checks and strict property initialization checks are enabled, if we have
             // a this.xxx property access, if the property is an instance property without an initializer,
             // and if we are in a constructor of the same class as the property declaration, assume that
