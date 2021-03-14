@@ -579,20 +579,24 @@ namespace ts {
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
-        const docsSet = new Set<string>();
-        JsDoc.getJsDocCommentsFromDeclarations(declarations).forEach(value => docsSet.add(value.text));
-        if (checker && (docsSet.size === 0 || declarations.some(hasJSDocInheritDocTag))) {
+        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
             forEachUnique(declarations, declaration => {
-                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
-                    return symbol.getDocumentationComment(checker)
-                });
-                // TODO: GH#16312 Return a ReadonlyArray, avoid copying
-                if (inheritedDocs) inheritedDocs.forEach(value => docsSet.add(value.text))
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
+                // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
+                if (inheritedDocs) {
+                    if (doc.length === 0) doc = inheritedDocs.slice();
+                    else {
+                        for (const docValue of doc) {
+                            if (docValue.text !== "\n" && !inheritedDocs.some(value => value.text === docValue.text)) {
+                                inheritedDocs.push(lineBreakPart(), docValue);
+                            }
+                        }
+                        doc = inheritedDocs;
+                    };
+                };
             });
         }
-        let doc: SymbolDisplayPart[] = [];
-        docsSet.forEach(value => doc.push({text: value, kind: "text"}))
-        if (doc.length > 1) doc = doc.map((e, i) => i < doc.length - 1 && e.text !== "" ? [e, lineBreakPart()] : [e]).reduce((a, b) => a.concat(b))
         return doc;
     }
 
