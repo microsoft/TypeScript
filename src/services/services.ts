@@ -579,14 +579,20 @@ namespace ts {
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
-        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
-        if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+        const docsSet = new Set<string>();
+        JsDoc.getJsDocCommentsFromDeclarations(declarations).forEach(value => docsSet.add(value.text));
+        if (checker && (docsSet.size === 0 || declarations.some(hasJSDocInheritDocTag))) {
             forEachUnique(declarations, declaration => {
-                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
-                // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
-                if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
+                    return symbol.getDocumentationComment(checker)
+                });
+                // TODO: GH#16312 Return a ReadonlyArray, avoid copying
+                if (inheritedDocs) inheritedDocs.forEach(value => docsSet.add(value.text))
             });
         }
+        let doc: SymbolDisplayPart[] = [];
+        docsSet.forEach(value => doc.push({kind: "text", text: value}))
+        doc = [...doc].map((e, i) => i < doc.length - 1 ? [e, lineBreakPart()] : [e]).reduce((a, b) => a.concat(b))
         return doc;
     }
 
