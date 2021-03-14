@@ -591,8 +591,8 @@ namespace ts {
             });
         }
         let doc: SymbolDisplayPart[] = [];
-        docsSet.forEach(value => doc.push({kind: "text", text: value}))
-        doc = [...doc].map((e, i) => i < doc.length - 1 ? [e, lineBreakPart()] : [e]).reduce((a, b) => a.concat(b))
+        docsSet.forEach(value => doc.push({text: value, kind: "text"}))
+        if (doc.length > 1) doc = doc.map((e, i) => i < doc.length - 1 && e.text !== "" ? [e, lineBreakPart()] : [e]).reduce((a, b) => a.concat(b))
         return doc;
     }
 
