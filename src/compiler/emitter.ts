@@ -498,7 +498,7 @@ namespace ts {
                     declarationTransform.transformed[0],
                     declarationPrinter,
                     {
-                        sourceMap: compilerOptions.declarationMap,
+                        sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                         sourceRoot: compilerOptions.sourceRoot,
                         mapRoot: compilerOptions.mapRoot,
                         extendedDiagnostics: compilerOptions.extendedDiagnostics,
@@ -663,7 +663,7 @@ namespace ts {
 
     /*@internal*/
     export function getBuildInfoText(buildInfo: BuildInfo) {
-        return JSON.stringify(buildInfo, undefined, 2);
+        return JSON.stringify(buildInfo);
     }
 
     /*@internal*/
