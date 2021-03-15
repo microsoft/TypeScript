@@ -1016,7 +1016,6 @@ namespace ts {
 
     /** @deprecated Use `AssertsKeyword` instead. */
     export type AssertsToken = AssertsKeyword;
-    export type AssertToken = AssertKeyword;
 
     export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
     }

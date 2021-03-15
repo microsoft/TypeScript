@@ -936,7 +936,7 @@
         "category": "Error",
         "code": 1323
     },
-    "The second argument of an import call is only supported when the module flag is not available in the current module flag.": {
+    "Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1360,8 +1360,8 @@
         "category": "Error",
         "code": 1432
     },
-    "Dynamic import must have a specifier as arguments and an optional assertion": {
-        "category": "Error",
+    "Dynamic import must only have a specifier and an optional assertion as arguments": {
+        "category": "Message",
         "code": 1433
     },
 
@@ -3288,7 +3288,7 @@
         "category": "Error",
         "code": 2802
     },
-    "Import assertions are only supported when the '--module' flag is set to 'esnext'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 2803
     },

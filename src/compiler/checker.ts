@@ -37443,9 +37443,9 @@ namespace ts {
             }
         }
 
-        function checkGrammarImportAssertion(declaration: ImportDeclaration | ExportDeclaration) {
+        function checkGrammarAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
             if (declaration.assertClause && moduleKind !== ModuleKind.ESNext) {
-                grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_flag_is_set_to_esnext);
+                grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
             }
         }
 
@@ -37454,7 +37454,6 @@ namespace ts {
                 // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
-            checkGrammarImportAssertion(node);
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
@@ -37481,7 +37480,7 @@ namespace ts {
                     }
                 }
             }
-
+            checkGrammarAssertClause(node);
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -37529,7 +37528,6 @@ namespace ts {
                 return;
             }
 
-            checkGrammarImportAssertion(node);
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
@@ -37577,6 +37575,7 @@ namespace ts {
                     }
                 }
             }
+            checkGrammarAssertClause(node);
         }
 
         function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
@@ -41422,15 +41421,15 @@ namespace ts {
 
         function checkGrammarImportCallArguments(node: ImportCall, nodeArguments: NodeArray<Expression>): boolean {
             if (moduleKind !== ModuleKind.ESNext) {
-                if (nodeArguments.length !== 1) {
-                    return grammarErrorOnNode(node, Diagnostics.The_second_argument_of_an_import_call_is_only_supported_when_the_module_flag_is_not_available_in_the_current_module_flag);
-                }
                 checkGrammarForDisallowedTrailingComma(nodeArguments);
-            }
-            else {
-                if (nodeArguments.length !== 1 && nodeArguments.length !== 2) {
-                    return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_a_specifier_as_arguments_and_an_optional_assertion);
+
+                if (nodeArguments.length > 1) {
+                    const assertionArgument = nodeArguments[1];
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_import_only_supports_a_second_argument_when_the_module_option_is_set_to_esnext);
                 }
+            }
+            if (nodeArguments.length !== 1) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_only_have_a_specifier_and_an_optional_assertion_as_arguments);
             }
             return false;
         }

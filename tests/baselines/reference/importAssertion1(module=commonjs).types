@@ -67,29 +67,41 @@ const a = import('./0')
 >import('./0') : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
 >'./0' : "./0"
 
-const b = import('./0', { type: "json" })
+const b = import('./0', { assert: { type: "json" } })
 >b : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { type: "json" }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>import('./0', { assert: { type: "json" } }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
 >'./0' : "./0"
+>{ assert: { type: "json" } } : { assert: { type: string; }; }
+>assert : { type: string; }
 >{ type: "json" } : { type: string; }
 >type : string
 >"json" : "json"
 
-const c = import('./0', { type: "json", ttype: "typo" })
+const c = import('./0', { assert: { type: "json", ttype: "typo" } })
 >c : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { type: "json", ttype: "typo" }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>import('./0', { assert: { type: "json", ttype: "typo" } }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
 >'./0' : "./0"
+>{ assert: { type: "json", ttype: "typo" } } : { assert: { type: string; ttype: string; }; }
+>assert : { type: string; ttype: string; }
 >{ type: "json", ttype: "typo" } : { type: string; ttype: string; }
 >type : string
 >"json" : "json"
 >ttype : string
 >"typo" : "typo"
 
-const d = import('./0', { })
+const d = import('./0', { assert: {} })
 >d : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
->import('./0', { }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>import('./0', { assert: {} }) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
 >'./0' : "./0"
->{ } : {}
+>{ assert: {} } : { assert: {}; }
+>assert : {}
+>{} : {}
+
+const dd = import('./0', {})
+>dd : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>import('./0', {}) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>'./0' : "./0"
+>{} : {}
 
 declare function foo(): any;
 >foo : () => any
@@ -111,5 +123,15 @@ const g = import('./0', {}, {})
 >'./0' : "./0"
 >{} : {}
 >{} : {}
+
+const h = import('./0', { assert: { type: "json" }},)
+>h : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>import('./0', { assert: { type: "json" }},) : Promise<typeof import("tests/cases/conformance/importAssertion/0")>
+>'./0' : "./0"
+>{ assert: { type: "json" }} : { assert: { type: string; }; }
+>assert : { type: string; }
+>{ type: "json" } : { type: string; }
+>type : string
+>"json" : "json"
 
 

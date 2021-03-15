@@ -23,13 +23,15 @@ d;
 
 //// [3.ts]
 const a = import('./0')
-const b = import('./0', { type: "json" })
-const c = import('./0', { type: "json", ttype: "typo" })
-const d = import('./0', { })
+const b = import('./0', { assert: { type: "json" } })
+const c = import('./0', { assert: { type: "json", ttype: "typo" } })
+const d = import('./0', { assert: {} })
+const dd = import('./0', {})
 declare function foo(): any;
 const e = import('./0', foo())
 const f = import()
 const g = import('./0', {}, {})
+const h = import('./0', { assert: { type: "json" }},)
 
 
 
@@ -53,12 +55,14 @@ c;
 d;
 //// [3.js]
 const a = import('./0');
-const b = import('./0', { type: "json" });
-const c = import('./0', { type: "json", ttype: "typo" });
-const d = import('./0', {});
+const b = import('./0', { assert: { type: "json" } });
+const c = import('./0', { assert: { type: "json", ttype: "typo" } });
+const d = import('./0', { assert: {} });
+const dd = import('./0', {});
 const e = import('./0', foo());
 const f = import();
 const g = import('./0', {}, {});
+const h = import('./0', { assert: { type: "json" } });
 
 
 //// [0.d.ts]
@@ -73,7 +77,9 @@ declare const a: Promise<typeof import("./0")>;
 declare const b: Promise<typeof import("./0")>;
 declare const c: Promise<typeof import("./0")>;
 declare const d: Promise<typeof import("./0")>;
+declare const dd: Promise<typeof import("./0")>;
 declare function foo(): any;
 declare const e: Promise<typeof import("./0")>;
 declare const f: Promise<any>;
 declare const g: Promise<typeof import("./0")>;
+declare const h: Promise<typeof import("./0")>;

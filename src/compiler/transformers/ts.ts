@@ -2828,8 +2828,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     importClause,
                     node.moduleSpecifier,
-                    node.assertClause
-                    )
+                    node.assertClause)
                 : undefined;
         }
 
