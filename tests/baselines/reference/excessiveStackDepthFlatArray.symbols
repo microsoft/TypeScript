@@ -1,0 +1,26 @@
+=== tests/cases/compiler/excessiveStackDepthFlatArray.ts ===
+interface MiddlewareArray<T> extends Array<T> {}
+>MiddlewareArray : Symbol(MiddlewareArray, Decl(excessiveStackDepthFlatArray.ts, 0, 0))
+>T : Symbol(T, Decl(excessiveStackDepthFlatArray.ts, 0, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>T : Symbol(T, Decl(excessiveStackDepthFlatArray.ts, 0, 26))
+
+declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
+>configureStore : Symbol(configureStore, Decl(excessiveStackDepthFlatArray.ts, 0, 48))
+>options : Symbol(options, Decl(excessiveStackDepthFlatArray.ts, 1, 32))
+>middleware : Symbol(middleware, Decl(excessiveStackDepthFlatArray.ts, 1, 42))
+>MiddlewareArray : Symbol(MiddlewareArray, Decl(excessiveStackDepthFlatArray.ts, 0, 0))
+
+declare const defaultMiddleware: MiddlewareArray<any>;
+>defaultMiddleware : Symbol(defaultMiddleware, Decl(excessiveStackDepthFlatArray.ts, 3, 13))
+>MiddlewareArray : Symbol(MiddlewareArray, Decl(excessiveStackDepthFlatArray.ts, 0, 0))
+
+configureStore({
+>configureStore : Symbol(configureStore, Decl(excessiveStackDepthFlatArray.ts, 0, 48))
+
+  middleware: [...defaultMiddleware], // Should not error
+>middleware : Symbol(middleware, Decl(excessiveStackDepthFlatArray.ts, 4, 16))
+>defaultMiddleware : Symbol(defaultMiddleware, Decl(excessiveStackDepthFlatArray.ts, 3, 13))
+
+});
+

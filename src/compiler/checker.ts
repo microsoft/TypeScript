@@ -19703,7 +19703,13 @@ namespace ts {
         function isArrayLikeType(type: Type): boolean {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
-            return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+            return isArrayType(type) || hasArrayOrReadonlyArrayBaseType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+        }
+
+        function hasArrayOrReadonlyArrayBaseType(type: Type): boolean {
+            return !!(getObjectFlags(type) & ObjectFlags.Reference)
+                && !!(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)
+                && some(getBaseTypes((type as TypeReference).target as InterfaceType), isArrayType);
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {

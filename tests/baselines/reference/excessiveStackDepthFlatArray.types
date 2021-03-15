@@ -1,0 +1,23 @@
+=== tests/cases/compiler/excessiveStackDepthFlatArray.ts ===
+interface MiddlewareArray<T> extends Array<T> {}
+declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
+>configureStore : (options: {    middleware: MiddlewareArray<any>;}) => void
+>options : { middleware: MiddlewareArray<any>; }
+>middleware : MiddlewareArray<any>
+
+declare const defaultMiddleware: MiddlewareArray<any>;
+>defaultMiddleware : MiddlewareArray<any>
+
+configureStore({
+>configureStore({  middleware: [...defaultMiddleware], // Should not error}) : void
+>configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
+>{  middleware: [...defaultMiddleware], // Should not error} : { middleware: any[]; }
+
+  middleware: [...defaultMiddleware], // Should not error
+>middleware : any[]
+>[...defaultMiddleware] : any[]
+>...defaultMiddleware : any
+>defaultMiddleware : MiddlewareArray<any>
+
+});
+
