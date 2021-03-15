@@ -208,7 +208,7 @@ namespace ts {
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>): BuilderState {
+        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? new Map<Path, ReferencedSet>() : undefined;
             const exportedModulesMap = referencedMap ? new Map<Path, ReferencedSet>() : undefined;
@@ -243,7 +243,7 @@ namespace ts {
                 referencedMap,
                 exportedModulesMap,
                 hasCalledUpdateShapeSignature,
-                useFileVersionAsSignature: !useOldState
+                useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
             };
         }
 

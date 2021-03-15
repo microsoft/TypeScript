@@ -2,6 +2,7 @@ namespace ts {
     export type TscCompileSystem = fakes.System & {
         writtenFiles: Set<Path>;
         baseLine(): { file: string; text: string; };
+        disableUseFileVersionAsSignature?: boolean;
     };
 
     export enum BuildKind {
@@ -30,6 +31,7 @@ namespace ts {
         baselineReadFileCalls?: boolean;
         baselinePrograms?: boolean;
         baselineDependencies?: boolean;
+        disableUseFileVersionAsSignature?: boolean;
     }
 
     export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
@@ -83,6 +85,7 @@ namespace ts {
 
         // Create system
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        if (input.disableUseFileVersionAsSignature) sys.disableUseFileVersionAsSignature = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const writtenFiles = sys.writtenFiles = new Set();
         const originalWriteFile = sys.writeFile;

@@ -6423,6 +6423,9 @@ namespace ts {
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
         /*@internal*/getSymlinkCache?(): SymlinkCache;
+
+        // For testing:
+        /*@internal*/ disableUseFileVersionAsSignature?: boolean;
     }
 
     /** true if --out otherwise source file name */

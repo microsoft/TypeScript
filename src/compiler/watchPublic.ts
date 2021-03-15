@@ -19,6 +19,7 @@ namespace ts {
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
         const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
         host.createHash = maybeBind(system, system.createHash);
+        host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
         setGetSourceFileAsHashVersioned(host, system);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;
@@ -111,6 +112,8 @@ namespace ts {
         // TODO: GH#18217 Optional methods are frequently asserted
         createDirectory?(path: string): void;
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        // For testing
+        disableUseFileVersionAsSignature?: boolean;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
