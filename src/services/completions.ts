@@ -1238,7 +1238,6 @@ namespace ts.Completions {
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextMap: SymbolSortTextMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
-        // const importSuggestionsCache = host.getImportSuggestionsCache && host.getImportSuggestionsCache();
         const isTypeOnly = isTypeOnlyCompletion();
 
         if (isRightOfDot || isRightOfQuestionDot) {
