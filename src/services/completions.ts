@@ -1459,7 +1459,7 @@ namespace ts.Completions {
                             isDefaultExport: false,
                             symbolName: firstAccessibleSymbol.name,
                             exportName: firstAccessibleSymbol.name,
-                            fileName: isExternalModuleNameRelative(stripQuotes(moduleSymbol.name)) ? cast(moduleSymbol.declarations![0], isSourceFile).fileName : undefined,
+                            fileName: isExternalModuleNameRelative(stripQuotes(moduleSymbol.name)) ? cast(moduleSymbol.valueDeclaration, isSourceFile).fileName : undefined,
                         };
                         symbolToOriginInfoMap[index] = origin;
                     }
