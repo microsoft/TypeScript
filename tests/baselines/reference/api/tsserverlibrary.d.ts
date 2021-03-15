@@ -595,7 +595,6 @@ declare namespace ts {
     export type AwaitKeywordToken = AwaitKeyword;
     /** @deprecated Use `AssertsKeyword` instead. */
     export type AssertsToken = AssertsKeyword;
-    export type AssertToken = AssertKeyword;
     export interface ModifierToken<TKind extends ModifierSyntaxKind> extends KeywordToken<TKind> {
     }
     export type AbstractKeyword = ModifierToken<SyntaxKind.AbstractKeyword>;
@@ -4270,6 +4269,7 @@ declare namespace ts {
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration;
+    function isAssertionKey(node: Node): node is AssertionKey;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
@@ -4517,7 +4517,6 @@ declare namespace ts {
     function isImportClause(node: Node): node is ImportClause;
     function isAssertClause(node: Node): node is AssertClause;
     function isAssertEntry(node: Node): node is AssertEntry;
-    function isAssertionKey(node: Node): node is AssertionKey;
     function isNamespaceImport(node: Node): node is NamespaceImport;
     function isNamespaceExport(node: Node): node is NamespaceExport;
     function isNamedImports(node: Node): node is NamedImports;
