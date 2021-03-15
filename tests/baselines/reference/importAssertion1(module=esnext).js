@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/esnext/importAssertion/importAssertion1.ts] ////
+//// [tests/cases/conformance/importAssertion/importAssertion1.ts] ////
 
 //// [0.ts]
 export const a = 1;
@@ -30,6 +30,7 @@ declare function foo(): any;
 const e = import('./0', foo())
 const f = import()
 const g = import('./0', {}, {})
+
 
 
 //// [0.js]

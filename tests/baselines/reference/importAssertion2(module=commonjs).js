@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/esnext/importAssertion/importAssertion2.ts] ////
+//// [tests/cases/conformance/importAssertion/importAssertion2.ts] ////
 
 //// [0.ts]
 export const a = 1;
