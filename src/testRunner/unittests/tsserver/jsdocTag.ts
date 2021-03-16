@@ -12,14 +12,15 @@ namespace ts.projectSystem {
 `
         };
         function assertQuickInfoJSDoc(file: File, options: {
-            richResponse: boolean,
+            displayPartsForJSDoc: boolean,
             command: protocol.CommandTypes,
             tags: string | unknown[] | undefined,
             documentation: string | unknown[]
         }) {
 
-            const { command, richResponse, tags, documentation } = options;
+            const { command, displayPartsForJSDoc, tags, documentation } = options;
             const session = createSession(createServerHost([file, config]));
+            session.getProjectService().setHostConfiguration({ preferences: { displayPartsForJSDoc } });
             openFilesForSession([file], session);
             const indexOfX = file.content.indexOf("x");
             const quickInfo = session.executeCommandSeq<protocol.QuickInfoRequest>({
@@ -27,8 +28,7 @@ namespace ts.projectSystem {
                 arguments: {
                     file: file.path,
                     position: indexOfX,
-                    richResponse,
-                } as protocol.QuickInfoRequestArgs
+                } as protocol.FileLocationRequestArgs
             }).response;
             const summaryAndLocation = command === protocol.CommandTypes.Quickinfo ? {
                 displayString: "var x: number",
@@ -91,7 +91,7 @@ var x = 1
         it("for quickinfo, should provide display parts plus a span for a working link in a tag", () => {
             assertQuickInfoJSDoc(linkInTag, {
                 command: protocol.CommandTypes.Quickinfo,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 documentation: [],
                 tags: [{
                     name: "wat",
@@ -125,7 +125,7 @@ var x = 1
         it("for quickinfo, should provide a string for a working link in a tag", () => {
             assertQuickInfoJSDoc(linkInTag, {
                 command: protocol.CommandTypes.Quickinfo,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 documentation: "",
                 tags: [{
                     name: "wat",
@@ -136,7 +136,7 @@ var x = 1
         it("for quickinfo, should provide display parts for a working link in a comment", () => {
             assertQuickInfoJSDoc(linkInComment, {
                 command: protocol.CommandTypes.Quickinfo,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 documentation: [{
                     kind: "text",
                     text: "",
@@ -167,7 +167,7 @@ var x = 1
         it("for quickinfo, should provide a string for a working link in a comment", () => {
             assertQuickInfoJSDoc(linkInComment, {
                 command: protocol.CommandTypes.Quickinfo,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 documentation: "{@link C}",
                 tags: [],
             });
@@ -176,7 +176,7 @@ var x = 1
         it("for quickinfo-full, should provide display parts plus a span for a working link in a tag", () => {
             assertQuickInfoJSDoc(linkInTag, {
                 command: protocol.CommandTypes.QuickinfoFull,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 documentation: [],
                 tags: [{
                     name: "wat",
@@ -206,7 +206,7 @@ var x = 1
         it("for quickinfo-full, should provide a string for a working link in a tag", () => {
             assertQuickInfoJSDoc(linkInTag, {
                 command: protocol.CommandTypes.QuickinfoFull,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 documentation: [],
                 tags: [{
                     name: "wat",
@@ -217,7 +217,7 @@ var x = 1
         it("for quickinfo-full, should provide display parts plus a span for a working link in a comment", () => {
             assertQuickInfoJSDoc(linkInComment, {
                 command: protocol.CommandTypes.QuickinfoFull,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 documentation: [{
                     kind: "text",
                     text: "",
@@ -244,7 +244,7 @@ var x = 1
         it("for quickinfo-full, should provide a string for a working link in a comment", () => {
             assertQuickInfoJSDoc(linkInComment, {
                 command: protocol.CommandTypes.QuickinfoFull,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 documentation: [{
                         kind: "text",
                         text: "",
@@ -270,7 +270,7 @@ var x = 1
         });
 
         function assertSignatureHelpJSDoc(options: {
-            richResponse: boolean,
+            displayPartsForJSDoc: boolean,
             command: protocol.CommandTypes,
             documentation: string | unknown[],
             tags: unknown[]
@@ -283,8 +283,9 @@ function x(y) { }
 x(1)`
             };
 
-            const { command, richResponse, documentation, tags } = options;
+            const { command, displayPartsForJSDoc, documentation, tags } = options;
             const session = createSession(createServerHost([linkInParamTag, config]));
+            session.getProjectService().setHostConfiguration({ preferences: { displayPartsForJSDoc } });
             openFilesForSession([linkInParamTag], session);
             const indexOfX = linkInParamTag.content.lastIndexOf("1");
             const signatureHelp = session.executeCommandSeq<protocol.SignatureHelpRequest>({
@@ -295,7 +296,6 @@ x(1)`
                     },
                     file: linkInParamTag.path,
                     position: indexOfX,
-                    richResponse,
                 } as protocol.SignatureHelpRequestArgs
             }).response;
             const applicableSpan = command === protocol.CommandTypes.SignatureHelp ? {
@@ -383,7 +383,7 @@ x(1)`
         it("for signature help, should provide a string for a working link in a comment", () => {
             assertSignatureHelpJSDoc({
                 command: protocol.CommandTypes.SignatureHelp,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
                     text: "y - {@link C}"
@@ -450,7 +450,7 @@ x(1)`
             }];
             assertSignatureHelpJSDoc({
                 command: protocol.CommandTypes.SignatureHelp,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 tags,
                 documentation: tags[0].text.slice(2)
             });
@@ -458,7 +458,7 @@ x(1)`
         it("for signature help-full, should provide a string for a working link in a comment", () => {
             assertSignatureHelpJSDoc({
                 command: protocol.CommandTypes.SignatureHelpFull,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
                     text: "y - {@link C}"
@@ -517,14 +517,14 @@ x(1)`
             }];
             assertSignatureHelpJSDoc({
                 command: protocol.CommandTypes.SignatureHelpFull,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 tags,
                 documentation: tags[0].text.slice(2),
             });
         });
 
         function assertCompletionsJSDoc(options: {
-            richResponse: boolean,
+            displayPartsForJSDoc: boolean,
             command: protocol.CommandTypes,
             tags: unknown[]
         }) {
@@ -535,8 +535,9 @@ x(1)`
 function foo (x) { }
 foo`
             };
-            const { command, richResponse, tags } = options;
+            const { command, displayPartsForJSDoc, tags } = options;
             const session = createSession(createServerHost([linkInParamJSDoc, config]));
+            session.getProjectService().setHostConfiguration({ preferences: { displayPartsForJSDoc } });
             openFilesForSession([linkInParamJSDoc], session);
             const indexOfFoo = linkInParamJSDoc.content.lastIndexOf("fo");
             const completions = session.executeCommandSeq<protocol.CompletionDetailsRequest>({
@@ -545,7 +546,6 @@ foo`
                     entryNames: ["foo"],
                     file: linkInParamJSDoc.path,
                     position: indexOfFoo,
-                    richResponse,
                 } as protocol.CompletionDetailsRequestArgs
             }).response;
             assert.deepEqual(completions, [{
@@ -598,7 +598,7 @@ foo`
         it("for completions, should provide display parts for a working link in a comment", () => {
             assertCompletionsJSDoc({
                 command: protocol.CommandTypes.CompletionDetails,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 tags: [{
                     name: "param",
                     text: [{
@@ -637,7 +637,7 @@ foo`
         it("for completions, should provide a string for a working link in a comment", () => {
             assertCompletionsJSDoc({
                 command: protocol.CommandTypes.CompletionDetails,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
                     text: "x - see {@link C}",
@@ -647,7 +647,7 @@ foo`
         it("for completions-full, should provide display parts for a working link in a comment", () => {
             assertCompletionsJSDoc({
                 command: protocol.CommandTypes.CompletionDetailsFull,
-                richResponse: true,
+                displayPartsForJSDoc: true,
                 tags: [{
                     name: "param",
                     text: [{
@@ -682,7 +682,7 @@ foo`
         it("for completions-full, should provide a string for a working link in a comment", () => {
             assertCompletionsJSDoc({
                 command: protocol.CommandTypes.CompletionDetailsFull,
-                richResponse: false,
+                displayPartsForJSDoc: false,
                 tags: [{
                     name: "param",
                     text: "x - see {@link C}",

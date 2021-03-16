@@ -1,5 +1,6 @@
 ///<reference path="fourslash.ts" />
 
+// @Filename: foo.ts
 //// interface [|/*def1*/Foo|] {
 ////     foo: string
 //// }
@@ -29,6 +30,10 @@
 //// /** @param x {@link /*use6*/[|Foo|]} */
 //// function foo(x) { }
 
+// @Filename: bar.ts
+//// /** {@link /*use7*/[|Foo|] }dd*/
+//// const f = ""
+
 goTo.marker("use1");
 verify.goToDefinitionIs("def1");
 
@@ -45,4 +50,7 @@ goTo.marker("use5");
 verify.goToDefinitionIs("def3");
 
 goTo.marker("use6");
+verify.goToDefinitionIs("def1");
+
+goTo.marker("use7");
 verify.goToDefinitionIs("def1");

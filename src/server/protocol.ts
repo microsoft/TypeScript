@@ -982,7 +982,10 @@ namespace ts.server.protocol {
     export interface JSDocTagInfo {
         /** Name of the JSDoc tag */
         name: string;
-        /** Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment */
+        /**
+         * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+         */
         text?: string | SymbolDisplayPart[];
     }
 
@@ -1958,12 +1961,7 @@ namespace ts.server.protocol {
      */
     export interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
-        arguments: QuickInfoRequestArgs;
-    }
-
-    export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-        /** if true - return response with documentation as display parts instead of string */
-        richResponse?: boolean;
+        arguments: FileLocationRequestArgs;
     }
 
     /**
@@ -1997,6 +1995,7 @@ namespace ts.server.protocol {
 
         /**
          * Documentation associated with symbol.
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
          */
         documentation: string | SymbolDisplayPart[];
 
@@ -2187,8 +2186,6 @@ namespace ts.server.protocol {
          * Names of one or more entries for which to obtain details.
          */
         entryNames: (string | CompletionEntryIdentifier)[];
-        /** if true - return response with documentation as display parts instead of string */
-        richResponse?: boolean;
     }
 
     export interface CompletionEntryIdentifier {
@@ -2473,8 +2470,6 @@ namespace ts.server.protocol {
          * See each individual possible
          */
         triggerReason?: SignatureHelpTriggerReason;
-        /** if true - return response with documentation as display parts instead of string */
-        richResponse?: boolean;
     }
 
     export type SignatureHelpTriggerReason =
@@ -3324,6 +3319,7 @@ namespace ts.server.protocol {
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
 
+        readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
     }
 

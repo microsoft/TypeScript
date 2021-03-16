@@ -1703,7 +1703,7 @@ namespace ts.server {
             return languageService.isValidBraceCompletionAtPosition(file, position, args.openingBrace.charCodeAt(0));
         }
 
-        private getQuickInfoWorker(args: protocol.QuickInfoRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
+        private getQuickInfoWorker(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.QuickInfoResponseBody | QuickInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const quickInfo = project.getLanguageService().getQuickInfoAtPosition(file, this.getPosition(args, scriptInfo));
@@ -1711,6 +1711,7 @@ namespace ts.server {
                 return undefined;
             }
 
+            const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
             if (simplifiedResult) {
                 const displayString = displayPartsToString(quickInfo.displayParts);
                 return {
@@ -1719,14 +1720,14 @@ namespace ts.server {
                     start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
                     end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
-                    documentation: args.richResponse ? this.mapDisplayParts(quickInfo.documentation, project) : displayPartsToString(quickInfo.documentation),
-                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, !!args.richResponse),
+                    documentation: useDisplayParts ? this.mapDisplayParts(quickInfo.documentation, project) : displayPartsToString(quickInfo.documentation),
+                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, useDisplayParts),
                 };
             }
             else {
-                return args.richResponse ? quickInfo : {
+                return useDisplayParts ? quickInfo : {
                     ...quickInfo,
-                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, /*richResponse*/ false) as JSDocTagInfo[]
+                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, /*useDisplayParts*/ false) as JSDocTagInfo[]
                 };
             }
         }
@@ -1862,18 +1863,19 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
+            const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
 
             const result = mapDefined(args.entryNames, entryName => {
                 const { name, source, data } = typeof entryName === "string" ? { name: entryName, source: undefined, data: undefined } : entryName;
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
             return fullResult
-                ? (args.richResponse ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })))
+                ? (useDisplayParts ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })))
                 : result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
                     documentation: this.mapDisplayParts(details.documentation, project),
-                    tags: this.mapJSDocTagInfo(details.tags, project, !!args.richResponse),
+                    tags: this.mapJSDocTagInfo(details.tags, project, useDisplayParts),
                 }));
         }
 
@@ -1934,6 +1936,7 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
             const helpItems = project.getLanguageService().getSignatureHelpItems(file, position, args);
+            const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
             if (helpItems && simplifiedResult) {
                 const span = helpItems.applicableSpan;
                 return {
@@ -1942,10 +1945,10 @@ namespace ts.server {
                         start: scriptInfo.positionToLineOffset(span.start),
                         end: scriptInfo.positionToLineOffset(span.start + span.length)
                     },
-                    items: this.mapSignatureHelpItems(helpItems.items, project, !!args.richResponse),
+                    items: this.mapSignatureHelpItems(helpItems.items, project, useDisplayParts),
                 };
             }
-            else if (args.richResponse || !helpItems) {
+            else if (useDisplayParts || !helpItems) {
                 return helpItems;
             }
             else {
