@@ -103,15 +103,7 @@ namespace ts.JsDoc {
     }
 
     function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: SymbolDisplayPart[]) {
-        if (parts1.length !== parts2.length) {
-            return false;
-        }
-        for (let i = 0; i < parts1.length; i++) {
-            if (parts1[i].kind !== parts2[i].kind || parts1[i].text !== parts2[i].text) {
-                return false;
-            }
-        }
-        return true;
+        return arraysEqual(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
