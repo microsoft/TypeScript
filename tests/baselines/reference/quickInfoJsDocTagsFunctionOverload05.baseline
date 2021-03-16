@@ -172,7 +172,12 @@
       "tags": [
         {
           "name": "tag",
-          "text": "Tag text"
+          "text": [
+            {
+              "text": "Tag text",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

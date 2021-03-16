@@ -19,30 +19,3 @@
 
 // #31298
 verify.baselineSignatureHelp()
-
-
-verify.signatureHelp({
-  marker: "foo",
-  text: "foo(): any",
-  docComment: "",
-  tags: [
-    { name: "returns", text: "Websocket server object" },
-  ],
-});
-
-verify.signatureHelp({
-  marker: "bar",
-  text: "bar(): void",
-  docComment: "",
-  tags: [],
-});
-
-
-verify.signatureHelp({
-  marker: "zee",
-  text: "zee(): any",
-  docComment: "",
-  tags: [
-    { name: "type", text: "{function(module:xxxx, module:xxxx): module:xxxxx}" },
-  ],
-});

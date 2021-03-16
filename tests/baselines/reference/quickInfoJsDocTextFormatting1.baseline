@@ -111,11 +111,37 @@
           "tags": [
             {
               "name": "param",
-              "text": "var1 **Highlighted text**"
+              "text": [
+                {
+                  "text": "var1",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "**Highlighted text**",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "var2 Another **Highlighted text**"
+              "text": [
+                {
+                  "text": "var2",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Another **Highlighted text**",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }
@@ -241,11 +267,37 @@
           "tags": [
             {
               "name": "param",
-              "text": "var1 *Regular text with an asterisk"
+              "text": [
+                {
+                  "text": "var1",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "*Regular text with an asterisk",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "var2 Another *Regular text with an asterisk"
+              "text": [
+                {
+                  "text": "var2",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Another *Regular text with an asterisk",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }
@@ -371,11 +423,37 @@
           "tags": [
             {
               "name": "param",
-              "text": "var1 *Regular text with an asterisk"
+              "text": [
+                {
+                  "text": "var1",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "*Regular text with an asterisk",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "var2 Another *Regular text with an asterisk"
+              "text": [
+                {
+                  "text": "var2",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Another *Regular text with an asterisk",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }
@@ -501,11 +579,37 @@
           "tags": [
             {
               "name": "param",
-              "text": "var1 **Highlighted text**"
+              "text": [
+                {
+                  "text": "var1",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "**Highlighted text**",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "var2 Another **Highlighted text**"
+              "text": [
+                {
+                  "text": "var2",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Another **Highlighted text**",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }
@@ -631,11 +735,37 @@
           "tags": [
             {
               "name": "param",
-              "text": "var1 **Highlighted text**"
+              "text": [
+                {
+                  "text": "var1",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "**Highlighted text**",
+                  "kind": "text"
+                }
+              ]
             },
             {
               "name": "param",
-              "text": "var2 Another **Highlighted text**"
+              "text": [
+                {
+                  "text": "var2",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Another **Highlighted text**",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }

@@ -158,7 +158,12 @@
       "tags": [
         {
           "name": "return",
-          "text": "*crunch*"
+          "text": [
+            {
+              "text": "*crunch*",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

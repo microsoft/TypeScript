@@ -387,7 +387,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "b inner parameter"
+          "text": [
+            {
+              "text": "b",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "inner parameter",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -448,7 +461,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "b inner parameter"
+          "text": [
+            {
+              "text": "b",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "inner parameter",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -609,7 +635,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "b inner parameter"
+          "text": [
+            {
+              "text": "b",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "inner parameter",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -714,7 +753,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "b inner parameter"
+          "text": [
+            {
+              "text": "b",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "inner parameter",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -811,19 +863,55 @@
       "tags": [
         {
           "name": "param",
-          "text": "s param on expression"
+          "text": [
+            {
+              "text": "s",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "param on expression",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "returns",
-          "text": "return on expression"
+          "text": [
+            {
+              "text": "return on expression",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "param",
-          "text": "s the first parameter!"
+          "text": [
+            {
+              "text": "s",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "the first parameter!",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "returns",
-          "text": "the parameter's length"
+          "text": [
+            {
+              "text": "the parameter's length",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -920,19 +1008,55 @@
       "tags": [
         {
           "name": "param",
-          "text": "s param on expression"
+          "text": [
+            {
+              "text": "s",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "param on expression",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "returns",
-          "text": "return on expression"
+          "text": [
+            {
+              "text": "return on expression",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "param",
-          "text": "s the first parameter!"
+          "text": [
+            {
+              "text": "s",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "the first parameter!",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "returns",
-          "text": "the parameter's length"
+          "text": [
+            {
+              "text": "the parameter's length",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
