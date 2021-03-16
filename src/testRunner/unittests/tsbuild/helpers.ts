@@ -186,7 +186,7 @@ interface Symbol {
         }
     }
 
-    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<string>; }) {
+    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<Path>; }) {
         const mapFileNames = mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
         while (true) {
             const result = mapFileNames.next();
@@ -238,8 +238,10 @@ interface Symbol {
 
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
         type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
-        type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
+        type ProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
         interface ProgramBuildInfo {
+            fileNames: readonly string[];
+            fileNamesList: readonly (readonly string[])[] | undefined;
             fileInfos: MapLike<BuilderState.FileInfo>;
             options: CompilerOptions;
             referencedMap?: MapLike<string[]>;
@@ -248,11 +250,11 @@ interface Symbol {
             affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         }
         const fileInfos: ProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, fileId) => {
-            fileInfos[toFileName(fileId)] = fileInfo;
-        });
+        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = fileInfo);
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ProgramBuildInfo | undefined = buildInfo.program && {
+            fileNames: buildInfo.program.fileNames,
+            fileNamesList,
             fileInfos,
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
@@ -264,23 +266,27 @@ interface Symbol {
             ),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
                 toFileName(fileId),
-                emitKind
+                emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
+                    emitKind === BuilderFileEmit.Full ? "Full" :
+                        Debug.assertNever(emitKind)
             ]),
         };
-        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; } = {
+        const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
+        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; size: number; } = {
             bundle: buildInfo.bundle,
             program,
-            version: buildInfo.version === version ? fakes.version : buildInfo.version,
+            version,
+            size: getBuildInfoText({ ...buildInfo, version }).length,
         };
         // For now its just JSON.stringify
         originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
         function toFileName(fileId: number) {
-            return buildInfo.program!.fileNames[fileId];
+            return buildInfo.program!.fileNames[fileId - 1];
         }
 
         function toFileNames(fileIdsListId: number) {
-            return fileNamesList![fileIdsListId];
+            return fileNamesList![fileIdsListId - 1];
         }
 
         function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
@@ -293,14 +299,18 @@ interface Symbol {
         }
     }
 
+    export function toPathWithSystem(sys: System, fileName: string): Path {
+        return toPath(fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+    }
+
     export function baselineBuildInfo(
         options: CompilerOptions,
-        sys: System & { writtenFiles: ReadonlyCollection<string>; },
+        sys: System & { writtenFiles: ReadonlyCollection<Path>; },
         originalReadCall?: System["readFile"],
         originalWriteFile?: System["writeFile"],
     ) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-        if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;
+        if (!buildInfoPath || !sys.writtenFiles.has(toPathWithSystem(sys, buildInfoPath))) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);

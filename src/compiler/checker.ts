@@ -14334,7 +14334,7 @@ namespace ts {
                         addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                     }
                     if (accessExpression) {
-                        markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
+                        markPropertyAsReferenced(prop, accessExpression, isSelfTypeAccess(accessExpression.expression, objectType.symbol));
                         if (isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression))) {
                             error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(prop));
                             return undefined;
@@ -14605,6 +14605,13 @@ namespace ts {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
             return type[cache] = type;
+        }
+
+        function isConditionalTypeAlwaysTrueDisregardingInferTypes(type: ConditionalType) {
+            const extendsInferParamMapper = type.root.inferTypeParameters && createTypeMapper(type.root.inferTypeParameters, map(type.root.inferTypeParameters, () => wildcardType));
+            const checkType = type.checkType;
+            const extendsType = type.extendsType;
+            return isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(instantiateType(extendsType, extendsInferParamMapper)));
         }
 
         function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
@@ -17175,6 +17182,14 @@ namespace ts {
                             }
                             break;
                         }
+                        case Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target.code: {
+                            secondaryRootErrors.unshift([Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target, args[0], args[1]]);
+                            break;
+                        }
+                        case Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target.code: {
+                            secondaryRootErrors.unshift([Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, args[0], args[1], args[2]]);
+                            break;
+                        }
                         default:
                             return Debug.fail(`Unhandled Diagnostic: ${msg.code}`);
                     }
@@ -18137,6 +18152,36 @@ namespace ts {
                             originalErrorInfo = errorInfo;
                             resetErrorInfo(saveErrorInfo);
                         }
+                    }
+                }
+                else if (target.flags & TypeFlags.Conditional) {
+                    const c = target as ConditionalType;
+                    // Check if the conditional is always true or always false but still deferred for distribution purposes
+                    const skipTrue = !isTypeAssignableTo(getPermissiveInstantiation(c.checkType), getPermissiveInstantiation(c.extendsType));
+                    const skipFalse = !skipTrue && isConditionalTypeAlwaysTrueDisregardingInferTypes(c);
+
+                    // Instantiate with a replacement mapper if the conditional is distributive, replacing the check type with a clone of itself,
+                    // this way {x: string | number, y: string | number} -> (T extends T ? { x: T, y: T } : never) appropriately _fails_ when
+                    // T = string | number (since that will end up distributing and producing `{x: string, y: string} | {x: number, y: number}`,
+                    // to which `{x: string | number, y: string | number}` isn't assignable)
+                    let distributionMapper: TypeMapper | undefined;
+                    const checkVar = getActualTypeVariable(c.root.checkType);
+                    if (c.root.isDistributive && checkVar.flags & TypeFlags.TypeParameter) {
+                        const newParam = cloneTypeParameter(checkVar);
+                        distributionMapper = prependTypeMapping(checkVar, newParam, c.mapper);
+                        newParam.mapper = distributionMapper;
+                    }
+
+                    // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
+                    let localResult: Ternary | undefined;
+                    if (skipTrue || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), /*reportErrors*/ false))) {
+                        if (!skipFalse) {
+                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), /*reportErrors*/ false);
+                        }
+                    }
+                    if (localResult) {
+                        resetErrorInfo(saveErrorInfo);
+                        return localResult;
                     }
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
@@ -22447,7 +22492,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && !(resultType.flags & TypeFlags.Never) && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
             return resultType;
@@ -22963,7 +23008,8 @@ namespace ts {
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
-                if (type.flags & (TypeFlags.Union | TypeFlags.Object)
+                if (type.flags & TypeFlags.Union
+                    || type.flags & TypeFlags.Object && declaredType !== type
                     || isThisTypeParameter(type)
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
                     const propName = escapeLeadingUnderscores(literal.text);
@@ -23690,7 +23736,14 @@ namespace ts {
             if (assignmentKind) {
                 if (!(localOrExportSymbol.flags & SymbolFlags.Variable) &&
                     !(isInJSFile(node) && localOrExportSymbol.flags & SymbolFlags.ValueModule)) {
-                    error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
+                    const assignmentError = localOrExportSymbol.flags & SymbolFlags.Enum ? Diagnostics.Cannot_assign_to_0_because_it_is_an_enum
+                        : localOrExportSymbol.flags & SymbolFlags.Class ? Diagnostics.Cannot_assign_to_0_because_it_is_a_class
+                        : localOrExportSymbol.flags & SymbolFlags.Module ? Diagnostics.Cannot_assign_to_0_because_it_is_a_namespace
+                        : localOrExportSymbol.flags & SymbolFlags.Function ? Diagnostics.Cannot_assign_to_0_because_it_is_a_function
+                        : localOrExportSymbol.flags & SymbolFlags.Alias ? Diagnostics.Cannot_assign_to_0_because_it_is_an_import
+                        : Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable;
+
+                    error(node, assignmentError, symbolToString(symbol));
                     return errorType;
                 }
                 if (isReadonlySymbol(localOrExportSymbol)) {
@@ -23774,12 +23827,18 @@ namespace ts {
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
         }
 
-        function isInsideFunction(node: Node, threshold: Node): boolean {
-            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
+        function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
+            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n) || (
+                n.parent && isPropertyDeclaration(n.parent) && !hasStaticModifier(n.parent) && n.parent.initializer === n
+            ));
         }
 
         function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
             return findAncestor(node, n => n === container ? "quit" : n === container.initializer || n === container.condition || n === container.incrementor || n === container.statement);
+        }
+
+        function getEnclosingIterationStatement(node: Node): Node | undefined {
+            return findAncestor(node, n => (!n || nodeStartsNewLexicalEnvironment(n)) ? "quit" : isIterationStatement(n, /*lookInLabeledStatements*/ false));
         }
 
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
@@ -23797,20 +23856,11 @@ namespace ts {
             // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
             const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
-            const usedInFunction = isInsideFunction(node.parent, container);
-            let current = container;
+            const isCaptured = isInsideFunctionOrInstancePropertyInitializer(node, container);
 
-            let containedInIterationStatement = false;
-            while (current && !nodeStartsNewLexicalEnvironment(current)) {
-                if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
-                    containedInIterationStatement = true;
-                    break;
-                }
-                current = current.parent;
-            }
-
-            if (containedInIterationStatement) {
-                if (usedInFunction) {
+            const enclosingIterationStatement = getEnclosingIterationStatement(container);
+            if (enclosingIterationStatement) {
+                if (isCaptured) {
                     // mark iteration statement as containing block-scoped binding captured in some function
                     let capturesBlockScopeBindingInLoopBody = true;
                     if (isForStatement(container)) {
@@ -23831,7 +23881,7 @@ namespace ts {
                         }
                     }
                     if (capturesBlockScopeBindingInLoopBody) {
-                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
                     }
                 }
 
@@ -23848,7 +23898,7 @@ namespace ts {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
             }
 
-            if (usedInFunction) {
+            if (isCaptured) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
         }
@@ -25528,6 +25578,20 @@ namespace ts {
             const links = getNodeLinks(node.expression);
             if (!links.resolvedType) {
                 links.resolvedType = checkExpression(node.expression);
+                // The computed property name of a non-static class field within a loop must be stored in a block-scoped binding.
+                // (It needs to be bound at class evaluation time.)
+                if (isPropertyDeclaration(node.parent) && !hasStaticModifier(node.parent) && isClassExpression(node.parent.parent)) {
+                    const container = getEnclosingBlockScopeContainer(node.parent.parent);
+                    const enclosingIterationStatement = getEnclosingIterationStatement(container);
+                    if (enclosingIterationStatement) {
+                        // The computed field name will use a block scoped binding which can be unique for each iteration of the loop.
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                        // The generated variable which stores the computed field name must be block-scoped.
+                        getNodeLinks(node).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                        // The generated variable which stores the class must be block-scoped.
+                        getNodeLinks(node.parent.parent).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                    }
+                }
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
                 if (links.resolvedType.flags & TypeFlags.Nullable ||
@@ -26796,7 +26860,7 @@ namespace ts {
                     addDeprecatedSuggestion(right, prop.declarations, right.escapedText as string);
                 }
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
-                markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
+                markPropertyAsReferenced(prop, node, isSelfTypeAccess(left, parentSymbol));
                 getNodeLinks(node).resolvedSymbol = prop;
                 checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, apparentType, prop);
                 if (isAssignmentToReadonlyEntity(node as Expression, prop, assignmentKind)) {
@@ -27125,7 +27189,7 @@ namespace ts {
             }
         }
 
-        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
+        function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isSelfTypeAccess: boolean) {
             const valueDeclaration = prop && (prop.flags & SymbolFlags.ClassMember) && prop.valueDeclaration;
             if (!valueDeclaration) {
                 return;
@@ -27138,8 +27202,7 @@ namespace ts {
             if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor)) {
                 return;
             }
-
-            if (isThisAccess) {
+            if (isSelfTypeAccess) {
                 // Find any FunctionLikeDeclaration because those create a new 'this' binding. But this should only matter for methods (or getters/setters).
                 const containingMethod = findAncestor(nodeForCheckWriteOnly, isFunctionLikeDeclaration);
                 if (containingMethod && containingMethod.symbol === prop) {
@@ -27148,6 +27211,11 @@ namespace ts {
             }
 
             (getCheckFlags(prop) & CheckFlags.Instantiated ? getSymbolLinks(prop).target : prop)!.isReferenced = SymbolFlags.All;
+        }
+
+        function isSelfTypeAccess(name: Expression | QualifiedName, parent: Symbol | undefined) {
+            return name.kind === SyntaxKind.ThisKeyword
+                || !!parent && isEntityNameExpression(name) && parent === getResolvedSymbol(getFirstIdentifier(name));
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: __String): boolean {
@@ -32612,6 +32680,16 @@ namespace ts {
                 for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
                     getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
                 }
+
+                // If this is a private field in a class expression inside the body of a loop,
+                // then we must use a block-scoped binding to store the WeakMap.
+                if (isClassExpression(node.parent)) {
+                    const enclosingIterationStatement = getEnclosingIterationStatement(node.parent);
+                    if (enclosingIterationStatement) {
+                        getNodeLinks(node.name).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    }
+                }
             }
         }
 
@@ -34700,7 +34778,7 @@ namespace ts {
                         const nameText = getPropertyNameFromType(exprType);
                         const property = getPropertyOfType(parentType, nameText);
                         if (property) {
-                            markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                            markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isSelfTypeAccess*/ false); // A destructuring is never a write-only reference.
                             checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
                         }
                     }
@@ -41508,5 +41586,4 @@ namespace ts {
     export function signatureHasLiteralTypes(s: Signature) {
         return !!(s.flags & SignatureFlags.HasLiteralTypes);
     }
-
 }

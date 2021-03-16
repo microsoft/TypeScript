@@ -283,7 +283,8 @@ declare function f(): string;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 252
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts] file written with same contents

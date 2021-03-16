@@ -603,9 +603,11 @@ namespace ts {
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
-            esnext: {
+            es2021: {
                 PromiseConstructor: ["any"],
-                String: ["replaceAll"],
+                String: ["replaceAll"]
+            },
+            esnext: {
                 NumberFormat: ["formatToParts"]
             }
         };
@@ -4213,8 +4215,10 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
             !sourceFile.isDeclarationFile &&
             !host.isSourceFileFromExternalLibrary(sourceFile) &&
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            (forceDtsEmit || !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName));
+            (forceDtsEmit || (
+                !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
+                !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
+            ));
     }
 
     export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {

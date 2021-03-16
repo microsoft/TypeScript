@@ -178,14 +178,14 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+    defineProperty<T>(o: T, p: string, attributes: PropertyDescriptor): T;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
       * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
       * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
       */
-    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+    defineProperties<T>(o: T, properties: PropertyDescriptorMap): T;
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.

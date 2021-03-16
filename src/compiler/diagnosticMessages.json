@@ -2654,6 +2654,26 @@
         "category": "Error",
         "code": 2627
     },
+    "Cannot assign to '{0}' because it is an enum.": {
+        "category": "Error",
+        "code": 2628
+    },
+    "Cannot assign to '{0}' because it is a class.": {
+        "category": "Error",
+        "code": 2629
+    },
+    "Cannot assign to '{0}' because it is a function.": {
+        "category": "Error",
+        "code": 2630
+    },
+    "Cannot assign to '{0}' because it is a namespace.": {
+        "category": "Error",
+        "code": 2631
+    },
+    "Cannot assign to '{0}' because it is an import.": {
+        "category": "Error",
+        "code": 2632
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3915,7 +3935,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },

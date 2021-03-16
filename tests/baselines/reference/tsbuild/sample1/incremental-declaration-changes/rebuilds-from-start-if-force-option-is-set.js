@@ -33,6 +33,12 @@ exitCode:: ExitStatus.Success
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -41,12 +47,12 @@ exitCode:: ExitStatus.Success
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "signature": "-8396256275-export declare const World = \"hello\";\r\n",
         "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map",
+        "signature": "1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n",
         "affectsGlobalScope": false
       },
       "./some_decl.d.ts": {
@@ -71,7 +77,8 @@ exitCode:: ExitStatus.Success
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2027
 }
 
 //// [/src/logic/index.d.ts] file written with same contents
@@ -81,6 +88,21 @@ exitCode:: ExitStatus.Success
 //// [/src/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../core/index.d.ts",
+      "../core/anothermodule.d.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../core/index.d.ts",
+        "../core/anothermodule.d.ts"
+      ],
+      [
+        "../core/anothermodule.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -129,7 +151,8 @@ exitCode:: ExitStatus.Success
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2540
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -138,6 +161,23 @@ exitCode:: ExitStatus.Success
 //// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../core/index.d.ts",
+      "../core/anothermodule.d.ts",
+      "../logic/index.d.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../core/anothermodule.d.ts"
+      ],
+      [
+        "../core/index.d.ts",
+        "../core/anothermodule.d.ts",
+        "../logic/index.d.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -198,6 +238,7 @@ exitCode:: ExitStatus.Success
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2895
 }
 

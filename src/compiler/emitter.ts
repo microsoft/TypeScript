@@ -498,7 +498,7 @@ namespace ts {
                     declarationTransform.transformed[0],
                     declarationPrinter,
                     {
-                        sourceMap: compilerOptions.declarationMap,
+                        sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                         sourceRoot: compilerOptions.sourceRoot,
                         mapRoot: compilerOptions.mapRoot,
                         extendedDiagnostics: compilerOptions.extendedDiagnostics,

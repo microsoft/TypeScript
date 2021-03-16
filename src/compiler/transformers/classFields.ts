@@ -36,7 +36,8 @@ namespace ts {
             factory,
             hoistVariableDeclaration,
             endLexicalEnvironment,
-            resumeLexicalEnvironment
+            resumeLexicalEnvironment,
+            addBlockScopedVariable
         } = context;
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
@@ -310,7 +311,7 @@ namespace ts {
                     visitNode(node.initializer, visitor, isForInitializer),
                     visitNode(node.condition, visitor, isExpression),
                     visitPostfixUnaryExpression(node.incrementor, /*valueIsDiscarded*/ true),
-                    visitNode(node.statement, visitor, isStatement)
+                    visitIterationBody(node.statement, visitor, context)
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -540,8 +541,10 @@ namespace ts {
                 }
                 else {
                     const expressions: Expression[] = [];
-                    const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
-                    const temp = factory.createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                    const classCheckFlags = resolver.getNodeCheckFlags(node);
+                    const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ClassWithConstructorReference;
+                    const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
+                    const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, !!isClassWithConstructorReference);
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
@@ -869,7 +872,6 @@ namespace ts {
             return undefined;
         }
 
-
         /**
          * If the name is a computed property, this function transforms it, then either returns an expression which caches the
          * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
@@ -883,7 +885,12 @@ namespace ts {
                 const alreadyTransformed = isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
                 if (!alreadyTransformed && !inlinable && shouldHoist) {
                     const generatedName = factory.getGeneratedNameForNode(name);
-                    hoistVariableDeclaration(generatedName);
+                    if (resolver.getNodeCheckFlags(name) & NodeCheckFlags.BlockScopedBindingInLoop) {
+                        addBlockScopedVariable(generatedName);
+                    }
+                    else {
+                        hoistVariableDeclaration(generatedName);
+                    }
                     return factory.createAssignment(generatedName, expression);
                 }
                 return (inlinable || isIdentifier(innerExpression)) ? undefined : expression;
@@ -910,7 +917,12 @@ namespace ts {
         function addPrivateIdentifierToEnvironment(name: PrivateIdentifier) {
             const text = getTextOfPropertyName(name) as string;
             const weakMapName = factory.createUniqueName("_" + text.substring(1), GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.ReservedInNestedScopes);
-            hoistVariableDeclaration(weakMapName);
+            if (resolver.getNodeCheckFlags(name) & NodeCheckFlags.BlockScopedBindingInLoop) {
+                addBlockScopedVariable(weakMapName);
+            }
+            else {
+                hoistVariableDeclaration(weakMapName);
+            }
             getPrivateIdentifierEnvironment().set(name.escapedText, { placement: PrivateIdentifierPlacement.InstanceField, weakMapName });
             getPendingExpressions().push(
                 factory.createAssignment(
