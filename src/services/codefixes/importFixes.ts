@@ -241,8 +241,8 @@ namespace ts.codefix {
                 if (file !== fileName) {
                     return undefined;
                 }
-                if (version) {
-                    return projectVersion === version ? cache : undefined;
+                if (version && projectVersion === version) {
+                    return cache;
                 }
                 cache?.forEach(infos => {
                     for (const info of infos) {
@@ -738,10 +738,10 @@ namespace ts.codefix {
     }
 
     function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly exportKind: ExportKind } | undefined {
+        const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
+        if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
         const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
         if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
-        const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
     }
 
     function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {

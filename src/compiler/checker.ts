@@ -3526,7 +3526,9 @@ namespace ts {
         function shouldTreatPropertiesOfExternalModuleAsExports(resolvedExternalModuleType: Type) {
             return !(resolvedExternalModuleType.flags & TypeFlags.Primitive ||
                     getObjectFlags(resolvedExternalModuleType) & ObjectFlags.Class ||
-                    isArrayOrTupleLikeType(resolvedExternalModuleType));
+                    // `isArrayOrTupleLikeType` is too expensive to use in this auto-imports hot path
+                    isArrayType(resolvedExternalModuleType) ||
+                    isTupleType(resolvedExternalModuleType));
         }
 
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {

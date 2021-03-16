@@ -1695,7 +1695,7 @@ namespace ts.Completions {
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*filterByPackageJson*/ !detailsEntryId);
             exportInfo.forEach((info, key) => {
-                const [symbolName] = key.split("|");
+                const symbolName = key.substring(0, key.indexOf("|"));
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                 if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
@@ -1745,7 +1745,8 @@ namespace ts.Completions {
             }
 
             let characterIndex = 0;
-            for (let strIndex = 0; strIndex < str.length; strIndex++) {
+            const len = str.length;
+            for (let strIndex = 0; strIndex < len; strIndex++) {
                 if (str.charCodeAt(strIndex) === characters.charCodeAt(characterIndex)) {
                     characterIndex++;
                     if (characterIndex === characters.length) {
