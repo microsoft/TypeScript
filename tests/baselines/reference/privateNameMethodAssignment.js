@@ -13,28 +13,30 @@ class A3 {
 
 
 //// [privateNameMethodAssignment.js]
-var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
-    throw new TypeError("private element is not writable");
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private method on non-instance");
-    }
-    return fn;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _A3_instances, _A3_method;
 class A3 {
     constructor(a, b) {
         var _a, _b;
         _A3_instances.add(this);
-        __classPrivateReadonly(this, () => { }); // Error, not writable 
-        __classPrivateReadonly(// Error, not writable 
-        a, () => { }); // Error, not writable 
-        __classPrivateReadonly(// Error, not writable 
-        b, () => { }); //Error, not writable 
-        (_a = this, { x: ({ set value(_b) { __classPrivateReadonly(_a, _b); } }).value } = { x: () => { } }); //Error, not writable 
-        let x = __classPrivateMethodGet(this, _A3_instances, _A3_method);
-        __classPrivateReadonly(_b = b, +__classPrivateMethodGet(_b, _A3_instances, _A3_method) + 1); //Error, not writable 
+        __classPrivateFieldSet(this, _A3_instances, () => { }, "m"); // Error, not writable 
+        __classPrivateFieldSet(// Error, not writable 
+        a, _A3_instances, () => { }, "m"); // Error, not writable 
+        __classPrivateFieldSet(// Error, not writable 
+        b, _A3_instances, () => { }, "m"); //Error, not writable 
+        (_a = this, { x: ({ set value(_b) { __classPrivateFieldSet(_a, _A3_instances, _b, "m"); } }).value } = { x: () => { } }); //Error, not writable 
+        let x = __classPrivateFieldGet(this, _A3_instances, "m", _A3_method);
+        __classPrivateFieldSet(_b = b, _A3_instances, +__classPrivateFieldGet(_b, _A3_instances, "m", _A3_method) + 1, "m"); //Error, not writable 
     }
     ;
 }

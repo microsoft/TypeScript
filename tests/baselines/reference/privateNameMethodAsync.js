@@ -15,11 +15,10 @@ new C().foo().then(console.log);
 
 
 //// [privateNameMethodAsync.js]
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private method on non-instance");
-    }
-    return fn;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _C_instances, _C_bar, _C_baz, _C_qux, _a;
 const C = (_a = class {
@@ -27,8 +26,8 @@ const C = (_a = class {
             _C_instances.add(this);
         }
         async foo() {
-            const b = await __classPrivateMethodGet(this, _C_instances, _C_bar).call(this);
-            return b + (__classPrivateMethodGet(this, _C_instances, _C_baz).call(this).next().value || 0) + ((await __classPrivateMethodGet(this, _C_instances, _C_qux).call(this).next()).value || 0);
+            const b = await __classPrivateFieldGet(this, _C_instances, "m", _C_bar).call(this);
+            return b + (__classPrivateFieldGet(this, _C_instances, "m", _C_baz).call(this).next().value || 0) + ((await __classPrivateFieldGet(this, _C_instances, "m", _C_qux).call(this).next()).value || 0);
         }
     },
     _C_instances = new WeakSet(),

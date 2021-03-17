@@ -14,23 +14,22 @@ class X {
   
 
 //// [privateStaticNameShadowing.js]
-var __classStaticPrivateMethodGet = (this && this.__classStaticPrivateMethodGet) || function (receiver, classConstructor, fn) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    return fn;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _b, _X_f, _X_m;
 class X {
     constructor() {
-        __classStaticPrivateMethodGet(X, _b, _X_m).call(X);
+        __classPrivateFieldGet(X, _b, "m", _X_m).call(X);
     }
 }
 _b = X, _X_m = function _X_m() {
     const X = {}; // shadow the class
     const _a = {}; // shadow the first generated var
-    __classStaticPrivateMethodGet(X, _b, _X_m).call(// shadow the first generated var
+    __classPrivateFieldGet(X, _b, "m", _X_m).call(// shadow the first generated var
     X); // Should check with X as the receiver with _b as the class constructor 
     return 1;
 };
-_X_f = { value: __classStaticPrivateMethodGet(X, _b, _X_m).call(X) };
+_X_f = { value: __classPrivateFieldGet(X, _b, "m", _X_m).call(X) };

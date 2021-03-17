@@ -11,12 +11,11 @@ new C().bar();
 
 
 //// [privateNameSetterExprReturnValue.js]
-var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || function (receiver, instances, fn, value) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to set private accessor on non-instance");
-    }
-    fn.call(receiver, value);
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
 var _C_instances, _C_foo_set;
 class C {
@@ -24,7 +23,7 @@ class C {
         _C_instances.add(this);
     }
     bar() {
-        let x = (__classPrivateAccessorSet(this, _C_instances, _C_foo_set, 42 * 2));
+        let x = (__classPrivateFieldSet(this, _C_instances, 42 * 2, "a", _C_foo_set));
         console.log(x); // 84
     }
 }
