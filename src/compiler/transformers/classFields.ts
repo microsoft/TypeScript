@@ -571,7 +571,7 @@ namespace ts {
 
                 const name = getNameOfDeclaration(node);
                 if (name && isIdentifier(name)) {
-                    getPrivateIdentifierEnvironment().className = name.escapedText as string;
+                    getPrivateIdentifierEnvironment().className = idText(name);
                 }
 
                 const privateInstanceMethods = getPrivateInstanceMethods(node);
