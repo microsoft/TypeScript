@@ -23,21 +23,17 @@ class B {
 
 
 //// [privateNameStaticFieldClassExpression.js]
-var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    return propertyDescriptor.value;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _a, _B_foo, _B_foo2, _b, _c;
 class B {
     m() {
-        console.log(__classStaticPrivateFieldGet(B, _a, _B_foo).test);
-        __classStaticPrivateFieldGet(B, _a, _B_foo).test = 10;
-        new (__classStaticPrivateFieldGet(B, _a, _B_foo))().field;
+        console.log(__classPrivateFieldGet(B, _a, void 0, _B_foo).test);
+        __classPrivateFieldGet(B, _a, void 0, _B_foo).test = 10;
+        new (__classPrivateFieldGet(B, _a, void 0, _B_foo))().field;
     }
 }
 _a = B;
@@ -45,7 +41,7 @@ _B_foo = { value: (_b = class {
             constructor() {
                 this.field = 10;
                 console.log("hello");
-                new (__classStaticPrivateFieldGet(B, _a, _B_foo2))();
+                new (__classPrivateFieldGet(B, _a, void 0, _B_foo2))();
             }
         },
         _b.test = 123,

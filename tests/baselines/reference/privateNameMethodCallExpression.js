@@ -25,11 +25,10 @@ class AA {
 
 
 //// [privateNameMethodCallExpression.js]
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private method on non-instance");
-    }
-    return fn;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _AA_instances, _AA_method, _AA_method2;
 class AA {
@@ -41,18 +40,18 @@ class AA {
     ;
     test() {
         var _a, _b, _c;
-        __classPrivateMethodGet(this, _AA_instances, _AA_method).call(this);
-        const func = __classPrivateMethodGet(this, _AA_instances, _AA_method);
+        __classPrivateFieldGet(this, _AA_instances, "m", _AA_method).call(this);
+        const func = __classPrivateFieldGet(this, _AA_instances, "m", _AA_method);
         func();
-        new (__classPrivateMethodGet(this, _AA_instances, _AA_method))();
+        new (__classPrivateFieldGet(this, _AA_instances, "m", _AA_method))();
         const arr = [1, 2];
-        __classPrivateMethodGet(this, _AA_instances, _AA_method2).call(this, 0, ...arr, 3);
-        const b = new (__classPrivateMethodGet(this, _AA_instances, _AA_method2))(0, ...arr, 3); //Error 
-        const str = __classPrivateMethodGet(this, _AA_instances, _AA_method2).bind(this) `head${1}middle${2}tail`;
-        __classPrivateMethodGet((_a = this.getInstance()), _AA_instances, _AA_method2).bind(_a) `test${1}and${2}`;
-        __classPrivateMethodGet((_b = this.getInstance()), _AA_instances, _AA_method2).call(_b, 0, ...arr, 3);
-        const b2 = new (__classPrivateMethodGet(this.getInstance(), _AA_instances, _AA_method2))(0, ...arr, 3); //Error 
-        const str2 = __classPrivateMethodGet((_c = this.getInstance()), _AA_instances, _AA_method2).bind(_c) `head${1}middle${2}tail`;
+        __classPrivateFieldGet(this, _AA_instances, "m", _AA_method2).call(this, 0, ...arr, 3);
+        const b = new (__classPrivateFieldGet(this, _AA_instances, "m", _AA_method2))(0, ...arr, 3); //Error 
+        const str = __classPrivateFieldGet(this, _AA_instances, "m", _AA_method2).bind(this) `head${1}middle${2}tail`;
+        __classPrivateFieldGet((_a = this.getInstance()), _AA_instances, "m", _AA_method2).bind(_a) `test${1}and${2}`;
+        __classPrivateFieldGet((_b = this.getInstance()), _AA_instances, "m", _AA_method2).call(_b, 0, ...arr, 3);
+        const b2 = new (__classPrivateFieldGet(this.getInstance(), _AA_instances, "m", _AA_method2))(0, ...arr, 3); //Error 
+        const str2 = __classPrivateFieldGet((_c = this.getInstance()), _AA_instances, "m", _AA_method2).bind(_c) `head${1}middle${2}tail`;
     }
     getInstance() { return new AA(); }
 }

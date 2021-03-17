@@ -32,21 +32,8 @@ namespace ts {
         createImportDefaultHelper(expression: Expression): Expression;
         createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
         // Class Fields Helpers
-        createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
-        createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
-        createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
-        createClassPrivateReadonlyHelper(receiver: Expression, value: Expression): Expression;
-        createClassPrivateWriteonlyHelper(receiver: Expression): Expression;
-        createClassPrivateAccessorGetHelper(receiver: Expression, instances: Identifier, fn: Identifier): Expression;
-        createClassPrivateAccessorSetHelper(receiver: Expression, instances: Identifier, fn: Identifier, value: Expression): Expression;
-        // Class Static Private Helpers
-        createClassStaticPrivateFieldGetHelper(receiver: Expression, classConstructor: Identifier, privateField: Identifier): Expression;
-        createClassStaticPrivateFieldSetHelper(receiver: Expression, classConstructor: Identifier, privateField: Identifier, value: Expression): Expression;
-        createClassStaticPrivateMethodGetHelper(receiver: Expression, classConstructor: Identifier, fn: Identifier): Expression;
-        createClassStaticPrivateReadonlyHelper(receiver: Expression, value: Expression): Expression;
-        createClassStaticPrivateWriteonlyHelper(receiver: Expression): Expression;
-        createClassStaticPrivateAccessorGetHelper(receiver: Expression, classConstructor: Identifier, fn: Identifier): Expression;
-        createClassStaticPrivateAccessorSetHelper(receiver: Expression, classConstructor: Identifier, fn: Identifier, value: Expression): Expression;
+        createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier, kind?: "a" | "m" | undefined, f?: Identifier | undefined): Expression;
+        createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression, kind?: "a" | "m" | undefined, f?: Identifier | undefined): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -85,18 +72,6 @@ namespace ts {
             // Class Fields Helpers
             createClassPrivateFieldGetHelper,
             createClassPrivateFieldSetHelper,
-            createClassPrivateMethodGetHelper,
-            createClassPrivateReadonlyHelper,
-            createClassPrivateWriteonlyHelper,
-            createClassPrivateAccessorGetHelper,
-            createClassPrivateAccessorSetHelper,
-            createClassStaticPrivateFieldGetHelper,
-            createClassStaticPrivateFieldSetHelper,
-            createClassStaticPrivateMethodGetHelper,
-            createClassStaticPrivateReadonlyHelper,
-            createClassStaticPrivateWriteonlyHelper,
-            createClassStaticPrivateAccessorGetHelper,
-            createClassStaticPrivateAccessorSetHelper,
         };
 
         /**
@@ -393,75 +368,42 @@ namespace ts {
 
         // Class Fields Helpers
 
-        function createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier) {
+        function createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind?: "a" | "m" | undefined, f?: Identifier | undefined) {
             context.requestEmitHelper(classPrivateFieldGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldGet"), /*typeArguments*/ undefined, [receiver, privateField]);
+            let args;
+            if(!kind && !f) {
+                args = [receiver, state];
+            }
+            else if(kind && !f) {
+                args = [receiver, state, factory.createStringLiteral(kind)];
+            }
+            else if(!kind && f) {
+                args = [receiver, state, factory.createVoidZero(), f];
+            }
+            else {
+                args = [receiver, state, factory.createStringLiteral(kind!), f!];
+            }
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldGet"), /*typeArguments*/ undefined, args);
         }
 
-        function createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression) {
+        function createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind?: "a" | "m" | undefined, f?: Identifier | undefined) {
             context.requestEmitHelper(classPrivateFieldSetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, [receiver, privateField, value]);
+            let args;
+            if(!kind && !f) {
+                args = [receiver, state, value];
+            }
+            else if(kind && !f) {
+                args = [receiver, state, value, factory.createStringLiteral(kind)];
+            }
+            else if(!kind && f) {
+                args = [receiver, state, value, factory.createVoidZero(), f];
+            }
+            else {
+                args = [receiver, state, value, factory.createStringLiteral(kind!), f!];
+            }
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, args);
         }
 
-        function createClassPrivateMethodGetHelper(receiver: Expression, instances: Identifier, fn: Identifier) {
-            context.requestEmitHelper(classPrivateMethodGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateMethodGet"), /*typeArguments*/ undefined, [receiver, instances, fn]);
-        }
-
-        function createClassPrivateReadonlyHelper(receiver: Expression, value: Expression) {
-            context.requestEmitHelper(classPrivateReadonlyHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateReadonly"), /*typeArguments*/ undefined, [receiver, value]);
-        }
-
-        function createClassPrivateWriteonlyHelper(receiver: Expression) {
-            context.requestEmitHelper(classPrivateWriteonlyHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateWriteonly"), /*typeArguments*/ undefined, [receiver]);
-        }
-
-        function createClassPrivateAccessorGetHelper(receiver: Expression, instances: Identifier, fn: Identifier) {
-            context.requestEmitHelper(classPrivateAccessorGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateAccessorGet"), /*typeArguments*/ undefined, [receiver, instances, fn]);
-        }
-
-        function createClassPrivateAccessorSetHelper(receiver: Expression, instances: Identifier, fn: Identifier, value: Expression) {
-            context.requestEmitHelper(classPrivateAccessorSetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateAccessorSet"), /*typeArguments*/ undefined, [receiver, instances, fn, value]);
-        }
-        // Class Private Static Helpers
-        function createClassStaticPrivateFieldGetHelper(receiver: Expression, classConstructor: Identifier, privateField: Identifier) {
-            context.requestEmitHelper(classStaticPrivateFieldGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateFieldGet"), /*typeArguments*/ undefined, [receiver, classConstructor, privateField]);
-        }
-
-        function createClassStaticPrivateFieldSetHelper(receiver: Expression, classConstructor: Identifier, privateField: Identifier, value: Expression) {
-            context.requestEmitHelper(classStaticPrivateFieldSetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateFieldSet"), /*typeArguments*/ undefined, [receiver, classConstructor, privateField, value]);
-        }
-
-        function createClassStaticPrivateMethodGetHelper(receiver: Expression, classConstructor: Identifier, fn: Identifier) {
-            context.requestEmitHelper(classStaticPrivateMethodGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateMethodGet"), /*typeArguments*/ undefined, [receiver, classConstructor, fn]);
-        }
-
-        function createClassStaticPrivateReadonlyHelper(receiver: Expression, value: Expression) {
-            context.requestEmitHelper(classStaticPrivateReadonlyHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateReadonly"), /*typeArguments*/ undefined, [receiver, value]);
-        }
-
-        function createClassStaticPrivateWriteonlyHelper(receiver: Expression) {
-            context.requestEmitHelper(classStaticPrivateWriteonlyHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateWriteonly"), /*typeArguments*/ undefined, [receiver]);
-        }
-
-        function createClassStaticPrivateAccessorGetHelper(receiver: Expression, classConstructor: Identifier, fn: Identifier) {
-            context.requestEmitHelper(classStaticPrivateAccessorGetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateAccessorGet"), /*typeArguments*/ undefined, [receiver, classConstructor, fn]);
-        }
-
-        function createClassStaticPrivateAccessorSetHelper(receiver: Expression, classConstructor: Identifier, fn: Identifier, value: Expression) {
-            context.requestEmitHelper(classStaticPrivateAccessorSetHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classStaticPrivateAccessorSet"), /*typeArguments*/ undefined, [receiver, classConstructor, fn, value]);
-        }
     }
 
     /* @internal */
@@ -907,11 +849,10 @@ namespace ts {
         importName: "__classPrivateFieldGet",
         scoped: false,
         text: `
-            var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-                if (!privateMap.has(receiver)) {
-                    throw new TypeError("attempted to get private field on non-instance");
-                }
-                return privateMap.get(receiver);
+            var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+                if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+                if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+                return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
             };`
     };
 
@@ -920,165 +861,11 @@ namespace ts {
         importName: "__classPrivateFieldSet",
         scoped: false,
         text: `
-            var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-                if (!privateMap.has(receiver)) {
-                    throw new TypeError("attempted to set private field on non-instance");
-                }
-                privateMap.set(receiver, value);
-                return value;
-            };`
-    };
-
-    export const classPrivateMethodGetHelper: UnscopedEmitHelper = {
-        name: "typescript:classPrivateMethodGet",
-        importName: "__classPrivateMethodGet",
-        scoped: false,
-        text: `
-            var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
-                if (!instances.has(receiver)) {
-                    throw new TypeError("attempted to get private method on non-instance");
-                }
-                return fn;
-            };`
-    };
-
-    export const classPrivateReadonlyHelper: UnscopedEmitHelper = {
-        name: "typescript:classPrivateReadonly",
-        importName: "__classPrivateReadonly",
-        scoped: false,
-        text: `
-            var __classPrivateReadonly = (this && this.__classPrivateReadonly) || function () {
-                throw new TypeError("private element is not writable");
-            };`
-    };
-
-    export const classPrivateWriteonlyHelper: UnscopedEmitHelper = {
-        name: "typescript:classPrivateWriteonly",
-        importName: "__classPrivateWriteonly",
-        scoped: false,
-        text: `
-            var __classPrivateWriteonly = (this && this.__classPrivateWriteonly) || function () {
-                throw new TypeError("private setter was defined without a getter");
-            };`
-    };
-
-    export const classPrivateAccessorGetHelper: UnscopedEmitHelper = {
-        name: "typescript:classPrivateAccessorGet",
-        importName: "__classPrivateAccessorGet",
-        scoped: false,
-        text: `
-            var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
-                if (!instances.has(receiver)) {
-                    throw new TypeError("attempted to get private accessor on non-instance");
-                }
-                return fn.call(receiver);
-            };`
-    };
-
-    export const classPrivateAccessorSetHelper: UnscopedEmitHelper = {
-        name: "typescript:classPrivateAccessorSet",
-        importName: "__classPrivateAccessorSet",
-        scoped: false,
-        text: `
-            var __classPrivateAccessorSet = (this && this.__classPrivateAccessorSet) || function (receiver, instances, fn, value) {
-                if (!instances.has(receiver)) {
-                    throw new TypeError("attempted to set private accessor on non-instance");
-                }
-                fn.call(receiver, value);
-                return value;
-            };`
-    };
-
-    export const classStaticPrivateFieldGetHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateFieldGet",
-        importName: "__classStaticPrivateFieldGet",
-        scoped: false,
-        text: `
-            var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
-                if (receiver !== classConstructor) {
-                    throw new TypeError("Private static access of wrong provenance");
-                }
-                if (propertyDescriptor === undefined) {
-                    throw new TypeError("Private static field was accessed before its declaration.");
-                }
-                return propertyDescriptor.value;
-            };`
-    };
-
-    export const classStaticPrivateFieldSetHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateFieldSet",
-        importName: "__classStaticPrivateFieldSet",
-        scoped: false,
-        text: `
-            var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
-                if (receiver !== classConstructor) {
-                    throw new TypeError("Private static access of wrong provenance");
-                }
-                if (propertyDescriptor === undefined) {
-                    throw new TypeError("Private static field was accessed before its declaration.");
-                }
-                propertyDescriptor.value = value;
-                return value;
-            };`
-    };
-
-    export const classStaticPrivateMethodGetHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateMethodGet",
-        importName: "__classStaticPrivateMethodGet",
-        scoped: false,
-        text: `
-            var __classStaticPrivateMethodGet = (this && this.__classStaticPrivateMethodGet) || function (receiver, classConstructor, fn) {
-                if (receiver !== classConstructor) {
-                    throw new TypeError("Private static access of wrong provenance");
-                }
-                return fn;
-            };`
-    };
-
-    export const classStaticPrivateReadonlyHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateReadonly",
-        importName: "__classStaticPrivateReadonly",
-        scoped: false,
-        text: `
-            var __classStaticPrivateReadonly = (this && this.__classStaticPrivateReadonly) || function () {
-                throw new TypeError("Private static element is not writable");
-            };`
-    };
-
-    export const classStaticPrivateWriteonlyHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateWriteonly",
-        importName: "__classStaticPrivateWriteonly",
-        scoped: false,
-        text: `
-            var __classStaticPrivateWriteonly = (this && this.__classStaticPrivateWriteonly) || function () {
-                throw new TypeError("Private static element is not readable");
-            };`
-    };
-
-    export const classStaticPrivateAccessorGetHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateAccessorGet",
-        importName: "__classStaticPrivateAccessorGet",
-        scoped: false,
-        text: `
-            var __classStaticPrivateAccessorGet = (this && this.__classStaticPrivateAccessorGet) || function (receiver, classConstructor, fn) {
-                if (receiver !== classConstructor) {
-                    throw new TypeError("Private static access of wrong provenance");
-                }
-                return fn.call(receiver);
-            };`
-    };
-
-    export const classStaticPrivateAccessorSetHelper: UnscopedEmitHelper = {
-        name: "typescript:classStaticPrivateAccessorSet",
-        importName: "__classStaticPrivateAccessorSet",
-        scoped: false,
-        text: `
-            var __classStaticPrivateAccessorSet = (this && this.__classStaticPrivateAccessorSet) || function (receiver, classConstructor, fn, value) {
-                if (receiver !== classConstructor) {
-                    throw new TypeError("Private static access of wrong provenance");
-                }
-                fn.call(receiver, value);
-                return value;
+            var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+                if (kind === "m") throw new TypeError("Private method is not writable");
+                if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+                if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+                return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
             };`
     };
 
@@ -1107,11 +894,6 @@ namespace ts {
             exportStarHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
-            classPrivateMethodGetHelper,
-            classPrivateReadonlyHelper,
-            classPrivateWriteonlyHelper,
-            classPrivateAccessorGetHelper,
-            classPrivateAccessorSetHelper,
             createBindingHelper,
             setModuleDefaultHelper
         ], helper => helper.name));

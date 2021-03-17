@@ -24,31 +24,23 @@ const willErrorSomeDay: typeof A = class {}; // OK for now
 
 //// [privateNamesAndStaticFields.js]
 "use strict";
-var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    propertyDescriptor.value = value;
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    return propertyDescriptor.value;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _a, _A_foo, _A_bar, _b, _B_foo;
 class A {
     constructor() {
-        __classStaticPrivateFieldSet(A, _a, _A_foo, 3);
-        __classStaticPrivateFieldGet(B, _a, _A_foo); // Error
-        __classStaticPrivateFieldGet(B, _a, _A_bar); // Error
+        __classPrivateFieldSet(A, _a, 3, void 0, _A_foo);
+        __classPrivateFieldGet(B, _a, void 0, _A_foo); // Error
+        __classPrivateFieldGet(B, _a, void 0, _A_bar); // Error
     }
 }
 _a = A;
@@ -57,7 +49,7 @@ _A_bar = { value: void 0 };
 class B extends A {
     constructor() {
         super();
-        __classStaticPrivateFieldSet(B, _b, _B_foo, "some string");
+        __classPrivateFieldSet(B, _b, "some string", void 0, _B_foo);
     }
 }
 _b = B;

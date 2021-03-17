@@ -46,11 +46,13 @@ namespace ts {
     interface PrivateIdentifierStaticGetterOnly {
         placement: PrivateIdentifierPlacement.StaticGetterOnly;
         getterName: Identifier;
+        setterName?: undefined;
         classConstructor: Identifier;
     }
     interface PrivateIdentifierStaticSetterOnly {
         placement: PrivateIdentifierPlacement.StaticSetterOnly;
         setterName: Identifier;
+        getterName?: undefined;
         classConstructor: Identifier;
     }
     interface PrivateIdentifierStaticGetterAndSetterOnly {
@@ -74,12 +76,14 @@ namespace ts {
         placement: PrivateIdentifierPlacement.InstanceGetterOnly;
         weakSetName: Identifier;
         getterName: Identifier;
+        setterName?: undefined;
     }
 
     interface PrivateIdentifierInstanceSetterOnly {
         placement: PrivateIdentifierPlacement.InstanceSetterOnly;
         weakSetName: Identifier;
         setterName: Identifier;
+        getterName?: undefined;
     }
 
     interface PrivateIdentifierInstanceGetterAndSetter {
@@ -368,44 +372,48 @@ namespace ts {
                         info.weakMapName
                     );
                 case PrivateIdentifierPlacement.InstanceMethod:
-                    return context.getEmitHelperFactory().createClassPrivateMethodGetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
                         info.weakSetName,
+                        "m",
                         info.functionName
                     );
                 case PrivateIdentifierPlacement.InstanceGetterOnly:
                 case PrivateIdentifierPlacement.InstanceGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateAccessorGetHelper(
+                case PrivateIdentifierPlacement.InstanceSetterOnly:
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
                         info.weakSetName,
+                        "a",
                         info.getterName
                     );
-                case PrivateIdentifierPlacement.InstanceSetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateWriteonlyHelper(
-                        receiver
-                    );
                 case PrivateIdentifierPlacement.StaticField:
-                    return context.getEmitHelperFactory().createClassStaticPrivateFieldGetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
                         info.classConstructor,
+                        undefined,
                         info.variableName
                     );
                 case PrivateIdentifierPlacement.StaticMethod:
-                    return context.getEmitHelperFactory().createClassStaticPrivateMethodGetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
                         info.classConstructor,
+                        "m",
                         info.functionName
                     );
                 case PrivateIdentifierPlacement.StaticGetterOnly:
                 case PrivateIdentifierPlacement.StaticGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassStaticPrivateAccessorGetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
                         info.classConstructor,
+                        "a",
                         info.getterName
                     );
                 case PrivateIdentifierPlacement.StaticSetterOnly:
-                    return context.getEmitHelperFactory().createClassStaticPrivateWriteonlyHelper(
-                        receiver
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
+                        receiver,
+                        info.classConstructor,
+                        "a"
                     );
                 default: return Debug.fail("Unexpected private identifier placement");
             }
@@ -609,39 +617,58 @@ namespace ts {
                         right
                     );
                 case PrivateIdentifierPlacement.InstanceMethod:
-                case PrivateIdentifierPlacement.InstanceGetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateReadonlyHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
-                        right
+                        info.weakSetName,
+                        right,
+                        "m"
+                    );
+                case PrivateIdentifierPlacement.InstanceGetterOnly:
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                        receiver,
+                        info.weakSetName,
+                        right,
+                        "a"
                     );
                 case PrivateIdentifierPlacement.InstanceSetterOnly:
                 case PrivateIdentifierPlacement.InstanceGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateAccessorSetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
                         info.weakSetName,
+                        right,
+                        "a",
                         info.setterName,
-                        right
                     );
                 case PrivateIdentifierPlacement.StaticField:
-                    return context.getEmitHelperFactory().createClassStaticPrivateFieldSetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
                         info.classConstructor,
+                        right,
+                        undefined,
                         info.variableName,
-                        right
                     );
                 case PrivateIdentifierPlacement.StaticMethod:
-                case PrivateIdentifierPlacement.StaticGetterOnly:
-                    return context.getEmitHelperFactory().createClassStaticPrivateReadonlyHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
-                        right
+                        info.classConstructor,
+                        right,
+                        "m",
+                    );
+                case PrivateIdentifierPlacement.StaticGetterOnly:
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                        receiver,
+                        info.classConstructor,
+                        right,
+                        "a",
                     );
                 case PrivateIdentifierPlacement.StaticSetterOnly:
                 case PrivateIdentifierPlacement.StaticGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassStaticPrivateAccessorSetHelper(
+                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
                         info.classConstructor,
+                        right,
+                        "a",
                         info.setterName,
-                        right
                     );
                 default: return Debug.fail("Unexpected private identifier placement");
             }
