@@ -14,6 +14,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2021:
+                return "lib.es2021.full.d.ts";
             case ScriptTarget.ES2020:
                 return "lib.es2020.full.d.ts";
             case ScriptTarget.ES2019:
@@ -614,7 +616,7 @@ namespace ts {
         return (declaration as NamedDeclaration).name;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
             (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
@@ -892,6 +894,11 @@ namespace ts {
     /** Gets all JSDoc tags of a specified kind */
     export function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): readonly JSDocTag[] {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
+    }
+
+    /** Gets the text of a jsdoc comment, flattening links to their text. */
+    export function getTextOfJSDocComment(comment?: NodeArray<JSDocText | JSDocLink>) {
+        return comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
     }
 
     /**
@@ -1208,8 +1215,8 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is SignatureDeclaration {
-        return node && isFunctionLikeKind(node.kind);
+    export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration {
+        return !!node && isFunctionLikeKind(node.kind);
     }
 
     /* @internal */
@@ -1858,7 +1865,13 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || node.kind === SyntaxKind.JSDocNamepathType || isJSDocTag(node) || isJSDocTypeLiteral(node) || isJSDocSignature(node);
+        return node.kind === SyntaxKind.JSDocComment
+            || node.kind === SyntaxKind.JSDocNamepathType
+            || node.kind === SyntaxKind.JSDocText
+            || node.kind === SyntaxKind.JSDocLink
+            || isJSDocTag(node)
+            || isJSDocTypeLiteral(node)
+            || isJSDocSignature(node);
     }
 
     // TODO: determine what this does before making it public.

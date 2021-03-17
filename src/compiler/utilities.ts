@@ -603,9 +603,11 @@ namespace ts {
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
-            esnext: {
+            es2021: {
                 PromiseConstructor: ["any"],
-                String: ["replaceAll"],
+                String: ["replaceAll"]
+            },
+            esnext: {
                 NumberFormat: ["formatToParts"]
             }
         };
@@ -734,9 +736,9 @@ namespace ts {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
-    function isShorthandAmbientModule(node: Node): boolean {
+    function isShorthandAmbientModule(node: Node | undefined): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -1204,7 +1206,8 @@ namespace ts {
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction ||
-            node.kind === SyntaxKind.ParenthesizedExpression) ?
+            node.kind === SyntaxKind.ParenthesizedExpression ||
+            node.kind === SyntaxKind.VariableDeclaration) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
@@ -1728,6 +1731,14 @@ namespace ts {
 
     export function isThisInitializedDeclaration(node: Node | undefined): boolean {
         return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
+    }
+
+    export function isThisInitializedObjectBindingExpression(node: Node | undefined): boolean {
+        return !!node
+            && (isShorthandPropertyAssignment(node) || isPropertyAssignment(node))
+            && isBinaryExpression(node.parent.parent)
+            && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken
+            && node.parent.parent.right.kind === SyntaxKind.ThisKeyword;
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
@@ -4204,8 +4215,10 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
             !sourceFile.isDeclarationFile &&
             !host.isSourceFileFromExternalLibrary(sourceFile) &&
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            (forceDtsEmit || !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName));
+            (forceDtsEmit || (
+                !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
+                !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
+            ));
     }
 
     export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {

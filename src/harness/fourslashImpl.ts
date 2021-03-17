@@ -1583,7 +1583,7 @@ namespace FourSlash {
             assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
             ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
                 assert.equal(actualTag.name, expectedTag.name);
-                assert.equal(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
+                assert.deepEqual(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
 
             const allKeys: readonly (keyof FourSlashInterface.VerifySignatureHelpOptions)[] = [
@@ -1917,19 +1917,45 @@ namespace FourSlash {
         }
 
         public baselineQuickInfo() {
-            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
-            Harness.Baseline.runBaseline(
-                baselineFile,
-                stringify(
-                    this.testData.markers.map(marker => ({
-                        marker,
-                        quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
-                    }))));
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
+            const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
+                marker: { ...marker, name },
+                quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+            }));
+            Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        }
+
+        public baselineSignatureHelp() {
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
+            const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
+                marker: { ...marker, name },
+                signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
+            }));
+            Harness.Baseline.runBaseline(baselineFile, stringify(result));
+        }
+
+        public baselineCompletions(preferences?: ts.UserPreferences) {
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
+            const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
+                const completions = this.getCompletionListAtCaret(preferences);
+                this.goToMarker(marker);
+                return {
+                    marker: { ...marker, name },
+                    completionList: {
+                        ...completions,
+                        entries: completions?.entries.map(entry => ({
+                            ...entry,
+                            ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences)
+                        })),
+                    }
+                };
+            });
+            Harness.Baseline.runBaseline(baselineFile, stringify(result));
         }
 
         public baselineSmartSelection() {
             const n = "\n";
-            const baselineFile = this.getBaselineFileNameForInternalFourslashFile();
+            const baselineFile = this.getBaselineFileNameForContainingTestFile();
             const markers = this.getMarkers();
             const fileContent = this.activeFile.content;
             const text = markers.map(marker => {

@@ -20,7 +20,21 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": "Description text follows",
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 36,
+                    "end": 64,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Description text follows"
+                },
+                "length": 1,
+                "pos": 36,
+                "end": 64,
+                "hasTrailingComma": false,
+                "transformFlags": 0
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,

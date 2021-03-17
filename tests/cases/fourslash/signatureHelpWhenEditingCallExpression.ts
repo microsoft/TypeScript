@@ -10,8 +10,8 @@
 ////fo/*1*/
 
 const tags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
-    { name: "param", text: "start The start" },
-    { name: "param", text: "end The end\nMore text" },
+    { name: "param", text: [{ kind: "text", text: "start" }, { kind: "space", text: " " }, { kind: "text", text: "The start" }] },
+    { name: "param", text: [{ kind: "text", text: "end" }, { kind: "space", text: " " }, { kind: "text", text: "The end\nMore text" }] },
 ];
 verify.noSignatureHelp("1");
 edit.insert("o");

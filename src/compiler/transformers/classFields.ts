@@ -80,7 +80,8 @@ namespace ts {
             factory,
             hoistVariableDeclaration,
             endLexicalEnvironment,
-            resumeLexicalEnvironment
+            resumeLexicalEnvironment,
+            addBlockScopedVariable
         } = context;
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
@@ -428,7 +429,7 @@ namespace ts {
                     visitNode(node.initializer, visitor, isForInitializer),
                     visitNode(node.condition, visitor, isExpression),
                     visitPostfixUnaryExpression(node.incrementor, /*valueIsDiscarded*/ true),
-                    visitNode(node.statement, visitor, isStatement)
+                    visitIterationBody(node.statement, visitor, context)
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -575,8 +576,9 @@ namespace ts {
                     getPrivateIdentifierEnvironment().className = name.escapedText as string;
                 }
 
-                if (some(getPrivateInstanceMethods(node))) {
-                    getPrivateIdentifierEnvironment().weakSetName = createHoistedVariableForClass("instances");
+                const privateInstanceMethods = getPrivateInstanceMethods(node);
+                if (some(privateInstanceMethods)) {
+                    getPrivateIdentifierEnvironment().weakSetName = createHoistedVariableForClass("instances", privateInstanceMethods[0].name as PrivateIdentifier);
                 }
             }
 
@@ -684,8 +686,10 @@ namespace ts {
                 }
                 else {
                     const expressions: Expression[] = [];
-                    const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
-                    const temp = factory.createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                    const classCheckFlags = resolver.getNodeCheckFlags(node);
+                    const isClassWithConstructorReference = classCheckFlags & NodeCheckFlags.ClassWithConstructorReference;
+                    const requiresBlockScopedVar = classCheckFlags & NodeCheckFlags.BlockScopedBindingInLoop;
+                    const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, !!isClassWithConstructorReference);
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
@@ -1052,7 +1056,6 @@ namespace ts {
             return undefined;
         }
 
-
         /**
          * If the name is a computed property, this function transforms it, then either returns an expression which caches the
          * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
@@ -1066,7 +1069,12 @@ namespace ts {
                 const alreadyTransformed = isAssignmentExpression(innerExpression) && isGeneratedIdentifier(innerExpression.left);
                 if (!alreadyTransformed && !inlinable && shouldHoist) {
                     const generatedName = factory.getGeneratedNameForNode(name);
-                    hoistVariableDeclaration(generatedName);
+                    if (resolver.getNodeCheckFlags(name) & NodeCheckFlags.BlockScopedBindingInLoop) {
+                        addBlockScopedVariable(generatedName);
+                    }
+                    else {
+                        hoistVariableDeclaration(generatedName);
+                    }
                     return factory.createAssignment(generatedName, expression);
                 }
                 return (inlinable || isIdentifier(innerExpression)) ? undefined : expression;
@@ -1105,7 +1113,7 @@ namespace ts {
             const assignmentExpressions: Expression[] = [];
 
             if (isPropertyDeclaration(node)) {
-                const weakMapName = createHoistedVariableForPrivateName(text);
+                const weakMapName = createHoistedVariableForPrivateName(text, node);
                 info = {
                     placement: PrivateIdentifierPlacement.InstanceField,
                     weakMapName,
@@ -1124,14 +1132,14 @@ namespace ts {
                 info = {
                     placement: PrivateIdentifierPlacement.InstanceMethod,
                     weakSetName,
-                    functionName: createHoistedVariableForPrivateName(text),
+                    functionName: createHoistedVariableForPrivateName(text, node),
                 };
             }
             else if (isAccessor(node)) {
                 const previousInfo = findPreviousAccessorInfo(node);
 
                 if (isGetAccessor(node)) {
-                    const getterName = createHoistedVariableForPrivateName(text + "_get");
+                    const getterName = createHoistedVariableForPrivateName(text + "_get", node);
 
                     if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceSetterOnly) {
                         info = {
@@ -1150,7 +1158,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const setterName = createHoistedVariableForPrivateName(text + "_set");
+                    const setterName = createHoistedVariableForPrivateName(text + "_set", node);
 
                     if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceGetterOnly) {
                         info = {
@@ -1187,16 +1195,23 @@ namespace ts {
             }
         }
 
-        function createHoistedVariableForClass(name: string): Identifier {
+        function createHoistedVariableForClass(name: string, node: PrivateIdentifier): Identifier {
             const { className } = getPrivateIdentifierEnvironment();
             const prefix = className ? `_${className}` : "";
             const identifier = factory.createUniqueName(`${prefix}_${name}`, GeneratedIdentifierFlags.Optimistic);
-            hoistVariableDeclaration(identifier);
+
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) {
+                addBlockScopedVariable(identifier);
+            }
+            else {
+                hoistVariableDeclaration(identifier);
+            }
+
             return identifier;
         }
 
-        function createHoistedVariableForPrivateName(privateName: string): Identifier {
-            return createHoistedVariableForClass(privateName.substring(1));
+        function createHoistedVariableForPrivateName(privateName: string, node: PrivateClassElementDeclaration): Identifier {
+            return createHoistedVariableForClass(privateName.substring(1), node.name);
         }
 
         function accessPrivateIdentifier(name: PrivateIdentifier) {

@@ -31,11 +31,11 @@ exports.hello = void 0;
 var c_1 = require("./c");
 function hello() { }
 exports.hello = hello;
-if (c_1.has('ember-debug')) {
-    c_1["default"]('ember-debug');
+if ((0, c_1.has)('ember-debug')) {
+    (0, c_1["default"])('ember-debug');
 }
 //// [m2.js]
 "use strict";
 exports.__esModule = true;
 var m_1 = require("./m");
-m_1.hello();
+(0, m_1.hello)();

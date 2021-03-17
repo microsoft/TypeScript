@@ -50,6 +50,9 @@ var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -67,7 +70,8 @@ var y = 20;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 162
 }
 
 //// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]

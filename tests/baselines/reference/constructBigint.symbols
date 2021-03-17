@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es2020/constructBigint.ts ===
+BigInt(1);
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+BigInt(1n);
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+BigInt("0");
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+BigInt(false);
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+BigInt(Symbol());
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+BigInt({ e: 1, m: 1 })
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>e : Symbol(e, Decl(constructBigint.ts, 6, 8))
+>m : Symbol(m, Decl(constructBigint.ts, 6, 14))
+
+BigInt(null);
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+BigInt(undefined)
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+
