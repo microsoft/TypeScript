@@ -32690,22 +32690,7 @@ namespace ts {
             if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarProperty(node)) checkGrammarComputedPropertyName(node.name);
             checkVariableLikeDeclaration(node);
 
-            // Private class fields transformation relies on WeakMaps.
-            if (isPrivateIdentifier(node.name) && languageVersion < ScriptTarget.ESNext) {
-                for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
-                    getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
-                }
-
-                // If this is a private field in a class expression inside the body of a loop,
-                // then we must use a block-scoped binding to store the WeakMap.
-                if (isClassExpression(node.parent)) {
-                    const enclosingIterationStatement = getEnclosingIterationStatement(node.parent);
-                    if (enclosingIterationStatement) {
-                        getNodeLinks(node.name).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
-                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
-                    }
-                }
-            }
+            setNodeLinksForPrivateIdentifierScope(node);
         }
 
         function checkPropertySignature(node: PropertySignature) {
@@ -32731,6 +32716,27 @@ namespace ts {
             // Private named methods are only allowed in class declarations
             if (isPrivateIdentifier(node.name) && !getContainingClass(node)) {
                 error(node, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+            }
+
+            setNodeLinksForPrivateIdentifierScope(node);
+        }
+
+        function setNodeLinksForPrivateIdentifierScope(node: PropertyDeclaration | PropertySignature | MethodDeclaration | MethodSignature | AccessorDeclaration) {
+            if (isPrivateIdentifier(node.name) && languageVersion < ScriptTarget.ESNext) {
+                for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
+                    getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
+                }
+
+                // If this is a private element in a class expression inside the body of a loop,
+                // then we must use a block-scoped binding to store the additional variables required
+                // to transform private elements.
+                if (isClassExpression(node.parent)) {
+                    const enclosingIterationStatement = getEnclosingIterationStatement(node.parent);
+                    if (enclosingIterationStatement) {
+                        getNodeLinks(node.name).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
+                        getNodeLinks(enclosingIterationStatement).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    }
+                }
             }
         }
 
@@ -32865,6 +32871,7 @@ namespace ts {
                 }
             }
             checkSourceElement(node.body);
+            setNodeLinksForPrivateIdentifierScope(node);
         }
 
         function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, message: DiagnosticMessage) {
