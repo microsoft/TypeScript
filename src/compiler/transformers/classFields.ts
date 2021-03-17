@@ -61,7 +61,7 @@ namespace ts {
         /**
          * Used for brand check on private methods.
          */
-        weakSetName: Identifier;
+        weakSetName?: Identifier;
         /**
          * A mapping of private names to information needed for transformation.
          */
@@ -736,9 +736,12 @@ namespace ts {
         }
 
         function createBrandCheckWeakSetForPrivateMethods() {
+            const { weakSetName } = getPrivateIdentifierEnvironment();
+            Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
+
             getPendingExpressions().push(
                 factory.createAssignment(
-                    getPrivateIdentifierEnvironment().weakSetName,
+                    weakSetName,
                     factory.createNewExpression(
                         factory.createIdentifier("WeakSet"),
                         /*typeArguments*/ undefined,
@@ -997,9 +1000,11 @@ namespace ts {
                 return;
             }
 
+            const { weakSetName } = getPrivateIdentifierEnvironment();
+            Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
             statements.push(
                 factory.createExpressionStatement(
-                    createPrivateInstanceMethodInitializer(receiver, getPrivateIdentifierEnvironment().weakSetName)
+                    createPrivateInstanceMethodInitializer(receiver, weakSetName)
                 )
             );
         }
@@ -1092,7 +1097,6 @@ namespace ts {
             if (!currentPrivateIdentifierEnvironment) {
                 currentPrivateIdentifierEnvironment = {
                     className: "",
-                    weakSetName: factory.createUniqueName("_instances", GeneratedIdentifierFlags.Optimistic),
                     identifiers: new Map()
                 };
             }
@@ -1127,6 +1131,8 @@ namespace ts {
                 ));
             }
             else if (isMethodDeclaration(node)) {
+                Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
+
                 info = {
                     placement: PrivateIdentifierPlacement.InstanceMethod,
                     weakSetName,
@@ -1134,6 +1140,7 @@ namespace ts {
                 };
             }
             else if (isAccessor(node)) {
+                Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
                 const previousInfo = getPrivateIdentifierEnvironment().identifiers.get(node.name.escapedText);
 
                 if (isGetAccessor(node)) {
