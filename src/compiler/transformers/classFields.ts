@@ -1134,7 +1134,7 @@ namespace ts {
                 };
             }
             else if (isAccessor(node)) {
-                const previousInfo = findPreviousAccessorInfo(node);
+                const previousInfo = getPrivateIdentifierEnvironment().identifiers.get(node.name.escapedText);
 
                 if (isGetAccessor(node)) {
                     const getterName = createHoistedVariableForPrivateName(text + "_get", node);
@@ -1181,16 +1181,6 @@ namespace ts {
 
             getPrivateIdentifierEnvironment().identifiers.set(node.name.escapedText, info);
             getPendingExpressions().push(...assignmentExpressions);
-        }
-
-        function findPreviousAccessorInfo(
-            node: PrivateIdentifierGetAccessorDeclaration | PrivateIdentifierSetAccessorDeclaration
-        ): PrivateIdentifierInstanceGetterOnly | PrivateIdentifierInstanceSetterOnly | undefined {
-            const info = getPrivateIdentifierEnvironment().identifiers.get(node.name.escapedText);
-            if (info?.placement === PrivateIdentifierPlacement.InstanceGetterOnly ||
-                info?.placement === PrivateIdentifierPlacement.InstanceSetterOnly) {
-                return info;
-            }
         }
 
         function createHoistedVariableForClass(name: string, node: PrivateIdentifier): Identifier {
