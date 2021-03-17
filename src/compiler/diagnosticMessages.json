@@ -3284,11 +3284,19 @@
         "category": "Error",
         "code": 2802
     },
-
     "Cannot assign to private method '{0}'. Private methods are not writable.": {
         "category": "Error",
         "code": 2803
     },
+    "Duplicate identifier '{0}'. Static and instance elements cannot share the same private name.": {
+        "category": "Error",
+        "code": 2804
+    },
+    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
+        "category": "Error",
+        "code": 2805
+    },
+
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -6381,5 +6389,9 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
+        "category": "Error",
+        "code": 18036
     }
 }

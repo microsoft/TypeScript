@@ -23,18 +23,27 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     }
     return privateMap.get(receiver);
 };
-var _Parent_foo, _Parent_bar, _Child_foo, _Child_bar;
+var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
+    if (receiver !== classConstructor) {
+        throw new TypeError("Private static access of wrong provenance");
+    }
+    if (propertyDescriptor === undefined) {
+        throw new TypeError("Private static field was accessed before its declaration.");
+    }
+    return propertyDescriptor.value;
+};
+var _a, _Parent_foo, _Parent_bar, _Child_foo, _Child_bar;
 class Parent {
     constructor() {
         _Parent_foo.set(this, 3);
     }
     accessChildProps() {
         __classPrivateFieldGet(new Child(), _Parent_foo); // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
-        __classPrivateFieldGet(Child, _Parent_bar); // Error: not found
+        __classStaticPrivateFieldGet(Child, _a, _Parent_bar); // Error: not found
     }
 }
-_Parent_foo = new WeakMap(), _Parent_bar = new WeakMap();
-_Parent_bar.set(Parent, 5);
+_a = Parent, _Parent_foo = new WeakMap();
+_Parent_bar = { value: 5 };
 class Child extends Parent {
     constructor() {
         super(...arguments);

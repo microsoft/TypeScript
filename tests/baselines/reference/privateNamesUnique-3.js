@@ -15,27 +15,30 @@ class B {
 
 
 //// [privateNamesUnique-3.js]
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
+var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
+    if (receiver !== classConstructor) {
+        throw new TypeError("Private static access of wrong provenance");
     }
-    return privateMap.get(receiver);
+    if (propertyDescriptor === undefined) {
+        throw new TypeError("Private static field was accessed before its declaration.");
+    }
+    return propertyDescriptor.value;
 };
-var _A_foo, _A_foo_1, _B_foo;
+var _a, _A_foo, _A_foo_1, _b, _B_foo;
 class A {
     constructor() {
-        _A_foo_1.set(this, 1);
+        _A_foo_1 = { value: 1 };
         // because static and instance private names
         // share the same lexical scope
         // https://tc39.es/proposal-class-fields/#prod-ClassBody
     }
 }
-_A_foo = new WeakMap(), _A_foo_1 = new WeakMap();
-_A_foo_1.set(A, true); // error (duplicate)
+_a = A, _A_foo = new WeakMap();
+_A_foo_1 = { value: true }; // error (duplicate)
 class B {
     test(x) {
-        __classPrivateFieldGet(x, _B_foo); // error (#foo is a static property on B, not an instance property)
+        __classStaticPrivateFieldGet(x, _b, _B_foo); // error (#foo is a static property on B, not an instance property)
     }
 }
-_B_foo = new WeakMap();
-_B_foo.set(B, true);
+_b = B;
+_B_foo = { value: true };
