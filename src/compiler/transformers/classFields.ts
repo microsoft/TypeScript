@@ -574,9 +574,12 @@ namespace ts {
                     getPrivateIdentifierEnvironment().className = idText(name);
                 }
 
-                const privateInstanceMethods = getPrivateInstanceMethods(node);
-                if (some(privateInstanceMethods)) {
-                    getPrivateIdentifierEnvironment().weakSetName = createHoistedVariableForClass("instances", privateInstanceMethods[0].name as PrivateIdentifier);
+                const privateInstanceMethodsAndAccessors = getPrivateInstanceMethodsAndAccessors(node);
+                if (some(privateInstanceMethodsAndAccessors)) {
+                    getPrivateIdentifierEnvironment().weakSetName = createHoistedVariableForClass(
+                        "instances",
+                        privateInstanceMethodsAndAccessors[0].name
+                    );
                 }
             }
 
@@ -595,11 +598,8 @@ namespace ts {
             return isPropertyDeclaration(node) || (shouldTransformPrivateElements && node.name && isPrivateIdentifier(node.name));
         }
 
-        function getPrivateInstanceMethods(node: ClassLikeDeclaration) {
-            return filter(
-                [...getMethods(node, /*isStatic*/ false), ...getAccessors(node, /*isStatic*/ false)],
-                method => isPrivateIdentifier(method.name)
-            );
+        function getPrivateInstanceMethodsAndAccessors(node: ClassLikeDeclaration) {
+            return filter(node.members, isNonStaticMethodOrAccessorWithPrivateName);
         }
 
         function visitClassDeclaration(node: ClassDeclaration) {
@@ -721,7 +721,7 @@ namespace ts {
                     }
                 }
 
-                if (some(getPrivateInstanceMethods(node))) {
+                if (some(getPrivateInstanceMethodsAndAccessors(node))) {
                     createBrandCheckWeakSetForPrivateMethods();
                 }
             }
@@ -794,8 +794,8 @@ namespace ts {
                 properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
             }
 
-            const privateMethods = getPrivateInstanceMethods(node);
-            const needsConstructorBody = some(properties) || some(privateMethods);
+            const privateMethodsAndAccessors = getPrivateInstanceMethodsAndAccessors(node);
+            const needsConstructorBody = some(properties) || some(privateMethodsAndAccessors);
 
             // Only generate synthetic constructor when there are property initializers to move.
             if (!constructor && !needsConstructorBody) {
@@ -850,7 +850,7 @@ namespace ts {
             }
             const receiver = factory.createThis();
             // private methods can be called in property initializers, they should execute first.
-            addMethodStatements(statements, privateMethods, receiver);
+            addMethodStatements(statements, privateMethodsAndAccessors, receiver);
             addPropertyStatements(statements, properties, receiver);
 
             // Add existing statements, skipping the initial super call.

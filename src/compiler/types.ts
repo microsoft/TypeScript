@@ -1315,6 +1315,8 @@ namespace ts {
         name: PrivateIdentifier;
     }
     /*@internal*/
+    export type PrivateIdentifierAccessorDeclaration = PrivateIdentifierGetAccessorDeclaration | PrivateIdentifierSetAccessorDeclaration;
+    /*@internal*/
     export type PrivateClassElementDeclaration =
         | PrivateIdentifierPropertyDeclaration
         | PrivateIdentifierMethodDeclaration
