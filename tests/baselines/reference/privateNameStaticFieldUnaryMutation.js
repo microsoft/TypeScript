@@ -30,52 +30,44 @@ class C {
 
 
 //// [privateNameStaticFieldUnaryMutation.js]
-var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    return propertyDescriptor.value;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    propertyDescriptor.value = value;
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
 var _a, _C_test;
 class C {
     constructor() {
         var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-        __classStaticPrivateFieldSet(_b = C, _a, _C_test, +__classStaticPrivateFieldGet(_b, _a, _C_test) + 1);
-        __classStaticPrivateFieldSet(_c = C, _a, _C_test, +__classStaticPrivateFieldGet(_c, _a, _C_test) - 1);
-        __classStaticPrivateFieldSet(_d = C, _a, _C_test, +__classStaticPrivateFieldGet(_d, _a, _C_test) + 1);
-        __classStaticPrivateFieldSet(_e = C, _a, _C_test, +__classStaticPrivateFieldGet(_e, _a, _C_test) - 1);
-        const a = (__classStaticPrivateFieldSet(_f = C, _a, _C_test, (_g = +__classStaticPrivateFieldGet(_f, _a, _C_test)) + 1), _g);
-        const b = (__classStaticPrivateFieldSet(_h = C, _a, _C_test, (_j = +__classStaticPrivateFieldGet(_h, _a, _C_test)) - 1), _j);
-        const c = __classStaticPrivateFieldSet(_k = C, _a, _C_test, +__classStaticPrivateFieldGet(_k, _a, _C_test) + 1);
-        const d = __classStaticPrivateFieldSet(_l = C, _a, _C_test, +__classStaticPrivateFieldGet(_l, _a, _C_test) - 1);
-        for (__classStaticPrivateFieldSet(C, _a, _C_test, 0); __classStaticPrivateFieldGet(C, _a, _C_test) < 10; __classStaticPrivateFieldSet(_m = C, _a, _C_test, +__classStaticPrivateFieldGet(_m, _a, _C_test) + 1)) { }
-        for (__classStaticPrivateFieldSet(C, _a, _C_test, 0); __classStaticPrivateFieldGet(C, _a, _C_test) < 10; __classStaticPrivateFieldSet(_o = C, _a, _C_test, +__classStaticPrivateFieldGet(_o, _a, _C_test) + 1)) { }
+        __classPrivateFieldSet(_b = C, _a, +__classPrivateFieldGet(_b, _a, void 0, _C_test) + 1, void 0, _C_test);
+        __classPrivateFieldSet(_c = C, _a, +__classPrivateFieldGet(_c, _a, void 0, _C_test) - 1, void 0, _C_test);
+        __classPrivateFieldSet(_d = C, _a, +__classPrivateFieldGet(_d, _a, void 0, _C_test) + 1, void 0, _C_test);
+        __classPrivateFieldSet(_e = C, _a, +__classPrivateFieldGet(_e, _a, void 0, _C_test) - 1, void 0, _C_test);
+        const a = (__classPrivateFieldSet(_f = C, _a, (_g = +__classPrivateFieldGet(_f, _a, void 0, _C_test)) + 1, void 0, _C_test), _g);
+        const b = (__classPrivateFieldSet(_h = C, _a, (_j = +__classPrivateFieldGet(_h, _a, void 0, _C_test)) - 1, void 0, _C_test), _j);
+        const c = __classPrivateFieldSet(_k = C, _a, +__classPrivateFieldGet(_k, _a, void 0, _C_test) + 1, void 0, _C_test);
+        const d = __classPrivateFieldSet(_l = C, _a, +__classPrivateFieldGet(_l, _a, void 0, _C_test) - 1, void 0, _C_test);
+        for (__classPrivateFieldSet(C, _a, 0, void 0, _C_test); __classPrivateFieldGet(C, _a, void 0, _C_test) < 10; __classPrivateFieldSet(_m = C, _a, +__classPrivateFieldGet(_m, _a, void 0, _C_test) + 1, void 0, _C_test)) { }
+        for (__classPrivateFieldSet(C, _a, 0, void 0, _C_test); __classPrivateFieldGet(C, _a, void 0, _C_test) < 10; __classPrivateFieldSet(_o = C, _a, +__classPrivateFieldGet(_o, _a, void 0, _C_test) + 1, void 0, _C_test)) { }
     }
     test() {
         var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
-        __classStaticPrivateFieldSet(_b = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_b, _a, _C_test) + 1);
-        __classStaticPrivateFieldSet(_c = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_c, _a, _C_test) - 1);
-        __classStaticPrivateFieldSet(_d = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_d, _a, _C_test) + 1);
-        __classStaticPrivateFieldSet(_e = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_e, _a, _C_test) - 1);
-        const a = (__classStaticPrivateFieldSet(_f = this.getClass(), _a, _C_test, (_g = +__classStaticPrivateFieldGet(_f, _a, _C_test)) + 1), _g);
-        const b = (__classStaticPrivateFieldSet(_h = this.getClass(), _a, _C_test, (_j = +__classStaticPrivateFieldGet(_h, _a, _C_test)) - 1), _j);
-        const c = __classStaticPrivateFieldSet(_k = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_k, _a, _C_test) + 1);
-        const d = __classStaticPrivateFieldSet(_l = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_l, _a, _C_test) - 1);
-        for (__classStaticPrivateFieldSet(this.getClass(), _a, _C_test, 0); __classStaticPrivateFieldGet(this.getClass(), _a, _C_test) < 10; __classStaticPrivateFieldSet(_m = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_m, _a, _C_test) + 1)) { }
-        for (__classStaticPrivateFieldSet(this.getClass(), _a, _C_test, 0); __classStaticPrivateFieldGet(this.getClass(), _a, _C_test) < 10; __classStaticPrivateFieldSet(_o = this.getClass(), _a, _C_test, +__classStaticPrivateFieldGet(_o, _a, _C_test) + 1)) { }
+        __classPrivateFieldSet(_b = this.getClass(), _a, +__classPrivateFieldGet(_b, _a, void 0, _C_test) + 1, void 0, _C_test);
+        __classPrivateFieldSet(_c = this.getClass(), _a, +__classPrivateFieldGet(_c, _a, void 0, _C_test) - 1, void 0, _C_test);
+        __classPrivateFieldSet(_d = this.getClass(), _a, +__classPrivateFieldGet(_d, _a, void 0, _C_test) + 1, void 0, _C_test);
+        __classPrivateFieldSet(_e = this.getClass(), _a, +__classPrivateFieldGet(_e, _a, void 0, _C_test) - 1, void 0, _C_test);
+        const a = (__classPrivateFieldSet(_f = this.getClass(), _a, (_g = +__classPrivateFieldGet(_f, _a, void 0, _C_test)) + 1, void 0, _C_test), _g);
+        const b = (__classPrivateFieldSet(_h = this.getClass(), _a, (_j = +__classPrivateFieldGet(_h, _a, void 0, _C_test)) - 1, void 0, _C_test), _j);
+        const c = __classPrivateFieldSet(_k = this.getClass(), _a, +__classPrivateFieldGet(_k, _a, void 0, _C_test) + 1, void 0, _C_test);
+        const d = __classPrivateFieldSet(_l = this.getClass(), _a, +__classPrivateFieldGet(_l, _a, void 0, _C_test) - 1, void 0, _C_test);
+        for (__classPrivateFieldSet(this.getClass(), _a, 0, void 0, _C_test); __classPrivateFieldGet(this.getClass(), _a, void 0, _C_test) < 10; __classPrivateFieldSet(_m = this.getClass(), _a, +__classPrivateFieldGet(_m, _a, void 0, _C_test) + 1, void 0, _C_test)) { }
+        for (__classPrivateFieldSet(this.getClass(), _a, 0, void 0, _C_test); __classPrivateFieldGet(this.getClass(), _a, void 0, _C_test) < 10; __classPrivateFieldSet(_o = this.getClass(), _a, +__classPrivateFieldGet(_o, _a, void 0, _C_test) + 1, void 0, _C_test)) { }
     }
     getClass() { return C; }
 }

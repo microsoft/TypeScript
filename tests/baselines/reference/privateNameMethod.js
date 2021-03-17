@@ -14,19 +14,18 @@ class A1 {
 
 //// [privateNameMethod.js]
 "use strict";
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private method on non-instance");
-    }
-    return fn;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _A1_instances, _A1_method;
 class A1 {
     constructor(name) {
         _A1_instances.add(this);
-        __classPrivateMethodGet(this, _A1_instances, _A1_method).call(this, "");
-        __classPrivateMethodGet(this, _A1_instances, _A1_method).call(this, 1); // Error
-        __classPrivateMethodGet(this, _A1_instances, _A1_method).call(// Error
+        __classPrivateFieldGet(this, _A1_instances, "m", _A1_method).call(this, "");
+        __classPrivateFieldGet(this, _A1_instances, "m", _A1_method).call(this, 1); // Error
+        __classPrivateFieldGet(this, _A1_instances, "m", _A1_method).call(// Error
         this); // Error 
     }
 }

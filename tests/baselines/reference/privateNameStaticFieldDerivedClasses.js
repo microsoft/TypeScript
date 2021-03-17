@@ -17,38 +17,30 @@ class Derived extends Base {
 
 
 //// [privateNameStaticFieldDerivedClasses.js]
-var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    propertyDescriptor.value = value;
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    return propertyDescriptor.value;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _a, _Base_prop, _b, _Derived_derivedProp;
 class Base {
     static method(x) {
         Derived.; // error
-        __classStaticPrivateFieldSet(// error
-        Base, _a, _Base_prop, 10);
+        __classPrivateFieldSet(// error
+        Base, _a, 10, void 0, _Base_prop);
     }
 }
 _a = Base;
 _Base_prop = { value: 123 };
 class Derived extends Base {
     static method(x) {
-        __classStaticPrivateFieldGet(Derived, _b, _Derived_derivedProp);
+        __classPrivateFieldGet(Derived, _b, void 0, _Derived_derivedProp);
         Base. = 10; // error
     }
 }
