@@ -192,10 +192,8 @@ namespace ts {
 
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return visitMethodDeclaration(node as AccessorDeclaration);
-
                 case SyntaxKind.MethodDeclaration:
-                    return visitMethodDeclaration(node as MethodDeclaration);
+                    return visitMethodOrAccessorDeclaration(node as MethodDeclaration | AccessorDeclaration);
 
                 case SyntaxKind.PropertyDeclaration:
                     return visitPropertyDeclaration(node as PropertyDeclaration);
@@ -238,7 +236,7 @@ namespace ts {
             return node;
         }
 
-        function visitMethodDeclaration(node: MethodDeclaration | AccessorDeclaration) {
+        function visitMethodOrAccessorDeclaration(node: MethodDeclaration | AccessorDeclaration) {
             Debug.assert(!some(node.decorators));
             const transformedMethod = visitEachChild(node, classElementVisitor, context);
 
