@@ -278,10 +278,9 @@ namespace ts {
 
         function visitMethodOrAccessorDeclaration(node: MethodDeclaration | AccessorDeclaration) {
             Debug.assert(!some(node.decorators));
-            const transformedMethod = visitEachChild(node, classElementVisitor, context);
 
-            if (!shouldTransformPrivateElements || !isPrivateIdentifier(node.name) || !transformedMethod.body) {
-                return transformedMethod;
+            if (!shouldTransformPrivateElements || !isPrivateIdentifier(node.name)) {
+                return visitEachChild(node, classElementVisitor, context);
             }
 
             const functionName = getHoistedFunctionName(node);
@@ -290,13 +289,13 @@ namespace ts {
                     factory.createAssignment(
                         functionName,
                         factory.createFunctionExpression(
-                            filter(transformedMethod.modifiers, m => !isStaticModifier(m)),
-                            transformedMethod.asteriskToken,
+                            filter(node.modifiers, m => !isStaticModifier(m)),
+                            node.asteriskToken,
                             functionName,
-                            transformedMethod.typeParameters,
-                            transformedMethod.parameters,
-                            transformedMethod.type,
-                            transformedMethod.body
+                            /* typeParameters */ undefined,
+                            visitParameterList(node.parameters, classElementVisitor, context),
+                            /* type */ undefined,
+                            visitFunctionBody(node.body!, classElementVisitor, context)
                         )
                     )
                 );
