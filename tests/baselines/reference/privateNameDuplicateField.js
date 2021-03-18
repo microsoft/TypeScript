@@ -419,6 +419,7 @@ function Field() {
     class A_Field_Method {
         constructor() {
             _A_Field_Method_instances.add(this);
+            this.#foo = "foo";
         }
     }
     _A_Field_Method_foo = new WeakMap(), _A_Field_Method_instances = new WeakSet(), _A_Field_Method_foo_1 = function _A_Field_Method_foo_1() { };
@@ -426,16 +427,18 @@ function Field() {
     class A_Field_Getter {
         constructor() {
             _A_Field_Getter_instances.add(this);
+            _A_Field_Getter_foo.set(this, "foo");
         }
     }
-    _A_Field_Getter_foo = new WeakMap(), _A_Field_Getter_instances = new WeakSet(), _A_Field_Getter_foo_get = function _A_Field_Getter_foo_get() { return ""; };
+    _A_Field_Getter_foo = new WeakMap(), _A_Field_Getter_instances = new WeakSet();
     // Error
     class A_Field_Setter {
         constructor() {
             _A_Field_Setter_instances.add(this);
+            _A_Field_Setter_foo.set(this, "foo");
         }
     }
-    _A_Field_Setter_foo = new WeakMap(), _A_Field_Setter_instances = new WeakSet(), _A_Field_Setter_foo_set = function _A_Field_Setter_foo_set(value) { };
+    _A_Field_Setter_foo = new WeakMap(), _A_Field_Setter_instances = new WeakSet();
     // Error
     class A_Field_StaticField {
         constructor() {
@@ -447,18 +450,21 @@ function Field() {
     // Error
     class A_Field_StaticMethod {
         constructor() {
+            this.#foo = "foo";
         }
     }
     _b = A_Field_StaticMethod, _A_Field_StaticMethod_foo = new WeakMap(), _A_Field_StaticMethod_foo_1 = function _A_Field_StaticMethod_foo_1() { };
     // Error
     class A_Field_StaticGetter {
         constructor() {
+            this.#foo = "foo";
         }
     }
     _c = A_Field_StaticGetter, _A_Field_StaticGetter_foo = new WeakMap(), _A_Field_StaticGetter_foo_get = function _A_Field_StaticGetter_foo_get() { return ""; };
     // Error
     class A_Field_StaticSetter {
         constructor() {
+            this.#foo = "foo";
         }
     }
     _d = A_Field_StaticSetter, _A_Field_StaticSetter_foo = new WeakMap(), _A_Field_StaticSetter_foo_set = function _A_Field_StaticSetter_foo_set(value) { };
@@ -486,14 +492,14 @@ function Method() {
             _A_Method_Getter_instances.add(this);
         }
     }
-    _A_Method_Getter_instances = new WeakSet(), _A_Method_Getter_foo_get = function _A_Method_Getter_foo_get() { return ""; };
+    _A_Method_Getter_instances = new WeakSet(), _A_Method_Getter_foo_get = function _A_Method_Getter_foo_get() { }, _A_Method_Getter_foo_get = function _A_Method_Getter_foo_get() { return ""; };
     // Error
     class A_Method_Setter {
         constructor() {
             _A_Method_Setter_instances.add(this);
         }
     }
-    _A_Method_Setter_instances = new WeakSet(), _A_Method_Setter_foo_set = function _A_Method_Setter_foo_set(value) { };
+    _A_Method_Setter_instances = new WeakSet(), _A_Method_Setter_foo = function _A_Method_Setter_foo() { }, _A_Method_Setter_foo = function _A_Method_Setter_foo(value) { };
     // Error
     class A_Method_StaticField {
         constructor() {
@@ -582,7 +588,7 @@ function Getter() {
             _A_Getter_StaticSetter_instances.add(this);
         }
     }
-    _d = A_Getter_StaticSetter, _A_Getter_StaticSetter_instances = new WeakSet(), _A_Getter_StaticSetter_foo_set = function _A_Getter_StaticSetter_foo_set(value) { };
+    _d = A_Getter_StaticSetter, _A_Getter_StaticSetter_instances = new WeakSet(), _A_Getter_StaticSetter_foo_get = function _A_Getter_StaticSetter_foo_get() { return ""; }, _A_Getter_StaticSetter_foo_set = function _A_Getter_StaticSetter_foo_set(value) { };
 }
 function Setter() {
     var _A_Setter_Field_instances, _A_Setter_Field_foo_set, _A_Setter_Field_foo, _A_Setter_Method_instances, _A_Setter_Method_foo_set, _A_Setter_Method_foo, _A_Setter_Getter_instances, _A_Setter_Getter_foo_set, _A_Setter_Getter_foo_get, _A_Setter_Setter_instances, _A_Setter_Setter_foo_set, _A_Setter_Setter_foo_set_1, _A_Setter_StaticField_instances, _a, _A_Setter_StaticField_foo_set, _A_Setter_StaticField_foo, _A_Setter_StaticMethod_instances, _b, _A_Setter_StaticMethod_foo_set, _A_Setter_StaticMethod_foo, _A_Setter_StaticGetter_instances, _c, _A_Setter_StaticGetter_foo_set, _A_Setter_StaticGetter_foo_get, _A_Setter_StaticSetter_instances, _d, _A_Setter_StaticSetter_foo_set, _A_Setter_StaticSetter_foo_set_1;
@@ -636,7 +642,7 @@ function Setter() {
             _A_Setter_StaticGetter_instances.add(this);
         }
     }
-    _c = A_Setter_StaticGetter, _A_Setter_StaticGetter_instances = new WeakSet(), _A_Setter_StaticGetter_foo_get = function _A_Setter_StaticGetter_foo_get() { return ""; };
+    _c = A_Setter_StaticGetter, _A_Setter_StaticGetter_instances = new WeakSet(), _A_Setter_StaticGetter_foo_set = function _A_Setter_StaticGetter_foo_set(value) { }, _A_Setter_StaticGetter_foo_get = function _A_Setter_StaticGetter_foo_get() { return ""; };
     // Error
     class A_Setter_StaticSetter {
         constructor() {
@@ -662,20 +668,23 @@ function StaticField() {
         }
     }
     _b = A_StaticField_Method, _A_StaticField_Method_instances = new WeakSet(), _A_StaticField_Method_foo_1 = function _A_StaticField_Method_foo_1() { };
+    A_StaticField_Method.#foo = "foo";
     // Error
     class A_StaticField_Getter {
         constructor() {
             _A_StaticField_Getter_instances.add(this);
         }
     }
-    _c = A_StaticField_Getter, _A_StaticField_Getter_instances = new WeakSet(), _A_StaticField_Getter_foo_get = function _A_StaticField_Getter_foo_get() { return ""; };
+    _c = A_StaticField_Getter, _A_StaticField_Getter_instances = new WeakSet();
+    _A_StaticField_Getter_foo = { value: "foo" };
     // Error
     class A_StaticField_Setter {
         constructor() {
             _A_StaticField_Setter_instances.add(this);
         }
     }
-    _d = A_StaticField_Setter, _A_StaticField_Setter_instances = new WeakSet(), _A_StaticField_Setter_foo_set = function _A_StaticField_Setter_foo_set(value) { };
+    _d = A_StaticField_Setter, _A_StaticField_Setter_instances = new WeakSet();
+    _A_StaticField_Setter_foo_set = { value: "foo" };
     // Error
     class A_StaticField_StaticField {
     }
@@ -686,14 +695,17 @@ function StaticField() {
     class A_StaticField_StaticMethod {
     }
     _f = A_StaticField_StaticMethod, _A_StaticField_StaticMethod_foo_1 = function _A_StaticField_StaticMethod_foo_1() { };
+    A_StaticField_StaticMethod.#foo = "foo";
     // Error
     class A_StaticField_StaticGetter {
     }
     _g = A_StaticField_StaticGetter, _A_StaticField_StaticGetter_foo_get = function _A_StaticField_StaticGetter_foo_get() { return ""; };
+    A_StaticField_StaticGetter.#foo = "foo";
     // Error
     class A_StaticField_StaticSetter {
     }
     _h = A_StaticField_StaticSetter, _A_StaticField_StaticSetter_foo_set = function _A_StaticField_StaticSetter_foo_set(value) { };
+    A_StaticField_StaticSetter.#foo = "foo";
 }
 function StaticMethod() {
     var _a, _A_StaticMethod_Field_foo, _A_StaticMethod_Field_foo_1, _A_StaticMethod_Method_instances, _b, _A_StaticMethod_Method_foo, _A_StaticMethod_Method_foo_1, _A_StaticMethod_Getter_instances, _c, _A_StaticMethod_Getter_foo, _A_StaticMethod_Getter_foo_get, _A_StaticMethod_Setter_instances, _d, _A_StaticMethod_Setter_foo, _A_StaticMethod_Setter_foo_set, _e, _A_StaticMethod_StaticField_foo, _A_StaticMethod_StaticField_foo_1, _f, _A_StaticMethod_StaticMethod_foo, _A_StaticMethod_StaticMethod_foo_1, _g, _A_StaticMethod_StaticGetter_foo, _A_StaticMethod_StaticGetter_foo_get, _h, _A_StaticMethod_StaticSetter_foo, _A_StaticMethod_StaticSetter_foo_set;
@@ -717,14 +729,14 @@ function StaticMethod() {
             _A_StaticMethod_Getter_instances.add(this);
         }
     }
-    _c = A_StaticMethod_Getter, _A_StaticMethod_Getter_instances = new WeakSet(), _A_StaticMethod_Getter_foo_get = function _A_StaticMethod_Getter_foo_get() { return ""; };
+    _c = A_StaticMethod_Getter, _A_StaticMethod_Getter_instances = new WeakSet(), _A_StaticMethod_Getter_foo_get = function _A_StaticMethod_Getter_foo_get() { }, _A_StaticMethod_Getter_foo_get = function _A_StaticMethod_Getter_foo_get() { return ""; };
     // Error
     class A_StaticMethod_Setter {
         constructor() {
             _A_StaticMethod_Setter_instances.add(this);
         }
     }
-    _d = A_StaticMethod_Setter, _A_StaticMethod_Setter_instances = new WeakSet(), _A_StaticMethod_Setter_foo_set = function _A_StaticMethod_Setter_foo_set(value) { };
+    _d = A_StaticMethod_Setter, _A_StaticMethod_Setter_instances = new WeakSet(), _A_StaticMethod_Setter_foo = function _A_StaticMethod_Setter_foo() { }, _A_StaticMethod_Setter_foo = function _A_StaticMethod_Setter_foo(value) { };
     // Error
     class A_StaticMethod_StaticField {
     }
@@ -772,7 +784,7 @@ function StaticGetter() {
             _A_StaticGetter_Setter_instances.add(this);
         }
     }
-    _d = A_StaticGetter_Setter, _A_StaticGetter_Setter_instances = new WeakSet(), _A_StaticGetter_Setter_foo_set = function _A_StaticGetter_Setter_foo_set(value) { };
+    _d = A_StaticGetter_Setter, _A_StaticGetter_Setter_instances = new WeakSet(), _A_StaticGetter_Setter_foo_get = function _A_StaticGetter_Setter_foo_get() { return ""; }, _A_StaticGetter_Setter_foo_set = function _A_StaticGetter_Setter_foo_set(value) { };
     // Error
     class A_StaticGetter_StaticField {
     }
@@ -812,7 +824,7 @@ function StaticSetter() {
             _A_StaticSetter_Getter_instances.add(this);
         }
     }
-    _c = A_StaticSetter_Getter, _A_StaticSetter_Getter_instances = new WeakSet(), _A_StaticSetter_Getter_foo_get = function _A_StaticSetter_Getter_foo_get() { return ""; };
+    _c = A_StaticSetter_Getter, _A_StaticSetter_Getter_instances = new WeakSet(), _A_StaticSetter_Getter_foo_set = function _A_StaticSetter_Getter_foo_set(value) { }, _A_StaticSetter_Getter_foo_get = function _A_StaticSetter_Getter_foo_get() { return ""; };
     // Error
     class A_StaticSetter_Setter {
         constructor() {

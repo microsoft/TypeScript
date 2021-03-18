@@ -7,91 +7,29 @@ namespace ts {
          */
         ClassAliases = 1 << 0,
     }
-
-    const enum PrivateIdentifierPlacement {
-        InstanceField,
-        InstanceMethod,
-        InstanceGetterOnly,
-        InstanceSetterOnly,
-        InstanceGetterAndSetter,
-        StaticField,
-        StaticMethod,
-        StaticGetterOnly,
-        StaticSetterOnly,
-        StaticGetterAndSetter,
-    }
-
-    type PrivateIdentifierInfo =
-        | PrivateIdentifierStaticField
-        | PrivateIdentifierStaticMethod
-        | PrivateIdentifierStaticGetterOnly
-        | PrivateIdentifierStaticSetterOnly
-        | PrivateIdentifierStaticGetterAndSetterOnly
-        | PrivateIdentifierInstanceField
-        | PrivateIdentifierInstanceMethod
-        | PrivateIdentifierInstanceGetterOnly
-        | PrivateIdentifierInstanceSetterOnly
-        | PrivateIdentifierInstanceGetterAndSetter;
-
-    interface PrivateIdentifierStaticField {
-        placement: PrivateIdentifierPlacement.StaticField;
-        variableName: Identifier;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticMethod {
-        placement: PrivateIdentifierPlacement.StaticMethod;
-        functionName: Identifier;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticGetterOnly {
-        placement: PrivateIdentifierPlacement.StaticGetterOnly;
-        getterName: Identifier;
-        setterName?: undefined;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticSetterOnly {
-        placement: PrivateIdentifierPlacement.StaticSetterOnly;
-        setterName: Identifier;
-        getterName?: undefined;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticGetterAndSetterOnly {
-        placement: PrivateIdentifierPlacement.StaticGetterAndSetter;
-        getterName: Identifier;
-        setterName: Identifier;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierInstanceField {
-        placement: PrivateIdentifierPlacement.InstanceField;
-        weakMapName: Identifier;
-    }
-
-    interface PrivateIdentifierInstanceMethod {
-        placement: PrivateIdentifierPlacement.InstanceMethod;
-        weakSetName: Identifier;
-        functionName: Identifier;
-    }
-
-    interface PrivateIdentifierInstanceGetterOnly {
-        placement: PrivateIdentifierPlacement.InstanceGetterOnly;
-        weakSetName: Identifier;
-        getterName: Identifier;
-        setterName?: undefined;
-    }
-
-    interface PrivateIdentifierInstanceSetterOnly {
-        placement: PrivateIdentifierPlacement.InstanceSetterOnly;
-        weakSetName: Identifier;
-        setterName: Identifier;
-        getterName?: undefined;
-    }
-
-    interface PrivateIdentifierInstanceGetterAndSetter {
-        placement: PrivateIdentifierPlacement.InstanceGetterAndSetter;
-        weakSetName: Identifier;
-        getterName: Identifier;
-        setterName: Identifier;
-    }
+    type PrivateIdentifierInfo = {
+        state: Identifier;
+    } & ({
+        kind: "a",
+        readFunction?: Identifier;
+        writeFunction?: Identifier;
+        isStatic: boolean;
+    } | {
+        kind: "m"
+        readFunction: Identifier;
+        writeFunction: undefined;
+        isStatic: boolean;
+    } | {
+        kind: undefined,
+        isStatic: true;
+        readFunction: Identifier;
+        writeFunction: Identifier;
+    } | {
+        kind: undefined,
+        isStatic: false;
+        readFunction: undefined;
+        writeFunction: undefined;
+    });
 
     interface PrivateIdentifierEnvironment {
         /**
@@ -315,23 +253,15 @@ namespace ts {
             const info = accessPrivateIdentifier(node.name);
             Debug.assert(info, "Undeclared private name for property declaration.");
 
-            if (info.placement === PrivateIdentifierPlacement.InstanceMethod || info.placement === PrivateIdentifierPlacement.StaticMethod) {
-                return info.functionName;
+            if (info.kind === "m") {
+                return info.readFunction;
             }
 
-            if (isGetAccessor(node) &&
-                (info.placement === PrivateIdentifierPlacement.InstanceGetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.StaticGetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.InstanceGetterAndSetter ||
-                    info.placement === PrivateIdentifierPlacement.StaticGetterAndSetter)) {
-                return info.getterName;
+            if (isGetAccessor(node) && info.kind === "a") {
+                return info.readFunction;
             }
-            if (isSetAccessor(node) &&
-                (info.placement === PrivateIdentifierPlacement.InstanceSetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.StaticSetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.InstanceGetterAndSetter ||
-                    info.placement === PrivateIdentifierPlacement.StaticGetterAndSetter)) {
-                return info.setterName;
+            if (isSetAccessor(node) && info.kind === "a") {
+                return info.writeFunction;
             }
         }
 
@@ -366,58 +296,12 @@ namespace ts {
         }
 
         function createPrivateIdentifierAccessHelper(info: PrivateIdentifierInfo, receiver: Expression): Expression {
-            switch (info.placement) {
-                case PrivateIdentifierPlacement.InstanceField:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.weakMapName
-                    );
-                case PrivateIdentifierPlacement.InstanceMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.weakSetName,
-                        "m",
-                        info.functionName
-                    );
-                case PrivateIdentifierPlacement.InstanceGetterOnly:
-                case PrivateIdentifierPlacement.InstanceGetterAndSetter:
-                case PrivateIdentifierPlacement.InstanceSetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.weakSetName,
-                        "a",
-                        info.getterName
-                    );
-                case PrivateIdentifierPlacement.StaticField:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        undefined,
-                        info.variableName
-                    );
-                case PrivateIdentifierPlacement.StaticMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        "m",
-                        info.functionName
-                    );
-                case PrivateIdentifierPlacement.StaticGetterOnly:
-                case PrivateIdentifierPlacement.StaticGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        "a",
-                        info.getterName
-                    );
-                case PrivateIdentifierPlacement.StaticSetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        "a"
-                    );
-                default: return Debug.fail("Unexpected private identifier placement");
-            }
+            return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
+                receiver,
+                info.state,
+                info.kind,
+                info.readFunction
+            );
         }
 
         function visitPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -610,69 +494,13 @@ namespace ts {
                 );
             }
 
-            switch (info.placement) {
-                case PrivateIdentifierPlacement.InstanceField:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.weakMapName,
-                        right
-                    );
-                case PrivateIdentifierPlacement.InstanceMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.weakSetName,
-                        right,
-                        "m"
-                    );
-                case PrivateIdentifierPlacement.InstanceGetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.weakSetName,
-                        right,
-                        "a"
-                    );
-                case PrivateIdentifierPlacement.InstanceSetterOnly:
-                case PrivateIdentifierPlacement.InstanceGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.weakSetName,
-                        right,
-                        "a",
-                        info.setterName,
-                    );
-                case PrivateIdentifierPlacement.StaticField:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        undefined,
-                        info.variableName,
-                    );
-                case PrivateIdentifierPlacement.StaticMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        "m",
-                    );
-                case PrivateIdentifierPlacement.StaticGetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        "a",
-                    );
-                case PrivateIdentifierPlacement.StaticSetterOnly:
-                case PrivateIdentifierPlacement.StaticGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        "a",
-                        info.setterName,
-                    );
-                default: return Debug.fail("Unexpected private identifier placement");
-            }
+            return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                receiver,
+                info.state,
+                right,
+                info.kind,
+                info.writeFunction,
+            );
         }
 
         /**
@@ -1074,22 +902,20 @@ namespace ts {
             if (shouldTransformPrivateElements && isPrivateIdentifier(propertyName)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
                 if (privateIdentifierInfo) {
-                    switch (privateIdentifierInfo.placement) {
-                        case PrivateIdentifierPlacement.InstanceField: {
+                    if(!privateIdentifierInfo.kind) {
+                        if (!privateIdentifierInfo.isStatic) {
                             return createPrivateInstanceFieldInitializer(
                                 receiver,
                                 visitNode(property.initializer, visitor, isExpression),
-                                privateIdentifierInfo.weakMapName
+                                privateIdentifierInfo.state
                             );
                         }
-                        case PrivateIdentifierPlacement.StaticField: {
+                        else {
                             return createPrivateStaticFieldInitializer(
-                                privateIdentifierInfo.variableName,
+                                privateIdentifierInfo.writeFunction,
                                 visitNode(property.initializer, visitor, isExpression)
                             );
                         }
-                        default:
-                            return undefined;
                     }
                 }
                 else {
@@ -1258,60 +1084,59 @@ namespace ts {
             const text = getTextOfPropertyName(node.name) as string;
             const env = getPrivateIdentifierEnvironment();
             const { weakSetName, classConstructor } = env;
-            let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
             if (hasStaticModifier(node)) {
                 Debug.assert(classConstructor, "weakSetName should be set in private identifier environment");
                 if (isPropertyDeclaration(node)) {
                     const variableName = createHoistedVariableForPrivateName(text, node);
-                    info = {
-                        placement: PrivateIdentifierPlacement.StaticField,
-                        variableName,
-                        classConstructor
-                    };
+                    env.identifiers.set(node.name.escapedText, {
+                        kind: undefined,
+                        readFunction: variableName,
+                        writeFunction: variableName,
+                        state: classConstructor,
+                        isStatic: true,
+                    });
                 }
                 else if (isMethodDeclaration(node)) {
                     const functionName = createHoistedVariableForPrivateName(text, node);
-                    info = {
-                        placement: PrivateIdentifierPlacement.StaticMethod,
-                        functionName,
-                        classConstructor
-                    };
+                    env.identifiers.set(node.name.escapedText, {
+                        kind: "m",
+                        readFunction: functionName,
+                        writeFunction: undefined,
+                        state: classConstructor,
+                        isStatic: true,
+                    });
                 }
                 else if (isGetAccessorDeclaration(node)) {
                     const getterName = createHoistedVariableForPrivateName(text + "_get", node);
                     const previousInfo = env.identifiers.get(node.name.escapedText);
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.StaticSetterOnly) {
-                        info = {
-                            ...previousInfo,
-                            placement: PrivateIdentifierPlacement.StaticGetterAndSetter,
-                            getterName,
-                        };
+                    if (previousInfo && previousInfo.kind === "a") {
+                        previousInfo.readFunction = getterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.StaticGetterOnly,
-                            getterName,
-                            classConstructor
-                        };
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: "a",
+                            readFunction: getterName,
+                            writeFunction: undefined,
+                            state: classConstructor,
+                            isStatic: true,
+                        });
                     }
                 }
                 else if (isSetAccessorDeclaration(node)) {
                     const setterName = createHoistedVariableForPrivateName(text + "_set", node);
                     const previousInfo = env.identifiers.get(node.name.escapedText);
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.StaticGetterOnly) {
-                        info = {
-                            ...previousInfo,
-                            placement: PrivateIdentifierPlacement.StaticGetterAndSetter,
-                            setterName,
-                        };
+                    if (previousInfo && previousInfo.kind === "a") {
+                        previousInfo.writeFunction = setterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.StaticSetterOnly,
-                            setterName,
-                            classConstructor
-                        };
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: "a",
+                            readFunction: undefined,
+                            writeFunction: setterName,
+                            state: classConstructor,
+                            isStatic: true,
+                        });
                     }
                 }
                 else {
@@ -1320,10 +1145,13 @@ namespace ts {
             }
             else if (isPropertyDeclaration(node)) {
                 const weakMapName = createHoistedVariableForPrivateName(text, node);
-                info = {
-                    placement: PrivateIdentifierPlacement.InstanceField,
-                    weakMapName,
-                };
+                env.identifiers.set(node.name.escapedText, {
+                    kind: undefined,
+                    readFunction: undefined,
+                    writeFunction: undefined,
+                    state: weakMapName,
+                    isStatic: false,
+                });
 
                 assignmentExpressions.push(factory.createAssignment(
                     weakMapName,
@@ -1337,11 +1165,13 @@ namespace ts {
             else if (isMethodDeclaration(node)) {
                 Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
 
-                info = {
-                    placement: PrivateIdentifierPlacement.InstanceMethod,
-                    weakSetName,
-                    functionName: createHoistedVariableForPrivateName(text, node),
-                };
+                env.identifiers.set(node.name.escapedText, {
+                    kind: "m",
+                    readFunction: createHoistedVariableForPrivateName(text, node),
+                    writeFunction: undefined,
+                    state: weakSetName,
+                    isStatic: false,
+                });
             }
             else if (isAccessor(node)) {
                 Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
@@ -1350,39 +1180,33 @@ namespace ts {
                 if (isGetAccessor(node)) {
                     const getterName = createHoistedVariableForPrivateName(text + "_get", node);
 
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceSetterOnly) {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceGetterAndSetter,
-                            weakSetName,
-                            getterName,
-                            setterName: previousInfo.setterName
-                        };
+                    if (previousInfo) {
+                        previousInfo.readFunction = getterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceGetterOnly,
-                            weakSetName,
-                            getterName
-                        };
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: "a",
+                            readFunction: getterName,
+                            writeFunction: undefined,
+                            state: weakSetName,
+                            isStatic: false,
+                        });
                     }
                 }
                 else {
                     const setterName = createHoistedVariableForPrivateName(text + "_set", node);
 
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceGetterOnly) {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceGetterAndSetter,
-                            weakSetName,
-                            setterName,
-                            getterName: previousInfo.getterName
-                        };
+                    if (previousInfo) {
+                        previousInfo.writeFunction = setterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceSetterOnly,
-                            weakSetName,
-                            setterName
-                        };
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: "a",
+                            readFunction: undefined,
+                            writeFunction: setterName,
+                            state: weakSetName,
+                            isStatic: false,
+                        });
                     }
                 }
             }
@@ -1390,7 +1214,6 @@ namespace ts {
                 Debug.assertNever(node, "Unknown class element type.");
             }
 
-            env.identifiers.set(node.name.escapedText, info);
             getPendingExpressions().push(...assignmentExpressions);
         }
 
