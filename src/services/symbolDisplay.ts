@@ -441,7 +441,7 @@ namespace ts.SymbolDisplay {
                     }
                     else {
                         documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
-                        tagsFromAlias = resolvedSymbol.getJsDocTags(typeChecker);
+                        tagsFromAlias = resolvedSymbol.getJsDocTags();
                     }
                 }
             }
@@ -570,7 +570,7 @@ namespace ts.SymbolDisplay {
                     }
 
                     documentation = rhsSymbol.getDocumentationComment(typeChecker);
-                    tags = rhsSymbol.getJsDocTags(typeChecker);
+                    tags = rhsSymbol.getJsDocTags();
                     if (documentation.length > 0) {
                         break;
                     }
@@ -579,7 +579,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (tags.length === 0 && !hasMultipleSignatures) {
-            tags = symbol.getJsDocTags(typeChecker);
+            tags = symbol.getJsDocTags();
         }
 
         if (documentation.length === 0 && documentationFromAlias) {

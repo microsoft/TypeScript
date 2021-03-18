@@ -1274,32 +1274,6 @@ namespace ts.server {
                 result;
         }
 
-        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project, richResponse: boolean): protocol.JSDocTagInfo[] {
-            return tags ? tags.map(tag => ({
-                ...tag,
-                text: richResponse ? this.mapDisplayParts(tag.text, project) : tag.text?.map(part => part.text).join("")
-            })) : [];
-        }
-
-        private mapDisplayParts(parts: SymbolDisplayPart[] | undefined, project: Project): protocol.SymbolDisplayPart[] {
-            if (!parts) {
-                return [];
-            }
-            return parts.map(part => part.kind !== "linkName" ? part : {
-                ...part,
-                target: this.toFileSpan((part as JSDocLinkDisplayPart).target.fileName, (part as JSDocLinkDisplayPart).target.textSpan, project),
-            });
-        }
-
-        private mapSignatureHelpItems(items: SignatureHelpItem[], project: Project, richResponse: boolean): protocol.SignatureHelpItem[] {
-            return items.map(item => ({
-                ...item,
-                documentation: this.mapDisplayParts(item.documentation, project),
-                parameters: item.parameters.map(p => ({ ...p, documentation: this.mapDisplayParts(p.documentation, project) })),
-                tags: this.mapJSDocTagInfo(item.tags, project, richResponse),
-            }));
-        }
-
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
             return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
         }
@@ -1711,24 +1685,22 @@ namespace ts.server {
                 return undefined;
             }
 
-            const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
             if (simplifiedResult) {
                 const displayString = displayPartsToString(quickInfo.displayParts);
+                const docString = displayPartsToString(quickInfo.documentation);
+
                 return {
                     kind: quickInfo.kind,
                     kindModifiers: quickInfo.kindModifiers,
                     start: scriptInfo.positionToLineOffset(quickInfo.textSpan.start),
                     end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
-                    documentation: useDisplayParts ? this.mapDisplayParts(quickInfo.documentation, project) : displayPartsToString(quickInfo.documentation),
-                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, useDisplayParts),
+                    documentation: docString,
+                    tags: quickInfo.tags || []
                 };
             }
             else {
-                return useDisplayParts ? quickInfo : {
-                    ...quickInfo,
-                    tags: this.mapJSDocTagInfo(quickInfo.tags, project, /*useDisplayParts*/ false) as JSDocTagInfo[]
-                };
+                return quickInfo;
             }
         }
 
@@ -1858,25 +1830,19 @@ namespace ts.server {
             return res;
         }
 
-        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, simplifiedResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
             const formattingOptions = project.projectService.getFormatCodeOptions(file);
-            const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
 
             const result = mapDefined(args.entryNames, entryName => {
                 const { name, source, data } = typeof entryName === "string" ? { name: entryName, source: undefined, data: undefined } : entryName;
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file), data ? cast(data, isCompletionEntryData) : undefined);
             });
-            return fullResult
-                ? (useDisplayParts ? result : result.map(details => ({ ...details, tags: this.mapJSDocTagInfo(details.tags, project, /*richResponse*/ false) as JSDocTagInfo[] })))
-                : result.map(details => ({
-                    ...details,
-                    codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
-                    documentation: this.mapDisplayParts(details.documentation, project),
-                    tags: this.mapJSDocTagInfo(details.tags, project, useDisplayParts),
-                }));
+            return simplifiedResult
+                ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(action)) }))
+                : result;
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): readonly protocol.CompileOnSaveAffectedFileListSingleProject[] {
@@ -1936,26 +1902,25 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
             const helpItems = project.getLanguageService().getSignatureHelpItems(file, position, args);
-            const useDisplayParts = !!this.getPreferences(file).displayPartsForJSDoc;
-            if (helpItems && simplifiedResult) {
+            if (!helpItems) {
+                return undefined;
+            }
+
+            if (simplifiedResult) {
                 const span = helpItems.applicableSpan;
                 return {
-                    ...helpItems,
+                    items: helpItems.items,
                     applicableSpan: {
                         start: scriptInfo.positionToLineOffset(span.start),
                         end: scriptInfo.positionToLineOffset(span.start + span.length)
                     },
-                    items: this.mapSignatureHelpItems(helpItems.items, project, useDisplayParts),
+                    selectedItemIndex: helpItems.selectedItemIndex,
+                    argumentIndex: helpItems.argumentIndex,
+                    argumentCount: helpItems.argumentCount,
                 };
-            }
-            else if (useDisplayParts || !helpItems) {
-                return helpItems;
             }
             else {
-                return {
-                    ...helpItems,
-                    items: helpItems.items.map(item => ({ ...item, tags: this.mapJSDocTagInfo(item.tags, project, /*richResponse*/ false) as JSDocTagInfo[] }))
-                };
+                return helpItems;
             }
         }
 
@@ -2735,10 +2700,10 @@ namespace ts.server {
                 return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionsFull));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ false));
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ true));
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ false));
             },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));

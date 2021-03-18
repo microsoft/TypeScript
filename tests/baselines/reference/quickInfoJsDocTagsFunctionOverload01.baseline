@@ -182,12 +182,7 @@
       "tags": [
         {
           "name": "tag",
-          "text": [
-            {
-              "text": "Tag text",
-              "kind": "text"
-            }
-          ]
+          "text": "Tag text"
         }
       ]
     }

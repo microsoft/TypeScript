@@ -182,80 +182,23 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "basePath",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "The base path where the search will be performed.",
-                  "kind": "text"
-                }
-              ]
+              "text": "basePath The base path where the search will be performed."
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "pattern",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string defining a regexp of a glob pattern.",
-                  "kind": "text"
-                }
-              ]
+              "text": "pattern A string defining a regexp of a glob pattern."
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "type",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "The search pattern type, can be a regexp or a glob.",
-                  "kind": "text"
-                }
-              ]
+              "text": "type The search pattern type, can be a regexp or a glob."
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "options",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A object containing options to the search.",
-                  "kind": "text"
-                }
-              ]
+              "text": "options A object containing options to the search."
             },
             {
               "name": "return",
-              "text": [
-                {
-                  "text": "A list containing the filtered paths.",
-                  "kind": "text"
-                }
-              ]
+              "text": "A list containing the filtered paths."
             }
           ]
         }

@@ -142,7 +142,7 @@
         "fileName": "/b.js",
         "contextSpan": {
           "start": 4,
-          "length": 22
+          "length": 21
         },
         "isWriteAccess": false,
         "isDefinition": false

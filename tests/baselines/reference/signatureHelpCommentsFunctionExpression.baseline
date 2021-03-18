@@ -379,55 +379,19 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "s",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "param on expression",
-                  "kind": "text"
-                }
-              ]
+              "text": "s param on expression"
             },
             {
               "name": "returns",
-              "text": [
-                {
-                  "text": "return on expression",
-                  "kind": "text"
-                }
-              ]
+              "text": "return on expression"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "s",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "the first parameter!",
-                  "kind": "text"
-                }
-              ]
+              "text": "s the first parameter!"
             },
             {
               "name": "returns",
-              "text": [
-                {
-                  "text": "the parameter's length",
-                  "kind": "text"
-                }
-              ]
+              "text": "the parameter's length"
             }
           ]
         }

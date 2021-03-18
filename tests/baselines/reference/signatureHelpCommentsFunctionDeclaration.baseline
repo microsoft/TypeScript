@@ -406,20 +406,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "a string",
-                  "kind": "text"
-                }
-              ]
+              "text": "a a string"
             }
           ]
         }

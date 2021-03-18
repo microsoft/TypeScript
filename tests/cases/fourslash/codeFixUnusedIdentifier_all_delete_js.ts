@@ -40,29 +40,35 @@ verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: ts.Diagnostics.Delete_all_unused_declarations.message,
     newFileContent:
-`/** */
+`/** Parameter doc comment */
 function f() {}
 
 /**
  * Doc
- * */
+ * Comment
+ */
 function g() {}
 
 /**
  * Doc
- * */
+ * Comment
+ * Comment
+ */
 function h() {}
 
 /**
  * Doc
- * */
+ * Comment
+ */
 function h2() {}
 
-/** @return {void} */
+/** Comment @return {void} */
 function i() {}
 
 /**
 Doc
+comment
+comment
 @param {number} x
 */
 function j(x) { return x; }`,

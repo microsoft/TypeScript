@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-/////** @template T baring strait */
+/////** @template T */
 ////function ident<T>: T {
 ////}
 
@@ -10,8 +10,7 @@ verify.syntacticClassificationsAre(
     c.punctuation("@"),
     c.docCommentTagName("template"),
     c.typeParameterName("T"),
-    c.comment("baring strait "),
-    c.comment("*/"),
+    c.comment(" */"),
     c.keyword("function"),
     c.identifier("ident"),
     c.punctuation("<"),

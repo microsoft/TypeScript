@@ -177,71 +177,19 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p1",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- A string param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p1 - A string param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p2",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p2 - An optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p3",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- Another optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p3 - Another optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p4",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param with a default value",
-                  "kind": "text"
-                }
-              ]
+              "text": "p4 - An optional param with a default value"
             }
           ]
         }
@@ -433,71 +381,19 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p1",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- A string param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p1 - A string param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p2",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p2 - An optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p3",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- Another optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p3 - Another optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p4",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param with a default value",
-                  "kind": "text"
-                }
-              ]
+              "text": "p4 - An optional param with a default value"
             }
           ]
         }
@@ -689,71 +585,19 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p1",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- A string param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p1 - A string param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p2",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p2 - An optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p3",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- Another optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p3 - Another optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p4",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param with a default value",
-                  "kind": "text"
-                }
-              ]
+              "text": "p4 - An optional param with a default value"
             }
           ]
         }
@@ -945,71 +789,19 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p1",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- A string param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p1 - A string param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p2",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p2 - An optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p3",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- Another optional param",
-                  "kind": "text"
-                }
-              ]
+              "text": "p3 - Another optional param"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "p4",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "- An optional param with a default value",
-                  "kind": "text"
-                }
-              ]
+              "text": "p4 - An optional param with a default value"
             }
           ]
         }

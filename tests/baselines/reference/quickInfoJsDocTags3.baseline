@@ -71,72 +71,23 @@
       "tags": [
         {
           "name": "author",
-          "text": [
-            {
-              "text": "Me <me@domain.tld>",
-              "kind": "text"
-            }
-          ]
+          "text": "Me <me@domain.tld>"
         },
         {
           "name": "see",
-          "text": [
-            {
-              "text": "x",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(the parameter)",
-              "kind": "text"
-            }
-          ]
+          "text": "x (the parameter)"
         },
         {
           "name": "param",
-          "text": [
-            {
-              "text": "x",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "- x comment",
-              "kind": "text"
-            }
-          ]
+          "text": "x - x comment"
         },
         {
           "name": "param",
-          "text": [
-            {
-              "text": "y",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "- y comment",
-              "kind": "text"
-            }
-          ]
+          "text": "y - y comment"
         },
         {
           "name": "throws",
-          "text": [
-            {
-              "text": "{Error} comment",
-              "kind": "text"
-            }
-          ]
+          "text": "{Error} comment"
         }
       ]
     }

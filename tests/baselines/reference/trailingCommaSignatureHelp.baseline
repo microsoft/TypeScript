@@ -180,20 +180,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "radix",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "The radix",
-                  "kind": "text"
-                }
-              ]
+              "text": "radix The radix"
             }
           ]
         }

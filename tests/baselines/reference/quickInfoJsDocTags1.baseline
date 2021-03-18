@@ -71,124 +71,39 @@
       "tags": [
         {
           "name": "author",
-          "text": [
-            {
-              "text": "Me <me@domain.tld>",
-              "kind": "text"
-            }
-          ]
+          "text": "Me <me@domain.tld>"
         },
         {
           "name": "augments",
-          "text": [
-            {
-              "text": "C<T>",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Augments it",
-              "kind": "text"
-            }
-          ]
+          "text": "C<T> Augments it"
         },
         {
           "name": "template",
-          "text": [
-            {
-              "text": "T",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "A template",
-              "kind": "text"
-            }
-          ]
+          "text": "T A template"
         },
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{number | string}",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "A type",
-              "kind": "text"
-            }
-          ]
+          "text": "{number | string} A type"
         },
         {
           "name": "typedef",
-          "text": [
-            {
-              "text": "NumOrStr",
-              "kind": "text"
-            }
-          ]
+          "text": "NumOrStr"
         },
         {
           "name": "property",
-          "text": [
-            {
-              "text": "{number} x The prop",
-              "kind": "text"
-            }
-          ]
+          "text": "{number} x The prop"
         },
         {
           "name": "param",
-          "text": [
-            {
-              "text": "x",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "The param",
-              "kind": "text"
-            }
-          ]
+          "text": "x The param"
         },
         {
           "name": "returns",
-          "text": [
-            {
-              "text": "The result",
-              "kind": "text"
-            }
-          ]
+          "text": "The result"
         },
         {
           "name": "see",
-          "text": [
-            {
-              "text": "x",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(the parameter)",
-              "kind": "text"
-            }
-          ]
+          "text": "x (the parameter)"
         }
       ]
     }

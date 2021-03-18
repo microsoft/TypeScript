@@ -50,12 +50,7 @@
       "tags": [
         {
           "name": "example",
-          "text": [
-            {
-              "text": "```\n1 + 2\n```",
-              "kind": "text"
-            }
-          ]
+          "text": "```\n1 + 2\n```"
         }
       ]
     }
@@ -111,12 +106,7 @@
       "tags": [
         {
           "name": "example",
-          "text": [
-            {
-              "text": "``\n1 + 2\n`",
-              "kind": "text"
-            }
-          ]
+          "text": "``\n1 + 2\n`"
         }
       ]
     }
