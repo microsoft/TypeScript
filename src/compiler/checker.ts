@@ -3752,6 +3752,12 @@ namespace ts {
             return type;
         }
 
+        function createTypeLambda(symbol?: Symbol) {
+            const type = <Typelambda>createType(TypeFlags.TypeLambda);
+            if (symbol) type.symbol = symbol;
+            return type;
+        }
+
         // A reserved member name starts with two underscores, but the third character cannot be an underscore,
         // @, or #. A third underscore indicates an escaped form of an identifier that started
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
@@ -12133,6 +12139,38 @@ namespace ts {
 
         function getTypeReferenceArity(type: TypeReference): number {
             return length(type.target.typeParameters);
+        }
+
+        function convertTypeToTypelambda(t: TypeConstructorPolymorphismDeclaration | InterfaceType): Typelambda {
+            // TODO (song): cache it
+            Debug.assert(t.typeParameters && t.typeParameters.length > 0);
+            const typeLambda = createTypeLambda(t.symbol);
+
+            // if it is Class or Interface
+
+            if (t.flags & TypeFlags.Object && (<ObjectType>t).objectFlags & ObjectFlags.ClassOrInterface) {
+                t.typeParameters.map(typeParameter => {
+
+                });
+                typeLambda.resType = <ObjectType>t;
+            }
+
+
+            return typeLambda;
+
+            // To TypeLambda or ProperType
+            function convertTypeParameter(typeParameter: TypeParameter): TypeLambdaParameterInfo | Typelambda {
+                // typeParameter contains typeparameter, its kind is more than zero.
+                // Convert it to TypeLambda.
+                if (isTypeParameterTypeConstructorDeclaration(typeParameter)) {
+                    return convertTypeToTypelambda(typeParameter);
+                }
+                // it is just a proper type, zero kind.
+                else {
+                    // TODO (song): variance marker? or infer from structure?
+                    return { name: typeParameter.symbol.escapedName, upperBound: getConstraintFromTypeParameter(typeParameter), variance: VarianceFlags.Bivariant };
+                }
+            }
         }
 
         /**

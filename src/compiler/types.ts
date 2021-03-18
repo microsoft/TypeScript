@@ -1526,6 +1526,7 @@ namespace ts {
     }
 
     export interface NodeWithTypeArguments extends TypeNode {
+        // undefined if no LessThanToken followed.
         readonly typeArguments?: NodeArray<TypeNode>;
     }
 
@@ -4876,9 +4877,9 @@ namespace ts {
         Never           = 1 << 17,  // Never type
         TypeParameter   = 1 << 18,  // Type parameter
         // @internal
-        TypeConstructorDeclaration = 1<< 27,   // Type Constructor Declaration, this is an additional flag of TypeParameter. This should include the constraint and parameter constrait.
+        TypeConstructorDeclaration = 1<< 29,   // Type Constructor Declaration, this is an additional flag of TypeParameter. This should include the constraint and parameter constrait.
         // @internal
-        TypeConstructorInstance = 1<< 28,   // Type Constructor, this is an additional flag of TypeParameter. This should include the concentrate arguments(not mapped yet).
+        TypeConstructorInstance = 1<< 30,   // Type Constructor, this is an additional flag of TypeParameter. This should include the concentrate arguments(not mapped yet).
         Object          = 1 << 19,  // Object type
         Union           = 1 << 20,  // Union (T | U)
         Intersection    = 1 << 21,  // Intersection (T & U)
@@ -4889,6 +4890,7 @@ namespace ts {
         NonPrimitive    = 1 << 26,  // intrinsic object type
         TemplateLiteral = 1 << 27,  // Template literal type
         StringMapping   = 1 << 28,  // Uppercase/Lowercase type
+        TypeLambda      = 1 << 31,  // Type Lambda is very special, not sure. But I guess it could not be used with any other flags? So should it be a flag?
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -5331,6 +5333,7 @@ namespace ts {
     export interface TypeConstructorPolymorphismDeclaration extends TypeParameter{
         /* @internal */
         tParams?: number; // Not allowed constraint for now, this might be a very complex feature.
+        typeParameters: TypeParameter[] | undefined;
     }
 
     // Type parameters (TypeFlags.TypeParameter | TypeFlags.TypeConstructorInstance)
@@ -5339,6 +5342,25 @@ namespace ts {
         resolvedTypeConstructorParam?: Type[];
         /* @internal */
         origionalTypeConstructorDeclaration?: TypeConstructorPolymorphismDeclaration;
+    }
+
+    // One Type is ProperType if it is not a TypeLambda. e.g Set<number>, Set<Set<number>>.
+    // However, Set<T> depends, if it means the class, it is a type lambda(T is typeParameter), if it is a constraint, it is a proper type(T is a declared typeArgument).
+    export interface ProperType extends ObjectType{
+
+    }
+
+    export interface TypeLambdaParameterInfo {
+        name: string;
+        upperBound: Typelambda | ProperType;
+        variance: VarianceFlags
+    }
+    export interface Typelambda extends Type {
+        resType?: ProperType;
+        paramInfos: TypeLambdaParameterInfo[];
+        target: Typelambda | TypeParameter | InterfaceType;
+        /* @internal  true if any params and resType does not have typeParameter */
+        isFullyinstantiated: boolean;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)
