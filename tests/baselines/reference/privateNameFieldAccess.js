@@ -17,7 +17,7 @@ var _A_myField;
 class A {
     constructor() {
         _A_myField.set(this, "hello world");
-        console.log(__classPrivateFieldGet(this, _A_myField));
+        console.log(__classPrivateFieldGet(this, _A_myField, "f"));
     }
 }
 _A_myField = new WeakMap();

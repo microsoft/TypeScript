@@ -26,7 +26,7 @@ class C {
         _C_prop.set(this, void 0);
     }
     func(x) {
-        __classPrivateFieldSet(x, _C_prop, 123);
+        __classPrivateFieldSet(x, _C_prop, 123, "f");
     }
 }
 _C_prop = new WeakMap();

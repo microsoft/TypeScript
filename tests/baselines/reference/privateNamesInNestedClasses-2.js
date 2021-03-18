@@ -32,7 +32,7 @@ class A {
                 _B_x.set(this, 5);
                 class C {
                     constructor() {
-                        __classPrivateFieldGet(A, _B_x); // error
+                        __classPrivateFieldGet(A, _B_x, "f"); // error
                     }
                 }
             }

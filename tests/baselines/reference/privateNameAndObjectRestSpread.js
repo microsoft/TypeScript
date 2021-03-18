@@ -41,13 +41,13 @@ class C {
     }
     method(other) {
         const obj = Object.assign({}, other);
-        __classPrivateFieldGet(obj, _C_prop);
+        __classPrivateFieldGet(obj, _C_prop, "f");
         const rest = __rest(other, []);
-        __classPrivateFieldGet(rest, _C_prop);
+        __classPrivateFieldGet(rest, _C_prop, "f");
         const statics = Object.assign({}, C);
-        __classPrivateFieldGet(statics, _a, void 0, _C_propStatic);
+        __classPrivateFieldGet(statics, _a, "f", _C_propStatic);
         const sRest = __rest(C, []);
-        __classPrivateFieldGet(sRest, _a, void 0, _C_propStatic);
+        __classPrivateFieldGet(sRest, _a, "f", _C_propStatic);
     }
 }
 _a = C, _C_prop = new WeakMap();

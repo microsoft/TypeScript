@@ -25,7 +25,7 @@ class Base {
         _Base_prop.set(this, 123);
     }
     static method(x) {
-        console.log(__classPrivateFieldGet(x, _Base_prop));
+        console.log(__classPrivateFieldGet(x, _Base_prop, "f"));
     }
 }
 _Base_prop = new WeakMap();

@@ -36,16 +36,16 @@ class A {
     test() {
         var _a;
         var _b;
-        __classPrivateFieldGet(this, _A_fieldFunc).call(this);
-        (_a = __classPrivateFieldGet(this, _A_fieldFunc)) === null || _a === void 0 ? void 0 : _a.call(this);
-        const func = __classPrivateFieldGet(this, _A_fieldFunc);
+        __classPrivateFieldGet(this, _A_fieldFunc, "f").call(this);
+        (_a = __classPrivateFieldGet(this, _A_fieldFunc, "f")) === null || _a === void 0 ? void 0 : _a.call(this);
+        const func = __classPrivateFieldGet(this, _A_fieldFunc, "f");
         func();
-        new (__classPrivateFieldGet(this, _A_fieldFunc))();
+        new (__classPrivateFieldGet(this, _A_fieldFunc, "f"))();
         const arr = [1, 2];
-        __classPrivateFieldGet(this, _A_fieldFunc2).call(this, 0, ...arr, 3);
-        const b = new (__classPrivateFieldGet(this, _A_fieldFunc2))(0, ...arr, 3);
-        const str = __classPrivateFieldGet(this, _A_fieldFunc2).bind(this) `head${1}middle${2}tail`;
-        __classPrivateFieldGet((_b = this.getInstance()), _A_fieldFunc2).bind(_b) `test${1}and${2}`;
+        __classPrivateFieldGet(this, _A_fieldFunc2, "f").call(this, 0, ...arr, 3);
+        const b = new (__classPrivateFieldGet(this, _A_fieldFunc2, "f"))(0, ...arr, 3);
+        const str = __classPrivateFieldGet(this, _A_fieldFunc2, "f").bind(this) `head${1}middle${2}tail`;
+        __classPrivateFieldGet((_b = this.getInstance()), _A_fieldFunc2, "f").bind(_b) `test${1}and${2}`;
     }
     getInstance() { return new A(); }
 }

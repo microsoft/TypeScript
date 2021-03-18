@@ -25,7 +25,7 @@ const C = (_a = class {
             _C_field.set(this, __classPrivateFieldGet(this, _C_instances, "m", _C_method).call(this));
         }
         static getInstance() { return new C(); }
-        getField() { return __classPrivateFieldGet(this, _C_field); }
+        getField() { return __classPrivateFieldGet(this, _C_field, "f"); }
         ;
     },
     _C_field = new WeakMap(),

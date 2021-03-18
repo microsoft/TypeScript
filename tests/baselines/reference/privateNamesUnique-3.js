@@ -33,7 +33,7 @@ _a = A, _A_foo = new WeakMap();
 _A_foo_1 = { value: true }; // error (duplicate)
 class B {
     test(x) {
-        __classPrivateFieldGet(x, _b, void 0, _B_foo); // error (#foo is a static property on B, not an instance property)
+        __classPrivateFieldGet(x, _b, "f", _B_foo); // error (#foo is a static property on B, not an instance property)
     }
 }
 _b = B;

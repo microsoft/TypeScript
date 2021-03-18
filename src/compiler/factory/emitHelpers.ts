@@ -32,8 +32,8 @@ namespace ts {
         createImportDefaultHelper(expression: Expression): Expression;
         createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
         // Class Fields Helpers
-        createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier, kind?: "a" | "m" | undefined, f?: Identifier | undefined): Expression;
-        createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression, kind?: "a" | "m" | undefined, f?: Identifier | undefined): Expression;
+        createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
+        createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -368,38 +368,26 @@ namespace ts {
 
         // Class Fields Helpers
 
-        function createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind?: "a" | "m" | undefined, f?: Identifier | undefined) {
+        function createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined) {
             context.requestEmitHelper(classPrivateFieldGetHelper);
             let args;
-            if(!kind && !f) {
-                args = [receiver, state];
-            }
-            else if(kind && !f) {
+            if (!f) {
                 args = [receiver, state, factory.createStringLiteral(kind)];
             }
-            else if(!kind && f) {
-                args = [receiver, state, factory.createVoidZero(), f];
-            }
             else {
-                args = [receiver, state, factory.createStringLiteral(kind!), f!];
+                args = [receiver, state, factory.createStringLiteral(kind), f];
             }
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldGet"), /*typeArguments*/ undefined, args);
         }
 
-        function createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind?: "a" | "m" | undefined, f?: Identifier | undefined) {
+        function createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined) {
             context.requestEmitHelper(classPrivateFieldSetHelper);
             let args;
-            if(!kind && !f) {
-                args = [receiver, state, value];
-            }
-            else if(kind && !f) {
+            if (!f) {
                 args = [receiver, state, value, factory.createStringLiteral(kind)];
             }
-            else if(!kind && f) {
-                args = [receiver, state, value, factory.createVoidZero(), f];
-            }
             else {
-                args = [receiver, state, value, factory.createStringLiteral(kind!), f!];
+                args = [receiver, state, value, factory.createStringLiteral(kind), f];
             }
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, args);
         }
@@ -830,7 +818,6 @@ namespace ts {
             };`
     };
 
-    // emit output for the __export helper function
     export const exportStarHelper: UnscopedEmitHelper = {
         name: "typescript:export-star",
         importName: "__exportStar",
@@ -843,7 +830,57 @@ namespace ts {
             };`
     };
 
-    // Class fields helpers
+    /**
+     * Parameters:
+     *  @param receiver — The object on which the private member will be set.
+     *  @param state — One of the following:
+     *      - A WeakMap used to store a private instance field.
+     *      - A WeakSet used as an instance brand for private instance methods and accessors.
+     *      - A function value that should be the undecorated class constructor used to brand check private static fields, methods, and accessors.
+     *  @param value — The value to set.
+     *  @param kind — (optional pre TS 4.3, required for TS 4.3+) One of the following values:
+     *       - undefined — Indicates a private instance field (pre TS 4.3).
+     *       - "f" — Indicates a private field (instance or static).
+     *       - "m" — Indicates a private method (instance or static).
+     *       - "a" — Indicates a private accessor (instance or static).
+     *   @param f — (optional pre TS 4.3) Depends on the arguments for state and kind:
+     *       - If kind is "m", this should be the function corresponding to the static or instance method.
+     *       - If kind is "a", this should be the function corresponding to the setter method, or undefined if the setter was not defined.
+     *       - If kind is "f" and state is a function, this should be an object holding the value of a static field, or undefined if the static field declaration has not yet been evaluated.
+     * Usage:
+     * This helper will only ever be used by the compiler in the following ways:
+     *
+     * Writing to a private instance field (pre TS 4.3):
+     *      __classPrivateFieldSet(<any>, <WeakMap>, <any>)
+     *
+     * Writing to a private instance field (TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <WeakMap>, <any>, "f")
+     *
+     * Writing to a private instance set accessor (when defined, TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <WeakSet>, <any>, "a", <function>)
+     *
+     * Writing to a private instance set accessor (when not defined, TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <WeakSet>, <any>, "a", void 0)
+     *      NOTE: This always results in a runtime error.
+     *
+     * Writing to a private instance method (TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <WeakSet>, <any>, "m", <function>)
+     *      NOTE: This always results in a runtime error.
+     *
+     * Writing to a private static field (TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <constructor>, <any>, "f", <{ value: any }>)
+     *
+     * Writing to a private static set accessor (when defined, TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <constructor>, <any>, "a", <function>)
+     *
+     * Writing to a private static set accessor (when not defined, TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <constructor>, <any>, "a", void 0)
+     *      NOTE: This always results in a runtime error.
+     *
+     * Writing to a private static method (TS 4.3+):
+     *      __classPrivateFieldSet(<any>, <constructor>, <any>, "m", <function>)
+     *      NOTE: This always results in a runtime error.
+     */
     export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldGet",
         importName: "__classPrivateFieldGet",
@@ -856,6 +893,54 @@ namespace ts {
             };`
     };
 
+    /**
+     * Parameters:
+     *  @param receiver — The object from which the private member will be read.
+     *  @param state — One of the following:
+     *      - A WeakMap used to read a private instance field.
+     *      - A WeakSet used as an instance brand for private instance methods and accessors.
+     *      - A function value that should be the undecorated class constructor used to brand check private static fields, methods, and accessors.
+     *  @param kind — (optional pre TS 4.3, required for TS 4.3+) One of the following values:
+     *      - undefined — Indicates a private instance field (pre TS 4.3).
+     *      - "f" — Indicates a private field (instance or static).
+     *      - "m" — Indicates a private method (instance or static).
+     *      - "a" — Indicates a private accessor (instance or static).
+     *  @param f — (optional pre TS 4.3) Depends on the arguments for state and kind:
+     *      - If kind is "m", this should be the function corresponding to the static or instance method.
+     *      - If kind is "a", this should be the function corresponding to the getter method, or undefined if the getter was not defined.
+     *      - If kind is "f" and state is a function, this should be an object holding the value of a static field, or undefined if the static field declaration has not yet been evaluated.
+     * Usage:
+     * This helper will only ever be used by the compiler in the following ways:
+     *
+     * Reading from a private instance field (pre TS 4.3):
+     *      __classPrivateFieldGet(<any>, <WeakMap>)
+     *
+     * Reading from a private instance field (TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <WeakMap>, "f")
+     *
+     * Reading from a private instance get accessor (when defined, TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <WeakSet>, "a", <function>)
+     *
+     * Reading from a private instance get accessor (when not defined, TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <WeakSet>, "a", void 0)
+     *      NOTE: This always results in a runtime error.
+     *
+     * Reading from a private instance method (TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <WeakSet>, "m", <function>)
+     *
+     * Reading from a private static field (TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <constructor>, "f", <{ value: any }>)
+     *
+     * Reading from a private static get accessor (when defined, TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <constructor>, "a", <function>)
+     *
+     * Reading from a private static get accessor (when not defined, TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <constructor>, "a", void 0)
+     *      NOTE: This always results in a runtime error.
+     *
+     * Reading from a private static method (TS 4.3+):
+     *      __classPrivateFieldGet(<any>, <constructor>, "m", <function>)
+     */
     export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldSet",
         importName: "__classPrivateFieldSet",

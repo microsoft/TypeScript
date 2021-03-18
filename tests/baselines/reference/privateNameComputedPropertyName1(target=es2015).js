@@ -57,18 +57,18 @@ class A {
         _A_c.set(this, 'c');
         _A_d.set(this, void 0);
         _A_e.set(this, '');
-        __classPrivateFieldSet(this, _A_b, 'b');
-        __classPrivateFieldSet(this, _A_d, 'd');
+        __classPrivateFieldSet(this, _A_b, 'b', "f");
+        __classPrivateFieldSet(this, _A_d, 'd', "f");
     }
     test() {
         const data = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
-        const { [__classPrivateFieldGet(this, _A_a)]: a, [__classPrivateFieldGet(this, _A_b)]: b, [__classPrivateFieldGet(this, _A_c)]: c, [__classPrivateFieldGet(this, _A_d)]: d, [__classPrivateFieldSet(this, _A_e, 'e')]: e, } = data;
+        const { [__classPrivateFieldGet(this, _A_a, "f")]: a, [__classPrivateFieldGet(this, _A_b, "f")]: b, [__classPrivateFieldGet(this, _A_c, "f")]: c, [__classPrivateFieldGet(this, _A_d, "f")]: d, [__classPrivateFieldSet(this, _A_e, 'e', "f")]: e, } = data;
         console.log(a, b, c, d, e);
-        const a1 = data[__classPrivateFieldGet(this, _A_a)];
-        const b1 = data[__classPrivateFieldGet(this, _A_b)];
-        const c1 = data[__classPrivateFieldGet(this, _A_c)];
-        const d1 = data[__classPrivateFieldGet(this, _A_d)];
-        const e1 = data[__classPrivateFieldGet(this, _A_e)];
+        const a1 = data[__classPrivateFieldGet(this, _A_a, "f")];
+        const b1 = data[__classPrivateFieldGet(this, _A_b, "f")];
+        const c1 = data[__classPrivateFieldGet(this, _A_c, "f")];
+        const d1 = data[__classPrivateFieldGet(this, _A_d, "f")];
+        const e1 = data[__classPrivateFieldGet(this, _A_e, "f")];
         console.log(a1, b1, c1, d1);
     }
 }

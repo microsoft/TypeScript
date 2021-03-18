@@ -16,8 +16,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _A_foo, _A_bar;
 class A {
     constructor() {
-        _A_foo.set(this, __classPrivateFieldGet(this, _A_bar));
-        _A_bar.set(this, __classPrivateFieldGet(this, _A_foo));
+        _A_foo.set(this, __classPrivateFieldGet(this, _A_bar, "f"));
+        _A_bar.set(this, __classPrivateFieldGet(this, _A_foo, "f"));
         this["#baz"] = this["#baz"]; // Error (should *not* be private name error)
     }
 }

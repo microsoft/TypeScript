@@ -42,7 +42,7 @@ export class Foo {
         _Foo_x.set(this, void 0);
     }
     copy(other) {
-        __classPrivateFieldGet(other, _Foo_x); // error
+        __classPrivateFieldGet(other, _Foo_x, "f"); // error
     }
 }
 _Foo_x = new WeakMap();

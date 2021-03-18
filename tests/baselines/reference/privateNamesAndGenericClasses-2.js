@@ -45,18 +45,18 @@ class C {
     constructor(t) {
         _C_instances.add(this);
         _C_foo.set(this, void 0);
-        __classPrivateFieldSet(this, _C_foo, t);
+        __classPrivateFieldSet(this, _C_foo, t, "f");
         t = __classPrivateFieldGet(this, _C_instances, "m", _C_bar).call(this);
     }
     set baz(t) {
-        __classPrivateFieldSet(this, _C_foo, t);
+        __classPrivateFieldSet(this, _C_foo, t, "f");
     }
     get baz() {
-        return __classPrivateFieldGet(this, _C_foo);
+        return __classPrivateFieldGet(this, _C_foo, "f");
     }
 }
 _C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_bar = function _C_bar() {
-    return __classPrivateFieldGet(this, _C_foo);
+    return __classPrivateFieldGet(this, _C_foo, "f");
 };
 let a = new C(3);
 let b = new C("hello");

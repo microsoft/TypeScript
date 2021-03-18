@@ -32,7 +32,7 @@ B. = 3; // Error (outside class body)
 class C {
     constructor() {
         _C_bar.set(this, 6);
-        __classPrivateFieldSet(exports, _C_bar, 6); // Error
+        __classPrivateFieldSet(exports, _C_bar, 6, "f"); // Error
         this. = 3; // Error (undeclared)
     }
 }

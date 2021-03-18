@@ -21,7 +21,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _a, _D_field, _D_method;
 const C = (_a = class D {
         static getClass() { return D; }
-        static getField() { return __classPrivateFieldGet(C, _a, void 0, _D_field); }
+        static getField() { return __classPrivateFieldGet(C, _a, "f", _D_field); }
         ;
     },
     _D_method = function _D_method() { return 42; },

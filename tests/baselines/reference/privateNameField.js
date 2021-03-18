@@ -19,7 +19,7 @@ var _A_name;
 class A {
     constructor(name) {
         _A_name.set(this, void 0);
-        __classPrivateFieldSet(this, _A_name, name);
+        __classPrivateFieldSet(this, _A_name, name, "f");
     }
 }
 _A_name = new WeakMap();

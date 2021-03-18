@@ -46,5 +46,5 @@ class A {
     }
     static getClass() { return A; }
 }
-_a = A, _A_fieldFunc_get = function _A_fieldFunc_get() { return function () { __classPrivateFieldSet(A, _a, 10, void 0, _A_x); }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };
+_a = A, _A_fieldFunc_get = function _A_fieldFunc_get() { return function () { __classPrivateFieldSet(A, _a, 10, "f", _A_x); }; }, _A_fieldFunc2_get = function _A_fieldFunc2_get() { return function (a, ...b) { }; };
 _A_x = { value: 1 };
