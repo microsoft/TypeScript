@@ -29,7 +29,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _A_foo, _A_bar, _A2_instances, _A2_foo, _A2_bar, _A3_instances, _A3_foo, _A3_bar_get, _B_foo, _B_bar;
 class A {
     constructor() {
-        _A_foo.set(this, __classPrivateFieldGet(this, _A_bar)); // Error
+        _A_foo.set(this, __classPrivateFieldGet(this, _A_bar, "f")); // Error
         _A_bar.set(this, 3);
     }
 }
@@ -52,8 +52,8 @@ class A3 {
 _A3_foo = new WeakMap(), _A3_instances = new WeakSet(), _A3_bar_get = function _A3_bar_get() { return 3; };
 class B {
     constructor() {
-        _B_foo.set(this, __classPrivateFieldGet(this, _B_bar)); // Error
-        _B_bar.set(this, __classPrivateFieldGet(this, _B_foo));
+        _B_foo.set(this, __classPrivateFieldGet(this, _B_bar, "f")); // Error
+        _B_bar.set(this, __classPrivateFieldGet(this, _B_foo, "f"));
     }
 }
 _B_foo = new WeakMap(), _B_bar = new WeakMap();

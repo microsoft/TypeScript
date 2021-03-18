@@ -40,27 +40,27 @@ class A {
         _A_foo.set(this, true);
     }
     method(thing) {
-        __classPrivateFieldGet(thing, _A_foo); // OK
+        __classPrivateFieldGet(thing, _A_foo, "f"); // OK
         __classPrivateFieldGet(thing, _a, "m", _A_m).call(// OK
         thing);
-        __classPrivateFieldGet(thing, _a, void 0, _A_baz);
+        __classPrivateFieldGet(thing, _a, "f", _A_baz);
         thing.; // Error
-        __classPrivateFieldGet(thing, _A_foo).call(// Error
+        __classPrivateFieldGet(thing, _A_foo, "f").call(// Error
         thing);
     }
     methodU(thing) {
-        __classPrivateFieldGet(thing, _A_foo);
+        __classPrivateFieldGet(thing, _A_foo, "f");
         __classPrivateFieldGet(thing, _a, "m", _A_m).call(thing);
-        __classPrivateFieldGet(thing, _a, void 0, _A_baz);
+        __classPrivateFieldGet(thing, _a, "f", _A_baz);
         thing.;
-        __classPrivateFieldGet(thing, _A_foo).call(thing);
+        __classPrivateFieldGet(thing, _A_foo, "f").call(thing);
     }
     methodN(thing) {
-        __classPrivateFieldGet(thing, _A_foo);
+        __classPrivateFieldGet(thing, _A_foo, "f");
         __classPrivateFieldGet(thing, _a, "m", _A_m).call(thing);
-        __classPrivateFieldGet(thing, _a, void 0, _A_baz);
+        __classPrivateFieldGet(thing, _a, "f", _A_baz);
         thing.;
-        __classPrivateFieldGet(thing, _A_foo).call(thing);
+        __classPrivateFieldGet(thing, _A_foo, "f").call(thing);
     }
 }
 _a = A, _A_foo = new WeakMap(), _A_m = function _A_m() { };

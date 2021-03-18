@@ -33,14 +33,14 @@ class Base {
     static method(x) {
         Derived.; // error
         __classPrivateFieldSet(// error
-        Base, _a, 10, void 0, _Base_prop);
+        Base, _a, 10, "f", _Base_prop);
     }
 }
 _a = Base;
 _Base_prop = { value: 123 };
 class Derived extends Base {
     static method(x) {
-        __classPrivateFieldGet(Derived, _b, void 0, _Derived_derivedProp);
+        __classPrivateFieldGet(Derived, _b, "f", _Derived_derivedProp);
         Base. = 10; // error
     }
 }

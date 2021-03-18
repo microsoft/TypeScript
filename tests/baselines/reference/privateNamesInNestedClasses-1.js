@@ -46,13 +46,13 @@ class A {
                 _B_foo.set(this, "B's #foo");
             }
             bar(a) {
-                __classPrivateFieldGet(a, _B_foo); // OK, no compile-time error, don't know what `a` is
+                __classPrivateFieldGet(a, _B_foo, "f"); // OK, no compile-time error, don't know what `a` is
             }
             baz(a) {
-                __classPrivateFieldGet(a, _B_foo); // compile-time error, shadowed
+                __classPrivateFieldGet(a, _B_foo, "f"); // compile-time error, shadowed
             }
             quux(b) {
-                __classPrivateFieldGet(b, _B_foo); // OK
+                __classPrivateFieldGet(b, _B_foo, "f"); // OK
             }
         }
         _B_foo = new WeakMap();

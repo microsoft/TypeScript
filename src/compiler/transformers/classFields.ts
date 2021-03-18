@@ -7,91 +7,64 @@ namespace ts {
          */
         ClassAliases = 1 << 0,
     }
-
-    const enum PrivateIdentifierPlacement {
-        InstanceField,
-        InstanceMethod,
-        InstanceGetterOnly,
-        InstanceSetterOnly,
-        InstanceGetterAndSetter,
-        StaticField,
-        StaticMethod,
-        StaticGetterOnly,
-        StaticSetterOnly,
-        StaticGetterAndSetter,
+    export const enum PrivateIdentifierKind {
+        Field = "f",
+        Method = "m",
+        Accessor = "a"
+    }
+    interface PrivateIdentifierInfoBase {
+        /**
+         * brandCheckIdentifier can contain:
+         *  - For instance field: The WeakMap that will be the storage for the field.
+         *  - For instance methods or accessors: The WeakSet that will be used for brand checking.
+         *  - For static members: The constructor that will be used for brand checking.
+         */
+        brandCheckIdentifier: Identifier;
+        /**
+         * Stores if the identifier is static or not
+         */
+        isStatic: boolean;
+    }
+    interface PrivateIdentifierAccessorInfo extends PrivateIdentifierInfoBase {
+        kind: PrivateIdentifierKind.Accessor;
+        /**
+         * Identifier for a variable that will contain the private get accessor implementation, if any.
+         */
+        getterName?: Identifier;
+        /**
+         * Identifier for a variable that will contain the private set accessor implementation, if any.
+         */
+        setterName?: Identifier;
+    }
+    interface PrivateIdentifierMethodInfo extends PrivateIdentifierInfoBase {
+        kind: PrivateIdentifierKind.Method;
+        /**
+         * Identifier for a variable that will contain the private method implementation.
+         */
+        methodName: Identifier;
+    }
+    interface PrivateIdentifierInstanceFieldInfo extends PrivateIdentifierInfoBase {
+        kind: PrivateIdentifierKind.Field;
+        isStatic: false;
+        /**
+         * Defined for ease of access when in a union with PrivateIdentifierStaticFieldInfo.
+         */
+        variableName: undefined;
+    }
+    interface PrivateIdentifierStaticFieldInfo extends PrivateIdentifierInfoBase {
+        kind: PrivateIdentifierKind.Field;
+        isStatic: true;
+        /**
+         * Contains the variable that will server as the storage for the field.
+         */
+        variableName: Identifier;
     }
 
     type PrivateIdentifierInfo =
-        | PrivateIdentifierStaticField
-        | PrivateIdentifierStaticMethod
-        | PrivateIdentifierStaticGetterOnly
-        | PrivateIdentifierStaticSetterOnly
-        | PrivateIdentifierStaticGetterAndSetterOnly
-        | PrivateIdentifierInstanceField
-        | PrivateIdentifierInstanceMethod
-        | PrivateIdentifierInstanceGetterOnly
-        | PrivateIdentifierInstanceSetterOnly
-        | PrivateIdentifierInstanceGetterAndSetter;
-
-    interface PrivateIdentifierStaticField {
-        placement: PrivateIdentifierPlacement.StaticField;
-        variableName: Identifier;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticMethod {
-        placement: PrivateIdentifierPlacement.StaticMethod;
-        functionName: Identifier;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticGetterOnly {
-        placement: PrivateIdentifierPlacement.StaticGetterOnly;
-        getterName: Identifier;
-        setterName?: undefined;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticSetterOnly {
-        placement: PrivateIdentifierPlacement.StaticSetterOnly;
-        setterName: Identifier;
-        getterName?: undefined;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierStaticGetterAndSetterOnly {
-        placement: PrivateIdentifierPlacement.StaticGetterAndSetter;
-        getterName: Identifier;
-        setterName: Identifier;
-        classConstructor: Identifier;
-    }
-    interface PrivateIdentifierInstanceField {
-        placement: PrivateIdentifierPlacement.InstanceField;
-        weakMapName: Identifier;
-    }
-
-    interface PrivateIdentifierInstanceMethod {
-        placement: PrivateIdentifierPlacement.InstanceMethod;
-        weakSetName: Identifier;
-        functionName: Identifier;
-    }
-
-    interface PrivateIdentifierInstanceGetterOnly {
-        placement: PrivateIdentifierPlacement.InstanceGetterOnly;
-        weakSetName: Identifier;
-        getterName: Identifier;
-        setterName?: undefined;
-    }
-
-    interface PrivateIdentifierInstanceSetterOnly {
-        placement: PrivateIdentifierPlacement.InstanceSetterOnly;
-        weakSetName: Identifier;
-        setterName: Identifier;
-        getterName?: undefined;
-    }
-
-    interface PrivateIdentifierInstanceGetterAndSetter {
-        placement: PrivateIdentifierPlacement.InstanceGetterAndSetter;
-        weakSetName: Identifier;
-        getterName: Identifier;
-        setterName: Identifier;
-    }
+        | PrivateIdentifierMethodInfo
+        | PrivateIdentifierInstanceFieldInfo
+        | PrivateIdentifierStaticFieldInfo
+        | PrivateIdentifierAccessorInfo;
 
     interface PrivateIdentifierEnvironment {
         /**
@@ -99,7 +72,7 @@ namespace ts {
          */
         className: string;
         /**
-         * Used for brand ckeck on static members
+         * Used for brand check on static members
          */
         classConstructor?: Identifier;
         /**
@@ -314,23 +287,17 @@ namespace ts {
             const info = accessPrivateIdentifier(node.name);
             Debug.assert(info, "Undeclared private name for property declaration.");
 
-            if (info.placement === PrivateIdentifierPlacement.InstanceMethod || info.placement === PrivateIdentifierPlacement.StaticMethod) {
-                return info.functionName;
+            if (info.kind === PrivateIdentifierKind.Method) {
+                return info.methodName;
             }
 
-            if (isGetAccessor(node) &&
-                (info.placement === PrivateIdentifierPlacement.InstanceGetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.StaticGetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.InstanceGetterAndSetter ||
-                    info.placement === PrivateIdentifierPlacement.StaticGetterAndSetter)) {
-                return info.getterName;
-            }
-            if (isSetAccessor(node) &&
-                (info.placement === PrivateIdentifierPlacement.InstanceSetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.StaticSetterOnly ||
-                    info.placement === PrivateIdentifierPlacement.InstanceGetterAndSetter ||
-                    info.placement === PrivateIdentifierPlacement.StaticGetterAndSetter)) {
-                return info.setterName;
+            if (info.kind === PrivateIdentifierKind.Accessor) {
+                if (isGetAccessor(node)) {
+                    return info.getterName;
+                }
+                if (isSetAccessor(node)) {
+                    return info.setterName;
+                }
             }
         }
 
@@ -365,57 +332,30 @@ namespace ts {
         }
 
         function createPrivateIdentifierAccessHelper(info: PrivateIdentifierInfo, receiver: Expression): Expression {
-            switch (info.placement) {
-                case PrivateIdentifierPlacement.InstanceField:
+            switch(info.kind) {
+                case PrivateIdentifierKind.Accessor:
                     return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
-                        info.weakMapName
-                    );
-                case PrivateIdentifierPlacement.InstanceMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.weakSetName,
-                        "m",
-                        info.functionName
-                    );
-                case PrivateIdentifierPlacement.InstanceGetterOnly:
-                case PrivateIdentifierPlacement.InstanceGetterAndSetter:
-                case PrivateIdentifierPlacement.InstanceSetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.weakSetName,
-                        "a",
+                        info.brandCheckIdentifier,
+                        info.kind,
                         info.getterName
                     );
-                case PrivateIdentifierPlacement.StaticField:
+                case PrivateIdentifierKind.Method:
                     return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
                         receiver,
-                        info.classConstructor,
-                        undefined,
+                        info.brandCheckIdentifier,
+                        info.kind,
+                        info.methodName
+                    );
+                case PrivateIdentifierKind.Field:
+                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
+                        receiver,
+                        info.brandCheckIdentifier,
+                        info.kind,
                         info.variableName
                     );
-                case PrivateIdentifierPlacement.StaticMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        "m",
-                        info.functionName
-                    );
-                case PrivateIdentifierPlacement.StaticGetterOnly:
-                case PrivateIdentifierPlacement.StaticGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        "a",
-                        info.getterName
-                    );
-                case PrivateIdentifierPlacement.StaticSetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
-                        receiver,
-                        info.classConstructor,
-                        "a"
-                    );
-                default: return Debug.fail("Unexpected private identifier placement");
+                default:
+                    Debug.assertNever(info, "Unknown private element type");
             }
         }
 
@@ -609,68 +549,33 @@ namespace ts {
                 );
             }
 
-            switch (info.placement) {
-                case PrivateIdentifierPlacement.InstanceField:
+            switch(info.kind) {
+                case PrivateIdentifierKind.Accessor:
                     return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
-                        info.weakMapName,
-                        right
-                    );
-                case PrivateIdentifierPlacement.InstanceMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.weakSetName,
+                        info.brandCheckIdentifier,
                         right,
-                        "m"
+                        info.kind,
+                        info.setterName
                     );
-                case PrivateIdentifierPlacement.InstanceGetterOnly:
+                case PrivateIdentifierKind.Method:
                     return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
-                        info.weakSetName,
+                        info.brandCheckIdentifier,
                         right,
-                        "a"
+                        info.kind,
+                        /* f */ undefined
                     );
-                case PrivateIdentifierPlacement.InstanceSetterOnly:
-                case PrivateIdentifierPlacement.InstanceGetterAndSetter:
+                case PrivateIdentifierKind.Field:
                     return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                         receiver,
-                        info.weakSetName,
+                        info.brandCheckIdentifier,
                         right,
-                        "a",
-                        info.setterName,
+                        info.kind,
+                        info.variableName
                     );
-                case PrivateIdentifierPlacement.StaticField:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        undefined,
-                        info.variableName,
-                    );
-                case PrivateIdentifierPlacement.StaticMethod:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        "m",
-                    );
-                case PrivateIdentifierPlacement.StaticGetterOnly:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        "a",
-                    );
-                case PrivateIdentifierPlacement.StaticSetterOnly:
-                case PrivateIdentifierPlacement.StaticGetterAndSetter:
-                    return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                        receiver,
-                        info.classConstructor,
-                        right,
-                        "a",
-                        info.setterName,
-                    );
-                default: return Debug.fail("Unexpected private identifier placement");
+                default:
+                    Debug.assertNever(info, "Unknown private element type");
             }
         }
 
@@ -1073,22 +978,23 @@ namespace ts {
             if (shouldTransformPrivateElements && isPrivateIdentifier(propertyName)) {
                 const privateIdentifierInfo = accessPrivateIdentifier(propertyName);
                 if (privateIdentifierInfo) {
-                    switch (privateIdentifierInfo.placement) {
-                        case PrivateIdentifierPlacement.InstanceField: {
+                    if (privateIdentifierInfo.kind === PrivateIdentifierKind.Field) {
+                        if (!privateIdentifierInfo.isStatic) {
                             return createPrivateInstanceFieldInitializer(
                                 receiver,
                                 visitNode(property.initializer, visitor, isExpression),
-                                privateIdentifierInfo.weakMapName
+                                privateIdentifierInfo.brandCheckIdentifier
                             );
                         }
-                        case PrivateIdentifierPlacement.StaticField: {
+                        else {
                             return createPrivateStaticFieldInitializer(
                                 privateIdentifierInfo.variableName,
                                 visitNode(property.initializer, visitor, isExpression)
                             );
                         }
-                        default:
-                            return undefined;
+                    }
+                    else {
+                        return undefined;
                     }
                 }
                 else {
@@ -1257,60 +1163,57 @@ namespace ts {
             const text = getTextOfPropertyName(node.name) as string;
             const env = getPrivateIdentifierEnvironment();
             const { weakSetName, classConstructor } = env;
-            let info: PrivateIdentifierInfo;
             const assignmentExpressions: Expression[] = [];
             if (hasStaticModifier(node)) {
                 Debug.assert(classConstructor, "weakSetName should be set in private identifier environment");
                 if (isPropertyDeclaration(node)) {
                     const variableName = createHoistedVariableForPrivateName(text, node);
-                    info = {
-                        placement: PrivateIdentifierPlacement.StaticField,
+                    env.identifiers.set(node.name.escapedText, {
+                        kind: PrivateIdentifierKind.Field,
                         variableName,
-                        classConstructor
-                    };
+                        brandCheckIdentifier: classConstructor,
+                        isStatic: true,
+                    });
                 }
                 else if (isMethodDeclaration(node)) {
                     const functionName = createHoistedVariableForPrivateName(text, node);
-                    info = {
-                        placement: PrivateIdentifierPlacement.StaticMethod,
-                        functionName,
-                        classConstructor
-                    };
+                    env.identifiers.set(node.name.escapedText, {
+                        kind: PrivateIdentifierKind.Method,
+                        methodName: functionName,
+                        brandCheckIdentifier: classConstructor,
+                        isStatic: true,
+                    });
                 }
                 else if (isGetAccessorDeclaration(node)) {
                     const getterName = createHoistedVariableForPrivateName(text + "_get", node);
                     const previousInfo = env.identifiers.get(node.name.escapedText);
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.StaticSetterOnly) {
-                        info = {
-                            ...previousInfo,
-                            placement: PrivateIdentifierPlacement.StaticGetterAndSetter,
-                            getterName,
-                        };
+                    if (previousInfo?.kind === PrivateIdentifierKind.Accessor) {
+                        previousInfo.getterName = getterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.StaticGetterOnly,
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: PrivateIdentifierKind.Accessor,
                             getterName,
-                            classConstructor
-                        };
+                            setterName: undefined,
+                            brandCheckIdentifier: classConstructor,
+                            isStatic: true,
+                        });
                     }
                 }
                 else if (isSetAccessorDeclaration(node)) {
                     const setterName = createHoistedVariableForPrivateName(text + "_set", node);
                     const previousInfo = env.identifiers.get(node.name.escapedText);
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.StaticGetterOnly) {
-                        info = {
-                            ...previousInfo,
-                            placement: PrivateIdentifierPlacement.StaticGetterAndSetter,
-                            setterName,
-                        };
+                    if (previousInfo?.kind === PrivateIdentifierKind.Accessor) {
+                        previousInfo.setterName = setterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.StaticSetterOnly,
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: PrivateIdentifierKind.Accessor,
+                            getterName: undefined,
                             setterName,
-                            classConstructor
-                        };
+                            brandCheckIdentifier: classConstructor,
+                            isStatic: true,
+                        });
                     }
                 }
                 else {
@@ -1319,10 +1222,12 @@ namespace ts {
             }
             else if (isPropertyDeclaration(node)) {
                 const weakMapName = createHoistedVariableForPrivateName(text, node);
-                info = {
-                    placement: PrivateIdentifierPlacement.InstanceField,
-                    weakMapName,
-                };
+                env.identifiers.set(node.name.escapedText, {
+                    kind: PrivateIdentifierKind.Field,
+                    brandCheckIdentifier: weakMapName,
+                    isStatic: false,
+                    variableName: undefined
+                });
 
                 assignmentExpressions.push(factory.createAssignment(
                     weakMapName,
@@ -1336,11 +1241,12 @@ namespace ts {
             else if (isMethodDeclaration(node)) {
                 Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
 
-                info = {
-                    placement: PrivateIdentifierPlacement.InstanceMethod,
-                    weakSetName,
-                    functionName: createHoistedVariableForPrivateName(text, node),
-                };
+                env.identifiers.set(node.name.escapedText, {
+                    kind: PrivateIdentifierKind.Method,
+                    methodName: createHoistedVariableForPrivateName(text, node),
+                    brandCheckIdentifier: weakSetName,
+                    isStatic: false,
+                });
             }
             else if (isAccessor(node)) {
                 Debug.assert(weakSetName, "weakSetName should be set in private identifier environment");
@@ -1349,39 +1255,33 @@ namespace ts {
                 if (isGetAccessor(node)) {
                     const getterName = createHoistedVariableForPrivateName(text + "_get", node);
 
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceSetterOnly) {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceGetterAndSetter,
-                            weakSetName,
-                            getterName,
-                            setterName: previousInfo.setterName
-                        };
+                    if (previousInfo?.kind === PrivateIdentifierKind.Accessor) {
+                        previousInfo.getterName = getterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceGetterOnly,
-                            weakSetName,
-                            getterName
-                        };
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: PrivateIdentifierKind.Accessor,
+                            getterName,
+                            setterName: undefined,
+                            brandCheckIdentifier: weakSetName,
+                            isStatic: false,
+                        });
                     }
                 }
                 else {
                     const setterName = createHoistedVariableForPrivateName(text + "_set", node);
 
-                    if (previousInfo?.placement === PrivateIdentifierPlacement.InstanceGetterOnly) {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceGetterAndSetter,
-                            weakSetName,
-                            setterName,
-                            getterName: previousInfo.getterName
-                        };
+                    if (previousInfo?.kind === PrivateIdentifierKind.Accessor) {
+                        previousInfo.setterName = setterName;
                     }
                     else {
-                        info = {
-                            placement: PrivateIdentifierPlacement.InstanceSetterOnly,
-                            weakSetName,
-                            setterName
-                        };
+                        env.identifiers.set(node.name.escapedText, {
+                            kind: PrivateIdentifierKind.Accessor,
+                            getterName: undefined,
+                            setterName,
+                            brandCheckIdentifier: weakSetName,
+                            isStatic: false,
+                        });
                     }
                 }
             }
@@ -1389,7 +1289,6 @@ namespace ts {
                 Debug.assertNever(node, "Unknown class element type.");
             }
 
-            env.identifiers.set(node.name.escapedText, info);
             getPendingExpressions().push(...assignmentExpressions);
         }
 

@@ -18,7 +18,7 @@ var _A_v;
 class A {
     constructor() {
         _A_v.set(this, 1);
-        delete __classPrivateFieldGet(this, _A_v); // Error: The operand of a delete operator cannot be a private name.
+        delete __classPrivateFieldGet(this, _A_v, "f"); // Error: The operand of a delete operator cannot be a private name.
     }
 }
 _A_v = new WeakMap();

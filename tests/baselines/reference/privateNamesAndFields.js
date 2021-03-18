@@ -27,7 +27,7 @@ var _A_foo, _B_foo;
 class A {
     constructor() {
         _A_foo.set(this, void 0);
-        __classPrivateFieldSet(this, _A_foo, 3);
+        __classPrivateFieldSet(this, _A_foo, 3, "f");
     }
 }
 _A_foo = new WeakMap();
@@ -35,7 +35,7 @@ class B extends A {
     constructor() {
         super();
         _B_foo.set(this, void 0);
-        __classPrivateFieldSet(this, _B_foo, "some string");
+        __classPrivateFieldSet(this, _B_foo, "some string", "f");
     }
 }
 _B_foo = new WeakMap();

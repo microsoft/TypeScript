@@ -41,13 +41,13 @@ class C {
         return _a = class D {
                 constructor() {
                     _D_instances.add(this);
-                    __classPrivateFieldGet(new C(), _C_foo);
+                    __classPrivateFieldGet(new C(), _C_foo, "f");
                     __classPrivateFieldGet(new C(), _D_instances, "m", _D_bar); // Error
                     __classPrivateFieldGet(new C(), _C_instances, "a", _C_baz_get);
                     __classPrivateFieldGet(new D(), _D_instances, "m", _D_bar);
                 }
                 n(x) {
-                    __classPrivateFieldGet(x, _C_foo);
+                    __classPrivateFieldGet(x, _C_foo, "f");
                     __classPrivateFieldGet(x, _D_instances, "m", _D_bar);
                     x.; // Error
                 }

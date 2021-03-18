@@ -38,13 +38,13 @@ class A {
         _A_field.set(this, 1);
         this.otherObject = new A();
         let y;
-        (_b = this, { x: ({ set value(_m) { __classPrivateFieldSet(_b, _A_field, _m); } }).value, y } = this.testObject());
-        (_c = this, [({ set value(_m) { __classPrivateFieldSet(_c, _A_field, _m); } }).value, y] = this.testArray());
-        (_d = this, _e = this, { a: ({ set value(_m) { __classPrivateFieldSet(_d, _A_field, _m); } }).value, b: [({ set value(_m) { __classPrivateFieldSet(_e, _A_field, _m); } }).value] } = { a: 1, b: [2] });
-        _f = this, _g = this, [({ set value(_m) { __classPrivateFieldSet(_f, _A_field, _m); } }).value, [({ set value(_m) { __classPrivateFieldSet(_g, _A_field, _m); } }).value]] = [1, [2]];
-        (_h = this, _j = this, { a: ({ set value(_m) { __classPrivateFieldSet(_h, _A_field, _m); } }).value = 1, b: [({ set value(_m) { __classPrivateFieldSet(_j, _A_field, _m); } }).value = 1] } = { b: [] });
-        _k = this, [({ set value(_m) { __classPrivateFieldSet(_k, _A_field, _m); } }).value = 2] = [];
-        _l = this.otherObject, [({ set value(_m) { __classPrivateFieldSet(_l, _A_field, _m); } }).value = 2] = [];
+        (_b = this, { x: ({ set value(_m) { __classPrivateFieldSet(_b, _A_field, _m, "f"); } }).value, y } = this.testObject());
+        (_c = this, [({ set value(_m) { __classPrivateFieldSet(_c, _A_field, _m, "f"); } }).value, y] = this.testArray());
+        (_d = this, _e = this, { a: ({ set value(_m) { __classPrivateFieldSet(_d, _A_field, _m, "f"); } }).value, b: [({ set value(_m) { __classPrivateFieldSet(_e, _A_field, _m, "f"); } }).value] } = { a: 1, b: [2] });
+        _f = this, _g = this, [({ set value(_m) { __classPrivateFieldSet(_f, _A_field, _m, "f"); } }).value, [({ set value(_m) { __classPrivateFieldSet(_g, _A_field, _m, "f"); } }).value]] = [1, [2]];
+        (_h = this, _j = this, { a: ({ set value(_m) { __classPrivateFieldSet(_h, _A_field, _m, "f"); } }).value = 1, b: [({ set value(_m) { __classPrivateFieldSet(_j, _A_field, _m, "f"); } }).value = 1] } = { b: [] });
+        _k = this, [({ set value(_m) { __classPrivateFieldSet(_k, _A_field, _m, "f"); } }).value = 2] = [];
+        _l = this.otherObject, [({ set value(_m) { __classPrivateFieldSet(_l, _A_field, _m, "f"); } }).value = 2] = [];
     }
     testObject() {
         return { x: 10, y: 6 };
@@ -53,7 +53,7 @@ class A {
         return [10, 11];
     }
     static test(_a) {
-        [({ set value(_b) { __classPrivateFieldSet(_a, _A_field, _b); } }).value] = [2];
+        [({ set value(_b) { __classPrivateFieldSet(_a, _A_field, _b, "f"); } }).value] = [2];
     }
 }
 _A_field = new WeakMap();

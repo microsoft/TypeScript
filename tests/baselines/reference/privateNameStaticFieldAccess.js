@@ -17,8 +17,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _a, _A_myField;
 class A {
     constructor() {
-        console.log(__classPrivateFieldGet(A, _a, void 0, _A_myField)); //Ok
-        console.log(__classPrivateFieldGet(this, _a, void 0, _A_myField)); //Error
+        console.log(__classPrivateFieldGet(A, _a, "f", _A_myField)); //Ok
+        console.log(__classPrivateFieldGet(this, _a, "f", _A_myField)); //Error
     }
 }
 _a = A;

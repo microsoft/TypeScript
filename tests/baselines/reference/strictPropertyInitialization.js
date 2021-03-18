@@ -178,7 +178,7 @@ class C5 {
     constructor() {
         _C5_b.set(this, void 0);
         this.a = 0;
-        __classPrivateFieldSet(this, _C5_b, 0);
+        __classPrivateFieldSet(this, _C5_b, 0, "f");
     }
 }
 _C5_b = new WeakMap();
@@ -190,7 +190,7 @@ class C6 {
             return;
         }
         this.a = 0;
-        __classPrivateFieldSet(this, _C6_b, 0);
+        __classPrivateFieldSet(this, _C6_b, 0, "f");
     }
 }
 _C6_b = new WeakMap();
@@ -199,11 +199,11 @@ class C7 {
         _C7_b.set(this, void 0);
         if (cond) {
             this.a = 1;
-            __classPrivateFieldSet(this, _C7_b, 1);
+            __classPrivateFieldSet(this, _C7_b, 1, "f");
             return;
         }
         this.a = 0;
-        __classPrivateFieldSet(this, _C7_b, 1);
+        __classPrivateFieldSet(this, _C7_b, 1, "f");
     }
 }
 _C7_b = new WeakMap();
@@ -220,9 +220,9 @@ class C10 {
         _C10_d.set(this, void 0);
         let x = this.a; // Error
         this.a = this.b; // Error
-        this.b = __classPrivateFieldGet(this, _C10_d); //Error
+        this.b = __classPrivateFieldGet(this, _C10_d, "f"); //Error
         this.b = x;
-        __classPrivateFieldSet(this, _C10_d, x);
+        __classPrivateFieldSet(this, _C10_d, x, "f");
         let y = this.c;
     }
 }
@@ -231,7 +231,7 @@ class C11 {
     constructor() {
         _C11_b.set(this, void 0);
         this.a = someValue();
-        __classPrivateFieldSet(this, _C11_b, someValue());
+        __classPrivateFieldSet(this, _C11_b, someValue(), "f");
     }
 }
 _C11_b = new WeakMap();

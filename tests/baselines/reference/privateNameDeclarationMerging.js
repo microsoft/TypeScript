@@ -31,9 +31,9 @@ class C {
     }
     foo() {
         const c = new C();
-        __classPrivateFieldGet(c, _C_x); // OK
+        __classPrivateFieldGet(c, _C_x, "f"); // OK
         const d = new C();
-        __classPrivateFieldGet(d, _C_x); // Error
+        __classPrivateFieldGet(d, _C_x, "f"); // Error
     }
 }
 _C_x = new WeakMap();

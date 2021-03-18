@@ -35,7 +35,7 @@ class Test {
                 }
             },
             _x = new WeakMap(),
-            _a)).s], _Test_y, 1);
+            _a)).s], _Test_y, 1, "f");
         __classPrivateFieldSet(_c = obj[(new (_b = class {
                 constructor() {
                     _x_1.set(this, 1);
@@ -43,7 +43,7 @@ class Test {
                 }
             },
             _x_1 = new WeakMap(),
-            _b)).s], _Test_y, __classPrivateFieldGet(_c, _Test_y) + 1);
+            _b)).s], _Test_y, __classPrivateFieldGet(_c, _Test_y, "f") + 1, "f");
     }
 }
 _Test_y = new WeakMap();

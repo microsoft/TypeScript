@@ -31,10 +31,10 @@ class Base {
                 _Derived_x.set(this, void 0);
             }
             testBase(x) {
-                console.log(__classPrivateFieldGet(x, _Derived_x));
+                console.log(__classPrivateFieldGet(x, _Derived_x, "f"));
             }
             testDerived(x) {
-                console.log(__classPrivateFieldGet(x, _Derived_x));
+                console.log(__classPrivateFieldGet(x, _Derived_x, "f"));
             }
         }
         _Derived_x = new WeakMap();

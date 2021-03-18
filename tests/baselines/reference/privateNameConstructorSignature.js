@@ -30,7 +30,7 @@ class C {
         _C_x.set(this, void 0);
     }
     static test() {
-        __classPrivateFieldSet(new C(), _C_x, 10);
+        __classPrivateFieldSet(new C(), _C_x, 10, "f");
         const y = new C();
         const z = new y();
         z.x = 123;
