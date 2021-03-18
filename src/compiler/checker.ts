@@ -17975,8 +17975,21 @@ namespace ts {
                     if (target.flags & TypeFlags.Intersection) {
                         return typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
                     }
-                    // Source is an intersection. Check to see if any constituents of the intersection are immediately related
-                    // to the target.
+                    // Source is an intersection. For the comparable relation, if the target is a primitive type we hoist the
+                    // constraints of all non-primitive types in the source into a new intersection. We do this because the
+                    // intersection may further constrain the constraints of the non-primitive types. For example, given a type
+                    // parameter 'T extends 1 | 2', the intersection 'T & 1' should be reduced to '1' such that it doesn't
+                    // appear to be comparable to '2'.
+                    if (relation === comparableRelation && target.flags & TypeFlags.Primitive) {
+                        const constraints = sameMap((<IntersectionType>source).types, t => t.flags & TypeFlags.Primitive ? t : getBaseConstraintOfType(t) || unknownType);
+                        if (constraints !== (<IntersectionType>source).types) {
+                            source = getIntersectionType(constraints);
+                            if (!(source.flags & TypeFlags.Intersection)) {
+                                return isRelatedTo(source, target, /*reportErrors*/ false);
+                            }
+                        }
+                    }
+                    // Check to see if any constituents of the intersection are immediately related to the target.
                     //
                     // Don't report errors though. Checking whether a constituent is related to the source is not actually
                     // useful and leads to some confusing error messages. Instead it is better to let the below checks
@@ -19736,6 +19749,15 @@ namespace ts {
 
         function isUnitType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Unit);
+        }
+
+        function isUnitLikeType(type: Type): boolean {
+            return type.flags & TypeFlags.Intersection ? some((<IntersectionType>type).types, isUnitType) :
+                !!(type.flags & TypeFlags.Unit);
+        }
+
+        function extractUnitType(type: Type) {
+            return type.flags & TypeFlags.Intersection ? find((<IntersectionType>type).types, isUnitType) || type : type;
         }
 
         function isLiteralType(type: Type): boolean {
@@ -21721,14 +21743,6 @@ namespace ts {
             return declaredType;
         }
 
-        function getTypeFactsOfTypes(types: Type[]): TypeFacts {
-            let result: TypeFacts = TypeFacts.None;
-            for (const t of types) {
-                result |= getTypeFacts(t);
-            }
-            return result;
-        }
-
         function isFunctionObjectType(type: ObjectType): boolean {
             // We do a quick check for a "bind" property before performing the more expensive subtype
             // check. This gives us a quicker out in the common case where an object type is not a function.
@@ -21800,8 +21814,11 @@ namespace ts {
                 return !isPatternLiteralType(type) ? getTypeFacts(getBaseConstraintOfType(type) || unknownType) :
                     strictNullChecks ? TypeFacts.NonEmptyStringStrictFacts : TypeFacts.NonEmptyStringFacts;
             }
-            if (flags & TypeFlags.UnionOrIntersection) {
-                return getTypeFactsOfTypes((<UnionOrIntersectionType>type).types);
+            if (flags & TypeFlags.Union) {
+                return reduceLeft((<UnionType>type).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
+            }
+            if (flags & TypeFlags.Intersection) {
+                return reduceLeft((<UnionType>type).types, (facts, t) => facts & getTypeFacts(t), TypeFacts.All);
             }
             return TypeFacts.All;
         }
@@ -23134,8 +23151,7 @@ namespace ts {
                     return replacePrimitivesWithLiterals(filterType(type, filterFn), valueType);
                 }
                 if (isUnitType(valueType)) {
-                    const regularType = getRegularTypeOfLiteralType(valueType);
-                    return filterType(type, t => isUnitType(t) ? !areTypesComparable(t, valueType) : getRegularTypeOfLiteralType(t) !== regularType);
+                    return filterType(type, t => !(isUnitLikeType(t) && areTypesComparable(t, valueType)));
                 }
                 return type;
             }
@@ -23217,7 +23233,7 @@ namespace ts {
                 if (!hasDefaultClause) {
                     return caseType;
                 }
-                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfLiteralType(t))));
+                const defaultType = filterType(type, t => !(isUnitLikeType(t) && contains(switchTypes, getRegularTypeOfLiteralType(extractUnitType(t)))));
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
