@@ -43,7 +43,8 @@ class C {
                     _D_instances.add(this);
                     __classPrivateFieldGet(new C(), _C_foo, "f");
                     __classPrivateFieldGet(new C(), _D_instances, "m", _D_bar); // Error
-                    __classPrivateFieldGet(new C(), _C_instances, "a", _C_baz_get);
+                    __classPrivateFieldGet(// Error
+                    new C(), _C_instances, "a", _C_baz_get);
                     __classPrivateFieldGet(new D(), _D_instances, "m", _D_bar);
                 }
                 n(x) {
