@@ -24,7 +24,8 @@ class A1 {
     constructor() {
         __classPrivateFieldGet(A1, _a, "m", _A1_method).call(A1, "");
         __classPrivateFieldGet(A1, _a, "m", _A1_method).call(A1, 1); // Error
-        __classPrivateFieldGet(A1, _a, "m", _A1_method).call(// Error
+        __classPrivateFieldGet(// Error
+        A1, _a, "m", _A1_method).call(// Error
         A1); // Error 
     }
 }

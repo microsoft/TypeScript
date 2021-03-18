@@ -326,9 +326,7 @@ namespace ts {
         }
 
         function createPrivateIdentifierAccess(info: PrivateIdentifierInfo, receiver: Expression): Expression {
-            receiver = visitNode(receiver, visitor, isExpression);
-            const synthesizedReceiver = nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
-            return createPrivateIdentifierAccessHelper(info, synthesizedReceiver);
+            return createPrivateIdentifierAccessHelper(info, visitNode(receiver, visitor, isExpression));
         }
 
         function createPrivateIdentifierAccessHelper(info: PrivateIdentifierInfo, receiver: Expression): Expression {

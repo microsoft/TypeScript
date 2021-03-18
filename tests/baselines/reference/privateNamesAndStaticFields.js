@@ -40,7 +40,8 @@ class A {
     constructor() {
         __classPrivateFieldSet(A, _a, 3, "f", _A_foo);
         __classPrivateFieldGet(B, _a, "f", _A_foo); // Error
-        __classPrivateFieldGet(B, _a, "f", _A_bar); // Error
+        __classPrivateFieldGet(// Error
+        B, _a, "f", _A_bar); // Error
     }
 }
 _a = A;
