@@ -20,21 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
-                "0": {
-                    "kind": "JSDocText",
-                    "pos": 24,
-                    "end": 34,
-                    "modifierFlagsCache": 0,
-                    "transformFlags": 0,
-                    "text": "Doc doc"
-                },
-                "length": 1,
-                "pos": 24,
-                "end": 34,
-                "hasTrailingComma": false,
-                "transformFlags": 0
-            },
+            "comment": "Doc doc",
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
@@ -62,21 +48,7 @@
                                 "transformFlags": 0,
                                 "escapedText": "param"
                             },
-                            "comment": {
-                                "0": {
-                                    "kind": "JSDocText",
-                                    "pos": 54,
-                                    "end": 64,
-                                    "modifierFlagsCache": 0,
-                                    "transformFlags": 0,
-                                    "text": "Doc for f"
-                                },
-                                "length": 1,
-                                "pos": 54,
-                                "end": 64,
-                                "hasTrailingComma": false,
-                                "transformFlags": 0
-                            },
+                            "comment": "Doc for f",
                             "typeExpression": {
                                 "kind": "JSDocTypeExpression",
                                 "pos": 41,

@@ -193,80 +193,23 @@
           "tags": [
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "T",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "some documentation 2",
-                  "kind": "text"
-                }
-              ]
+              "text": "T some documentation 2"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "W",
-                  "kind": "text"
-                }
-              ]
+              "text": "W"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "U, V",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "others",
-                  "kind": "text"
-                }
-              ]
+              "text": "U, V others"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "a ok"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "not ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "b not ok"
             }
           ]
         }
@@ -474,80 +417,23 @@
           "tags": [
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "T",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "some documentation 2",
-                  "kind": "text"
-                }
-              ]
+              "text": "T some documentation 2"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "W",
-                  "kind": "text"
-                }
-              ]
+              "text": "W"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "U, V",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "others",
-                  "kind": "text"
-                }
-              ]
+              "text": "U, V others"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "a ok"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "not ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "b not ok"
             }
           ]
         }
@@ -755,80 +641,23 @@
           "tags": [
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "T",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "some documentation 2",
-                  "kind": "text"
-                }
-              ]
+              "text": "T some documentation 2"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "W",
-                  "kind": "text"
-                }
-              ]
+              "text": "W"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "U, V",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "others",
-                  "kind": "text"
-                }
-              ]
+              "text": "U, V others"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "a ok"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "not ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "b not ok"
             }
           ]
         }
@@ -1036,80 +865,23 @@
           "tags": [
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "T",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "some documentation 2",
-                  "kind": "text"
-                }
-              ]
+              "text": "T some documentation 2"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "W",
-                  "kind": "text"
-                }
-              ]
+              "text": "W"
             },
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "U, V",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "others",
-                  "kind": "text"
-                }
-              ]
+              "text": "U, V others"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "a ok"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "not ok",
-                  "kind": "text"
-                }
-              ]
+              "text": "b not ok"
             }
           ]
         }

@@ -42,12 +42,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{string}",
-              "kind": "text"
-            }
-          ]
+          "text": "{string}"
         }
       ]
     }
@@ -95,12 +90,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{number}",
-              "kind": "text"
-            }
-          ]
+          "text": "{number}"
         }
       ]
     }
@@ -148,12 +138,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{boolean}",
-              "kind": "text"
-            }
-          ]
+          "text": "{boolean}"
         }
       ]
     }
@@ -201,12 +186,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{void}",
-              "kind": "text"
-            }
-          ]
+          "text": "{void}"
         }
       ]
     }
@@ -254,12 +234,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{undefined}",
-              "kind": "text"
-            }
-          ]
+          "text": "{undefined}"
         }
       ]
     }
@@ -307,12 +282,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{null}",
-              "kind": "text"
-            }
-          ]
+          "text": "{null}"
         }
       ]
     }
@@ -368,12 +338,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{array}",
-              "kind": "text"
-            }
-          ]
+          "text": "{array}"
         }
       ]
     }
@@ -433,12 +398,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{promise}",
-              "kind": "text"
-            }
-          ]
+          "text": "{promise}"
         }
       ]
     }
@@ -486,12 +446,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{?number}",
-              "kind": "text"
-            }
-          ]
+          "text": "{?number}"
         }
       ]
     }
@@ -539,12 +494,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{function}",
-              "kind": "text"
-            }
-          ]
+          "text": "{function}"
         }
       ]
     }
@@ -628,12 +578,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{function (number): number}",
-              "kind": "text"
-            }
-          ]
+          "text": "{function (number): number}"
         }
       ]
     }
@@ -697,12 +642,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{string | number}",
-              "kind": "text"
-            }
-          ]
+          "text": "{string | number}"
         }
       ]
     }

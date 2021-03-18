@@ -175,8 +175,8 @@ namespace ts.server {
                 kindModifiers: body.kindModifiers,
                 textSpan: this.decodeSpan(body, fileName),
                 displayParts: [{ kind: "text", text: body.displayString }],
-                documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
-                tags: this.decodeLinkDisplayParts(body.tags)
+                documentation: [{ kind: "text", text: body.documentation }],
+                tags: body.tags
             };
         }
 
@@ -536,13 +536,6 @@ namespace ts.server {
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
-        private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
-            return tags.map(tag => typeof tag.text === "string" ? {
-                ...tag,
-                text: [textPart(tag.text)]
-            } : (tag as JSDocTagInfo));
-        }
-
         getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
             return notImplemented();
         }
@@ -561,10 +554,9 @@ namespace ts.server {
                 return undefined;
             }
 
-            const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
+            const { items, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
 
-            const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
-            const items = (encodedItems as (SignatureHelpItem | protocol.SignatureHelpItem)[]).map(item => ({ ...item, tags: this.decodeLinkDisplayParts(item.tags) }));
+            const applicableSpan = this.decodeSpan(encodedApplicableSpan, fileName);
 
             return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
         }

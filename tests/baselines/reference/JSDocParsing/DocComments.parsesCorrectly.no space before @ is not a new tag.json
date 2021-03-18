@@ -20,21 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
-                "0": {
-                    "kind": "JSDocText",
-                    "pos": 19,
-                    "end": 29,
-                    "modifierFlagsCache": 0,
-                    "transformFlags": 0,
-                    "text": "(@is@)"
-                },
-                "length": 1,
-                "pos": 19,
-                "end": 29,
-                "hasTrailingComma": false,
-                "transformFlags": 0
-            },
+            "comment": "(@is@)",
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
@@ -61,21 +47,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": {
-                "0": {
-                    "kind": "JSDocText",
-                    "pos": 41,
-                    "end": 50,
-                    "modifierFlagsCache": 0,
-                    "transformFlags": 0,
-                    "text": "its@fine"
-                },
-                "length": 1,
-                "pos": 41,
-                "end": 50,
-                "hasTrailingComma": false,
-                "transformFlags": 0
-            },
+            "comment": "its@fine",
             "name": {
                 "kind": "Identifier",
                 "pos": 36,
@@ -105,7 +77,7 @@
         "3": {
             "kind": "JSDocTag",
             "pos": 62,
-            "end": 89,
+            "end": 75,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -116,25 +88,11 @@
                 "transformFlags": 0,
                 "escapedText": "singlestar"
             },
-            "comment": {
-                "0": {
-                    "kind": "JSDocText",
-                    "pos": 75,
-                    "end": 89,
-                    "modifierFlagsCache": 0,
-                    "transformFlags": 0,
-                    "text": "*@doublestar"
-                },
-                "length": 1,
-                "pos": 75,
-                "end": 89,
-                "hasTrailingComma": false,
-                "transformFlags": 0
-            }
+            "comment": "*@doublestar"
         },
         "length": 4,
         "pos": 7,
-        "end": 89,
+        "end": 75,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

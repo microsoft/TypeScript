@@ -87,20 +87,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "radius",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "The radius of the circle.",
-                  "kind": "text"
-                }
-              ]
+              "text": "radius The radius of the circle."
             }
           ]
         }

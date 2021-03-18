@@ -9,7 +9,7 @@
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
-            "end": 52,
+            "end": 24,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -21,21 +21,7 @@
                 "originalKeywordKind": "ReturnKeyword",
                 "escapedText": "return"
             },
-            "comment": {
-                "0": {
-                    "kind": "JSDocText",
-                    "pos": 24,
-                    "end": 52,
-                    "modifierFlagsCache": 0,
-                    "transformFlags": 0,
-                    "text": "Description text follows"
-                },
-                "length": 1,
-                "pos": 24,
-                "end": 52,
-                "hasTrailingComma": false,
-                "transformFlags": 0
-            },
+            "comment": "Description text follows",
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 16,
@@ -53,7 +39,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 52,
+        "end": 24,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

@@ -105,7 +105,7 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
-        else if (isEntityName(node) && (isJSDocNameReference(node.parent) || isJSDocLink(node.parent))) {
+        else if (isEntityName(node) && isJSDocNameReference(node.parent)) {
             return SemanticMeaning.All;
         }
         else if (isTypeReference(node)) {
@@ -2181,44 +2181,6 @@ namespace ts {
 
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
-    }
-
-    export function linkTextPart(text: string) {
-        return displayPart(text, SymbolDisplayPartKind.linkText);
-    }
-
-    export function linkNamePart(name: EntityName, target: Declaration): JSDocLinkDisplayPart {
-        return {
-            text: getTextOfNode(name),
-            kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
-            target: {
-                fileName: getSourceFileOfNode(target).fileName,
-                textSpan: createTextSpanFromNode(target),
-            },
-        };
-    }
-
-    export function linkPart(text: string) {
-        return displayPart(text, SymbolDisplayPartKind.link);
-    }
-
-    export function buildLinkParts(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart[] {
-        const parts = [linkPart("{@link ")];
-        if (!link.name) {
-            if (link.text) {parts.push(linkTextPart(link.text));}
-        }
-        else {
-            const symbol = checker?.getSymbolAtLocation(link.name);
-            if (symbol?.valueDeclaration) {
-                parts.push(linkNamePart(link.name, symbol.valueDeclaration));
-                if (link.text) {parts.push(linkTextPart(link.text));}
-            }
-            else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + link.text));
-            }
-        }
-        parts.push(linkPart("}"));
-        return parts;
     }
 
     const carriageReturnLineFeed = "\r\n";

@@ -114,39 +114,19 @@
           "tags": [
             {
               "name": "template",
-              "text": [
-                {
-                  "text": "T",
-                  "kind": "text"
-                }
-              ]
+              "text": "T"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "l",
-                  "kind": "text"
-                }
-              ]
+              "text": "l"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "x",
-                  "kind": "text"
-                }
-              ]
+              "text": "x"
             },
             {
               "name": "returns",
-              "text": [
-                {
-                  "text": "The names of the found item(s).",
-                  "kind": "text"
-                }
-              ]
+              "text": "The names of the found item(s)."
             }
           ]
         }

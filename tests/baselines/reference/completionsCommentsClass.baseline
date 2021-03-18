@@ -95,20 +95,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "x",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A String value that contains valid JavaScript code.",
-                  "kind": "text"
-                }
-              ]
+              "text": "x A String value that contains valid JavaScript code."
             }
           ]
         },
@@ -204,37 +191,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "string",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string to convert into a number.",
-                  "kind": "text"
-                }
-              ]
+              "text": "string A string to convert into a number."
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "radix",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
-                  "kind": "text"
-                }
-              ]
+              "text": "radix A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
             }
           ]
         },
@@ -302,20 +263,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "string",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string that contains a floating-point number.",
-                  "kind": "text"
-                }
-              ]
+              "text": "string A string that contains a floating-point number."
             }
           ]
         },
@@ -383,20 +331,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "number",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A numeric value.",
-                  "kind": "text"
-                }
-              ]
+              "text": "number A numeric value."
             }
           ]
         },
@@ -464,20 +399,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "number",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "Any numeric value.",
-                  "kind": "text"
-                }
-              ]
+              "text": "number Any numeric value."
             }
           ]
         },
@@ -545,20 +467,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "encodedURI",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A value representing an encoded URI.",
-                  "kind": "text"
-                }
-              ]
+              "text": "encodedURI A value representing an encoded URI."
             }
           ]
         },
@@ -626,20 +535,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "encodedURIComponent",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A value representing an encoded URI component.",
-                  "kind": "text"
-                }
-              ]
+              "text": "encodedURIComponent A value representing an encoded URI component."
             }
           ]
         },
@@ -707,20 +603,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "uri",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A value representing an encoded URI.",
-                  "kind": "text"
-                }
-              ]
+              "text": "uri A value representing an encoded URI."
             }
           ]
         },
@@ -820,20 +703,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "uriComponent",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A value representing an encoded URI component.",
-                  "kind": "text"
-                }
-              ]
+              "text": "uriComponent A value representing an encoded URI component."
             }
           ]
         },
@@ -901,20 +771,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "string",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string value",
-                  "kind": "text"
-                }
-              ]
+              "text": "string A string value"
             }
           ]
         },
@@ -982,20 +839,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "string",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A string value",
-                  "kind": "text"
-                }
-              ]
+              "text": "string A string value"
             }
           ]
         },

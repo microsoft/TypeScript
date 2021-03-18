@@ -82,28 +82,21 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[], checker?: TypeChecker): SymbolDisplayPart[] {
+    export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[]): SymbolDisplayPart[] {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const parts: SymbolDisplayPart[][] = [];
+        const documentationComment: string[] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                const newparts = getDisplayPartsFromComment(comment, checker);
-                if (!contains(parts, newparts, isIdenticalListOfDisplayParts)) {
-                    parts.push(newparts);
-                }
+                pushIfUnique(documentationComment, comment);
             }
         });
-        return flatten(intersperse(parts, [lineBreakPart()]));
-    }
-
-    function isIdenticalListOfDisplayParts(parts1: SymbolDisplayPart[], parts2: SymbolDisplayPart[]) {
-        return arraysEqual(parts1, parts2, (p1, p2) => p1.kind === p2.kind && p1.text === p2.text);
+        return intersperse(map(documentationComment, textPart), lineBreakPart());
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -119,25 +112,18 @@ namespace ts.JsDoc {
         }
     }
 
-    export function getJsDocTagsFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
+    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+                tags.push({ name: tag.tagName.text, text: getCommentText(tag) });
             }
         });
         return tags;
     }
 
-    function getDisplayPartsFromComment(comment: readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        return flatMap(
-            comment,
-            node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
-        ) as SymbolDisplayPart[];
-    }
-
-    function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
+    function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
             case SyntaxKind.JSDocImplementsTag:
@@ -145,7 +131,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
+                return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
@@ -154,17 +140,21 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment && getDisplayPartsFromComment(comment, checker);
+                return name ? withNode(name) : comment;
             default:
-                return comment && getDisplayPartsFromComment(comment, checker);
+                return comment;
         }
 
         function withNode(node: Node) {
             return addComment(node.getText());
         }
 
+        function withList(list: NodeArray<Node>): string {
+            return addComment(list.map(x => x.getText()).join(", "));
+        }
+
         function addComment(s: string) {
-            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)];
+            return comment === undefined ? s : `${s} ${comment}`;
         }
     }
 

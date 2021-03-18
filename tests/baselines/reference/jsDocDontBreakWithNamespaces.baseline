@@ -52,12 +52,7 @@
           "tags": [
             {
               "name": "returns",
-              "text": [
-                {
-                  "text": "Websocket server object",
-                  "kind": "text"
-                }
-              ]
+              "text": "Websocket server object"
             }
           ]
         }
@@ -186,12 +181,7 @@
           "tags": [
             {
               "name": "type",
-              "text": [
-                {
-                  "text": "{function(module:xxxx, module:xxxx): module:xxxxx}",
-                  "kind": "text"
-                }
-              ]
+              "text": "{function(module:xxxx, module:xxxx): module:xxxxx}"
             }
           ]
         }

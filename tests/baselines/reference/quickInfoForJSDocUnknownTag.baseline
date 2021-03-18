@@ -50,12 +50,7 @@
       "tags": [
         {
           "name": "example",
-          "text": [
-            {
-              "text": "if (true) {\n    foo()\n}",
-              "kind": "text"
-            }
-          ]
+          "text": "if (true) {\n    foo()\n}"
         }
       ]
     }
@@ -111,12 +106,7 @@
       "tags": [
         {
           "name": "example",
-          "text": [
-            {
-              "text": "{\n    foo()\n}",
-              "kind": "text"
-            }
-          ]
+          "text": "{\n    foo()\n}"
         }
       ]
     }
@@ -172,12 +162,7 @@
       "tags": [
         {
           "name": "example",
-          "text": [
-            {
-              "text": "  x y\n  12345\n     b",
-              "kind": "text"
-            }
-          ]
+          "text": "  x y\n  12345\n     b"
         }
       ]
     }
@@ -236,12 +221,7 @@
         },
         {
           "name": "example",
-          "text": [
-            {
-              "text": "  x y\n  12345\n     b",
-              "kind": "text"
-            }
-          ]
+          "text": "  x y\n  12345\n     b"
         }
       ]
     }
@@ -300,12 +280,7 @@
         },
         {
           "name": "example",
-          "text": [
-            {
-              "text": "x y\n12345\n   b",
-              "kind": "text"
-            }
-          ]
+          "text": "x y\n12345\n   b"
         }
       ]
     }

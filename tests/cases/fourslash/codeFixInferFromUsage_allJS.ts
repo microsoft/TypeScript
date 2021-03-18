@@ -40,9 +40,7 @@ function g(z) {
     return z * 2;
 }
 
-/**
- * @type {number | null}
- */
+/** @type {number | null} */
 let x = null;
 function h() {
     if (!x) x = 2;

@@ -42,12 +42,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{String}",
-              "kind": "text"
-            }
-          ]
+          "text": "{String}"
         }
       ]
     }
@@ -95,12 +90,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Number}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Number}"
         }
       ]
     }
@@ -148,12 +138,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Boolean}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Boolean}"
         }
       ]
     }
@@ -201,12 +186,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Void}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Void}"
         }
       ]
     }
@@ -254,12 +234,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Undefined}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Undefined}"
         }
       ]
     }
@@ -307,12 +282,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Null}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Null}"
         }
       ]
     }
@@ -368,12 +338,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Array}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Array}"
         }
       ]
     }
@@ -433,12 +398,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Promise}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Promise}"
         }
       ]
     }
@@ -486,12 +446,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Object}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Object}"
         }
       ]
     }
@@ -539,12 +494,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{Function}",
-              "kind": "text"
-            }
-          ]
+          "text": "{Function}"
         }
       ]
     }
@@ -592,12 +542,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{*}",
-              "kind": "text"
-            }
-          ]
+          "text": "{*}"
         }
       ]
     }
@@ -645,12 +590,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{?}",
-              "kind": "text"
-            }
-          ]
+          "text": "{?}"
         }
       ]
     }
@@ -714,12 +654,7 @@
       "tags": [
         {
           "name": "type",
-          "text": [
-            {
-              "text": "{String|Number}",
-              "kind": "text"
-            }
-          ]
+          "text": "{String|Number}"
         }
       ]
     }

@@ -179,7 +179,6 @@
         "unittests/tsserver/importHelpers.ts",
         "unittests/tsserver/importSuggestionsCache.ts",
         "unittests/tsserver/inferredProjects.ts",
-        "unittests/tsserver/jsdocTag.ts",
         "unittests/tsserver/languageService.ts",
         "unittests/tsserver/maxNodeModuleJsDepth.ts",
         "unittests/tsserver/metadataInResponse.ts",

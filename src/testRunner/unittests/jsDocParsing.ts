@@ -312,23 +312,8 @@ namespace ts {
 */`);
                 parsesCorrectly("@link tags",
                     `/**
- * {@link first }
+ * {@link first link}
  * Inside {@link link text} thing
- * @param foo See also {@link A.Reference}
- * @param bar Or see {@link http://www.zombocom.com }
- * {@link Standalone.Complex }
- * This empty one: {@link} is OK.
- * This double-space one: {@link  doubled  } is OK too.
- * This should work, despite being badly formatted: {@link
-oh.no
-}
- * Forgot to close this one {@link https://typescriptlang.org
- * But it's still OK.
- * Although it skips the newline so parses the asterisks in the wrong state.
- * This shouldn't work: {@link
- * nope
- * }, because of the intermediate asterisks.
- * @author Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}
  */`);
                 parsesCorrectly("authorTag",
                     `/**

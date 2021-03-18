@@ -21,8 +21,7 @@ verify.completions({
       kind: "const",
       kindModifiers: "export",
       hasAction: true,
-      sortText: completion.SortText.AutoImportSuggestions,
-      tags: []
+      sortText: completion.SortText.AutoImportSuggestions
     },
     {
       name: "someModule",
@@ -32,8 +31,7 @@ verify.completions({
       kind: "property",
       kindModifiers: "export",
       hasAction: true,
-      sortText: completion.SortText.AutoImportSuggestions,
-      tags: []
+      sortText: completion.SortText.AutoImportSuggestions
     },
   ],
   preferences: {

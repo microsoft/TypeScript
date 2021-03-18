@@ -87,20 +87,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "x",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A String value that contains valid JavaScript code.",
-                  "kind": "text"
-                }
-              ]
+              "text": "x A String value that contains valid JavaScript code."
             }
           ]
         }

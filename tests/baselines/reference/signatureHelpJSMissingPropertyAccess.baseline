@@ -280,37 +280,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "predicate",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
-                  "kind": "text"
-                }
-              ]
+              "text": "predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array."
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "thisArg",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
-                  "kind": "text"
-                }
-              ]
+              "text": "thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value."
             }
           ]
         },
@@ -543,37 +517,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "predicate",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
-                  "kind": "text"
-                }
-              ]
+              "text": "predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array."
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "thisArg",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
-                  "kind": "text"
-                }
-              ]
+              "text": "thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value."
             }
           ]
         }

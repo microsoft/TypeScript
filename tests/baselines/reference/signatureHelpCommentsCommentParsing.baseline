@@ -1029,37 +1029,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "second number",
-                  "kind": "text"
-                }
-              ]
+              "text": "b second number"
             }
           ]
         }
@@ -1190,37 +1164,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "second number",
-                  "kind": "text"
-                }
-              ]
+              "text": "b second number"
             }
           ]
         }
@@ -1435,76 +1383,30 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d"
             },
             {
               "name": "anotherTag"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "LastParam",
-                  "kind": "text"
-                }
-              ]
+              "text": "e LastParam"
             },
             {
               "name": "anotherTag"
@@ -1722,76 +1624,30 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d"
             },
             {
               "name": "anotherTag"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "LastParam",
-                  "kind": "text"
-                }
-              ]
+              "text": "e LastParam"
             },
             {
               "name": "anotherTag"
@@ -2009,76 +1865,30 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d"
             },
             {
               "name": "anotherTag"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "LastParam",
-                  "kind": "text"
-                }
-              ]
+              "text": "e LastParam"
             },
             {
               "name": "anotherTag"
@@ -2296,76 +2106,30 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d"
             },
             {
               "name": "anotherTag"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "LastParam",
-                  "kind": "text"
-                }
-              ]
+              "text": "e LastParam"
             },
             {
               "name": "anotherTag"
@@ -2583,76 +2347,30 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "first number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a first number"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d"
             },
             {
               "name": "anotherTag"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "LastParam",
-                  "kind": "text"
-                }
-              ]
+              "text": "e LastParam"
             },
             {
               "name": "anotherTag"
@@ -2752,20 +2470,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b about b"
             }
           ]
         },
@@ -2931,20 +2636,7 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b about b"
             }
           ]
         },
@@ -3346,97 +3038,27 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is about b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is optional param c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d this is optional param d"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param e",
-                  "kind": "text"
-                }
-              ]
+              "text": "e this is optional param e"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "{ () => string; } } f this is optional param f",
-                  "kind": "text"
-                }
-              ]
+              "text": " { () => string; } } f this is optional param f"
             }
           ]
         }
@@ -3769,97 +3391,27 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is about b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is optional param c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d this is optional param d"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param e",
-                  "kind": "text"
-                }
-              ]
+              "text": "e this is optional param e"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "{ () => string; } } f this is optional param f",
-                  "kind": "text"
-                }
-              ]
+              "text": " { () => string; } } f this is optional param f"
             }
           ]
         }
@@ -4192,97 +3744,27 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is about b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is optional param c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d this is optional param d"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param e",
-                  "kind": "text"
-                }
-              ]
+              "text": "e this is optional param e"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "{ () => string; } } f this is optional param f",
-                  "kind": "text"
-                }
-              ]
+              "text": " { () => string; } } f this is optional param f"
             }
           ]
         }
@@ -4615,97 +4097,27 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is about b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is optional param c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d this is optional param d"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param e",
-                  "kind": "text"
-                }
-              ]
+              "text": "e this is optional param e"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "{ () => string; } } f this is optional param f",
-                  "kind": "text"
-                }
-              ]
+              "text": " { () => string; } } f this is optional param f"
             }
           ]
         }
@@ -5038,97 +4450,27 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is about b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is optional param c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d this is optional param d"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param e",
-                  "kind": "text"
-                }
-              ]
+              "text": "e this is optional param e"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "{ () => string; } } f this is optional param f",
-                  "kind": "text"
-                }
-              ]
+              "text": " { () => string; } } f this is optional param f"
             }
           ]
         }
@@ -5461,97 +4803,27 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                }
-              ]
+              "text": ""
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is about b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is about b"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param c",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is optional param c"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "d",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param d",
-                  "kind": "text"
-                }
-              ]
+              "text": "d this is optional param d"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "e",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is optional param e",
-                  "kind": "text"
-                }
-              ]
+              "text": "e this is optional param e"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "{ () => string; } } f this is optional param f",
-                  "kind": "text"
-                }
-              ]
+              "text": " { () => string; } } f this is optional param f"
             }
           ]
         }
@@ -5653,38 +4925,15 @@
           "tags": [
             {
               "name": "paramTag",
-              "text": [
-                {
-                  "text": "{ number } a this is input number of paramTag",
-                  "kind": "text"
-                }
-              ]
+              "text": "{ number } a this is input number of paramTag"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is input number",
-                  "kind": "text"
-                }
-              ]
+              "text": "a this is input number"
             },
             {
               "name": "returnType",
-              "text": [
-                {
-                  "text": "{ number } it is return type",
-                  "kind": "text"
-                }
-              ]
+              "text": "{ number } it is return type"
             }
           ]
         }
@@ -5815,46 +5064,15 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is a",
-                  "kind": "text"
-                }
-              ]
+              "text": "a this is a"
             },
             {
               "name": "paramTag",
-              "text": [
-                {
-                  "text": "{ number } g this is optional param g",
-                  "kind": "text"
-                }
-              ]
+              "text": "{ number } g this is optional param g"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is b"
             }
           ]
         }
@@ -5985,46 +5203,15 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is a",
-                  "kind": "text"
-                }
-              ]
+              "text": "a this is a"
             },
             {
               "name": "paramTag",
-              "text": [
-                {
-                  "text": "{ number } g this is optional param g",
-                  "kind": "text"
-                }
-              ]
+              "text": "{ number } g this is optional param g"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is b",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is b"
             }
           ]
         }
@@ -6155,37 +5342,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "foo",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "is string",
-                  "kind": "text"
-                }
-              ]
+              "text": "foo is string"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "bar",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "is second string",
-                  "kind": "text"
-                }
-              ]
+              "text": "bar is second string"
             }
           ]
         }
@@ -6316,37 +5477,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "foo",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "is string",
-                  "kind": "text"
-                }
-              ]
+              "text": "foo is string"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "bar",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "is second string",
-                  "kind": "text"
-                }
-              ]
+              "text": "bar is second string"
             }
           ]
         }
@@ -6545,37 +5680,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is first parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "a it is first parameter"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is third parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "c it is third parameter"
             }
           ]
         }
@@ -6767,37 +5876,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is first parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "a it is first parameter"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is third parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "c it is third parameter"
             }
           ]
         }
@@ -6989,37 +6072,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is first parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "a it is first parameter"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is third parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "c it is third parameter"
             }
           ]
         }
@@ -7211,37 +6268,11 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is first parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "a it is first parameter"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "it is third parameter",
-                  "kind": "text"
-                }
-              ]
+              "text": "c it is third parameter"
             }
           ]
         }
@@ -7535,54 +6566,15 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
-                  "kind": "text"
-                }
-              ]
+              "text": "a this is info about a\nspanning on two lines and aligned perfectly"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is info about b\nnot aligned text about parameter will eat only one space"
             }
           ]
         }
@@ -7742,54 +6734,15 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
-                  "kind": "text"
-                }
-              ]
+              "text": "a this is info about a\nspanning on two lines and aligned perfectly"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is info about b\nnot aligned text about parameter will eat only one space"
             }
           ]
         }
@@ -7949,54 +6902,15 @@
           "tags": [
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "a",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about a\nspanning on two lines and aligned perfectly",
-                  "kind": "text"
-                }
-              ]
+              "text": "a this is info about a\nspanning on two lines and aligned perfectly"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "b",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin",
-                  "kind": "text"
-                }
-              ]
+              "text": "b this is info about b\nspanning on two lines and aligned perfectly\nspanning one more line alined perfectly\n    spanning another line with more margin"
             },
             {
               "name": "param",
-              "text": [
-                {
-                  "text": "c",
-                  "kind": "text"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "this is info about b\nnot aligned text about parameter will eat only one space",
-                  "kind": "text"
-                }
-              ]
+              "text": "c this is info about b\nnot aligned text about parameter will eat only one space"
             }
           ]
         }

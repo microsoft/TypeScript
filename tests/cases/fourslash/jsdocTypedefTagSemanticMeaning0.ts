@@ -3,7 +3,7 @@
 // @allowJs: true
 // @Filename: a.js
 
-/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] |]*/
+/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|]|] */
 
 ////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}T|] = 1;|]
 

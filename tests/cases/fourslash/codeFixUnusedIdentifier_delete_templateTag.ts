@@ -55,6 +55,7 @@ verify.codeFix({
     description: "Remove template tag",
     newFileContent:
 `/**
- * */
+ * Comment
+ */
 function both() {}`,
 });
