@@ -25,15 +25,11 @@ class A {
 
 
 //// [privateNameStaticFieldDestructuredBinding.js]
-var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    propertyDescriptor.value = value;
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
 var _b, _A_field;
 class A {
@@ -41,13 +37,13 @@ class A {
         var _c;
         this.otherClass = A;
         let y;
-        ({ x: ({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value, y } = this.testObject());
-        ([({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value, y] = this.testArray());
-        ({ a: ({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value, b: [({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value] } = { a: 1, b: [2] });
-        [({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value, [({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value]] = [1, [2]];
-        ({ a: ({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value = 1, b: [({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value = 1] } = { b: [] });
-        [({ set value(_b) { __classStaticPrivateFieldSet(A, _b, _A_field, _b); } }).value = 2] = [];
-        _c = this.otherClass, [({ set value(_b) { __classStaticPrivateFieldSet(_c, _b, _A_field, _b); } }).value = 2] = [];
+        ({ x: ({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value, y } = this.testObject());
+        ([({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value, y] = this.testArray());
+        ({ a: ({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value, b: [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value] } = { a: 1, b: [2] });
+        [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value, [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value]] = [1, [2]];
+        ({ a: ({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value = 1, b: [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value = 1] } = { b: [] });
+        [({ set value(_b) { __classPrivateFieldSet(A, _b, _b, "f", _A_field); } }).value = 2] = [];
+        _c = this.otherClass, [({ set value(_b) { __classPrivateFieldSet(_c, _b, _b, "f", _A_field); } }).value = 2] = [];
     }
     testObject() {
         return { x: 10, y: 6 };
@@ -56,7 +52,7 @@ class A {
         return [10, 11];
     }
     static test(_a) {
-        [({ set value(_c) { __classStaticPrivateFieldSet(_a, _b, _A_field, _c); } }).value] = [2];
+        [({ set value(_c) { __classPrivateFieldSet(_a, _b, _c, "f", _A_field); } }).value] = [2];
     }
 }
 _b = A;

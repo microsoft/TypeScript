@@ -27,7 +27,7 @@ let A = class A {
         _A_x.set(this, 1);
     }
     f() {
-        return __awaiter(this, void 0, void 0, function* () { __classPrivateFieldSet(this, _A_x, yield __classPrivateFieldGet(this, _A_x)); });
+        return __awaiter(this, void 0, void 0, function* () { __classPrivateFieldSet(this, _A_x, yield __classPrivateFieldGet(this, _A_x, "f"), "f"); });
     }
 };
 _A_x = new WeakMap();

@@ -26,21 +26,20 @@ class B2 {
 
 
 //// [privateNameAccessorsAccess.js]
-var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private accessor on non-instance");
-    }
-    return fn.call(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _A2_instances, _A2_prop_get, _A2_prop_set;
 class A2 {
     constructor() {
         _A2_instances.add(this);
-        console.log(__classPrivateAccessorGet(this, _A2_instances, _A2_prop_get));
+        console.log(__classPrivateFieldGet(this, _A2_instances, "a", _A2_prop_get));
         let a = this;
-        __classPrivateAccessorGet(a, _A2_instances, _A2_prop_get);
+        __classPrivateFieldGet(a, _A2_instances, "a", _A2_prop_get);
         function foo() {
-            __classPrivateAccessorGet(a, _A2_instances, _A2_prop_get);
+            __classPrivateFieldGet(a, _A2_instances, "a", _A2_prop_get);
         }
     }
 }

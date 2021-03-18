@@ -36,55 +36,47 @@ class A {
 
 
 //// [privateNameStaticFieldAssignment.js]
-var __classStaticPrivateFieldSet = (this && this.__classStaticPrivateFieldSet) || function (receiver, classConstructor, propertyDescriptor, value) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    propertyDescriptor.value = value;
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classStaticPrivateFieldGet = (this && this.__classStaticPrivateFieldGet) || function (receiver, classConstructor, propertyDescriptor) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    if (propertyDescriptor === undefined) {
-        throw new TypeError("Private static field was accessed before its declaration.");
-    }
-    return propertyDescriptor.value;
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _a, _A_field;
 class A {
     constructor() {
         var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
-        __classStaticPrivateFieldSet(A, _a, _A_field, 1);
-        __classStaticPrivateFieldSet(_b = A, _a, _A_field, __classStaticPrivateFieldGet(_b, _a, _A_field) + 2);
-        __classStaticPrivateFieldSet(_c = A, _a, _A_field, __classStaticPrivateFieldGet(_c, _a, _A_field) - 3);
-        __classStaticPrivateFieldSet(_d = A, _a, _A_field, __classStaticPrivateFieldGet(_d, _a, _A_field) / 4);
-        __classStaticPrivateFieldSet(_e = A, _a, _A_field, __classStaticPrivateFieldGet(_e, _a, _A_field) * 5);
-        __classStaticPrivateFieldSet(_f = A, _a, _A_field, Math.pow(__classStaticPrivateFieldGet(_f, _a, _A_field), 6));
-        __classStaticPrivateFieldSet(_g = A, _a, _A_field, __classStaticPrivateFieldGet(_g, _a, _A_field) % 7);
-        __classStaticPrivateFieldSet(_h = A, _a, _A_field, __classStaticPrivateFieldGet(_h, _a, _A_field) << 8);
-        __classStaticPrivateFieldSet(_j = A, _a, _A_field, __classStaticPrivateFieldGet(_j, _a, _A_field) >> 9);
-        __classStaticPrivateFieldSet(_k = A, _a, _A_field, __classStaticPrivateFieldGet(_k, _a, _A_field) >>> 10);
-        __classStaticPrivateFieldSet(_l = A, _a, _A_field, __classStaticPrivateFieldGet(_l, _a, _A_field) & 11);
-        __classStaticPrivateFieldSet(_m = A, _a, _A_field, __classStaticPrivateFieldGet(_m, _a, _A_field) | 12);
-        __classStaticPrivateFieldSet(_o = A, _a, _A_field, __classStaticPrivateFieldGet(_o, _a, _A_field) ^ 13);
-        __classStaticPrivateFieldSet(A.getClass(), _a, _A_field, 1);
-        __classStaticPrivateFieldSet(_p = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_p, _a, _A_field) + 2);
-        __classStaticPrivateFieldSet(_q = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_q, _a, _A_field) - 3);
-        __classStaticPrivateFieldSet(_r = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_r, _a, _A_field) / 4);
-        __classStaticPrivateFieldSet(_s = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_s, _a, _A_field) * 5);
-        __classStaticPrivateFieldSet(_t = A.getClass(), _a, _A_field, Math.pow(__classStaticPrivateFieldGet(_t, _a, _A_field), 6));
-        __classStaticPrivateFieldSet(_u = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_u, _a, _A_field) % 7);
-        __classStaticPrivateFieldSet(_v = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_v, _a, _A_field) << 8);
-        __classStaticPrivateFieldSet(_w = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_w, _a, _A_field) >> 9);
-        __classStaticPrivateFieldSet(_x = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_x, _a, _A_field) >>> 10);
-        __classStaticPrivateFieldSet(_y = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_y, _a, _A_field) & 11);
-        __classStaticPrivateFieldSet(_z = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_z, _a, _A_field) | 12);
-        __classStaticPrivateFieldSet(_0 = A.getClass(), _a, _A_field, __classStaticPrivateFieldGet(_0, _a, _A_field) ^ 13);
+        __classPrivateFieldSet(A, _a, 1, "f", _A_field);
+        __classPrivateFieldSet(_b = A, _a, __classPrivateFieldGet(_b, _a, "f", _A_field) + 2, "f", _A_field);
+        __classPrivateFieldSet(_c = A, _a, __classPrivateFieldGet(_c, _a, "f", _A_field) - 3, "f", _A_field);
+        __classPrivateFieldSet(_d = A, _a, __classPrivateFieldGet(_d, _a, "f", _A_field) / 4, "f", _A_field);
+        __classPrivateFieldSet(_e = A, _a, __classPrivateFieldGet(_e, _a, "f", _A_field) * 5, "f", _A_field);
+        __classPrivateFieldSet(_f = A, _a, Math.pow(__classPrivateFieldGet(_f, _a, "f", _A_field), 6), "f", _A_field);
+        __classPrivateFieldSet(_g = A, _a, __classPrivateFieldGet(_g, _a, "f", _A_field) % 7, "f", _A_field);
+        __classPrivateFieldSet(_h = A, _a, __classPrivateFieldGet(_h, _a, "f", _A_field) << 8, "f", _A_field);
+        __classPrivateFieldSet(_j = A, _a, __classPrivateFieldGet(_j, _a, "f", _A_field) >> 9, "f", _A_field);
+        __classPrivateFieldSet(_k = A, _a, __classPrivateFieldGet(_k, _a, "f", _A_field) >>> 10, "f", _A_field);
+        __classPrivateFieldSet(_l = A, _a, __classPrivateFieldGet(_l, _a, "f", _A_field) & 11, "f", _A_field);
+        __classPrivateFieldSet(_m = A, _a, __classPrivateFieldGet(_m, _a, "f", _A_field) | 12, "f", _A_field);
+        __classPrivateFieldSet(_o = A, _a, __classPrivateFieldGet(_o, _a, "f", _A_field) ^ 13, "f", _A_field);
+        __classPrivateFieldSet(A.getClass(), _a, 1, "f", _A_field);
+        __classPrivateFieldSet(_p = A.getClass(), _a, __classPrivateFieldGet(_p, _a, "f", _A_field) + 2, "f", _A_field);
+        __classPrivateFieldSet(_q = A.getClass(), _a, __classPrivateFieldGet(_q, _a, "f", _A_field) - 3, "f", _A_field);
+        __classPrivateFieldSet(_r = A.getClass(), _a, __classPrivateFieldGet(_r, _a, "f", _A_field) / 4, "f", _A_field);
+        __classPrivateFieldSet(_s = A.getClass(), _a, __classPrivateFieldGet(_s, _a, "f", _A_field) * 5, "f", _A_field);
+        __classPrivateFieldSet(_t = A.getClass(), _a, Math.pow(__classPrivateFieldGet(_t, _a, "f", _A_field), 6), "f", _A_field);
+        __classPrivateFieldSet(_u = A.getClass(), _a, __classPrivateFieldGet(_u, _a, "f", _A_field) % 7, "f", _A_field);
+        __classPrivateFieldSet(_v = A.getClass(), _a, __classPrivateFieldGet(_v, _a, "f", _A_field) << 8, "f", _A_field);
+        __classPrivateFieldSet(_w = A.getClass(), _a, __classPrivateFieldGet(_w, _a, "f", _A_field) >> 9, "f", _A_field);
+        __classPrivateFieldSet(_x = A.getClass(), _a, __classPrivateFieldGet(_x, _a, "f", _A_field) >>> 10, "f", _A_field);
+        __classPrivateFieldSet(_y = A.getClass(), _a, __classPrivateFieldGet(_y, _a, "f", _A_field) & 11, "f", _A_field);
+        __classPrivateFieldSet(_z = A.getClass(), _a, __classPrivateFieldGet(_z, _a, "f", _A_field) | 12, "f", _A_field);
+        __classPrivateFieldSet(_0 = A.getClass(), _a, __classPrivateFieldGet(_0, _a, "f", _A_field) ^ 13, "f", _A_field);
     }
     static getClass() {
         return A;

@@ -582,7 +582,7 @@ function Getter() {
             _A_Getter_StaticSetter_instances.add(this);
         }
     }
-    _d = A_Getter_StaticSetter, _A_Getter_StaticSetter_instances = new WeakSet(), _A_Getter_StaticSetter_foo_set = function _A_Getter_StaticSetter_foo_set(value) { };
+    _d = A_Getter_StaticSetter, _A_Getter_StaticSetter_instances = new WeakSet(), _A_Getter_StaticSetter_foo_get = function _A_Getter_StaticSetter_foo_get() { return ""; }, _A_Getter_StaticSetter_foo_set = function _A_Getter_StaticSetter_foo_set(value) { };
 }
 function Setter() {
     var _A_Setter_Field_instances, _A_Setter_Field_foo_set, _A_Setter_Field_foo, _A_Setter_Method_instances, _A_Setter_Method_foo_set, _A_Setter_Method_foo, _A_Setter_Getter_instances, _A_Setter_Getter_foo_set, _A_Setter_Getter_foo_get, _A_Setter_Setter_instances, _A_Setter_Setter_foo_set, _A_Setter_Setter_foo_set_1, _A_Setter_StaticField_instances, _a, _A_Setter_StaticField_foo_set, _A_Setter_StaticField_foo, _A_Setter_StaticMethod_instances, _b, _A_Setter_StaticMethod_foo_set, _A_Setter_StaticMethod_foo, _A_Setter_StaticGetter_instances, _c, _A_Setter_StaticGetter_foo_set, _A_Setter_StaticGetter_foo_get, _A_Setter_StaticSetter_instances, _d, _A_Setter_StaticSetter_foo_set, _A_Setter_StaticSetter_foo_set_1;
@@ -636,7 +636,7 @@ function Setter() {
             _A_Setter_StaticGetter_instances.add(this);
         }
     }
-    _c = A_Setter_StaticGetter, _A_Setter_StaticGetter_instances = new WeakSet(), _A_Setter_StaticGetter_foo_get = function _A_Setter_StaticGetter_foo_get() { return ""; };
+    _c = A_Setter_StaticGetter, _A_Setter_StaticGetter_instances = new WeakSet(), _A_Setter_StaticGetter_foo_set = function _A_Setter_StaticGetter_foo_set(value) { }, _A_Setter_StaticGetter_foo_get = function _A_Setter_StaticGetter_foo_get() { return ""; };
     // Error
     class A_Setter_StaticSetter {
         constructor() {
@@ -772,7 +772,7 @@ function StaticGetter() {
             _A_StaticGetter_Setter_instances.add(this);
         }
     }
-    _d = A_StaticGetter_Setter, _A_StaticGetter_Setter_instances = new WeakSet(), _A_StaticGetter_Setter_foo_set = function _A_StaticGetter_Setter_foo_set(value) { };
+    _d = A_StaticGetter_Setter, _A_StaticGetter_Setter_instances = new WeakSet(), _A_StaticGetter_Setter_foo_get = function _A_StaticGetter_Setter_foo_get() { return ""; }, _A_StaticGetter_Setter_foo_set = function _A_StaticGetter_Setter_foo_set(value) { };
     // Error
     class A_StaticGetter_StaticField {
     }
@@ -812,7 +812,7 @@ function StaticSetter() {
             _A_StaticSetter_Getter_instances.add(this);
         }
     }
-    _c = A_StaticSetter_Getter, _A_StaticSetter_Getter_instances = new WeakSet(), _A_StaticSetter_Getter_foo_get = function _A_StaticSetter_Getter_foo_get() { return ""; };
+    _c = A_StaticSetter_Getter, _A_StaticSetter_Getter_instances = new WeakSet(), _A_StaticSetter_Getter_foo_set = function _A_StaticSetter_Getter_foo_set(value) { }, _A_StaticSetter_Getter_foo_get = function _A_StaticSetter_Getter_foo_get() { return ""; };
     // Error
     class A_StaticSetter_Setter {
         constructor() {

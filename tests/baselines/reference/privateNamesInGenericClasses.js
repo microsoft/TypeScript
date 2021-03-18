@@ -29,30 +29,16 @@ b = a;                                    // Error
 
 //// [privateNamesInGenericClasses.js]
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var __classPrivateMethodGet = (this && this.__classPrivateMethodGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private method on non-instance");
-    }
-    return fn;
-};
-var __classPrivateAccessorGet = (this && this.__classPrivateAccessorGet) || function (receiver, instances, fn) {
-    if (!instances.has(receiver)) {
-        throw new TypeError("attempted to get private accessor on non-instance");
-    }
-    return fn.call(receiver);
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
 var _C_instances, _C_foo, _C_method, _C_prop_get, _C_prop_set;
 class C {
@@ -60,17 +46,17 @@ class C {
         _C_instances.add(this);
         _C_foo.set(this, void 0);
     }
-    bar(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
-    bar2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method).call(x); } // OK
-    bar3(x) { return __classPrivateAccessorGet(x, _C_instances, _C_prop_get); } // OK
-    baz(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
-    baz2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method); } // OK
-    baz3(x) { return __classPrivateAccessorGet(x, _C_instances, _C_prop_get); } // OK
-    quux(x) { return __classPrivateFieldGet(x, _C_foo); } // OK
-    quux2(x) { return __classPrivateMethodGet(x, _C_instances, _C_method); } // OK
-    quux3(x) { return __classPrivateAccessorGet(x, _C_instances, _C_prop_get); } // OK
+    bar(x) { return __classPrivateFieldGet(x, _C_foo, "f"); } // OK
+    bar2(x) { return __classPrivateFieldGet(x, _C_instances, "m", _C_method).call(x); } // OK
+    bar3(x) { return __classPrivateFieldGet(x, _C_instances, "a", _C_prop_get); } // OK
+    baz(x) { return __classPrivateFieldGet(x, _C_foo, "f"); } // OK
+    baz2(x) { return __classPrivateFieldGet(x, _C_instances, "m", _C_method); } // OK
+    baz3(x) { return __classPrivateFieldGet(x, _C_instances, "a", _C_prop_get); } // OK
+    quux(x) { return __classPrivateFieldGet(x, _C_foo, "f"); } // OK
+    quux2(x) { return __classPrivateFieldGet(x, _C_instances, "m", _C_method); } // OK
+    quux3(x) { return __classPrivateFieldGet(x, _C_instances, "a", _C_prop_get); } // OK
 }
-_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_method = function _C_method() { return __classPrivateFieldGet(this, _C_foo); }, _C_prop_get = function _C_prop_get() { return __classPrivateFieldGet(this, _C_foo); }, _C_prop_set = function _C_prop_set(value) { __classPrivateFieldSet(this, _C_foo, value); };
+_C_foo = new WeakMap(), _C_instances = new WeakSet(), _C_method = function _C_method() { return __classPrivateFieldGet(this, _C_foo, "f"); }, _C_prop_get = function _C_prop_get() { return __classPrivateFieldGet(this, _C_foo, "f"); }, _C_prop_set = function _C_prop_set(value) { __classPrivateFieldSet(this, _C_foo, value, "f"); };
 a.; // Error
 a.; // Error
 a.; // Error

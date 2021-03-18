@@ -28,20 +28,19 @@ class B2 {
 
 
 //// [privateNameStaticAccessorsAccess.js]
-var __classStaticPrivateAccessorGet = (this && this.__classStaticPrivateAccessorGet) || function (receiver, classConstructor, fn) {
-    if (receiver !== classConstructor) {
-        throw new TypeError("Private static access of wrong provenance");
-    }
-    return fn.call(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _a, _A2_prop_get, _A2_prop_set;
 class A2 {
     constructor() {
-        console.log(__classStaticPrivateAccessorGet(A2, _a, _A2_prop_get));
+        console.log(__classPrivateFieldGet(A2, _a, "a", _A2_prop_get));
         let a = A2;
-        __classStaticPrivateAccessorGet(a, _a, _A2_prop_get);
+        __classPrivateFieldGet(a, _a, "a", _A2_prop_get);
         function foo() {
-            __classStaticPrivateAccessorGet(a, _a, _A2_prop_get);
+            __classPrivateFieldGet(a, _a, "a", _A2_prop_get);
         }
     }
 }
