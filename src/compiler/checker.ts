@@ -37443,9 +37443,15 @@ namespace ts {
             }
         }
 
-        function checkGrammarAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
-            if (declaration.assertClause && moduleKind !== ModuleKind.ESNext) {
-                grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+        function checkAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
+            if (declaration.assertClause) {
+                if (moduleKind !== ModuleKind.ESNext) {
+                    error(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+                }
+
+                if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
+                    error(declaration.assertClause, Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
+                }
             }
         }
 
@@ -37480,7 +37486,7 @@ namespace ts {
                     }
                 }
             }
-            checkGrammarAssertClause(node);
+            checkAssertClause(node);
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -37575,7 +37581,7 @@ namespace ts {
                     }
                 }
             }
-            checkGrammarAssertClause(node);
+            checkAssertClause(node);
         }
 
         function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {

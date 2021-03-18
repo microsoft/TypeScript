@@ -3292,6 +3292,10 @@
         "category": "Error",
         "code": 2803
     },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2804
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
