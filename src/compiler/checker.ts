@@ -3753,7 +3753,7 @@ namespace ts {
         }
 
         function createTypeLambda(symbol?: Symbol) {
-            const type = <Typelambda>createType(TypeFlags.TypeLambda);
+            const type = <TypeLambda>createType(TypeFlags.TypeLambda);
             if (symbol) type.symbol = symbol;
             return type;
         }
@@ -12141,35 +12141,113 @@ namespace ts {
             return length(type.target.typeParameters);
         }
 
-        function convertTypeToTypelambda(t: TypeConstructorPolymorphismDeclaration | InterfaceType): Typelambda {
+        function isTypeLambda(t: Type): t is TypeLambda {
+            throw new Error("no implement");
+        }
+
+        // define <: on ProperType
+        // true if `pt1` <: `pt2`
+        // This is wrong. Should use existing function. But this is easy to be checked as prototype.
+        function isProperTypeLessThan(pt1: ProperType, pt2: ProperType): boolean {
+            return checkTypeRelatedTo(pt1, pt2, assignableRelation, undefined);
+            // // ObjectType
+            // if (pt1.flags & TypeFlags.Object && pt2.flags & TypeFlags.Object) {
+            //     // like Set<T>, Functor<GenericImpl>
+            //     if ((<ObjectType>pt1).objectFlags & ObjectFlags.Reference && (<ObjectType>pt2).objectFlags & ObjectFlags.Reference) {
+            //         getBaseConstructorTypeOfClass()
+            //         // Should we check constraint?
+            //         // const tmp1 = convertTypeToTypelambda((<TypeReference>pt1).target);
+            //         // const tmp2 = convertTypeToTypelambda((<TypeReference>pt1).target);
+            //         // let res = isTypeLambdaLessThan(tmp1, tmp2);
+            //         if (!res) return false;
+            //         const typeArguments1 = getTypeArguments(<TypeReference>pt1);
+            //         const typeArguments2 = getTypeArguments(<TypeReference>pt2);
+            //     }
+            //     else {debugger;}
+            // }
+            // else if () {
+            // }
+            // return false;
+        }
+
+        // define <: on TypeLambda
+        // @ts-ignore
+        function isTypeLambdaLessThan(tl1: TypeLambda, tl2: TypeLambda): boolean {
+            Debug.assert(tl1.paramInfos.length === tl1.paramInfos.length, "kind must match");
+            const lengthOfTypeParameters = tl1.paramInfos.length;
+            // parameters are contravariance
+            for (let i = 0; i < lengthOfTypeParameters; i++) {
+                const constraint1 = tl1.paramInfos[i].upperBound;
+                const constraint2 = tl2.paramInfos[i].upperBound;
+                const isTypeLamnda1 = isTypeLambda(constraint1);
+                const isTypeLamnda2 = isTypeLambda(constraint2);
+                Debug.assert(isTypeLamnda1 === isTypeLamnda2, "kind must match");
+
+                let res: boolean;
+                if (isTypeLambda(constraint1) && isTypeLambda(constraint2)) {
+                    res = isTypeLambdaLessThan(constraint2, constraint1);
+                }
+                else {
+                    res = isProperTypeLessThan(constraint2, constraint1);
+                }
+                if (!res) return false;
+            }
+            // apply are covariance
+            const appliedType1 = tl1.resType ?? anyType;
+            const appliedType2 = tl2.resType ?? anyType;
+            const res = isProperTypeLessThan(appliedType1, appliedType2);
+            return res;
+        }
+
+        // @ts-ignore
+        function convertTypeToTypelambda(t: TypeConstructorPolymorphismDeclaration | InterfaceType): TypeLambda {
             // TODO (song): cache it
             Debug.assert(t.typeParameters && t.typeParameters.length > 0);
             const typeLambda = createTypeLambda(t.symbol);
 
             // if it is Class or Interface
-
             if (t.flags & TypeFlags.Object && (<ObjectType>t).objectFlags & ObjectFlags.ClassOrInterface) {
-                t.typeParameters.map(typeParameter => {
-
-                });
+                typeLambda.paramInfos = t.typeParameters.map(convertTypeParameter);
                 typeLambda.resType = <ObjectType>t;
             }
-
-
+            // if it is HK type parameter
+            else if(isTypeParameterTypeConstructorDeclaration(t)){
+                typeLambda.paramInfos = t.typeParameters.map(convertTypeParameter);
+                typeLambda.resType = getConstraintFromTypeParameter(t);
+            }
             return typeLambda;
 
+            // F[X] = R
+            // F = [X] ==> R
+
+            // TL1  =  [X >: L1 <: U1] =>> R1
+
+            // [F[X] <: Coll[X]]
+            // [F >: Nothing <: [X] =>> Coll[X]]
+            // [X <: R]
             // To TypeLambda or ProperType
-            function convertTypeParameter(typeParameter: TypeParameter): TypeLambdaParameterInfo | Typelambda {
+            function convertTypeParameter(typeParameter: TypeParameter): TypeLambdaParameterInfo {
                 // typeParameter contains typeparameter, its kind is more than zero.
                 // Convert it to TypeLambda.
+                let res: TypeLambdaParameterInfo;
                 if (isTypeParameterTypeConstructorDeclaration(typeParameter)) {
-                    return convertTypeToTypelambda(typeParameter);
+                    res = {
+                        typeref: typeParameter,
+                        upperBound: convertTypeToTypelambda(typeParameter),
+                        variance: VarianceFlags.Bivariant
+                    }
                 }
                 // it is just a proper type, zero kind.
                 else {
-                    // TODO (song): variance marker? or infer from structure?
-                    return { name: typeParameter.symbol.escapedName, upperBound: getConstraintFromTypeParameter(typeParameter), variance: VarianceFlags.Bivariant };
+                    res = {
+                        typeRef: typeParameter,
+                        // any type is the top upper bound.
+                        upperBound: getConstraintFromTypeParameter(typeParameter) ?? anyType,
+                        // TODO (song): variance marker? or infer from structure?
+                        variance: VarianceFlags.Bivariant
+                    };
                 }
+                return res;
             }
         }
 

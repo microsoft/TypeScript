@@ -5334,6 +5334,8 @@ namespace ts {
         /* @internal */
         tParams?: number; // Not allowed constraint for now, this might be a very complex feature.
         typeParameters: TypeParameter[] | undefined;
+        // @override
+        constraint?: TypeLambda;
     }
 
     // Type parameters (TypeFlags.TypeParameter | TypeFlags.TypeConstructorInstance)
@@ -5346,20 +5348,21 @@ namespace ts {
 
     // One Type is ProperType if it is not a TypeLambda. e.g Set<number>, Set<Set<number>>.
     // However, Set<T> depends, if it means the class, it is a type lambda(T is typeParameter), if it is a constraint, it is a proper type(T is a declared typeArgument).
-    export interface ProperType extends ObjectType{
+    export interface ProperType extends Type{
 
     }
 
     export interface TypeLambdaParameterInfo {
-        name: string;
-        upperBound: Typelambda | ProperType;
+        typeRef: Type;
+        upperBound: TypeLambda | ProperType;
         variance: VarianceFlags
     }
-    export interface Typelambda extends Type {
+
+    export interface TypeLambda extends Type {
         resType?: ProperType;
         paramInfos: TypeLambdaParameterInfo[];
-        target: Typelambda | TypeParameter | InterfaceType;
-        /* @internal  true if any params and resType does not have typeParameter */
+        target: TypeLambda | TypeParameter | InterfaceType;
+        /* @internal  true if any params and resType does not have typeParameter declared in the declared tree of origional target */
         isFullyinstantiated: boolean;
     }
 
