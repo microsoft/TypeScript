@@ -1629,6 +1629,9 @@ namespace ts {
             if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
                 return node.parent.expression;
             }
+            if (isNamedTupleMember(node.parent) && node.pos === node.parent.pos) {
+                return node.parent;
+            }
             return node;
         }
 
@@ -1643,6 +1646,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NamedTupleMember:
                     return true;
                 default:
                     return false;
