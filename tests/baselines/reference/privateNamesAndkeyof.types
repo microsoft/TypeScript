@@ -2,9 +2,20 @@
 class A {
 >A : A
 
-    #foo = 3;
->#foo : number
+    #fooField = 3;
+>#fooField : number
 >3 : 3
+
+    #fooMethod() { };
+>#fooMethod : () => void
+
+    get #fooProp() { return 1; };
+>#fooProp : number
+>1 : 1
+
+    set #fooProp(value: number) { };
+>#fooProp : number
+>value : number
 
     bar = 3;
 >bar : number
@@ -15,6 +26,6 @@ class A {
 >3 : 3
 }
 
-type T = keyof A     // should not include '#foo'
+type T = keyof A     // should not include '#foo*'
 >T : keyof A
 

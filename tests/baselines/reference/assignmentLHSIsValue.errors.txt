@@ -3,10 +3,10 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(8,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(11,18): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(13,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(17,1): error TS2539: Cannot assign to 'M' because it is not a variable.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(19,1): error TS2539: Cannot assign to 'C' because it is not a variable.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(22,1): error TS2539: Cannot assign to 'E' because it is not a variable.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(24,1): error TS2539: Cannot assign to 'foo' because it is not a variable.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(19,1): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(22,1): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(24,1): error TS2630: Cannot assign to 'foo' because it is a function.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(27,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(28,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(29,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -23,10 +23,10 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(5
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(51,11): error TS1005: ';' expected.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(54,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(57,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,2): error TS2539: Cannot assign to 'M' because it is not a variable.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(59,2): error TS2539: Cannot assign to 'C' because it is not a variable.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(60,2): error TS2539: Cannot assign to 'E' because it is not a variable.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(61,2): error TS2539: Cannot assign to 'foo' because it is not a variable.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(59,2): error TS2629: Cannot assign to 'C' because it is a class.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(60,2): error TS2628: Cannot assign to 'E' because it is an enum.
+tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(61,2): error TS2630: Cannot assign to 'foo' because it is a function.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(62,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(63,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(64,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -67,20 +67,20 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
     module M { export var a; }
     M = value;
     ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     
     C = value;
     ~
-!!! error TS2539: Cannot assign to 'C' because it is not a variable.
+!!! error TS2629: Cannot assign to 'C' because it is a class.
     
     enum E { }
     E = value;
     ~
-!!! error TS2539: Cannot assign to 'E' because it is not a variable.
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
     
     foo = value;
     ~~~
-!!! error TS2539: Cannot assign to 'foo' because it is not a variable.
+!!! error TS2630: Cannot assign to 'foo' because it is a function.
     
     // literals
     null = value;
@@ -148,16 +148,16 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     (M) = value;
      ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     (C) = value;
      ~
-!!! error TS2539: Cannot assign to 'C' because it is not a variable.
+!!! error TS2629: Cannot assign to 'C' because it is a class.
     (E) = value;
      ~
-!!! error TS2539: Cannot assign to 'E' because it is not a variable.
+!!! error TS2628: Cannot assign to 'E' because it is an enum.
     (foo) = value;
      ~~~
-!!! error TS2539: Cannot assign to 'foo' because it is not a variable.
+!!! error TS2630: Cannot assign to 'foo' because it is a function.
     (null) = value;
     ~~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

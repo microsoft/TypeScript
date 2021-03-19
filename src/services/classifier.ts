@@ -740,6 +740,9 @@ namespace ts {
                             pos = tag.end;
                             break;
                     }
+                    if (tag.comment) {
+                        pushCommentRange(tag.comment.pos, tag.comment.end - tag.comment.pos);
+                    }
                 }
             }
 

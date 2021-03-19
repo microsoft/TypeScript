@@ -405,7 +405,20 @@
           "tags": [
             {
               "name": "param",
-              "text": "a Parameter definition."
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "text"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "Parameter definition.",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         },

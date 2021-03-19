@@ -18,7 +18,7 @@ tests/cases/conformance/jsdoc/declarations/file.js(6,5): error TS4084: Exported 
     
 ==== tests/cases/conformance/jsdoc/declarations/file.js (3 errors) ====
     /** @typedef {import('./base')} BaseFactory */
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4084: Exported type alias 'BaseFactory' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
     /**
      * @callback BaseFactoryFactory
@@ -29,7 +29,7 @@ tests/cases/conformance/jsdoc/declarations/file.js(6,5): error TS4084: Exported 
     ~
 !!! error TS4084: Exported type alias 'BaseFactoryFactory' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
     /** @enum {import('./base')} */
-        ~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS4084: Exported type alias 'couldntThinkOfAny' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
     const couldntThinkOfAny = {}
     
