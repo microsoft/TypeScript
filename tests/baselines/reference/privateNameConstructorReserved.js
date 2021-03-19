@@ -10,5 +10,6 @@ class A {
     constructor() {
         _A_instances.add(this);
     }
+    #constructor() { } // Error: `#constructor` is a reserved word.
 }
-_A_instances = new WeakSet(), _A_constructor = function _A_constructor() { };
+_A_instances = new WeakSet();
