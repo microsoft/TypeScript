@@ -252,7 +252,7 @@ exports.multiply = multiply;
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -265,7 +265,7 @@ exports.multiply = multiply;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -279,7 +279,7 @@ exports.multiply = multiply;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             }
           ]
@@ -293,7 +293,7 @@ exports.multiply = multiply;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -415,7 +415,7 @@ exports.m = mod;
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -428,7 +428,7 @@ exports.m = mod;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 0
             }
@@ -443,7 +443,7 @@ exports.m = mod;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 1
             }
@@ -472,7 +472,7 @@ exports.m = mod;
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -652,7 +652,7 @@ exports.m = mod;
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -665,7 +665,7 @@ exports.m = mod;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 0
             }
@@ -680,12 +680,12 @@ exports.m = mod;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "../logic/index.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 2
             }
@@ -709,7 +709,7 @@ exports.m = mod;
           },
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 1
             }
@@ -743,7 +743,7 @@ exports.m = mod;
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1012,7 +1012,7 @@ exports.someClass = someClass;
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1025,7 +1025,7 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1039,7 +1039,7 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             }
           ]
@@ -1053,7 +1053,7 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -1158,7 +1158,7 @@ exports.someClass = someClass;
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1171,7 +1171,7 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 0
             }
@@ -1186,7 +1186,7 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 1
             }
@@ -1215,7 +1215,7 @@ exports.someClass = someClass;
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1378,7 +1378,7 @@ exports.someClass = someClass;
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1391,7 +1391,7 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 0
             }
@@ -1406,12 +1406,12 @@ exports.someClass = someClass;
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "../logic/index.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 2
             }
@@ -1435,7 +1435,7 @@ exports.someClass = someClass;
           },
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 1
             }
@@ -1469,7 +1469,7 @@ exports.someClass = someClass;
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1708,7 +1708,7 @@ var someClass2 = /** @class */ (function () {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1721,7 +1721,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1735,7 +1735,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             }
           ]
@@ -1749,7 +1749,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -1937,7 +1937,7 @@ var someClass2 = /** @class */ (function () {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1950,7 +1950,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1964,7 +1964,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             }
           ]
@@ -1978,7 +1978,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -2083,7 +2083,7 @@ var someClass2 = /** @class */ (function () {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -2096,7 +2096,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 0
             }
@@ -2111,7 +2111,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 1
             }
@@ -2140,7 +2140,7 @@ var someClass2 = /** @class */ (function () {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -2303,7 +2303,7 @@ var someClass2 = /** @class */ (function () {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -2316,7 +2316,7 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 0
             }
@@ -2331,12 +2331,12 @@ var someClass2 = /** @class */ (function () {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "../logic/index.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 2
             }
@@ -2360,7 +2360,7 @@ var someClass2 = /** @class */ (function () {
           },
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./index.ts",
               "index": 1
             }
@@ -2394,7 +2394,7 @@ var someClass2 = /** @class */ (function () {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]

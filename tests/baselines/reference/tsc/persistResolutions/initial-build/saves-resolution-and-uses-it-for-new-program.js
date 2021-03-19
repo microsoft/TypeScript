@@ -270,7 +270,7 @@ interface SomeType {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -283,21 +283,21 @@ interface SomeType {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             }
@@ -326,7 +326,7 @@ interface SomeType {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -340,12 +340,12 @@ interface SomeType {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -362,7 +362,7 @@ interface SomeType {
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -394,7 +394,7 @@ interface SomeType {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -644,7 +644,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -657,21 +657,21 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             }
@@ -700,7 +700,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -714,12 +714,12 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -736,7 +736,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -768,7 +768,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1012,7 +1012,7 @@ define(["require", "exports"], function (require, exports) {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1025,21 +1025,21 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 2
             }
@@ -1068,7 +1068,7 @@ define(["require", "exports"], function (require, exports) {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1082,12 +1082,12 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 5
             }
           ]
@@ -1104,7 +1104,7 @@ define(["require", "exports"], function (require, exports) {
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -1118,12 +1118,12 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -1160,7 +1160,7 @@ define(["require", "exports"], function (require, exports) {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1408,7 +1408,7 @@ define(["require", "exports"], function (require, exports) {
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1421,21 +1421,21 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 2
             }
@@ -1464,7 +1464,7 @@ define(["require", "exports"], function (require, exports) {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1478,7 +1478,7 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             }
           ]
@@ -1492,12 +1492,12 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 6
             }
           ]
@@ -1514,7 +1514,7 @@ define(["require", "exports"], function (require, exports) {
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1528,12 +1528,12 @@ define(["require", "exports"], function (require, exports) {
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 5
             }
           ]
@@ -1570,7 +1570,7 @@ define(["require", "exports"], function (require, exports) {
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -1808,7 +1808,7 @@ Semantic diagnostics in builder refreshed for::
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1821,21 +1821,21 @@ Semantic diagnostics in builder refreshed for::
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 2
             }
@@ -1850,16 +1850,16 @@ Semantic diagnostics in builder refreshed for::
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 1
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 3
             }
@@ -1888,7 +1888,7 @@ Semantic diagnostics in builder refreshed for::
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1902,12 +1902,12 @@ Semantic diagnostics in builder refreshed for::
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 6
             }
           ]
@@ -1924,7 +1924,7 @@ Semantic diagnostics in builder refreshed for::
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1938,12 +1938,12 @@ Semantic diagnostics in builder refreshed for::
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 5
             }
           ]
@@ -1980,7 +1980,7 @@ Semantic diagnostics in builder refreshed for::
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -2186,7 +2186,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -2199,21 +2199,21 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 2
             }
@@ -2228,16 +2228,16 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 1
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 3
             }
@@ -2266,7 +2266,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -2280,12 +2280,12 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 6
             }
           ]
@@ -2302,7 +2302,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -2316,12 +2316,12 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 5
             }
           ]
@@ -2358,7 +2358,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]

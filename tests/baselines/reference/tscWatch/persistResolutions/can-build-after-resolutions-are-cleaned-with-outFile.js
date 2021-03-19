@@ -272,7 +272,7 @@ exitCode:: ExitStatus.undefined
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -285,21 +285,21 @@ exitCode:: ExitStatus.undefined
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             }
@@ -328,7 +328,7 @@ exitCode:: ExitStatus.undefined
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -342,12 +342,12 @@ exitCode:: ExitStatus.undefined
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -364,7 +364,7 @@ exitCode:: ExitStatus.undefined
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -396,7 +396,7 @@ exitCode:: ExitStatus.undefined
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -676,7 +676,7 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -689,21 +689,21 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             }
@@ -732,7 +732,7 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -746,12 +746,12 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -768,7 +768,7 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -800,7 +800,7 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1128,7 +1128,7 @@ declare module "src/main" { }
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1141,21 +1141,21 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 2
             }
@@ -1184,7 +1184,7 @@ declare module "src/main" { }
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1198,12 +1198,12 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 5
             }
           ]
@@ -1220,7 +1220,7 @@ declare module "src/main" { }
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             }
           ]
@@ -1234,12 +1234,12 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
@@ -1276,7 +1276,7 @@ declare module "src/main" { }
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1629,7 +1629,7 @@ declare module "src/main" { }
           "hasNoDefaultLib": true,
           "includeReasons": [
             {
-              "kind": 6
+              "kind": "LibFile"
             }
           ]
         },
@@ -1642,21 +1642,21 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 2
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 1
             },
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 2
             }
@@ -1685,7 +1685,7 @@ declare module "src/main" { }
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 0
             }
           ]
@@ -1699,7 +1699,7 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 1
             }
           ]
@@ -1713,12 +1713,12 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 4,
+              "kind": "ReferenceFile",
               "file": "./src/filewithref.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 6
             }
           ]
@@ -1735,7 +1735,7 @@ declare module "src/main" { }
           ],
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 3
             }
           ]
@@ -1749,12 +1749,12 @@ declare module "src/main" { }
           "flags": 0,
           "includeReasons": [
             {
-              "kind": 3,
+              "kind": "Import",
               "file": "./src/main.ts",
               "index": 0
             },
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 5
             }
           ]
@@ -1791,7 +1791,7 @@ declare module "src/main" { }
           },
           "includeReasons": [
             {
-              "kind": 0,
+              "kind": "RootFile",
               "index": 4
             }
           ]
