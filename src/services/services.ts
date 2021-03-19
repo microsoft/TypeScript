@@ -585,8 +585,8 @@ namespace ts {
             forEachUnique(declarations, declaration => {
                 const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
                     if (!seenSymbols.has(symbol)) {
-                        seenSymbols.add(symbol)
-                        return symbol.getDocumentationComment(checker)
+                        seenSymbols.add(symbol);
+                        return symbol.getDocumentationComment(checker);
                     }
                 });
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
