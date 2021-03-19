@@ -20,6 +20,14 @@ namespace ts.tscWatch {
                     content: `export function something() { return 10; }`,
                 },
                 {
+                    path: `${projectRoot}/src/fileWithRef.ts`,
+                    content: `/// <reference path="./types.ts"/>`,
+                },
+                {
+                    path: `${projectRoot}/src/types.ts`,
+                    content: `interface SomeType {}`,
+                },
+                {
                     path: `${projectRoot}/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {

@@ -10,6 +10,8 @@ namespace ts {
                     import { something } from "./filePresent";
                     import { something2 } from "./fileNotFound";`,
                 "/src/project/src/filePresent.ts": `export function something() { return 10; }`,
+                "/src/project/src/fileWithRef.ts": `/// <reference path="./types.ts"/>`,
+                "/src/project/src/types.ts": `interface SomeType {}`,
                 "/src/project/tsconfig.json": JSON.stringify({
                     compilerOptions: {
                         module: "amd",
@@ -60,6 +62,10 @@ namespace ts {
                         [`/src/project/src/main.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
                         [`/src/project/src/newfile.js`, CleanBuildDescrepancy.CleanFilePresent],
                         [`/src/project/src/newfile.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/types.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/types.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/filewithref.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/filewithref.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
                         [`/src/project/tsconfig.tsbuildinfo`, CleanBuildDescrepancy.CleanFileTextDifferent],
                     ]),
                 },

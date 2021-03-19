@@ -10,6 +10,8 @@ namespace ts {
                     import { something } from "./filePresent";
                     import { something2 } from "./fileNotFound";`,
                 "/src/project/src/filePresent.ts": `export function something() { return 10; }`,
+                "/src/project/src/fileWithRef.ts": `/// <reference path="./types.ts"/>`,
+                "/src/project/src/types.ts": `interface SomeType {}`,
                 "/src/project/tsconfig.json": JSON.stringify({
                     compilerOptions: {
                         module: "amd",

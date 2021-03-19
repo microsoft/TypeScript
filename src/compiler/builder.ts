@@ -1201,7 +1201,7 @@ namespace ts {
         }
 
         function toPersistedProgramFileReference(f: FileReference) {
-            return relativeToBuildInfoEnsuringAbsolutePath(f.fileName);
+            return f.fileName;
         }
     }
 
@@ -1711,9 +1711,9 @@ namespace ts {
                     resolvedPath,
                     flags: file.flags,
                     version: file.version,
-                    typeReferenceDirectives: mapToReadonlyArray(file.typeReferenceDirectives, toAbsolutePath),
-                    libReferenceDirectives: mapToReadonlyArray(file.libReferenceDirectives, toAbsolutePath),
-                    referencedFiles: mapToReadonlyArray(file.referencedFiles, toAbsolutePath),
+                    typeReferenceDirectives: file.typeReferenceDirectives || emptyArray,
+                    libReferenceDirectives: file.libReferenceDirectives || emptyArray,
+                    referencedFiles: file.referencedFiles || emptyArray,
                     imports: file.imports || emptyArray,
                     moduleAugmentations: file.moduleAugmentations || emptyArray,
                     ambientModuleNames: file.ambientModuleNames || emptyArray,
