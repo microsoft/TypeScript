@@ -23630,6 +23630,9 @@ namespace ts {
 
         function isConstraintPosition(node: Node) {
             const parent = node.parent;
+            // In an element access obj[x], we consider obj to be in a constraint position only when x is not
+            // of a generic type. This is because when both obj and x are of generic types T and K, we want
+            // the resulting type to be T[K].
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
                 parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node &&
