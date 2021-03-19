@@ -1829,6 +1829,7 @@ namespace ts {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
                 case SyntaxKind.FunctionExpression:
@@ -1864,7 +1865,7 @@ namespace ts {
                     // By not creating a new block-scoped-container here, we ensure that both 'var x'
                     // and 'let x' go into the Function-container's locals, and we do get a collision
                     // conflict.
-                    return isFunctionLike(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
+                    return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
             }
 
             return ContainerFlags.None;
@@ -1926,6 +1927,7 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another

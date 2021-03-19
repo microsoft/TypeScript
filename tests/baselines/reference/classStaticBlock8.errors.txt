@@ -1,0 +1,56 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(9,21): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(12,21): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(15,21): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(25,13): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(28,13): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(31,13): error TS1107: Jump target cannot cross function boundary.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts (6 errors) ====
+    function foo (v: number) {
+        label: if (v) {
+            class C {
+                static {
+                    if (v === 1) {
+                        break label;
+                    }
+                    if (v === 2) {
+                        continue label;
+                        ~~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+                    }
+                    if (v === 3) {
+                        break
+                        ~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+                    }
+                    if (v === 4) {
+                        continue
+                        ~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+                    }
+    
+                }
+            }
+    
+            if (v === 5) {
+                break label;
+            }
+            if (v === 6) {
+                continue label;
+                ~~~~~~~~~~~~~~~
+!!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+            }
+            if (v === 7) {
+                break;
+                ~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+            }
+            if (v === 8) {
+                continue;
+                ~~~~~~~~~
+!!! error TS1107: Jump target cannot cross function boundary.
+            }
+        }
+    }
+    

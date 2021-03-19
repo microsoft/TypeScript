@@ -1,0 +1,45 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts ===
+class B {
+>B : B
+
+    static a = 1;
+>a : number
+>1 : 1
+}
+
+class C extends B {
+>C : C
+>B : B
+
+    static {
+        var await = 1;
+>await : number
+>1 : 1
+
+        var arguments = 1;
+>arguments : number
+>1 : 1
+
+        var eval = 1;
+>eval : number
+>1 : 1
+
+
+        await: if (true) {
+>await : any
+>true : true
+
+        }
+
+        arguments;
+>arguments : number
+
+        await;
+>await : number
+
+        super();
+>super() : void
+>super : any
+    }
+}
+

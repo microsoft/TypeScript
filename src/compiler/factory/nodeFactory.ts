@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createClassStaticBlockDeclaration,
+            updateClassStaticBlockDeclaration,
             createTemplateLiteralTypeSpan,
             updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
@@ -1607,6 +1609,36 @@ namespace ts {
                 || node.decorators !== decorators
                 || node.modifiers !== modifiers
                 ? updateBaseSignatureDeclaration(createIndexSignature(decorators, modifiers, parameters, type), node)
+                : node;
+        }
+
+        // @api
+        function createClassStaticBlockDeclaration(
+            staticToken: Token<SyntaxKind.StaticKeyword>,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
+                SyntaxKind.ClassStaticBlockDeclaration,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined
+            );
+            node.staticToken = staticToken;
+            node.body = body;
+            node.transformFlags = TransformFlags.ContainsESNext;
+            return node;
+        }
+
+        // @api
+        function updateClassStaticBlockDeclaration(
+            node: ClassStaticBlockDeclaration,
+            staticToken: Token<SyntaxKind.StaticKeyword>,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            return node.staticToken !== staticToken
+                || node.body !== body
+                ? update(createClassStaticBlockDeclaration(staticToken, body), node)
                 : node;
         }
 

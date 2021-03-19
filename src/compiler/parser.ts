@@ -168,6 +168,9 @@ namespace ts {
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
                     visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return visitNode(cbNode, (<ClassStaticBlockDeclaration>node).staticToken) ||
+                    visitNode(cbNode, (<ClassStaticBlockDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
                     visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
@@ -6561,6 +6564,28 @@ namespace ts {
             return false;
         }
 
+        function parseClassStaticBlockDeclaration(): ClassStaticBlockDeclaration {
+            const pos = getNodePos();
+            const staticKeyworkd = parseExpectedToken(SyntaxKind.StaticKeyword);
+            const body = parseClassStaticBlockBodyBlock();
+            return finishNode(factory.createClassStaticBlockDeclaration(staticKeyworkd, body), pos);
+        }
+
+        function parseClassStaticBlockBodyBlock() {
+            const savedYieldContext = inYieldContext();
+            setYieldContext(false);
+
+            const savedAwaitContext = inAwaitContext();
+            setAwaitContext(false);
+
+            const block = parseBlock(/*ignoreMissingOpenBrace*/ false);
+
+            setAwaitContext(savedAwaitContext);
+            setYieldContext(savedYieldContext);
+
+            return block;
+        }
+
         function parseDecoratorExpression() {
             if (inAwaitContext() && token() === SyntaxKind.AwaitKeyword) {
                 // `@await` is is disallowed in an [Await] context, but can cause parsing to go off the rails
@@ -6644,6 +6669,9 @@ namespace ts {
             if (token() === SyntaxKind.SemicolonToken) {
                 nextToken();
                 return finishNode(factory.createSemicolonClassElement(), pos);
+            }
+            if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
+                return parseClassStaticBlockDeclaration();
             }
 
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -6908,6 +6936,10 @@ namespace ts {
 
         function nextTokenIsOpenParen() {
             return nextToken() === SyntaxKind.OpenParenToken;
+        }
+
+        function nextTokenIsOpenBrace() {
+            return nextToken() === SyntaxKind.OpenBraceToken;
         }
 
         function nextTokenIsSlash() {
