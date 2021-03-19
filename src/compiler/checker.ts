@@ -23632,7 +23632,8 @@ namespace ts {
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
-                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node;
+                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node &&
+                    !isGenericIndexType(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression));
         }
 
         function isGenericTypeWithUnionConstraint(type: Type) {
