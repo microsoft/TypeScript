@@ -581,20 +581,16 @@ namespace ts {
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
         if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+            const seenSymbols = new Set<Symbol>();
             forEachUnique(declarations, declaration => {
-                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol)
+                        return symbol.getDocumentationComment(checker)
+                    }
+                });
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
-                if (inheritedDocs) {
-                    if (doc.length === 0) doc = inheritedDocs.slice();
-                    else {
-                        for (const docValue of doc) {
-                            if (docValue.text !== "\n" && !inheritedDocs.some(value => value.text === docValue.text)) {
-                                inheritedDocs.push(lineBreakPart(), docValue);
-                            }
-                        }
-                        doc = inheritedDocs;
-                    };
-                };
+                if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
             });
         }
         return doc;
