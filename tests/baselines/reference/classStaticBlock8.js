@@ -1,6 +1,6 @@
 //// [classStaticBlock8.ts]
 function foo (v: number) {
-    label: if (v) {
+    label: while (v) {
         class C {
             static {
                 if (v === 1) {
@@ -15,7 +15,6 @@ function foo (v: number) {
                 if (v === 4) {
                     continue
                 }
-
             }
         }
 
@@ -37,7 +36,7 @@ function foo (v: number) {
 
 //// [classStaticBlock8.js]
 function foo(v) {
-    label: if (v) {
+    label: while (v) {
         var C = /** @class */ (function () {
             function C() {
             }

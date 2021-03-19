@@ -3,7 +3,7 @@ function foo (v: number) {
 >foo : (v: number) => void
 >v : number
 
-    label: if (v) {
+    label: while (v) {
 >label : any
 >v : number
 
@@ -41,7 +41,6 @@ function foo (v: number) {
 
                     continue
                 }
-
             }
         }
 

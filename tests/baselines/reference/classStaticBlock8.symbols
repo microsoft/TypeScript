@@ -3,11 +3,11 @@ function foo (v: number) {
 >foo : Symbol(foo, Decl(classStaticBlock8.ts, 0, 0))
 >v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
 
-    label: if (v) {
+    label: while (v) {
 >v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
 
         class C {
->C : Symbol(C, Decl(classStaticBlock8.ts, 1, 19))
+>C : Symbol(C, Decl(classStaticBlock8.ts, 1, 22))
 
             static {
                 if (v === 1) {
@@ -30,7 +30,6 @@ function foo (v: number) {
 
                     continue
                 }
-
             }
         }
 
