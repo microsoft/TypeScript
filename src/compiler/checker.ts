@@ -12170,19 +12170,28 @@ namespace ts {
             // return false;
         }
 
-        // define <: on TypeLambda
+        /**
+         * define <: on TypeLambda
+         * TL1  =  [X >: L1 <: U1] =>> R1
+         * TL2  =  [X >: L2 <: U2] =>> R2
+         * TL1 <: TL2 if
+         *   - L2..U2 is more strict. (i.e. L1 <: L2 and U2 <: U1)
+         *   - R1 <: R2
+         * @param tl1
+         * @param tl2
+         * @returns tl1 <: tl2
+         */
         // @ts-ignore
         function isTypeLambdaLessThan(tl1: TypeLambda, tl2: TypeLambda): boolean {
             Debug.assert(tl1.paramInfos.length === tl1.paramInfos.length, "kind must match");
             const lengthOfTypeParameters = tl1.paramInfos.length;
             // parameters are contravariance
             for (let i = 0; i < lengthOfTypeParameters; i++) {
-                const constraint1 = tl1.paramInfos[i].upperBound;
-                const constraint2 = tl2.paramInfos[i].upperBound;
+                const constraint1 = tl1.paramInfos[i].upperBound ?? anyType;
+                const constraint2 = tl2.paramInfos[i].upperBound ?? anyType;
                 const isTypeLamnda1 = isTypeLambda(constraint1);
                 const isTypeLamnda2 = isTypeLambda(constraint2);
                 Debug.assert(isTypeLamnda1 === isTypeLamnda2, "kind must match");
-
                 let res: boolean;
                 if (isTypeLambda(constraint1) && isTypeLambda(constraint2)) {
                     res = isTypeLambdaLessThan(constraint2, constraint1);
@@ -12232,10 +12241,10 @@ namespace ts {
                 let res: TypeLambdaParameterInfo;
                 if (isTypeParameterTypeConstructorDeclaration(typeParameter)) {
                     res = {
-                        typeref: typeParameter,
+                        typeRef: typeParameter,
                         upperBound: convertTypeToTypelambda(typeParameter),
                         variance: VarianceFlags.Bivariant
-                    }
+                    };
                 }
                 // it is just a proper type, zero kind.
                 else {
@@ -12249,6 +12258,21 @@ namespace ts {
                 }
                 return res;
             }
+        }
+
+        function applyTypeLambdaWithTypeArguments(tl: TypeLambda, typearguments: (TypeLambda | ProperType)[]): ProperType {
+
+        }
+
+        // interface Functor[Generic[T <: U] <: Set[U], U]
+        // Functor[List, number]
+        // In this case, when check whether List <: Functor#Generic, we need to replace U with number first
+        // So we should
+        // 1. create a Mapper
+        // 2. instanitatedTL = instanitateTypeLambdaWithMapper(Generic, Mapper)
+        // 3. isTypeLambdaLessThan(List, instanitatedTL)
+        function instanitateTypeLambdaWithMapper(){
+
         }
 
         /**

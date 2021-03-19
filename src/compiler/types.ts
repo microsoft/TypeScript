@@ -5348,13 +5348,18 @@ namespace ts {
 
     // One Type is ProperType if it is not a TypeLambda. e.g Set<number>, Set<Set<number>>.
     // However, Set<T> depends, if it means the class, it is a type lambda(T is typeParameter), if it is a constraint, it is a proper type(T is a declared typeArgument).
-    export interface ProperType extends Type{
-
+    /**
+     * interface MyGeneric<T> exnteds Set<T>{}
+     *           ^ lambda             ^   ^ both proper
+     * interface MyFunctor<Generic<T> extends Set<T>>{}
+     *           ^         ^ both lambda      ^   ^ both proper
+     */
+    export interface ProperType extends Type {
     }
 
     export interface TypeLambdaParameterInfo {
         typeRef: Type;
-        upperBound: TypeLambda | ProperType;
+        upperBound?: TypeLambda | ProperType;
         variance: VarianceFlags
     }
 
