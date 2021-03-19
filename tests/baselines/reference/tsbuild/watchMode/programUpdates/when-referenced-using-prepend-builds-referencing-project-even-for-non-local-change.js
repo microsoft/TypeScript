@@ -30,7 +30,7 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -82,6 +82,9 @@ declare function foo(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -107,7 +110,8 @@ declare function foo(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 203
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -138,6 +142,9 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":30,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":30,"kind":"text"}]},{"pos":30,"end":69,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":32,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":32,"kind":"text"}]},{"pos":32,"end":64,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -189,7 +196,8 @@ declare function bar(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 417
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -232,7 +240,7 @@ function myFunc() { return 10; }
 
 Output::
 >> Screen clear
-[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -276,6 +284,9 @@ declare function myFunc(): number;
 
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -301,7 +312,8 @@ declare function myFunc(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 203
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -328,7 +340,7 @@ Change:: Build logic
 Input::
 
 Output::
-[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -376,6 +388,9 @@ declare function bar(): number;
 
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":63,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":63,"kind":"text"}]},{"pos":63,"end":102,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -427,7 +442,8 @@ declare function bar(): number;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 418
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
@@ -472,7 +488,7 @@ function myFunc() { return 100; }
 
 Output::
 >> Screen clear
-[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -512,6 +528,9 @@ function myFunc() { return 100; }
 
 //// [/user/username/projects/sample1/core/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/core/index.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -537,7 +556,8 @@ function myFunc() { return 100; }
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 203
 }
 
 //// [/user/username/projects/sample1/core/index.tsbuildinfo.baseline.txt]
@@ -564,7 +584,7 @@ Change:: Build logic
 Input::
 
 Output::
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -597,6 +617,9 @@ function bar() { return foo() + 1; }
 
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"prepend","data":"../core/index.js","texts":[{"pos":0,"end":64,"kind":"text"}]},{"pos":64,"end":103,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":67,"kind":"prepend","data":"../core/index.d.ts","texts":[{"pos":0,"end":67,"kind":"text"}]},{"pos":67,"end":99,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/logic/index.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -648,7 +671,8 @@ function bar() { return foo() + 1; }
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 418
 }
 
 //// [/user/username/projects/sample1/logic/index.tsbuildinfo.baseline.txt]
