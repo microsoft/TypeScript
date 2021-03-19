@@ -357,7 +357,7 @@ interface Symbol {
                 ...buildInfo.program.peristedProgram,
                 files: buildInfo.program.peristedProgram.files?.map(toReadablePersistedProgramSourceFile),
                 filesByName,
-                projectReferences: buildInfo.program.peristedProgram.projectReferences,
+                projectReferences: buildInfo.program.peristedProgram.projectReferences?.map(toProjectReference),
                 resolvedProjectReferences: buildInfo.program.peristedProgram.resolvedProjectReferences?.map(toReadablePersistedProgramResolvedProjectReference),
                 missingPaths: buildInfo.program.peristedProgram.missingPaths?.map(toFileName),
                 fileProcessingDiagnostics: buildInfo.program.peristedProgram.fileProcessingDiagnostics?.map(toReadablePersistedProgramFilePreprocessingDiagnostic),
@@ -432,10 +432,18 @@ interface Symbol {
 
         function toReadablePersistedProgramResolvedProjectReference(ref: PersistedProgramResolvedProjectReference | undefined): ReadablePersistedProgramResolvedProjectReference | undefined {
             return ref && {
-                commandLine: ref.commandLine,
+                commandLine: {
+                    fileNames: ref.commandLine.fileNames?.map(toFileName),
+                    options: ref.commandLine.options,
+                    projectReferences: ref.commandLine.projectReferences?.map(toProjectReference)
+                },
                 sourceFile: { ...ref.sourceFile, path: toFileName(ref.sourceFile.path) },
                 references: ref.references?.map(toReadablePersistedProgramResolvedProjectReference)
             };
+        }
+
+        function toProjectReference(ref: PersistedProgramProjectReference): ProjectReference {
+            return { ...ref, path: toFileName(ref.path) };
         }
     }
 
