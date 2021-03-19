@@ -7708,7 +7708,7 @@ namespace ts {
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
                     const text = [];
-                    while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia) {
+                    while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
                         text.push(scanner.getTokenText());
                         nextTokenJSDoc();
                     }
