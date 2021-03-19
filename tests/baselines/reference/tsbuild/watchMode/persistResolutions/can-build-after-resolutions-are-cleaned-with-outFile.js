@@ -23,7 +23,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/main.ts"]},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 
 /a/lib/tsc.js --b . -w --extendedDiagnostics
@@ -144,17 +144,10 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/main.ts"]},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"-22084070133-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"-22084070133-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./src/filePresent.ts",
-      "./src/main.ts"
-    ]
-  },
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
@@ -191,7 +184,7 @@ exitCode:: ExitStatus.undefined
     "exportedModulesMap": {}
   },
   "version": "FakeTSVersion",
-  "size": 1017
+  "size": 922
 }
 
 
@@ -269,18 +262,10 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/newFile.ts","./src/main.ts"]},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"4428918903-export function foo() { return 20; }","signature":false},{"version":"-1814339108-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"4428918903-export function foo() { return 20; }","signature":false},{"version":"-1814339108-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./src/filePresent.ts",
-      "./src/newFile.ts",
-      "./src/main.ts"
-    ]
-  },
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
@@ -323,7 +308,7 @@ exitCode:: ExitStatus.undefined
     "exportedModulesMap": {}
   },
   "version": "FakeTSVersion",
-  "size": 1170
+  "size": 1056
 }
 
 

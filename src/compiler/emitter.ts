@@ -386,7 +386,7 @@ namespace ts {
                 return;
             }
             const version = ts.version; // Extracted into a const so the form is stable between namespace and module
-            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
+            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle: bundle && (bundle.js || bundle.dts) ? bundle : undefined, program, version }), /*writeByteOrderMark*/ false);
         }
 
         function emitJsFileOrBundle(
