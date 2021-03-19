@@ -170,8 +170,17 @@ namespace ts {
                     return visitForStatement(node as ForStatement);
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return visitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function visitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            if (!shouldTransformPrivateElements) {
+                return visitEachChild(node, classElementVisitor, context);
+            }
+            return undefined;
         }
 
         function visitorDestructuringTarget(node: Node): VisitResult<Node> {
@@ -501,6 +510,20 @@ namespace ts {
                 );
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
+            if (shouldTransformPrivateElements) {
+                receiver = visitNode(receiver, visitor, isExpression);
+                const right = factory.createImmediatelyInvokedArrowFunction(visitNodes(node.body.statements, visitor, isBlock));
+                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                    receiver,
+                    factory.createUniqueName("_"),
+                    right,
+                    PrivateIdentifierKind.Field,
+                    /*f*/ undefined
+                );
+            }
         }
 
         function visitBinaryExpression(node: BinaryExpression) {
@@ -923,9 +946,9 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression) {
+        function addPropertyStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const expression = transformProperty(property, receiver);
+                const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property, receiver) : transformProperty(property, receiver);
                 if (!expression) {
                     continue;
                 }

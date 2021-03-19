@@ -1626,7 +1626,7 @@ namespace ts {
             );
             node.staticToken = staticToken;
             node.body = body;
-            node.transformFlags = TransformFlags.ContainsESNext;
+            node.transformFlags = TransformFlags.ContainsClassFields;
             return node;
         }
 

@@ -19,9 +19,21 @@ class C {
 
 
 //// [classStaticBlock3.js]
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
 const a = 1;
 class C {
 }
 C.f1 = 1;
+__classPrivateFieldSet(C, _1, (() => {
+    console.log(C.f1, C.f2, C.f3);
+})(), "f");
 C.f2 = 2;
+__classPrivateFieldSet(C, _2, (() => {
+    console.log(C.f1, C.f2, C.f3);
+})(), "f");
 C.f3 = 3;

@@ -32,6 +32,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+};
+var _this = this;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -46,5 +53,10 @@ var C = /** @class */ (function (_super) {
     }
     C.b = 3;
     C.c = _super.a;
+    __classPrivateFieldSet(C, _1, (function () {
+        _this.b;
+        _super.b;
+        _super.a;
+    })(), "f");
     return C;
 }(B));
