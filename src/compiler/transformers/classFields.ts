@@ -515,13 +515,11 @@ namespace ts {
         function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
             if (shouldTransformPrivateElements) {
                 receiver = visitNode(receiver, visitor, isExpression);
-                const right = factory.createImmediatelyInvokedArrowFunction(visitNodes(node.body.statements, visitor, isBlock));
-                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
-                    receiver,
-                    factory.createUniqueName("_"),
-                    right,
-                    PrivateIdentifierKind.Field,
-                    /*f*/ undefined
+                const right = factory.createImmediatelyInvokedArrowFunction(visitNode(node.body, visitor, isBlock).statements);
+                const name = createHoistedVariableForClass("_", node);
+                return createPrivateStaticFieldInitializer(
+                    name,
+                    right
                 );
             }
         }
@@ -1313,7 +1311,7 @@ namespace ts {
             getPendingExpressions().push(...assignmentExpressions);
         }
 
-        function createHoistedVariableForClass(name: string, node: PrivateIdentifier): Identifier {
+        function createHoistedVariableForClass(name: string, node: PrivateIdentifier | ClassStaticBlockDeclaration): Identifier {
             const { className } = getPrivateIdentifierEnvironment();
             const prefix = className ? `_${className}` : "";
             const identifier = factory.createUniqueName(`${prefix}_${name}`, GeneratedIdentifierFlags.Optimistic);

@@ -1,0 +1,25 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts(2,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts(3,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts(4,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock14.ts (3 errors) ====
+    class C {
+      static #_1 = 1;
+             ~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+      static #_3 = 1;
+             ~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+      static #_5 = 1;
+             ~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    
+      static {}
+      static {}
+      static {}
+      static {}
+      static {}
+      static {}
+    }
+    

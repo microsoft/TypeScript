@@ -1,0 +1,27 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock13.ts ===
+class C {
+>C : C
+
+  static #x = 123;
+>#x : number
+>123 : 123
+  
+  static {
+    console.log(C.#x)
+>console.log(C.#x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>C.#x : number
+>C : typeof C
+  }
+
+  foo () {
+>foo : () => number
+
+    return C.#x;
+>C.#x : number
+>C : typeof C
+  }
+}
+

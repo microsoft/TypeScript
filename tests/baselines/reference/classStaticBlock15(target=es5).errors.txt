@@ -1,0 +1,30 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts(2,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts(3,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts(4,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts(14,13): error TS2304: Cannot find name '_C__1'.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts (4 errors) ====
+    class C {
+      static #_1 = 1;
+             ~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+      static #_3 = 3;
+             ~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+      static #_5 = 5;
+             ~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    
+      static {}
+      static {}
+      static {}
+      static {}
+      static {}
+      static {}
+    }
+    
+    console.log(_C__1)
+                ~~~~~
+!!! error TS2304: Cannot find name '_C__1'.
+    
