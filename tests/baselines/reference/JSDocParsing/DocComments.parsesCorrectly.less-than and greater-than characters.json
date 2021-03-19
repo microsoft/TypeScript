@@ -20,7 +20,21 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": "hi\n< > still part of the previous comment",
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 16,
+                    "end": 59,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "hi\n< > still part of the previous comment"
+                },
+                "length": 1,
+                "pos": 16,
+                "end": 59,
+                "hasTrailingComma": false,
+                "transformFlags": 0
+            },
             "name": {
                 "kind": "Identifier",
                 "pos": 14,

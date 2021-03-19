@@ -43,7 +43,7 @@ namespace ts {
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /* @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
-        getJsDocTags(): JSDocTagInfo[];
+        getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
     }
 
     export interface Type {
@@ -1032,6 +1032,9 @@ namespace ts {
         enumMemberName,
         functionName,
         regularExpressionLiteral,
+        link,
+        linkName,
+        linkText,
     }
 
     export interface SymbolDisplayPart {
@@ -1039,9 +1042,13 @@ namespace ts {
         kind: string;
     }
 
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        target: DocumentSpan;
+    }
+
     export interface JSDocTagInfo {
         name: string;
-        text?: string;
+        text?: SymbolDisplayPart[];
     }
 
     export interface QuickInfo {
@@ -1391,6 +1398,15 @@ namespace ts {
 
         /** String literal */
         string = "string",
+
+        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        link = "link",
+
+        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        linkName = "link name",
+
+        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        linkText = "link text",
     }
 
     export const enum ScriptElementKindModifier {

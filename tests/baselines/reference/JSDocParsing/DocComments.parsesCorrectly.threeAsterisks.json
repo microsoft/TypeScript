@@ -5,5 +5,19 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": "*"
+    "comment": {
+        "0": {
+            "kind": "JSDocText",
+            "pos": 0,
+            "end": 5,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "text": "*"
+        },
+        "length": 1,
+        "pos": 0,
+        "end": 5,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
 }

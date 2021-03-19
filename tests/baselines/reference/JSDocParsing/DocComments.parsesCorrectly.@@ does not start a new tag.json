@@ -20,7 +20,21 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": "is (@@fine@@and) is one comment",
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 19,
+                    "end": 52,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "is (@@fine@@and) is one comment"
+                },
+                "length": 1,
+                "pos": 19,
+                "end": 52,
+                "hasTrailingComma": false,
+                "transformFlags": 0
+            },
             "name": {
                 "kind": "Identifier",
                 "pos": 14,

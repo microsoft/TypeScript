@@ -3,7 +3,7 @@ tests/cases/conformance/jsdoc/bug27142.js(1,5): error TS2456: Type alias 'E' cir
 
 ==== tests/cases/conformance/jsdoc/bug27142.js (1 errors) ====
     /** @enum {E} */
-        ~~~~~~~~~
+        ~~~~~~~~~~
 !!! error TS2456: Type alias 'E' circularly references itself.
     const E = { x: 0 };
     

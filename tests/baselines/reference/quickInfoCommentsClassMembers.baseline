@@ -5585,7 +5585,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "a this is first parameter a"
+          "text": [
+            {
+              "text": "a",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is first parameter a",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -5746,7 +5759,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "a this is first parameter a"
+          "text": [
+            {
+              "text": "a",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is first parameter a",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -5815,7 +5841,20 @@
       "tags": [
         {
           "name": "param",
-          "text": "a this is first parameter a"
+          "text": [
+            {
+              "text": "a",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "this is first parameter a",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

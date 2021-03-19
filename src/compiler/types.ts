@@ -370,8 +370,10 @@ namespace ts {
         JSDocVariadicType,
         JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
         JSDocComment,
+        JSDocText,
         JSDocTypeLiteral,
         JSDocSignature,
+        JSDocLink,
         JSDocTag,
         JSDocAugmentsTag,
         JSDocImplementsTag,
@@ -3133,13 +3135,24 @@ namespace ts {
         readonly kind: SyntaxKind.JSDocComment;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
-        readonly comment?: string;
+        readonly comment?: NodeArray<JSDocText | JSDocLink>;
     }
 
     export interface JSDocTag extends Node {
         readonly parent: JSDoc | JSDocTypeLiteral;
         readonly tagName: Identifier;
-        readonly comment?: string;
+        readonly comment?: NodeArray<JSDocText | JSDocLink>;
+    }
+
+    export interface JSDocLink extends Node {
+        readonly kind: SyntaxKind.JSDocLink;
+        readonly name?: EntityName;
+        text: string;
+    }
+
+    export interface JSDocText extends Node {
+        readonly kind: SyntaxKind.JSDocText;
+        text: string;
     }
 
     export interface JSDocUnknownTag extends JSDocTag {
@@ -7166,52 +7179,56 @@ namespace ts {
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
         createJSDocNameReference(name: EntityName): JSDocNameReference;
         updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
+        createJSDocLink(name: EntityName | undefined, text: string): JSDocLink;
+        updateJSDocLink(node: JSDocLink, name: EntityName | undefined, text: string): JSDocLink;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
         updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type: JSDocReturnTag | undefined): JSDocSignature;
-        createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string): JSDocTemplateTag;
-        updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | undefined): JSDocTemplateTag;
-        createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag;
-        updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | JSDocTypeLiteral | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocTypedefTag;
-        createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag;
-        updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag;
-        createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag;
-        updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag;
-        createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
-        updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
-        createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
-        updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
-        createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
-        updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
-        createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
-        updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocThisTag;
-        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocEnumTag;
-        updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocEnumTag;
-        createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
-        updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag;
-        createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag;
-        updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag;
-        createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;
-        updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment: string | undefined): JSDocImplementsTag;
-        createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag;
-        updateJSDocAuthorTag(node: JSDocAuthorTag, tagName: Identifier | undefined, comment: string | undefined): JSDocAuthorTag;
-        createJSDocClassTag(tagName: Identifier | undefined, comment?: string): JSDocClassTag;
-        updateJSDocClassTag(node: JSDocClassTag, tagName: Identifier | undefined, comment: string | undefined): JSDocClassTag;
-        createJSDocPublicTag(tagName: Identifier | undefined, comment?: string): JSDocPublicTag;
-        updateJSDocPublicTag(node: JSDocPublicTag, tagName: Identifier | undefined, comment: string | undefined): JSDocPublicTag;
-        createJSDocPrivateTag(tagName: Identifier | undefined, comment?: string): JSDocPrivateTag;
-        updateJSDocPrivateTag(node: JSDocPrivateTag, tagName: Identifier | undefined, comment: string | undefined): JSDocPrivateTag;
-        createJSDocProtectedTag(tagName: Identifier | undefined, comment?: string): JSDocProtectedTag;
-        updateJSDocProtectedTag(node: JSDocProtectedTag, tagName: Identifier | undefined, comment: string | undefined): JSDocProtectedTag;
-        createJSDocReadonlyTag(tagName: Identifier | undefined, comment?: string): JSDocReadonlyTag;
-        updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | undefined): JSDocReadonlyTag;
-        createJSDocUnknownTag(tagName: Identifier, comment?: string): JSDocUnknownTag;
-        updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | undefined): JSDocUnknownTag;
-        createJSDocDeprecatedTag(tagName: Identifier, comment?: string): JSDocDeprecatedTag;
-        updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string): JSDocDeprecatedTag;
-        createJSDocComment(comment?: string | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
-        updateJSDocComment(node: JSDoc, comment: string | undefined, tags: readonly JSDocTag[] | undefined): JSDoc;
+        createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocTemplateTag;
+        updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocTemplateTag;
+        createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocTypedefTag;
+        updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | JSDocTypeLiteral | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocTypedefTag;
+        createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocParameterTag;
+        updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocParameterTag;
+        createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocPropertyTag;
+        updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocPropertyTag;
+        createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocTypeTag;
+        updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocTypeTag;
+        createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocSeeTag;
+        updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocSeeTag;
+        createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocReturnTag;
+        updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocReturnTag;
+        createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocThisTag;
+        updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocThisTag;
+        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocEnumTag;
+        updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocEnumTag;
+        createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocCallbackTag;
+        updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocCallbackTag;
+        createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocAugmentsTag;
+        updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocAugmentsTag;
+        createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocImplementsTag;
+        updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocImplementsTag;
+        createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocAuthorTag;
+        updateJSDocAuthorTag(node: JSDocAuthorTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocAuthorTag;
+        createJSDocClassTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocClassTag;
+        updateJSDocClassTag(node: JSDocClassTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocClassTag;
+        createJSDocPublicTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocPublicTag;
+        updateJSDocPublicTag(node: JSDocPublicTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocPublicTag;
+        createJSDocPrivateTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocPrivateTag;
+        updateJSDocPrivateTag(node: JSDocPrivateTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocPrivateTag;
+        createJSDocProtectedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocProtectedTag;
+        updateJSDocProtectedTag(node: JSDocProtectedTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocProtectedTag;
+        createJSDocReadonlyTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocReadonlyTag;
+        updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocReadonlyTag;
+        createJSDocUnknownTag(tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocUnknownTag;
+        updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocUnknownTag;
+        createJSDocDeprecatedTag(tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocDeprecatedTag;
+        updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocDeprecatedTag;
+        createJSDocText(text: string): JSDocText;
+        updateJSDocText(node: JSDocText, text: string): JSDocText;
+        createJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
+        updateJSDocComment(node: JSDoc, comment: string | NodeArray<JSDocText | JSDocLink> | undefined, tags: readonly JSDocTag[] | undefined): JSDoc;
 
         //
         // JSX
