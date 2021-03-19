@@ -151,7 +151,7 @@ module.exports = {};
       "../../src/common/nominal.js": {
         "version": "-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n",
         "signature": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": false
       }
     },
     "options": {
