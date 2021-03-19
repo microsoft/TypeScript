@@ -324,6 +324,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // Fallback to the default visit behavior.
                     return visitorWorker(node);
 

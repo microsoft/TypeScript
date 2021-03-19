@@ -38038,6 +38038,8 @@ namespace ts {
                     return checkMappedType(<MappedTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return forEachChild(node, checkSourceElement);
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                     return checkBlock(<Block>node);
@@ -41092,7 +41094,7 @@ namespace ts {
         function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
             let current: Node = node;
             while (current) {
-                if (isFunctionLike(current)) {
+                if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
                     return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
                 }
 

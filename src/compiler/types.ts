@@ -208,6 +208,7 @@ namespace ts {
         SetAccessor,
         CallSignature,
         ConstructSignature,
+        ClassStaticBlockDeclaration,
         IndexSignature,
         // Type
         TypePredicate,
@@ -1500,6 +1501,12 @@ namespace ts {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
         readonly type: TypeNode;
+    }
+
+    export interface ClassStaticBlockDeclaration extends ClassElement {
+        readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
+        readonly staticToken: Token<SyntaxKind.StaticKeyword>;
+        readonly body: Block;
     }
 
     export interface TypeNode extends Node {
@@ -6932,6 +6939,8 @@ namespace ts {
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        createClassStaticBlockDeclaration(staticToken: Token<SyntaxKind.StaticKeyword>, body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, staticToken: Token<SyntaxKind.StaticKeyword>, body: Block): ClassStaticBlockDeclaration;
 
         //
         // Types

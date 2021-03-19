@@ -1,0 +1,33 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(8,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(9,13): error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(18,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (3 errors) ====
+    class B {
+        static a = 1;
+    }
+    
+    class C extends B {
+        static {
+            var await = 1;
+            var arguments = 1;
+                ~~~~~~~~~
+!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
+            var eval = 1;
+                ~~~~
+!!! error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+    
+    
+            await: if (true) {
+    
+            }
+    
+            arguments;
+            await;
+            super();
+            ~~~~~
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+        }
+    }
+    

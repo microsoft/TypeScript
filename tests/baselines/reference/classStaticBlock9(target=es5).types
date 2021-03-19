@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock9.ts ===
+class A {
+>A : A
+
+    static bar = A.foo + 1
+>bar : number
+>A.foo + 1 : number
+>A.foo : number
+>A : typeof A
+>foo : number
+>1 : 1
+
+    static {
+        A.foo + 2;
+>A.foo + 2 : number
+>A.foo : number
+>A : typeof A
+>foo : number
+>2 : 2
+    }
+    static foo = 1;
+>foo : number
+>1 : 1
+}
+
