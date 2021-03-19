@@ -845,7 +845,7 @@ namespace ts {
 
         includeReasons: readonly PersistedProgramFileIncludeReason[];
         isSourceFileFromExternalLibraryPath?: true;
-        redirectTargets?: readonly string[];
+        redirectTargets?: readonly ProgramBuildInfoAbsoluteFileId[];
         packageName?: string;
     }
     /** If key and value are same, just use ProgramBuildInfoFileId otherwise pair of key followed by value */
@@ -898,7 +898,7 @@ namespace ts {
     }
     export interface PersistedProgram {
         files: readonly PersistedProgramSourceFile[] | undefined;
-        rootFileNames: readonly string[] | undefined;
+        rootFileNames: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
         filesByName: readonly PersistedProgramFileByNameEntry[] | undefined;
         projectReferences: readonly PersistedProgramProjectReference[] | undefined;
         resolvedProjectReferences: readonly (PersistedProgramResolvedProjectReference | undefined)[] | undefined;
@@ -1010,7 +1010,7 @@ namespace ts {
             }
             peristedProgram = {
                 files,
-                rootFileNames: mapToReadonlyArrayOrUndefined(program.getRootFileNames(), relativeToBuildInfoEnsuringAbsolutePath),
+                rootFileNames: mapToReadonlyArrayOrUndefined(program.getRootFileNames(), toAbsoluteFileId),
                 filesByName,
                 projectReferences: program.getProjectReferences()?.map(toPersistedProgramProjectReference),
                 resolvedProjectReferences: program.getResolvedProjectReferences()?.map(toPersistedProgramResolvedProjectReference),
@@ -1088,7 +1088,7 @@ namespace ts {
                 redirectInfo: sourceFile.redirectInfo && { redirectTarget: { path: toFileId(sourceFile.redirectInfo.redirectTarget.path) } },
                 resolvedModules: toPersistedProgramResolutionMap(sourceFile.resolvedModules),
                 resolvedTypeReferenceDirectiveNames: toPersistedProgramResolutionMap(sourceFile.resolvedTypeReferenceDirectiveNames),
-                redirectTargets: mapToReadonlyArrayOrUndefined(program.redirectTargetsMap.get(sourceFile.path), relativeToBuildInfoEnsuringAbsolutePath),
+                redirectTargets: mapToReadonlyArrayOrUndefined(program.redirectTargetsMap.get(sourceFile.path), toAbsoluteFileId),
                 includeReasons: program.getFileIncludeReasons().get(sourceFile.path)!.map(toPersistedProgramFileIncludeReason),
                 isSourceFileFromExternalLibraryPath: program.isSourceFileFromExternalLibraryPath(sourceFile.path) ? true : undefined,
                 packageName: program.sourceFileToPackageName.get(sourceFile.path),
@@ -1668,7 +1668,7 @@ namespace ts {
             const files = mapToReadonlyArray(program.peristedProgram.files, toSourceFileOfProgramFromBuildInfo);
             state.persistedProgramInfo = {
                 files,
-                rootFileNames: mapToReadonlyArray(program.peristedProgram.rootFileNames, toAbsolutePath),
+                rootFileNames: mapToReadonlyArray(program.peristedProgram.rootFileNames, toFileAbsolutePath),
                 filesByName,
                 fileIncludeReasons,
                 sourceFileFromExternalLibraryPath,
@@ -1688,7 +1688,7 @@ namespace ts {
 
                 fileIncludeReasons.set(path, file.includeReasons.map(toFileIncludeReason));
                 if (file.isSourceFileFromExternalLibraryPath) (sourceFileFromExternalLibraryPath ||= new Set()).add(path);
-                if (file.redirectTargets) redirectTargetsMap.set(path, file.redirectTargets.map(toAbsolutePath));
+                if (file.redirectTargets) redirectTargetsMap.set(path, file.redirectTargets.map(toFileAbsolutePath));
                 if (file.packageName) sourceFileToPackageName.set(path, file.packageName);
 
                 const sourceFile: SourceFileOfProgramFromBuildInfo = {

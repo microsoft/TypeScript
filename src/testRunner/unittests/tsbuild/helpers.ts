@@ -356,6 +356,7 @@ interface Symbol {
             peristedProgram: buildInfo.program.peristedProgram && {
                 ...buildInfo.program.peristedProgram,
                 files: buildInfo.program.peristedProgram.files?.map(toReadablePersistedProgramSourceFile),
+                rootFileNames: buildInfo.program.peristedProgram.rootFileNames?.map(toFileName),
                 filesByName,
                 projectReferences: buildInfo.program.peristedProgram.projectReferences?.map(toProjectReference),
                 resolvedProjectReferences: buildInfo.program.peristedProgram.resolvedProjectReferences?.map(toReadablePersistedProgramResolvedProjectReference),
@@ -398,6 +399,7 @@ interface Symbol {
                 path: toFileName(file.path),
                 resolvedPath: toFileName(file.resolvedPath),
                 redirectInfo: file.redirectInfo && { redirectTarget: { path: toFileName(file.redirectInfo.redirectTarget.path) } },
+                redirectTargets: file.redirectTargets?.map(toFileName),
                 includeReasons: file.includeReasons.map(toReadablePersistedProgramFileIncludeReason),
             };
         }
