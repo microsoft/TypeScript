@@ -958,7 +958,7 @@ namespace ts {
         const flowNodePostSuper: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
-        const potentialWeakMapCollisions: Node[] = [];
+        const potentialWeakMapSetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
@@ -34646,10 +34646,11 @@ namespace ts {
             });
         }
 
-        function checkWeakMapCollision(node: Node) {
+        function checkWeakMapSetCollision(node: Node) {
             const enclosingBlockScope = getEnclosingBlockScopeContainer(node);
             if (getNodeCheckFlags(enclosingBlockScope) & NodeCheckFlags.ContainsClassWithPrivateIdentifiers) {
-                errorSkippedOn("noEmit", node, Diagnostics.Compiler_reserves_name_0_when_emitting_private_identifier_downlevel, "WeakMap");
+                Debug.assert(isNamedDeclaration(node) && isIdentifier(node.name) && typeof node.name.escapedText === "string", "The target of a WeakMap/WeakSet collision check should be an identifier");
+                errorSkippedOn("noEmit", node, Diagnostics.Compiler_reserves_name_0_when_emitting_private_identifier_downlevel, node.name.escapedText);
             }
         }
 
@@ -34915,8 +34916,9 @@ namespace ts {
                 }
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
-                if (languageVersion < ScriptTarget.ESNext && needCollisionCheckForIdentifier(node, node.name, "WeakMap")) {
-                    potentialWeakMapCollisions.push(node);
+                if (languageVersion < ScriptTarget.ESNext
+                    && (needCollisionCheckForIdentifier(node, node.name, "WeakMap") || needCollisionCheckForIdentifier(node, node.name, "WeakSet"))) {
+                    potentialWeakMapSetCollisions.push(node);
                 }
             }
         }
@@ -38169,7 +38171,7 @@ namespace ts {
 
                 clear(potentialThisCollisions);
                 clear(potentialNewTargetCollisions);
-                clear(potentialWeakMapCollisions);
+                clear(potentialWeakMapSetCollisions);
 
                 forEach(node.statements, checkSourceElement);
                 checkSourceElement(node.endOfFileToken);
@@ -38209,9 +38211,9 @@ namespace ts {
                     clear(potentialNewTargetCollisions);
                 }
 
-                if (potentialWeakMapCollisions.length) {
-                    forEach(potentialWeakMapCollisions, checkWeakMapCollision);
-                    clear(potentialWeakMapCollisions);
+                if (potentialWeakMapSetCollisions.length) {
+                    forEach(potentialWeakMapSetCollisions, checkWeakMapSetCollision);
+                    clear(potentialWeakMapSetCollisions);
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;
