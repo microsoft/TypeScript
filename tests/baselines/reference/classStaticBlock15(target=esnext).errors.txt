@@ -1,0 +1,21 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts(14,13): error TS2304: Cannot find name '_C__1'.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts (1 errors) ====
+    class C {
+      static #_1 = 1;
+      static #_3 = 3;
+      static #_5 = 5;
+    
+      static {}
+      static {}
+      static {}
+      static {}
+      static {}
+      static {}
+    }
+    
+    console.log(_C__1)
+                ~~~~~
+!!! error TS2304: Cannot find name '_C__1'.
+    

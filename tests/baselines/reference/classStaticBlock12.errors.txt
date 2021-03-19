@@ -1,0 +1,14 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock12.ts(2,10): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock12.ts (1 errors) ====
+    class C {
+      static #x = 1;
+             ~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+      
+      static {
+        C.#x;
+      }
+    }
+    

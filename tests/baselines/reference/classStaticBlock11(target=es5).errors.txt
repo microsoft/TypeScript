@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts(3,3): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock11.ts (1 errors) ====
+    let getX;
+    class C {
+      #x = 1
+      ~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+      constructor(x: number) {
+        this.#x = x;
+      }
+    
+      static {
+        // getX has privileged access to #x
+        getX = (obj: C) => obj.#x;
+      }
+    }
+    
