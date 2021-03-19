@@ -506,16 +506,16 @@ namespace ts.Completions {
         const replacementSpan = createTextSpanFromNode(importCompletionNode, sourceFile);
         const quotedModuleSpecifier = quote(sourceFile, preferences, origin.moduleSpecifier);
         const exportKind =
-            origin.isDefaultExport ? codefix.ExportKind.Default :
-            origin.exportName === InternalSymbolName.ExportEquals ? codefix.ExportKind.ExportEquals :
-            codefix.ExportKind.Named;
+            origin.isDefaultExport ? ExportKind.Default :
+            origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
+            ExportKind.Named;
         const importKind = codefix.getImportKind(sourceFile, exportKind, options);
         const suffix = useSemicolons ? ";" : "";
         switch (importKind) {
-            case codefix.ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}$1 = require(${quotedModuleSpecifier})${suffix}` };
-            case codefix.ImportKind.Default: return { replacementSpan, insertText: `import ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
-            case codefix.ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
-            case codefix.ImportKind.Named: return { replacementSpan, insertText: `import { ${name}$1 } from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}$1 = require(${quotedModuleSpecifier})${suffix}` };
+            case ImportKind.Default: return { replacementSpan, insertText: `import ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Named: return { replacementSpan, insertText: `import { ${name}$1 } from ${quotedModuleSpecifier}${suffix}` };
         }
     }
 
@@ -1239,6 +1239,9 @@ namespace ts.Completions {
         const symbolToSortTextMap: SymbolSortTextMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
         const isTypeOnly = isTypeOnlyCompletion();
+        const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
+            return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
+        });
 
         if (isRightOfDot || isRightOfQuestionDot) {
             getTypeScriptMemberSymbols();
@@ -1691,29 +1694,35 @@ namespace ts.Completions {
             if (!shouldOfferImportCompletions()) return;
             Debug.assert(!detailsEntryId?.data);
             const start = timestamp();
+            const moduleSpecifierCache = host.getModuleSpecifierCache?.();
             host.log?.(`collectAutoImports: starting, ${resolveModuleSpecifiers ? "" : "not "}resolving module specifiers`);
+            if (moduleSpecifierCache) {
+                host.log?.(`collectAutoImports: module specifier cache size: ${moduleSpecifierCache.count()}`);
+            }
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
-            const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program, /*filterByPackageJson*/ !detailsEntryId);
+            const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
+            const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
+            const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, host);
             exportInfo.forEach((info, key) => {
                 const symbolName = key.substring(0, key.indexOf("|"));
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                 if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
-                    // If we don't need to resolve module specifiers, it doesn't matter which SymbolExportInfo
-                    // we use. Each is importable by the same name and resolves to the same declaration.
+                    // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
+                    // (We need to ensure that at least one is importable to show a completion.)
                     const { moduleSpecifier, exportInfo } = resolveModuleSpecifiers
-                        ? codefix.getBestImportFixForExports(info, sourceFile, /*position*/ undefined, /*preferTypeOnlyImport*/ false, /*useRequire*/ false, program, host, preferences)
-                        : { moduleSpecifier: undefined, exportInfo: info[0] };
+                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences)
+                        : { moduleSpecifier: undefined, exportInfo: find(info, isImportableExportInfo) };
                     if (!exportInfo) return;
-                    const isDefaultExport = exportInfo.exportKind === codefix.ExportKind.Default;
+                    const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);
+                    const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                     const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
-                    const isAmbientModule = !isExternalModuleNameRelative(stripQuotes(exportInfo.moduleSymbol.name));
                     pushAutoImportSymbol(symbol, {
                         kind: resolveModuleSpecifiers ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                         moduleSpecifier,
                         symbolName,
-                        exportName: exportInfo.exportKind === codefix.ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
-                        fileName: isAmbientModule ? undefined : cast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile).fileName,
+                        exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
+                        fileName: moduleFile?.fileName,
                         isDefaultExport,
                         moduleSymbol: exportInfo.moduleSymbol,
                         isFromPackageJson: exportInfo.isFromPackageJson,
@@ -1721,7 +1730,24 @@ namespace ts.Completions {
                 }
             });
             host.log?.(`collectAutoImports: done in ${timestamp() - start} ms`);
+
+            function isImportableExportInfo(info: SymbolExportInfo) {
+                const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
+                if (!moduleFile) {
+                    return packageJsonFilter
+                        ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
+                        : true;
+                }
+                return isImportableFile(
+                    info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
+                    sourceFile,
+                    moduleFile,
+                    packageJsonFilter,
+                    getModuleSpecifierResolutionHost(info.isFromPackageJson),
+                    moduleSpecifierCache);
+            }
         }
+
 
         function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {
             const symbolId = getSymbolId(symbol);

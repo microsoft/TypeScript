@@ -27,14 +27,14 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: importSuggestionsCache", () => {
         it("caches auto-imports in the same file", () => {
             const { importSuggestionsCache, checker } = setup();
-            assert.ok(importSuggestionsCache.get(bTs.path, checker));
+            assert.ok(importSuggestionsCache.get(bTs.path as Path, checker));
         });
 
         it("invalidates the cache when new files are added", () => {
             const { host, importSuggestionsCache, checker } = setup();
             host.writeFile("/src/a2.ts", aTs.content);
             host.runQueuedTimeoutCallbacks();
-            assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
+            assert.isUndefined(importSuggestionsCache.get(bTs.path as Path, checker));
         });
 
         it("invalidates the cache when files are deleted", () => {
@@ -42,14 +42,14 @@ namespace ts.projectSystem {
             projectService.closeClientFile(aTs.path);
             host.deleteFile(aTs.path);
             host.runQueuedTimeoutCallbacks();
-            assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
+            assert.isUndefined(importSuggestionsCache.get(bTs.path as Path, checker));
         });
 
-        it("invalidates the cache when package.json is changed", () => {
+        it("does not invalidate the cache when package.json is changed", () => {
             const { host, importSuggestionsCache, checker } = setup();
             host.writeFile("/package.json", "{}");
             host.runQueuedTimeoutCallbacks();
-            assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
+            assert.isUndefined(importSuggestionsCache.get(bTs.path as Path, checker));
         });
     });
 
@@ -70,6 +70,6 @@ namespace ts.projectSystem {
             prefix: "foo",
         });
         const checker = project.getLanguageService().getProgram()!.getTypeChecker();
-        return { host, project, projectService, importSuggestionsCache: project.getImportSuggestionsCache(), checker };
+        return { host, project, projectService, importSuggestionsCache: project.getExportMapCache(), checker };
     }
 }

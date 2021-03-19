@@ -7954,6 +7954,7 @@ namespace ts {
         readFile?(path: string): string | undefined;
         realpath?(path: string): string;
         getSymlinkCache?(): SymlinkCache;
+        getModuleSpecifierCache?(): ModuleSpecifierCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
         getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
@@ -7962,6 +7963,21 @@ namespace ts {
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+    }
+
+    /* @internal */
+    export interface ModulePath {
+        path: string;
+        isInNodeModules: boolean;
+        isRedirect: boolean;
+    }
+
+    /* @internal */
+    export interface ModuleSpecifierCache {
+        get(fromFileName: Path, toFileName: Path): boolean | readonly ModulePath[] | undefined;
+        set(fromFileName: Path, toFileName: Path, moduleSpecifiers: boolean | readonly ModulePath[]): void;
+        clear(): void;
+        count(): number;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

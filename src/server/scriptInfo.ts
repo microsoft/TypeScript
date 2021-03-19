@@ -391,7 +391,8 @@ namespace ts.server {
             return this.textStorage.getSnapshot();
         }
 
-        private ensureRealPath() {
+        /** @returns Whether the file was a symlink */
+        private ensureRealPath(): boolean {
             if (this.realpath === undefined) {
                 // Default is just the path
                 this.realpath = this.path;
@@ -404,10 +405,12 @@ namespace ts.server {
                         // If it is different from this.path, add to the map
                         if (this.realpath !== this.path) {
                             project.projectService.realpathToScriptInfos!.add(this.realpath, this); // TODO: GH#18217
+                            return true;
                         }
                     }
                 }
             }
+            return false;
         }
 
         /*@internal*/
@@ -424,7 +427,10 @@ namespace ts.server {
                 this.containingProjects.push(project);
                 project.onFileAddedOrRemoved();
                 if (!project.getCompilerOptions().preserveSymlinks) {
-                    this.ensureRealPath();
+                    const isSymlink = this.ensureRealPath();
+                    if (isSymlink) {
+                        project.onSymlinkAddedOrRemoved();
+                    }
                 }
             }
             return isNew;
