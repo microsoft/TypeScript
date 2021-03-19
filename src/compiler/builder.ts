@@ -798,6 +798,7 @@ namespace ts {
     }
 
     export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
+    export type ProgramBuildInfoAbsoluteFileId = number & { __programBuildInfoAbsoluteFileIdBrand: any };
     export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
     export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
     export type ProgramBuilderInfoFilePendingEmit = [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
@@ -821,8 +822,8 @@ namespace ts {
         failedLookupLocations?: readonly string[];
     };
     export interface PersistedProgramSourceFile {
-        fileName: string;
-        originalFileName: string;
+        fileName: ProgramBuildInfoAbsoluteFileId;
+        originalFileName: ProgramBuildInfoAbsoluteFileId;
         path: ProgramBuildInfoFileId;
         resolvedPath: ProgramBuildInfoFileId;
         // This currently is set to sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags but cant be set in type
@@ -921,7 +922,7 @@ namespace ts {
         const currentDirectory = program.getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileNames: string[] = [];
-        const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+        const fileNameToFileId = new Map<string, ProgramBuildInfoFileId & ProgramBuildInfoAbsoluteFileId>();
         let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
         let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
         let resolutions: (ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations)[] | undefined;
@@ -1033,13 +1034,21 @@ namespace ts {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
         }
 
-        function toFileId(path: Path): ProgramBuildInfoFileId {
+        function toFileAndAbsoluteFileId(path: string): ProgramBuildInfoFileId & ProgramBuildInfoAbsoluteFileId {
             let fileId = fileNameToFileId.get(path);
             if (fileId === undefined) {
                 fileNames.push(relativeToBuildInfo(path));
-                fileNameToFileId.set(path, fileId = fileNames.length as ProgramBuildInfoFileId);
+                fileNameToFileId.set(path, fileId = fileNames.length as ProgramBuildInfoFileId & ProgramBuildInfoAbsoluteFileId);
             }
             return fileId;
+        }
+
+        function toFileId(path: Path): ProgramBuildInfoFileId {
+            return toFileAndAbsoluteFileId(path);
+        }
+
+        function toAbsoluteFileId(path: string): ProgramBuildInfoAbsoluteFileId {
+            return toFileAndAbsoluteFileId(getNormalizedAbsolutePath(path, currentDirectory));
         }
 
         function toFileIdListId(set: ReadonlySet<Path>): ProgramBuildInfoFileIdListId {
@@ -1057,8 +1066,8 @@ namespace ts {
             if (programFilesByName.get(sourceFile.path) === sourceFile) programFilesByName.delete(sourceFile.path);
             if (programFilesByName.get(sourceFile.resolvedPath) === sourceFile) programFilesByName.delete(sourceFile.resolvedPath);
             return {
-                fileName: relativeToBuildInfoEnsuringAbsolutePath(sourceFile.fileName),
-                originalFileName: relativeToBuildInfoEnsuringAbsolutePath(sourceFile.originalFileName),
+                fileName: toAbsoluteFileId(sourceFile.fileName),
+                originalFileName: toAbsoluteFileId(sourceFile.originalFileName),
                 path: toFileId(sourceFile.path),
                 resolvedPath: toFileId(sourceFile.resolvedPath),
                 version: sourceFile.version,
@@ -1589,7 +1598,8 @@ namespace ts {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
-        const filePaths = program.fileNames.map(toPath);
+        const filePaths: (Path | undefined)[] = [];
+        let fileAbsolutePaths: (string | undefined)[] | undefined;
         const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
         program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1 as ProgramBuildInfoFileId), toBuilderStateFileInfo(fileInfo)));
@@ -1681,8 +1691,8 @@ namespace ts {
                 if (file.packageName) sourceFileToPackageName.set(path, file.packageName);
 
                 const sourceFile: SourceFileOfProgramFromBuildInfo = {
-                    fileName: toAbsolutePath(file.fileName),
-                    originalFileName: toAbsolutePath(file.originalFileName),
+                    fileName: toFileAbsolutePath(file.fileName),
+                    originalFileName: toFileAbsolutePath(file.originalFileName),
                     path,
                     resolvedPath,
                     flags: file.flags,
@@ -1724,11 +1734,17 @@ namespace ts {
             return getNormalizedAbsolutePath(path, buildInfoDirectory);
         }
 
-        function toFilePath(fileId: ProgramBuildInfoFileId) {
-            return filePaths[fileId - 1];
+        function toFilePath(fileId: ProgramBuildInfoFileId): Path {
+            const result = filePaths[fileId - 1];
+            return result !== undefined ? result : filePaths[fileId - 1] = toPath(program.fileNames[fileId - 1]);
         }
 
-        function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
+        function toFileAbsolutePath(fileId: ProgramBuildInfoAbsoluteFileId): string {
+            const result = fileAbsolutePaths?.[fileId - 1];
+            return result !== undefined ? result : (fileAbsolutePaths ||= [])[fileId - 1] = toAbsolutePath(program.fileNames[fileId - 1]);
+        }
+
+        function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId): Set<Path> {
             return filePathsSetList![fileIdsListId - 1];
         }
 
