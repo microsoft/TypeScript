@@ -829,11 +829,31 @@ namespace ts {
      * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
      */
     export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
-    export type ResolutionWithoutFailedLookupLocations<T extends ResolutionWithFailedLookupLocations> = Omit<T, "failedLookupLocations">;
-    export type PersistedProgramResolution = ResolutionWithoutFailedLookupLocations<ResolvedModuleWithFailedLookupLocations> &
-        ResolutionWithoutFailedLookupLocations<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> & {
-        failedLookupLocations?: readonly string[];
+    export interface ResolutionWithFailedLookupLocations {
+        serializationIndex?: PersistedProgramResolutionId;
+    }
+    export interface ResolvedModuleWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
+    export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
+    export type PersistedProgramResolvedModuleFull = Omit<ResolvedModuleFull, "resolvedFileName" | "isExternalLibraryImport" | "originalPath"> & {
+        resolvedFileName: ProgramBuildInfoAbsoluteFileId;
+        isExternalLibraryImport?: true;
+        readonly originalPath?: ProgramBuildInfoAbsoluteFileId;
     };
+    export interface PersistedProgramResolvedModuleWithFailedLookupLocations {
+        readonly resolvedModule: PersistedProgramResolvedModuleFull | undefined;
+        failedLookupLocations?: readonly ProgramBuildInfoAbsoluteFileId[];
+    }
+    export type PersistedProgramResolvedTypeReferenceDirective = Omit<ResolvedTypeReferenceDirective, "resolvedFileName" | "isExternalLibraryImport"> & {
+        resolvedFileName: ProgramBuildInfoAbsoluteFileId | undefined;
+        isExternalLibraryImport?: true;
+    };
+    export interface PersistedProgramResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+        resolvedTypeReferenceDirective: PersistedProgramResolvedTypeReferenceDirective | undefined;
+        failedLookupLocations?: readonly ProgramBuildInfoAbsoluteFileId[];
+    }
+    export type PersistedProgramResolution = PersistedProgramResolvedModuleWithFailedLookupLocations & PersistedProgramResolvedTypeReferenceDirectiveWithFailedLookupLocations;
+    export type PersistedProgramResolutionId = number & { __persistedProgramResolutionIdBrand: any };
+    export type PersistedProgramResolutionEntry = [name: string, resolutionId: PersistedProgramResolutionId];
     export interface PersistedProgramSourceFile {
         fileName: ProgramBuildInfoAbsoluteFileId;
         originalFileName: ProgramBuildInfoAbsoluteFileId;
@@ -852,8 +872,8 @@ namespace ts {
         ambientModuleNames?: readonly string[];
         hasNoDefaultLib?: true;
 
-        resolvedModules?: MapLike<number>;
-        resolvedTypeReferenceDirectiveNames?: MapLike<number>;
+        resolvedModules?: readonly PersistedProgramResolutionEntry[];
+        resolvedTypeReferenceDirectiveNames?: readonly PersistedProgramResolutionEntry[];
         redirectInfo?: { readonly redirectTarget: { readonly path: ProgramBuildInfoFileId; }; };
 
         includeReasons: readonly PersistedProgramFileIncludeReason[];
@@ -863,10 +883,6 @@ namespace ts {
     }
     /** If key and value are same, just use ProgramBuildInfoFileId otherwise pair of key followed by value */
     export type PersistedProgramFileByNameEntry = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, file: ProgramBuildInfoFileId | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile];
-
-    export interface ResolutionWithFailedLookupLocations {
-        serializationIndex?: number;
-    }
     export interface ResolvedModuleWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
     export interface PersistedProgramReferencedFile {
@@ -916,7 +932,7 @@ namespace ts {
         projectReferences: readonly PersistedProgramProjectReference[] | undefined;
         resolvedProjectReferences: readonly (PersistedProgramResolvedProjectReference | undefined)[] | undefined;
         missingPaths: readonly ProgramBuildInfoFileId[] | undefined;
-        resolvedTypeReferenceDirectives: MapLike<number> | undefined;
+        resolvedTypeReferenceDirectives: readonly PersistedProgramResolutionEntry[] | undefined;
         fileProcessingDiagnostics: readonly PersistedProgramFilePreprocessingDiagnostic[] | undefined;
         resolutions: readonly PersistedProgramResolution[] | undefined;
     }
@@ -1163,33 +1179,30 @@ namespace ts {
             r.serializationIndex = undefined;
             return {
                 resolvedModule: resolvedModule && {
-                    resolvedFileName: relativeToBuildInfoEnsuringAbsolutePath(resolvedModule.resolvedFileName),
+                    ...resolvedModule,
+                    resolvedFileName: toAbsoluteFileId(resolvedModule.resolvedFileName),
                     isExternalLibraryImport: resolvedModule.isExternalLibraryImport ? true : undefined,
-                    originalPath: resolvedModule.originalPath && relativeToBuildInfoEnsuringAbsolutePath(resolvedModule.originalPath),
-                    extension: resolvedModule.extension,
-                    packageId: resolvedModule.packageId,
+                    originalPath: resolvedModule.originalPath ? toAbsoluteFileId(resolvedModule.originalPath) : undefined,
                 },
                 resolvedTypeReferenceDirective: resolvedTypeReferenceDirective && {
-                    resolvedFileName: resolvedTypeReferenceDirective.resolvedFileName && relativeToBuildInfoEnsuringAbsolutePath(resolvedTypeReferenceDirective.resolvedFileName),
-                    primary: resolvedTypeReferenceDirective.primary,
+                    ...resolvedTypeReferenceDirective,
+                    resolvedFileName: resolvedTypeReferenceDirective.resolvedFileName ? toAbsoluteFileId(resolvedTypeReferenceDirective.resolvedFileName) : undefined,
                     isExternalLibraryImport: resolvedTypeReferenceDirective.isExternalLibraryImport ? true : undefined,
-                    packageId: resolvedTypeReferenceDirective.packageId
                 },
-                failedLookupLocations: mapToReadonlyArrayOrUndefined(r.failedLookupLocations, relativeToBuildInfoEnsuringAbsolutePath),
+                failedLookupLocations: mapToReadonlyArrayOrUndefined(r.failedLookupLocations, toAbsoluteFileId),
             };
         }
 
-        function toPersistedProgramResolutionMap(resolutionMap: ESMap<string, ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined) {
-            if (!resolutionMap || !resolutionMap.size) return undefined;
-            const mappedResult: MapLike<number> = {};
-            resolutionMap.forEach((resolution, key) => {
+        function toPersistedProgramResolutionMap(resolutionMap: ESMap<string, ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined): readonly PersistedProgramResolutionEntry[] | undefined {
+            let result: PersistedProgramResolutionEntry[] | undefined;
+            resolutionMap?.forEach((resolution, key) => {
                 if (resolution.serializationIndex === undefined) {
                     (resolutions ||= []).push(resolution);
-                    resolution.serializationIndex = resolutions.length - 1;
+                    resolution.serializationIndex = resolutions.length as PersistedProgramResolutionId;
                 }
-                mappedResult[key] = resolution.serializationIndex;
+                (result ||= []).push([key, resolution.serializationIndex]);
             });
-            return mappedResult;
+            return result;
         }
 
         function toStringLiteralLikeOfProgramFromBuildInfo(name: StringLiteralLike): StringLiteralLikeOfProgramFromBuildInfo {
@@ -1728,15 +1741,9 @@ namespace ts {
                 return sourceFile;
             }
 
-            function toResolutionMap(resolutionMap: MapLike<number> | undefined) {
+            function toResolutionMap(resolutionMap: readonly PersistedProgramResolutionEntry[] | undefined) {
                 if (!resolutionMap) return undefined;
-                const result = new Map<string, ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
-                for (const key in resolutionMap) {
-                    if (hasProperty(resolutionMap, key)) {
-                        result.set(key, resolutions[resolutionMap[key]]);
-                    }
-                }
-                return result;
+                return resolutionMap && arrayToMap(resolutionMap, value => value[0], value => resolutions[value[1] - 1]);
             }
         }
 
@@ -1777,19 +1784,15 @@ namespace ts {
         function toResolution({ resolvedModule, resolvedTypeReferenceDirective, failedLookupLocations }: PersistedProgramResolution): ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
             return {
                 resolvedModule: resolvedModule && {
-                    resolvedFileName: toAbsolutePath(resolvedModule.resolvedFileName),
-                    isExternalLibraryImport: resolvedModule.isExternalLibraryImport ? true : undefined,
-                    originalPath: resolvedModule.originalPath && toAbsolutePath(resolvedModule.originalPath),
-                    extension: resolvedModule.extension,
-                    packageId: resolvedModule.packageId,
+                    ...resolvedModule,
+                    resolvedFileName: toFileAbsolutePath(resolvedModule.resolvedFileName),
+                    originalPath: resolvedModule.originalPath && toFileAbsolutePath(resolvedModule.originalPath),
                 },
                 resolvedTypeReferenceDirective: resolvedTypeReferenceDirective && {
-                    resolvedFileName: resolvedTypeReferenceDirective.resolvedFileName && toAbsolutePath(resolvedTypeReferenceDirective.resolvedFileName),
-                    primary: resolvedTypeReferenceDirective.primary,
-                    isExternalLibraryImport: resolvedTypeReferenceDirective.isExternalLibraryImport ? true : undefined,
-                    packageId: resolvedTypeReferenceDirective.packageId
+                    ...resolvedTypeReferenceDirective,
+                    resolvedFileName: resolvedTypeReferenceDirective.resolvedFileName && toFileAbsolutePath(resolvedTypeReferenceDirective.resolvedFileName),
                 },
-                failedLookupLocations: failedLookupLocations ? failedLookupLocations.map(toAbsolutePath) : []
+                failedLookupLocations: failedLookupLocations ? failedLookupLocations.map(toFileAbsolutePath) : []
             };
         }
 

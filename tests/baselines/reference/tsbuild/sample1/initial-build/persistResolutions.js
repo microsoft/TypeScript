@@ -333,7 +333,7 @@ exports.m = mod;
 {"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;AAAA,iCAAmC;AACnC,SAAgB,eAAe;IAC3B,OAAO,CAAC,CAAC,QAAQ,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC9B,CAAC;AAFD,0CAEC;AACD,2CAA6C;AAChC,QAAA,CAAC,GAAG,GAAG,CAAC"}
 
 //// [/src/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../core/tsconfig.json","../core","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":5,"path":5,"resolvedPath":2,"version":"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0}]},{"fileName":6,"originalFileName":7,"path":8,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1}]},{"fileName":4,"originalFileName":4,"path":4,"resolvedPath":4,"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/index":0,"../core/anotherModule":1},"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[4],"filesByName":[9],"projectReferences":[{"path":10,"originalPath":"../core"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[7,5,11],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":9}}],"resolutions":[{"resolvedModule":{"resolvedFileName":"../core/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../core/tsconfig.json","../core","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":5,"path":5,"resolvedPath":2,"version":"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0}]},{"fileName":6,"originalFileName":7,"path":8,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1}]},{"fileName":4,"originalFileName":4,"path":4,"resolvedPath":4,"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/index",1],["../core/anotherModule",2]],"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[4],"filesByName":[9],"projectReferences":[{"path":10,"originalPath":"../core"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[7,5,11],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":9}}],"resolutions":[{"resolvedModule":{"resolvedFileName":5,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":7,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/src/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -466,10 +466,26 @@ exports.m = mod;
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/index": 0,
-            "../core/anotherModule": 1
-          },
+          "resolvedModules": [
+            [
+              "../core/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "RootFile",
@@ -529,7 +545,7 @@ exports.m = mod;
     }
   },
   "version": "FakeTSVersion",
-  "size": 3842
+  "size": 3804
 }
 
 //// [/src/tests/index.d.ts]
@@ -550,7 +566,7 @@ exports.m = mod;
 
 
 //// [/src/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../logic/index.ts","../core/tsconfig.json","../logic/tsconfig.json","../core","../logic","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":6,"path":6,"resolvedPath":2,"version":"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0}]},{"fileName":7,"originalFileName":8,"path":9,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":10,"index":0},{"kind":3,"file":5,"index":2}]},{"fileName":4,"originalFileName":10,"path":10,"resolvedPath":4,"version":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/anotherModule":0},"includeReasons":[{"kind":3,"file":5,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../logic/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/index":1,"../logic/index":2,"../core/anotherModule":3},"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[5],"filesByName":[11,12],"projectReferences":[{"path":13,"originalPath":"../core"},{"path":14,"originalPath":"../logic"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}},{"commandLine":{"fileNames":[10],"options":{"composite":true,"configFilePath":"../logic/tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"projectReferences":[{"path":13,"originalPath":"../core"}]},"sourceFile":{"path":12},"references":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}}]}],"resolutions":[{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../logic/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../logic/index.ts","../core/tsconfig.json","../logic/tsconfig.json","../core","../logic","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,2]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":6,"path":6,"resolvedPath":2,"version":"-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0}]},{"fileName":7,"originalFileName":8,"path":9,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":10,"index":0},{"kind":3,"file":5,"index":2}]},{"fileName":4,"originalFileName":10,"path":10,"resolvedPath":4,"version":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/anotherModule",1]],"includeReasons":[{"kind":3,"file":5,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../logic/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/index",2],["../logic/index",3],["../core/anotherModule",4]],"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[5],"filesByName":[11,12],"projectReferences":[{"path":13,"originalPath":"../core"},{"path":14,"originalPath":"../logic"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}},{"commandLine":{"fileNames":[10],"options":{"composite":true,"configFilePath":"../logic/tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"projectReferences":[{"path":13,"originalPath":"../core"}]},"sourceFile":{"path":12},"references":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}}]}],"resolutions":[{"resolvedModule":{"resolvedFileName":8,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":6,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":10,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":8,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -704,9 +720,17 @@ exports.m = mod;
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/anotherModule": 0
-          },
+          "resolvedModules": [
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "Import",
@@ -736,11 +760,35 @@ exports.m = mod;
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/index": 1,
-            "../logic/index": 2,
-            "../core/anotherModule": 3
-          },
+          "resolvedModules": [
+            [
+              "../core/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../logic/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../logic/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "RootFile",
@@ -864,7 +912,7 @@ exports.m = mod;
     }
   },
   "version": "FakeTSVersion",
-  "size": 5377
+  "size": 5301
 }
 
 
@@ -1074,7 +1122,7 @@ exports.someClass = someClass;
 //// [/src/logic/index.js] file written with same contents
 //// [/src/logic/index.js.map] file written with same contents
 //// [/src/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../core/tsconfig.json","../core","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":5,"path":5,"resolvedPath":2,"version":"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0}]},{"fileName":6,"originalFileName":7,"path":8,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1}]},{"fileName":4,"originalFileName":4,"path":4,"resolvedPath":4,"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/index":0,"../core/anotherModule":1},"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[4],"filesByName":[9],"projectReferences":[{"path":10,"originalPath":"../core"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[7,5,11],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":9}}],"resolutions":[{"resolvedModule":{"resolvedFileName":"../core/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../core/tsconfig.json","../core","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":5,"path":5,"resolvedPath":2,"version":"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0}]},{"fileName":6,"originalFileName":7,"path":8,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1}]},{"fileName":4,"originalFileName":4,"path":4,"resolvedPath":4,"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/index",1],["../core/anotherModule",2]],"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[4],"filesByName":[9],"projectReferences":[{"path":10,"originalPath":"../core"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[7,5,11],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":9}}],"resolutions":[{"resolvedModule":{"resolvedFileName":5,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":7,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/src/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1209,10 +1257,26 @@ exports.someClass = someClass;
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/index": 0,
-            "../core/anotherModule": 1
-          },
+          "resolvedModules": [
+            [
+              "../core/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "RootFile",
@@ -1272,13 +1336,13 @@ exports.someClass = someClass;
     }
   },
   "version": "FakeTSVersion",
-  "size": 4107
+  "size": 4069
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js] file written with same contents
 //// [/src/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../logic/index.ts","../core/tsconfig.json","../logic/tsconfig.json","../core","../logic","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":6,"path":6,"resolvedPath":2,"version":"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0}]},{"fileName":7,"originalFileName":8,"path":9,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":10,"index":0},{"kind":3,"file":5,"index":2}]},{"fileName":4,"originalFileName":10,"path":10,"resolvedPath":4,"version":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/anotherModule":0},"includeReasons":[{"kind":3,"file":5,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../logic/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/index":1,"../logic/index":2,"../core/anotherModule":3},"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[5],"filesByName":[11,12],"projectReferences":[{"path":13,"originalPath":"../core"},{"path":14,"originalPath":"../logic"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}},{"commandLine":{"fileNames":[10],"options":{"composite":true,"configFilePath":"../logic/tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"projectReferences":[{"path":13,"originalPath":"../core"}]},"sourceFile":{"path":12},"references":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}}]}],"resolutions":[{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../logic/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../logic/index.ts","../core/tsconfig.json","../logic/tsconfig.json","../core","../logic","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":6,"path":6,"resolvedPath":2,"version":"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0}]},{"fileName":7,"originalFileName":8,"path":9,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":10,"index":0},{"kind":3,"file":5,"index":2}]},{"fileName":4,"originalFileName":10,"path":10,"resolvedPath":4,"version":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/anotherModule",1]],"includeReasons":[{"kind":3,"file":5,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../logic/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/index",2],["../logic/index",3],["../core/anotherModule",4]],"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[5],"filesByName":[11,12],"projectReferences":[{"path":13,"originalPath":"../core"},{"path":14,"originalPath":"../logic"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}},{"commandLine":{"fileNames":[10],"options":{"composite":true,"configFilePath":"../logic/tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"projectReferences":[{"path":13,"originalPath":"../core"}]},"sourceFile":{"path":12},"references":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}}]}],"resolutions":[{"resolvedModule":{"resolvedFileName":8,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":6,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":10,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":8,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1430,9 +1494,17 @@ exports.someClass = someClass;
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/anotherModule": 0
-          },
+          "resolvedModules": [
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "Import",
@@ -1462,11 +1534,35 @@ exports.someClass = someClass;
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/index": 1,
-            "../logic/index": 2,
-            "../core/anotherModule": 3
-          },
+          "resolvedModules": [
+            [
+              "../core/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../logic/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../logic/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "RootFile",
@@ -1590,7 +1686,7 @@ exports.someClass = someClass;
     }
   },
   "version": "FakeTSVersion",
-  "size": 5581
+  "size": 5505
 }
 
 
@@ -1999,7 +2095,7 @@ var someClass2 = /** @class */ (function () {
 //// [/src/logic/index.js] file written with same contents
 //// [/src/logic/index.js.map] file written with same contents
 //// [/src/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../core/tsconfig.json","../core","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":5,"path":5,"resolvedPath":2,"version":"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0}]},{"fileName":6,"originalFileName":7,"path":8,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1}]},{"fileName":4,"originalFileName":4,"path":4,"resolvedPath":4,"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/index":0,"../core/anotherModule":1},"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[4],"filesByName":[9],"projectReferences":[{"path":10,"originalPath":"../core"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[7,5,11],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":9}}],"resolutions":[{"resolvedModule":{"resolvedFileName":"../core/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../core/tsconfig.json","../core","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":5,"path":5,"resolvedPath":2,"version":"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0}]},{"fileName":6,"originalFileName":7,"path":8,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1}]},{"fileName":4,"originalFileName":4,"path":4,"resolvedPath":4,"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/index",1],["../core/anotherModule",2]],"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[4],"filesByName":[9],"projectReferences":[{"path":10,"originalPath":"../core"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[7,5,11],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":9}}],"resolutions":[{"resolvedModule":{"resolvedFileName":5,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":7,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/src/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2134,10 +2230,26 @@ var someClass2 = /** @class */ (function () {
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/index": 0,
-            "../core/anotherModule": 1
-          },
+          "resolvedModules": [
+            [
+              "../core/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "RootFile",
@@ -2197,13 +2309,13 @@ var someClass2 = /** @class */ (function () {
     }
   },
   "version": "FakeTSVersion",
-  "size": 4113
+  "size": 4075
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js] file written with same contents
 //// [/src/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../logic/index.ts","../core/tsconfig.json","../logic/tsconfig.json","../core","../logic","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":6,"path":6,"resolvedPath":2,"version":"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0}]},{"fileName":7,"originalFileName":8,"path":9,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":10,"index":0},{"kind":3,"file":5,"index":2}]},{"fileName":4,"originalFileName":10,"path":10,"resolvedPath":4,"version":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/anotherModule":0},"includeReasons":[{"kind":3,"file":5,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../logic/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":{"../core/index":1,"../logic/index":2,"../core/anotherModule":3},"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[5],"filesByName":[11,12],"projectReferences":[{"path":13,"originalPath":"../core"},{"path":14,"originalPath":"../logic"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}},{"commandLine":{"fileNames":[10],"options":{"composite":true,"configFilePath":"../logic/tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"projectReferences":[{"path":13,"originalPath":"../core"}]},"sourceFile":{"path":12},"references":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}}]}],"resolutions":[{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../logic/index.ts","extension":".ts"}},{"resolvedModule":{"resolvedFileName":"../core/anotherModule.ts","extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../core/index.ts","../core/anotherModule.d.ts","../core/anotherModule.ts","../core/anothermodule.ts","../logic/index.ts","../core/tsconfig.json","../logic/tsconfig.json","../core","../logic","../core/some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":2,"originalFileName":6,"path":6,"resolvedPath":2,"version":"-9469451737-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClassNew {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0}]},{"fileName":7,"originalFileName":8,"path":9,"resolvedPath":3,"version":"7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","flags":0,"includeReasons":[{"kind":3,"file":10,"index":0},{"kind":3,"file":5,"index":2}]},{"fileName":4,"originalFileName":10,"path":10,"resolvedPath":4,"version":"-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/anotherModule",1]],"includeReasons":[{"kind":3,"file":5,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","flags":0,"imports":[{"kind":10,"text":"../core/index"},{"kind":10,"text":"../logic/index"},{"kind":10,"text":"../core/anotherModule"}],"resolvedModules":[["../core/index",2],["../logic/index",3],["../core/anotherModule",4]],"includeReasons":[{"kind":0,"index":0}]}],"rootFileNames":[5],"filesByName":[11,12],"projectReferences":[{"path":13,"originalPath":"../core"},{"path":14,"originalPath":"../logic"}],"resolvedProjectReferences":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}},{"commandLine":{"fileNames":[10],"options":{"composite":true,"configFilePath":"../logic/tsconfig.json","declaration":true,"forceConsistentCasingInFileNames":true,"persistResolutions":true,"skipDefaultLibCheck":true,"sourceMap":true},"projectReferences":[{"path":13,"originalPath":"../core"}]},"sourceFile":{"path":12},"references":[{"commandLine":{"fileNames":[8,6,15],"options":{"composite":true,"configFilePath":"../core/tsconfig.json","declaration":true,"declarationMap":true,"persistResolutions":true,"skipDefaultLibCheck":true}},"sourceFile":{"path":11}}]}],"resolutions":[{"resolvedModule":{"resolvedFileName":8,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":6,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":10,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":8,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2355,9 +2467,17 @@ var someClass2 = /** @class */ (function () {
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/anotherModule": 0
-          },
+          "resolvedModules": [
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "Import",
@@ -2387,11 +2507,35 @@ var someClass2 = /** @class */ (function () {
               "text": "../core/anotherModule"
             }
           ],
-          "resolvedModules": {
-            "../core/index": 1,
-            "../logic/index": 2,
-            "../core/anotherModule": 3
-          },
+          "resolvedModules": [
+            [
+              "../core/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../logic/index",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../logic/index.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "../core/anotherModule",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "../core/anotherModule.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
           "includeReasons": [
             {
               "kind": "RootFile",
@@ -2515,6 +2659,6 @@ var someClass2 = /** @class */ (function () {
     }
   },
   "version": "FakeTSVersion",
-  "size": 5587
+  "size": 5511
 }
 
