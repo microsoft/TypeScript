@@ -321,6 +321,116 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 >x : never
     }
 }
+
+// Repro from #38608
+declare const error: Error;
+>error : Error
+
+if ('extra' in error) {
+>'extra' in error : boolean
+>'extra' : "extra"
+>error : Error
+
+    error // Still Error
+>error : Error
+
+} else {
+    error // Error
+>error : Error
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+>narrowsToNever : (x: {    l: number;} | {    r: number;}) => number
+>x : { l: number; } | { r: number; }
+>l : number
+>r : number
+
+    let v: number;
+>v : number
+
+    if ("l" in x) {
+>"l" in x : boolean
+>"l" : "l"
+>x : { l: number; } | { r: number; }
+
+        v = x.l;
+>v = x.l : number
+>v : number
+>x.l : number
+>x : { l: number; }
+>l : number
+    }
+    else if ("r" in x) {
+>"r" in x : boolean
+>"r" : "r"
+>x : { r: number; }
+
+        v = x.r;
+>v = x.r : number
+>v : number
+>x.r : number
+>x : { r: number; }
+>r : number
+    }
+    else {
+        v = x
+>v = x : never
+>v : number
+>x : never
+    }
+    return v;
+>v : number
+}
+
+type AOrB = { aProp: number } | { bProp: number };
+>AOrB : AOrB
+>aProp : number
+>bProp : number
+
+declare function isAOrB(x: unknown): x is AOrB;
+>isAOrB : (x: unknown) => x is AOrB
+>x : unknown
+
+declare var x: unknown;
+>x : unknown
+
+if (isAOrB(x)) {
+>isAOrB(x) : boolean
+>isAOrB : (x: unknown) => x is AOrB
+>x : unknown
+
+    if ("aProp" in x) {
+>"aProp" in x : boolean
+>"aProp" : "aProp"
+>x : AOrB
+
+        x.aProp;
+>x.aProp : number
+>x : { aProp: number; }
+>aProp : number
+    }
+    else if ("bProp" in x) {
+>"bProp" in x : boolean
+>"bProp" : "bProp"
+>x : { bProp: number; }
+
+        x.bProp;
+>x.bProp : number
+>x : { bProp: number; }
+>bProp : number
+    }
+    // x is never because of the type predicate from unknown
+    else if ("cProp" in x) {
+>"cProp" in x : boolean
+>"cProp" : "cProp"
+>x : never
+
+        const _never: never = x;
+>_never : never
+>x : never
+    }
+}
+
 function negativeIntersectionTest() {
 >negativeIntersectionTest : () => void
 

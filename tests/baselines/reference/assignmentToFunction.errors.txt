@@ -1,12 +1,12 @@
-tests/cases/compiler/assignmentToFunction.ts(2,1): error TS2539: Cannot assign to 'fn' because it is not a variable.
-tests/cases/compiler/assignmentToFunction.ts(8,9): error TS2539: Cannot assign to 'bar' because it is not a variable.
+tests/cases/compiler/assignmentToFunction.ts(2,1): error TS2630: Cannot assign to 'fn' because it is a function.
+tests/cases/compiler/assignmentToFunction.ts(8,9): error TS2630: Cannot assign to 'bar' because it is a function.
 
 
 ==== tests/cases/compiler/assignmentToFunction.ts (2 errors) ====
     function fn() { }
     fn = () => 3;
     ~~
-!!! error TS2539: Cannot assign to 'fn' because it is not a variable.
+!!! error TS2630: Cannot assign to 'fn' because it is a function.
     
     module foo {
         function xyz() {
@@ -14,6 +14,6 @@ tests/cases/compiler/assignmentToFunction.ts(8,9): error TS2539: Cannot assign t
             }
             bar = null;
             ~~~
-!!! error TS2539: Cannot assign to 'bar' because it is not a variable.
+!!! error TS2630: Cannot assign to 'bar' because it is a function.
         }
     }
