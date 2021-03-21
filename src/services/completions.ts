@@ -459,7 +459,7 @@ namespace ts.Completions {
             Debug.assertIsDefined(importCompletionNode);
             ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, useSemicolons, options, preferences));
             sourceDisplay = [textPart(origin.moduleSpecifier)];
-            isSnippet = true;
+            isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
@@ -509,13 +509,14 @@ namespace ts.Completions {
             origin.isDefaultExport ? ExportKind.Default :
             origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
             ExportKind.Named;
+        const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
         const importKind = codefix.getImportKind(sourceFile, exportKind, options);
         const suffix = useSemicolons ? ";" : "";
         switch (importKind) {
-            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}$1 = require(${quotedModuleSpecifier})${suffix}` };
-            case ImportKind.Default: return { replacementSpan, insertText: `import ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name}$1 from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Named: return { replacementSpan, insertText: `import { ${name}$1 } from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}${tabStop} = require(${quotedModuleSpecifier})${suffix}` };
+            case ImportKind.Default: return { replacementSpan, insertText: `import ${name}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Named: return { replacementSpan, insertText: `import { ${name}${tabStop} } from ${quotedModuleSpecifier}${suffix}` };
         }
     }
 

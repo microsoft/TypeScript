@@ -3875,6 +3875,7 @@ declare namespace ts {
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsForImportStatements?: boolean;
+        readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
@@ -9150,6 +9151,10 @@ declare namespace ts.server.protocol {
          */
         readonly includeCompletionsForImportStatements?: boolean;
         /**
+         * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
+         */
+        readonly includeCompletionsWithSnippetText?: boolean;
+        /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
@@ -9331,6 +9336,7 @@ declare namespace ts.server {
         open(newText: string): void;
         close(fileExists?: boolean): void;
         getSnapshot(): IScriptSnapshot;
+        /** @returns Whether the file was a symlink */
         private ensureRealPath;
         getFormatCodeSettings(): FormatCodeSettings | undefined;
         getPreferences(): protocol.UserPreferences | undefined;
@@ -9574,7 +9580,6 @@ declare namespace ts.server {
         markAsDirty(): void;
         getScriptFileNames(): string[];
         getLanguageService(): never;
-        markAutoImportProviderAsDirty(): never;
         getModuleResolutionHostForAutoImportProvider(): never;
         getProjectReferences(): readonly ProjectReference[] | undefined;
         useSourceOfProjectReferenceRedirect(): boolean;

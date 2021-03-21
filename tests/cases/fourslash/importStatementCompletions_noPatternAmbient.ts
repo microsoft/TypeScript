@@ -15,5 +15,6 @@ verify.completions({
   preferences: {
     includeCompletionsForImportStatements: true,
     includeInsertTextCompletions: true,
+    includeCompletionsWithSnippetText: true,
   }
 });

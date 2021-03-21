@@ -3,8 +3,7 @@
 // @Filename: /mod.ts
 //// export const foo = 0;
 
-// @Filename: /single.ts
-//// import * as fs from 'fs';
+// @Filename: /index0.ts
 //// [|import f/**/|]
 
 verify.completions({
@@ -12,14 +11,14 @@ verify.completions({
   exact: [{
     name: "foo",
     source: "./mod",
-    insertText: `import { foo$1 } from './mod';`, // <-- single quotes
-    isSnippet: true,
+    insertText: `import { foo } from "./mod";`, // <-- no `$1` tab stop
+    isSnippet: undefined, // <-- undefined
     replacementSpan: test.ranges()[0],
     sourceDisplay: "./mod",
   }],
   preferences: {
     includeCompletionsForImportStatements: true,
     includeInsertTextCompletions: true,
-    includeCompletionsWithSnippetText: true,
+    includeCompletionsWithSnippetText: false, // <-- false
   }
 });
