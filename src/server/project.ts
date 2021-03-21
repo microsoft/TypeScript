@@ -206,7 +206,7 @@ namespace ts.server {
         originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
         /*@internal*/
-        packageJsonsForAutoImport: Set<string> | undefined;
+        private packageJsonsForAutoImport: Set<string> | undefined;
 
         /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -970,6 +970,10 @@ namespace ts.server {
                 info.detachFromProject(this);
             }
 
+            if (info.getRealpathIfDifferent()) {
+                this.hasAddedOrRemovedSymlinks = true;
+            }
+
             this.markAsDirty();
         }
 
@@ -993,12 +997,23 @@ namespace ts.server {
         }
 
         /*@internal*/
-        markAutoImportProviderAsDirty() {
+        onAutoImportProviderSettingsChanged() {
             if (this.autoImportProviderHost === false) {
                 this.autoImportProviderHost = undefined;
             }
-            this.autoImportProviderHost?.markAsDirty();
-            this.exportMapCache.clear();
+            else {
+                this.autoImportProviderHost?.markAsDirty();
+            }
+        }
+
+        /*@internal*/
+        onPackageJsonChange(packageJsonPath: Path) {
+            if (this.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                this.moduleSpecifierCache.clear();
+                if (this.autoImportProviderHost) {
+                    this.autoImportProviderHost.markAsDirty();
+                }
+            }
         }
 
         /* @internal */
@@ -1173,7 +1188,7 @@ namespace ts.server {
             }
 
             if (!this.exportMapCache.isEmpty()) {
-                if (this.hasAddedorRemovedFiles || oldProgram && !this.program.structureIsReused) {
+                if (this.hasAddedorRemovedFiles || !this.program.structureIsReused) {
                     this.exportMapCache.clear();
                 }
                 else if (this.changedFilesForExportMapCache && oldProgram && this.program) {
@@ -1192,12 +1207,10 @@ namespace ts.server {
                 this.changedFilesForExportMapCache.clear();
             }
 
-            if (this.hasAddedorRemovedFiles) {
-                const symlinksInvalidated = this.hasAddedOrRemovedSymlinks || this.getCompilerOptions().preserveSymlinks;
-                if (symlinksInvalidated) {
-                    this.symlinks = undefined;
-                    this.moduleSpecifierCache.clear();
-                }
+            if (this.hasAddedOrRemovedSymlinks || !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks) {
+                // With --preserveSymlinks, we may not determine that a file is a symlink, so we never set `hasAddedOrRemovedSymlinks`
+                this.symlinks = undefined;
+                this.moduleSpecifierCache.clear();
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
@@ -1977,8 +1990,11 @@ namespace ts.server {
 
             this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
             this.rootFileNames = rootFileNames;
-            this.hostProject.getExportMapCache().clear();
-            return super.updateGraph();
+            const isSameSetOfFiles = super.updateGraph();
+            if (!isSameSetOfFiles) {
+                this.hostProject.getExportMapCache().clear();
+            }
+            return isSameSetOfFiles;
         }
 
         hasRoots() {
@@ -1998,7 +2014,7 @@ namespace ts.server {
             throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
         }
 
-        markAutoImportProviderAsDirty(): never {
+        onAutoImportProviderSettingsChanged(): never {
             throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
         }
 

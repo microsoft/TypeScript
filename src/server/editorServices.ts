@@ -2845,7 +2845,7 @@ namespace ts.server {
                         });
                     }
                     if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
-                        this.invalidateProjectAutoImports(/*packageJsonPath*/ undefined);
+                        this.invalidateProjectPackageJson(/*packageJsonPath*/ undefined);
                     }
                 }
                 if (args.extraFileExtensions) {
@@ -3933,7 +3933,7 @@ namespace ts.server {
         private watchPackageJsonFile(path: Path) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
             if (!watchers.has(path)) {
-                this.invalidateProjectAutoImports(path);
+                this.invalidateProjectPackageJson(path);
                 watchers.set(path, this.watchFactory.watchFile(
                     path,
                     (fileName, eventKind) => {
@@ -3943,11 +3943,11 @@ namespace ts.server {
                                 return Debug.fail();
                             case FileWatcherEventKind.Changed:
                                 this.packageJsonCache.addOrUpdate(path);
-                                this.invalidateProjectAutoImports(path);
+                                this.invalidateProjectPackageJson(path);
                                 break;
                             case FileWatcherEventKind.Deleted:
                                 this.packageJsonCache.delete(path);
-                                this.invalidateProjectAutoImports(path);
+                                this.invalidateProjectPackageJson(path);
                                 watchers.get(path)!.close();
                                 watchers.delete(path);
                         }
@@ -3975,15 +3975,16 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private invalidateProjectAutoImports(packageJsonPath: Path | undefined) {
-            if (this.includePackageJsonAutoImports()) {
-                this.configuredProjects.forEach(invalidate);
-                this.inferredProjects.forEach(invalidate);
-                this.externalProjects.forEach(invalidate);
-            }
+        private invalidateProjectPackageJson(packageJsonPath: Path | undefined) {
+            this.configuredProjects.forEach(invalidate);
+            this.inferredProjects.forEach(invalidate);
+            this.externalProjects.forEach(invalidate);
             function invalidate(project: Project) {
-                if (!packageJsonPath || project.packageJsonsForAutoImport?.has(packageJsonPath)) {
-                    project.markAutoImportProviderAsDirty();
+                if (packageJsonPath) {
+                    project.onPackageJsonChange(packageJsonPath);
+                }
+                else {
+                    project.onAutoImportProviderSettingsChanged();
                 }
             }
         }

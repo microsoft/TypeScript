@@ -3128,7 +3128,7 @@ namespace ts {
                 }
             },
             get: (file, checker, version) => {
-                if (file !== usableByFileName) {
+                if (usableByFileName && file !== usableByFileName) {
                     return undefined;
                 }
                 if (version && projectVersion === version) {
@@ -3175,7 +3175,7 @@ namespace ts {
             },
         };
         if (Debug.isDebugging) {
-            (wrapped as any).__cache = cache;
+            Object.defineProperty(wrapped, "__cache", { get: () => cache });
         }
         return wrapped;
 
@@ -3225,7 +3225,7 @@ namespace ts {
             }
         };
         if (Debug.isDebugging) {
-            (wrapped as any).__cache = cache;
+            Object.defineProperty(wrapped, "__cache", { get: () => cache });
         }
         return wrapped;
     }

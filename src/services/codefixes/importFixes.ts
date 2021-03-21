@@ -280,6 +280,10 @@ namespace ts.codefix {
 
     export function getSymbolToExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program) {
         const start = timestamp();
+        // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
+        // which will invalidate the export map cache if things change, so pull it before
+        // checking the cache.
+        host.getPackageJsonAutoImportProvider?.();
         const cache = host.getExportMapCache?.();
         if (cache) {
             const cached = cache.get(importingFile.path, program.getTypeChecker(), host.getProjectVersion?.());
