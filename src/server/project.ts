@@ -1207,7 +1207,7 @@ namespace ts.server {
                 this.changedFilesForExportMapCache.clear();
             }
 
-            if (this.hasAddedOrRemovedSymlinks || !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks) {
+            if (this.hasAddedOrRemovedSymlinks || this.program && !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks) {
                 // With --preserveSymlinks, we may not determine that a file is a symlink, so we never set `hasAddedOrRemovedSymlinks`
                 this.symlinks = undefined;
                 this.moduleSpecifierCache.clear();
@@ -2014,8 +2014,14 @@ namespace ts.server {
             throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
         }
 
+        /*@internal*/
         onAutoImportProviderSettingsChanged(): never {
             throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
+        }
+
+        /*@internal*/
+        onPackageJsonChange(): never {
+            throw new Error("package.json changes should be notified on an AutoImportProvider's host project");
         }
 
         getModuleResolutionHostForAutoImportProvider(): never {
