@@ -26783,8 +26783,8 @@ namespace ts {
 
         function containerSeemsToBeEmptyDomElement(containingType: Type) {
             return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
-                everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(type.symbol.escapedName.toString())) &&
-                checker.getPropertiesOfType(containingType).length === 0;
+                everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
+                isEmptyObjectType(containingType);
         }
 
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {
