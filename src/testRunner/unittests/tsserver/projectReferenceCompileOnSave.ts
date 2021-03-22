@@ -193,16 +193,6 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     });
                     host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -241,16 +231,6 @@ ${appendDts}`
                     const session = createSession(host);
                     openFilesForSession([usageTs], session);
 
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
@@ -300,34 +280,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -392,34 +344,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -463,16 +387,6 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     });
                     host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -511,16 +425,6 @@ ${appendDts}`
                     const session = createSession(host);
                     openFilesForSession([usageTs], session);
 
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
@@ -580,34 +484,6 @@ ${appendDts}`
                             insertString: change
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -652,34 +528,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -798,16 +646,6 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     });
                     host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -841,16 +679,6 @@ ${appendDts}`
                     const session = createSession(host);
                     openFilesForSession([usageTs], session);
 
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
@@ -895,34 +723,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -982,34 +782,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1048,16 +820,6 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     });
                     host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1091,16 +853,6 @@ ${appendDts}`
                     const session = createSession(host);
                     openFilesForSession([usageTs], session);
 
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    host.writeFile(dependencyTs.path, `${dependencyTs.content}`);
                     session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
                         command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
                         arguments: { file: dependencyTs.path }
@@ -1155,34 +907,6 @@ ${appendDts}`
                             insertString: change
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1222,34 +946,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -1386,34 +1082,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1458,34 +1126,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(dependencyTs.content);
                     const location = toLocation(dependencyTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -1550,34 +1190,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1622,34 +1234,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -1714,34 +1298,6 @@ ${appendDts}`
                             insertString: change
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1786,34 +1342,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(dependencyTs.content);
                     const location = toLocation(dependencyTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -1878,34 +1406,6 @@ ${appendDts}`
                             insertString: change
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -1950,34 +1450,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -2076,34 +1548,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -2143,34 +1587,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -2230,34 +1646,6 @@ ${appendDts}`
                             insertString: change
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -2297,34 +1685,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -2460,34 +1820,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -2543,34 +1875,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -2615,34 +1919,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -2708,34 +1984,6 @@ ${appendDts}`
                             insertString: localChange
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + localChange.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: localChange
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -2780,34 +2028,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(dependencyTs.content);
                     const location = toLocation(dependencyTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -2873,34 +2093,6 @@ ${appendDts}`
                             insertString: change
                         }
                     });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: dependencyTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
                     host.writtenFiles.clear();
 
                     // Verify CompileOnSaveAffectedFileList
@@ -2945,34 +2137,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
@@ -3028,34 +2192,6 @@ ${appendDts}`
                     });
                     const toLocation = protocolToLocation(usageTs.content);
                     const location = toLocation(usageTs.content.length);
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset,
-                            insertString: change
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
-                    session.executeCommandSeq<protocol.ChangeRequest>({
-                        command: protocol.CommandTypes.Change,
-                        arguments: {
-                            file: usageTs.path,
-                            ...location,
-                            endLine: location.line,
-                            endOffset: location.offset + change.length,
-                            insertString: ""
-                        }
-                    });
-                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                        arguments: { file: dependencyTs.path }
-                    });
                     session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
                         arguments: {
