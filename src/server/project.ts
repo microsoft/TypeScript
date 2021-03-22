@@ -1990,8 +1990,12 @@ namespace ts.server {
 
             this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
             this.rootFileNames = rootFileNames;
-            this.hostProject.getExportMapCache().clear();
-            return super.updateGraph();
+            const oldProgram = this.getCurrentProgram();
+            const hasSameSetOfFiles = super.updateGraph();
+            if (oldProgram && oldProgram !== this.getCurrentProgram()) {
+                this.hostProject.getExportMapCache().clear();
+            }
+            return hasSameSetOfFiles;
         }
 
         hasRoots() {
