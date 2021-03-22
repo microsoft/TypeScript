@@ -1708,7 +1708,7 @@ namespace ts.Completions {
                 const symbolName = key.substring(0, key.indexOf("|"));
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
-                if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName.toLowerCase(), lowerCaseTokenText)) {
+                if (isCompletionDetailsMatch || isNameMatch(symbolName)) {
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
                     const { moduleSpecifier, exportInfo } = resolveModuleSpecifiers
@@ -1731,6 +1731,15 @@ namespace ts.Completions {
                 }
             });
             host.log?.(`collectAutoImports: done in ${timestamp() - start} ms`);
+
+            function isNameMatch(symbolName: string) {
+                const lowerCaseSymbolName = symbolName.toLowerCase();
+                if (resolveModuleSpecifiers && lowerCaseTokenText) {
+                    // Use a more restrictive filter if resolving module specifiers since resolving module specifiers is expensive.
+                    return lowerCaseTokenText[0] === lowerCaseSymbolName[0] && stringContainsCharactersInOrder(lowerCaseSymbolName, lowerCaseTokenText);
+                }
+                return stringContainsCharactersInOrder(lowerCaseSymbolName, lowerCaseTokenText);
+            }
 
             function isImportableExportInfo(info: SymbolExportInfo) {
                 const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
