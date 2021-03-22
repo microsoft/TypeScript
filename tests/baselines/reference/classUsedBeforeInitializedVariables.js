@@ -6,6 +6,11 @@ class Test {
     p4 = 0;
     p5?: number;
 
+    p6?: string;
+    p7 = {
+        hello: (this.p6 = "string"),
+    };
+
     directlyAssigned: any = this.directlyAssigned;
 
     withinArrowFunction: any = () => this.withinArrowFunction;
@@ -66,6 +71,9 @@ var Test = /** @class */ (function () {
         this.p2 = this.p1;
         this.p3 = this.p4;
         this.p4 = 0;
+        this.p7 = {
+            hello: (this.p6 = "string"),
+        };
         this.directlyAssigned = this.directlyAssigned;
         this.withinArrowFunction = function () { return _this.withinArrowFunction; };
         this.withinFunction = function () {

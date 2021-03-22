@@ -7,6 +7,11 @@ class Test {
     p4 = 0;
     p5?: number;
 
+    p6?: string;
+    p7 = {
+        hello: (this.p6 = "string"),
+    };
+
     directlyAssigned: any = this.directlyAssigned;
 
     withinArrowFunction: any = () => this.withinArrowFunction;

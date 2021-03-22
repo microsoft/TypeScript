@@ -25,6 +25,24 @@ class Test {
     p5?: number;
 >p5 : number
 
+    p6?: string;
+>p6 : string
+
+    p7 = {
+>p7 : { hello: string; }
+>{        hello: (this.p6 = "string"),    } : { hello: string; }
+
+        hello: (this.p6 = "string"),
+>hello : string
+>(this.p6 = "string") : "string"
+>this.p6 = "string" : "string"
+>this.p6 : string
+>this : this
+>p6 : string
+>"string" : "string"
+
+    };
+
     directlyAssigned: any = this.directlyAssigned;
 >directlyAssigned : any
 >this.directlyAssigned : any
