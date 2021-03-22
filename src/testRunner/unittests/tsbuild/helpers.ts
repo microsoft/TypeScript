@@ -186,7 +186,7 @@ interface Symbol {
         }
     }
 
-    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<string>; }) {
+    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<Path>; }) {
         const mapFileNames = mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
         while (true) {
             const result = mapFileNames.next();
@@ -236,18 +236,88 @@ interface Symbol {
         }
     }
 
+    function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
+        type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
+        type ProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
+        interface ProgramBuildInfo {
+            fileNames: readonly string[];
+            fileNamesList: readonly (readonly string[])[] | undefined;
+            fileInfos: MapLike<BuilderState.FileInfo>;
+            options: CompilerOptions;
+            referencedMap?: MapLike<string[]>;
+            exportedModulesMap?: MapLike<string[]>;
+            semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
+            affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
+        }
+        const fileInfos: ProgramBuildInfo["fileInfos"] = {};
+        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = fileInfo);
+        const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
+        const program: ProgramBuildInfo | undefined = buildInfo.program && {
+            fileNames: buildInfo.program.fileNames,
+            fileNamesList,
+            fileInfos,
+            options: buildInfo.program.options,
+            referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
+            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
+            semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
+                isNumber(d) ?
+                    toFileName(d) :
+                    [toFileName(d[0]), d[1]]
+            ),
+            affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(([fileId, emitKind]) => [
+                toFileName(fileId),
+                emitKind === BuilderFileEmit.DtsOnly ? "DtsOnly" :
+                    emitKind === BuilderFileEmit.Full ? "Full" :
+                        Debug.assertNever(emitKind)
+            ]),
+        };
+        const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
+        const result: Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; size: number; } = {
+            bundle: buildInfo.bundle,
+            program,
+            version,
+            size: getBuildInfoText({ ...buildInfo, version }).length,
+        };
+        // For now its just JSON.stringify
+        originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+
+        function toFileName(fileId: number) {
+            return buildInfo.program!.fileNames[fileId - 1];
+        }
+
+        function toFileNames(fileIdsListId: number) {
+            return fileNamesList![fileIdsListId - 1];
+        }
+
+        function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
+            if (!referenceMap) return undefined;
+            const result: MapLike<string[]> = {};
+            for (const [fileNamesKey, fileNamesListKey] of referenceMap) {
+                result[toFileName(fileNamesKey)] = toFileNames(fileNamesListKey);
+            }
+            return result;
+        }
+    }
+
+    export function toPathWithSystem(sys: System, fileName: string): Path {
+        return toPath(fileName, sys.getCurrentDirectory(), createGetCanonicalFileName(sys.useCaseSensitiveFileNames));
+    }
+
     export function baselineBuildInfo(
         options: CompilerOptions,
-        sys: System & { writtenFiles: ReadonlyCollection<string>; },
-        originalReadCall?: System["readFile"]
+        sys: System & { writtenFiles: ReadonlyCollection<Path>; },
+        originalReadCall?: System["readFile"],
+        originalWriteFile?: System["writeFile"],
     ) {
-        const out = outFile(options);
-        if (!out) return;
-        const { buildInfoPath, jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
-        if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
+        if (!buildInfoPath || !sys.writtenFiles.has(toPathWithSystem(sys, buildInfoPath))) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
         const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        generateBuildInfoProgramBaseline(sys, originalWriteFile || sys.writeFile, buildInfoPath, buildInfo);
+
+        if (!outFile(options)) return;
+        const { jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
         const bundle = buildInfo.bundle;
         if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) return;
 
@@ -256,9 +326,8 @@ interface Symbol {
         generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
         generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
         baselineRecorder.Close();
-
         const text = baselineRecorder.lines.join("\r\n");
-        sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
+        (originalWriteFile || sys.writeFile).call(sys, `${buildInfoPath}.baseline.txt`, text);
     }
 
     interface VerifyIncrementalCorrectness {
@@ -295,7 +364,7 @@ interface Symbol {
                 const cleanBuildText = sys.readFile(outputFile);
                 const incrementalBuildText = newSys.readFile(outputFile);
                 const descrepancyInClean = discrepancies?.get(outputFile);
-                if (!isBuildInfoFile(outputFile)) {
+                if (!isBuildInfoFile(outputFile) && !fileExtensionIs(outputFile, ".tsbuildinfo.readable.baseline.txt")) {
                     verifyTextEqual(incrementalBuildText, cleanBuildText, descrepancyInClean, `File: ${outputFile}`);
                 }
                 else if (incrementalBuildText !== cleanBuildText) {

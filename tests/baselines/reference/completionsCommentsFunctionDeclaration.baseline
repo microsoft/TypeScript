@@ -122,7 +122,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -191,11 +191,11 @@
           "tags": [
             {
               "name": "param",
-              "text": "s A string to convert into a number."
+              "text": "string A string to convert into a number."
             },
             {
               "name": "param",
-              "text": "radix A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
+              "text": "radix A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
             }
           ]
         },
@@ -4461,7 +4461,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -4530,11 +4530,11 @@
           "tags": [
             {
               "name": "param",
-              "text": "s A string to convert into a number."
+              "text": "string A string to convert into a number."
             },
             {
               "name": "param",
-              "text": "radix A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
+              "text": "radix A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
             }
           ]
         },
@@ -7635,7 +7635,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "s",
+              "text": "string",
               "kind": "parameterName"
             },
             {
@@ -7704,11 +7704,11 @@
           "tags": [
             {
               "name": "param",
-              "text": "s A string to convert into a number."
+              "text": "string A string to convert into a number."
             },
             {
               "name": "param",
-              "text": "radix A value between 2 and 36 that specifies the base of the number in numString.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
+              "text": "radix A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal."
             }
           ]
         },

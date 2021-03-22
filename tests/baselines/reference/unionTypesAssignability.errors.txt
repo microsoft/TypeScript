@@ -24,12 +24,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-    Type 'U' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-    Type 'T' is not assignable to type 'U'.
-      'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts (19 errors) ====
@@ -151,13 +147,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:     Type 'U' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
         u = x; // error T not assignable to U
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
-!!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     }
     

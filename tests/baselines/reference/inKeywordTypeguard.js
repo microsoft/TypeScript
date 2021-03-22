@@ -104,6 +104,46 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
         let n: never = x;
     }
 }
+
+// Repro from #38608
+declare const error: Error;
+if ('extra' in error) {
+    error // Still Error
+} else {
+    error // Error
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+    let v: number;
+    if ("l" in x) {
+        v = x.l;
+    }
+    else if ("r" in x) {
+        v = x.r;
+    }
+    else {
+        v = x
+    }
+    return v;
+}
+
+type AOrB = { aProp: number } | { bProp: number };
+declare function isAOrB(x: unknown): x is AOrB;
+
+declare var x: unknown;
+if (isAOrB(x)) {
+    if ("aProp" in x) {
+        x.aProp;
+    }
+    else if ("bProp" in x) {
+        x.bProp;
+    }
+    // x is never because of the type predicate from unknown
+    else if ("cProp" in x) {
+        const _never: never = x;
+    }
+}
+
 function negativeIntersectionTest() {
     if ("ontouchstart" in window) {
         window.ontouchstart
@@ -250,6 +290,37 @@ function positiveIntersectionTest(x) {
     }
     else {
         var n = x;
+    }
+}
+if ('extra' in error) {
+    error; // Still Error
+}
+else {
+    error; // Error
+}
+function narrowsToNever(x) {
+    var v;
+    if ("l" in x) {
+        v = x.l;
+    }
+    else if ("r" in x) {
+        v = x.r;
+    }
+    else {
+        v = x;
+    }
+    return v;
+}
+if (isAOrB(x)) {
+    if ("aProp" in x) {
+        x.aProp;
+    }
+    else if ("bProp" in x) {
+        x.bProp;
+    }
+    // x is never because of the type predicate from unknown
+    else if ("cProp" in x) {
+        var _never = x;
     }
 }
 function negativeIntersectionTest() {
