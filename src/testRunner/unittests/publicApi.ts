@@ -68,8 +68,8 @@ function test() {}`;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
         assert.isDefined(tags[0].comment![0]);
-        assert.equal(tags[0].comment![0].kind, ts.SyntaxKind.JSDocText);
-        assert.equal(tags[0].comment![0].text, "Some\n text\r\n with newlines.");
+        assert.isString(tags[0].comment);
+        assert.equal(tags[0].comment as string, "Some\n text\r\n with newlines.");
     });
 });
 

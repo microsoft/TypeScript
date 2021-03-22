@@ -897,8 +897,10 @@ namespace ts {
     }
 
     /** Gets the text of a jsdoc comment, flattening links to their text. */
-    export function getTextOfJSDocComment(comment?: NodeArray<JSDocText | JSDocLink>) {
-        return comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink>) {
+        return typeof comment === "string" ? comment
+            : comment?.map(c =>
+                c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
     }
 
     /**

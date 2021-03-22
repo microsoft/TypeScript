@@ -4243,7 +4243,7 @@ namespace ts {
         function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | NodeArray<JSDocText | JSDocLink> | undefined) {
             const node = createBaseNode<T>(kind);
             node.tagName = tagName;
-            node.comment = typeof comment === "string" ? createNodeArray([createJSDocText(comment)]) : comment;
+            node.comment = comment;
             return node;
         }
 
@@ -4507,7 +4507,7 @@ namespace ts {
         // @api
         function createJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink> | undefined, tags?: readonly JSDocTag[] | undefined) {
             const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
-            node.comment = typeof comment === "string" ? createNodeArray([createJSDocText(comment)]) : comment;
+            node.comment = comment;
             node.tags = asNodeArray(tags);
             return node;
         }

@@ -130,7 +130,10 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getDisplayPartsFromComment(comment: readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    function getDisplayPartsFromComment(comment: string | readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (typeof comment === "string") {
+            return [textPart(comment)];
+        }
         return flatMap(
             comment,
             node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
@@ -154,9 +157,9 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment && getDisplayPartsFromComment(comment, checker);
+                return name ? withNode(name) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
             default:
-                return comment && getDisplayPartsFromComment(comment, checker);
+                return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
 
         function withNode(node: Node) {

@@ -380,7 +380,7 @@ namespace ts.codefix {
     }
 
     export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-        const comments = flatMap(parent.jsDoc, j => j.comment) as (JSDocText | JSDocLink)[];
+        const comments = flatMap(parent.jsDoc, j => typeof j.comment === 'string' ? factory.createJSDocText(j.comment) : j.comment) as (JSDocText | JSDocLink)[];
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
             const merged = tryMergeJsdocTags(tag, newTag);

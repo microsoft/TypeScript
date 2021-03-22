@@ -3135,13 +3135,13 @@ namespace ts {
         readonly kind: SyntaxKind.JSDocComment;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
-        readonly comment?: NodeArray<JSDocText | JSDocLink>;
+        readonly comment?: string | NodeArray<JSDocText | JSDocLink>;
     }
 
     export interface JSDocTag extends Node {
         readonly parent: JSDoc | JSDocTypeLiteral;
         readonly tagName: Identifier;
-        readonly comment?: NodeArray<JSDocText | JSDocLink>;
+        readonly comment?: string | NodeArray<JSDocText | JSDocLink>;
     }
 
     export interface JSDocLink extends Node {
