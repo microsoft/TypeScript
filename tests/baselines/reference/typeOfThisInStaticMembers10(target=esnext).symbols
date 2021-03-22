@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts ===
+declare const foo: any;
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers10.ts, 0, 13))
+
+@foo
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers10.ts, 0, 13))
+
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers10.ts, 0, 23))
+
+    static a = 1;
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers10.ts, 3, 9))
+
+    static b = this.a + 1;
+>b : Symbol(C.b, Decl(typeOfThisInStaticMembers10.ts, 4, 17))
+>this.a : Symbol(C.a, Decl(typeOfThisInStaticMembers10.ts, 3, 9))
+>this : Symbol(C, Decl(typeOfThisInStaticMembers10.ts, 0, 23))
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers10.ts, 3, 9))
+}
+
+@foo
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers10.ts, 0, 13))
+
+class D extends C {
+>D : Symbol(D, Decl(typeOfThisInStaticMembers10.ts, 6, 1))
+>C : Symbol(C, Decl(typeOfThisInStaticMembers10.ts, 0, 23))
+
+    static c = 2;
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers10.ts, 9, 19))
+
+    static d = this.c + 1;
+>d : Symbol(D.d, Decl(typeOfThisInStaticMembers10.ts, 10, 17))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers10.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers10.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers10.ts, 9, 19))
+
+    static e = super.a + this.c + 1;
+>e : Symbol(D.e, Decl(typeOfThisInStaticMembers10.ts, 11, 26))
+>super.a : Symbol(C.a, Decl(typeOfThisInStaticMembers10.ts, 3, 9))
+>super : Symbol(C, Decl(typeOfThisInStaticMembers10.ts, 0, 23))
+>a : Symbol(C.a, Decl(typeOfThisInStaticMembers10.ts, 3, 9))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers10.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers10.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers10.ts, 9, 19))
+}
+
