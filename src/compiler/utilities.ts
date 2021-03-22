@@ -2706,6 +2706,9 @@ namespace ts {
                 case SyntaxKind.NonNullExpression:
                     node = parent;
                     break;
+                case SyntaxKind.SpreadAssignment:
+                    node = parent.parent;
+                    break;
                 case SyntaxKind.ShorthandPropertyAssignment:
                     if ((parent as ShorthandPropertyAssignment).name !== node) {
                         return AssignmentKind.None;
@@ -4814,6 +4817,9 @@ namespace ts {
             && isLeftHandSideExpression(node.left);
     }
 
+    export function isLeftHandSideOfAssignment(node: Node) {
+        return isAssignmentExpression(node.parent) && node.parent.left === node;
+    }
     export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const kind = node.left.kind;

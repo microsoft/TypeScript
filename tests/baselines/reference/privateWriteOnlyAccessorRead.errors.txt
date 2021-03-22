@@ -1,0 +1,55 @@
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(8,17): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(11,5): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(16,13): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(18,17): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(21,18): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(25,9): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(26,12): error TS2806: Private accessor was defined without a getter.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts (7 errors) ====
+    class Test {
+      set #value(v: { foo: { bar: number } }) {}
+      set #valueRest(v: number[]) {}
+      set #valueOne(v: number) {}
+    
+      m() {
+        const foo = { bar: 1 };
+        console.log(this.#value); // error
+                    ~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+        this.#value = { foo }; // ok
+        this.#value = { foo }; // ok
+        this.#value.foo = foo; // error
+        ~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+    
+        ({ o: this.#value } = { o: { foo } }); //ok
+        ({ ...this.#value } = { foo }); //ok
+    
+        ({ foo: this.#value.foo } = { foo }); //error
+                ~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+        ({
+          foo: { ...this.#value.foo },
+                    ~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+        } = { foo }); //error
+    
+        let r = { o: this.#value }; //error
+                     ~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+    
+        [this.#valueOne, ...this.#valueRest] = [1, 2, 3];
+        let arr = [
+            this.#valueOne,
+            ~~~~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+            ...this.#valueRest
+               ~~~~~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
+        ];
+      }
+    }
+    new Test().m();
+    
