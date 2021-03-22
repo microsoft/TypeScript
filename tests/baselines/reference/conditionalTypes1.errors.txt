@@ -2,17 +2,11 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(12,5): error TS23
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
   Type 'string | undefined' is not assignable to type 'NonNullable<T>'.
     Type 'undefined' is not assignable to type 'NonNullable<T>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(18,9): error TS2322: Type 'T' is not assignable to type 'string'.
-  Type 'string | undefined' is not assignable to type 'string'.
-    Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(24,5): error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
   Type 'undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(29,5): error TS2322: Type 'T["x"]' is not assignable to type 'NonNullable<T["x"]>'.
   Type 'string | undefined' is not assignable to type 'NonNullable<T["x"]>'.
     Type 'undefined' is not assignable to type 'NonNullable<T["x"]>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(30,9): error TS2322: Type 'T["x"]' is not assignable to type 'string'.
-  Type 'string | undefined' is not assignable to type 'string'.
-    Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(103,5): error TS2322: Type 'FunctionProperties<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'FunctionProperties<T>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(104,5): error TS2322: Type 'NonFunctionProperties<T>' is not assignable to type 'T'.
@@ -63,7 +57,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
       Type 'boolean' is not assignable to type 'true'.
 
 
-==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (22 errors) ====
+==== tests/cases/conformance/types/conditional/conditionalTypes1.ts (20 errors) ====
     type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
     type T01 = Extract<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
     
@@ -88,10 +82,6 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'NonNullable<T>'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'NonNullable<T>'.
         let s1: string = x;  // Error
-            ~~
-!!! error TS2322: Type 'T' is not assignable to type 'string'.
-!!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
         let s2: string = y;
     }
     
@@ -111,10 +101,6 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'NonNullable<T["x"]>'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'NonNullable<T["x"]>'.
         let s1: string = x;  // Error
-            ~~
-!!! error TS2322: Type 'T["x"]' is not assignable to type 'string'.
-!!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
         let s2: string = y;
     }
     
