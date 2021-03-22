@@ -3296,6 +3296,10 @@
         "category": "Error",
         "code": 2805
     },
+    "Private accessor was defined without a getter.": {
+        "category": "Error",
+        "code": 2806
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -26815,6 +26815,12 @@ namespace ts {
                 if (!prop && checkPrivateIdentifierPropertyAccess(leftType, right, lexicallyScopedSymbol)) {
                     return errorType;
                 }
+                else {
+                    const isSetonlyAccessor = prop && prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
+                    if (isSetonlyAccessor && !isAssignmentTarget(node)) {
+                        error(node, Diagnostics.Private_accessor_was_defined_without_a_getter);
+                    }
+                }
             }
             else {
                 if (isAnyLike) {
