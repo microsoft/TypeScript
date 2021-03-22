@@ -48,7 +48,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 exports.spread = void 0;
 var bug_1 = require("./bug");
-exports.spread = __assign({}, bug_1.createInstance());
+exports.spread = __assign({}, (0, bug_1.createInstance)());
 
 
 //// [bug.d.ts]

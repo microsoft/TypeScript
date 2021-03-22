@@ -1202,7 +1202,7 @@ namespace ts {
                         fakespace.symbol = props[0].parent!;
                         const exportMappings: [Identifier, string][] = [];
                         let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                            if (!isPropertyAccessExpression(p.valueDeclaration)) {
+                            if (!p.valueDeclaration || !isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);

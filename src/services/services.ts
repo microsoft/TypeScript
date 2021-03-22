@@ -550,7 +550,7 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? getJsDocTags([this.declaration], this.checker) : [];
+                this.jsDocTags = this.declaration ? getJsDocTagsOfSignature(this.declaration, this.checker) : [];
             }
             return this.jsDocTags;
         }
@@ -565,15 +565,13 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
-    function getJsDocTags(declarations: Declaration[], checker: TypeChecker): JSDocTagInfo[] {
-        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations);
-        if (tags.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
-            forEachUnique(declarations, declaration => {
-                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.getJsDocTags());
-                if (inheritedTags) {
-                    tags = [...inheritedTags, ...tags];
-                }
-            });
+    function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
+        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration]);
+        if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
+            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
+            if (inheritedTags) {
+                tags = [...inheritedTags, ...tags];
+            }
         }
         return tags;
     }
@@ -583,16 +581,22 @@ namespace ts {
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
         if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
-            forEachUnique(declarations, declaration => {
-                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
+            const seenSymbols = new Set<Symbol>();
+            for (const declaration of declarations) {
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol);
+                        return symbol.getDocumentationComment(checker);
+                    }
+                });
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
-            });
+            }
         }
         return doc;
     }
 
-    function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[]): T[] | undefined {
+    function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
         return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
@@ -1621,6 +1625,9 @@ namespace ts {
             if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
                 return node.parent.expression;
             }
+            if (isNamedTupleMember(node.parent) && node.pos === node.parent.pos) {
+                return node.parent;
+            }
             return node;
         }
 
@@ -1635,6 +1642,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NamedTupleMember:
                     return true;
                 default:
                     return false;

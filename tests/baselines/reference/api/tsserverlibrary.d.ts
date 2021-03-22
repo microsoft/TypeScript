@@ -558,7 +558,7 @@ declare namespace ts {
     }
     export interface JSDocContainer {
     }
-    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
+    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -687,7 +687,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.ConstructSignature;
     }
     export type BindingName = Identifier | BindingPattern;
-    export interface VariableDeclaration extends NamedDeclaration {
+    export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.VariableDeclaration;
         readonly parent: VariableDeclarationList | CatchClause;
         readonly name: BindingName;
@@ -2187,7 +2187,7 @@ declare namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
@@ -2409,7 +2409,7 @@ declare namespace ts {
         flags: SymbolFlags;
         escapedName: __String;
         declarations?: Declaration[];
-        valueDeclaration: Declaration;
+        valueDeclaration?: Declaration;
         members?: SymbolTable;
         exports?: SymbolTable;
         globalExports?: SymbolTable;
@@ -2775,18 +2775,21 @@ declare namespace ts {
         FixedPollingInterval = 0,
         PriorityPollingInterval = 1,
         DynamicPriorityPolling = 2,
-        UseFsEvents = 3,
-        UseFsEventsOnParentDirectory = 4
+        FixedChunkSizePolling = 3,
+        UseFsEvents = 4,
+        UseFsEventsOnParentDirectory = 5
     }
     export enum WatchDirectoryKind {
         UseFsEvents = 0,
         FixedPollingInterval = 1,
-        DynamicPriorityPolling = 2
+        DynamicPriorityPolling = 2,
+        FixedChunkSizePolling = 3
     }
     export enum PollingWatchKind {
         FixedInterval = 0,
         PriorityInterval = 1,
-        DynamicPriority = 2
+        DynamicPriority = 2,
+        FixedChunkSize = 3
     }
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     export interface CompilerOptions {
@@ -2958,6 +2961,7 @@ declare namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
+        ES2021 = 8,
         ESNext = 99,
         JSON = 100,
         Latest = 99
@@ -3173,14 +3177,27 @@ declare namespace ts {
         createStringLiteralFromNode(sourceNode: PropertyNameLiteral, isSingleQuote?: boolean): StringLiteral;
         createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
         createIdentifier(text: string): Identifier;
-        /** Create a unique temporary variable. */
-        createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
-        /** Create a unique temporary variable for use in a loop. */
-        createLoopVariable(): Identifier;
+        /**
+         * Create a unique temporary variable.
+         * @param recordTempVariable An optional callback used to record the temporary variable name. This
+         * should usually be a reference to `hoistVariableDeclaration` from a `TransformationContext`, but
+         * can be `undefined` if you plan to record the temporary variable manually.
+         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * during emit so that the variable can be referenced in a nested function body. This is an alternative to
+         * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
+         */
+        createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier;
+        /**
+         * Create a unique temporary variable for use in a loop.
+         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * during emit so that the variable can be referenced in a nested function body. This is an alternative to
+         * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
+         */
+        createLoopVariable(reservedInNestedScopes?: boolean): Identifier;
         /** Create a unique name based on the supplied text. */
         createUniqueName(text: string, flags?: GeneratedIdentifierFlags): Identifier;
         /** Create a unique name generated for a node. */
-        getGeneratedNameForNode(node: Node | undefined): Identifier;
+        getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier;
         createPrivateIdentifier(text: string): PrivateIdentifier;
         createToken(token: SyntaxKind.SuperKeyword): SuperExpression;
         createToken(token: SyntaxKind.ThisKeyword): ThisExpression;
@@ -3974,7 +3991,7 @@ declare namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanJsxToken(allowMultilineJsxText?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
         reScanInvalidIdentifier(): SyntaxKind;
@@ -4109,7 +4126,7 @@ declare namespace ts {
     function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string;
     function symbolName(symbol: Symbol): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
-    function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
+    function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -4235,7 +4252,7 @@ declare namespace ts {
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
-    function isFunctionLike(node: Node): node is SignatureDeclaration;
+    function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;
@@ -4767,6 +4784,10 @@ declare namespace ts {
      * environment and merging hoisted declarations upon completion.
      */
     function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext): ConciseBody;
+    /**
+     * Visits an iteration body, adding any block-scoped variables required by the transformation.
+     */
+    function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -7699,18 +7720,21 @@ declare namespace ts.server.protocol {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
         UseFsEvents = "UseFsEvents",
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory"
     }
     enum WatchDirectoryKind {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
-        DynamicPriorityPolling = "DynamicPriorityPolling"
+        DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling"
     }
     enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
-        DynamicPriority = "DynamicPriority"
+        DynamicPriority = "DynamicPriority",
+        FixedChunkSize = "FixedChunkSize"
     }
     interface WatchOptions {
         watchFile?: WatchFileKind | ts.WatchFileKind;
@@ -9282,6 +9306,7 @@ declare namespace ts.server.protocol {
         ES2018 = "ES2018",
         ES2019 = "ES2019",
         ES2020 = "ES2020",
+        ES2021 = "ES2021",
         ESNext = "ESNext"
     }
     enum ClassificationType {
@@ -10286,7 +10311,7 @@ declare namespace ts {
     /** @deprecated Use `factory.createRegularExpressionLiteral` or the factory supplied by your transformation context instead. */
     const createRegularExpressionLiteral: (text: string) => RegularExpressionLiteral;
     /** @deprecated Use `factory.createLoopVariable` or the factory supplied by your transformation context instead. */
-    const createLoopVariable: () => Identifier;
+    const createLoopVariable: (reservedInNestedScopes?: boolean | undefined) => Identifier;
     /** @deprecated Use `factory.createUniqueName` or the factory supplied by your transformation context instead. */
     const createUniqueName: (text: string, flags?: GeneratedIdentifierFlags | undefined) => Identifier;
     /** @deprecated Use `factory.createPrivateIdentifier` or the factory supplied by your transformation context instead. */

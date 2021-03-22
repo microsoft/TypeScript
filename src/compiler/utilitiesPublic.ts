@@ -14,6 +14,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2021:
+                return "lib.es2021.full.d.ts";
             case ScriptTarget.ES2020:
                 return "lib.es2020.full.d.ts";
             case ScriptTarget.ES2019:
@@ -614,7 +616,7 @@ namespace ts {
         return (declaration as NamedDeclaration).name;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
             (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
@@ -1208,8 +1210,8 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is SignatureDeclaration {
-        return node && isFunctionLikeKind(node.kind);
+    export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration {
+        return !!node && isFunctionLikeKind(node.kind);
     }
 
     /* @internal */

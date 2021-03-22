@@ -225,7 +225,7 @@ namespace ts {
                     ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.expression, visitor, isExpression),
-                visitNode(node.statement, asyncBodyVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, asyncBodyVisitor, context)
             );
         }
 
@@ -237,7 +237,7 @@ namespace ts {
                     ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.expression, visitor, isExpression),
-                visitNode(node.statement, asyncBodyVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, asyncBodyVisitor, context)
             );
         }
 
@@ -250,7 +250,7 @@ namespace ts {
                     : visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitor, isExpression),
-                visitNode(node.statement, asyncBodyVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, asyncBodyVisitor, context)
             );
         }
 

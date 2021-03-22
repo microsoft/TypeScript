@@ -874,6 +874,7 @@ namespace ts {
         | FunctionDeclaration
         | ConstructorDeclaration
         | MethodDeclaration
+        | VariableDeclaration
         | PropertyDeclaration
         | AccessorDeclaration
         | ClassLikeDeclaration
@@ -1237,7 +1238,7 @@ namespace ts {
 
     export type BindingName = Identifier | BindingPattern;
 
-    export interface VariableDeclaration extends NamedDeclaration {
+    export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.VariableDeclaration;
         readonly parent: VariableDeclarationList | CatchClause;
         readonly name: BindingName;                    // Declared variable name
@@ -4046,7 +4047,7 @@ namespace ts {
          * The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
-        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined;
 
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
@@ -4715,7 +4716,7 @@ namespace ts {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
-        valueDeclaration: Declaration;          // First value declaration of the symbol
+        valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
@@ -5795,6 +5796,7 @@ namespace ts {
         FixedPollingInterval,
         PriorityPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
         UseFsEvents,
         UseFsEventsOnParentDirectory,
     }
@@ -5803,12 +5805,14 @@ namespace ts {
         UseFsEvents,
         FixedPollingInterval,
         DynamicPriorityPolling,
+        FixedChunkSizePolling,
     }
 
     export enum PollingWatchKind {
         FixedInterval,
         PriorityInterval,
         DynamicPriority,
+        FixedChunkSize,
     }
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
@@ -6028,6 +6032,7 @@ namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
+        ES2021 = 8,
         ESNext = 99,
         JSON = 100,
         Latest = ESNext,
@@ -6439,30 +6444,31 @@ namespace ts {
         ContainsTypeScript = 1 << 0,
         ContainsJsx = 1 << 1,
         ContainsESNext = 1 << 2,
-        ContainsES2020 = 1 << 3,
-        ContainsES2019 = 1 << 4,
-        ContainsES2018 = 1 << 5,
-        ContainsES2017 = 1 << 6,
-        ContainsES2016 = 1 << 7,
-        ContainsES2015 = 1 << 8,
-        ContainsGenerator = 1 << 9,
-        ContainsDestructuringAssignment = 1 << 10,
+        ContainsES2021 = 1 << 3,
+        ContainsES2020 = 1 << 4,
+        ContainsES2019 = 1 << 5,
+        ContainsES2018 = 1 << 6,
+        ContainsES2017 = 1 << 7,
+        ContainsES2016 = 1 << 8,
+        ContainsES2015 = 1 << 9,
+        ContainsGenerator = 1 << 10,
+        ContainsDestructuringAssignment = 1 << 11,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 11, // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 12,
-        ContainsRestOrSpread = 1 << 13,
-        ContainsObjectRestOrSpread = 1 << 14,
-        ContainsComputedPropertyName = 1 << 15,
-        ContainsBlockScopedBinding = 1 << 16,
-        ContainsBindingPattern = 1 << 17,
-        ContainsYield = 1 << 18,
-        ContainsAwait = 1 << 19,
-        ContainsHoistedDeclarationOrCompletion = 1 << 20,
-        ContainsDynamicImport = 1 << 21,
-        ContainsClassFields = 1 << 22,
-        ContainsPossibleTopLevelAwait = 1 << 23,
+        ContainsTypeScriptClassSyntax = 1 << 12, // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 13,
+        ContainsRestOrSpread = 1 << 14,
+        ContainsObjectRestOrSpread = 1 << 15,
+        ContainsComputedPropertyName = 1 << 16,
+        ContainsBlockScopedBinding = 1 << 17,
+        ContainsBindingPattern = 1 << 18,
+        ContainsYield = 1 << 19,
+        ContainsAwait = 1 << 20,
+        ContainsHoistedDeclarationOrCompletion = 1 << 21,
+        ContainsDynamicImport = 1 << 22,
+        ContainsClassFields = 1 << 23,
+        ContainsPossibleTopLevelAwait = 1 << 24,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -6474,6 +6480,7 @@ namespace ts {
         AssertTypeScript = ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2021 = ContainsES2021,
         AssertES2020 = ContainsES2020,
         AssertES2019 = ContainsES2019,
         AssertES2018 = ContainsES2018,
@@ -6782,19 +6789,30 @@ namespace ts {
         /* @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
 
-        /** Create a unique temporary variable. */
-        createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined): Identifier;
-        /* @internal */ createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+        /**
+         * Create a unique temporary variable.
+         * @param recordTempVariable An optional callback used to record the temporary variable name. This
+         * should usually be a reference to `hoistVariableDeclaration` from a `TransformationContext`, but
+         * can be `undefined` if you plan to record the temporary variable manually.
+         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * during emit so that the variable can be referenced in a nested function body. This is an alternative to
+         * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
+         */
+        createTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined, reservedInNestedScopes?: boolean): Identifier;
 
-        /** Create a unique temporary variable for use in a loop. */
-        createLoopVariable(): Identifier;
+        /**
+         * Create a unique temporary variable for use in a loop.
+         * @param reservedInNestedScopes When `true`, reserves the temporary variable name in all nested scopes
+         * during emit so that the variable can be referenced in a nested function body. This is an alternative to
+         * setting `EmitFlags.ReuseTempVariableScope` on the nested function itself.
+         */
+        createLoopVariable(reservedInNestedScopes?: boolean): Identifier;
 
         /** Create a unique name based on the supplied text. */
         createUniqueName(text: string, flags?: GeneratedIdentifierFlags): Identifier;
 
         /** Create a unique name generated for a node. */
-        getGeneratedNameForNode(node: Node | undefined): Identifier;
-        /* @internal */ getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+        getGeneratedNameForNode(node: Node | undefined, flags?: GeneratedIdentifierFlags): Identifier;
 
         createPrivateIdentifier(text: string): PrivateIdentifier
 
@@ -7394,7 +7412,7 @@ namespace ts {
          * @param allowComments A value indicating whether comments may be emitted for the name.
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        /* @internal */ getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
+        /* @internal */ getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean): Identifier;
         /**
          * Gets a namespace-qualified name for use in expressions.
          *
@@ -7501,6 +7519,12 @@ namespace ts {
 
         /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
+
+        /*@internal*/ startBlockScope(): void;
+
+        /*@internal*/ endBlockScope(): Statement[] | undefined;
+
+        /*@internal*/ addBlockScopedVariable(node: Identifier): void;
 
         /** Adds an initialization statement to the top of the lexical environment. */
         /* @internal */

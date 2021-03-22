@@ -1962,7 +1962,7 @@
         "category": "Error",
         "code": 2445
     },
-    "Property '{0}' is protected and only accessible through an instance of class '{1}'.": {
+    "Property '{0}' is protected and only accessible through an instance of class '{1}'. This is an instance of class '{2}'.": {
         "category": "Error",
         "code": 2446
     },
@@ -2653,6 +2653,26 @@
     "Type at positions {0} through {1} in source is not compatible with type at position {2} in target.": {
         "category": "Error",
         "code": 2627
+    },
+    "Cannot assign to '{0}' because it is an enum.": {
+        "category": "Error",
+        "code": 2628
+    },
+    "Cannot assign to '{0}' because it is a class.": {
+        "category": "Error",
+        "code": 2629
+    },
+    "Cannot assign to '{0}' because it is a function.": {
+        "category": "Error",
+        "code": 2630
+    },
+    "Cannot assign to '{0}' because it is a namespace.": {
+        "category": "Error",
+        "code": 2631
+    },
+    "Cannot assign to '{0}' because it is an import.": {
+        "category": "Error",
+        "code": 2632
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -3915,7 +3935,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -4701,15 +4721,15 @@
         "category": "Message",
         "code": 6224
     },
-    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
         "category": "Message",
         "code": 6225
     },
-    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling'.": {
         "category": "Message",
         "code": 6226
     },
-    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority', 'FixedChunkSize'.": {
         "category": "Message",
         "code": 6227
     },
@@ -6257,7 +6277,6 @@
         "category": "Message",
         "code": 95159
     },
-
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

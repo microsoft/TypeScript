@@ -49,14 +49,14 @@ exports.__esModule = true;
 exports.prerendered = void 0;
 /** @jsx h */
 var renderer_1 = require("./renderer");
-exports.prerendered = renderer_1.dom("h", null);
+exports.prerendered = (0, renderer_1.dom)("h", null);
 //// [othernoalias.js]
 "use strict";
 exports.__esModule = true;
 exports.prerendered2 = void 0;
 /** @jsx otherdom */
 var renderer_1 = require("./renderer");
-exports.prerendered2 = renderer_1.otherdom("h", null);
+exports.prerendered2 = (0, renderer_1.otherdom)("h", null);
 //// [reacty.js]
 "use strict";
 exports.__esModule = true;
@@ -78,7 +78,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
-renderer_1.dom("h", null);
+(0, renderer_1.dom)("h", null);
 __exportStar(require("./other"), exports);
 __exportStar(require("./othernoalias"), exports);
 __exportStar(require("./reacty"), exports);

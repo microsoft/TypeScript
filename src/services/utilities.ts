@@ -2839,7 +2839,7 @@ namespace ts {
         }
 
         function allowsImportingAmbientModule(moduleSymbol: Symbol, moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost): boolean {
-            if (!packageJsons.length) {
+            if (!packageJsons.length || !moduleSymbol.valueDeclaration) {
                 return true;
             }
 

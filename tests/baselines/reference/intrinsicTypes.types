@@ -132,7 +132,7 @@ function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
 
     let s: 'FOO' | 'BAR' = x;
 >s : "FOO" | "BAR"
->x : Uppercase<T>
+>x : "FOO" | "BAR"
 }
 
 declare function foo3<T extends string>(x: Uppercase<T>): T;
