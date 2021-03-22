@@ -255,28 +255,17 @@ interface Symbol {
     }
     type ReadablePersistedProgramResolution = ReadablePersistedProgramResolvedModuleWithFailedLookupLocations & ReadablePersistedProgramResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     type ReadablePersistedProgramResolutionEntry = [name: string, resolution: ReadablePersistedProgramResolution];
-    interface ReadablePersistedProgramSourceFile {
+    type ReadablePersistedProgramSourceFile = Omit<PersistedProgramSourceFile, "fileName" | "originalFileName" | "path" | "resolvedPath" | "resolvedModules" | "resolvedTypeReferenceDirectiveNames" | "redirectInfo" | "includeReasons" | "redirectTargets"> & {
         fileName: string;
         originalFileName: string;
         path: string;
         resolvedPath: string;
-        flags: NodeFlags;
-        version: string;
-        typeReferenceDirectives?: readonly string[];
-        libReferenceDirectives?: readonly string[];
-        referencedFiles?: readonly string[];
-        imports?: readonly StringLiteralLikeOfProgramFromBuildInfo[];
-        moduleAugmentations?: readonly ModuleNameOfProgramFromBuildInfo[];
-        ambientModuleNames?: readonly string[];
-        hasNoDefaultLib?: true;
         resolvedModules?: readonly ReadablePersistedProgramResolutionEntry[];
         resolvedTypeReferenceDirectiveNames?: readonly ReadablePersistedProgramResolutionEntry[];
         redirectInfo?: { readonly redirectTarget: { readonly path: string }; };
         includeReasons: readonly ReadablePersistedProgramFileIncludeReason[];
-        isSourceFileFromExternalLibraryPath?: true;
         redirectTargets?: readonly string[];
-        packageName?: string;
-    }
+    };
     enum ReadableFileIncludeKind {
         RootFile = "RootFile",
         SourceFromProjectReference = "SourceFromProjectReference",
@@ -308,19 +297,15 @@ interface Symbol {
         FilePreprocessingReferencedDiagnostic = "FilePreprocessingReferencedDiagnostic",
         FilePreprocessingFileExplainingDiagnostic = "FilePreprocessingFileExplainingDiagnostic"
     }
-    interface ReadablePersistedProgramFilePreprocessingReferencedDiagnostic {
+    type ReadablePersistedProgramFilePreprocessingReferencedDiagnostic = Omit<PersistedProgramFilePreprocessingReferencedDiagnostic, "kind" | "reason"> & {
         kind: ReadableFilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
         reason: ReadablePersistedProgramReferencedFile;
-        diagnostic: keyof typeof Diagnostics;
-        args?: (string | number | undefined)[];
-    }
-    interface ReadablePersistedProgramFilePreprocessingFileExplainingDiagnostic {
+    };
+    type ReadablePersistedProgramFilePreprocessingFileExplainingDiagnostic = Omit<PersistedProgramFilePreprocessingFileExplainingDiagnostic, "kind" | "file" | "fileProcessingReason"> & {
         kind: ReadableFilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
         file?: string;
         fileProcessingReason: ReadablePersistedProgramFileIncludeReason;
-        diagnostic: keyof typeof Diagnostics;
-        args?: (string | number | undefined)[];
-    }
+    };
     type ReadablePersistedProgramFilePreprocessingDiagnostic = ReadablePersistedProgramFilePreprocessingReferencedDiagnostic | ReadablePersistedProgramFilePreprocessingFileExplainingDiagnostic;
     interface ReadablePersistedProgramResolvedProjectReference {
         commandLine: {

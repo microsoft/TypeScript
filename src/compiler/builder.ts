@@ -883,39 +883,28 @@ namespace ts {
     }
     /** If key and value are same, just use ProgramBuildInfoFileId otherwise pair of key followed by value */
     export type PersistedProgramFileByNameEntry = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, file: ProgramBuildInfoFileId | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile];
-    export interface ResolvedModuleWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
-    export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolutionWithFailedLookupLocations { }
-    export interface PersistedProgramReferencedFile {
-        kind: ReferencedFileKind;
+    export type PersistedProgramReferencedFile = Omit<ReferencedFile, "file"> & {
         file: ProgramBuildInfoFileId;
-        index: number;
-    }
+    };
     export type PersistedProgramFileIncludeReason =
         RootFile |
         LibFile |
         ProjectReferenceFile |
         PersistedProgramReferencedFile |
         AutomaticTypeDirectiveFile;
-    export interface PersistedProgramFilePreprocessingReferencedDiagnostic {
-        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
+    export type PersistedProgramFilePreprocessingReferencedDiagnostic = Omit<FilePreprocessingReferencedDiagnostic, "reason" | "diagnostic"> & {
         reason: PersistedProgramReferencedFile;
         diagnostic: keyof typeof Diagnostics;
-        args?: (string | number | undefined)[];
-    }
-    export interface PersistedProgramFilePreprocessingFileExplainingDiagnostic {
-        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
+    };
+    export type PersistedProgramFilePreprocessingFileExplainingDiagnostic = Omit<FilePreprocessingFileExplainingDiagnostic, "file" | "fileProcessingReason" | "diagnostic"> & {
         file?: ProgramBuildInfoFileId;
         fileProcessingReason: PersistedProgramFileIncludeReason;
         diagnostic: keyof typeof Diagnostics;
-        args?: (string | number | undefined)[];
-    }
+    };
     export type PersistedProgramFilePreprocessingDiagnostic = PersistedProgramFilePreprocessingReferencedDiagnostic | PersistedProgramFilePreprocessingFileExplainingDiagnostic;
-    export interface PersistedProgramProjectReference {
+    export type PersistedProgramProjectReference = Omit<ProjectReference, "path"> & {
         path: ProgramBuildInfoAbsoluteFileId;
-        originalPath?: string;
-        prepend?: boolean;
-        circular?: boolean;
-    }
+    };
     export interface PersistedProgramResolvedProjectReference {
         commandLine: {
             fileNames: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
