@@ -1231,7 +1231,7 @@ namespace ts {
                 node.initializer && visitForInitializer(node.initializer),
                 visitNode(node.condition, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.incrementor, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1251,7 +1251,7 @@ namespace ts {
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1272,7 +1272,7 @@ namespace ts {
                 node.awaitModifier,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1320,7 +1320,7 @@ namespace ts {
         function visitDoStatement(node: DoStatement): VisitResult<Statement> {
             return factory.updateDoStatement(
                 node,
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock),
+                visitIterationBody(node.statement, nestedElementVisitor, context),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression)
             );
         }
@@ -1334,7 +1334,7 @@ namespace ts {
             return factory.updateWhileStatement(
                 node,
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
         }
 

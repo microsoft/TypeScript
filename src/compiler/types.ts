@@ -6032,6 +6032,7 @@ namespace ts {
         ES2018 = 5,
         ES2019 = 6,
         ES2020 = 7,
+        ES2021 = 8,
         ESNext = 99,
         JSON = 100,
         Latest = ESNext,
@@ -6443,30 +6444,31 @@ namespace ts {
         ContainsTypeScript = 1 << 0,
         ContainsJsx = 1 << 1,
         ContainsESNext = 1 << 2,
-        ContainsES2020 = 1 << 3,
-        ContainsES2019 = 1 << 4,
-        ContainsES2018 = 1 << 5,
-        ContainsES2017 = 1 << 6,
-        ContainsES2016 = 1 << 7,
-        ContainsES2015 = 1 << 8,
-        ContainsGenerator = 1 << 9,
-        ContainsDestructuringAssignment = 1 << 10,
+        ContainsES2021 = 1 << 3,
+        ContainsES2020 = 1 << 4,
+        ContainsES2019 = 1 << 5,
+        ContainsES2018 = 1 << 6,
+        ContainsES2017 = 1 << 7,
+        ContainsES2016 = 1 << 8,
+        ContainsES2015 = 1 << 9,
+        ContainsGenerator = 1 << 10,
+        ContainsDestructuringAssignment = 1 << 11,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 11, // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 12,
-        ContainsRestOrSpread = 1 << 13,
-        ContainsObjectRestOrSpread = 1 << 14,
-        ContainsComputedPropertyName = 1 << 15,
-        ContainsBlockScopedBinding = 1 << 16,
-        ContainsBindingPattern = 1 << 17,
-        ContainsYield = 1 << 18,
-        ContainsAwait = 1 << 19,
-        ContainsHoistedDeclarationOrCompletion = 1 << 20,
-        ContainsDynamicImport = 1 << 21,
-        ContainsClassFields = 1 << 22,
-        ContainsPossibleTopLevelAwait = 1 << 23,
+        ContainsTypeScriptClassSyntax = 1 << 12, // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 13,
+        ContainsRestOrSpread = 1 << 14,
+        ContainsObjectRestOrSpread = 1 << 15,
+        ContainsComputedPropertyName = 1 << 16,
+        ContainsBlockScopedBinding = 1 << 17,
+        ContainsBindingPattern = 1 << 18,
+        ContainsYield = 1 << 19,
+        ContainsAwait = 1 << 20,
+        ContainsHoistedDeclarationOrCompletion = 1 << 21,
+        ContainsDynamicImport = 1 << 22,
+        ContainsClassFields = 1 << 23,
+        ContainsPossibleTopLevelAwait = 1 << 24,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -6478,6 +6480,7 @@ namespace ts {
         AssertTypeScript = ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2021 = ContainsES2021,
         AssertES2020 = ContainsES2020,
         AssertES2019 = ContainsES2019,
         AssertES2018 = ContainsES2018,
@@ -7516,6 +7519,12 @@ namespace ts {
 
         /** Hoists a variable declaration to the containing scope. */
         hoistVariableDeclaration(node: Identifier): void;
+
+        /*@internal*/ startBlockScope(): void;
+
+        /*@internal*/ endBlockScope(): Statement[] | undefined;
+
+        /*@internal*/ addBlockScopedVariable(node: Identifier): void;
 
         /** Adds an initialization statement to the top of the lexical environment. */
         /* @internal */

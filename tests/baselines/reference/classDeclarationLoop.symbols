@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/classDeclarations/classDeclarationLoop.ts ===
+const arr = [];
+>arr : Symbol(arr, Decl(classDeclarationLoop.ts, 0, 5))
+
+for (let i = 0; i < 10; ++i) {
+>i : Symbol(i, Decl(classDeclarationLoop.ts, 1, 8))
+>i : Symbol(i, Decl(classDeclarationLoop.ts, 1, 8))
+>i : Symbol(i, Decl(classDeclarationLoop.ts, 1, 8))
+
+    class C {
+>C : Symbol(C, Decl(classDeclarationLoop.ts, 1, 30))
+
+        prop = i;
+>prop : Symbol(C.prop, Decl(classDeclarationLoop.ts, 2, 13))
+>i : Symbol(i, Decl(classDeclarationLoop.ts, 1, 8))
+    }
+    arr.push(C);
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(classDeclarationLoop.ts, 0, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(classDeclarationLoop.ts, 1, 30))
+}
+

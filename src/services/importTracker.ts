@@ -644,7 +644,8 @@ namespace ts.FindAllReferences {
                     return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
                 }
                 else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
-                    return checker.getExportSpecifierLocalTargetSymbol(declaration.name)!;
+                    // Export of form 'module.exports.propName = expr';
+                    return checker.getSymbolAtLocation(declaration)!;
                 }
                 else if (isShorthandPropertyAssignment(declaration)
                     && isBinaryExpression(declaration.parent.parent)

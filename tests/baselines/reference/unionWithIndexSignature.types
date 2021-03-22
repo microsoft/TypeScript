@@ -51,11 +51,11 @@ export function flatten<T extends number|TypedArray>(arr: T) {
   if (isTypedArray(arr)) {
 >isTypedArray(arr) : boolean
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
->arr : T
+>arr : number | TypedArray
 
       arr[1];
 >arr[1] : number
->arr : T & (Int32Array | Uint8Array)
+>arr : TypedArray
 >1 : 1
   }
 }
