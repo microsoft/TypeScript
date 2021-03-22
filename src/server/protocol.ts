@@ -979,6 +979,16 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface JSDocTagInfo {
+        /** Name of the JSDoc tag */
+        name: string;
+        /**
+         * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+         */
+        text?: string | SymbolDisplayPart[];
+    }
+
     export interface TextSpanWithContext extends TextSpan {
         contextStart?: Location;
         contextEnd?: Location;
@@ -1951,6 +1961,7 @@ namespace ts.server.protocol {
      */
     export interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
+        arguments: FileLocationRequestArgs;
     }
 
     /**
@@ -1984,8 +1995,9 @@ namespace ts.server.protocol {
 
         /**
          * Documentation associated with symbol.
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
          */
-        documentation: string;
+        documentation: string | SymbolDisplayPart[];
 
         /**
          * JSDoc tags associated with symbol.
@@ -2206,6 +2218,12 @@ namespace ts.server.protocol {
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
         kind: string;
+    }
+
+    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        /** The location of the declaration that the @link tag links to. */
+        target: FileSpan;
     }
 
     /**
@@ -3301,6 +3319,7 @@ namespace ts.server.protocol {
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
 
+        readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
     }
 
