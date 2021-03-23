@@ -1207,6 +1207,7 @@ namespace ts {
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
         // For testing
         /*@internal*/ now?(): Date;
+        /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
         /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
     }

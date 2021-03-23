@@ -265,6 +265,11 @@ const a: string = 10;`, "utf-8"),
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
                 },
                 {
+                    subScenario: "Modify main file again",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                },
+                {
                     subScenario: "Add new file and update main file",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => {
@@ -288,7 +293,9 @@ const a: string = 10;`, "utf-8"),
             baselinePrograms: true,
         });
 
-        const jsxLibraryContent = `
+        describe("when synthesized imports are added to files", () => {
+            function getJsxLibraryContent() {
+                return `
 export {};
 declare global {
     namespace JSX {
@@ -300,29 +307,31 @@ declare global {
         }
     }
 }`;
+            }
 
-        verifyTsc({
-            scenario: "react-jsx-emit-mode",
-            subScenario: "with no backing types found doesn't crash",
-            fs: () => loadProjectFromFiles({
-                "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
-                "/src/project/node_modules/@types/react/index.d.ts": jsxLibraryContent, // doesn't contain a jsx-runtime definition
-                "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
-            }),
-            commandLineArgs: ["--p", "src/project"]
-        });
+            verifyTsc({
+                scenario: "react-jsx-emit-mode",
+                subScenario: "with no backing types found doesn't crash",
+                fs: () => loadProjectFromFiles({
+                    "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
+                    "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
+                    "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
+                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
+                }),
+                commandLineArgs: ["--p", "src/project"]
+            });
 
-        verifyTsc({
-            scenario: "react-jsx-emit-mode",
-            subScenario: "with no backing types found doesn't crash under --strict",
-            fs: () => loadProjectFromFiles({
-                "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
-                "/src/project/node_modules/@types/react/index.d.ts": jsxLibraryContent, // doesn't contain a jsx-runtime definition
-                "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
-            }),
-            commandLineArgs: ["--p", "src/project", "--strict"]
+            verifyTsc({
+                scenario: "react-jsx-emit-mode",
+                subScenario: "with no backing types found doesn't crash under --strict",
+                fs: () => loadProjectFromFiles({
+                    "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
+                    "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
+                    "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
+                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
+                }),
+                commandLineArgs: ["--p", "src/project", "--strict"]
+            });
         });
     });
 }
