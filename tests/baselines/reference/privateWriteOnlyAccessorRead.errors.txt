@@ -1,17 +1,19 @@
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(8,17): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(11,5): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(16,13): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(18,17): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(21,18): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(25,9): error TS2806: Private accessor was defined without a getter.
-tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(26,12): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(9,17): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(12,5): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(17,13): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(19,17): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(22,18): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(26,9): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(27,12): error TS2806: Private accessor was defined without a getter.
+tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts(30,5): error TS2806: Private accessor was defined without a getter.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts (7 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts (8 errors) ====
     class Test {
       set #value(v: { foo: { bar: number } }) {}
       set #valueRest(v: number[]) {}
       set #valueOne(v: number) {}
+      set #valueCompound(v: number) {}
     
       m() {
         const foo = { bar: 1 };
@@ -49,6 +51,10 @@ tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRea
                ~~~~~~~~~~~~~~~
 !!! error TS2806: Private accessor was defined without a getter.
         ];
+    
+        this.#valueCompound += 3;
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2806: Private accessor was defined without a getter.
       }
     }
     new Test().m();

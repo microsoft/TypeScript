@@ -3,6 +3,7 @@ class Test {
   set #value(v: { foo: { bar: number } }) {}
   set #valueRest(v: number[]) {}
   set #valueOne(v: number) {}
+  set #valueCompound(v: number) {}
 
   m() {
     const foo = { bar: 1 };
@@ -26,6 +27,8 @@ class Test {
         this.#valueOne,
         ...this.#valueRest
     ];
+
+    this.#valueCompound += 3;
   }
 }
 new Test().m();

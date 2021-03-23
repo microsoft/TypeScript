@@ -26791,12 +26791,18 @@ namespace ts {
             const parentSymbol = getNodeLinks(left).resolvedSymbol;
             const assignmentKind = getAssignmentTargetKind(node);
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
-            if (isPrivateIdentifier(right)) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
-            }
             const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
             let prop: Symbol | undefined;
             if (isPrivateIdentifier(right)) {
+                if (languageVersion < ScriptTarget.ESNext) {
+                    if (assignmentKind !== AssignmentKind.None) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldSet);
+                    }
+                    if (assignmentKind !== AssignmentKind.Definite) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
+                    }
+                }
+
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
                 if (assignmentKind && lexicallyScopedSymbol && lexicallyScopedSymbol.valueDeclaration && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
@@ -26817,7 +26823,7 @@ namespace ts {
                 }
                 else {
                     const isSetonlyAccessor = prop && prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
-                    if (isSetonlyAccessor && !isAssignmentTarget(node)) {
+                    if (isSetonlyAccessor && assignmentKind !== AssignmentKind.Definite) {
                         error(node, Diagnostics.Private_accessor_was_defined_without_a_getter);
                     }
                 }
@@ -39905,6 +39911,16 @@ namespace ts {
                                 const symbol = getSymbol(helpersModule.exports!, escapeLeadingUnderscores(name), SymbolFlags.Value);
                                 if (!symbol) {
                                     error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
+                                }
+                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
+                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+                                    }
+                                }
+                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
+                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                    }
                                 }
                             }
                         }
