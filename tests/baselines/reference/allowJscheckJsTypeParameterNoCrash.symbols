@@ -41,11 +41,11 @@ export var a = vextend({
 
       this.data2 = 1;
 >this : Symbol(__type, Decl(lib.es5.d.ts, --, --))
->data2 : Symbol(data2, Decl(app.js, 4, 16), Decl(app.js, 6, 6))
+>data2 : Symbol(data2, Decl(app.js, 4, 16))
 
     },
     data2(val) { },
->data2 : Symbol(data2, Decl(app.js, 4, 16), Decl(app.js, 6, 6))
+>data2 : Symbol(data2, Decl(app.js, 6, 6))
 >val : Symbol(val, Decl(app.js, 7, 10))
   }
 });

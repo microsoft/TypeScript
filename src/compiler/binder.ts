@@ -410,13 +410,17 @@ namespace ts {
          * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
          * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
          */
-        function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean): Symbol {
-            Debug.assert(!hasDynamicName(node));
+        function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean, isComputedName?: boolean): Symbol {
+            Debug.assert(isComputedName || !hasDynamicName(node));
 
             const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
 
             // The exported symbol for an export default function/class node is always named "default"
-            const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
+            const name = isComputedName
+                ? InternalSymbolName.Computed
+                : isDefaultExport && parent
+                    ? InternalSymbolName.Default
+                    : getDeclarationName(node);
 
             let symbol: Symbol | undefined;
             if (name === undefined) {
@@ -459,6 +463,11 @@ namespace ts {
                 else if (isReplaceableByMethod && !symbol.isReplaceableByMethod) {
                     // A symbol already exists, so don't add this as a declaration.
                     return symbol;
+                }
+                else if(!isReplaceableByMethod && symbol.isReplaceableByMethod) {
+                    // A symbol already exists, but needs to be replaced
+                    const symbolFlags = includes & SymbolFlags.Property ? SymbolFlags.Property : SymbolFlags.None;
+                    symbolTable.set(name, symbol = createSymbol(symbolFlags, name));
                 }
                 else if (symbol.flags & excludes) {
                     if (symbol.isReplaceableByMethod) {
@@ -2949,7 +2958,8 @@ namespace ts {
                     const containingClass = thisContainer.parent;
                     const symbolTable = hasSyntacticModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
                     if (hasDynamicName(node)) {
-                        bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol);
+                        declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true, /*isComputedName*/ true);
+                        addLateBoundAssignmentDeclarationToSymbol(node, containingClass.symbol);
                     }
                     else {
                         declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
