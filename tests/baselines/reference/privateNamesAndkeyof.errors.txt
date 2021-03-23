@@ -1,0 +1,42 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts(14,1): error TS2322: Type '"#fooField"' is not assignable to type 'keyof A'.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts(15,1): error TS2322: Type '"#fooMethod"' is not assignable to type 'keyof A'.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts(16,1): error TS2322: Type '"#fooProp"' is not assignable to type 'keyof A'.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts(18,1): error TS2322: Type '"fooField"' is not assignable to type 'keyof A'.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts(19,1): error TS2322: Type '"fooMethod"' is not assignable to type 'keyof A'.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts(20,1): error TS2322: Type '"fooProp"' is not assignable to type 'keyof A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts (6 errors) ====
+    class A {
+        #fooField = 3;
+        #fooMethod() { };
+        get #fooProp() { return 1; };
+        set #fooProp(value: number) { };
+        bar = 3;
+        baz = 3;
+    }
+    
+    // `keyof A` should not include '#foo*'
+    let k: keyof A = "bar"; // OK
+    k = "baz"; // OK
+    
+    k = "#fooField"; // Error
+    ~
+!!! error TS2322: Type '"#fooField"' is not assignable to type 'keyof A'.
+    k = "#fooMethod"; // Error
+    ~
+!!! error TS2322: Type '"#fooMethod"' is not assignable to type 'keyof A'.
+    k = "#fooProp"; // Error
+    ~
+!!! error TS2322: Type '"#fooProp"' is not assignable to type 'keyof A'.
+    
+    k = "fooField"; // Error
+    ~
+!!! error TS2322: Type '"fooField"' is not assignable to type 'keyof A'.
+    k = "fooMethod"; // Error
+    ~
+!!! error TS2322: Type '"fooMethod"' is not assignable to type 'keyof A'.
+    k = "fooProp"; // Error
+    ~
+!!! error TS2322: Type '"fooProp"' is not assignable to type 'keyof A'.
+    

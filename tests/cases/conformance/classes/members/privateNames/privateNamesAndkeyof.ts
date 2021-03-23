@@ -10,4 +10,14 @@ class A {
     baz = 3;
 }
 
-type T = keyof A     // should not include '#foo*'
+// `keyof A` should not include '#foo*'
+let k: keyof A = "bar"; // OK
+k = "baz"; // OK
+
+k = "#fooField"; // Error
+k = "#fooMethod"; // Error
+k = "#fooProp"; // Error
+
+k = "fooField"; // Error
+k = "fooMethod"; // Error
+k = "fooProp"; // Error

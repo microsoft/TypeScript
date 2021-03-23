@@ -750,7 +750,7 @@ namespace ts {
                 }
                 else {
                     const expressions: Expression[] = [];
-                    temp = temp ?? createClassTempVar ();
+                    temp ||= createClassTempVar();
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
