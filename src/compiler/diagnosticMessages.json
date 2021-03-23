@@ -3300,6 +3300,10 @@
         "category": "Error",
         "code": 2806
     },
+    "This syntax requires an imported helper named '{1}' with {2} parameters, which is not compatible with the one in '{0}'. Consider upgrading your version of '{0}'.": {
+        "category": "Error",
+        "code": 2807
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
