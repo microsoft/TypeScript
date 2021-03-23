@@ -16,6 +16,10 @@ class Test {
 >#valueOne : number
 >v : number
 
+  set #valueCompound(v: number) {}
+>#valueCompound : number
+>v : number
+
   m() {
 >m : () => void
 
@@ -139,6 +143,12 @@ class Test {
 >this : this
 
     ];
+
+    this.#valueCompound += 3;
+>this.#valueCompound += 3 : number
+>this.#valueCompound : number
+>this : this
+>3 : 3
   }
 }
 new Test().m();

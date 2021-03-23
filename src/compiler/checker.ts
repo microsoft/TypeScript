@@ -26823,7 +26823,7 @@ namespace ts {
                 }
                 else {
                     const isSetonlyAccessor = prop && prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
-                    if (isSetonlyAccessor && !isAssignmentTarget(node)) {
+                    if (isSetonlyAccessor && assignmentKind !== AssignmentKind.Definite) {
                         error(node, Diagnostics.Private_accessor_was_defined_without_a_getter);
                     }
                 }
