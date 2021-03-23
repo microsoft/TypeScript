@@ -339,8 +339,6 @@ namespace ts {
         let instantiationDepth = 0;
         let currentNode: Node | undefined;
 
-        const typeCatalog: Type[] = []; // NB: id is index + 1
-
         const emptySymbols = createSymbolTable();
         const arrayVariances = [VarianceFlags.Covariant];
 
@@ -385,7 +383,6 @@ namespace ts {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
-            getTypeCatalog: () => typeCatalog,
             getTypeCount: () => typeCount,
             getInstantiationCount: () => totalInstantiationCount,
             getRelationCacheSizes: () => ({
@@ -3817,8 +3814,8 @@ namespace ts {
             const result = new Type(checker, flags);
             typeCount++;
             result.id = typeCount;
-            if (tracing) {
-                typeCatalog.push(result);
+            if (produceDiagnostics) { // Only record types from one checker
+                tracing?.recordType(result);
             }
             return result;
         }

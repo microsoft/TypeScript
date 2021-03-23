@@ -3848,8 +3848,6 @@ namespace ts {
 
         /* @internal */ getClassifiableNames(): Set<__String>;
 
-        getTypeCatalog(): readonly Type[];
-
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
@@ -4188,8 +4186,6 @@ namespace ts {
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
         /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
-
-        /* @internal */ getTypeCatalog(): readonly Type[];
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
