@@ -1186,7 +1186,7 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
-            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
+            const realpathSync = process.platform !== "win32" ? _fs.realpathSync.native : _fs.realpathSync;
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
