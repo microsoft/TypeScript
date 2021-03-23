@@ -165,11 +165,9 @@ namespace ts.textChanges {
     }
 
     function getAdjustedRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd): TextRange {
-        return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options).end };
+        return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
     }
 
-    // TODO: Need to fix the pattern for trailing comment. This variable shouldn't be placed here.
-    // let isTrailingComment = false;
     function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd, hasTrailingComment = false) {
         const { leadingTriviaOption } = options;
         if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
@@ -220,21 +218,10 @@ namespace ts.textChanges {
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
     }
 
-    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): { end: number, hasTrailingComment: boolean } {
+    /** Return the end position of a multiline comment of it is on another line; otherwise returns `undefined`; */
+    function getPositionIfEndingOnDifferentLine(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number | undefined {
         const { end } = node;
         const { trailingTriviaOption } = options;
-        if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
-            return { end, hasTrailingComment: false };
-        }
-        if (trailingTriviaOption === TrailingTriviaOption.ExcludeWhitespace) {
-            const comments = concatenate(getTrailingCommentRanges(sourceFile.text, end), getLeadingCommentRanges(sourceFile.text, end));
-            const realEnd = comments?.[comments.length - 1]?.end;
-            if (realEnd) {
-                return { end: realEnd, hasTrailingComment: false };
-            }
-            return { end, hasTrailingComment: false };
-        }
-
         if (trailingTriviaOption === TrailingTriviaOption.Include) {
             // If the trailing comment is a multiline comment that extends to the next lines,
             // return the end of the comment and track it for the next nodes to adjust.
@@ -249,25 +236,44 @@ namespace ts.textChanges {
                     }
 
                     // Get the end line of the comment and compare against the end line of the node.
-                    // If the comment end line position, the multiline comment expans to multiple lines
-                    // and is safe to return the end position.
+                    // If the comment end line position and the multiline comment extends to multiple lines,
+                    // then is safe to return the end position.
                     const commentEndLine = getLineOfLocalPosition(sourceFile, comment.end);
                     if (commentEndLine > nodeEndLine) {
-                        const newEnd = skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
-                        return { end: newEnd, hasTrailingComment: true };
+                        return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
                     }
                 }
             }
         }
 
+        return undefined;
+    }
+
+    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number {
+        const { end } = node;
+        const { trailingTriviaOption } = options;
+        if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
+            return end;
+        }
+        if (trailingTriviaOption === TrailingTriviaOption.ExcludeWhitespace) {
+            const comments = concatenate(getTrailingCommentRanges(sourceFile.text, end), getLeadingCommentRanges(sourceFile.text, end));
+            const realEnd = comments?.[comments.length - 1]?.end;
+            if (realEnd) {
+                return realEnd;
+            }
+            return end;
+        }
+
+        const multilineEndPosition = getPositionIfEndingOnDifferentLine(sourceFile, node, options);
+        if (multilineEndPosition) {
+            return multilineEndPosition;
+        }
+
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
 
-        return {
-            end: newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
-                ? newEnd
-                : end,
-            hasTrailingComment: false
-        };
+        return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
+            ? newEnd
+            : end;
     }
 
     /**
@@ -348,11 +354,11 @@ namespace ts.textChanges {
 
             for (const node of nodes) {
                 const pos = getAdjustedStartPosition(sourceFile, node, options, hasTrailingComment);
-                const adjustedEnd = getAdjustedEndPosition(sourceFile, node, options);
+                const end = getAdjustedEndPosition(sourceFile, node, options);
 
-                hasTrailingComment = adjustedEnd.hasTrailingComment;
+                this.deleteRange(sourceFile, { pos, end });
 
-                this.deleteRange(sourceFile, { pos, end: adjustedEnd.end });
+                hasTrailingComment = !!getPositionIfEndingOnDifferentLine(sourceFile, node, options);
             }
         }
 
@@ -362,7 +368,7 @@ namespace ts.textChanges {
 
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
-            const endPosition = getAdjustedEndPosition(sourceFile, endNode, options).end;
+            const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
         }
 
@@ -482,7 +488,7 @@ namespace ts.textChanges {
                 for (const jsdoc of node.jsDoc) {
                     this.deleteRange(sourceFile, {
                         pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
-                        end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {}).end
+                        end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
                     });
                 }
             }
@@ -677,7 +683,7 @@ namespace ts.textChanges {
                     this.replaceRange(sourceFile, createRange(after.end), factory.createToken(SyntaxKind.SemicolonToken));
                 }
             }
-            const endPosition = getAdjustedEndPosition(sourceFile, after, {}).end;
+            const endPosition = getAdjustedEndPosition(sourceFile, after, {});
             return endPosition;
         }
 
@@ -1507,7 +1513,7 @@ namespace ts.textChanges {
     // Exported for tests only! (TODO: improve tests to not need this)
     export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
         const startPosition = getAdjustedStartPosition(sourceFile, node, options);
-        const endPosition = getAdjustedEndPosition(sourceFile, node, options).end;
+        const endPosition = getAdjustedEndPosition(sourceFile, node, options);
         changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
@@ -1526,7 +1532,7 @@ namespace ts.textChanges {
         deletedNodesInLists.add(node);
         changes.deleteRange(sourceFile, {
             pos: startPositionToDeleteNodeInList(sourceFile, node),
-            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}).end : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
         });
     }
 }
