@@ -1,3 +1,6 @@
+// @noEmit: true
+// @noTypesAndSymbols: true
+
 async function myAsyncFunction1() {}
 asynd function myAsyncFunction2() {}
 sasync function myAsyncFunction3() {}

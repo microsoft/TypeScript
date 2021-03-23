@@ -1531,13 +1531,19 @@ namespace ts {
             "var",
         ];
 
-        function parseSemicolonAfter(expression: Expression | PropertyName) {
+        function parseSemicolonAfter(expression: Expression | PropertyName, initializer?: Node) {
             // Consume the semicolon if it was explicitly provided.
             if (canParseSemicolon()) {
                 if (token() === SyntaxKind.SemicolonToken) {
                     nextToken();
                 }
 
+                return;
+            }
+
+            // The only way not having a semicolon after an expression when expected shouldn't create an error
+            // would be if we've there's an initializer, which would indicate the initializer already has an error
+            if (initializer) {
                 return;
             }
 
@@ -1635,7 +1641,7 @@ namespace ts {
                 return;
             }
 
-            return parseSemicolonAfter(name);
+            return parseSemicolonAfter(name, initializer);
         }
 
         function getExpressionText(expression: Expression | PropertyName) {
