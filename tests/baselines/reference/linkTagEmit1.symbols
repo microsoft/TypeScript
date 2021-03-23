@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/declarations.d.ts ===
+declare namespace NS {
+>NS : Symbol(NS, Decl(declarations.d.ts, 0, 0))
+
+    type R = number
+>R : Symbol(R, Decl(declarations.d.ts, 0, 22))
+}
+=== tests/cases/conformance/jsdoc/linkTagEmit1.js ===
+/** @typedef {number} N */
+/**
+ * @typedef {Object} D1
+ * @property {1} e Just link to {@link NS.R} this time
+ * @property {1} m Wyatt Earp loved {@link N integers} I bet.
+ */
+
+/** @typedef {number} Z @see N {@link N} */
+
+/**
+ * @param {number} integer {@link Z}
+ */
+function computeCommonSourceDirectoryOfFilenames(integer) {
+>computeCommonSourceDirectoryOfFilenames : Symbol(computeCommonSourceDirectoryOfFilenames, Decl(linkTagEmit1.js, 0, 0))
+>integer : Symbol(integer, Decl(linkTagEmit1.js, 12, 49))
+
+    return integer + 1 // pls pls pls
+>integer : Symbol(integer, Decl(linkTagEmit1.js, 12, 49))
+}
+

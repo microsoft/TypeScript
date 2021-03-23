@@ -82,7 +82,12 @@
           "tags": [
             {
               "name": "myjsdoctag",
-              "text": "this is a comment"
+              "text": [
+                {
+                  "text": "this is a comment",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }
@@ -154,7 +159,12 @@
           "tags": [
             {
               "name": "mytag",
-              "text": "comment1 comment2"
+              "text": [
+                {
+                  "text": "comment1 comment2",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }
@@ -287,7 +297,12 @@
           "tags": [
             {
               "name": "returns",
-              "text": "a value"
+              "text": [
+                {
+                  "text": "a value",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }

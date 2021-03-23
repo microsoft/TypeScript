@@ -2674,6 +2674,10 @@
         "category": "Error",
         "code": 2632
     },
+    "JSX property access expressions cannot include JSX namespace names": {
+        "category": "Error",
+        "code": 2633
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",

@@ -748,7 +748,7 @@ declare namespace FourSlashInterface {
 
     interface JSDocTagInfo {
         readonly name: string;
-        readonly text: string | undefined;
+        readonly text: string | ts.SymbolDisplayPart[] | undefined;
     }
 
     interface GenerateTypesOptions {

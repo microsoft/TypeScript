@@ -50,7 +50,12 @@
       "tags": [
         {
           "name": "param",
-          "text": "opts"
+          "text": [
+            {
+              "text": "opts",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

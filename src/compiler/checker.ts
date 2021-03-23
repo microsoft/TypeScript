@@ -5197,7 +5197,7 @@ namespace ts {
                 function preserveCommentsOn<T extends Node>(node: T) {
                     if (some(propertySymbol.declarations, d => d.kind === SyntaxKind.JSDocPropertyTag)) {
                         const d = propertySymbol.declarations?.find(d => d.kind === SyntaxKind.JSDocPropertyTag)! as JSDocPropertyTag;
-                        const commentText = d.comment;
+                        const commentText = getTextOfJSDocComment(d.comment);
                         if (commentText) {
                             setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]);
                         }
@@ -6712,7 +6712,7 @@ namespace ts {
                     const typeParams = getSymbolLinks(symbol).typeParameters;
                     const typeParamDecls = map(typeParams, p => typeParameterToDeclaration(p, context));
                     const jsdocAliasDecl = symbol.declarations?.find(isJSDocTypeAlias);
-                    const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
+                    const commentText = getTextOfJSDocComment(jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined);
                     const oldFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
                     const oldEnclosingDecl = context.enclosingDeclaration;
@@ -38680,6 +38680,10 @@ namespace ts {
                 const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
             }
+            else if (isJSDocLink(name.parent)) {
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ true);
+            }
 
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(<Identifier>name, /*meaning*/ SymbolFlags.FunctionScopedVariable);
@@ -40735,6 +40739,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
+            checkGrammarJsxName(node.tagName);
             checkGrammarTypeArguments(node, node.typeArguments);
             const seen = new Map<__String, boolean>();
 
@@ -40753,6 +40758,29 @@ namespace ts {
 
                 if (initializer && initializer.kind === SyntaxKind.JsxExpression && !initializer.expression) {
                     return grammarErrorOnNode(initializer, Diagnostics.JSX_attributes_must_only_be_assigned_a_non_empty_expression);
+                }
+            }
+        }
+
+        function checkGrammarJsxName(node: JsxTagNameExpression) {
+            if (isPropertyAccessExpression(node)) {
+                let propName: JsxTagNameExpression = node;
+                do {
+                    const check = checkGrammarJsxNestedIdentifier(propName.name);
+                    if (check) {
+                        return check;
+                    }
+                    propName = propName.expression;
+                } while (isPropertyAccessExpression(propName));
+                const check = checkGrammarJsxNestedIdentifier(propName);
+                if (check) {
+                    return check;
+                }
+            }
+
+            function checkGrammarJsxNestedIdentifier(name: MemberName | ThisExpression) {
+                if (isIdentifier(name) && idText(name).indexOf(":") !== -1) {
+                    return grammarErrorOnNode(name, Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names);
                 }
             }
         }
