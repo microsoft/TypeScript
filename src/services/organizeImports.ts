@@ -65,7 +65,7 @@ namespace ts.OrganizeImports {
 
             // Delete all nodes if there are no imports.
             if (newImportDecls.length === 0) {
-                // Consider the first node to have trailingTrivia as we want to exclude the 
+                // Consider the first node to have trailingTrivia as we want to exclude the
                 // "header" comment.
                 changeTracker.deleteNodes(sourceFile, oldImportDecls, {
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
