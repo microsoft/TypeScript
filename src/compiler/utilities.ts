@@ -6054,7 +6054,7 @@ namespace ts {
 
     export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
         const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
-        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[jsxImportSourcePragmas.length - 1] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
             compilerOptions.jsxImportSource ||
