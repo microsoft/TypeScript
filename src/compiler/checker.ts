@@ -8845,32 +8845,25 @@ namespace ts {
 
         function getTypeOfSymbol(symbol: Symbol): Type {
             const checkFlags = getCheckFlags(symbol);
-            if (checkFlags & CheckFlags.DeferredType) {
-                return getTypeOfSymbolWithDeferredType(symbol);
-            }
-            if (checkFlags & CheckFlags.Instantiated) {
-                return getTypeOfInstantiatedSymbol(symbol);
-            }
-            if (checkFlags & CheckFlags.Mapped) {
-                return getTypeOfMappedSymbol(symbol as MappedSymbol);
-            }
-            if (checkFlags & CheckFlags.ReverseMapped) {
-                return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
-            }
-            if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
-                return getTypeOfVariableOrParameterOrProperty(symbol);
-            }
-            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                return getTypeOfFuncClassEnumModule(symbol);
-            }
-            if (symbol.flags & SymbolFlags.EnumMember) {
-                return getTypeOfEnumMember(symbol);
-            }
-            if (symbol.flags & SymbolFlags.Accessor) {
-                return getTypeOfAccessors(symbol);
-            }
-            if (symbol.flags & SymbolFlags.Alias) {
-                return getTypeOfAlias(symbol);
+            switch (true) {
+                case !!(checkFlags & CheckFlags.DeferredType):
+                    return getTypeOfSymbolWithDeferredType(symbol);
+                case !!(checkFlags & CheckFlags.Instantiated):
+                    return getTypeOfInstantiatedSymbol(symbol);
+                case !!(checkFlags & CheckFlags.Mapped):
+                    return getTypeOfMappedSymbol(symbol as MappedSymbol);
+                case !!(checkFlags & CheckFlags.ReverseMapped):
+                    return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
+                case !!(symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)):
+                    return getTypeOfVariableOrParameterOrProperty(symbol);
+                case !!(symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)):
+                    return getTypeOfFuncClassEnumModule(symbol);
+                case !!(symbol.flags & SymbolFlags.EnumMember):
+                    return getTypeOfEnumMember(symbol);
+                case !!(symbol.flags & SymbolFlags.Accessor):
+                    return getTypeOfAccessors(symbol);
+                case !!(symbol.flags & SymbolFlags.Alias):
+                    return getTypeOfAlias(symbol);
             }
             return errorType;
         }
@@ -12142,6 +12135,7 @@ namespace ts {
         }
 
         function isTypeLambda(t: Type): t is TypeLambda {
+            console.log(t);
             throw new Error("no implement");
         }
 
@@ -12260,6 +12254,7 @@ namespace ts {
             }
         }
 
+        // @ts-ignore
         function applyTypeLambdaWithTypeArguments(tl: TypeLambda, typearguments: (TypeLambda | ProperType)[]): ProperType {
 
         }
@@ -12271,6 +12266,7 @@ namespace ts {
         // 1. create a Mapper
         // 2. instanitatedTL = instanitateTypeLambdaWithMapper(Generic, Mapper)
         // 3. isTypeLambdaLessThan(List, instanitatedTL)
+        // @ts-ignore
         function instanitateTypeLambdaWithMapper(){
 
         }
