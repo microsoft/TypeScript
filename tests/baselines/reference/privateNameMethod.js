@@ -25,9 +25,7 @@ class A1 {
         _A1_instances.add(this);
         __classPrivateFieldGet(this, _A1_instances, "m", _A1_method).call(this, "");
         __classPrivateFieldGet(this, _A1_instances, "m", _A1_method).call(this, 1); // Error
-        __classPrivateFieldGet(// Error
-        this, _A1_instances, "m", _A1_method).call(// Error
-        this); // Error 
+        __classPrivateFieldGet(this, _A1_instances, "m", _A1_method).call(this); // Error 
     }
 }
 _A1_instances = new WeakSet(), _A1_method = function _A1_method(param) {

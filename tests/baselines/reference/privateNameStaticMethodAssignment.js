@@ -29,10 +29,8 @@ class A3 {
     constructor(a, b) {
         var _b;
         __classPrivateFieldSet(A3, _a, () => { }, "m"); // Error, not writable 
-        __classPrivateFieldSet(// Error, not writable 
-        a, _a, () => { }, "m"); // Error, not writable 
-        __classPrivateFieldSet(// Error, not writable 
-        b, _a, () => { }, "m"); //Error, not writable 
+        __classPrivateFieldSet(a, _a, () => { }, "m"); // Error, not writable 
+        __classPrivateFieldSet(b, _a, () => { }, "m"); //Error, not writable 
         ({ x: ({ set value(_b) { __classPrivateFieldSet(A3, _a, _b, "m"); } }).value } = { x: () => { } }); //Error, not writable 
         let x = __classPrivateFieldGet(A3, _a, "m", _A3_method);
         __classPrivateFieldSet(_b = b, _a, +__classPrivateFieldGet(_b, _a, "m", _A3_method) + 1, "m"); //Error, not writable 
