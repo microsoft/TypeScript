@@ -13,5 +13,4 @@
 ////  */
 //// import * as AnotherThingElse from "someotherpath";
 
-
 verify.organizeImports(''); 

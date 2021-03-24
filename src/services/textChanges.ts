@@ -200,12 +200,13 @@ namespace ts.textChanges {
             return leadingTriviaOption === LeadingTriviaOption.IncludeAll ? fullStart : start;
         }
 
-        // if node has a trailing comments, use comment end position as the text has already been
-        // included.
+        // if node has a trailing comments, use comment end position as the text has already been included.
         if (hasTrailingComment) {
-            const comment = getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
+            // Check first for leading comments as if the node is the first import, we want to exclude the trivia;
+            // otherwise we get the trailing comments.
+            const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] || getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
             if (comment) {
-                return comment.end;
+                return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
             }
         }
 
@@ -219,7 +220,7 @@ namespace ts.textChanges {
     }
 
     /** Return the end position of a multiline comment of it is on another line; otherwise returns `undefined`; */
-    function getPositionIfEndingOnDifferentLine(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number | undefined {
+    function getEndPositionOfMultilineTrailingComment(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number | undefined {
         const { end } = node;
         const { trailingTriviaOption } = options;
         if (trailingTriviaOption === TrailingTriviaOption.Include) {
@@ -264,7 +265,7 @@ namespace ts.textChanges {
             return end;
         }
 
-        const multilineEndPosition = getPositionIfEndingOnDifferentLine(sourceFile, node, options);
+        const multilineEndPosition = getEndPositionOfMultilineTrailingComment(sourceFile, node, options);
         if (multilineEndPosition) {
             return multilineEndPosition;
         }
@@ -348,17 +349,15 @@ namespace ts.textChanges {
             this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
 
-        public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+        public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }, hasTrailingComment: boolean): void {
             // When deleting multiple nodes we need to track if the end position is including multiline trailing comments.
-            let hasTrailingComment = false;
-
             for (const node of nodes) {
                 const pos = getAdjustedStartPosition(sourceFile, node, options, hasTrailingComment);
                 const end = getAdjustedEndPosition(sourceFile, node, options);
 
                 this.deleteRange(sourceFile, { pos, end });
 
-                hasTrailingComment = !!getPositionIfEndingOnDifferentLine(sourceFile, node, options);
+                hasTrailingComment = !!getEndPositionOfMultilineTrailingComment(sourceFile, node, options);
             }
         }
 
@@ -404,6 +403,13 @@ namespace ts.textChanges {
 
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
+        }
+
+        public replaceAndDeleteNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: readonly Node[], deleteNodes: Node[], replaceOptions: ChangeNodeOptions = useNonAdjustedPositions, deleteOptions: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+            this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, replaceOptions), newNodes, replaceOptions);
+
+            const hasTrailingComment = !!getEndPositionOfMultilineTrailingComment(sourceFile, oldNode, replaceOptions);
+            this.deleteNodes(sourceFile, deleteNodes, deleteOptions, hasTrailingComment);
         }
 
         private nextCommaToken(sourceFile: SourceFile, node: Node): Node | undefined {

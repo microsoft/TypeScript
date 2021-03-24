@@ -8,9 +8,4 @@
 //// */
 //// import * as somethingElse from "anotherpath";
 
-verify.organizeImports(
-`/* some comment here
-* and there
-*/
-`
-); 
+verify.organizeImports('');

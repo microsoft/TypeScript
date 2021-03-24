@@ -65,21 +65,19 @@ namespace ts.OrganizeImports {
 
             // Delete all nodes if there are no imports.
             if (newImportDecls.length === 0) {
+                // Consider the first node to have trailingTrivia as we want to exclude the 
+                // "header" comment.
                 changeTracker.deleteNodes(sourceFile, oldImportDecls, {
-                    leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
-                });
+                }, /*hasTrailingComment*/ true);
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
-                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
+                changeTracker.replaceAndDeleteNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, oldImportDecls.slice(1), {
                     leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
-                });
-
-                // Delete any subsequent imports.
-                changeTracker.deleteNodes(sourceFile, oldImportDecls.slice(1), {
+                }, {
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                 });
             }
