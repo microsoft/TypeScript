@@ -23546,7 +23546,7 @@ namespace ts {
             // an dotted name expression, and if the location is not an assignment target, obtain the type
             // of the expression (which will reflect control flow analysis). If the expression indeed
             // resolved to the given symbol, return the narrowed type.
-            if (location.kind === SyntaxKind.Identifier) {
+            if (location.kind === SyntaxKind.Identifier || location.kind === SyntaxKind.PrivateIdentifier) {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
