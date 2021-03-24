@@ -5269,9 +5269,10 @@ namespace ts {
         return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
     }
 
-    export function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
+    export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const flags = getCombinedModifierFlags(s.valueDeclaration);
+            const declaration = (isWrite && forEach(s.declarations, d => d.kind === SyntaxKind.SetAccessor && d)) || s.valueDeclaration;
+            const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
         if (getCheckFlags(s) & CheckFlags.Synthetic) {

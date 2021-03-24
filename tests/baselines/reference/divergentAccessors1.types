@@ -1,0 +1,57 @@
+=== tests/cases/compiler/divergentAccessors1.ts ===
+// Accessors in interfaces/types
+
+{
+    interface IHasGetSet {
+        get foo(): number;
+>foo : number
+
+        set foo(): number | string;
+>foo : number
+    }
+    
+    declare const ihgs: IHasGetSet;
+>ihgs : IHasGetSet
+
+    ihgs.foo = "32";
+>ihgs.foo = "32" : "32"
+>ihgs.foo : number
+>ihgs : IHasGetSet
+>foo : number
+>"32" : "32"
+
+    let r_ihgs_foo: number = ihgs.foo;
+>r_ihgs_foo : number
+>ihgs.foo : number
+>ihgs : IHasGetSet
+>foo : number
+}
+
+{
+    type T_HasGetSet = {
+>T_HasGetSet : { foo: number; }
+
+        get foo(): number;
+>foo : number
+
+        set foo(): number | string;
+>foo : number
+    }
+    
+    declare const t_hgs: T_HasGetSet;
+>t_hgs : { foo: number; }
+
+    t_hgs.foo = "32";
+>t_hgs.foo = "32" : "32"
+>t_hgs.foo : number
+>t_hgs : { foo: number; }
+>foo : number
+>"32" : "32"
+
+    let r_t_hgs_foo: number = t_hgs.foo;
+>r_t_hgs_foo : number
+>t_hgs.foo : number
+>t_hgs : { foo: number; }
+>foo : number
+}
+

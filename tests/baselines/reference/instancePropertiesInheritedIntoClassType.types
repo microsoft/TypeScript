@@ -135,9 +135,9 @@ module Generic {
 
     r.y = '';
 >r.y = '' : ""
->r.y : string
+>r.y : U
 >r : D<number, string>
->y : string
+>y : U
 >'' : ""
 
     var r6 = d.y(); // error

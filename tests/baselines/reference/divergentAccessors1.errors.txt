@@ -1,0 +1,45 @@
+tests/cases/compiler/divergentAccessors1.ts(6,13): error TS1049: A 'set' accessor must have exactly one parameter.
+tests/cases/compiler/divergentAccessors1.ts(9,5): error TS1184: Modifiers cannot appear here.
+tests/cases/compiler/divergentAccessors1.ts(10,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/divergentAccessors1.ts(17,13): error TS1049: A 'set' accessor must have exactly one parameter.
+tests/cases/compiler/divergentAccessors1.ts(20,5): error TS1184: Modifiers cannot appear here.
+tests/cases/compiler/divergentAccessors1.ts(21,5): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/divergentAccessors1.ts (6 errors) ====
+    // Accessors in interfaces/types
+    
+    {
+        interface IHasGetSet {
+            get foo(): number;
+            set foo(): number | string;
+                ~~~
+!!! error TS1049: A 'set' accessor must have exactly one parameter.
+        }
+        
+        declare const ihgs: IHasGetSet;
+        ~~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+        ihgs.foo = "32";
+        ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+        let r_ihgs_foo: number = ihgs.foo;
+    }
+    
+    {
+        type T_HasGetSet = {
+            get foo(): number;
+            set foo(): number | string;
+                ~~~
+!!! error TS1049: A 'set' accessor must have exactly one parameter.
+        }
+        
+        declare const t_hgs: T_HasGetSet;
+        ~~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+        t_hgs.foo = "32";
+        ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+        let r_t_hgs_foo: number = t_hgs.foo;
+    }
+    

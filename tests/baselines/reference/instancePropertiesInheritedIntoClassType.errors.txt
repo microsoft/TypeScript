@@ -4,11 +4,13 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
   Type 'Number' has no call signatures.
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(26,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(29,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(40,5): error TS2322: Type 'string' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts(41,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'String' has no call signatures.
 
 
-==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (6 errors) ====
+==== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts (7 errors) ====
     module NonGeneric {
         class C {
             x: string;
@@ -60,6 +62,9 @@ tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIn
         var r2 = r.x;
         var r3 = r.y;
         r.y = '';
+        ~~~
+!!! error TS2322: Type 'string' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'string'.
         var r6 = d.y(); // error
                    ~
 !!! error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
