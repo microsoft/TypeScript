@@ -14227,9 +14227,7 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? (<StringLiteralType>type).value :
                 type.flags & TypeFlags.NumberLiteral ? "" + (<NumberLiteralType>type).value :
                 type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((<BigIntLiteralType>type).value) :
-                type.flags & TypeFlags.BooleanLiteral ? (<IntrinsicType>type).intrinsicName :
-                type.flags & TypeFlags.Null ? "null" :
-                type.flags & TypeFlags.Undefined ? "undefined" :
+                type.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) ? (<IntrinsicType>type).intrinsicName :
                 undefined;
         }
 
@@ -14509,7 +14507,7 @@ namespace ts {
         }
 
         function isPatternLiteralPlaceholderType(type: Type) {
-            return templateConstraintType.types.indexOf(type) !== -1 || !!(type.flags & TypeFlags.Any);
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt));
         }
 
         function isPatternLiteralType(type: Type) {
@@ -18207,13 +18205,10 @@ namespace ts {
                         return localResult;
                     }
                 }
-                else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
-                    if (isPatternLiteralType(target)) {
-                        // match all non-`string` segments
-                        const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
-                        if (result && every(result, (r, i) => isStringLiteralTypeValueParsableAsType(r, (target as TemplateLiteralType).types[i]))) {
-                            return Ternary.True;
-                        }
+                else if (target.flags & TypeFlags.TemplateLiteral) {
+                    const result = inferTypesFromTemplateLiteralType(source, target as TemplateLiteralType);
+                    if (result && every(result, (r, i) => isValidTypeForTemplateLiteralPlaceholder(r, (target as TemplateLiteralType).types[i]))) {
+                        return Ternary.True;
                     }
                 }
 
@@ -20620,43 +20615,89 @@ namespace ts {
             return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
         }
 
-        function isStringLiteralTypeValueParsableAsType(s: StringLiteralType, target: Type): boolean {
-            if (target.flags & TypeFlags.Union) {
-                return someType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
+        function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
+            if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
+                return true;
             }
-            switch (target) {
-                case stringType: return true;
-                case numberType: return s.value !== "" && isFinite(+(s.value));
-                case bigintType: return s.value !== "" && isValidBigIntString(s.value);
-                // the next 4 should be handled in `getTemplateLiteralType`, as they are all exactly one value, but are here for completeness, just in case
-                // this function is ever used on types which don't come from template literal holes
-                case trueType: return s.value === "true";
-                case falseType: return s.value === "false";
-                case undefinedType: return s.value === "undefined";
-                case nullType: return s.value === "null";
-                default: return !!(target.flags & TypeFlags.Any);
+            if (source.flags & TypeFlags.StringLiteral) {
+                const value = (<StringLiteralType>source).value;
+                return !!(target.flags & TypeFlags.Number && value !== "" && isFinite(+value) ||
+                    target.flags & TypeFlags.BigInt && value !== "" && isValidBigIntString(value) ||
+                    target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (<IntrinsicType>target).intrinsicName);
             }
+            if (source.flags & TypeFlags.TemplateLiteral) {
+                const texts = (<TemplateLiteralType>source).texts;
+                return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((<TemplateLiteralType>source).types[0], target);
+            }
+            return isTypeAssignableTo(source, target);
         }
 
-        function inferLiteralsFromTemplateLiteralType(source: StringLiteralType, target: TemplateLiteralType): StringLiteralType[] | undefined {
-            const value = source.value;
-            const texts = target.texts;
-            const lastIndex = texts.length - 1;
-            const startText = texts[0];
-            const endText = texts[lastIndex];
-            if (!(value.startsWith(startText) && value.slice(startText.length).endsWith(endText))) return undefined;
-            const matches = [];
-            const str = value.slice(startText.length, value.length - endText.length);
-            let pos = 0;
-            for (let i = 1; i < lastIndex; i++) {
-                const delim = texts[i];
-                const delimPos = delim.length > 0 ? str.indexOf(delim, pos) : pos < str.length ? pos + 1 : -1;
-                if (delimPos < 0) return undefined;
-                matches.push(getLiteralType(str.slice(pos, delimPos)));
-                pos = delimPos + delim.length;
+        function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
+            return source.flags & TypeFlags.StringLiteral ? inferFromLiteralPartsToTemplateLiteral([(<StringLiteralType>source).value], emptyArray, target) :
+                source.flags & TypeFlags.TemplateLiteral ?
+                    arraysEqual((<TemplateLiteralType>source).texts, target.texts) ? map((<TemplateLiteralType>source).types, getStringLikeTypeForType) :
+                    inferFromLiteralPartsToTemplateLiteral((<TemplateLiteralType>source).texts, (<TemplateLiteralType>source).types, target) :
+                undefined;
+        }
+
+        function getStringLikeTypeForType(type: Type) {
+            return type.flags & (TypeFlags.Any | TypeFlags.StringLike) ? type : getTemplateLiteralType(["", ""], [type]);
+        }
+
+        function inferFromLiteralPartsToTemplateLiteral(sourceTexts: readonly string[], sourceTypes: readonly Type[], target: TemplateLiteralType): Type[] | undefined {
+            const lastSourceIndex = sourceTexts.length - 1;
+            const sourceStartText = sourceTexts[0];
+            const sourceEndText = sourceTexts[lastSourceIndex];
+            const targetTexts = target.texts;
+            const lastTargetIndex = targetTexts.length - 1;
+            const targetStartText = targetTexts[0];
+            const targetEndText = targetTexts[lastTargetIndex];
+            if (lastSourceIndex === 0 && sourceStartText.length < targetStartText.length + targetEndText.length ||
+                !sourceStartText.startsWith(targetStartText) || !sourceEndText.endsWith(targetEndText)) return undefined;
+            const remainingEndText = sourceEndText.slice(0, sourceEndText.length - targetEndText.length);
+            const matches: Type[] = [];
+            let seg = 0;
+            let pos = targetStartText.length;
+            for (let i = 1; i < lastTargetIndex; i++) {
+                const delim = targetTexts[i];
+                if (delim.length > 0) {
+                    let s = seg;
+                    let p = pos;
+                    while (true) {
+                        p = getSourceText(s).indexOf(delim, p);
+                        if (p >= 0) break;
+                        s++;
+                        if (s === sourceTexts.length) return undefined;
+                        p = 0;
+                    }
+                    addMatch(s, p);
+                    pos += delim.length;
+                }
+                else if (pos < getSourceText(seg).length) {
+                    addMatch(seg, pos + 1);
+                }
+                else if (seg < lastSourceIndex) {
+                    addMatch(seg + 1, 0);
+                }
+                else {
+                    return undefined;
+                }
             }
-            matches.push(getLiteralType(str.slice(pos)));
+            addMatch(lastSourceIndex, getSourceText(lastSourceIndex).length);
             return matches;
+            function getSourceText(index: number) {
+                return index < lastSourceIndex ? sourceTexts[index] : remainingEndText;
+            }
+            function addMatch(s: number, p: number) {
+                const matchType = s === seg ?
+                    getLiteralType(getSourceText(s).slice(pos, p)) :
+                    getTemplateLiteralType(
+                        [sourceTexts[seg].slice(pos), ...sourceTexts.slice(seg + 1, s), getSourceText(s).slice(0, p)],
+                        sourceTypes.slice(seg, s));
+                matches.push(matchType);
+                seg = s;
+                pos = p;
+            }
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
@@ -21121,9 +21162,7 @@ namespace ts {
             }
 
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
-                const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateLiteralType(<StringLiteralType>source, target) :
-                    source.flags & TypeFlags.TemplateLiteral && arraysEqual((<TemplateLiteralType>source).texts, target.texts) ? (<TemplateLiteralType>source).types :
-                    undefined;
+                const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
                 for (let i = 0; i < types.length; i++) {
                     inferFromTypes(matches ? matches[i] : neverType, types[i]);
