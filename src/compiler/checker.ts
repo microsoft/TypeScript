@@ -33565,11 +33565,14 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
                     case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.BinaryExpression:
+                        const node = d as ExportAssignment | BinaryExpression;
+                        const expression = isExportAssignment(node) ? node.expression : node.right;
                         // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
-                        if (!isEntityNameExpression((d as ExportAssignment).expression)) {
+                        if (!isEntityNameExpression(expression)) {
                             return DeclarationSpaces.ExportValue;
                         }
-                        d = (d as ExportAssignment).expression;
+                        d = expression;
 
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module.
                     // falls through
