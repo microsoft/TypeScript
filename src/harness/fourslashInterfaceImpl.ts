@@ -215,6 +215,10 @@ namespace FourSlashInterface {
             this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
 
+        public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
+            this.state.verifyRefactorKindsAvailable(kind, expected, preferences);
+        }
+
         public toggleLineComment(newFileContent: string) {
             this.state.toggleLineComment(newFileContent);
         }
@@ -332,8 +336,12 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
-        public baselineFindAllReferences(markerName: string) {
-            this.state.verifyBaselineFindAllReferences(markerName);
+        public baselineFindAllReferences(...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferences(...markerNames);
+        }
+
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
         }
 
         public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
@@ -388,6 +396,14 @@ namespace FourSlashInterface {
             this.state.baselineQuickInfo();
         }
 
+        public baselineSignatureHelp() {
+            this.state.baselineSignatureHelp();
+        }
+
+        public baselineCompletions() {
+            this.state.baselineCompletions();
+        }
+
         public baselineSmartSelection() {
             this.state.baselineSmartSelection();
         }
@@ -424,9 +440,9 @@ namespace FourSlashInterface {
             this.state.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string) {
+        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
             this.state.goToMarker(marker);
-            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset });
+            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
         }
 
         public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
@@ -993,7 +1009,7 @@ namespace FourSlashInterface {
         export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["false", "null", "true", "void", "asserts", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "asserts", "any", "boolean", "infer", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
             interfaceEntry("Symbol"),
@@ -1254,6 +1270,7 @@ namespace FourSlashInterface {
             "await",
             "boolean",
             "declare",
+            "infer",
             "keyof",
             "module",
             "namespace",
@@ -1456,6 +1473,7 @@ namespace FourSlashInterface {
             "await",
             "boolean",
             "declare",
+            "infer",
             "keyof",
             "module",
             "namespace",
@@ -1691,6 +1709,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
+        data?: ts.CompletionEntryData;
         description: string;
         preferences?: ts.UserPreferences;
     }

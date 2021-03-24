@@ -3,9 +3,9 @@
 interface I1 {
     [Symbol.toStringTag]: string;
 >[Symbol.toStringTag] : string
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     [key: string]: number;
 >key : string
@@ -14,9 +14,9 @@ interface I1 {
 interface I2 {
     [Symbol.toStringTag]: string;
 >[Symbol.toStringTag] : string
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     [key: number]: boolean;
 >key : number

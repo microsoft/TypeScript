@@ -1,13 +1,7 @@
 tests/cases/compiler/typeParameterDiamond2.ts(8,13): error TS2322: Type 'T | U' is not assignable to type 'Top'.
   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-    Type 'U' is not assignable to type 'Top'.
-      'Top' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 tests/cases/compiler/typeParameterDiamond2.ts(10,13): error TS2322: Type 'Bottom' is not assignable to type 'Top'.
   'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
-    Type 'T | U' is not assignable to type 'Top'.
-      'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-        Type 'U' is not assignable to type 'Top'.
-          'Top' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
 ==== tests/cases/compiler/typeParameterDiamond2.ts (2 errors) ====
@@ -22,17 +16,11 @@ tests/cases/compiler/typeParameterDiamond2.ts(10,13): error TS2322: Type 'Bottom
                 ~~~
 !!! error TS2322: Type 'T | U' is not assignable to type 'Top'.
 !!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:     Type 'U' is not assignable to type 'Top'.
-!!! error TS2322:       'Top' could be instantiated with an arbitrary type which could be unrelated to 'U'.
                 middle = bottom;
                 top = bottom;
                 ~~~
 !!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.
 !!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'Bottom'.
-!!! error TS2322:     Type 'T | U' is not assignable to type 'Top'.
-!!! error TS2322:       'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
-!!! error TS2322:         Type 'U' is not assignable to type 'Top'.
-!!! error TS2322:           'Top' could be instantiated with an arbitrary type which could be unrelated to 'U'.
             }
         }
     }

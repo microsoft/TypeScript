@@ -1,0 +1,16 @@
+tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts(9,21): error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts (1 errors) ====
+    namespace A {
+        export class B {}
+    }
+    
+    // ok
+    class C1 extends A?.B {}
+    
+    // error
+    class C2 implements A?.B {}
+                        ~~~~
+!!! error TS2500: A class can only implement an identifier/qualified-name with optional type arguments.
+    

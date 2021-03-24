@@ -1,8 +1,9 @@
 tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(7,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error TS2367: This condition will always return 'false' since the types '"a" | "b"' and '"c"' have no overlap.
+tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error TS2367: This condition will always return 'false' since the types 'keyof O' and '"c"' have no overlap.
+tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(247,10): error TS2339: Property 'kind' does not exist on type 'never'.
 
 
-==== tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts (2 errors) ====
+==== tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts (3 errors) ====
     function f1(x: 1 | 2): string {
         if (!!true) {
             switch (x) {
@@ -241,7 +242,20 @@ tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error
         }
         k === 'c';  // Error
         ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '"a" | "b"' and '"c"' have no overlap.
+!!! error TS2367: This condition will always return 'false' since the types 'keyof O' and '"c"' have no overlap.
         return o[k];
     }
     
+    // Repro from #35431
+    type A = { kind: "abc" } | { kind: "def" };
+    
+    function f35431(a: A) {
+      switch (a.kind) {
+        case "abc":
+        case "def": return;
+        default:
+          a!.kind; // Error expected
+             ~~~~
+!!! error TS2339: Property 'kind' does not exist on type 'never'.
+      }
+    }

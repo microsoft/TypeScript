@@ -2,7 +2,6 @@
 /** Performance measurements for the compiler. */
 namespace ts.performance {
     let perfHooks: PerformanceHooks | undefined;
-    let perfObserver: PerformanceObserver | undefined;
     // when set, indicates the implementation of `Performance` to use for user timing.
     // when unset, indicates user timing is unavailable or disabled.
     let performanceImpl: Performance | undefined;
@@ -41,6 +40,10 @@ namespace ts.performance {
     }
 
     export const nullTimer: Timer = { enter: noop, exit: noop };
+
+    let enabled = false;
+    let timeorigin = timestamp();
+    const marks = new Map<string, number>();
     const counts = new Map<string, number>();
     const durations = new Map<string, number>();
 
@@ -50,7 +53,12 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function mark(markName: string) {
-        performanceImpl?.mark(markName);
+        if (enabled) {
+            const count = counts.get(markName) ?? 0;
+            counts.set(markName, count + 1);
+            marks.set(markName, timestamp());
+            performanceImpl?.mark(markName);
+        }
     }
 
     /**
@@ -63,7 +71,13 @@ namespace ts.performance {
      *      used.
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
-        performanceImpl?.measure(measureName, startMarkName, endMarkName);
+        if (enabled) {
+            const end = (endMarkName !== undefined ? marks.get(endMarkName) : undefined) ?? timestamp();
+            const start = (startMarkName !== undefined ? marks.get(startMarkName) : undefined) ?? timeorigin;
+            const previousDuration = durations.get(measureName) || 0;
+            durations.set(measureName, previousDuration + (end - start));
+            performanceImpl?.measure(measureName, startMarkName, endMarkName);
+        }
     }
 
     /**
@@ -97,35 +111,36 @@ namespace ts.performance {
      * Indicates whether the performance API is enabled.
      */
     export function isEnabled() {
-        return !!performanceImpl;
+        return enabled;
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
-    export function enable() {
-        if (!performanceImpl) {
+    export function enable(system: System = sys) {
+        if (!enabled) {
+            enabled = true;
             perfHooks ||= tryGetNativePerformanceHooks();
-            if (!perfHooks) return false;
-            perfObserver ||= new perfHooks.PerformanceObserver(updateStatisticsFromList);
-            perfObserver.observe({ entryTypes: ["mark", "measure"] });
-            performanceImpl = perfHooks.performance;
+            if (perfHooks) {
+                timeorigin = perfHooks.performance.timeOrigin;
+                // NodeJS's Web Performance API is currently slower than expected, but we'd still like
+                // to be able to leverage native trace events when node is run with either `--cpu-prof`
+                // or `--prof`, if we're running with our own `--generateCpuProfile` flag, or when
+                // running in debug mode (since its possible to generate a cpu profile while debugging).
+                if (perfHooks.shouldWriteNativeEvents || system?.cpuProfilingEnabled?.() || system?.debugMode) {
+                    performanceImpl = perfHooks.performance;
+                }
+            }
         }
         return true;
     }
 
     /** Disables performance measurements for the compiler. */
     export function disable() {
-        perfObserver?.disconnect();
-        performanceImpl = undefined;
-        counts.clear();
-        durations.clear();
-    }
-
-    function updateStatisticsFromList(list: PerformanceObserverEntryList) {
-        for (const mark of list.getEntriesByType("mark")) {
-            counts.set(mark.name, (counts.get(mark.name) || 0) + 1);
-        }
-        for (const measure of list.getEntriesByType("measure")) {
-            durations.set(measure.name, (durations.get(measure.name) || 0) + measure.duration);
+        if (enabled) {
+            marks.clear();
+            counts.clear();
+            durations.clear();
+            performanceImpl = undefined;
+            enabled = false;
         }
     }
 }

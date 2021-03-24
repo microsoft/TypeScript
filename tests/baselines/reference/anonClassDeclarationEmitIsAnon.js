@@ -44,6 +44,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -84,6 +86,8 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -92,7 +96,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 exports.TimestampedUser = exports.User = void 0;
 var wrapClass_1 = require("./wrapClass");
-exports["default"] = wrapClass_1.wrapClass(0);
+exports["default"] = (0, wrapClass_1.wrapClass)(0);
 // Simple class
 var User = /** @class */ (function () {
     function User() {
@@ -108,7 +112,7 @@ var TimestampedUser = /** @class */ (function (_super) {
         return _super.call(this) || this;
     }
     return TimestampedUser;
-}(wrapClass_1.Timestamped(User)));
+}((0, wrapClass_1.Timestamped)(User)));
 exports.TimestampedUser = TimestampedUser;
 
 

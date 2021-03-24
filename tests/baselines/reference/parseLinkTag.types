@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/parseLinkTag.ts ===
+/** trailing @link tag {@link */
+var x;
+>x : any
+
+/** @returns trailing @link tag {@link */
+function f() {
+>f : () => any
+
+    return x
+>x : any
+}
+

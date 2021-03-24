@@ -1,0 +1,24 @@
+=== tests/cases/compiler/intersectionType_useDefineForClassFields.ts ===
+type Foo<T> = {
+>Foo : Foo<T>
+
+    [k in keyof T & string]: any
+}
+
+function bar<T>(_p: T): { new(): Foo<T> } {
+>bar : <T>(_p: T) => {    new (): Foo<T>;}
+>_p : T
+
+    return null as any;
+>null as any : any
+>null : null
+}
+
+class Baz extends bar({ x: 1 }) {
+>Baz : Baz
+>bar({ x: 1 }) : Foo<{ x: number; }>
+>bar : <T>(_p: T) => new () => Foo<T>
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+}

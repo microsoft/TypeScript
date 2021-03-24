@@ -10,7 +10,7 @@ namespace ts.formatting {
         kind: T;
     }
 
-    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaKind>;
+    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaSyntaxKind>;
 
     export interface TokenInfo {
         leadingTrivia: TextRangeWithTriviaKind[] | undefined;
@@ -390,7 +390,8 @@ namespace ts.formatting {
                 sourceFile));
     }
 
-    function formatSpanWorker(originalRange: TextRange,
+    function formatSpanWorker(
+        originalRange: TextRange,
         enclosingNode: Node,
         initialIndentation: number,
         delta: number,
@@ -424,14 +425,18 @@ namespace ts.formatting {
         }
 
         if (!formattingScanner.isOnToken()) {
+            const indentation = SmartIndenter.nodeWillIndentChild(options, enclosingNode, /*child*/ undefined, sourceFile, /*indentByDefault*/ false)
+                ? initialIndentation + options.indentSize!
+                : initialIndentation;
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
-                indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
+                indentTriviaItems(leadingTrivia, indentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
-                if (options.trimTrailingWhitespace !== false) {
-                    trimTrailingWhitespacesForRemainingRange();
-                }
             }
+        }
+
+        if (options.trimTrailingWhitespace !== false) {
+            trimTrailingWhitespacesForRemainingRange();
         }
 
         return edits;
@@ -498,10 +503,11 @@ namespace ts.formatting {
                     // - we need to get the indentation on last line and the delta of parent
                     return { indentation: indentationOnLastIndentedLine, delta: parentDynamicIndentation.getDelta(node) };
                 }
-                else if (SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile)) {
-                    return { indentation: parentDynamicIndentation.getIndentation(), delta };
-                }
-                else if (SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)) {
+                else if (
+                    SmartIndenter.childStartsOnTheSameLineWithElseInIfStatement(parent, node, startLine, sourceFile) ||
+                    SmartIndenter.childIsUnindentedBranchOfConditionalExpression(parent, node, startLine, sourceFile) ||
+                    SmartIndenter.argumentStartsOnSameLineAsPreviousArgument(parent, node, startLine, sourceFile)
+                ) {
                     return { indentation: parentDynamicIndentation.getIndentation(), delta };
                 }
                 else {
@@ -592,6 +598,7 @@ namespace ts.formatting {
                             case SyntaxKind.JsxOpeningElement:
                             case SyntaxKind.JsxClosingElement:
                             case SyntaxKind.JsxSelfClosingElement:
+                            case SyntaxKind.ExpressionWithTypeArguments:
                                 return false;
                         }
                         break;
@@ -651,11 +658,6 @@ namespace ts.formatting {
                 const tokenInfo = formattingScanner.readTokenInfo(node);
                 if (tokenInfo.token.end > node.end) {
                     break;
-                }
-                if (node.kind === SyntaxKind.JsxText) {
-                    // Intentation rules for jsx text are handled by `indentMultilineCommentOrJsxText` inside `processChildNode`; just fastforward past it here
-                    formattingScanner.advance();
-                    continue;
                 }
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation, node);
             }
@@ -749,22 +751,6 @@ namespace ts.formatting {
                 const childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
                 processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
-                if (child.kind === SyntaxKind.JsxText) {
-                    const range: TextRange = { pos: child.getStart(), end: child.getEnd() };
-                    if (range.pos !== range.end) { // don't indent zero-width jsx text
-                        const siblings = parent.getChildren(sourceFile);
-                        const currentIndex = findIndex(siblings, arg => arg.pos === child.pos);
-                        const previousNode = siblings[currentIndex - 1];
-                        if (previousNode) {
-                            // The jsx text needs no indentation whatsoever if it ends on the same line the previous sibling ends on
-                            if (sourceFile.getLineAndCharacterOfPosition(range.end).line !== sourceFile.getLineAndCharacterOfPosition(previousNode.end).line) {
-                                // The first line is (already) "indented" if the text starts on the same line as the previous sibling element ends on
-                                const firstLineIsIndented = sourceFile.getLineAndCharacterOfPosition(range.pos).line === sourceFile.getLineAndCharacterOfPosition(previousNode.end).line;
-                                indentMultilineCommentOrJsxText(range, childIndentation.indentation, firstLineIsIndented, /*indentFinalLine*/ false, /*jsxStyle*/ true);
-                            }
-                        }
-                    }
-                }
 
                 childContextNode = node;
 
@@ -923,7 +909,7 @@ namespace ts.formatting {
                 switch (triviaItem.kind) {
                     case SyntaxKind.MultiLineCommentTrivia:
                         if (triviaInRange) {
-                            indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                            indentMultilineComment(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
                         }
                         indentNextTokenOrTrivia = false;
                         break;
@@ -1066,7 +1052,7 @@ namespace ts.formatting {
             return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
         }
 
-        function indentMultilineCommentOrJsxText(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true, jsxTextStyleIndent?: boolean) {
+        function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
             // split comment in lines
             let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
@@ -1104,19 +1090,13 @@ namespace ts.formatting {
             }
 
             // shift all parts on the delta size
-            let delta = indentation - nonWhitespaceColumnInFirstPart.column;
+            const delta = indentation - nonWhitespaceColumnInFirstPart.column;
             for (let i = startIndex; i < parts.length; i++ , startLine++) {
                 const startLinePos = getStartPositionOfLine(startLine, sourceFile);
                 const nonWhitespaceCharacterAndColumn =
                     i === 0
                         ? nonWhitespaceColumnInFirstPart
                         : SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(parts[i].pos, parts[i].end, sourceFile, options);
-                if (jsxTextStyleIndent) {
-                    // skip adding indentation to blank lines
-                    if (isLineBreak(sourceFile.text.charCodeAt(getStartPositionOfLine(startLine, sourceFile)))) continue;
-                    // reset delta on every line
-                    delta = indentation - nonWhitespaceCharacterAndColumn.column;
-                }
                 const newIndentation = nonWhitespaceCharacterAndColumn.column + delta;
                 if (newIndentation > 0) {
                     const indentationString = getIndentationString(newIndentation, options);

@@ -19,6 +19,7 @@ namespace ts {
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
         const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
         host.createHash = maybeBind(system, system.createHash);
+        host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
         setGetSourceFileAsHashVersioned(host, system);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;
@@ -111,6 +112,8 @@ namespace ts {
         // TODO: GH#18217 Optional methods are frequently asserted
         createDirectory?(path: string): void;
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        // For testing
+        disableUseFileVersionAsSignature?: boolean;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
@@ -246,6 +249,7 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
+        let extendedConfigFilesMap: ESMap<Path, FileWatcher>;               // Map of file watchers for the extended config files
         let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
@@ -253,14 +257,14 @@ namespace ts {
 
 
         const sourceFilesCache = new Map<string, HostFileInfo>();                 // Cache that stores the source file and version info
-        let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
+        let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
 
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const currentDirectory = host.getCurrentDirectory();
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, watchOptionsToExtend, extraFileExtensions, createProgram } = host;
         let { rootFiles: rootFileNames, options: compilerOptions, watchOptions, projectReferences } = host;
-        let configFileSpecs: ConfigFileSpecs;
+        let wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined;
         let configFileParsingDiagnostics: Diagnostic[] | undefined;
         let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
@@ -337,6 +341,9 @@ namespace ts {
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
+        // Update extended config file watch
+        watchExtendedConfigFiles();
+
         return configFileName ?
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
@@ -353,6 +360,10 @@ namespace ts {
             if (configFileWatcher) {
                 configFileWatcher.close();
                 configFileWatcher = undefined;
+            }
+            if (extendedConfigFilesMap) {
+                clearMap(extendedConfigFilesMap, closeFileWatcher);
+                extendedConfigFilesMap = undefined!;
             }
             if (watchedWildcardDirectories) {
                 clearMap(watchedWildcardDirectories, closeFileWatcherOf);
@@ -635,11 +646,10 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
-            const result = getFileNamesFromConfigSpecs(configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
-            if (updateErrorForNoInputFiles(result, getNormalizedAbsolutePath(configFileName, currentDirectory), configFileSpecs, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+            rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
+            if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
             }
-            rootFileNames = result.fileNames;
 
             // Update the program
             synchronizeProgram();
@@ -658,6 +668,9 @@ namespace ts {
 
             // Update the wild card directory watch
             watchConfigFileWildCardDirectories();
+
+            // Update extended config file watch
+            watchExtendedConfigFiles();
         }
 
         function parseConfigFile() {
@@ -668,8 +681,8 @@ namespace ts {
             rootFileNames = configFileParseResult.fileNames;
             compilerOptions = configFileParseResult.options;
             watchOptions = configFileParseResult.watchOptions;
-            configFileSpecs = configFileParseResult.configFileSpecs!; // TODO: GH#18217
             projectReferences = configFileParseResult.projectReferences;
+            wildcardDirectories = configFileParseResult.wildcardDirectories;
             configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult).slice();
             canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(configFileParseResult.raw);
             hasChangedConfigFileParsingErrors = true;
@@ -726,10 +739,10 @@ namespace ts {
         }
 
         function watchConfigFileWildCardDirectories() {
-            if (configFileSpecs) {
+            if (wildcardDirectories) {
                 updateWatchingWildcardDirectories(
                     watchedWildcardDirectories || (watchedWildcardDirectories = new Map()),
-                    new Map(getEntries(configFileSpecs.wildcardDirectories)),
+                    new Map(getEntries(wildcardDirectories)),
                     watchWildcardDirectory
                 );
             }
@@ -757,7 +770,6 @@ namespace ts {
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
-                        configFileSpecs,
                         extraFileExtensions,
                         options: compilerOptions,
                         program: getCurrentBuilderProgram(),
@@ -778,6 +790,24 @@ namespace ts {
                 watchOptions,
                 WatchType.WildcardDirectory
             );
+        }
+
+        function watchExtendedConfigFiles() {
+            // Update the extended config files watcher
+            mutateMap(
+                extendedConfigFilesMap ||= new Map(),
+                arrayToMap(compilerOptions.configFile?.extendedSourceFiles || emptyArray, toPath),
+                {
+                    // Watch the extended config files
+                    createNewValue: watchExtendedConfigFile,
+                    // Config files that are no longer extended should no longer be watched.
+                    onDeleteValue: closeFileWatcher
+                }
+            );
+        }
+
+        function watchExtendedConfigFile(extendedConfigFile: Path) {
+            return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ExtendedConfigFile);
         }
     }
 }

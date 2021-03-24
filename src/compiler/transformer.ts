@@ -54,6 +54,10 @@ namespace ts {
             transformers.push(transformESNext);
         }
 
+        if (languageVersion < ScriptTarget.ES2021) {
+            transformers.push(transformES2021);
+        }
+
         if (languageVersion < ScriptTarget.ES2020) {
             transformers.push(transformES2020);
         }
@@ -155,6 +159,9 @@ namespace ts {
         let lexicalEnvironmentFlagsStack: LexicalEnvironmentFlags[] = [];
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
+        let blockScopedVariableDeclarationsStack: Identifier[][] = [];
+        let blockScopeStackOffset = 0;
+        let blockScopedVariableDeclarations: Identifier[];
         let emitHelpers: EmitHelper[] | undefined;
         let onSubstituteNode: TransformationContext["onSubstituteNode"] = noEmitSubstitution;
         let onEmitNode: TransformationContext["onEmitNode"] = noEmitNotification;
@@ -178,6 +185,9 @@ namespace ts {
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             addInitializationStatement,
+            startBlockScope,
+            endBlockScope,
+            addBlockScopedVariable,
             requestEmitHelper,
             readEmitHelpers,
             enableSubstitution,
@@ -223,9 +233,9 @@ namespace ts {
         // Transform each node.
         const transformed: T[] = [];
         for (const node of nodes) {
-            tracing.push(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
+            tracing?.push(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
             transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
-            tracing.pop();
+            tracing?.pop();
         }
 
         // prevent modification of the lexical environment.
@@ -469,6 +479,46 @@ namespace ts {
             return lexicalEnvironmentFlags;
         }
 
+        /**
+         * Starts a block scope. Any existing block hoisted variables are pushed onto the stack and the related storage variables are reset.
+         */
+        function startBlockScope() {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot start a block scope during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot start a block scope after transformation has completed.");
+            blockScopedVariableDeclarationsStack[blockScopeStackOffset] = blockScopedVariableDeclarations;
+            blockScopeStackOffset++;
+            blockScopedVariableDeclarations = undefined!;
+        }
+
+        /**
+         * Ends a block scope. The previous set of block hoisted variables are restored. Any hoisted declarations are returned.
+         */
+        function endBlockScope() {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot end a block scope during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot end a block scope after transformation has completed.");
+            const statements: Statement[] | undefined = some(blockScopedVariableDeclarations) ?
+                [
+                    factory.createVariableStatement(
+                        /*modifiers*/ undefined,
+                        factory.createVariableDeclarationList(
+                            blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
+                            NodeFlags.Let
+                        )
+                    )
+                ] : undefined;
+            blockScopeStackOffset--;
+            blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];
+            if (blockScopeStackOffset === 0) {
+                blockScopedVariableDeclarationsStack = [];
+            }
+            return statements;
+        }
+
+        function addBlockScopedVariable(name: Identifier): void {
+            Debug.assert(blockScopeStackOffset > 0, "Cannot add a block scoped variable outside of an iteration body.");
+            (blockScopedVariableDeclarations || (blockScopedVariableDeclarations = [])).push(name);
+        }
+
         function requestEmitHelper(helper: EmitHelper): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
@@ -535,5 +585,8 @@ namespace ts {
         startLexicalEnvironment: noop,
         suspendLexicalEnvironment: noop,
         addDiagnostic: noop,
+        startBlockScope: noop,
+        endBlockScope: returnUndefined,
+        addBlockScopedVariable: noop
     };
 }

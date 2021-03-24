@@ -517,7 +517,6 @@ namespace ts.SignatureHelp {
         if (argumentIndex !== 0) {
             Debug.assertLessThan(argumentIndex, argumentCount);
         }
-
         let selectedItemIndex = 0;
         let itemsSeen = 0;
         for (let i = 0; i < items.length; i++) {
@@ -541,8 +540,19 @@ namespace ts.SignatureHelp {
         }
 
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
-
-        return { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
+        const help = { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
+        const selected = help.items[selectedItemIndex];
+        if (selected.isVariadic) {
+            const firstRest = findIndex(selected.parameters, p => !!p.isRest);
+            if (-1 < firstRest && firstRest < selected.parameters.length - 1) {
+                // We don't have any code to get this correct; instead, don't highlight a current parameter AT ALL
+                help.argumentIndex = selected.parameters.length;
+            }
+            else {
+                help.argumentIndex = Math.min(help.argumentIndex, selected.parameters.length - 1);
+            }
+        }
+        return help;
     }
 
     function createTypeHelpItems(
@@ -564,7 +574,7 @@ namespace ts.SignatureHelp {
         const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
         const documentation = symbol.getDocumentationComment(checker);
-        const tags = symbol.getJsDocTags();
+        const tags = symbol.getJsDocTags(checker);
         const prefixDisplayParts = [...typeSymbolDisplay, punctuationPart(SyntaxKind.LessThanToken)];
         return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, tags };
     }
@@ -638,8 +648,9 @@ namespace ts.SignatureHelp {
             const param = checker.symbolToParameterDeclaration(parameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        const isOptional = checker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration);
-        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional };
+        const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
+        const isRest = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
     }
 
     function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
@@ -647,6 +658,6 @@ namespace ts.SignatureHelp {
             const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
+        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isRest: false };
     }
 }

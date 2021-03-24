@@ -14,15 +14,16 @@ export {
 
 
 
+
 //// [index.d.ts]
-declare module "mylib/versions.static" {
+declare module "versions.static" {
     var _default: {
         "@a/b": string;
         "@a/c": string;
     };
     export default _default;
 }
-declare module "mylib" {
+declare module "index" {
     export { versions };
-    import versions from "mylib/versions.static";
+    import versions from "versions.static";
 }
