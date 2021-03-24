@@ -18,7 +18,7 @@
 ////   /*6*/s;
 ////}
 
-////class TestClass {
+////class Foo {
 ////    #privateProperty: string[] | null;
 ////    constructor() {
 ////        this.#privateProperty = null;
@@ -37,7 +37,7 @@ verify.quickInfos({
     4: "let s: string | undefined",
     5: "let s: string | undefined",
     6: "let s: string",
-    7: "(property) TestClass.#privateProperty: string[]"
+    7: "(property) Foo.#privateProperty: string[]"
 });
 
 verify.completions(
@@ -46,5 +46,5 @@ verify.completions(
     { marker: "3", includes: { name: "strOrNum", text: "(parameter) strOrNum: string" } },
     { marker: ["4", "5"], includes: { name: "s", text: "let s: string | undefined" } },
     { marker: "6", includes: { name: "s", text: "let s: string" } },
-    { marker: "7", includes: { name: "#privateProperty", text: "(property) TestClass.#privateProperty: string[]" } }
+    { marker: "7", includes: { name: "#privateProperty", text: "(property) Foo.#privateProperty: string[]" } }
 );
