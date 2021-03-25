@@ -98,6 +98,12 @@ const pixelString: PixelValueType = `22px`;
 
 const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
 
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+    return `test-${title}`;
+}
+
 
 //// [templateLiteralTypes2.js]
 "use strict";
@@ -172,6 +178,10 @@ var t5 = takesLiteral("foo.bar." + someUnion); // "abc" | "def" | "ghi"
 var pixelValue = 22;
 var pixelString = "22px";
 var pixelStringWithTemplate = pixelValue + "px";
+// Repro from #43143
+function getCardTitle(title) {
+    return "test-" + title;
+}
 
 
 //// [templateLiteralTypes2.d.ts]
@@ -199,3 +209,4 @@ declare const pixelValue: number;
 declare type PixelValueType = `${number}px`;
 declare const pixelString: PixelValueType;
 declare const pixelStringWithTemplate: PixelValueType;
+declare function getCardTitle(title: string): `test-${string}`;

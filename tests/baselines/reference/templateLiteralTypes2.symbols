@@ -322,3 +322,13 @@ const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
 >PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 91, 30))
 >pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 91, 5))
 
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : Symbol(getCardTitle, Decl(templateLiteralTypes2.ts, 97, 66))
+>title : Symbol(title, Decl(templateLiteralTypes2.ts, 101, 22))
+
+    return `test-${title}`;
+>title : Symbol(title, Decl(templateLiteralTypes2.ts, 101, 22))
+}
+

@@ -99,3 +99,9 @@ type PixelValueType = `${number}px`;
 const pixelString: PixelValueType = `22px`;
 
 const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+    return `test-${title}`;
+}

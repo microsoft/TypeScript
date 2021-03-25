@@ -121,3 +121,9 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(70,9): error TS23
     
     const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
     
+    // Repro from #43143
+    
+    function getCardTitle(title: string): `test-${string}` {
+        return `test-${title}`;
+    }
+    

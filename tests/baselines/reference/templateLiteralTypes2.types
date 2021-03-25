@@ -354,3 +354,14 @@ const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
 >`${pixelValue}px` : `${number}px`
 >pixelValue : number
 
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : (title: string) => `test-${string}`
+>title : string
+
+    return `test-${title}`;
+>`test-${title}` : `test-${string}`
+>title : string
+}
+
