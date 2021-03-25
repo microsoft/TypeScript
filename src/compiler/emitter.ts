@@ -498,7 +498,7 @@ namespace ts {
                     declarationTransform.transformed[0],
                     declarationPrinter,
                     {
-                        sourceMap: compilerOptions.declarationMap,
+                        sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                         sourceRoot: compilerOptions.sourceRoot,
                         mapRoot: compilerOptions.mapRoot,
                         extendedDiagnostics: compilerOptions.extendedDiagnostics,
@@ -663,7 +663,7 @@ namespace ts {
 
     /*@internal*/
     export function getBuildInfoText(buildInfo: BuildInfo) {
-        return JSON.stringify(buildInfo, undefined, 2);
+        return JSON.stringify(buildInfo);
     }
 
     /*@internal*/
@@ -3565,13 +3565,16 @@ namespace ts {
         function emitJSDoc(node: JSDoc) {
             write("/**");
             if (node.comment) {
-                const lines = node.comment.split(/\r\n?|\n/g);
-                for (const line of lines) {
-                    writeLine();
-                    writeSpace();
-                    writePunctuation("*");
-                    writeSpace();
-                    write(line);
+                const text = getTextOfJSDocComment(node.comment);
+                if (text) {
+                    const lines = text.split(/\r\n?|\n/g);
+                    for (const line of lines) {
+                        writeLine();
+                        writeSpace();
+                        writePunctuation("*");
+                        writeSpace();
+                        write(line);
+                    }
                 }
             }
             if (node.tags) {
@@ -3704,10 +3707,11 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: string | undefined) {
-            if (comment) {
+        function emitJSDocComment(comment: string | NodeArray<JSDocText | JSDocLink> | undefined) {
+            const text = getTextOfJSDocComment(comment);
+            if (text) {
                 writeSpace();
-                write(comment);
+                write(text);
             }
         }
 

@@ -1,11 +1,11 @@
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(24,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(25,25): error TS2539: Cannot assign to 'A' because it is not a variable.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(26,25): error TS2539: Cannot assign to 'M' because it is not a variable.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(25,25): error TS2629: Cannot assign to 'A' because it is a class.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(26,25): error TS2631: Cannot assign to 'M' because it is a namespace.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(27,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(28,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(30,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(31,23): error TS2539: Cannot assign to 'A' because it is not a variable.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(32,23): error TS2539: Cannot assign to 'M' because it is not a variable.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(31,23): error TS2629: Cannot assign to 'A' because it is a class.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(32,23): error TS2631: Cannot assign to 'M' because it is a namespace.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(33,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(34,24): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts(37,26): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -81,10 +81,10 @@ tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOp
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
     var ResultIsNumber2 = --A;
                             ~
-!!! error TS2539: Cannot assign to 'A' because it is not a variable.
+!!! error TS2629: Cannot assign to 'A' because it is a class.
     var ResultIsNumber3 = --M;
                             ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     var ResultIsNumber4 = --obj;
                             ~~~
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
@@ -97,10 +97,10 @@ tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOp
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
     var ResultIsNumber7 = A--;
                           ~
-!!! error TS2539: Cannot assign to 'A' because it is not a variable.
+!!! error TS2629: Cannot assign to 'A' because it is a class.
     var ResultIsNumber8 = M--;
                           ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     var ResultIsNumber9 = obj--;
                           ~~~
 !!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.

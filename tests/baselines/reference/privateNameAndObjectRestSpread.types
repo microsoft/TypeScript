@@ -6,6 +6,10 @@ class C {
 >#prop : number
 >1 : 1
 
+    static #propStatic = 1;
+>#propStatic : number
+>1 : 1
+
     method(other: C) {
 >method : (other: C) => void
 >other : C
@@ -26,5 +30,22 @@ class C {
         rest.#prop;
 >rest.#prop : any
 >rest : {}
+
+        const statics = { ... C};
+>statics : { prototype: C; }
+>{ ... C} : { prototype: C; }
+>C : typeof C
+
+        statics.#propStatic
+>statics.#propStatic : any
+>statics : { prototype: C; }
+
+        const { ...sRest } = C;
+>sRest : { prototype: C; }
+>C : typeof C
+
+        sRest.#propStatic;
+>sRest.#propStatic : any
+>sRest : { prototype: C; }
     }
 }
