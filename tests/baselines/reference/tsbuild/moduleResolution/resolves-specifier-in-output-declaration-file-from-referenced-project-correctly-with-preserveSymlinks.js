@@ -143,7 +143,7 @@ export type { TheNum } from 'const';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","affectsGlobalScope":false},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n","affectsGlobalScope":false}],"options":{"composite":true,"outDir":"./","baseUrl":"..","preserveSymlinks":true,"traceResolution":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-11202312776-export type TheNum = 42;","affectsGlobalScope":false},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-10837689162-export type { TheNum } from 'const';","affectsGlobalScope":false}],"options":{"composite":true,"outDir":"./","baseUrl":"..","preserveSymlinks":true,"traceResolution":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -166,12 +166,12 @@ export type { TheNum } from 'const';
       },
       "../const.ts": {
         "version": "-11202312776-export type TheNum = 42;",
-        "signature": "-9649133742-export declare type TheNum = 42;\n",
+        "signature": "-11202312776-export type TheNum = 42;",
         "affectsGlobalScope": false
       },
       "../index.ts": {
         "version": "-10837689162-export type { TheNum } from 'const';",
-        "signature": "-9751391360-export type { TheNum } from 'const';\n",
+        "signature": "-10837689162-export type { TheNum } from 'const';",
         "affectsGlobalScope": false
       }
     },
@@ -200,7 +200,7 @@ export type { TheNum } from 'const';
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1452
+  "size": 1442
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]

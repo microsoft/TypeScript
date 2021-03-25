@@ -2674,6 +2674,10 @@
         "category": "Error",
         "code": 2632
     },
+    "JSX property access expressions cannot include JSX namespace names": {
+        "category": "Error",
+        "code": 2633
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3283,6 +3287,26 @@
     "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.": {
         "category": "Error",
         "code": 2802
+    },
+    "Cannot assign to private method '{0}'. Private methods are not writable.": {
+        "category": "Error",
+        "code": 2803
+    },
+    "Duplicate identifier '{0}'. Static and instance elements cannot share the same private name.": {
+        "category": "Error",
+        "code": 2804
+    },
+    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
+        "category": "Error",
+        "code": 2805
+    },
+    "Private accessor was defined without a getter.": {
+        "category": "Error",
+        "code": 2806
+    },
+    "This syntax requires an imported helper named '{1}' with {2} parameters, which is not compatible with the one in '{0}'. Consider upgrading your version of '{0}'.": {
+        "category": "Error",
+        "code": 2807
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -6334,14 +6358,6 @@
         "category": "Error",
         "code": 18019
     },
-    "A method cannot be named with a private identifier.": {
-        "category": "Error",
-        "code": 18022
-    },
-    "An accessor cannot be named with a private identifier.": {
-        "category": "Error",
-        "code": 18023
-    },
     "An enum member cannot be named with a private identifier.": {
         "category": "Error",
         "code": 18024
@@ -6385,5 +6401,9 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
+        "category": "Error",
+        "code": 18036
     }
 }

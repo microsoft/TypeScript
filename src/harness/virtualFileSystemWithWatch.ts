@@ -127,7 +127,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return { close: () => map.remove(path, callback) };
     }
 
-    function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
+    export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }

@@ -169,8 +169,8 @@ namespace ts {
     /**
      * Create the state so that we can iterate on changedFiles/affected files
      */
-    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderProgramState>): BuilderProgramState {
-        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
+    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
+        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
@@ -947,7 +947,7 @@ namespace ts {
          * Computing hash to for signature verification
          */
         const computeHash = maybeBind(host, host.createHash);
-        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
+        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
         let backupState: BuilderProgramState | undefined;
         newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
 

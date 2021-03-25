@@ -124,7 +124,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project1.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project1.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -142,12 +142,12 @@ declare let y: number;
       },
       "./commonfile1.ts": {
         "version": "2167136208-let x = 1",
-        "signature": "2842409786-declare let x: number;\n",
+        "signature": "2167136208-let x = 1",
         "affectsGlobalScope": true
       },
       "./commonfile2.ts": {
         "version": "2168322129-let y = 1",
-        "signature": "784887931-declare let y: number;\n",
+        "signature": "2168322129-let y = 1",
         "affectsGlobalScope": true
       }
     },
@@ -165,7 +165,7 @@ declare let y: number;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1282
+  "size": 1253
 }
 
 //// [/a/b/other.js]
@@ -177,7 +177,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project2.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project2.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -194,7 +194,7 @@ declare let z: number;
       },
       "./other.ts": {
         "version": "2874288940-let z = 0;",
-        "signature": "-1272633924-declare let z: number;\n",
+        "signature": "2874288940-let z = 0;",
         "affectsGlobalScope": true
       }
     },
@@ -211,7 +211,7 @@ declare let z: number;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1147
+  "size": 1132
 }
 
 
