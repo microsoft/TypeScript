@@ -1057,10 +1057,8 @@ namespace ts {
             return emitResolver;
         }
 
-        function lookupOrIssueError(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
-            const diagnostic = location
-                ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
-                : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
+        function lookupOrIssueError(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
+            const diagnostic = createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3);
             const existing = diagnostics.lookup(diagnostic);
             if (existing) {
                 return existing;
@@ -1071,13 +1069,15 @@ namespace ts {
             }
         }
 
-        function errorSkippedOn(key: keyof CompilerOptions, location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+        function errorSkippedOn(key: keyof CompilerOptions, location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
             const diagnostic = error(location, message, arg0, arg1, arg2, arg3);
             diagnostic.skippedOn = key;
             return diagnostic;
         }
 
-        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+        function error(location: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation;
+        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic;
+        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
@@ -39003,7 +39003,9 @@ namespace ts {
             }
         }
 
-        function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): Diagnostic[] {
+        function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): DiagnosticWithLocation[];
+        function getDiagnostics(sourceFile: undefined, ct: CancellationToken): Diagnostic[];
+        function getDiagnostics(sourceFile: SourceFile | undefined, ct: CancellationToken): Diagnostic[] | DiagnosticWithLocation[] {
             try {
                 // Record the cancellation token so it can be checked later on during checkSourceElement.
                 // Do this in a finally block so we can ensure that it gets reset back to nothing after
@@ -39016,7 +39018,7 @@ namespace ts {
             }
         }
 
-        function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
+        function getDiagnosticsWorker(sourceFile?: SourceFile): Diagnostic[] {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 // Some global diagnostics are deferred until they are needed and
