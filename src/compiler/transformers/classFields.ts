@@ -189,7 +189,7 @@ namespace ts {
             }
         }
 
-        function visitorThisOrSuperInStaticFieldContext(receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined) {
+        function visitorThisOrSuperInStaticFieldContext(receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined) {
             const shouldCareAboutSuper = baseClass && languageVersion >= ScriptTarget.ES2015;
             return function staticFieldThisOrSuperVisitor(node: Node): Node {
                 if (!(node.transformFlags & (TransformFlags.ContainsLexicalThis | (shouldCareAboutSuper ? TransformFlags.ContainsLexicalSuper : TransformFlags.None)))) {
@@ -202,9 +202,15 @@ namespace ts {
                 }
 
                 if (node.kind === SyntaxKind.ThisKeyword) {
+                    if (hasClassDecorators) {
+                        return factory.createParenthesizedExpression(factory.createVoidZero())
+                    }
                     return nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
                 }
                 else if (baseClass && shouldCareAboutSuper && node.kind === SyntaxKind.SuperKeyword) {
+                    if (hasClassDecorators) {
+                        return factory.createParenthesizedExpression(factory.createVoidZero());
+                    }
                     return nodeIsSynthesized(baseClass) ? baseClass : factory.cloneNode(baseClass);
                 }
 
@@ -716,7 +722,7 @@ namespace ts {
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
 
             if (some(staticProperties)) {
-                addPropertyStatements(statements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression);
+                addPropertyStatements(statements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression, !!length(node.original?.decorators));
             }
 
             return statements;
@@ -763,6 +769,8 @@ namespace ts {
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
                 transformClassMembers(node, isDerivedClass)
             );
+
+            const hasClassDecorators = !!length(node.original?.decorators);
             const hasTransformableStatics = some(staticProperties, p => !!p.initializer || (shouldTransformPrivateElements && isPrivateIdentifier(p.name)));
             if (hasTransformableStatics || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
@@ -774,7 +782,7 @@ namespace ts {
                     }
 
                     if (pendingStatements && some(staticProperties)) {
-                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression);
+                        addPropertyStatements(pendingStatements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression, hasClassDecorators);
                     }
                     if (temp) {
                         return factory.inlineExpressions([factory.createAssignment(temp, classExpression), temp]);
@@ -798,7 +806,7 @@ namespace ts {
                     expressions.push(startOnNewLine(factory.createAssignment(temp, classExpression)));
                     // Add any pending expressions leftover from elided or relocated computed property names
                     addRange(expressions, map(pendingExpressions, startOnNewLine));
-                    addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp, extendsClauseElement?.expression));
+                    addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp, extendsClauseElement?.expression, hasClassDecorators));
                     expressions.push(startOnNewLine(temp));
 
                     return factory.inlineExpressions(expressions);
@@ -977,9 +985,9 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression, baseClass?: LeftHandSideExpression) {
+        function addPropertyStatements(statements: Statement[], properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression, baseClass?: LeftHandSideExpression, hasClassDecorators?: boolean) {
             for (const property of properties) {
-                const expression = transformProperty(property, receiver, baseClass);
+                const expression = transformProperty(property, receiver, baseClass, hasClassDecorators);
                 if (!expression) {
                     continue;
                 }
@@ -997,10 +1005,10 @@ namespace ts {
          * @param properties An array of property declarations to transform.
          * @param receiver The receiver on which each property should be assigned.
          */
-        function generateInitializedPropertyExpressions(properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined) {
+        function generateInitializedPropertyExpressions(properties: readonly PropertyDeclaration[], receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined) {
             const expressions: Expression[] = [];
             for (const property of properties) {
-                const expression = transformProperty(property, receiver, baseClass);
+                const expression = transformProperty(property, receiver, baseClass, hasClassDecorators);
                 if (!expression) {
                     continue;
                 }
@@ -1020,7 +1028,7 @@ namespace ts {
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined) {
+        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const emitAssignment = !context.getCompilerOptions().useDefineForClassFields;
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
@@ -1063,7 +1071,7 @@ namespace ts {
             }
 
             const initializer = property.initializer || emitAssignment ? visitNode(
-                hasStaticModifier(property) ? visitNode(property.initializer, visitorThisOrSuperInStaticFieldContext(receiver, baseClass), isExpression) : property.initializer,
+                hasStaticModifier(property) ? visitNode(property.initializer, visitorThisOrSuperInStaticFieldContext(receiver, baseClass, hasClassDecorators), isExpression) : property.initializer,
                 visitor,
                 isExpression
             ) ?? factory.createVoidZero()

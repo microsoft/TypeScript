@@ -74,7 +74,7 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.a = 1;
-    C.b = C.a + 1;
+    C.b = (void 0).a + 1;
     C = __decorate([
         foo
     ], C);
@@ -99,9 +99,9 @@ var D = /** @class */ (function (_super) {
         configurable: true
     });
     D.c = 2;
-    D.d = D.c + 1;
-    D.e = _super.a + D.c + 1;
-    D.f = function () { return D.c + 1; };
+    D.d = (void 0).c + 1;
+    D.e = _super.a + (void 0).c + 1;
+    D.f = function () { return (void 0).c + 1; };
     D.ff = function () { this.c + 1; };
     D = __decorate([
         foo
