@@ -1302,6 +1302,26 @@ namespace ts {
     export interface PrivateIdentifierPropertyDeclaration extends PropertyDeclaration {
         name: PrivateIdentifier;
     }
+    /*@internal*/
+    export interface PrivateIdentifierMethodDeclaration extends MethodDeclaration {
+        name: PrivateIdentifier;
+    }
+    /*@internal*/
+    export interface PrivateIdentifierGetAccessorDeclaration extends GetAccessorDeclaration {
+        name: PrivateIdentifier;
+    }
+    /*@internal*/
+    export interface PrivateIdentifierSetAccessorDeclaration extends SetAccessorDeclaration {
+        name: PrivateIdentifier;
+    }
+    /*@internal*/
+    export type PrivateIdentifierAccessorDeclaration = PrivateIdentifierGetAccessorDeclaration | PrivateIdentifierSetAccessorDeclaration;
+    /*@internal*/
+    export type PrivateClassElementDeclaration =
+        | PrivateIdentifierPropertyDeclaration
+        | PrivateIdentifierMethodDeclaration
+        | PrivateIdentifierGetAccessorDeclaration
+        | PrivateIdentifierSetAccessorDeclaration;
 
     /* @internal */
     export type InitializedPropertyDeclaration = PropertyDeclaration & { readonly initializer: Expression };

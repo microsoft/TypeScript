@@ -2,6 +2,7 @@
 
 function test() {
     let WeakMap;
+    let WeakSet;
     class C {
         #x;
     }
