@@ -3890,14 +3890,7 @@ namespace ts {
         function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
             const result = getNamedMembers(members);
             const index = getIndexSymbolFromSymbolTable(members);
-            if (!index) {
-                return result;
-            }
-            if (result === emptyArray) {
-                return [index];
-            }
-            result.push(index);
-            return result;
+            return index ? concatenate(result, [index]) : result;
         }
 
         function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
