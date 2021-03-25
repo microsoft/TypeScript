@@ -1,0 +1,41 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/**
+ * @callback Func
+ * @returns {Promise<number>}
+ */
+
+/** @type {Func} */
+function test() {
+>test : Symbol(test, Decl(foo.js, 0, 0))
+
+    console.log("Nope");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+/** @type {Func} */
+async function test2() {
+>test2 : Symbol(test2, Decl(foo.js, 8, 1))
+
+    return "asd";
+}
+
+var test3 = /** @type {Func} */ function() {
+>test3 : Symbol(test3, Decl(foo.js, 15, 3))
+
+    console.log("test")
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+/** @type {Func} */
+var test4 = function() {
+>test4 : Symbol(test4, Decl(foo.js, 20, 3))
+
+    console.log("test")
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}

@@ -1,0 +1,50 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/**
+ * @callback Func
+ * @returns {Promise<number>}
+ */
+
+/** @type {Func} */
+function test() {
+>test : () => Promise<number>
+
+    console.log("Nope");
+>console.log("Nope") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"Nope" : "Nope"
+}
+
+/** @type {Func} */
+async function test2() {
+>test2 : () => Promise<number>
+
+    return "asd";
+>"asd" : "asd"
+}
+
+var test3 = /** @type {Func} */ function() {
+>test3 : Func
+>function() {    console.log("test")} : () => Promise<number>
+
+    console.log("test")
+>console.log("test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"test" : "test"
+}
+
+/** @type {Func} */
+var test4 = function() {
+>test4 : Func
+>function() {    console.log("test")} : () => Promise<number>
+
+    console.log("test")
+>console.log("test") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"test" : "test"
+}

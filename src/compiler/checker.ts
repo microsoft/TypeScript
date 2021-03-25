@@ -30362,8 +30362,8 @@ namespace ts {
             else if (type && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+                // NOTE: returnType may not exist when func.type is denoted by jsdoc
+                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
             else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
                 error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
