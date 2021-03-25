@@ -34,32 +34,11 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFil
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalMain.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/types.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-======== Resolving module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/filePresent.ts' exist - use it as a name resolution result.
-======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
-======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/fileNotFound.ts' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.d.ts' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.js' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.jsx' does not exist.
-======== Module name './fileNotFound' was not resolved. ========
-======== Resolving module './filePresent' from '/user/username/projects/myproject/src/main.ts'. ========
-Resolution for module './filePresent' was found in cache from location '/user/username/projects/myproject/src'.
-======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
-======== Resolving module './filePresent' from '/user/username/projects/myproject/src/main.ts'. ========
-Resolution for module './filePresent' was found in cache from location '/user/username/projects/myproject/src'.
-======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
-======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/main.ts'. ========
-Resolution for module './fileNotFound' was found in cache from location '/user/username/projects/myproject/src'.
-======== Module name './fileNotFound' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFileNotFound.ts 500 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Missing file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Completely Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (9)
 	/a/lib/lib.d.ts

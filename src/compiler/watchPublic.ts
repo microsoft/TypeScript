@@ -4,16 +4,21 @@ namespace ts {
         getCurrentDirectory(): string;
         readFile(fileName: string): string | undefined;
     }
-    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
-        if (outFileWithoutPersistResolutions(compilerOptions)) return undefined;
+    /*@internal*/
+    export function readBuildInfoForProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
-        const content = host.readFile(buildInfoPath);
+        const content = host.readFile?.(buildInfoPath);
         if (!content) return undefined;
         const buildInfo = getBuildInfo(content);
         if (buildInfo.version !== version) return undefined;
-        if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
+        return { buildInfo, buildInfoPath };
+    }
+    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
+        if (outFileWithoutPersistResolutions(compilerOptions)) return undefined;
+        const result = readBuildInfoForProgram(compilerOptions, host);
+        if (!result?.buildInfo.program) return undefined;
+        return createBuildProgramUsingProgramBuildInfo(result.buildInfo.program, result.buildInfoPath, host);
     }
 
     export interface CleanPersistedProgramOfTsBuildInfoHost {
