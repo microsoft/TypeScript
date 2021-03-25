@@ -5628,8 +5628,8 @@ namespace ts {
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.escapedName = name;
-        this.declarations = undefined!;
-        this.valueDeclaration = undefined!;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
         this.id = undefined;
         this.mergeId = undefined;
         this.parent = undefined;

@@ -962,12 +962,14 @@ namespace FourSlash {
         }
 
         /** Use `getProgram` instead of accessing this directly. */
-        private _program: ts.Program | undefined;
+        private _program: ts.Program | undefined | "missing";
         /** Use `getChecker` instead of accessing this directly. */
         private _checker: ts.TypeChecker | undefined;
 
         private getProgram(): ts.Program {
-            return this._program || (this._program = this.languageService.getProgram()!); // TODO: GH#18217
+            if (!this._program) this._program = this.languageService.getProgram() || "missing";
+            if (this._program === "missing") ts.Debug.fail("Could not retrieve program from language service");
+            return this._program;
         }
 
         private getChecker() {

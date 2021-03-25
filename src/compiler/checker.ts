@@ -11616,7 +11616,7 @@ namespace ts {
                 }
             }
 
-            result.declarations = declarations!;
+            result.declarations = declarations;
             result.nameType = nameType;
             if (propTypes.length > 2) {
                 // When `propTypes` has the potential to explode in size when normalized, defer normalization until absolutely needed

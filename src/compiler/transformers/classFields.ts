@@ -534,7 +534,7 @@ namespace ts {
             if (shouldTransformPrivateElements) {
                 if (isDestructuringAssignment(node)) {
                     const savedPendingExpressions = pendingExpressions;
-                    pendingExpressions = undefined!;
+                    pendingExpressions = undefined;
                     node = factory.updateBinaryExpression(
                         node,
                         visitNode(node.left, visitorDestructuringTarget),
