@@ -12,6 +12,39 @@ class D extends C {
     static c = 2;
     static d = this.c + 1;
     static e = super.a + this.c + 1;
+    static f = () => this.c + 1;
+    static ff = function () { this.c + 1 }
+    static foo () {
+        return this.c + 1;
+    }
+    static get fa () {
+        return this.c + 1;
+    }
+    static set fa (v: number) {
+        this.c = v + 1;
+    }
+}
+
+class CC {
+    static a = 1;
+    static b = this.a + 1;
+}
+
+class DD extends CC {
+    static c = 2;
+    static d = this.c + 1;
+    static e = super.a + this.c + 1;
+    static f = () => this.c + 1;
+    static ff = function () { this.c + 1 }
+    static foo () {
+        return this.c + 1;
+    }
+    static get fa () {
+        return this.c + 1;
+    }
+    static set fa (v: number) {
+        this.c = v + 1;
+    }
 }
 
 
@@ -52,11 +85,58 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    D.foo = function () {
+        return this.c + 1;
+    };
+    Object.defineProperty(D, "fa", {
+        get: function () {
+            return this.c + 1;
+        },
+        set: function (v) {
+            this.c = v + 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
     D.c = 2;
     D.d = D.c + 1;
     D.e = _super.a + D.c + 1;
+    D.f = function () { return D.c + 1; };
+    D.ff = function () { this.c + 1; };
     D = __decorate([
         foo
     ], D);
     return D;
 }(C));
+var CC = /** @class */ (function () {
+    function CC() {
+    }
+    CC.a = 1;
+    CC.b = CC.a + 1;
+    return CC;
+}());
+var DD = /** @class */ (function (_super) {
+    __extends(DD, _super);
+    function DD() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DD.foo = function () {
+        return this.c + 1;
+    };
+    Object.defineProperty(DD, "fa", {
+        get: function () {
+            return this.c + 1;
+        },
+        set: function (v) {
+            this.c = v + 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    DD.c = 2;
+    DD.d = DD.c + 1;
+    DD.e = _super.a + DD.c + 1;
+    DD.f = function () { return DD.c + 1; };
+    DD.ff = function () { this.c + 1; };
+    return DD;
+}(CC));

@@ -12,6 +12,39 @@ class D extends C {
     static c = 2;
     static d = this.c + 1;
     static e = super.a + this.c + 1;
+    static f = () => this.c + 1;
+    static ff = function () { this.c + 1 }
+    static foo () {
+        return this.c + 1;
+    }
+    static get fa () {
+        return this.c + 1;
+    }
+    static set fa (v: number) {
+        this.c = v + 1;
+    }
+}
+
+class CC {
+    static a = 1;
+    static b = this.a + 1;
+}
+
+class DD extends CC {
+    static c = 2;
+    static d = this.c + 1;
+    static e = super.a + this.c + 1;
+    static f = () => this.c + 1;
+    static ff = function () { this.c + 1 }
+    static foo () {
+        return this.c + 1;
+    }
+    static get fa () {
+        return this.c + 1;
+    }
+    static set fa (v: number) {
+        this.c = v + 1;
+    }
 }
 
 
@@ -30,10 +63,41 @@ C = __decorate([
     foo
 ], C);
 let D = class D extends C {
+    static foo() {
+        return this.c + 1;
+    }
+    static get fa() {
+        return this.c + 1;
+    }
+    static set fa(v) {
+        this.c = v + 1;
+    }
 };
 D.c = 2;
 D.d = D.c + 1;
 D.e = C.a + D.c + 1;
+D.f = () => D.c + 1;
+D.ff = function () { this.c + 1; };
 D = __decorate([
     foo
 ], D);
+class CC {
+}
+CC.a = 1;
+CC.b = CC.a + 1;
+class DD extends CC {
+    static foo() {
+        return this.c + 1;
+    }
+    static get fa() {
+        return this.c + 1;
+    }
+    static set fa(v) {
+        this.c = v + 1;
+    }
+}
+DD.c = 2;
+DD.d = DD.c + 1;
+DD.e = CC.a + DD.c + 1;
+DD.f = () => DD.c + 1;
+DD.ff = function () { this.c + 1; };

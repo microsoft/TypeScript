@@ -3308,6 +3308,10 @@
         "category": "Error",
         "code": 2807
     },
+    "Cannot use 'this' in static property initializer in a decorated class.": {
+        "category": "Error",
+        "code": 2808
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

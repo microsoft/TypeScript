@@ -24023,6 +24023,13 @@ namespace ts {
             }
         }
 
+        function checkThisInStaticClassFieldInitializerInDecoratedClass(thisExpression: Node, container: Node) {
+            if (isPropertyDeclaration(container) && hasStaticModifier(container) &&
+                container.initializer && textRangeContainsPositionInclusive(container.initializer, thisExpression.pos) && length(container.parent.decorators)) {
+                    error(thisExpression, Diagnostics.Cannot_use_this_in_static_property_initializer_in_a_decorated_class);
+            }
+        }
+
         function checkThisExpression(node: Node): Type {
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
@@ -24039,6 +24046,7 @@ namespace ts {
                 capturedByArrowFunction = true;
             }
 
+            checkThisInStaticClassFieldInitializerInDecoratedClass(node, container);
             switch (container.kind) {
                 case SyntaxKind.ModuleDeclaration:
                     error(node, Diagnostics.this_cannot_be_referenced_in_a_module_or_namespace_body);
