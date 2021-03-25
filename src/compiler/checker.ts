@@ -31799,7 +31799,12 @@ namespace ts {
                 texts.push(span.literal.text);
                 types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
             }
-            return isConstContext(node) ? getTemplateLiteralType(texts, types) : stringType;
+            return isConstContext(node) || someType(getContextualType(node) || unknownType, isTemplateLiteralContextualType) ? getTemplateLiteralType(texts, types) : stringType;
+        }
+
+        function isTemplateLiteralContextualType(type: Type): boolean {
+            return !!(type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral) ||
+                type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.StringLike));
         }
 
         function getContextNode(node: Expression): Node {
