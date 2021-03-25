@@ -203,7 +203,7 @@ namespace ts {
 
                 if (node.kind === SyntaxKind.ThisKeyword) {
                     if (hasClassDecorators) {
-                        return factory.createParenthesizedExpression(factory.createVoidZero())
+                        return factory.createParenthesizedExpression(factory.createVoidZero());
                     }
                     return nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
                 }
