@@ -40911,8 +40911,13 @@ namespace ts {
                     return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }
-            if (accessor.body && hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
-                return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
+            if (accessor.body) {
+                if (hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
+                    return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
+                }
+                if (accessor.parent.kind === SyntaxKind.TypeLiteral || accessor.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                    return grammarErrorOnNode(accessor.body, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts)
+                }
             }
             if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
