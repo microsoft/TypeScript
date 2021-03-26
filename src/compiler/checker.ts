@@ -33020,7 +33020,11 @@ namespace ts {
                             error(node.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
                         }
 
-                        checkAccessorDeclarationTypesAssignable(getter, setter, getAnnotatedAccessorType, Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type);
+                        const getterType = getAnnotatedAccessorType(getter);
+                        const setterType = getAnnotatedAccessorType(setter);
+                        if (getterType && setterType) {
+                            checkTypeAssignableTo(getterType, setterType, getter, Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type);
+                        }
                     }
                 }
                 const returnType = getTypeOfAccessors(getSymbolOfNode(node));
@@ -33030,18 +33034,6 @@ namespace ts {
             }
             checkSourceElement(node.body);
             setNodeLinksForPrivateIdentifierScope(node);
-        }
-
-        function checkAccessorDeclarationTypesAssignable(getter: AccessorDeclaration, setter: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, message: DiagnosticMessage) {
-            return checkAccessorDeclarationTypesMatch(getter, setter, getAnnotatedType, isTypeAssignableTo, message);
-        }
-
-        function checkAccessorDeclarationTypesMatch(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, match: typeof areTypesComparable, message: DiagnosticMessage) {
-            const firstType = getAnnotatedType(first);
-            const secondType = getAnnotatedType(second);
-            if (firstType && secondType && !match(firstType, secondType)) {
-                error(first, message);
-            }
         }
 
         function checkMissingDeclaration(node: Node) {
