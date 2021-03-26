@@ -985,7 +985,7 @@ namespace ts.server {
         markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
             if (!this.exportMapCache.isEmpty()) {
-                (this.changedFilesForExportMapCache || (this.changedFilesForExportMapCache = new Set())).add(changedFile);
+                (this.changedFilesForExportMapCache ||= new Set()).add(changedFile);
             }
         }
 
