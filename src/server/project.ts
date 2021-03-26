@@ -644,7 +644,7 @@ namespace ts.server {
                 return [];
             }
             updateProjectIfDirty(this);
-            this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
+            this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState, /*disableUseFileVersionAsSignature*/ true);
             return mapDefined(
                 BuilderState.getFilesAffectedBy(
                     this.builderState,
@@ -776,9 +776,9 @@ namespace ts.server {
 
             this.rootFiles = undefined!;
             this.rootFilesMap = undefined!;
-            this.externalFiles = undefined!;
-            this.program = undefined!;
-            this.builderState = undefined!;
+            this.externalFiles = undefined;
+            this.program = undefined;
+            this.builderState = undefined;
             this.resolutionCache.clear();
             this.resolutionCache = undefined!;
             this.cachedUnresolvedImportsPerFile = undefined!;
@@ -788,7 +788,7 @@ namespace ts.server {
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
                 clearMap(this.missingFilesMap, closeFileWatcher);
-                this.missingFilesMap = undefined!;
+                this.missingFilesMap = undefined;
             }
             this.clearGeneratedFileWatch();
             this.clearInvalidateResolutionOfFailedLookupTimer();
@@ -1112,7 +1112,7 @@ namespace ts.server {
             const start = timestamp();
             this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
             this.resolutionCache.startCachingPerDirectoryResolution();
-            this.program = this.languageService.getProgram()!; // TODO: GH#18217
+            this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
             this.resolutionCache.finishCachingPerDirectoryResolution();
 
@@ -1121,8 +1121,9 @@ namespace ts.server {
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            const hasNewProgram = this.program && (!oldProgram || (this.program !== oldProgram && !(this.program.structureIsReused & StructureIsReused.Completely)));
-            if (hasNewProgram) {
+            let hasNewProgram = false;
+            if (this.program && (!oldProgram || (this.program !== oldProgram && !(this.program.structureIsReused & StructureIsReused.Completely)))) {
+                hasNewProgram = true;
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         const newFile = this.program.getSourceFileByPath(f.resolvedPath);
@@ -1188,7 +1189,7 @@ namespace ts.server {
             }
 
             if (!this.exportMapCache.isEmpty()) {
-                if (this.hasAddedorRemovedFiles || !this.program.structureIsReused) {
+                if (this.hasAddedorRemovedFiles || oldProgram && !this.program!.structureIsReused) {
                     this.exportMapCache.clear();
                 }
                 else if (this.changedFilesForExportMapCache && oldProgram && this.program) {
@@ -1232,7 +1233,7 @@ namespace ts.server {
                 this.print(/*writeProjectFileNames*/ true);
             }
             else if (this.program !== oldProgram) {
-                this.writeLog(`Different program with same set of files:: structureIsReused:: ${this.program.structureIsReused}`);
+                this.writeLog(`Different program with same set of files:: structureIsReused:: ${this.program?.structureIsReused}`);
             }
             return hasNewProgram;
         }

@@ -1393,7 +1393,7 @@ namespace ts.server {
                 emptyArray;
         }
 
-        private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
+        private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs) {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // all the config file errors are reported as part of semantic check so nothing to report here
@@ -1403,7 +1403,7 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), !!args.includeLinePosition);
         }
 
-        private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
+        private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs) {
             const { configFile, project } = this.getConfigFileAndProject(args);
             if (configFile) {
                 return this.getConfigFileDiagnostics(configFile, project!, !!args.includeLinePosition); // TODO: GH#18217
@@ -1411,7 +1411,7 @@ namespace ts.server {
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file), !!args.includeLinePosition);
         }
 
-        private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
+        private getSuggestionDiagnosticsSync(args: protocol.SuggestionDiagnosticsSyncRequestArgs) {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // Currently there are no info diagnostics for config files.
@@ -2233,7 +2233,25 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
+            let codeActions: readonly CodeFixAction[];
+            try {
+                codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, this.getFormatOptions(file), this.getPreferences(file));
+            }
+            catch(e) {
+                const ls = project.getLanguageService();
+                const existingDiagCodes = [
+                    ...ls.getSyntacticDiagnostics(file),
+                    ...ls.getSemanticDiagnostics(file),
+                    ...ls.getSuggestionDiagnostics(file)
+                ].map(d =>
+                    decodedTextSpanIntersectsWith(startPosition, endPosition - startPosition, d.start!, d.length!)
+                    && d.code);
+                const badCode = args.errorCodes.find(c => !existingDiagCodes.includes(c));
+                if (badCode !== undefined) {
+                    e.message = `BADCLIENT: Bad error code, ${badCode} not found in range ${startPosition}..${endPosition} (found: ${existingDiagCodes.join(", ")}); could have caused this error:\n${e.message}`;
+                }
+                throw e;
+            }
             return simplifiedResult ? codeActions.map(codeAction => this.mapCodeFixAction(codeAction)) : codeActions;
         }
 

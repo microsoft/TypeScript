@@ -16,6 +16,16 @@ for (let i = 0; i < 10; ++i) {
         #myField = "hello";
 >#myField : Symbol(C.#myField, Decl(privateNameClassExpressionLoop.ts, 2, 24))
 
+        #method() {}
+>#method : Symbol(C.#method, Decl(privateNameClassExpressionLoop.ts, 3, 27))
+
+        get #accessor() { return 42; }
+>#accessor : Symbol(C.#accessor, Decl(privateNameClassExpressionLoop.ts, 4, 20), Decl(privateNameClassExpressionLoop.ts, 5, 38))
+
+        set #accessor(val) { }
+>#accessor : Symbol(C.#accessor, Decl(privateNameClassExpressionLoop.ts, 4, 20), Decl(privateNameClassExpressionLoop.ts, 5, 38))
+>val : Symbol(val, Decl(privateNameClassExpressionLoop.ts, 6, 22))
+
     });
 }
 

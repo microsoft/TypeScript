@@ -164,12 +164,12 @@ namespace ts.tscWatch {
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
-                        signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`),
+                        signature: system.createHash(file1.content),
                         affectsGlobalScope: false,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
-                        signature: system.createHash("export declare const y: string;\n"),
+                        signature: system.createHash(fileModified.content),
                         affectsGlobalScope: false,
                     });
 

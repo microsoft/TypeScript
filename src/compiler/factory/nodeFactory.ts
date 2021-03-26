@@ -555,9 +555,9 @@ namespace ts {
             // NOTE: The following properties are commonly set by the binder and are added here to
             // ensure declarations have a stable shape.
             node.symbol = undefined!; // initialized by binder
-            node.localSymbol = undefined!; // initialized by binder
-            node.locals = undefined!; // initialized by binder
-            node.nextContainer = undefined!; // initialized by binder
+            node.localSymbol = undefined; // initialized by binder
+            node.locals = undefined; // initialized by binder
+            node.nextContainer = undefined; // initialized by binder
             return node;
         }
 

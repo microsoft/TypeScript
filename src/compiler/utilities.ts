@@ -2719,6 +2719,9 @@ namespace ts {
                 case SyntaxKind.NonNullExpression:
                     node = parent;
                     break;
+                case SyntaxKind.SpreadAssignment:
+                    node = parent.parent;
+                    break;
                 case SyntaxKind.ShorthandPropertyAssignment:
                     if ((parent as ShorthandPropertyAssignment).name !== node) {
                         return AssignmentKind.None;
@@ -4827,6 +4830,9 @@ namespace ts {
             && isLeftHandSideExpression(node.left);
     }
 
+    export function isLeftHandSideOfAssignment(node: Node) {
+        return isAssignmentExpression(node.parent) && node.parent.left === node;
+    }
     export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const kind = node.left.kind;
@@ -5635,8 +5641,8 @@ namespace ts {
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.escapedName = name;
-        this.declarations = undefined!;
-        this.valueDeclaration = undefined!;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
         this.id = undefined;
         this.mergeId = undefined;
         this.parent = undefined;
@@ -6067,7 +6073,7 @@ namespace ts {
 
     export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
         const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
-        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[jsxImportSourcePragmas.length - 1] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
             compilerOptions.jsxImportSource ||

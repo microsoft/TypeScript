@@ -1363,7 +1363,11 @@ namespace ts.textChanges {
                     break;
 
                 default:
-                    if (isImportClause(node.parent) && node.parent.name === node) {
+                    if (!node.parent) {
+                        // a misbehaving client can reach here with the SourceFile node
+                        deleteNode(changes, sourceFile, node);
+                    }
+                    else if (isImportClause(node.parent) && node.parent.name === node) {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
                     else if (isCallExpression(node.parent) && contains(node.parent.arguments, node)) {

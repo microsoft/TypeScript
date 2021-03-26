@@ -71,6 +71,14 @@ function ft14(t: `foo${number}`) {
     let x6: { length: number } = t;
 }
 
+declare function g1<T>(x: T): T;
+declare function g2<T extends string>(x: T): T;
+
+function ft20(s: string) {
+    let x1 = g1(`xyz-${s}`);  // string
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
@@ -97,6 +105,12 @@ type PixelValueType = `${number}px`;
 const pixelString: PixelValueType = `22px`;
 
 const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+    return `test-${title}`;
+}
 
 
 //// [templateLiteralTypes2.js]
@@ -161,6 +175,10 @@ function ft14(t) {
     var x4 = t;
     var x6 = t;
 }
+function ft20(s) {
+    var x1 = g1("xyz-" + s); // string
+    var x2 = g2("xyz-" + s); // `xyz-${string}`
+}
 var t1 = takesLiteral("foo.bar.baz"); // "baz"
 var id2 = "foo.bar.baz";
 var t2 = takesLiteral(id2); // "baz"
@@ -172,6 +190,10 @@ var t5 = takesLiteral("foo.bar." + someUnion); // "abc" | "def" | "ghi"
 var pixelValue = 22;
 var pixelString = "22px";
 var pixelStringWithTemplate = pixelValue + "px";
+// Repro from #43143
+function getCardTitle(title) {
+    return "test-" + title;
+}
 
 
 //// [templateLiteralTypes2.d.ts]
@@ -185,17 +207,21 @@ declare function nonWidening<T extends string | number | symbol>(x: T): T;
 declare function ft13(s: string, cond: boolean): void;
 declare type T0 = string | `${number}px`;
 declare function ft14(t: `foo${number}`): void;
+declare function g1<T>(x: T): T;
+declare function g2<T extends string>(x: T): T;
+declare function ft20(s: string): void;
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 declare const t1: "baz";
 declare const id2 = "foo.bar.baz";
 declare const t2: "baz";
 declare const someString: string;
-declare const t3: unknown;
+declare const t3: string;
 declare const id4: string;
 declare const t4: unknown;
 declare const someUnion: 'abc' | 'def' | 'ghi';
-declare const t5: unknown;
+declare const t5: "abc" | "def" | "ghi";
 declare const pixelValue: number;
 declare type PixelValueType = `${number}px`;
 declare const pixelString: PixelValueType;
 declare const pixelStringWithTemplate: PixelValueType;
+declare function getCardTitle(title: string): `test-${string}`;
