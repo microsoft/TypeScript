@@ -5,7 +5,7 @@
 {
     interface IHasGetSet {
         get foo(): number;
-        set foo(): number | string;
+        set foo(v: number | string);
     }
     
     const ihgs: IHasGetSet = null as any;
@@ -16,7 +16,7 @@
 {
     type T_HasGetSet = {
         get foo(): number;
-        set foo(): number | string;
+        set foo(v: number | string);
     }
     
     const t_hgs: T_HasGetSet = null as any;
