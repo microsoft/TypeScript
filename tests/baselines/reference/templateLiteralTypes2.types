@@ -283,6 +283,33 @@ function ft14(t: `foo${number}`) {
 >t : `foo${number}`
 }
 
+declare function g1<T>(x: T): T;
+>g1 : <T>(x: T) => T
+>x : T
+
+declare function g2<T extends string>(x: T): T;
+>g2 : <T extends string>(x: T) => T
+>x : T
+
+function ft20(s: string) {
+>ft20 : (s: string) => void
+>s : string
+
+    let x1 = g1(`xyz-${s}`);  // string
+>x1 : string
+>g1(`xyz-${s}`) : string
+>g1 : <T>(x: T) => T
+>`xyz-${s}` : string
+>s : string
+
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+>x2 : `xyz-${string}`
+>g2(`xyz-${s}`) : `xyz-${string}`
+>g2 : <T extends string>(x: T) => T
+>`xyz-${s}` : `xyz-${string}`
+>s : string
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;

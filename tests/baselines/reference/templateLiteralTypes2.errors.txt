@@ -94,6 +94,14 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(70,9): error TS23
 !!! error TS2322: Type '`foo${number}`' is not assignable to type '{ length: number; }'.
     }
     
+    declare function g1<T>(x: T): T;
+    declare function g2<T extends string>(x: T): T;
+    
+    function ft20(s: string) {
+        let x1 = g1(`xyz-${s}`);  // string
+        let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+    }
+    
     // Repro from #41631
     
     declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
