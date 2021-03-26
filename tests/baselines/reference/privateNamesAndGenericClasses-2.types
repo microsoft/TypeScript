@@ -62,9 +62,9 @@ let b = new C("hello");
 
 a.baz = 5                                 // OK
 >a.baz = 5 : 5
->a.baz : T
+>a.baz : number
 >a : C<number>
->baz : T
+>baz : number
 >5 : 5
 
 const x: number = a.baz                   // OK

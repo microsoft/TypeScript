@@ -9028,6 +9028,11 @@ namespace ts {
             if (isWrite) {
                 const setterParameterType = getAnnotatedAccessorType(setter);
                 if (setterParameterType) {
+                    const flags = getCheckFlags(symbol);
+                    if (flags & CheckFlags.Instantiated) {
+                        const links = getSymbolLinks(symbol);
+                        return instantiateType(setterParameterType, links.mapper);
+                    }
                     return setterParameterType;
                 }
             }

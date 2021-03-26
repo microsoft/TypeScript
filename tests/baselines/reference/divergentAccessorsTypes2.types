@@ -20,22 +20,22 @@ const s = new Test1<string>();
 
 s.foo = undefined;
 >s.foo = undefined : undefined
->s.foo : T | undefined
+>s.foo : string | undefined
 >s : Test1<string>
->foo : T | undefined
+>foo : string | undefined
 >undefined : undefined
 
 s.foo = "hello";
 >s.foo = "hello" : "hello"
->s.foo : T | undefined
+>s.foo : string | undefined
 >s : Test1<string>
->foo : T | undefined
+>foo : string | undefined
 >"hello" : "hello"
 
 s.foo = 42;
 >s.foo = 42 : 42
->s.foo : T | undefined
+>s.foo : string | undefined
 >s : Test1<string>
->foo : T | undefined
+>foo : string | undefined
 >42 : 42
 
