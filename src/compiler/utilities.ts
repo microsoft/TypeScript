@@ -5277,7 +5277,7 @@ namespace ts {
 
     export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const declaration = (isWrite && forEach(s.declarations, d => d.kind === SyntaxKind.SetAccessor && d)) || s.valueDeclaration;
+            const declaration = (isWrite && find(s.declarations, d => d.kind === SyntaxKind.SetAccessor)) || s.valueDeclaration;
             const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
