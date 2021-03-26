@@ -463,7 +463,8 @@ declare const myVar = 30;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 572
 }
 
 //// [/src/lib/module.d.ts] file written with same contents
@@ -753,6 +754,7 @@ declare const globalConst = 10;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 308
 }
 

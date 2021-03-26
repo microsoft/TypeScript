@@ -123,6 +123,11 @@ namespace ts.tscWatch {
             },
             changes: [
                 {
+                    caption: "change file to ensure signatures are updated",
+                    change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
                     caption: "delete file2",
                     change: sys => sys.deleteFile(commonFile2.path),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
@@ -171,6 +176,11 @@ namespace ts.tscWatch {
                 return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
             },
             changes: [
+                {
+                    caption: "change file to ensure signatures are updated",
+                    change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
                 {
                     caption: "Change config",
                     change: sys => sys.writeFile(configFilePath, `{

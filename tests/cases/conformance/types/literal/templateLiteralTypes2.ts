@@ -73,6 +73,14 @@ function ft14(t: `foo${number}`) {
     let x6: { length: number } = t;
 }
 
+declare function g1<T>(x: T): T;
+declare function g2<T extends string>(x: T): T;
+
+function ft20(s: string) {
+    let x1 = g1(`xyz-${s}`);  // string
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
@@ -99,3 +107,9 @@ type PixelValueType = `${number}px`;
 const pixelString: PixelValueType = `22px`;
 
 const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+    return `test-${title}`;
+}

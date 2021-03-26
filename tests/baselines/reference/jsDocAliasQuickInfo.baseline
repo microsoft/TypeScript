@@ -55,7 +55,12 @@
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -116,7 +121,12 @@
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -157,7 +167,12 @@
       "tags": [
         {
           "name": "type",
-          "text": "{number}"
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

@@ -1326,7 +1326,7 @@ namespace ts {
         public close(): void {
             // Forget all the registered shims
             clear(this._shims);
-            this.documentRegistry = undefined!;
+            this.documentRegistry = undefined;
         }
 
         public registerShim(shim: Shim): void {

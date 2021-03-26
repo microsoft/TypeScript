@@ -858,7 +858,8 @@ declare const appfile4_ar: number[];
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 743
 }
 
 //// [/src/lib/module.d.ts] file written with same contents
@@ -1309,6 +1310,7 @@ declare const globalConst = 10;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 456
 }
 

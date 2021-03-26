@@ -462,7 +462,8 @@ declare function f(): string;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 362
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -1489,6 +1490,7 @@ declare function forthirdthird_part1Rest(): void;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 836
 }
 

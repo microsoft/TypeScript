@@ -292,13 +292,10 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[]; // same
 
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
-
-        // Undefined is used to indicate the value has not been computed. If, after computing, the
-        // symbol has no JSDoc tags, then the empty array will be returned.
-        tags?: JSDocTagInfo[];
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
@@ -359,9 +356,9 @@ namespace ts {
             }
         }
 
-        getJsDocTags(): JSDocTagInfo[] {
+        getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations);
+                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations, checker);
             }
 
             return this.tags;
@@ -521,10 +518,7 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
-
-        // Undefined is used to indicate the value has not been computed. If, after computing, the
-        // symbol has no doc comment, then the empty array will be returned.
-        jsDocTags?: JSDocTagInfo[];
+        jsDocTags?: JSDocTagInfo[]; // same
 
         constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
@@ -566,7 +560,7 @@ namespace ts {
     }
 
     function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
-        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration]);
+        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
         if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
             const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
             if (inheritedTags) {
@@ -579,13 +573,19 @@ namespace ts {
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
-        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
         if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
-            forEachUnique(declarations, declaration => {
-                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
+            const seenSymbols = new Set<Symbol>();
+            for (const declaration of declarations) {
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol);
+                        return symbol.getDocumentationComment(checker);
+                    }
+                });
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
-            });
+            }
         }
         return doc;
     }
@@ -1636,7 +1636,7 @@ namespace ts {
                     textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                     displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                    tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                    tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined
                 };
             }
 
@@ -1657,6 +1657,9 @@ namespace ts {
             if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
                 return node.parent.expression;
             }
+            if (isNamedTupleMember(node.parent) && node.pos === node.parent.pos) {
+                return node.parent;
+            }
             return node;
         }
 
@@ -1671,6 +1674,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NamedTupleMember:
                     return true;
                 default:
                     return false;
