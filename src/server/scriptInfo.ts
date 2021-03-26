@@ -391,8 +391,7 @@ namespace ts.server {
             return this.textStorage.getSnapshot();
         }
 
-        /** @returns Whether the file was a symlink */
-        private ensureRealPath(): boolean {
+        private ensureRealPath() {
             if (this.realpath === undefined) {
                 // Default is just the path
                 this.realpath = this.path;
@@ -405,17 +404,24 @@ namespace ts.server {
                         // If it is different from this.path, add to the map
                         if (this.realpath !== this.path) {
                             project.projectService.realpathToScriptInfos!.add(this.realpath, this); // TODO: GH#18217
-                            return true;
                         }
                     }
                 }
             }
-            return false;
         }
 
         /*@internal*/
         getRealpathIfDifferent(): Path | undefined {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
+        }
+
+        /**
+         * @internal
+         * Does not compute realpath; uses precomputed result. Use `ensureRealPath`
+         * first if a definite result is needed.
+         */
+        isSymlink(): boolean | undefined {
+            return this.realpath && this.realpath !== this.path;
         }
 
         getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
@@ -425,13 +431,10 @@ namespace ts.server {
             const isNew = !this.isAttached(project);
             if (isNew) {
                 this.containingProjects.push(project);
-                project.onFileAddedOrRemoved();
                 if (!project.getCompilerOptions().preserveSymlinks) {
-                    const isSymlink = this.ensureRealPath();
-                    if (isSymlink) {
-                        project.onSymlinkAddedOrRemoved();
-                    }
+                    this.ensureRealPath();
                 }
+                project.onFileAddedOrRemoved(this.isSymlink());
             }
             return isNew;
         }
@@ -453,23 +456,23 @@ namespace ts.server {
                     return;
                 case 1:
                     if (this.containingProjects[0] === project) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                         this.containingProjects.pop();
                     }
                     break;
                 case 2:
                     if (this.containingProjects[0] === project) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                         this.containingProjects[0] = this.containingProjects.pop()!;
                     }
                     else if (this.containingProjects[1] === project) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                         this.containingProjects.pop();
                     }
                     break;
                 default:
                     if (unorderedRemoveItem(this.containingProjects, project)) {
-                        project.onFileAddedOrRemoved();
+                        project.onFileAddedOrRemoved(this.isSymlink());
                     }
                     break;
             }
@@ -483,7 +486,7 @@ namespace ts.server {
                 const existingRoot = p.getRootFilesMap().get(this.path);
                 // detach is unnecessary since we'll clean the list of containing projects anyways
                 p.removeFile(this, /*fileExists*/ false, /*detachFromProjects*/ false);
-                p.onFileAddedOrRemoved();
+                p.onFileAddedOrRemoved(this.isSymlink());
                 // If the info was for the external or configured project's root,
                 // add missing file as the root
                 if (existingRoot && !isInferredProject(p)) {

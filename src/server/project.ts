@@ -970,10 +970,6 @@ namespace ts.server {
                 info.detachFromProject(this);
             }
 
-            if (info.getRealpathIfDifferent()) {
-                this.hasAddedOrRemovedSymlinks = true;
-            }
-
             this.markAsDirty();
         }
 
@@ -1017,13 +1013,11 @@ namespace ts.server {
         }
 
         /* @internal */
-        onFileAddedOrRemoved() {
+        onFileAddedOrRemoved(isSymlink: boolean | undefined) {
             this.hasAddedorRemovedFiles = true;
-        }
-
-        /* @internal */
-        onSymlinkAddedOrRemoved() {
-            this.hasAddedOrRemovedSymlinks = true;
+            if (isSymlink) {
+                this.hasAddedOrRemovedSymlinks = true;
+            }
         }
 
         /**
