@@ -1,37 +1,22 @@
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(6,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(7,11): error TS2322: Type 'string' is not assignable to type '`abc${number}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(8,11): error TS2322: Type 'string' is not assignable to type '"abcfoo" | "abcbar" | "abcbaz"'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(9,11): error TS2322: Type 'string' is not assignable to type '`abc${T}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(21,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(23,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(29,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}`'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}` | `baz${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(43,11): error TS2322: Type 'string' is not assignable to type '`foo${string}`'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(67,9): error TS2322: Type '`foo${number}`' is not assignable to type 'String'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(68,9): error TS2322: Type '`foo${number}`' is not assignable to type 'Object'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(69,9): error TS2322: Type '`foo${number}`' is not assignable to type '{}'.
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(70,9): error TS2322: Type '`foo${number}`' is not assignable to type '{ length: number; }'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(98,7): error TS2322: Type 'string' is not assignable to type '`${number}px`'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypes2.ts (14 errors) ====
+==== tests/cases/conformance/types/literal/templateLiteralTypes2.ts (7 errors) ====
     function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
         const c1 = `abc${s}`;  // `abc${string}`
         const c2 = `abc${n}`;  // `abc${number}`
         const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
         const c4 = `abc${t}`;  // `abc${T}
         const d1: `abc${string}` = `abc${s}`;
-              ~~
-!!! error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
         const d2: `abc${number}` = `abc${n}`;
-              ~~
-!!! error TS2322: Type 'string' is not assignable to type '`abc${number}`'.
         const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
-              ~~
-!!! error TS2322: Type 'string' is not assignable to type '"abcfoo" | "abcbar" | "abcbaz"'.
         const d4: `abc${T}` = `abc${t}`;
-              ~~
-!!! error TS2322: Type 'string' is not assignable to type '`abc${T}`'.
     }
     
     function ft2(s: string) {
@@ -44,8 +29,6 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(98,7): error TS23
         const c2 = c1;  // Widening type `abc${string}`
         let v2 = c2;  // Type string
         const c3: `abc${string}` = `abc${s}`;
-              ~~
-!!! error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
         let v3 = c3;  // Type `abc${string}`
         const c4: `abc${string}` = c1;  // Type `abc${string}`
               ~~
@@ -74,8 +57,6 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(98,7): error TS23
         const c1 = `foo${s}`;
         let v1 = c1;
         const c2: `foo${string}` = `foo${s}`;
-              ~~
-!!! error TS2322: Type 'string' is not assignable to type '`foo${string}`'.
         let v2 = c2;
         const c3 = `foo${s}` as `foo${string}`;
         let v3 = c3;
@@ -113,6 +94,14 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(98,7): error TS23
 !!! error TS2322: Type '`foo${number}`' is not assignable to type '{ length: number; }'.
     }
     
+    declare function g1<T>(x: T): T;
+    declare function g2<T extends string>(x: T): T;
+    
+    function ft20(s: string) {
+        let x1 = g1(`xyz-${s}`);  // string
+        let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+    }
+    
     // Repro from #41631
     
     declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
@@ -139,6 +128,10 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(98,7): error TS23
     const pixelString: PixelValueType = `22px`;
     
     const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
-          ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type '`${number}px`'.
+    
+    // Repro from #43143
+    
+    function getCardTitle(title: string): `test-${string}` {
+        return `test-${title}`;
+    }
     

@@ -28,22 +28,22 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 
     const d1: `abc${string}` = `abc${s}`;
 >d1 : `abc${string}`
->`abc${s}` : string
+>`abc${s}` : `abc${string}`
 >s : string
 
     const d2: `abc${number}` = `abc${n}`;
 >d2 : `abc${number}`
->`abc${n}` : string
+>`abc${n}` : `abc${number}`
 >n : number
 
     const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
 >d3 : "abcfoo" | "abcbar" | "abcbaz"
->`abc${u}` : string
+>`abc${u}` : "abcfoo" | "abcbar" | "abcbaz"
 >u : "foo" | "bar" | "baz"
 
     const d4: `abc${T}` = `abc${t}`;
 >d4 : `abc${T}`
->`abc${t}` : string
+>`abc${t}` : `abc${T}`
 >t : T
 }
 
@@ -79,7 +79,7 @@ function ft10(s: string) {
 
     const c3: `abc${string}` = `abc${s}`;
 >c3 : `abc${string}`
->`abc${s}` : string
+>`abc${s}` : `abc${string}`
 >s : string
 
     let v3 = c3;  // Type `abc${string}`
@@ -168,7 +168,7 @@ function ft12(s: string) {
 
     const c2: `foo${string}` = `foo${s}`;
 >c2 : `foo${string}`
->`foo${s}` : string
+>`foo${s}` : `foo${string}`
 >s : string
 
     let v2 = c2;
@@ -178,7 +178,7 @@ function ft12(s: string) {
     const c3 = `foo${s}` as `foo${string}`;
 >c3 : `foo${string}`
 >`foo${s}` as `foo${string}` : `foo${string}`
->`foo${s}` : string
+>`foo${s}` : `foo${string}`
 >s : string
 
     let v3 = c3;
@@ -188,7 +188,7 @@ function ft12(s: string) {
     const c4 = <`foo${string}`>`foo${s}`;
 >c4 : `foo${string}`
 ><`foo${string}`>`foo${s}` : `foo${string}`
->`foo${s}` : string
+>`foo${s}` : `foo${string}`
 >s : string
 
     let v4 = c4;
@@ -237,20 +237,20 @@ function ft13(s: string, cond: boolean) {
 >s : string
 
     let y1 = nonWidening(`foo${s}`);
->y1 : string
->nonWidening(`foo${s}`) : string
+>y1 : `foo${string}`
+>nonWidening(`foo${s}`) : `foo${string}`
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->`foo${s}` : string
+>`foo${s}` : `foo${string}`
 >s : string
 
     let y2 = nonWidening(cond ? 'a' : `foo${s}`);
->y2 : string
->nonWidening(cond ? 'a' : `foo${s}`) : string
+>y2 : `foo${string}` | "a"
+>nonWidening(cond ? 'a' : `foo${s}`) : `foo${string}` | "a"
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->cond ? 'a' : `foo${s}` : string
+>cond ? 'a' : `foo${s}` : `foo${string}` | "a"
 >cond : boolean
 >'a' : "a"
->`foo${s}` : string
+>`foo${s}` : `foo${string}`
 >s : string
 }
 
@@ -283,6 +283,33 @@ function ft14(t: `foo${number}`) {
 >t : `foo${number}`
 }
 
+declare function g1<T>(x: T): T;
+>g1 : <T>(x: T) => T
+>x : T
+
+declare function g2<T extends string>(x: T): T;
+>g2 : <T extends string>(x: T) => T
+>x : T
+
+function ft20(s: string) {
+>ft20 : (s: string) => void
+>s : string
+
+    let x1 = g1(`xyz-${s}`);  // string
+>x1 : string
+>g1(`xyz-${s}`) : string
+>g1 : <T>(x: T) => T
+>`xyz-${s}` : string
+>s : string
+
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+>x2 : `xyz-${string}`
+>g2(`xyz-${s}`) : `xyz-${string}`
+>g2 : <T extends string>(x: T) => T
+>`xyz-${s}` : `xyz-${string}`
+>s : string
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
@@ -309,10 +336,10 @@ declare const someString: string;
 >someString : string
 
 const t3 = takesLiteral(`foo.bar.${someString}`);  // string
->t3 : unknown
->takesLiteral(`foo.bar.${someString}`) : unknown
+>t3 : string
+>takesLiteral(`foo.bar.${someString}`) : string
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->`foo.bar.${someString}` : string
+>`foo.bar.${someString}` : `foo.bar.${string}`
 >someString : string
 
 const id4 = `foo.bar.${someString}`;
@@ -330,10 +357,10 @@ declare const someUnion: 'abc' | 'def' | 'ghi';
 >someUnion : "abc" | "def" | "ghi"
 
 const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
->t5 : unknown
->takesLiteral(`foo.bar.${someUnion}`) : unknown
+>t5 : "abc" | "def" | "ghi"
+>takesLiteral(`foo.bar.${someUnion}`) : "abc" | "def" | "ghi"
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->`foo.bar.${someUnion}` : string
+>`foo.bar.${someUnion}` : "foo.bar.abc" | "foo.bar.def" | "foo.bar.ghi"
 >someUnion : "abc" | "def" | "ghi"
 
 // Repro from #41732
@@ -351,6 +378,17 @@ const pixelString: PixelValueType = `22px`;
 
 const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
 >pixelStringWithTemplate : `${number}px`
->`${pixelValue}px` : string
+>`${pixelValue}px` : `${number}px`
 >pixelValue : number
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : (title: string) => `test-${string}`
+>title : string
+
+    return `test-${title}`;
+>`test-${title}` : `test-${string}`
+>title : string
+}
 
