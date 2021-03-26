@@ -100,7 +100,7 @@ var D = /** @class */ (function (_super) {
     });
     D.c = 2;
     D.d = (void 0).c + 1;
-    D.e = _super.a + (void 0).c + 1;
+    D.e = (void 0).a + (void 0).c + 1;
     D.f = function () { return (void 0).c + 1; };
     D.ff = function () { this.c + 1; };
     D = __decorate([

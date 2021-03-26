@@ -190,28 +190,41 @@ namespace ts {
         }
 
         function visitorThisOrSuperInStaticFieldContext(receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined) {
-            const shouldCareAboutSuper = baseClass && languageVersion >= ScriptTarget.ES2015;
+            const shouldRewriteSuper = baseClass && languageVersion >= ScriptTarget.ES2015;
+            const shouldAvoidThisOrSuper = hasClassDecorators;
+            const shouldCareAboutSuper = shouldRewriteSuper || shouldAvoidThisOrSuper;
             return function staticFieldThisOrSuperVisitor(node: Node): Node {
                 if (!(node.transformFlags & (TransformFlags.ContainsLexicalThis | (shouldCareAboutSuper ? TransformFlags.ContainsLexicalSuper : TransformFlags.None)))) {
                     return node;
                 }
 
-                // `This` access in static field cannot cross function or class boundary.
+                // `This` access in static field cannot cross function boundary.
                 if (isClassLike(node) || isFunctionDeclaration(node) || isFunctionExpression(node)) {
                     return node;
                 }
 
-                if (node.kind === SyntaxKind.ThisKeyword) {
-                    if (hasClassDecorators) {
-                        return factory.createParenthesizedExpression(factory.createVoidZero());
-                    }
-                    return nodeIsSynthesized(receiver) ? receiver : factory.cloneNode(receiver);
+                const originalNode = getOriginalNode(node);
+                if (originalNode.kind === SyntaxKind.ThisKeyword) {
+                    return setTextRange(
+                        setOriginalNode(
+                            shouldAvoidThisOrSuper ?
+                                factory.createParenthesizedExpression(factory.createVoidZero()) :
+                                factory.cloneNode(receiver),
+                            node,
+                        ),
+                        node
+                    );
                 }
-                else if (baseClass && shouldCareAboutSuper && node.kind === SyntaxKind.SuperKeyword) {
-                    if (hasClassDecorators) {
-                        return factory.createParenthesizedExpression(factory.createVoidZero());
-                    }
-                    return nodeIsSynthesized(baseClass) ? baseClass : factory.cloneNode(baseClass);
+                else if (baseClass && shouldCareAboutSuper && originalNode.kind === SyntaxKind.SuperKeyword) {
+                    return setTextRange(
+                        setOriginalNode(
+                            shouldAvoidThisOrSuper ?
+                                factory.createParenthesizedExpression(factory.createVoidZero()) :
+                                factory.cloneNode(baseClass),
+                            node
+                        ),
+                        node
+                    );
                 }
 
                 return visitEachChild(node, staticFieldThisOrSuperVisitor, context);
@@ -722,7 +735,7 @@ namespace ts {
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
 
             if (some(staticProperties)) {
-                addPropertyStatements(statements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression, !!length(node.original?.decorators));
+                addPropertyStatements(statements, staticProperties, factory.getInternalName(node), extendsClauseElement?.expression, !!length(getOriginalNode(node).decorators));
             }
 
             return statements;
@@ -770,7 +783,7 @@ namespace ts {
                 transformClassMembers(node, isDerivedClass)
             );
 
-            const hasClassDecorators = !!length(node.original?.decorators);
+            const hasClassDecorators = !!length(getOriginalNode(node).decorators);
             const hasTransformableStatics = some(staticProperties, p => !!p.initializer || (shouldTransformPrivateElements && isPrivateIdentifier(p.name)));
             if (hasTransformableStatics || some(pendingExpressions)) {
                 if (isDecoratedClassDeclaration) {
