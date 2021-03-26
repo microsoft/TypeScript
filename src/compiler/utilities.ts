@@ -4668,6 +4668,18 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Static);
     }
 
+    export function hasOverrideModifier(node: Node): boolean {
+        return hasEffectiveModifier(node, ModifierFlags.Override);
+    }
+
+    export function hasAbstractModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Abstract);
+    }
+
+    export function hasAmbientModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Ambient);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
@@ -4726,6 +4738,7 @@ namespace ts {
                 if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
                 if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+                if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
             }
             if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
@@ -4778,8 +4791,13 @@ namespace ts {
             case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
             case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+            case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
         }
         return ModifierFlags.None;
+    }
+
+    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
+        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
     }
 
     export function isLogicalOperator(token: SyntaxKind): boolean {
