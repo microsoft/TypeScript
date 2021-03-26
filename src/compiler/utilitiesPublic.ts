@@ -1241,6 +1241,7 @@ namespace ts {
         }
     }
 
+    /* @internal */
     export function isThisOrSuperInStaticFieldBoundary(node: Node, parent: Node | undefined): boolean {
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
