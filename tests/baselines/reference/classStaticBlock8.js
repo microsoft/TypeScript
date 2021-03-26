@@ -36,12 +36,27 @@ function foo (v: number) {
 
 //// [classStaticBlock8.js]
 function foo(v) {
+    var _C__;
     label: while (v) {
         var C = /** @class */ (function () {
             function C() {
             }
             return C;
         }());
+        _C__ = { value: (function () {
+                if (v === 1) {
+                    break label;
+                }
+                if (v === 2) {
+                    continue label;
+                }
+                if (v === 3) {
+                    break;
+                }
+                if (v === 4) {
+                    continue;
+                }
+            })() };
         if (v === 5) {
             break label;
         }

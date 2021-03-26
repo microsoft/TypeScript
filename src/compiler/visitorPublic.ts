@@ -480,7 +480,8 @@ namespace ts {
                 context.startLexicalEnvironment();
                 context.suspendLexicalEnvironment();
                 return factory.updateClassStaticBlockDeclaration(node,
-                        nodeVisitor(node.staticToken, visitor, isStaticModifier),
+                        nodesVisitor(node.decorators, visitor, isDecorator),
+                        nodesVisitor(node.modifiers, visitor, isModifier),
                         visitFunctionBody(node.body, visitor, context, nodeVisitor));
 
             case SyntaxKind.CallSignature:

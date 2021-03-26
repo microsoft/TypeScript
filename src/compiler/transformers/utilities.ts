@@ -339,7 +339,13 @@ namespace ts {
     export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
     export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[];
     export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
-        return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic) || isStatic && isClassStaticBlockDeclaration(m)) as PropertyDeclaration[];
+        return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
+    }
+
+    export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+    export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+    export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
+        return filter(node.members, or(isStaticPropertyDeclaration, isClassStaticBlockDeclaration)) as (PropertyDeclaration | ClassStaticBlockDeclaration)[];
     }
 
     /**
@@ -352,6 +358,10 @@ namespace ts {
         return isPropertyDeclaration(member)
             && (!!member.initializer || !requireInitializer)
             && hasStaticModifier(member) === isStatic;
+    }
+
+    function isStaticPropertyDeclaration(member: ClassElement) {
+        return isPropertyDeclaration(member) && hasStaticModifier(member);
     }
 
     /**

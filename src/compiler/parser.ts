@@ -169,7 +169,8 @@ namespace ts {
                     visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
                     visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
             case SyntaxKind.ClassStaticBlockDeclaration:
-                return visitNode(cbNode, (<ClassStaticBlockDeclaration>node).staticToken) ||
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ClassStaticBlockDeclaration>node).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
@@ -6565,11 +6566,10 @@ namespace ts {
             return false;
         }
 
-        function parseClassStaticBlockDeclaration(): ClassStaticBlockDeclaration {
-            const pos = getNodePos();
-            const staticKeyworkd = parseExpectedToken(SyntaxKind.StaticKeyword);
+        function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: ModifiersArray | undefined): ClassStaticBlockDeclaration {
+            parseExpectedToken(SyntaxKind.StaticKeyword);
             const body = parseClassStaticBlockBodyBlock();
-            return finishNode(factory.createClassStaticBlockDeclaration(staticKeyworkd, body), pos);
+            return withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(decorators, modifiers, body), pos), hasJSDoc);
         }
 
         function parseClassStaticBlockBodyBlock() {
@@ -6618,7 +6618,7 @@ namespace ts {
             return list && createNodeArray(list, pos);
         }
 
-        function tryParseModifier(permitInvalidConstAsModifier?: boolean): Modifier | undefined {
+        function tryParseModifier(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
             const pos = getNodePos();
             const kind = token();
 
@@ -6628,6 +6628,9 @@ namespace ts {
                 if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
                     return undefined;
                 }
+            }
+            else if (stopOnStartOfClassStaticBlock && token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
+                return undefined;
             }
             else {
                 if (!parseAnyContextualModifier()) {
@@ -6645,10 +6648,10 @@ namespace ts {
          *
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
-        function parseModifiers(permitInvalidConstAsModifier?: boolean): NodeArray<Modifier> | undefined {
+        function parseModifiers(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
             const pos = getNodePos();
             let list, modifier;
-            while (modifier = tryParseModifier(permitInvalidConstAsModifier)) {
+            while (modifier = tryParseModifier(permitInvalidConstAsModifier, stopOnStartOfClassStaticBlock)) {
                 list = append(list, modifier);
             }
             return list && createNodeArray(list, pos);
@@ -6671,13 +6674,13 @@ namespace ts {
                 nextToken();
                 return finishNode(factory.createSemicolonClassElement(), pos);
             }
-            if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
-                return parseClassStaticBlockDeclaration();
-            }
 
             const hasJSDoc = hasPrecedingJSDocComment();
             const decorators = parseDecorators();
-            const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true);
+            const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
+            if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
+                return parseClassStaticBlockDeclaration(pos, hasJSDoc, decorators, modifiers);
+            }
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
                 return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);

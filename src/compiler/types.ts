@@ -203,12 +203,12 @@ namespace ts {
         PropertyDeclaration,
         MethodSignature,
         MethodDeclaration,
+        ClassStaticBlockDeclaration,
         Constructor,
         GetAccessor,
         SetAccessor,
         CallSignature,
         ConstructSignature,
-        ClassStaticBlockDeclaration,
         IndexSignature,
         // Type
         TypePredicate,
@@ -862,6 +862,7 @@ namespace ts {
     export type HasJSDoc =
         | ParameterDeclaration
         | CallSignatureDeclaration
+        | ClassStaticBlockDeclaration
         | ConstructSignatureDeclaration
         | MethodSignature
         | PropertySignature
@@ -1503,10 +1504,11 @@ namespace ts {
         readonly type: TypeNode;
     }
 
-    export interface ClassStaticBlockDeclaration extends ClassElement {
+    export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
-        readonly staticToken: Token<SyntaxKind.StaticKeyword>;
         readonly body: Block;
+        /* @internal */ readonly decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
+        /* @internal */ readonly modifier?: ModifiersArray; // Present for use with reporting a grammar error
     }
 
     export interface TypeNode extends Node {
@@ -6939,8 +6941,8 @@ namespace ts {
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
-        createClassStaticBlockDeclaration(staticToken: Token<SyntaxKind.StaticKeyword>, body: Block): ClassStaticBlockDeclaration;
-        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, staticToken: Token<SyntaxKind.StaticKeyword>, body: Block): ClassStaticBlockDeclaration;
+        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
 
         //
         // Types

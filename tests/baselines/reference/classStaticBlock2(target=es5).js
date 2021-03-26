@@ -20,6 +20,7 @@ class C {
 
 
 //// [classStaticBlock2.js]
+var _C__, _C__1;
 var a = 1;
 var b = 2;
 var C = /** @class */ (function () {
@@ -27,3 +28,13 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
+_C__ = { value: (function () {
+        var a_1 = 11;
+        a_1;
+        b;
+    })() };
+_C__1 = { value: (function () {
+        var a_2 = 11;
+        a_2;
+        b;
+    })() };

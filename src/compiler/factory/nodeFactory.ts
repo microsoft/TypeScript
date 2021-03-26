@@ -1395,6 +1395,38 @@ namespace ts {
         }
 
         // @api
+        function createClassStaticBlockDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
+                SyntaxKind.ClassStaticBlockDeclaration,
+                decorators,
+                modifiers,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined
+            );
+            node.body = body;
+            node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
+            return node;
+        }
+
+        // @api
+        function updateClassStaticBlockDeclaration(
+            node: ClassStaticBlockDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            return node.decorators !== decorators
+                || node.modifier !== modifiers
+                || node.body !== body
+                ? update(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
+                : node;
+        }
+
+        // @api
         function createConstructorDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -1609,36 +1641,6 @@ namespace ts {
                 || node.decorators !== decorators
                 || node.modifiers !== modifiers
                 ? updateBaseSignatureDeclaration(createIndexSignature(decorators, modifiers, parameters, type), node)
-                : node;
-        }
-
-        // @api
-        function createClassStaticBlockDeclaration(
-            staticToken: Token<SyntaxKind.StaticKeyword>,
-            body: Block
-        ): ClassStaticBlockDeclaration {
-            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
-                SyntaxKind.ClassStaticBlockDeclaration,
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*name*/ undefined,
-                /*typeParameters*/ undefined
-            );
-            node.staticToken = staticToken;
-            node.body = body;
-            node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
-            return node;
-        }
-
-        // @api
-        function updateClassStaticBlockDeclaration(
-            node: ClassStaticBlockDeclaration,
-            staticToken: Token<SyntaxKind.StaticKeyword>,
-            body: Block
-        ): ClassStaticBlockDeclaration {
-            return node.staticToken !== staticToken
-                || node.body !== body
-                ? update(createClassStaticBlockDeclaration(staticToken, body), node)
                 : node;
         }
 

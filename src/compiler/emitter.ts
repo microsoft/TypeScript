@@ -2011,7 +2011,9 @@ namespace ts {
         }
 
         function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
-            emit(node.staticToken);
+            emitDecorators(node, node.decorators);
+            emitModifiers(node, node.modifiers);
+            writeKeyword("static");
             emitBlockFunctionBody(node.body);
         }
 
@@ -5780,7 +5782,8 @@ namespace ts {
                     case SyntaxKind.ClassStaticBlockDeclaration:
                         Debug.type<ClassStaticBlockDeclaration>(node);
                         return factory.updateClassStaticBlockDeclaration(node,
-                            visit(node.staticToken, isStaticModifier),
+                            visitList(node.decorators, isDecorator),
+                            visitList(node.modifiers, isModifier),
                             visitFunctionBody(node.body));
 
                     case SyntaxKind.Constructor:

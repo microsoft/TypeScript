@@ -37,6 +37,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var _C__;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -50,3 +51,13 @@ var C = /** @class */ (function (_super) {
     }
     return C;
 }(B));
+_C__ = { value: (function () {
+        var await = 1;
+        var arguments = 1;
+        var eval = 1;
+        await: if (true) {
+        }
+        arguments;
+        await;
+        _this = _super.call(this) || this;
+    })() };

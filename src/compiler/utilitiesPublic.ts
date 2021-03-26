@@ -1221,10 +1221,6 @@ namespace ts {
         return !!node && isFunctionLikeKind(node.kind);
     }
 
-    export function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration {
-        return node.kind === SyntaxKind.ClassStaticBlockDeclaration;
-    }
-
     export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is (SignatureDeclaration | ClassStaticBlockDeclaration) {
         return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
     }
@@ -1879,6 +1875,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocComment
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
+
             || node.kind === SyntaxKind.JSDocLink
             || isJSDocTag(node)
             || isJSDocTypeLiteral(node)
