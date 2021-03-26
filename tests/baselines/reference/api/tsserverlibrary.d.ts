@@ -9410,7 +9410,6 @@ declare namespace ts.server {
         open(newText: string): void;
         close(fileExists?: boolean): void;
         getSnapshot(): IScriptSnapshot;
-        /** @returns Whether the file was a symlink */
         private ensureRealPath;
         getFormatCodeSettings(): FormatCodeSettings | undefined;
         getPreferences(): protocol.UserPreferences | undefined;
