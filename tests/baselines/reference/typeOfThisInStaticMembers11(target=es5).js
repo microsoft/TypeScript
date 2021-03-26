@@ -7,46 +7,45 @@ class C {
     static b = this.a + 1;
 }
 
-const classComputedName = "classComputedName"
-
-const D = class extends C {
+@foo
+class D extends C {
     static c = 2;
     static d = this.c + 1;
     static e = super.a + this.c + 1;
     static f = () => this.c + 1;
     static ff = function () { this.c + 1 }
-    static [classComputedName] = 1;
-    static foo() {
+    static foo () {
         return this.c + 1;
     }
-    static get fa() {
+    static get fa () {
         return this.c + 1;
     }
-    static set fa(v: number) {
+    static set fa (v: number) {
         this.c = v + 1;
     }
 }
 
-function ret() {
-    return class extends C {
-        static c = 2;
-        static d = this.c + 1;
-        static e = super.a + this.c + 1;
-        static f = () => this.c + 1;
-        static ff = function () { this.c + 1 }
-        static [classComputedName] = 1;
-        static foo() {
-            return this.c + 1;
-        }
-        static get fa() {
-            return this.c + 1;
-        }
-        static set fa(v: number) {
-            this.c = v + 1;
-        }
-    }
+class CC {
+    static a = 1;
+    static b = this.a + 1;
 }
 
+class DD extends CC {
+    static c = 2;
+    static d = this.c + 1;
+    static e = super.a + this.c + 1;
+    static f = () => this.c + 1;
+    static ff = function () { this.c + 1 }
+    static foo () {
+        return this.c + 1;
+    }
+    static get fa () {
+        return this.c + 1;
+    }
+    static set fa (v: number) {
+        this.c = v + 1;
+    }
+}
 
 
 //// [typeOfThisInStaticMembers11.js]
@@ -71,74 +70,153 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var _a, _b;
 var C = /** @class */ (function () {
     function C() {
     }
-    C.a = 1;
-    C.b = (void 0).a + 1;
+    Object.defineProperty(C, "a", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: 1
+    });
+    Object.defineProperty(C, "b", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: (void 0).a + 1
+    });
     C = __decorate([
         foo
     ], C);
     return C;
 }());
-var classComputedName = "classComputedName";
-var D = (_b = /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        class_1.foo = function () {
+var D = /** @class */ (function (_super) {
+    __extends(D, _super);
+    function D() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(D, "foo", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
             return this.c + 1;
-        };
-        Object.defineProperty(class_1, "fa", {
-            get: function () {
-                return this.c + 1;
-            },
-            set: function (v) {
-                this.c = v + 1;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return class_1;
-    }(C)),
-    _a = classComputedName,
-    _b.c = 2,
-    _b.d = _b.c + 1,
-    _b.e = _super.a + _b.c + 1,
-    _b.f = function () { return _b.c + 1; },
-    _b.ff = function () { this.c + 1; },
-    _b[_a] = 1,
-    _b);
-function ret() {
-    var _b, _c;
-    return _c = /** @class */ (function (_super) {
-            __extends(class_2, _super);
-            function class_2() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            class_2.foo = function () {
-                return this.c + 1;
-            };
-            Object.defineProperty(class_2, "fa", {
-                get: function () {
-                    return this.c + 1;
-                },
-                set: function (v) {
-                    this.c = v + 1;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return class_2;
-        }(C)),
-        _b = classComputedName,
-        _c.c = 2,
-        _c.d = _c.c + 1,
-        _c.e = _super.a + _c.c + 1,
-        _c.f = function () { return _c.c + 1; },
-        _c.ff = function () { this.c + 1; },
-        _c[_b] = 1,
-        _c;
-}
+        }
+    });
+    Object.defineProperty(D, "fa", {
+        get: function () {
+            return this.c + 1;
+        },
+        set: function (v) {
+            this.c = v + 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(D, "c", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: 2
+    });
+    Object.defineProperty(D, "d", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: (void 0).c + 1
+    });
+    Object.defineProperty(D, "e", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: (void 0).a + (void 0).c + 1
+    });
+    Object.defineProperty(D, "f", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: function () { return (void 0).c + 1; }
+    });
+    Object.defineProperty(D, "ff", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: function () { this.c + 1; }
+    });
+    D = __decorate([
+        foo
+    ], D);
+    return D;
+}(C));
+var CC = /** @class */ (function () {
+    function CC() {
+    }
+    Object.defineProperty(CC, "a", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: 1
+    });
+    Object.defineProperty(CC, "b", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: CC.a + 1
+    });
+    return CC;
+}());
+var DD = /** @class */ (function (_super) {
+    __extends(DD, _super);
+    function DD() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(DD, "foo", {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function () {
+            return this.c + 1;
+        }
+    });
+    Object.defineProperty(DD, "fa", {
+        get: function () {
+            return this.c + 1;
+        },
+        set: function (v) {
+            this.c = v + 1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(DD, "c", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: 2
+    });
+    Object.defineProperty(DD, "d", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: DD.c + 1
+    });
+    Object.defineProperty(DD, "e", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: _super.a + DD.c + 1
+    });
+    Object.defineProperty(DD, "f", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: function () { return DD.c + 1; }
+    });
+    Object.defineProperty(DD, "ff", {
+        enumerable: true,
+        configurable: true,
+        writable: true,
+        value: function () { this.c + 1; }
+    });
+    return DD;
+}(CC));

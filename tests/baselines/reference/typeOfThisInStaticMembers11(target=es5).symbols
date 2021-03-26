@@ -18,136 +18,137 @@ class C {
 >a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
 }
 
-const classComputedName = "classComputedName"
->classComputedName : Symbol(classComputedName, Decl(typeOfThisInStaticMembers11.ts, 8, 5))
+@foo
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers11.ts, 0, 13))
 
-const D = class extends C {
->D : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 5))
+class D extends C {
+>D : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
 >C : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
 
     static c = 2;
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
 
     static d = this.c + 1;
->d : Symbol(D.d, Decl(typeOfThisInStaticMembers11.ts, 11, 17))
->this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 9))
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
+>d : Symbol(D.d, Decl(typeOfThisInStaticMembers11.ts, 10, 17))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
 
     static e = super.a + this.c + 1;
->e : Symbol(D.e, Decl(typeOfThisInStaticMembers11.ts, 12, 26))
+>e : Symbol(D.e, Decl(typeOfThisInStaticMembers11.ts, 11, 26))
 >super.a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
 >super : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
 >a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
->this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 9))
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
 
     static f = () => this.c + 1;
->f : Symbol(D.f, Decl(typeOfThisInStaticMembers11.ts, 13, 36))
->this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 9))
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
+>f : Symbol(D.f, Decl(typeOfThisInStaticMembers11.ts, 12, 36))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
 
     static ff = function () { this.c + 1 }
->ff : Symbol(D.ff, Decl(typeOfThisInStaticMembers11.ts, 14, 32))
+>ff : Symbol(D.ff, Decl(typeOfThisInStaticMembers11.ts, 13, 32))
 
-    static [classComputedName] = 1;
->[classComputedName] : Symbol(D[classComputedName], Decl(typeOfThisInStaticMembers11.ts, 15, 42))
->classComputedName : Symbol(classComputedName, Decl(typeOfThisInStaticMembers11.ts, 8, 5))
-
-    static foo() {
->foo : Symbol(D.foo, Decl(typeOfThisInStaticMembers11.ts, 16, 35))
+    static foo () {
+>foo : Symbol(D.foo, Decl(typeOfThisInStaticMembers11.ts, 14, 42))
 
         return this.c + 1;
->this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 9))
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
     }
-    static get fa() {
->fa : Symbol(D.fa, Decl(typeOfThisInStaticMembers11.ts, 19, 5), Decl(typeOfThisInStaticMembers11.ts, 22, 5))
+    static get fa () {
+>fa : Symbol(D.fa, Decl(typeOfThisInStaticMembers11.ts, 17, 5), Decl(typeOfThisInStaticMembers11.ts, 20, 5))
 
         return this.c + 1;
->this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 9))
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
     }
-    static set fa(v: number) {
->fa : Symbol(D.fa, Decl(typeOfThisInStaticMembers11.ts, 19, 5), Decl(typeOfThisInStaticMembers11.ts, 22, 5))
->v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 23, 18))
+    static set fa (v: number) {
+>fa : Symbol(D.fa, Decl(typeOfThisInStaticMembers11.ts, 17, 5), Decl(typeOfThisInStaticMembers11.ts, 20, 5))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 21, 19))
 
         this.c = v + 1;
->this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 10, 9))
->c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 10, 27))
->v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 23, 18))
+>this.c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>this : Symbol(D, Decl(typeOfThisInStaticMembers11.ts, 6, 1))
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers11.ts, 9, 19))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 21, 19))
     }
 }
 
-function ret() {
->ret : Symbol(ret, Decl(typeOfThisInStaticMembers11.ts, 26, 1))
+class CC {
+>CC : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
 
-    return class extends C {
->C : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
+    static a = 1;
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
 
-        static c = 2;
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
-
-        static d = this.c + 1;
->d : Symbol((Anonymous class).d, Decl(typeOfThisInStaticMembers11.ts, 30, 21))
->this.c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers11.ts, 29, 10))
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
-
-        static e = super.a + this.c + 1;
->e : Symbol((Anonymous class).e, Decl(typeOfThisInStaticMembers11.ts, 31, 30))
->super.a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
->super : Symbol(C, Decl(typeOfThisInStaticMembers11.ts, 0, 23))
->a : Symbol(C.a, Decl(typeOfThisInStaticMembers11.ts, 3, 9))
->this.c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers11.ts, 29, 10))
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
-
-        static f = () => this.c + 1;
->f : Symbol((Anonymous class).f, Decl(typeOfThisInStaticMembers11.ts, 32, 40))
->this.c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers11.ts, 29, 10))
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
-
-        static ff = function () { this.c + 1 }
->ff : Symbol((Anonymous class).ff, Decl(typeOfThisInStaticMembers11.ts, 33, 36))
-
-        static [classComputedName] = 1;
->[classComputedName] : Symbol((Anonymous class)[classComputedName], Decl(typeOfThisInStaticMembers11.ts, 34, 46))
->classComputedName : Symbol(classComputedName, Decl(typeOfThisInStaticMembers11.ts, 8, 5))
-
-        static foo() {
->foo : Symbol((Anonymous class).foo, Decl(typeOfThisInStaticMembers11.ts, 35, 39))
-
-            return this.c + 1;
->this.c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers11.ts, 29, 10))
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
-        }
-        static get fa() {
->fa : Symbol((Anonymous class).fa, Decl(typeOfThisInStaticMembers11.ts, 38, 9), Decl(typeOfThisInStaticMembers11.ts, 41, 9))
-
-            return this.c + 1;
->this.c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers11.ts, 29, 10))
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
-        }
-        static set fa(v: number) {
->fa : Symbol((Anonymous class).fa, Decl(typeOfThisInStaticMembers11.ts, 38, 9), Decl(typeOfThisInStaticMembers11.ts, 41, 9))
->v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 42, 22))
-
-            this.c = v + 1;
->this.c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers11.ts, 29, 10))
->c : Symbol((Anonymous class).c, Decl(typeOfThisInStaticMembers11.ts, 29, 28))
->v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 42, 22))
-        }
-    }
+    static b = this.a + 1;
+>b : Symbol(CC.b, Decl(typeOfThisInStaticMembers11.ts, 27, 17))
+>this.a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+>this : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
 }
 
+class DD extends CC {
+>DD : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>CC : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+
+    static c = 2;
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static d = this.c + 1;
+>d : Symbol(DD.d, Decl(typeOfThisInStaticMembers11.ts, 32, 17))
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static e = super.a + this.c + 1;
+>e : Symbol(DD.e, Decl(typeOfThisInStaticMembers11.ts, 33, 26))
+>super.a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+>super : Symbol(CC, Decl(typeOfThisInStaticMembers11.ts, 24, 1))
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers11.ts, 26, 10))
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static f = () => this.c + 1;
+>f : Symbol(DD.f, Decl(typeOfThisInStaticMembers11.ts, 34, 36))
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+
+    static ff = function () { this.c + 1 }
+>ff : Symbol(DD.ff, Decl(typeOfThisInStaticMembers11.ts, 35, 32))
+
+    static foo () {
+>foo : Symbol(DD.foo, Decl(typeOfThisInStaticMembers11.ts, 36, 42))
+
+        return this.c + 1;
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+    }
+    static get fa () {
+>fa : Symbol(DD.fa, Decl(typeOfThisInStaticMembers11.ts, 39, 5), Decl(typeOfThisInStaticMembers11.ts, 42, 5))
+
+        return this.c + 1;
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+    }
+    static set fa (v: number) {
+>fa : Symbol(DD.fa, Decl(typeOfThisInStaticMembers11.ts, 39, 5), Decl(typeOfThisInStaticMembers11.ts, 42, 5))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 43, 19))
+
+        this.c = v + 1;
+>this.c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>this : Symbol(DD, Decl(typeOfThisInStaticMembers11.ts, 29, 1))
+>c : Symbol(DD.c, Decl(typeOfThisInStaticMembers11.ts, 31, 21))
+>v : Symbol(v, Decl(typeOfThisInStaticMembers11.ts, 43, 19))
+    }
+}
 

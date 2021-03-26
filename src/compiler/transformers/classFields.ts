@@ -189,17 +189,18 @@ namespace ts {
             }
         }
 
-        function visitorThisOrSuperInStaticFieldContext(receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined) {
+        function visitorThisOrSuperInStaticFieldContext(root: Expression | undefined, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined): Expression | undefined {
             const shouldRewriteSuper = baseClass && languageVersion >= ScriptTarget.ES2015;
             const shouldAvoidThisOrSuper = hasClassDecorators;
             const shouldCareAboutSuper = shouldRewriteSuper || shouldAvoidThisOrSuper;
-            return function staticFieldThisOrSuperVisitor(node: Node): Node {
+
+            function staticFieldThisOrSuperVisitor(node: Expression): Expression {
                 if (!(node.transformFlags & (TransformFlags.ContainsLexicalThis | (shouldCareAboutSuper ? TransformFlags.ContainsLexicalSuper : TransformFlags.None)))) {
                     return node;
                 }
 
                 // `This` access in static field cannot cross function boundary.
-                if (isClassLike(node) || isFunctionDeclaration(node) || isFunctionExpression(node)) {
+                if (isThisOrSuperInStaticFieldBoundary(node, node !== root ? node.parent : undefined)) {
                     return node;
                 }
 
@@ -229,6 +230,8 @@ namespace ts {
 
                 return visitEachChild(node, staticFieldThisOrSuperVisitor, context);
             };
+
+            return visitNode(root, staticFieldThisOrSuperVisitor, isExpression);
         }
 
         /**
@@ -1084,7 +1087,7 @@ namespace ts {
             }
 
             const initializer = property.initializer || emitAssignment ? visitNode(
-                hasStaticModifier(property) ? visitNode(property.initializer, visitorThisOrSuperInStaticFieldContext(receiver, baseClass, hasClassDecorators), isExpression) : property.initializer,
+                hasStaticModifier(property) ? visitorThisOrSuperInStaticFieldContext(property.initializer, receiver, baseClass, hasClassDecorators) : property.initializer,
                 visitor,
                 isExpression
             ) ?? factory.createVoidZero()

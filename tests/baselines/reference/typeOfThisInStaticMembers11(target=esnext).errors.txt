@@ -1,7 +1,10 @@
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(6,16): error TS2808: Cannot use 'this' in static property initializer in a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(12,16): error TS2808: Cannot use 'this' in static property initializer in a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(13,26): error TS2808: Cannot use 'this' in static property initializer in a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(14,22): error TS2808: Cannot use 'this' in static property initializer in a decorated class.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts (1 errors) ====
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts (4 errors) ====
     declare const foo: any;
     
     @foo
@@ -12,44 +15,49 @@ tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInSta
 !!! error TS2808: Cannot use 'this' in static property initializer in a decorated class.
     }
     
-    const classComputedName = "classComputedName"
+    @foo
+    class D extends C {
+        static c = 2;
+        static d = this.c + 1;
+                   ~~~~
+!!! error TS2808: Cannot use 'this' in static property initializer in a decorated class.
+        static e = super.a + this.c + 1;
+                             ~~~~
+!!! error TS2808: Cannot use 'this' in static property initializer in a decorated class.
+        static f = () => this.c + 1;
+                         ~~~~
+!!! error TS2808: Cannot use 'this' in static property initializer in a decorated class.
+        static ff = function () { this.c + 1 }
+        static foo () {
+            return this.c + 1;
+        }
+        static get fa () {
+            return this.c + 1;
+        }
+        static set fa (v: number) {
+            this.c = v + 1;
+        }
+    }
     
-    const D = class extends C {
+    class CC {
+        static a = 1;
+        static b = this.a + 1;
+    }
+    
+    class DD extends CC {
         static c = 2;
         static d = this.c + 1;
         static e = super.a + this.c + 1;
         static f = () => this.c + 1;
         static ff = function () { this.c + 1 }
-        static [classComputedName] = 1;
-        static foo() {
+        static foo () {
             return this.c + 1;
         }
-        static get fa() {
+        static get fa () {
             return this.c + 1;
         }
-        static set fa(v: number) {
+        static set fa (v: number) {
             this.c = v + 1;
         }
     }
-    
-    function ret() {
-        return class extends C {
-            static c = 2;
-            static d = this.c + 1;
-            static e = super.a + this.c + 1;
-            static f = () => this.c + 1;
-            static ff = function () { this.c + 1 }
-            static [classComputedName] = 1;
-            static foo() {
-                return this.c + 1;
-            }
-            static get fa() {
-                return this.c + 1;
-            }
-            static set fa(v: number) {
-                this.c = v + 1;
-            }
-        }
-    }
-    
     

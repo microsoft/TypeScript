@@ -1241,6 +1241,30 @@ namespace ts {
         }
     }
 
+    export function isThisOrSuperInStaticFieldBoundary(node: Node, parent: Node | undefined): boolean {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.Constructor:
+                return true;
+        }
+
+        if (parent) {
+            switch (parent.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                    Debug.type<PropertyDeclaration>(parent);
+                    return node === parent.initializer;
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                    Debug.type<AccessorDeclaration | MethodDeclaration>(parent);
+                    return node !== parent.name;
+            }
+        }
+
+        return false;
+    }
+
     /* @internal */
     export function isFunctionLikeKind(kind: SyntaxKind): boolean {
         switch (kind) {

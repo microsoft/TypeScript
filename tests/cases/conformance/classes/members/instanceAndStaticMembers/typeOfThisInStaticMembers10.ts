@@ -1,6 +1,6 @@
 // @target: esnext, es6, es5
-// @useDefineForClassFields: false
 // @experimentalDecorators: true
+// @useDefineForClassFields: false
 
 declare const foo: any;
 
