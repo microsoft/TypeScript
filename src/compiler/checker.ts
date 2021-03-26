@@ -3891,6 +3891,12 @@ namespace ts {
             return result || emptyArray;
         }
 
+        function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
+            const result = getNamedMembers(members);
+            const index = getIndexSymbolFromSymbolTable(members);
+            return index ? concatenate(result, [index]) : result;
+        }
+
         function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
             const resolved = <ResolvedType>type;
             resolved.members = members;
@@ -10764,6 +10770,7 @@ namespace ts {
                 // Combinations of function, class, enum and module
                 let members = emptySymbols;
                 let stringIndexInfo: IndexInfo | undefined;
+                let numberIndexInfo: IndexInfo | undefined;
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                     if (symbol === globalThisSymbol) {
@@ -10776,20 +10783,32 @@ namespace ts {
                         members = varsOnly;
                     }
                 }
+                let baseConstructorIndexInfo: IndexInfo | undefined;
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
                     if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
-                        members = createSymbolTable(getNamedMembers(members));
+                        members = createSymbolTable(getNamedOrIndexSignatureMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
                     }
                     else if (baseConstructorType === anyType) {
-                        stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
+                        baseConstructorIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
                     }
                 }
-                const numberIndexInfo = symbol.flags & SymbolFlags.Enum && (getDeclaredTypeOfSymbol(symbol).flags & TypeFlags.Enum ||
-                    some(type.properties, prop => !!(getTypeOfSymbol(prop).flags & TypeFlags.NumberLike))) ? enumNumberIndexInfo : undefined;
+
+                const indexSymbol = getIndexSymbolFromSymbolTable(members);
+                if (indexSymbol) {
+                    stringIndexInfo = getIndexInfoOfIndexSymbol(indexSymbol, IndexKind.String);
+                    numberIndexInfo = getIndexInfoOfIndexSymbol(indexSymbol, IndexKind.Number);
+                }
+                else {
+                    stringIndexInfo = baseConstructorIndexInfo;
+                    if (symbol.flags & SymbolFlags.Enum && (getDeclaredTypeOfSymbol(symbol).flags & TypeFlags.Enum ||
+                        some(type.properties, prop => !!(getTypeOfSymbol(prop).flags & TypeFlags.NumberLike)))) {
+                        numberIndexInfo = enumNumberIndexInfo;
+                    }
+                }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
                 // We resolve the members before computing the signatures because a signature may use
                 // typeof with a qualified name expression that circularly references the type we are
@@ -10815,6 +10834,13 @@ namespace ts {
                     type.constructSignatures = constructSignatures;
                 }
             }
+        }
+
+        function getIndexInfoOfIndexSymbol(indexSymbol: Symbol, indexKind: IndexKind) {
+            const declaration = getIndexDeclarationOfIndexSymbol(indexSymbol, indexKind);
+            if (!declaration) return undefined;
+            return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
+                hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration);
         }
 
         function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
@@ -12363,12 +12389,20 @@ namespace ts {
         }
 
         function getIndexSymbol(symbol: Symbol): Symbol | undefined {
-            return symbol.members!.get(InternalSymbolName.Index);
+            return symbol.members ? getIndexSymbolFromSymbolTable(symbol.members) : undefined;
         }
 
-        function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): IndexSignatureDeclaration | undefined {
+        function getIndexSymbolFromSymbolTable(symbolTable: SymbolTable): Symbol | undefined {
+            return symbolTable.get(InternalSymbolName.Index);
+        }
+
+        function getIndexDeclarationOfSymbol(symbol: Symbol | undefined, kind: IndexKind): IndexSignatureDeclaration | undefined {
+            const indexSymbol = symbol && getIndexSymbol(symbol);
+            return indexSymbol && getIndexDeclarationOfIndexSymbol(indexSymbol, kind);
+        }
+
+        function getIndexDeclarationOfIndexSymbol(indexSymbol: Symbol, kind: IndexKind): IndexSignatureDeclaration | undefined {
             const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
-            const indexSymbol = getIndexSymbol(symbol);
             if (indexSymbol?.declarations) {
                 for (const decl of indexSymbol.declarations) {
                     const node = cast(decl, isIndexSignatureDeclaration);
@@ -36723,6 +36757,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
+                checkIndexConstraints(staticType);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
             }
@@ -40109,7 +40144,7 @@ namespace ts {
                     if (node.kind === SyntaxKind.PropertySignature || node.kind === SyntaxKind.MethodSignature) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_member, tokenToString(modifier.kind));
                     }
-                    if (node.kind === SyntaxKind.IndexSignature) {
+                    if (node.kind === SyntaxKind.IndexSignature && (modifier.kind !== SyntaxKind.StaticKeyword || !isClassLike(node.parent))) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_index_signature, tokenToString(modifier.kind));
                     }
                 }
