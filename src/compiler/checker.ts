@@ -33016,7 +33016,6 @@ namespace ts {
                         }
 
                         checkAccessorDeclarationTypesAssignable(getter, setter, getAnnotatedAccessorType, Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type);
-                        checkAccessorDeclarationTypesIdentical(getter, setter, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
                 }
                 const returnType = getTypeOfAccessors(getSymbolOfNode(node));
@@ -33026,10 +33025,6 @@ namespace ts {
             }
             checkSourceElement(node.body);
             setNodeLinksForPrivateIdentifierScope(node);
-        }
-
-        function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, message: DiagnosticMessage) {
-            return checkAccessorDeclarationTypesMatch(first, second, getAnnotatedType, isTypeIdenticalTo, message);
         }
 
         function checkAccessorDeclarationTypesAssignable(getter: AccessorDeclaration, setter: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, message: DiagnosticMessage) {
