@@ -13,13 +13,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["index.ts"]}
+{"compilerOptions":{"composite":true}}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
 
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
 
 //// [/user/username/projects/transitiveReferences/a/index.ts]
 export class A {}
@@ -155,15 +155,19 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -262,15 +266,19 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -280,7 +288,7 @@ Change:: edit on config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../b"}]}
 
 //// [/user/username/projects/transitiveReferences/nrefs/a.d.ts]
 export class X {}
@@ -354,11 +362,15 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/nrefs:
   {"directoryName":"/user/username/projects/transitiveReferences/nrefs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/node_modules/@types:
@@ -372,7 +384,7 @@ Change:: Revert config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/c/tsconfig.json]
-{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
+{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
 
 
 Output::
@@ -441,11 +453,15 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/node_modules/@types:
@@ -459,7 +475,7 @@ Change:: edit in referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../a"}]}
 
 
 Output::
@@ -528,7 +544,12 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
@@ -545,7 +566,7 @@ Change:: Revert referenced config file edit
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../a"}]}
 
 
 Output::
@@ -606,7 +627,12 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
@@ -626,10 +652,10 @@ Output::
 >> Screen clear
 [[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
 
-[96mc/tsconfig.json[0m:[93m1[0m:[93m105[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
+[96mc/tsconfig.json[0m:[93m1[0m:[93m84[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/b' not found.
 
-[7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"files":["index.ts"],"references":[{"path":"../b"}]}
-[7m [0m [91m                                                                                                        ~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+[7m [0m [91m                                                                                   ~~~~~~~~~~~~~~~[0m
 
 [[90m12:01:52 AM[0m] Found 1 error. Watching for file changes.
 
@@ -685,6 +711,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
@@ -701,7 +729,7 @@ Change:: Revert deleting referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/b/tsconfig.json]
-{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
 
 
 Output::
@@ -772,6 +800,9 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
@@ -779,6 +810,7 @@ FsWatchesRecursive::
 /user/username/projects/transitivereferences/node_modules/@types:
   {"directoryName":"/user/username/projects/transitiveReferences/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
   {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
@@ -794,10 +826,10 @@ Output::
 >> Screen clear
 [[90m12:02:01 AM[0m] File change detected. Starting incremental compilation...
 
-[96mb/tsconfig.json[0m:[93m1[0m:[93m117[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
+[96mb/tsconfig.json[0m:[93m1[0m:[93m96[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/a' not found.
 
-[7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"files":["index.ts"],"references":[{"path":"../a"}]}
-[7m [0m [91m                                                                                                                    ~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+[7m [0m [91m                                                                                               ~~~~~~~~~~~~~~~[0m
 
 [[90m12:02:05 AM[0m] Found 1 error. Watching for file changes.
 
@@ -862,6 +894,9 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
@@ -879,7 +914,7 @@ Change:: Revert deleting transitively referenced config file
 
 Input::
 //// [/user/username/projects/transitiveReferences/a/tsconfig.json]
-{"compilerOptions":{"composite":true},"files":["index.ts"]}
+{"compilerOptions":{"composite":true}}
 
 
 Output::
@@ -950,6 +985,9 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitivereferences/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/transitivereferences/c:
+  {"directoryName":"/user/username/projects/transitivereferences/c","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/c/node_modules/@types:
@@ -958,6 +996,7 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/transitiveReferences/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/transitivereferences/a:
   {"directoryName":"/user/username/projects/transitiveReferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/transitivereferences/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

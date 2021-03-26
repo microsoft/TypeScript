@@ -4628,7 +4628,7 @@ declare namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -5093,6 +5093,8 @@ declare namespace ts {
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
         useSourceOfProjectReferenceRedirect?(): boolean;
+        /** If provided, use this method to get parsed command lines for referenced projects */
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
     }
@@ -5479,6 +5481,7 @@ declare namespace ts {
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -9653,7 +9656,6 @@ declare namespace ts.server {
         getLanguageService(): never;
         getModuleResolutionHostForAutoImportProvider(): never;
         getProjectReferences(): readonly ProjectReference[] | undefined;
-        useSourceOfProjectReferenceRedirect(): boolean;
         getTypeAcquisition(): TypeAcquisition;
     }
     /**
@@ -9662,7 +9664,6 @@ declare namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
-        private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
@@ -9909,14 +9910,6 @@ declare namespace ts.server {
          * Project size for configured or external projects
          */
         private readonly projectToSizeMap;
-        /**
-         * This is a map of config file paths existence that doesnt need query to disk
-         * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
-         *   In this case the exists could be true/false based on config file is present or not
-         * - Or it is present if we have configured project open with config file at that location
-         *   In this case the exists property is always true
-         */
-        private readonly configFileExistenceInfoCache;
         private readonly hostConfiguration;
         private safelist;
         private readonly legacySafelist;
@@ -9972,12 +9965,6 @@ declare namespace ts.server {
         private delayUpdateSourceInfoProjects;
         private delayUpdateProjectsOfScriptInfoPath;
         private handleDeletedFile;
-        /**
-         * This is the callback function for the config file add/remove/change at any location
-         * that matters to open script info but doesnt have configured project open
-         * for the config file
-         */
-        private onConfigFileChangeForOpenScriptInfo;
         private removeProject;
         private assignOrphanScriptInfosToInferredProject;
         /**
@@ -9987,22 +9974,10 @@ declare namespace ts.server {
         private closeOpenFile;
         private deleteScriptInfo;
         private configFileExists;
-        private setConfigFileExistenceByNewConfiguredProject;
         /**
          * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
          */
         private configFileExistenceImpactsRootOfInferredProject;
-        private setConfigFileExistenceInfoByClosedConfiguredProject;
-        private logConfigFileWatchUpdate;
-        /**
-         * Create the watcher for the configFileExistenceInfo
-         */
-        private createConfigFileWatcherOfConfigFileExistence;
-        /**
-         * Close the config file watcher in the cached ConfigFileExistenceInfo
-         *   if there arent any open files that are root of inferred project
-         */
-        private closeConfigFileWatcherOfConfigFileExistenceInfo;
         /**
          * This is called on file close, so that we stop watching the config file for this script info
          */
@@ -10068,7 +10043,6 @@ declare namespace ts.server {
          * This does not reload contents of open files from disk. But we could do that if needed
          */
         reloadProjects(): void;
-        private delayReloadConfiguredProjectForFiles;
         /**
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately

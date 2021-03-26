@@ -316,6 +316,8 @@ namespace ts {
         getPackageJsonAutoImportProvider?(): Program | undefined;
         /* @internal */
         sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     }
 
     /* @internal */

@@ -1416,6 +1416,160 @@ bar;`
             });
         });
 
+        describe("when new file is added to the referenced project", () => {
+            function setup(extendOptionsProject2?: CompilerOptions) {
+                const config1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        },
+                        exclude: ["temp"]
+                    })
+                };
+                const class1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
+                    content: `class class1 {}`
+                };
+                const class1Dts: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.d.ts`,
+                    content: `declare class class1 {}`
+                };
+                const config2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true,
+                            ...(extendOptionsProject2 || {})
+                        },
+                        references: [
+                            { path: "../project1" }
+                        ]
+                    })
+                };
+                const class2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
+                    content: `class class2 {}`
+                };
+                const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+                const session = createSession(host);
+                openFilesForSession([class2], session);
+                const service = session.getProjectService();
+                return { host, session, service, class1, class1Dts, class2, config1, config2 };
+            }
+
+            it("when referenced project is not open", () => {
+                const { host, service, class1, class2, config2 } = setup();
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Add output from new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+
+            it("when referenced project is open", () => {
+                const { host, session, service, class1, class2, config1, config2 } = setup();
+                openFilesForSession([class1], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(3);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Add output from new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+
+            it("when referenced project is not open with disableSourceOfProjectReferenceRedirect", () => {
+                const { host, service, class1Dts, class2, config2 } = setup({ disableSourceOfProjectReferenceRedirect: true });
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Add output of new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Delete output from new class to referenced project
+                host.deleteFile(class3Dts);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Write back output of new class to referenced project
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+            });
+
+            it("when referenced project is open with disableSourceOfProjectReferenceRedirect", () => {
+                const { host, session, service, class1, class1Dts, class2, config1, config2 } = setup({ disableSourceOfProjectReferenceRedirect: true });
+                openFilesForSession([class1], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(3);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Add output of new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Delete output from new class to referenced project
+                host.deleteFile(class3Dts);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Write back output of new class to referenced project
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+            });
+        });
+
         describe("auto import with referenced project", () => {
             function verifyAutoImport(built: boolean, disableSourceOfProjectReferenceRedirect?: boolean) {
                 const solnConfig: File = {

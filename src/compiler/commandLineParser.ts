@@ -1564,7 +1564,7 @@ namespace ts {
      */
     export function getParsedCommandLineOfConfigFile(
         configFileName: string,
-        optionsToExtend: CompilerOptions,
+        optionsToExtend: CompilerOptions | undefined,
         host: ParseConfigFileHost,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions,
