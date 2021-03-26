@@ -1014,7 +1014,7 @@ namespace ts {
             jsDocDiagnostics = undefined!;
             parsingContext = 0;
             identifiers = undefined!;
-            notParenthesizedArrow = undefined!;
+            notParenthesizedArrow = undefined;
             topLevel = true;
         }
 

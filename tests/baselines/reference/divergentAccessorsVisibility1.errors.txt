@@ -1,9 +1,9 @@
-tests/cases/compiler/divergentAccessorsVisibility1.ts(11,19): error TS2803: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(12,9): error TS2803: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(20,17): error TS2803: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(21,9): error TS2803: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(23,17): error TS2803: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/divergentAccessorsVisibility1.ts(24,19): error TS2803: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(11,19): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(12,9): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(20,17): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(21,9): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(23,17): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(24,19): error TS2808: A get accessor must be at least as accessible as the setter
 tests/cases/compiler/divergentAccessorsVisibility1.ts(66,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
 tests/cases/compiler/divergentAccessorsVisibility1.ts(69,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
 tests/cases/compiler/divergentAccessorsVisibility1.ts(72,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
@@ -64,10 +64,10 @@ tests/cases/compiler/divergentAccessorsVisibility1.ts(156,11): error TS2341: Pro
     
         protected get ProtectedPublic() { return 0; }
                       ~~~~~~~~~~~~~~~
-!!! error TS2803: A get accessor must be at least as accessible as the setter
+!!! error TS2808: A get accessor must be at least as accessible as the setter
         set ProtectedPublic(v) { return; }
             ~~~~~~~~~~~~~~~
-!!! error TS2803: A get accessor must be at least as accessible as the setter
+!!! error TS2808: A get accessor must be at least as accessible as the setter
     
         protected get ProtectedProtected() { return 0; }
         protected set ProtectedProtected(v) { return; }
@@ -77,17 +77,17 @@ tests/cases/compiler/divergentAccessorsVisibility1.ts(156,11): error TS2341: Pro
     
         private get PrivatePublic() { return 0; }
                     ~~~~~~~~~~~~~
-!!! error TS2803: A get accessor must be at least as accessible as the setter
+!!! error TS2808: A get accessor must be at least as accessible as the setter
         set PrivatePublic(v) { return; }
             ~~~~~~~~~~~~~
-!!! error TS2803: A get accessor must be at least as accessible as the setter
+!!! error TS2808: A get accessor must be at least as accessible as the setter
     
         private get PrivateProtected() { return 0; }
                     ~~~~~~~~~~~~~~~~
-!!! error TS2803: A get accessor must be at least as accessible as the setter
+!!! error TS2808: A get accessor must be at least as accessible as the setter
         protected set PrivateProtected(v) { return; }
                       ~~~~~~~~~~~~~~~~
-!!! error TS2803: A get accessor must be at least as accessible as the setter
+!!! error TS2808: A get accessor must be at least as accessible as the setter
     
         private get PrivatePrivate() { return 0; }
         private set PrivatePrivate(v) { return; }

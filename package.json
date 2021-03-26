@@ -53,9 +53,9 @@
         "@types/source-map-support": "latest",
         "@types/through2": "latest",
         "@types/xml2js": "^0.4.0",
-        "@typescript-eslint/eslint-plugin": "4.5.0",
-        "@typescript-eslint/experimental-utils": "4.5.0",
-        "@typescript-eslint/parser": "4.5.0",
+        "@typescript-eslint/eslint-plugin": "^4.19.0",
+        "@typescript-eslint/experimental-utils": "^4.19.0",
+        "@typescript-eslint/parser": "^4.19.0",
         "async": "latest",
         "azure-devops-node-api": "^10.1.0",
         "browser-resolve": "^1.11.2",
@@ -94,7 +94,7 @@
         "remove-internal": "^2.9.2",
         "source-map-support": "latest",
         "through2": "latest",
-        "typescript": "^4.0.0-dev.20200624",
+        "typescript": "^4.2.3",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"
@@ -129,6 +129,5 @@
     },
     "volta": {
         "node": "14.15.5"
-    },
-    "dependencies": {}
+    }
 }

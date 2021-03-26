@@ -133,7 +133,7 @@ namespace ts {
             moduleInfo = undefined!;
             exportFunction = undefined!;
             contextObject = undefined!;
-            hoistedStatements = undefined!;
+            hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined!;
             return updated;
         }

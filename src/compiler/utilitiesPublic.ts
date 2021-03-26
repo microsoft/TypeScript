@@ -490,7 +490,7 @@ namespace ts {
         return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
-        if (symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+        if (symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
             return idText(symbol.valueDeclaration.name);
         }
         return unescapeLeadingUnderscores(symbol.escapedName);
@@ -1149,8 +1149,8 @@ namespace ts {
 
     // Private Identifiers
     /*@internal*/
-    export function isPrivateIdentifierPropertyDeclaration(node: Node): node is PrivateIdentifierPropertyDeclaration {
-        return isPropertyDeclaration(node) && isPrivateIdentifier(node.name);
+    export function isPrivateIdentifierClassElementDeclaration(node: Node): node is PrivateClassElementDeclaration {
+        return (isPropertyDeclaration(node) || isMethodOrAccessor(node)) && isPrivateIdentifier(node.name);
     }
 
     /*@internal*/
