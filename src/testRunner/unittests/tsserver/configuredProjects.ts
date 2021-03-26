@@ -1093,6 +1093,137 @@ foo();`
             });
             assert.equal(service.tryGetDefaultProjectForFile(server.toNormalizedPath(fooDts)), service.configuredProjects.get(barConfig.path));
         });
+
+        describe("watches extended config files", () => {
+            function getService(additionalFiles?: File[]) {
+                const alphaExtendedConfig: File = {
+                    path: `${tscWatch.projectRoot}/extended/alpha.tsconfig.json`,
+                    content: "{}"
+                };
+                const bravoExtendedConfig: File = {
+                    path: `${tscWatch.projectRoot}/extended/bravo.tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json"
+                    })
+                };
+                const aConfig: File = {
+                    path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "../extended/alpha.tsconfig.json",
+                        files: ["a.ts"]
+                    })
+                };
+                const aFile: File = {
+                    path: `${tscWatch.projectRoot}/a/a.ts`,
+                    content: `let a = 1;`
+                };
+                const bConfig: File = {
+                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                    content: JSON.stringify({
+                        extends: "../extended/bravo.tsconfig.json",
+                        files: ["b.ts"]
+                    })
+                };
+                const bFile: File = {
+                    path: `${tscWatch.projectRoot}/b/b.ts`,
+                    content: `let b = 1;`
+                };
+
+                const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || emptyArray)]);
+                const projectService = createProjectService(host);
+                return { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
+            }
+
+            it("should watch the extended configs of multiple projects", () => {
+                const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService();
+
+                projectService.openClientFile(aFile.path);
+                projectService.openClientFile(bFile.path);
+                checkNumberOfConfiguredProjects(projectService, 2);
+                const aProject = projectService.configuredProjects.get(aConfig.path)!;
+                const bProject = projectService.configuredProjects.get(bConfig.path)!;
+                checkProjectActualFiles(aProject, [aFile.path, aConfig.path, alphaExtendedConfig.path]);
+                checkProjectActualFiles(bProject, [bFile.path, bConfig.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+                assert.isUndefined(aProject.getCompilerOptions().strict);
+                assert.isUndefined(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+                host.writeFile(alphaExtendedConfig.path, JSON.stringify({
+                    compilerOptions: {
+                        strict: true
+                    }
+                }));
+                assert.isTrue(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(3);
+                assert.isTrue(aProject.getCompilerOptions().strict);
+                assert.isTrue(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+                host.writeFile(bravoExtendedConfig.path, JSON.stringify({
+                    extends: "./alpha.tsconfig.json",
+                    compilerOptions: {
+                        strict: false
+                    }
+                }));
+                assert.isFalse(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(2);
+                assert.isTrue(aProject.getCompilerOptions().strict);
+                assert.isFalse(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+                host.writeFile(bConfig.path, JSON.stringify({
+                    extends: "../extended/alpha.tsconfig.json",
+                }));
+                assert.isFalse(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(2);
+                assert.isTrue(aProject.getCompilerOptions().strict);
+                assert.isTrue(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, alphaExtendedConfig.path]);
+
+                host.writeFile(alphaExtendedConfig.path, "{}");
+                assert.isTrue(projectService.hasPendingProjectUpdate(aProject));
+                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
+                host.checkTimeoutQueueLengthAndRun(3);
+                assert.isUndefined(aProject.getCompilerOptions().strict);
+                assert.isUndefined(bProject.getCompilerOptions().strict);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, alphaExtendedConfig.path]);
+            });
+
+            it("should stop watching the extended configs of closed projects", () => {
+                const dummy: File = {
+                    path: `${tscWatch.projectRoot}/dummy/dummy.ts`,
+                    content: `let dummy = 1;`
+                };
+                const dummyConfig: File = {
+                    path: `${tscWatch.projectRoot}/dummy/tsconfig.json`,
+                    content: "{}"
+                };
+                const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService([dummy, dummyConfig]);
+
+                projectService.openClientFile(aFile.path);
+                projectService.openClientFile(bFile.path);
+                projectService.openClientFile(dummy.path);
+                checkNumberOfConfiguredProjects(projectService, 3);
+                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path, dummyConfig.path]);
+
+                projectService.closeClientFile(bFile.path);
+                projectService.closeClientFile(dummy.path);
+                projectService.openClientFile(dummy.path);
+
+                checkNumberOfConfiguredProjects(projectService, 2);
+                checkWatchedFiles(host, [aConfig.path, libFile.path, alphaExtendedConfig.path, dummyConfig.path]);
+
+                projectService.closeClientFile(aFile.path);
+                projectService.closeClientFile(dummy.path);
+                projectService.openClientFile(dummy.path);
+
+                checkNumberOfConfiguredProjects(projectService, 1);
+                checkWatchedFiles(host, [libFile.path, dummyConfig.path]);
+            });
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {

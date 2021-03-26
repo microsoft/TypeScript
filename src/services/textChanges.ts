@@ -261,7 +261,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = new Map<string, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -399,19 +399,12 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, options), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
         }
 
-        public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
-            const pos = before.getStart(sourceFile);
-            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), { suffix: " " });
+        public insertModifierAt(sourceFile: SourceFile, pos: number, modifier: SyntaxKind, options: InsertNodeOptions = {}): void {
+            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), options);
         }
 
-        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
-            if (!before.modifiers) {
-                this.insertModifierBefore(sourceFile, modifier, before);
-                return;
-            }
-
-            const pos = before.modifiers.end;
-            this.insertNodeAt(sourceFile, pos, factory.createToken(modifier), { prefix: " " });
+        public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+            return this.insertModifierAt(sourceFile, before.getStart(sourceFile), modifier, { suffix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -843,7 +836,7 @@ namespace ts.textChanges {
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
-                        this.deleteRange(sourceFile, rangeOfTypeParameters(node));
+                        this.deleteRange(sourceFile, rangeOfTypeParameters(sourceFile, node));
                     }
                     else {
                         deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);
@@ -1044,11 +1037,12 @@ namespace ts.textChanges {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine);
-        const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
+        const onBeforeEmitNode: PrintHandlers["onBeforeEmitNode"] = node => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);
             }
-            printCallback(hint, node);
+        };
+        const onAfterEmitNode: PrintHandlers["onAfterEmitNode"] = node => {
             if (node) {
                 setEnd(node, lastNonTriviaPosition);
             }
@@ -1170,7 +1164,8 @@ namespace ts.textChanges {
         }
 
         return {
-            onEmitNode,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
             onBeforeEmitToken,
@@ -1368,7 +1363,11 @@ namespace ts.textChanges {
                     break;
 
                 default:
-                    if (isImportClause(node.parent) && node.parent.name === node) {
+                    if (!node.parent) {
+                        // a misbehaving client can reach here with the SourceFile node
+                        deleteNode(changes, sourceFile, node);
+                    }
+                    else if (isImportClause(node.parent) && node.parent.name === node) {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
                     else if (isCallExpression(node.parent) && contains(node.parent.arguments, node)) {

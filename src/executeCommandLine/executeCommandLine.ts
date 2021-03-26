@@ -4,12 +4,57 @@ namespace ts {
         value: string;
     }
 
-    function countLines(program: Program): number {
-        let count = 0;
+    function countLines(program: Program): Map<number> {
+        const counts = getCountsMap();
         forEach(program.getSourceFiles(), file => {
-            count += getLineStarts(file).length;
+            const key = getCountKey(program, file);
+            const lineCount = getLineStarts(file).length;
+            counts.set(key, counts.get(key)! + lineCount);
         });
-        return count;
+        return counts;
+    }
+
+    function countNodes(program: Program): Map<number> {
+        const counts = getCountsMap();
+        forEach(program.getSourceFiles(), file => {
+            const key = getCountKey(program, file);
+            counts.set(key, counts.get(key)! + file.nodeCount);
+        });
+        return counts;
+    }
+
+    function getCountsMap() {
+        const counts = createMap<number>();
+        counts.set("Library", 0);
+        counts.set("Definitions", 0);
+        counts.set("TypeScript", 0);
+        counts.set("JavaScript", 0);
+        counts.set("JSON", 0);
+        counts.set("Other", 0);
+        return counts;
+    }
+
+    function getCountKey(program: Program, file: SourceFile) {
+        if (program.isSourceFileDefaultLibrary(file)) {
+            return "Library";
+        }
+        else if (file.isDeclarationFile) {
+            return "Definitions";
+        }
+
+        const path = file.path;
+        if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+            return "TypeScript";
+        }
+        else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
+            return "JavaScript";
+        }
+        else if (fileExtensionIs(path, Extension.Json)) {
+            return "JSON";
+        }
+        else {
+            return "Other";
+        }
     }
 
     function updateReportDiagnostic(
@@ -456,7 +501,7 @@ namespace ts {
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
-        tracing.dumpLegend();
+        dumpTracingLegend(); // Will no-op if there hasn't been any tracing
         return sys.exit(exitStatus);
     }
 
@@ -617,11 +662,12 @@ namespace ts {
 
     function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
         if (canReportDiagnostics(system, compilerOptions)) {
-            performance.enable();
+            performance.enable(system);
         }
 
         if (canTrace(system, compilerOptions)) {
-            tracing.startTracing(compilerOptions.configFilePath, compilerOptions.generateTrace!, isBuildMode);
+            startTracing(isBuildMode ? "build" : "project",
+                         compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
     }
 
@@ -629,7 +675,7 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
 
         if (canTrace(sys, compilerOptions)) {
-            tracing.stopTracing(program.getTypeCatalog());
+            tracing?.stopTracing();
         }
 
         let statistics: Statistic[];
@@ -637,8 +683,22 @@ namespace ts {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
-            reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", program.getNodeCount());
+
+            const lineCounts = countLines(program);
+            const nodeCounts = countNodes(program);
+            if (compilerOptions.extendedDiagnostics) {
+                for (const key of arrayFrom(lineCounts.keys())) {
+                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                }
+                for (const key of arrayFrom(nodeCounts.keys())) {
+                    reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!);
+                }
+            }
+            else {
+                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+                reportCountStatistic("Nodes", reduceLeftIterator(nodeCounts.values(), (sum, count) => sum + count, 0));
+            }
+
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());
@@ -648,19 +708,22 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            const programTime = performance.getDuration("Program");
-            const bindTime = performance.getDuration("Bind");
-            const checkTime = performance.getDuration("Check");
-            const emitTime = performance.getDuration("Emit");
+            const isPerformanceEnabled = performance.isEnabled();
+            const programTime = isPerformanceEnabled ? performance.getDuration("Program") : 0;
+            const bindTime = isPerformanceEnabled ? performance.getDuration("Bind") : 0;
+            const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
+            const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
                 const caches = program.getRelationCacheSizes();
                 reportCountStatistic("Assignability cache size", caches.assignable);
                 reportCountStatistic("Identity cache size", caches.identity);
                 reportCountStatistic("Subtype cache size", caches.subtype);
                 reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
-                performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                if (isPerformanceEnabled) {
+                    performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                }
             }
-            else {
+            else if (isPerformanceEnabled) {
                 // Individual component times.
                 // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
                 // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -672,10 +735,16 @@ namespace ts {
                 reportTimeStatistic("Check time", checkTime);
                 reportTimeStatistic("Emit time", emitTime);
             }
-            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            if (isPerformanceEnabled) {
+                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            }
             reportStatistics();
-
-            performance.disable();
+            if (!isPerformanceEnabled) {
+                sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+            }
+            else {
+                performance.disable();
+            }
         }
 
         function reportStatistics() {

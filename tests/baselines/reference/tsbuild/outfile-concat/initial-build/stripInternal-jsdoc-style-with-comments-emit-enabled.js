@@ -48,7 +48,6 @@ function f() {
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "first",
   },
   "files": [
     "first_PART1.ts",
@@ -117,7 +116,6 @@ class C {
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "bundledPackageName": "second",
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
@@ -144,7 +142,6 @@ c.doSomething();
     "stripInternal": true,
     "outFile": "./thirdjs/output/third-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "third",
   },
   "files": [
     "third_part1.ts"
@@ -2713,64 +2710,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../second",
-    "sourceFiles": [
-      "../second/second_part1.ts",
-      "../second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 3435,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 77,
-          "kind": "text"
-        },
-        {
-          "pos": 77,
-          "end": 257,
-          "kind": "internal"
-        },
-        {
-          "pos": 259,
-          "end": 291,
-          "kind": "text"
-        },
-        {
-          "pos": 291,
-          "end": 803,
-          "kind": "internal"
-        },
-        {
-          "pos": 805,
-          "end": 808,
-          "kind": "text"
-        },
-        {
-          "pos": 808,
-          "end": 1341,
-          "kind": "internal"
-        },
-        {
-          "pos": 1343,
-          "end": 1391,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":3435,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":77,"kind":"text"},{"pos":77,"end":257,"kind":"internal"},{"pos":259,"end":291,"kind":"text"},{"pos":291,"end":803,"kind":"internal"},{"pos":805,"end":808,"kind":"text"},{"pos":808,"end":1341,"kind":"internal"},{"pos":1343,"end":1391,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2956,6 +2896,67 @@ declare class C {
 }
 
 ======================================================================
+
+//// [/src/2/second-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../second",
+    "sourceFiles": [
+      "../second/second_part1.ts",
+      "../second/second_part2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 3435,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 77,
+          "kind": "text"
+        },
+        {
+          "pos": 77,
+          "end": 257,
+          "kind": "internal"
+        },
+        {
+          "pos": 259,
+          "end": 291,
+          "kind": "text"
+        },
+        {
+          "pos": 291,
+          "end": 803,
+          "kind": "internal"
+        },
+        {
+          "pos": 805,
+          "end": 808,
+          "kind": "text"
+        },
+        {
+          "pos": 808,
+          "end": 1341,
+          "kind": "internal"
+        },
+        {
+          "pos": 1343,
+          "end": 1391,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 485
+}
 
 //// [/src/first/bin/first-output.d.ts]
 /**@internal*/ interface TheFirst {
@@ -3264,6 +3265,39 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":54,"kind":"internal"},{"pos":56,"end":172,"kind":"text"}]}},"version":"FakeTSVersion"}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-110)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+internal: (0-54)
+/**@internal*/ interface TheFirst {
+    none: any;
+}
+----------------------------------------------------------------------
+text: (56-172)
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+======================================================================
+
+//// [/src/first/bin/first-output.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "..",
@@ -3296,38 +3330,9 @@ sourceFile:../first_part3.ts
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 290
 }
-
-//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/first/bin/first-output.js
-----------------------------------------------------------------------
-text: (0-110)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-======================================================================
-======================================================================
-File:: /src/first/bin/first-output.d.ts
-----------------------------------------------------------------------
-internal: (0-54)
-/**@internal*/ interface TheFirst {
-    none: any;
-}
-----------------------------------------------------------------------
-text: (56-172)
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare const s = "Hello, world";
@@ -5466,85 +5471,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "../..",
-    "sourceFiles": [
-      "../../third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 110,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 110,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 110,
-          "end": 3545,
-          "kind": "prepend",
-          "data": "../../../2/second-output.js",
-          "texts": [
-            {
-              "pos": 110,
-              "end": 3545,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 3545,
-          "end": 3581,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 116,
-          "kind": "prepend",
-          "data": "../../../first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 116,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 116,
-          "end": 276,
-          "kind": "prepend",
-          "data": "../../../2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 116,
-              "end": 276,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 276,
-          "end": 295,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":110,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":110,"kind":"text"}]},{"pos":110,"end":3545,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":110,"end":3545,"kind":"text"}]},{"pos":3545,"end":3581,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":116,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":116,"kind":"text"}]},{"pos":116,"end":276,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":116,"end":276,"kind":"text"}]},{"pos":276,"end":295,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -5706,4 +5633,86 @@ text: (276-295)
 declare var c: C;
 
 ======================================================================
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "bundle": {
+    "commonSourceDirectory": "../..",
+    "sourceFiles": [
+      "../../third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 110,
+          "end": 3545,
+          "kind": "prepend",
+          "data": "../../../2/second-output.js",
+          "texts": [
+            {
+              "pos": 110,
+              "end": 3545,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 3545,
+          "end": 3581,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 116,
+          "kind": "prepend",
+          "data": "../../../first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 116,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 116,
+          "end": 276,
+          "kind": "prepend",
+          "data": "../../../2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 116,
+              "end": 276,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 276,
+          "end": 295,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 724
+}
 

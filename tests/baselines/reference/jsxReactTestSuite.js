@@ -133,19 +133,21 @@ var x =
     <Composite2 />
 </Composite>;
 var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
-    "baz" + "bug"} attr3={"foo" + "bar" +
-    "baz" + "bug"} attr4="baz">
+        "baz" + "bug"} attr3={"foo" + "bar" +
+        "baz" + "bug"
+    // Extra line here.
+    } attr4="baz">
   </div>;
 (<div>
-    
-    
+    {/* A comment at the beginning */}
+    {/* A second comment at the beginning */}
     <span>
-      
+      {/* A nested comment */}
     </span>
-    
+    {/* A sandwiched comment */}
     <br />
-    
-    
+    {/* A comment at the end */}
+    {/* A second comment at the end */}
   </div>);
 (<div 
 /* a multi-line

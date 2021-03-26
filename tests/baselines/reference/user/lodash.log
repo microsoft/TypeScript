@@ -53,8 +53,8 @@ node_modules/lodash/_baseFlatten.js(24,22): error TS2349: This expression is not
 node_modules/lodash/_baseFlatten.js(24,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/lodash/_baseHas.js(15,26): error TS1016: A required parameter cannot follow an optional parameter.
-node_modules/lodash/_baseHas.js(16,56): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string | number | symbol'.
-  Type 'any[]' is not assignable to type 'string | number | symbol'.
+node_modules/lodash/_baseHas.js(16,56): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'PropertyKey'.
+  Type 'any[]' is not assignable to type 'PropertyKey'.
     Type 'any[]' is not assignable to type 'string'.
 node_modules/lodash/_baseHasIn.js(9,28): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_baseHasIn.js(10,28): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
@@ -93,7 +93,7 @@ node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' 
 node_modules/lodash/_cloneArrayBuffer.js(11,20): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: Buffer, isDeep?: boolean | undefined) => Buffer'.
-node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer\"": (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: (buffer: Buffer, isDeep?: boolean | undefined) => Buffer; }'.
 node_modules/lodash/_cloneBuffer.js(29,56): error TS2351: This expression is not constructable.
   Type 'Function' has no construct signatures.
 node_modules/lodash/_createAggregator.js(19,60): error TS2554: Expected 0-1 arguments, but got 2.
@@ -125,7 +125,7 @@ node_modules/lodash/_createFlow.js(56,13): error TS2454: Variable 'wrapper' is u
 node_modules/lodash/_createFlow.js(57,13): error TS2454: Variable 'wrapper' is used before being assigned.
 node_modules/lodash/_createFlow.js(57,21): error TS2339: Property 'thru' does not exist on type 'LodashWrapper'.
 node_modules/lodash/_createFlow.js(65,24): error TS2339: Property 'plant' does not exist on type 'LodashWrapper'.
-node_modules/lodash/_createHybrid.js(44,49): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
+node_modules/lodash/_createHybrid.js(44,49): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_createHybrid.js(59,42): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
   Type 'undefined' is not assignable to type 'any[]'.
@@ -133,7 +133,7 @@ node_modules/lodash/_createHybrid.js(62,52): error TS2345: Argument of type 'any
   Type 'undefined' is not assignable to type 'any[]'.
 node_modules/lodash/_createHybrid.js(64,15): error TS2454: Variable 'holdersCount' is used before being assigned.
 node_modules/lodash/_createHybrid.js(65,31): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/_createHybrid.js(68,9): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
+node_modules/lodash/_createHybrid.js(68,9): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_createHybrid.js(68,46): error TS2339: Property 'placeholder' does not exist on type '(...args: any[]) => any'.
 node_modules/lodash/_createHybrid.js(69,40): error TS2532: Object is possibly 'undefined'.
@@ -141,16 +141,16 @@ node_modules/lodash/_createHybrid.js(73,38): error TS2538: Type 'Function' canno
 node_modules/lodash/_createHybrid.js(81,18): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_createHybrid.js(82,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-node_modules/lodash/_createWrap.js(94,29): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
+node_modules/lodash/_createWrap.js(94,29): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
-node_modules/lodash/_createWrap.js(96,26): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
+node_modules/lodash/_createWrap.js(96,26): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_createWrap.js(97,100): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/_createWrap.js(98,28): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
+node_modules/lodash/_createWrap.js(98,28): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
-node_modules/lodash/_createWrap.js(100,44): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[func: TimerHandler, bitmask: number, thisArg?: any, partials?: any[] | undefined, holders?: any[] | undefined, partialsRight?: any[] | undefined, holdersRight?: any[] | undefined, argPos?: any[] | undefined, ary?: number | undefined, arity?: number | undefined]'.
+node_modules/lodash/_createWrap.js(100,44): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[func: string | Function, bitmask: number, thisArg?: any, partials?: any[] | undefined, holders?: any[] | undefined, partialsRight?: any[] | undefined, holdersRight?: any[] | undefined, argPos?: any[] | undefined, ary?: number | undefined, arity?: number | undefined]'.
   Target requires 2 element(s) but source may have fewer.
-node_modules/lodash/_createWrap.js(103,51): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
+node_modules/lodash/_createWrap.js(103,51): error TS2345: Argument of type 'string | Function' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_customDefaultsMerge.js(22,35): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
 node_modules/lodash/_customOmitClone.js(9,20): error TS8024: JSDoc '@param' tag has name 'key', but there is no parameter with that name.
@@ -172,7 +172,7 @@ node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is 
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
-node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_nodeUtil\"": any; }'.
+node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: any; }'.
 node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'false | (Global & typeof globalThis)'.
   Property 'process' does not exist on type 'false'.
 node_modules/lodash/_overRest.js(15,32): error TS1016: A required parameter cannot follow an optional parameter.
@@ -253,9 +253,7 @@ node_modules/lodash/core.js(2199,41): error TS8024: JSDoc '@param' tag has name 
 node_modules/lodash/core.js(2489,21): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 node_modules/lodash/core.js(2489,37): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/core.js(2660,12): error TS2554: Expected 3-5 arguments, but got 2.
-node_modules/lodash/core.js(3261,58): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string | number | symbol'.
-  Type 'any[]' is not assignable to type 'string | number | symbol'.
-    Type 'any[]' is not assignable to type 'string'.
+node_modules/lodash/core.js(3261,58): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'PropertyKey'.
 node_modules/lodash/core.js(3370,53): error TS2538: Type 'any[]' cannot be used as an index type.
 node_modules/lodash/core.js(3440,41): error TS2769: No overload matches this call.
   The last overload gave the following error.
@@ -363,7 +361,7 @@ node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ attempt:
 node_modules/lodash/inRange.js(43,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/includes.js(40,49): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/intersectionBy.js(41,55): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/isBuffer\"": any; }'.
+node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ exports: any; }'.
 node_modules/lodash/isEqual.js(32,10): error TS2554: Expected 3-5 arguments, but got 2.
 node_modules/lodash/isEqualWith.js(38,59): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'boolean'.
 node_modules/lodash/iteratee.js(50,74): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.

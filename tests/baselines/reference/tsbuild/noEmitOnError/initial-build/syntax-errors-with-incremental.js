@@ -153,8 +153,22 @@ console.log("hi");
 
 
 //// [/src/dev-build/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-9621097780-export interface A {\r\n    name: string;\r\n}","signature":"-9621097780-export interface A {\r\n    name: string;\r\n}","affectsGlobalScope":false},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","affectsGlobalScope":false},{"version":"11373096570-console.log(\"hi\");\r\nexport { }","signature":"11373096570-console.log(\"hi\");\r\nexport { }","affectsGlobalScope":false}],"options":{"outDir":"./","noEmitOnError":true,"incremental":true,"configFilePath":"../tsconfig.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+
+//// [/src/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../shared/types/db.ts",
+      "../src/main.ts",
+      "../src/other.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../shared/types/db.ts"
+      ]
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -163,17 +177,17 @@ console.log("hi");
       },
       "../shared/types/db.ts": {
         "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
-        "signature": "-6245214333-export interface A {\r\n    name: string;\r\n}\r\n",
+        "signature": "-9621097780-export interface A {\r\n    name: string;\r\n}",
         "affectsGlobalScope": false
       },
       "../src/main.ts": {
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-        "signature": "-4882119183-export {};\r\n",
+        "signature": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
         "affectsGlobalScope": false
       },
       "../src/other.ts": {
         "version": "11373096570-console.log(\"hi\");\r\nexport { }",
-        "signature": "-4882119183-export {};\r\n",
+        "signature": "11373096570-console.log(\"hi\");\r\nexport { }",
         "affectsGlobalScope": false
       }
     },
@@ -188,7 +202,11 @@ console.log("hi");
         "../shared/types/db.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "../src/main.ts": [
+        "../shared/types/db.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "../shared/types/db.ts",
@@ -196,7 +214,8 @@ console.log("hi");
       "../src/other.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1856
 }
 
 

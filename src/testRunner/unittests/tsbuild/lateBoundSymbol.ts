@@ -5,10 +5,16 @@ namespace ts {
             fs: () => loadProjectFromDisk("tests/projects/lateBoundSymbol"),
             scenario: "lateBoundSymbol",
             commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsUnchanged,
-                modifyFs: fs => replaceText(fs, "/src/src/main.ts", "const x = 10;", ""),
-            }]
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => replaceText(fs, "/src/src/main.ts", "const x = 10;", ""),
+                },
+                {
+                    buildKind: BuildKind.IncrementalDtsUnchanged,
+                    modifyFs: fs => appendText(fs, "/src/src/main.ts", "const x = 10;"),
+                },
+            ]
         });
     });
 }

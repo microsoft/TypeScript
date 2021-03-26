@@ -409,7 +409,7 @@ namespace ts.projectSystem {
             checkErrors([serverUtilities.path, app.path]);
 
             function checkErrors(openFiles: [string, string]) {
-                verifyGetErrRequestNoErrors({ session, host, files: openFiles, existingTimeouts: 2 });
+                verifyGetErrRequestNoErrors({ session, host, files: openFiles });
             }
         });
 

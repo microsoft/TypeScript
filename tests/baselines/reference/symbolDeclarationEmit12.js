@@ -16,7 +16,7 @@ module M {
 var M;
 (function (M) {
     class C {
-        [Symbol.toPrimitive](x) { }
+        [(Symbol.iterator, Symbol.toPrimitive)](x) { }
         [Symbol.isConcatSpreadable]() {
             return undefined;
         }

@@ -13,12 +13,12 @@ declare function eval(x: string): any;
 
 /**
  * Converts a string to an integer.
- * @param s A string to convert into a number.
- * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+ * @param string A string to convert into a number.
+ * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
  * All other strings are considered decimal.
  */
-declare function parseInt(s: string, radix?: number): number;
+declare function parseInt(string: string, radix?: number): number;
 
 /**
  * Converts a string to a floating-point number.
@@ -177,14 +177,14 @@ interface ObjectConstructor {
      * @param p The property name.
      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
      */
-    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty<T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): T;
 
     /**
      * Adds one or more properties to an object, and/or modifies attributes of existing properties.
      * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
      * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
      */
-    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
+    defineProperties<T>(o: T, properties: PropertyDescriptorMap & ThisType<any>): T;
 
     /**
      * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -1199,7 +1199,7 @@ interface ConcatArray<T> {
 
 interface Array<T> {
     /**
-     * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
+     * Gets or sets the length of the array. This is a number one higher than the highest index in the array.
      */
     length: number;
     /**
@@ -1212,44 +1212,54 @@ interface Array<T> {
     toLocaleString(): string;
     /**
      * Removes the last element from an array and returns it.
+     * If the array is empty, undefined is returned and the array is not modified.
      */
     pop(): T | undefined;
     /**
-     * Appends new elements to an array, and returns the new length of the array.
-     * @param items New elements of the Array.
+     * Appends new elements to the end of an array, and returns the new length of the array.
+     * @param items New elements to add to the array.
      */
     push(...items: T[]): number;
     /**
      * Combines two or more arrays.
-     * @param items Additional items to add to the end of array1.
+     * This method returns a new array without modifying any existing arrays.
+     * @param items Additional arrays and/or items to add to the end of the array.
      */
     concat(...items: ConcatArray<T>[]): T[];
     /**
      * Combines two or more arrays.
-     * @param items Additional items to add to the end of array1.
+     * This method returns a new array without modifying any existing arrays.
+     * @param items Additional arrays and/or items to add to the end of the array.
      */
     concat(...items: (T | ConcatArray<T>)[]): T[];
     /**
-     * Adds all the elements of an array separated by the specified separator string.
-     * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
+     * Adds all the elements of an array into a string, separated by the specified separator string.
+     * @param separator A string used to separate one element of the array from the next in the resulting string. If omitted, the array elements are separated with a comma.
      */
     join(separator?: string): string;
     /**
-     * Reverses the elements in an Array.
+     * Reverses the elements in an array in place.
+     * This method mutates the array and returns a reference to the same array.
      */
     reverse(): T[];
     /**
      * Removes the first element from an array and returns it.
+     * If the array is empty, undefined is returned and the array is not modified.
      */
     shift(): T | undefined;
     /**
-     * Returns a section of an array.
-     * @param start The beginning of the specified portion of the array.
-     * @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
+     * Returns a copy of a section of an array.
+     * For both start and end, a negative index can be used to indicate an offset from the end of the array.
+     * For example, -2 refers to the second to last element of the array.
+     * @param start The beginning index of the specified portion of the array.
+     * If start is undefined, then the slice begins at index 0.
+     * @param end The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.
+     * If end is undefined, then the slice extends to the end of the array.
      */
     slice(start?: number, end?: number): T[];
     /**
-     * Sorts an array.
+     * Sorts an array in place.
+     * This method mutates the array and returns a reference to the same array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
@@ -1262,6 +1272,7 @@ interface Array<T> {
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
+     * @returns An array containing the elements that were deleted.
      */
     splice(start: number, deleteCount?: number): T[];
     /**
@@ -1269,23 +1280,24 @@ interface Array<T> {
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      * @param items Elements to insert into the array in place of the deleted elements.
+     * @returns An array containing the elements that were deleted.
      */
     splice(start: number, deleteCount: number, ...items: T[]): T[];
     /**
-     * Inserts new elements at the start of an array.
-     * @param items  Elements to insert at the start of the Array.
+     * Inserts new elements at the start of an array, and returns the new length of the array.
+     * @param items Elements to insert at the start of the array.
      */
     unshift(...items: T[]): number;
     /**
-     * Returns the index of the first occurrence of a value in an array.
+     * Returns the index of the first occurrence of a value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
      */
     indexOf(searchElement: T, fromIndex?: number): number;
     /**
-     * Returns the index of the last occurrence of a specified value in an array.
+     * Returns the index of the last occurrence of a specified value in an array, or -1 if it is not present.
      * @param searchElement The value to locate in the array.
-     * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
+     * @param fromIndex The array index at which to begin searching backward. If fromIndex is omitted, the search starts at the last index in the array.
      */
     lastIndexOf(searchElement: T, fromIndex?: number): number;
     /**
@@ -1376,7 +1388,7 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? (unknown extends T ? never : readonly any[]) : any[];
+    isArray(arg: any): arg is any[];
     readonly prototype: any[];
 }
 
@@ -1496,7 +1508,7 @@ type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) 
 /**
  * Obtain the parameters of a constructor function type in a tuple
  */
-type ConstructorParameters<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
+type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type
@@ -1506,7 +1518,7 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
 
 /**
  * Convert string literal type to uppercase
@@ -4318,17 +4330,17 @@ declare namespace Intl {
     };
 
     interface DateTimeFormatOptions {
-        localeMatcher?: string;
-        weekday?: string;
-        era?: string;
-        year?: string;
-        month?: string;
-        day?: string;
-        hour?: string;
-        minute?: string;
-        second?: string;
-        timeZoneName?: string;
-        formatMatcher?: string;
+        localeMatcher?: "best fit" | "lookup";
+        weekday?: "long" | "short" | "narrow";
+        era?: "long" | "short" | "narrow";
+        year?: "numeric" | "2-digit";
+        month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
+        day?: "numeric" | "2-digit";
+        hour?: "numeric" | "2-digit";
+        minute?: "numeric" | "2-digit";
+        second?: "numeric" | "2-digit";
+        timeZoneName?: "long" | "short";
+        formatMatcher?: "best fit" | "basic";
         hour12?: boolean;
         timeZone?: string;
     }

@@ -3,7 +3,6 @@
         "outFile": "../built/local/compositeExec.js",
         "composite": true,
         "declarationMap": true,
-        "bundledPackageName": "compositeExec"
     },
     "files": [
         "index.ts"

@@ -49,8 +49,8 @@ animal.canMeow; // since is cat, should not be an error
 >canMeow : true
 
 const animalOrUndef = { type: 'cat', canMeow: true } as Animal | undefined;
->animalOrUndef : Cat | Dog | undefined
->{ type: 'cat', canMeow: true } as Animal | undefined : Cat | Dog | undefined
+>animalOrUndef : Animal | undefined
+>{ type: 'cat', canMeow: true } as Animal | undefined : Animal | undefined
 >{ type: 'cat', canMeow: true } : { type: "cat"; canMeow: true; }
 >type : "cat"
 >'cat' : "cat"
@@ -61,7 +61,7 @@ assertEqual(animalOrUndef?.type, 'cat' as const);
 >assertEqual(animalOrUndef?.type, 'cat' as const) : void
 >assertEqual : <T>(value: any, type: T) => asserts value is T
 >animalOrUndef?.type : "cat" | "dog" | undefined
->animalOrUndef : Cat | Dog | undefined
+>animalOrUndef : Animal | undefined
 >type : "cat" | "dog" | undefined
 >'cat' as const : "cat"
 >'cat' : "cat"

@@ -20,7 +20,7 @@ node_modules/follow-redirects/index.js(360,14): error TS2339: Property 'emit' do
 node_modules/follow-redirects/index.js(372,13): error TS2339: Property 'cause' does not exist on type 'CustomError'.
 node_modules/follow-redirects/index.js(373,12): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
 node_modules/follow-redirects/index.js(380,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(492,25): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/follow-redirects/index.js(498,25): error TS2339: Property 'code' does not exist on type 'Error'.
 
 
 

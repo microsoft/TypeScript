@@ -37,6 +37,9 @@ namespace ts.server.protocol {
         /* @internal */
         EmitOutput = "emit-output",
         Exit = "exit",
+        FileReferences = "fileReferences",
+        /* @internal */
+        FileReferencesFull = "fileReferences-full",
         Format = "format",
         Formatonkey = "formatonkey",
         /* @internal */
@@ -563,7 +566,8 @@ namespace ts.server.protocol {
         arguments: GetApplicableRefactorsRequestArgs;
     }
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
-        triggerReason?: RefactorTriggerReason
+        triggerReason?: RefactorTriggerReason;
+        kind?: string;
     };
 
     export type RefactorTriggerReason = "implicit" | "invoked";
@@ -623,6 +627,11 @@ namespace ts.server.protocol {
          * the current context.
          */
         notApplicableReason?: string;
+
+        /**
+         * The hierarchical dotted name of the refactor action.
+         */
+        kind?: string;
     }
 
     export interface GetEditsForRefactorRequest extends Request {
@@ -834,7 +843,6 @@ namespace ts.server.protocol {
     /**
      * A request to get encoded semantic classifications for a span in the file
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequest extends FileRequest {
         arguments: EncodedSemanticClassificationsRequestArgs;
     }
@@ -842,7 +850,6 @@ namespace ts.server.protocol {
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
-    /** @internal */
     export interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -852,8 +859,25 @@ namespace ts.server.protocol {
          * Length of the span.
          */
         length: number;
+        /**
+         * Optional parameter for the semantic highlighting response, if absent it
+         * defaults to "original".
+         */
+        format?: "original" | "2020"
     }
 
+    /** The response for a EncodedSemanticClassificationsRequest */
+    export interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody
+    }
+
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    export interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
     /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
@@ -955,6 +979,16 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface JSDocTagInfo {
+        /** Name of the JSDoc tag */
+        name: string;
+        /**
+         * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+         */
+        text?: string | SymbolDisplayPart[];
+    }
+
     export interface TextSpanWithContext extends TextSpan {
         contextStart?: Location;
         contextEnd?: Location;
@@ -963,8 +997,15 @@ namespace ts.server.protocol {
     export interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
 
+    export interface DefinitionInfo extends FileSpanWithContext {
+        /**
+         * When true, the file may or may not exist.
+         */
+        unverified?: boolean;
+    }
+
     export interface DefinitionInfoAndBoundSpan {
-        definitions: readonly FileSpanWithContext[];
+        definitions: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
 
@@ -1150,6 +1191,25 @@ namespace ts.server.protocol {
      */
     export interface ReferencesResponse extends Response {
         body?: ReferencesResponseBody;
+    }
+
+    export interface FileReferencesRequest extends FileRequest {
+        command: CommandTypes.FileReferences;
+    }
+
+    export interface FileReferencesResponseBody {
+        /**
+         * The file locations referencing the symbol.
+         */
+        refs: readonly ReferencesResponseItem[];
+        /**
+         * The name of the symbol.
+         */
+        symbolName: string;
+    }
+
+    export interface FileReferencesResponse extends Response {
+        body?: FileReferencesResponseBody;
     }
 
     /**
@@ -1488,6 +1548,7 @@ namespace ts.server.protocol {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
         UseFsEvents = "UseFsEvents",
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
     }
@@ -1496,12 +1557,14 @@ namespace ts.server.protocol {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
     }
 
     export const enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
         DynamicPriority = "DynamicPriority",
+        FixedChunkSize = "FixedChunkSize",
     }
 
     export interface WatchOptions {
@@ -1509,6 +1572,8 @@ namespace ts.server.protocol {
         watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
 
@@ -1763,6 +1828,11 @@ namespace ts.server.protocol {
     }
 
     /**
+     * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+     */
+    export type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+
+    /**
      * Request to set compiler options for inferred projects.
      * External projects are opened / closed explicitly.
      * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
@@ -1783,7 +1853,7 @@ namespace ts.server.protocol {
         /**
          * Compiler options to be used with inferred projects.
          */
-        options: ExternalProjectCompilerOptions;
+        options: InferredProjectCompilerOptions;
 
         /**
          * Specifies the project root path used to scope compiler options.
@@ -1891,6 +1961,7 @@ namespace ts.server.protocol {
      */
     export interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
+        arguments: FileLocationRequestArgs;
     }
 
     /**
@@ -1924,8 +1995,9 @@ namespace ts.server.protocol {
 
         /**
          * Documentation associated with symbol.
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
          */
-        documentation: string;
+        documentation: string | SymbolDisplayPart[];
 
         /**
          * JSDoc tags associated with symbol.
@@ -2119,6 +2191,7 @@ namespace ts.server.protocol {
     export interface CompletionEntryIdentifier {
         name: string;
         source?: string;
+        data?: unknown;
     }
 
     /**
@@ -2145,6 +2218,12 @@ namespace ts.server.protocol {
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
         kind: string;
+    }
+
+    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        /** The location of the declaration that the @link tag links to. */
+        target: FileSpan;
     }
 
     /**
@@ -2205,6 +2284,12 @@ namespace ts.server.protocol {
          * in the project package.json.
          */
         isPackageJsonImport?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name.
+         */
+        data?: unknown;
     }
 
     /**
@@ -3191,6 +3276,7 @@ namespace ts.server.protocol {
         insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
@@ -3223,7 +3309,7 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
@@ -3232,6 +3318,9 @@ namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+
+        readonly displayPartsForJSDoc?: boolean;
+        readonly generateReturnInDocTemplate?: boolean;
     }
 
     export interface CompilerOptions {
@@ -3345,6 +3434,35 @@ namespace ts.server.protocol {
         ES2018 = "ES2018",
         ES2019 = "ES2019",
         ES2020 = "ES2020",
+        ES2021 = "ES2021",
         ESNext = "ESNext"
+    }
+
+    export const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25,
     }
 }

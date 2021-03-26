@@ -10,7 +10,7 @@ type TV1<T extends unknown[]> = [string, ...T, number];
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
 >TV2 : [string, ...T, number, ...T]
 
-type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
+type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
 >TV3 : [string, ...T, ...number[], ...T]
 
 // Normalization
@@ -25,13 +25,13 @@ type TN3 = TV1<[boolean?]>;
 >TN3 : [string, boolean | undefined, number]
 
 type TN4 = TV1<string[]>;
->TN4 : [string, ...(string | number)[]]
+>TN4 : [string, ...string[], number]
 
 type TN5 = TV1<[boolean] | [symbol, symbol]>;
 >TN5 : [string, boolean, number] | [string, symbol, symbol, number]
 
 type TN6 = TV1<any>;
->TN6 : [string, ...any[]]
+>TN6 : [string, ...any[], number]
 
 type TN7 = TV1<never>;
 >TN7 : never
@@ -108,8 +108,8 @@ const tc3 = concat([1, 2, 3], sa);
 >sa : string[]
 
 const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, number, number]
->tc4 : (string | number)[]
->concat(sa, [1, 2, 3]) : (string | number)[]
+>tc4 : [...string[], number, number, number]
+>concat(sa, [1, 2, 3]) : [...string[], number, number, number]
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
 >sa : string[]
 >[1, 2, 3] : [number, number, number]
@@ -772,16 +772,23 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 // Inference between variadic tuple types
 
-type First<T extends readonly unknown[]> = T[0];
+type First<T extends readonly unknown[]> =
 >First : First<T>
 
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+    T extends readonly [unknown, ...unknown[]] ? T[0] :
+    T[0] | undefined;
+
+type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
 >DropFirst : DropFirst<T>
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
+type Last<T extends readonly unknown[]> =
 >Last : Last<T>
 
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+    T extends readonly [...unknown[], infer U] ? U :
+    T extends readonly [unknown, ...unknown[]] ? T[number] :
+    T[number] | undefined;
+
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 >DropLast : DropLast<T>
 
 type T00 = First<[number, symbol, string]>;
@@ -803,7 +810,7 @@ type T05 = First<[string?]>;
 >T05 : string | undefined
 
 type T06 = First<string[]>;
->T06 : string
+>T06 : string | undefined
 
 type T07 = First<[]>;
 >T07 : undefined
@@ -854,22 +861,22 @@ type T22 = Last<[string]>;
 >T22 : string
 
 type T23 = Last<[number, symbol, ...string[]]>;
->T23 : string
+>T23 : string | number | symbol
 
 type T24 = Last<[symbol, ...string[]]>;
->T24 : string
+>T24 : string | symbol
 
 type T25 = Last<[string?]>;
 >T25 : string | undefined
 
 type T26 = Last<string[]>;
->T26 : string
+>T26 : string | undefined
 
-type T27 = Last<[]>;  // unknown, maybe should undefined
->T27 : unknown
+type T27 = Last<[]>;
+>T27 : undefined
 
-type T28 = Last<any>;  // unknown, maybe should be any
->T28 : unknown
+type T28 = Last<any>;
+>T28 : any
 
 type T29 = Last<never>;
 >T29 : never
@@ -890,13 +897,13 @@ type T34 = DropLast<[symbol, ...string[]]>;
 >T34 : [symbol, ...string[]]
 
 type T35 = DropLast<[string?]>;
->T35 : []
+>T35 : [(string | undefined)?]
 
 type T36 = DropLast<string[]>;
 >T36 : string[]
 
 type T37 = DropLast<[]>;  // unknown[], maybe should be []
->T37 : unknown[]
+>T37 : []
 
 type T38 = DropLast<any>;
 >T38 : unknown[] | any[]
@@ -920,7 +927,7 @@ type R04 = First<readonly [symbol, ...string[]]>;
 >R04 : symbol
 
 type R05 = First<readonly string[]>;
->R05 : string
+>R05 : string | undefined
 
 type R06 = First<readonly []>;
 >R06 : undefined
@@ -956,16 +963,16 @@ type R22 = Last<readonly [string]>;
 >R22 : string
 
 type R23 = Last<readonly [number, symbol, ...string[]]>;
->R23 : string
+>R23 : string | number | symbol
 
 type R24 = Last<readonly [symbol, ...string[]]>;
->R24 : string
+>R24 : string | symbol
 
 type R25 = Last<readonly string[]>;
->R25 : string
+>R25 : string | undefined
 
 type R26 = Last<readonly []>;
->R26 : unknown
+>R26 : undefined
 
 type R30 = DropLast<readonly [number, symbol, string]>;
 >R30 : [number, symbol]
@@ -986,7 +993,7 @@ type R35 = DropLast<readonly string[]>;
 >R35 : string[]
 
 type R36 = DropLast<readonly []>;
->R36 : unknown[]
+>R36 : []
 
 // Inference to [...T, ...U] with implied arity for T
 
@@ -1237,16 +1244,13 @@ call('hello', 32, (a, b) => 42);
 >b : number
 >42 : 42
 
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-
 call(...sa, (...x) => 42);
->call(...sa, (...x) => 42) : [(string | ((...x: any[]) => number))[], number]
+>call(...sa, (...x) => 42) : [string[], number]
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
 >...sa : string
 >sa : string[]
->(...x) => 42 : (...x: any[]) => number
->x : any[]
+>(...x) => 42 : (...x: string[]) => number
+>x : string[]
 >42 : 42
 
 // No inference to ending optional elements (except with identical structure)
@@ -1389,19 +1393,19 @@ type Numbers = number[];
 >Numbers : Numbers
 
 type Unbounded = [...Numbers, boolean];
->Unbounded : (number | boolean)[]
+>Unbounded : [...number[], boolean]
 
-const data: Unbounded = [false, false];
->data : (number | boolean)[]
->[false, false] : false[]
+const data: Unbounded = [false, false];  // Error
+>data : [...number[], boolean]
+>[false, false] : [false, false]
 >false : false
 >false : false
 
 type U1 = [string, ...Numbers, boolean];
->U1 : [string, ...(number | boolean)[]]
+>U1 : [string, ...number[], boolean]
 
 type U2 = [...[string, ...Numbers], boolean];
->U2 : [string, ...(number | boolean)[]]
+>U2 : [string, ...number[], boolean]
 
 type U3 = [...[string, number], boolean];
 >U3 : [string, number, boolean]

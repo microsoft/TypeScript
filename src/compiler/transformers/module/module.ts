@@ -1,5 +1,6 @@
 /*@internal*/
 namespace ts {
+
     export function transformModule(context: TransformationContext) {
         interface AsynchronousDependencies {
             aliasedModuleNames: Expression[];
@@ -34,6 +35,8 @@ namespace ts {
         context.onEmitNode = onEmitNode;
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
+        context.enableSubstitution(SyntaxKind.CallExpression); // Substitutes expression identifiers with imported/exported symbols.
+        context.enableSubstitution(SyntaxKind.TaggedTemplateExpression); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.PostfixUnaryExpression); // Substitutes updates to exported symbols.
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
@@ -46,6 +49,7 @@ namespace ts {
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
+        let bindingReferenceCache: ESMap<Node, Identifier | SourceFile | ImportClause | ImportSpecifier | undefined> | undefined;
 
         return chainBundle(context, transformSourceFile);
 
@@ -609,7 +613,10 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
-            const argument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+            const firstArgument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
+            const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
             const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
@@ -1739,11 +1746,95 @@ namespace ts {
                     return substituteExpressionIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     return substituteBinaryExpression(<BinaryExpression>node);
+                case SyntaxKind.CallExpression:
+                    return substituteCallExpression(<CallExpression>node);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return substituteTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
                     return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
             }
 
+            return node;
+        }
+
+        /**
+         * For an Identifier, gets the import or export binding that it references.
+         * @returns One of the following:
+         * - An `Identifier` if node references an external helpers module (i.e., `tslib`).
+         * - A `SourceFile` if the node references an export in the file.
+         * - An `ImportClause` or `ImportSpecifier` if the node references an import binding.
+         * - Otherwise, `undefined`.
+         */
+        function getImportOrExportBindingReferenceWorker(node: Identifier): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
+            if (getEmitFlags(node) & EmitFlags.HelperName) {
+                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
+                if (externalHelpersModuleName) {
+                    return externalHelpersModuleName;
+                }
+            }
+            else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
+                const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
+                if (exportContainer?.kind === SyntaxKind.SourceFile) {
+                    return exportContainer;
+                }
+                const importDeclaration = resolver.getReferencedImportDeclaration(node);
+                if (importDeclaration && (isImportClause(importDeclaration) || isImportSpecifier(importDeclaration))) {
+                    return importDeclaration;
+                }
+            }
+            return undefined;
+        }
+
+        /**
+         * For an Identifier, gets the import or export binding that it references.
+         * @param removeEntry When `false`, the result is cached to avoid recomputing the result in a later substitution.
+         * When `true`, any cached result for the node is removed.
+         * @returns One of the following:
+         * - An `Identifier` if node references an external helpers module (i.e., `tslib`).
+         * - A `SourceFile` if the node references an export in the file.
+         * - An `ImportClause` or `ImportSpecifier` if the node references an import binding.
+         * - Otherwise, `undefined`.
+         */
+        function getImportOrExportBindingReference(node: Identifier, removeEntry: boolean): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
+            let result = bindingReferenceCache?.get(node);
+            if (!result && !bindingReferenceCache?.has(node)) {
+                result = getImportOrExportBindingReferenceWorker(node);
+                if (!removeEntry) {
+                    bindingReferenceCache ||= new Map();
+                    bindingReferenceCache.set(node, result);
+                }
+            }
+            else if (removeEntry) {
+                bindingReferenceCache?.delete(node);
+            }
+            return result;
+        }
+
+        function substituteCallExpression(node: CallExpression) {
+            if (isIdentifier(node.expression) && getImportOrExportBindingReference(node.expression, /*removeEntry*/ false)) {
+                return isCallChain(node) ?
+                    factory.updateCallChain(node,
+                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
+                        node.questionDotToken,
+                        /*typeArguments*/ undefined,
+                        node.arguments) :
+                    factory.updateCallExpression(node,
+                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
+                        /*typeArguments*/ undefined,
+                        node.arguments);
+            }
+            return node;
+        }
+
+        function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            if (isIdentifier(node.tag) && getImportOrExportBindingReference(node.tag, /*removeEntry*/ false)) {
+                return factory.updateTaggedTemplateExpression(
+                    node,
+                    setTextRange(factory.createComma(factory.createNumericLiteral(0), node.tag), node.tag),
+                    /*typeArguments*/ undefined,
+                    node.template);
+            }
             return node;
         }
 
@@ -1754,18 +1845,11 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            if (getEmitFlags(node) & EmitFlags.HelperName) {
-                const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
-                if (externalHelpersModuleName) {
-                    return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
-                }
-
-                return node;
-            }
-
-            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
-                const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
-                if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
+            const result = getImportOrExportBindingReference(node, /*removeEntry*/ true);
+            switch (result?.kind) {
+                case SyntaxKind.Identifier: // tslib import
+                    return factory.createPropertyAccessExpression(result, node);
+                case SyntaxKind.SourceFile: // top-level export
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.createIdentifier("exports"),
@@ -1773,32 +1857,26 @@ namespace ts {
                         ),
                         /*location*/ node
                     );
-                }
-
-                const importDeclaration = resolver.getReferencedImportDeclaration(node);
-                if (importDeclaration) {
-                    if (isImportClause(importDeclaration)) {
-                        return setTextRange(
-                            factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent),
-                                factory.createIdentifier("default")
-                            ),
-                            /*location*/ node
-                        );
-                    }
-                    else if (isImportSpecifier(importDeclaration)) {
-                        const name = importDeclaration.propertyName || importDeclaration.name;
-                        return setTextRange(
-                            factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
-                                factory.cloneNode(name)
-                            ),
-                            /*location*/ node
-                        );
-                    }
-                }
+                case SyntaxKind.ImportClause:
+                    return setTextRange(
+                        factory.createPropertyAccessExpression(
+                            factory.getGeneratedNameForNode(result.parent),
+                            factory.createIdentifier("default")
+                        ),
+                        /*location*/ node
+                    );
+                case SyntaxKind.ImportSpecifier:
+                    const name = result.propertyName || result.name;
+                    return setTextRange(
+                        factory.createPropertyAccessExpression(
+                            factory.getGeneratedNameForNode(result.parent?.parent?.parent || result),
+                            factory.cloneNode(name)
+                        ),
+                        /*location*/ node
+                    );
+                default:
+                    return node;
             }
-            return node;
         }
 
         /**
@@ -1861,10 +1939,9 @@ namespace ts {
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
                         ? setTextRange(
-                            factory.createBinaryExpression(
-                                node.operand,
-                                factory.createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
-                                factory.createNumericLiteral(1)
+                            factory.createPrefixUnaryExpression(
+                                node.operator,
+                                node.operand
                             ),
                             /*location*/ node)
                         : node;
@@ -1873,7 +1950,12 @@ namespace ts {
                         noSubstitution[getNodeId(expression)] = true;
                         expression = createExportExpression(exportName, expression);
                     }
-
+                    if (node.kind === SyntaxKind.PostfixUnaryExpression) {
+                        noSubstitution[getNodeId(expression)] = true;
+                        expression = node.operator === SyntaxKind.PlusPlusToken
+                            ? factory.createSubtract(expression, factory.createNumericLiteral(1))
+                            : factory.createAdd(expression, factory.createNumericLiteral(1));
+                    }
                     return expression;
                 }
             }
