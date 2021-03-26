@@ -7,7 +7,7 @@
         set foo(): number | string;
     }
     
-    declare const ihgs: IHasGetSet;
+    const ihgs: IHasGetSet = null as any;
     ihgs.foo = "32";
     let r_ihgs_foo: number = ihgs.foo;
 }
@@ -18,7 +18,7 @@
         set foo(): number | string;
     }
     
-    declare const t_hgs: T_HasGetSet;
+    const t_hgs: T_HasGetSet = null as any;
     t_hgs.foo = "32";
     let r_t_hgs_foo: number = t_hgs.foo;
 }
@@ -28,10 +28,12 @@
 "use strict";
 // Accessors in interfaces/types
 {
+    var ihgs = null;
     ihgs.foo = "32";
     var r_ihgs_foo = ihgs.foo;
 }
 {
+    var t_hgs = null;
     t_hgs.foo = "32";
     var r_t_hgs_foo = t_hgs.foo;
 }

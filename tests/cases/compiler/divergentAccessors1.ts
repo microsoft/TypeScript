@@ -8,7 +8,7 @@
         set foo(): number | string;
     }
     
-    declare const ihgs: IHasGetSet;
+    const ihgs: IHasGetSet = null as any;
     ihgs.foo = "32";
     let r_ihgs_foo: number = ihgs.foo;
 }
@@ -19,7 +19,7 @@
         set foo(): number | string;
     }
     
-    declare const t_hgs: T_HasGetSet;
+    const t_hgs: T_HasGetSet = null as any;
     t_hgs.foo = "32";
     let r_t_hgs_foo: number = t_hgs.foo;
 }
