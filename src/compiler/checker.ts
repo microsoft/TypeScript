@@ -9198,7 +9198,7 @@ namespace ts {
             return links.type;
         }
 
-        function getWriteTypeOfSymbol(symbol: Symbol): Type {
+        function getSetAccessorTypeOfSymbol(symbol: Symbol): Type {
             if (symbol.flags & SymbolFlags.Accessor) {
                 const type = getTypeOfSetAccessor(symbol);
                 if (type) {
@@ -26956,7 +26956,7 @@ namespace ts {
                     return errorType;
                 }
 
-                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getSetAccessorTypeOfSymbol(prop) : getTypeOfSymbol(prop);
             }
 
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
