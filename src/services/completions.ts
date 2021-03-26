@@ -141,10 +141,11 @@ namespace ts.Completions {
 
         if (triggerCharacter === " ") {
             // `isValidTrigger` ensures we are at `import |`
-            if (!(preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText)) {
-                return undefined;
+            if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
+                return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
             }
-            return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+            return undefined;
+
         }
 
         const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, host, log, preferences);
