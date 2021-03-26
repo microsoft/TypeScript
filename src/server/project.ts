@@ -146,6 +146,8 @@ namespace ts.server {
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
         /*@internal*/
         private hasAddedorRemovedFiles = false;
+        /*@internal*/
+        private hasAddedOrRemovedSymlinks = false;
 
         /*@internal*/
         lastFileExceededProgramSize: string | undefined;
@@ -204,7 +206,7 @@ namespace ts.server {
         originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
         /*@internal*/
-        packageJsonsForAutoImport: Set<string> | undefined;
+        private packageJsonsForAutoImport: Set<string> | undefined;
 
         /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -248,9 +250,11 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
+        private exportMapCache = createExportMapCache();
         /*@internal*/
-        private dirtyFilesForSuggestions: Set<Path> | undefined;
+        private changedFilesForExportMapCache: Set<Path> | undefined;
+        /*@internal*/
+        private moduleSpecifierCache = createModuleSpecifierCache();
         /*@internal*/
         private symlinks: SymlinkCache | undefined;
         /*@internal*/
@@ -979,8 +983,8 @@ namespace ts.server {
         /*@internal*/
         markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
-            if (!this.importSuggestionsCache.isEmpty()) {
-                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = new Set())).add(changedFile);
+            if (!this.exportMapCache.isEmpty()) {
+                (this.changedFilesForExportMapCache ||= new Set()).add(changedFile);
             }
         }
 
@@ -992,17 +996,31 @@ namespace ts.server {
         }
 
         /*@internal*/
-        markAutoImportProviderAsDirty() {
+        onAutoImportProviderSettingsChanged() {
             if (this.autoImportProviderHost === false) {
                 this.autoImportProviderHost = undefined;
             }
-            this.autoImportProviderHost?.markAsDirty();
-            this.importSuggestionsCache.clear();
+            else {
+                this.autoImportProviderHost?.markAsDirty();
+            }
+        }
+
+        /*@internal*/
+        onPackageJsonChange(packageJsonPath: Path) {
+            if (this.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                this.moduleSpecifierCache.clear();
+                if (this.autoImportProviderHost) {
+                    this.autoImportProviderHost.markAsDirty();
+                }
+            }
         }
 
         /* @internal */
-        onFileAddedOrRemoved() {
+        onFileAddedOrRemoved(isSymlink: boolean | undefined) {
             this.hasAddedorRemovedFiles = true;
+            if (isSymlink) {
+                this.hasAddedOrRemovedSymlinks = true;
+            }
         }
 
         /**
@@ -1016,6 +1034,7 @@ namespace ts.server {
             const hasNewProgram = this.updateGraphWorker();
             const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
             this.hasAddedorRemovedFiles = false;
+            this.hasAddedOrRemovedSymlinks = false;
 
             const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
@@ -1166,27 +1185,30 @@ namespace ts.server {
                 }
             }
 
-            if (!this.importSuggestionsCache.isEmpty()) {
+            if (!this.exportMapCache.isEmpty()) {
                 if (this.hasAddedorRemovedFiles || oldProgram && !this.program!.structureIsReused) {
-                    this.importSuggestionsCache.clear();
+                    this.exportMapCache.clear();
                 }
-                else if (this.dirtyFilesForSuggestions && oldProgram && this.program) {
-                    forEachKey(this.dirtyFilesForSuggestions, fileName => {
-                        const oldSourceFile = oldProgram.getSourceFile(fileName);
-                        const sourceFile = this.program!.getSourceFile(fileName);
-                        if (this.sourceFileHasChangedOwnImportSuggestions(oldSourceFile, sourceFile)) {
-                            this.importSuggestionsCache.clear();
+                else if (this.changedFilesForExportMapCache && oldProgram && this.program) {
+                    forEachKey(this.changedFilesForExportMapCache, fileName => {
+                        const oldSourceFile = oldProgram.getSourceFileByPath(fileName);
+                        const sourceFile = this.program!.getSourceFileByPath(fileName);
+                        if (!oldSourceFile || !sourceFile) {
+                            this.exportMapCache.clear();
                             return true;
                         }
+                        return this.exportMapCache.onFileChanged(oldSourceFile, sourceFile, !!this.getTypeAcquisition().enable);
                     });
                 }
             }
-            if (this.dirtyFilesForSuggestions) {
-                this.dirtyFilesForSuggestions.clear();
+            if (this.changedFilesForExportMapCache) {
+                this.changedFilesForExportMapCache.clear();
             }
 
-            if (this.hasAddedorRemovedFiles) {
+            if (this.hasAddedOrRemovedSymlinks || this.program && !this.program.structureIsReused && this.getCompilerOptions().preserveSymlinks) {
+                // With --preserveSymlinks, we may not determine that a file is a symlink, so we never set `hasAddedOrRemovedSymlinks`
                 this.symlinks = undefined;
+                this.moduleSpecifierCache.clear();
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
@@ -1216,54 +1238,6 @@ namespace ts.server {
         /* @internal */
         sendPerformanceEvent(kind: PerformanceEvent["kind"], durationMs: number) {
             this.projectService.sendPerformanceEvent(kind, durationMs);
-        }
-
-        /*@internal*/
-        private sourceFileHasChangedOwnImportSuggestions(oldSourceFile: SourceFile | undefined, newSourceFile: SourceFile | undefined) {
-            if (!oldSourceFile && !newSourceFile) {
-                return false;
-            }
-            // Probably shouldn’t get this far, but on the off chance the file was added or removed,
-            // we can’t reliably tell anything about it.
-            if (!oldSourceFile || !newSourceFile) {
-                return true;
-            }
-
-            Debug.assertEqual(oldSourceFile.fileName, newSourceFile.fileName);
-            // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
-            // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
-            if (this.getTypeAcquisition().enable && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile)) {
-                return true;
-            }
-
-            // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
-            // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
-            // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
-            if (
-                !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
-                !this.ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
-            ) {
-                return true;
-            }
-            return false;
-        }
-
-        /*@internal*/
-        private ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
-            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
-                return false;
-            }
-            let oldFileStatementIndex = -1;
-            let newFileStatementIndex = -1;
-            for (const ambientModuleName of newSourceFile.ambientModuleNames) {
-                const isMatchingModuleDeclaration = (node: Statement) => isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
-                oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
-                newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
-                if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
-                    return false;
-                }
-            }
-            return true;
         }
 
         private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
@@ -1683,8 +1657,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getImportSuggestionsCache() {
-            return this.importSuggestionsCache;
+        getExportMapCache() {
+            return this.exportMapCache;
+        }
+
+        /*@internal*/
+        getModuleSpecifierCache() {
+            return this.moduleSpecifierCache;
         }
 
         /*@internal*/
@@ -2016,8 +1995,12 @@ namespace ts.server {
 
             this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
             this.rootFileNames = rootFileNames;
-            this.hostProject.getImportSuggestionsCache().clear();
-            return super.updateGraph();
+            const oldProgram = this.getCurrentProgram();
+            const hasSameSetOfFiles = super.updateGraph();
+            if (oldProgram && oldProgram !== this.getCurrentProgram()) {
+                this.hostProject.getExportMapCache().clear();
+            }
+            return hasSameSetOfFiles;
         }
 
         hasRoots() {
@@ -2037,8 +2020,14 @@ namespace ts.server {
             throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
         }
 
-        markAutoImportProviderAsDirty(): never {
+        /*@internal*/
+        onAutoImportProviderSettingsChanged(): never {
             throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
+        }
+
+        /*@internal*/
+        onPackageJsonChange(): never {
+            throw new Error("package.json changes should be notified on an AutoImportProvider's host project");
         }
 
         getModuleResolutionHostForAutoImportProvider(): never {
