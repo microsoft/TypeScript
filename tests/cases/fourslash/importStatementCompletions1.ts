@@ -58,7 +58,12 @@
 // @Filename: /index11.ts
 //// import oo/*11*/
 
-[6, 7, 8, 9, 10, 11].forEach(marker => {
+// @Filename: /index12.ts
+//// import {
+////   /*12*/
+//// }
+
+[6, 7, 8, 9, 10, 11, 12].forEach(marker => {
   verify.completions({
     marker: "" + marker,
     exact: [],

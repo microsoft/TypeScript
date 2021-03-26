@@ -2921,24 +2921,29 @@ namespace ts.Completions {
     }
 
     function getImportCompletionNode(contextToken: Node) {
-        const parent = contextToken.parent;
-        if (isImportEqualsDeclaration(parent)) {
-            return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
+        const candidate = getCandidate();
+        return candidate && rangeIsOnSingleLine(candidate, candidate.getSourceFile()) ? candidate : undefined;
+
+        function getCandidate() {
+            const parent = contextToken.parent;
+            if (isImportEqualsDeclaration(parent)) {
+                return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
+            }
+            if (isNamedImports(parent) || isNamespaceImport(parent)) {
+                return isModuleSpecifierMissingOrEmpty(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2) && !parent.parent.name
+                    ? parent.parent.parent
+                    : undefined;
+            }
+            if (isImportKeyword(contextToken) && isSourceFile(parent)) {
+                // A lone import keyword with nothing following it does not parse as a statement at all
+                return contextToken as Token<SyntaxKind.ImportKeyword>;
+            }
+            if (isImportKeyword(contextToken) && isImportDeclaration(parent)) {
+                // `import s| from`
+                return isModuleSpecifierMissingOrEmpty(parent.moduleSpecifier) ? parent : undefined;
+            }
+            return undefined;
         }
-        if (isNamedImports(parent) || isNamespaceImport(parent)) {
-            return isModuleSpecifierMissingOrEmpty(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2) && !parent.parent.name
-                ? parent.parent.parent
-                : undefined;
-        }
-        if (isImportKeyword(contextToken) && isSourceFile(parent)) {
-            // A lone import keyword with nothing following it does not parse as a statement at all
-            return contextToken as Token<SyntaxKind.ImportKeyword>;
-        }
-        if (isImportKeyword(contextToken) && isImportDeclaration(parent)) {
-            // `import s| from`
-            return isModuleSpecifierMissingOrEmpty(parent.moduleSpecifier) ? parent : undefined;
-        }
-        return undefined;
     }
 
     function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression) {
