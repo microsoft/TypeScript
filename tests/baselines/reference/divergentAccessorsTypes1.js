@@ -32,7 +32,7 @@ type Test3 = {
     t.foo = 32;
     let m: string = t.foo;
 
-    // See how CFA interacts with out-of-type writes
+    // See how CFA interacts with in-type vs out-of-type writes
     t.bar = 42;
     let n: number = t.bar;
     t.bar = false;
