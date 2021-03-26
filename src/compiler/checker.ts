@@ -26956,9 +26956,7 @@ namespace ts {
                     return errorType;
                 }
 
-                if (propType === undefined) {
-                    propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
-                }
+                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getWriteTypeOfSymbol(prop) : getTypeOfSymbol(prop);
             }
 
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
