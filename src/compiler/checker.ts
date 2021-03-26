@@ -26912,7 +26912,7 @@ namespace ts {
                 markAliasReferenced(parentSymbol, node);
             }
 
-            let propType: Type | undefined;
+            let propType: Type;
             if (!prop) {
                 const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
