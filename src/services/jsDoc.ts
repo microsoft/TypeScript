@@ -79,6 +79,46 @@ namespace ts.JsDoc {
         "virtual",
         "yields"
     ];
+    const jsDocTagCustomNamesDict: Record<string, string> = {
+        access: "accessLevel",
+        abstract: "abstractMember",
+        argument: "argumentName",
+        async: "asynchronous",
+        callback: "callbackFunction",
+        classdesc: "classDescription",
+        constructor: "constructor",
+        default: "defaultValue",
+        emits: "emitsEvent",
+        file: "fileOverview",
+        fileoverview: "fileOverview",
+        fires: "firesEvent",
+        generator: "generatorFunction",
+        hideconstructor: "hideConstructor",
+        host: "external",
+        ignore: "ignoredInDocumentation",
+        inheritdoc: "inheritDocumentation",
+        inner: "innerObject",
+        instance: "instanceMember",
+        kind: "symbolKind",
+        lends: "lendsAsMembersOfSymbol",
+        memberof: "memberOf",
+        package: "packagePrivate",
+        param: "parameterName",
+        protected: "protectedSymbol",
+        returns: "returnsValue",
+        since: "addedSince",
+        static: "staticMember",
+        template: "genericTypeName",
+        this: "typeOfThis",
+        throws: "throwException",
+        todo: "toDo",
+        tutorial: "tutorialLink",
+        type: "typeName",
+        typedef: "typeDefinition",
+        var: "variation", // TODO: is this correct?
+        virtual: "virtualMember",
+        yields: "yieldsValue"
+    };
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
@@ -124,10 +164,16 @@ namespace ts.JsDoc {
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+                tags.push({ name: getCustomTagName(tag.tagName.text), text: getCommentDisplayParts(tag, checker) });
             }
         });
         return tags;
+    }
+
+    function getCustomTagName(tagNameText: string): string {
+        return tagNameText in jsDocTagCustomNamesDict
+            ? jsDocTagCustomNamesDict[tagNameText]
+            : tagNameText;
     }
 
     function getDisplayPartsFromComment(comment: string | readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
