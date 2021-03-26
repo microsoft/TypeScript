@@ -476,6 +476,7 @@ namespace ts {
             getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
             createHash: maybeBind(host, host.createHash),
             readDirectory: maybeBind(host, host.readDirectory),
+            disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
@@ -538,7 +539,8 @@ namespace ts {
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             createHash: maybeBind(system, system.createHash),
-            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
+            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
+            disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
         };
     }
 

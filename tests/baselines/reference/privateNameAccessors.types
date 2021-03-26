@@ -1,0 +1,49 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAccessors.ts ===
+class A1 {
+>A1 : A1
+
+    get #prop() { return ""; }
+>#prop : string
+>"" : ""
+
+    set #prop(param: string) { }
+>#prop : string
+>param : string
+
+    get #roProp() { return ""; }
+>#roProp : string
+>"" : ""
+
+    constructor(name: string) {
+>name : string
+
+        this.#prop = "";
+>this.#prop = "" : ""
+>this.#prop : string
+>this : this
+>"" : ""
+
+        this.#roProp = ""; // Error
+>this.#roProp = "" : ""
+>this.#roProp : any
+>this : this
+>"" : ""
+
+        console.log(this.#prop);
+>console.log(this.#prop) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#prop : string
+>this : this
+
+        console.log(this.#roProp);
+>console.log(this.#roProp) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this.#roProp : string
+>this : this
+    }
+}
+

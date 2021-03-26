@@ -675,7 +675,7 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
 
         if (canTrace(sys, compilerOptions)) {
-            tracing?.stopTracing(program.getTypeCatalog());
+            tracing?.stopTracing();
         }
 
         let statistics: Statistic[];

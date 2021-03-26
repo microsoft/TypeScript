@@ -1,0 +1,54 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts ===
+class A2 {
+>A2 : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+
+    #method() { return "" }
+>#method : Symbol(A2.#method, Decl(privateNameMethodAccess.ts, 0, 10))
+
+    constructor() {
+        console.log(this.#method);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.#method : Symbol(A2.#method, Decl(privateNameMethodAccess.ts, 0, 10))
+>this : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+
+        let a: A2 = this;
+>a : Symbol(a, Decl(privateNameMethodAccess.ts, 4, 11))
+>A2 : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+>this : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+
+        a.#method();
+>a.#method : Symbol(A2.#method, Decl(privateNameMethodAccess.ts, 0, 10))
+>a : Symbol(a, Decl(privateNameMethodAccess.ts, 4, 11))
+
+        function  foo (){
+>foo : Symbol(foo, Decl(privateNameMethodAccess.ts, 5, 20))
+
+            a.#method();
+>a.#method : Symbol(A2.#method, Decl(privateNameMethodAccess.ts, 0, 10))
+>a : Symbol(a, Decl(privateNameMethodAccess.ts, 4, 11))
+        }
+    }
+}
+new A2().#method(); // Error
+>A2 : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+
+function  foo (){
+>foo : Symbol(foo, Decl(privateNameMethodAccess.ts, 11, 19))
+
+    new A2().#method(); // Error
+>A2 : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+}
+
+class B2 {
+>B2 : Symbol(B2, Decl(privateNameMethodAccess.ts, 15, 1))
+
+    m() {
+>m : Symbol(B2.m, Decl(privateNameMethodAccess.ts, 17, 10))
+
+        new A2().#method();
+>A2 : Symbol(A2, Decl(privateNameMethodAccess.ts, 0, 0))
+    }
+}
+
