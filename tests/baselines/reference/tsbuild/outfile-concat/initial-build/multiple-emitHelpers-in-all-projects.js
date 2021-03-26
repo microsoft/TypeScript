@@ -1063,7 +1063,8 @@ declare const secondsecond_part2_ar: number[];
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 556
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -1868,7 +1869,8 @@ declare const firstfirst_part3_ar: number[];
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 553
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -3836,6 +3838,7 @@ declare const thirdthird_part1_ar: number[];
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1031
 }
 

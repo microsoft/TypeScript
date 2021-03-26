@@ -1057,7 +1057,6 @@ namespace ts {
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
-            getTypeCatalog: () => getDiagnosticsProducingTypeChecker().getTypeCatalog(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getInstantiationCount: () => getDiagnosticsProducingTypeChecker().getInstantiationCount(),
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
@@ -3196,9 +3195,10 @@ namespace ts {
                 }
             }
 
-            // there has to be common source directory if user specified --outdir || --sourceRoot
+            // there has to be common source directory if user specified --outdir || --rootDir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
+                options.rootDir || // there is --rootDir specified
                 options.sourceRoot || // there is --sourceRoot specified
                 options.mapRoot) { // there is --mapRoot specified
 

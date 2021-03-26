@@ -962,12 +962,14 @@ namespace FourSlash {
         }
 
         /** Use `getProgram` instead of accessing this directly. */
-        private _program: ts.Program | undefined;
+        private _program: ts.Program | undefined | "missing";
         /** Use `getChecker` instead of accessing this directly. */
         private _checker: ts.TypeChecker | undefined;
 
         private getProgram(): ts.Program {
-            return this._program || (this._program = this.languageService.getProgram()!); // TODO: GH#18217
+            if (!this._program) this._program = this.languageService.getProgram() || "missing";
+            if (this._program === "missing") ts.Debug.fail("Could not retrieve program from language service");
+            return this._program;
         }
 
         private getChecker() {
@@ -1583,7 +1585,7 @@ namespace FourSlash {
             assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
             ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
                 assert.equal(actualTag.name, expectedTag.name);
-                assert.equal(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
+                assert.deepEqual(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
 
             const allKeys: readonly (keyof FourSlashInterface.VerifySignatureHelpOptions)[] = [

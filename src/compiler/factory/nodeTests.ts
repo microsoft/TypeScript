@@ -770,6 +770,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocNameReference;
     }
 
+    export function isJSDocLink(node: Node): node is JSDocLink {
+        return node.kind === SyntaxKind.JSDocLink;
+    }
+
     export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }

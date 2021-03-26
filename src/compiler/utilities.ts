@@ -603,9 +603,11 @@ namespace ts {
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
-            esnext: {
+            es2021: {
                 PromiseConstructor: ["any"],
-                String: ["replaceAll"],
+                String: ["replaceAll"]
+            },
+            esnext: {
                 NumberFormat: ["formatToParts"]
             }
         };
@@ -1731,6 +1733,14 @@ namespace ts {
         return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
     }
 
+    export function isThisInitializedObjectBindingExpression(node: Node | undefined): boolean {
+        return !!node
+            && (isShorthandPropertyAssignment(node) || isPropertyAssignment(node))
+            && isBinaryExpression(node.parent.parent)
+            && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken
+            && node.parent.parent.right.kind === SyntaxKind.ThisKeyword;
+    }
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
@@ -2695,6 +2705,9 @@ namespace ts {
                 case SyntaxKind.SpreadElement:
                 case SyntaxKind.NonNullExpression:
                     node = parent;
+                    break;
+                case SyntaxKind.SpreadAssignment:
+                    node = parent.parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
                     if ((parent as ShorthandPropertyAssignment).name !== node) {
@@ -4205,8 +4218,10 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
             !sourceFile.isDeclarationFile &&
             !host.isSourceFileFromExternalLibrary(sourceFile) &&
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            (forceDtsEmit || !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName));
+            (forceDtsEmit || (
+                !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
+                !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
+            ));
     }
 
     export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
@@ -4820,6 +4835,9 @@ namespace ts {
             && isLeftHandSideExpression(node.left);
     }
 
+    export function isLeftHandSideOfAssignment(node: Node) {
+        return isAssignmentExpression(node.parent) && node.parent.left === node;
+    }
     export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const kind = node.left.kind;
@@ -5628,8 +5646,8 @@ namespace ts {
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.escapedName = name;
-        this.declarations = undefined!;
-        this.valueDeclaration = undefined!;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
         this.id = undefined;
         this.mergeId = undefined;
         this.parent = undefined;
@@ -6060,7 +6078,7 @@ namespace ts {
 
     export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
         const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
-        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[jsxImportSourcePragmas.length - 1] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
             compilerOptions.jsxImportSource ||

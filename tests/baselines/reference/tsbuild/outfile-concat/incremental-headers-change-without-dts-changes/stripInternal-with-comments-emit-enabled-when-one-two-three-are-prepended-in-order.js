@@ -1147,7 +1147,8 @@ declare class C {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 731
 }
 
 //// [/src/first/bin/first-output.d.ts] file written with same contents
@@ -1489,7 +1490,8 @@ declare function f(): string;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 252
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -2024,6 +2026,7 @@ declare var c: C;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 464
 }
 

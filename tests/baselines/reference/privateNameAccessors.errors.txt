@@ -1,0 +1,20 @@
+tests/cases/conformance/classes/members/privateNames/privateNameAccessors.ts(9,14): error TS2540: Cannot assign to '#roProp' because it is a read-only property.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameAccessors.ts (1 errors) ====
+    class A1 {
+        get #prop() { return ""; }
+        set #prop(param: string) { }
+    
+        get #roProp() { return ""; }
+    
+        constructor(name: string) {
+            this.#prop = "";
+            this.#roProp = ""; // Error
+                 ~~~~~~~
+!!! error TS2540: Cannot assign to '#roProp' because it is a read-only property.
+            console.log(this.#prop);
+            console.log(this.#roProp);
+        }
+    }
+    

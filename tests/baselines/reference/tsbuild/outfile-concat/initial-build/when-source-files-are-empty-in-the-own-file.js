@@ -600,7 +600,8 @@ declare class C {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 255
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -962,7 +963,8 @@ declare function f(): string;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 252
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -1754,6 +1756,7 @@ declare class C {
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 648
 }
 

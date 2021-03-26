@@ -169,8 +169,8 @@ namespace ts {
     /**
      * Create the state so that we can iterate on changedFiles/affected files
      */
-    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderProgramState>): BuilderProgramState {
-        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
+    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
+        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
@@ -733,7 +733,7 @@ namespace ts {
         const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]) => {
             // Ensure fileId
             const fileId = toFileId(key);
-            Debug.assert(fileNames[fileId] === relativeToBuildInfo(key));
+            Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
             return signature === undefined ? value : { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope };
         });
@@ -804,19 +804,23 @@ namespace ts {
         }
 
         function toFileId(path: Path): number {
-            const existing = fileNameToFileId.get(path);
-            if (existing !== undefined) return existing;
-            fileNameToFileId.set(path, fileNames.length);
-            return fileNames.push(relativeToBuildInfo(path)) - 1;
+            let fileId = fileNameToFileId.get(path);
+            if (fileId === undefined) {
+                fileNames.push(relativeToBuildInfo(path));
+                fileNameToFileId.set(path, fileId = fileNames.length);
+            }
+            return fileId;
         }
 
         function toFileIdListId(set: ReadonlySet<Path>): number {
             const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
             const key = fileIds.join();
-            const existing = fileNamesToFileIdListId?.get(key);
-            if (existing !== undefined) return existing;
-            (fileNamesToFileIdListId ||= new Map()).set(key, fileIdsList?.length || 0);
-            return (fileIdsList ||= []).push(fileIds) - 1;
+            let fileIdListId = fileNamesToFileIdListId?.get(key);
+            if (fileIdListId === undefined) {
+                (fileIdsList ||= []).push(fileIds);
+                (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length);
+            }
+            return fileIdListId;
         }
     }
 
@@ -943,7 +947,7 @@ namespace ts {
          * Computing hash to for signature verification
          */
         const computeHash = maybeBind(host, host.createHash);
-        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
+        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
         let backupState: BuilderProgramState | undefined;
         newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
 
@@ -1216,7 +1220,7 @@ namespace ts {
         const filePaths = program.fileNames.map(toPath);
         const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        program.fileInfos.forEach((fileInfo, fileId) => fileInfos.set(toFilePath(fileId), fileInfo));
+        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1), fileInfo));
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
@@ -1262,11 +1266,11 @@ namespace ts {
         }
 
         function toFilePath(fileId: number) {
-            return filePaths[fileId];
+            return filePaths[fileId - 1];
         }
 
         function toFilePathsSet(fileIdsListId: number) {
-            return filePathsSetList![fileIdsListId];
+            return filePathsSetList![fileIdsListId - 1];
         }
 
         function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {

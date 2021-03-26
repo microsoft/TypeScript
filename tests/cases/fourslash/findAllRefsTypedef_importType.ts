@@ -4,7 +4,7 @@
 
 // @Filename: /a.js
 ////module.exports = 0;
-/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|]|] */
+/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|] |]*/
 ////const dummy = 0;
 
 // @Filename: /b.js

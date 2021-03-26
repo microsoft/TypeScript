@@ -575,7 +575,7 @@ namespace ts {
                 visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
                 visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
-                visitNode(node.statement, visitor, isStatement)
+                visitIterationBody(node.statement, visitor, context)
             );
         }
 
@@ -648,7 +648,7 @@ namespace ts {
             let bodyLocation: TextRange | undefined;
             let statementsLocation: TextRange | undefined;
             const statements: Statement[] = [visitNode(binding, visitor, isStatement)];
-            const statement = visitNode(node.statement, visitor, isStatement);
+            const statement = visitIterationBody(node.statement, visitor, context);
             if (isBlock(statement)) {
                 addRange(statements, statement.statements);
                 bodyLocation = statement;

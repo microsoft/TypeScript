@@ -28,6 +28,7 @@ namespace ts {
         ["es2018", "lib.es2018.d.ts"],
         ["es2019", "lib.es2019.d.ts"],
         ["es2020", "lib.es2020.d.ts"],
+        ["es2021", "lib.es2021.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -67,14 +68,17 @@ namespace ts {
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
+        ["es2021.promise", "lib.es2021.promise.d.ts"],
+        ["es2021.string", "lib.es2021.string.d.ts"],
+        ["es2021.weakref", "lib.es2021.weakref.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-        ["esnext.string", "lib.esnext.string.d.ts"],
-        ["esnext.promise", "lib.esnext.promise.d.ts"],
-        ["esnext.weakref", "lib.esnext.weakref.d.ts"]
+        ["esnext.string", "lib.es2021.string.d.ts"],
+        ["esnext.promise", "lib.es2021.promise.d.ts"],
+        ["esnext.weakref", "lib.es2021.weakref.d.ts"]
     ];
 
     /**
@@ -290,6 +294,7 @@ namespace ts {
             es2018: ScriptTarget.ES2018,
             es2019: ScriptTarget.ES2019,
             es2020: ScriptTarget.ES2020,
+            es2021: ScriptTarget.ES2021,
             esnext: ScriptTarget.ESNext,
         })),
         affectsSourceFile: true,
@@ -298,7 +303,7 @@ namespace ts {
         paramType: Diagnostics.VERSION,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Basic_Options,
-        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
+        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
     };
 
     /* @internal */

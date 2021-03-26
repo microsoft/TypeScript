@@ -70,7 +70,8 @@ var y = 20;
       ]
     }
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 162
 }
 
 //// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
