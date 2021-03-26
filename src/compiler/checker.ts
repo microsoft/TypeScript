@@ -9020,12 +9020,12 @@ namespace ts {
             return type;
         }
 
-        function resolveTypeOfAccessors(symbol: Symbol, writing = false) {
+        function resolveTypeOfAccessors(symbol: Symbol, isWrite = false) {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
             // For write operations, prioritize type annotations on the setter
-            if (writing) {
+            if (isWrite) {
                 const setterParameterType = getAnnotatedAccessorType(setter);
                 if (setterParameterType) {
                     return setterParameterType;
