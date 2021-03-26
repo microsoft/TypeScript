@@ -906,12 +906,15 @@ namespace ts {
                         if (extendedConfigCache) cleanExtendedConfigCache(extendedConfigCache, extendedConfigFilePath, toPath);
                         // Update projects
                         const projects = sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects;
+                        // If there are no referenced projects this extended config file watcher depend on ignore
                         if (!projects?.size) return;
                         projects.forEach(projectPath => {
                             if (toPath(configFileName) === projectPath) {
+                                // If this is the config file of the project, reload completely
                                 reloadLevel = ConfigFileProgramReloadLevel.Full;
                             }
                             else {
+                                // Reload config for the referenced projects and remove the resolutions from referenced projects since the config file changed
                                 const config = parsedConfigs?.get(projectPath);
                                 if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
                                 resolutionCache.removeResolutionsFromProjectReferenceRedirects(projectPath);
