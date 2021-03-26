@@ -2491,6 +2491,7 @@ namespace ts {
          * module.exports = <EntityNameExpression>
          * {<Identifier>}
          * {name: <EntityNameExpression>}
+         * const { x } = require ...
          */
         function isAliasSymbolDeclaration(node: Node): boolean {
             return node.kind === SyntaxKind.ImportEqualsDeclaration
@@ -41670,6 +41671,7 @@ namespace ts {
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.ImportSpecifier: // For rename import `x as y`
+            case SyntaxKind.BindingElement: // For commonjs import.
                 return true;
             case SyntaxKind.Identifier:
                 // For regular import, `decl` is an Identifier under the ImportSpecifier.
