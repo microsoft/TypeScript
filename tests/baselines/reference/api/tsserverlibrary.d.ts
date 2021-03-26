@@ -270,12 +270,12 @@ declare namespace ts {
         PropertyDeclaration = 163,
         MethodSignature = 164,
         MethodDeclaration = 165,
-        Constructor = 166,
-        GetAccessor = 167,
-        SetAccessor = 168,
-        CallSignature = 169,
-        ConstructSignature = 170,
-        ClassStaticBlockDeclaration = 171,
+        ClassStaticBlockDeclaration = 166,
+        Constructor = 167,
+        GetAccessor = 168,
+        SetAccessor = 169,
+        CallSignature = 170,
+        ConstructSignature = 171,
         IndexSignature = 172,
         TypePredicate = 173,
         TypeReference = 174,
@@ -561,7 +561,7 @@ declare namespace ts {
     }
     export interface JSDocContainer {
     }
-    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
+    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ClassStaticBlockDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -842,9 +842,8 @@ declare namespace ts {
         readonly parent: ObjectTypeDeclaration;
         readonly type: TypeNode;
     }
-    export interface ClassStaticBlockDeclaration extends ClassElement {
+    export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
-        readonly staticToken: Token<SyntaxKind.StaticKeyword>;
         readonly body: Block;
     }
     export interface TypeNode extends Node {
@@ -3265,8 +3264,8 @@ declare namespace ts {
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
-        createClassStaticBlockDeclaration(staticToken: Token<SyntaxKind.StaticKeyword>, body: Block): ClassStaticBlockDeclaration;
-        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, staticToken: Token<SyntaxKind.StaticKeyword>, body: Block): ClassStaticBlockDeclaration;
+        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
         createKeywordTypeNode<TKind extends KeywordTypeSyntaxKind>(kind: TKind): KeywordTypeNode<TKind>;
         createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
         updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
@@ -4276,7 +4275,6 @@ declare namespace ts {
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
     function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
-    function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration;
     function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is (SignatureDeclaration | ClassStaticBlockDeclaration);
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
@@ -4418,6 +4416,7 @@ declare namespace ts {
     function isPropertyDeclaration(node: Node): node is PropertyDeclaration;
     function isMethodSignature(node: Node): node is MethodSignature;
     function isMethodDeclaration(node: Node): node is MethodDeclaration;
+    function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration;
     function isConstructorDeclaration(node: Node): node is ConstructorDeclaration;
     function isGetAccessorDeclaration(node: Node): node is GetAccessorDeclaration;
     function isSetAccessorDeclaration(node: Node): node is SetAccessorDeclaration;
