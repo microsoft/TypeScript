@@ -211,6 +211,9 @@ namespace ts.server {
             return undefined;
         }
 
+        /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */ getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
@@ -1097,7 +1100,7 @@ namespace ts.server {
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
             let hasNewProgram = false;
-            if (this.program && (!oldProgram || (this.program !== oldProgram && !(this.program.structureIsReused & StructureIsReused.Completely)))) {
+            if (this.program && (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))) {
                 hasNewProgram = true;
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
@@ -1274,6 +1277,11 @@ namespace ts.server {
         }
 
         private addMissingFileWatcher(missingFilePath: Path) {
+            if (isConfiguredProject(this)) {
+                // If this file is referenced config file, we are already watching it, no need to watch again
+                const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
+                if (configFileExistenceInfo?.config?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
+            }
             const fileWatcher = this.projectService.watchFactory.watchFile(
                 missingFilePath,
                 (fileName, eventKind) => {
@@ -1983,6 +1991,8 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
+            this.useSourceOfProjectReferenceRedirect = maybeBind(this.hostProject, this.hostProject.useSourceOfProjectReferenceRedirect);
+            this.getParsedCommandLine = maybeBind(this.hostProject, this.hostProject.getParsedCommandLine);
         }
 
         /*@internal*/
@@ -2039,10 +2049,6 @@ namespace ts.server {
             return this.hostProject.getProjectReferences();
         }
 
-        useSourceOfProjectReferenceRedirect() {
-            return true;
-        }
-
         /*@internal*/
         includePackageJsonAutoImports() {
             return PackageJsonAutoImportPreference.Off;
@@ -2065,17 +2071,12 @@ namespace ts.server {
      */
     export class ConfiguredProject extends Project {
         /* @internal */
-        configFileWatcher: FileWatcher | undefined;
-        private directoriesWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher> | undefined;
-        readonly canonicalConfigFilePath: NormalizedPath;
-
-        /* @internal */
         pendingReload: ConfigFileProgramReloadLevel | undefined;
         /* @internal */
         pendingReloadReason: string | undefined;
 
         /* @internal */
-        openFileWatchTriggered = new Map<string, true>();
+        openFileWatchTriggered = new Map<string, ConfigFileProgramReloadLevel>();
 
         /*@internal*/
         canConfigFileJsonReportNoInputFiles = false;
@@ -2103,6 +2104,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(configFileName: NormalizedPath,
+            readonly canonicalConfigFilePath: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
@@ -2118,7 +2120,6 @@ namespace ts.server {
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
             );
-            this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
         /* @internal */
@@ -2137,28 +2138,32 @@ namespace ts.server {
         }
 
         /* @internal */
-        setWatchOptions(watchOptions: WatchOptions | undefined) {
-            const oldOptions = this.getWatchOptions();
-            super.setWatchOptions(watchOptions);
-            // If watch options different than older options
-            if (this.isInitialLoadPending() &&
-                !isJsonEqual(oldOptions, this.getWatchOptions())) {
-                const oldWatcher = this.configFileWatcher;
-                this.createConfigFileWatcher();
-                if (oldWatcher) oldWatcher.close();
+        getParsedCommandLine(fileName: string) {
+            const configFileName = asNormalizedPath(normalizePath(fileName));
+            const canonicalConfigFilePath = asNormalizedPath(this.projectService.toCanonicalFileName(configFileName));
+            // Ensure the config file existience info is cached
+            let configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(canonicalConfigFilePath);
+            if (!configFileExistenceInfo) {
+                this.projectService.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo = { exists: this.projectService.host.fileExists(configFileName) });
             }
+            // Ensure we have upto date parsed command line
+            this.projectService.ensureParsedConfigUptoDate(configFileName, canonicalConfigFilePath, configFileExistenceInfo, this);
+            // Watch wild cards if LS is enabled
+            if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic) {
+                this.projectService.watchWildcards(configFileName, configFileExistenceInfo, this);
+            }
+            return configFileExistenceInfo.exists ? configFileExistenceInfo.config!.parsedCommandLine : undefined;
         }
 
         /* @internal */
-        createConfigFileWatcher() {
-            this.configFileWatcher = this.projectService.watchFactory.watchFile(
-                this.getConfigFilePath(),
-                (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
-                PollingInterval.High,
-                this.projectService.getWatchOptions(this),
-                WatchType.ConfigFile,
-                this
-            );
+        onReleaseParsedCommandLine(fileName: string) {
+            this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))));
+        }
+
+        /* @internal */
+        private releaseParsedConfig(canonicalConfigFilePath: NormalizedPath) {
+            this.projectService.stopWatchingWildCards(canonicalConfigFilePath, this);
+            this.projectService.releaseParsedConfig(canonicalConfigFilePath, this);
         }
 
         /**
@@ -2276,32 +2281,9 @@ namespace ts.server {
             this.projectErrors = projectErrors;
         }
 
-        /*@internal*/
-        watchWildcards(wildcardDirectories: ESMap<string, WatchDirectoryFlags>) {
-            updateWatchingWildcardDirectories(
-                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = new Map()),
-                wildcardDirectories,
-                // Create new directory watcher
-                (directory, flags) => this.projectService.watchWildcardDirectory(directory as Path, flags, this),
-            );
-        }
-
-        /*@internal*/
-        stopWatchingWildCards() {
-            if (this.directoriesWatchedForWildcards) {
-                clearMap(this.directoriesWatchedForWildcards, closeFileWatcherOf);
-                this.directoriesWatchedForWildcards = undefined;
-            }
-        }
-
         close() {
-            if (this.configFileWatcher) {
-                this.configFileWatcher.close();
-                this.configFileWatcher = undefined;
-            }
-
-            this.stopWatchingWildCards();
-            this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
+            this.projectService.configFileExistenceInfoCache.forEach((_configFileExistenceInfo, canonicalConfigFilePath) =>
+                this.releaseParsedConfig(canonicalConfigFilePath));
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;
@@ -2349,18 +2331,18 @@ namespace ts.server {
                 return false;
             }
 
-            const configFileExistenceInfo = this.projectService.getConfigFileExistenceInfo(this);
+            const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(this.canonicalConfigFilePath)!;
             if (this.projectService.hasPendingProjectUpdate(this)) {
                 // If there is pending update for this project,
                 // we dont know if this project would be needed by any of the open files impacted by this config file
                 // In that case keep the project alive if there are open files impacted by this project
-                return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
+                return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
             }
 
             // If there is no pending update for this project,
             // We know exact set of open files that get impacted by this configured project as the files in the project
             // The project is referenced only if open files impacted by this project are present in this project
-            return forEachEntry(
+            return !!configFileExistenceInfo.openFilesImpactedByConfigFile && forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
                 (_value, infoPath) => {
                     const info = this.projectService.getScriptInfoForPath(infoPath)!;
