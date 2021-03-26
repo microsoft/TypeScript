@@ -32864,6 +32864,12 @@ namespace ts {
             }
         }
 
+        function checkClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            checkGrammarDecoratorsAndModifiers(node);
+
+            forEachChild(node, checkSourceElement);
+        }
+
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
             // Grammar check on signature of constructor and modifier of the constructor is done in checkSignatureDeclaration function.
             checkSignatureDeclaration(node);
@@ -37962,6 +37968,8 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     return checkMethodDeclaration(<MethodDeclaration | MethodSignature>node);
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return checkClassStaticBlockDeclaration(<ClassStaticBlockDeclaration>node);
                 case SyntaxKind.Constructor:
                     return checkConstructorDeclaration(<ConstructorDeclaration>node);
                 case SyntaxKind.GetAccessor:
@@ -38038,8 +38046,6 @@ namespace ts {
                     return checkMappedType(<MappedTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
-                case SyntaxKind.ClassStaticBlockDeclaration:
-                    return forEachChild(node, checkSourceElement);
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                     return checkBlock(<Block>node);
@@ -40357,6 +40363,7 @@ namespace ts {
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.TypeAliasDeclaration:
+                        case SyntaxKind.ClassStaticBlockDeclaration:
                             return true;
                         case SyntaxKind.EnumDeclaration:
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.ConstKeyword);
