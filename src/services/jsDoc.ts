@@ -110,7 +110,7 @@ namespace ts.JsDoc {
         static: "staticMember",
         template: "genericTypeName",
         this: "typeOfThis",
-        throws: "throwException",
+        throws: "throwsException",
         todo: "toDo",
         tutorial: "tutorialLink",
         type: "typeName",
