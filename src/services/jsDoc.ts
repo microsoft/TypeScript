@@ -79,6 +79,12 @@ namespace ts.JsDoc {
         "virtual",
         "yields"
     ];
+    const syntaxKindDisplayPartFunctionDict: Partial<Record<SyntaxKind, ConstructSpecificDisplayPartFunction>> = {
+        [SyntaxKind.JSDocTypedefTag]: typeDefinitionNamePart,
+        [SyntaxKind.JSDocCallbackTag]: callbackFunctionNamePart,
+        [SyntaxKind.JSDocPropertyTag]: propertyNamePart,
+        [SyntaxKind.JSDocParameterTag]: parameterNamePart,
+    };
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
@@ -156,18 +162,24 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
-                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
+                const { name } = tag as JSDocCallbackTag | JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+                return name
+                    ? withNode(name, syntaxKindDisplayPartFunctionDict[tag.kind])
+                    : comment === undefined
+                    ? undefined
+                    : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
 
-        function withNode(node: Node) {
-            return addComment(node.getText());
+        function withNode(node: Node, constructDisplayPartFunc?: ConstructSpecificDisplayPartFunction) {
+            return addComment(node.getText(), constructDisplayPartFunc);
         }
 
-        function addComment(s: string) {
-            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)];
+        function addComment(s: string, constructDisplayPartFunc?: ConstructSpecificDisplayPartFunction) {
+            return comment
+                ? [!!constructDisplayPartFunc ? constructDisplayPartFunc(s) : textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
+                : [textPart(s)];
         }
     }
 
