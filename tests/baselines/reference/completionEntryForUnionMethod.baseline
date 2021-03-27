@@ -223,7 +223,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns a string representation of an array. The elements are converted to string using their toLocalString methods.",
+              "text": "Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.",
               "kind": "text"
             }
           ]

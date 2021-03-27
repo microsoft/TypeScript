@@ -1073,7 +1073,7 @@ interface ReadonlyArray<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
@@ -1207,7 +1207,7 @@ interface Array<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
