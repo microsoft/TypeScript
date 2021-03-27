@@ -80,10 +80,10 @@ namespace ts.JsDoc {
         "yields"
     ];
     const syntaxKindDisplayPartFunctionDict: Partial<Record<SyntaxKind, ConstructSpecificDisplayPartFunction>> = {
-        [SyntaxKind.JSDocTypedefTag]: typeDefinitionNamePart,
         [SyntaxKind.JSDocCallbackTag]: callbackFunctionNamePart,
-        [SyntaxKind.JSDocPropertyTag]: propertyNamePart,
         [SyntaxKind.JSDocParameterTag]: parameterNamePart,
+        [SyntaxKind.JSDocPropertyTag]: propertyNamePart,
+        [SyntaxKind.JSDocTypedefTag]: typeDefinitionNamePart,
     };
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
@@ -147,14 +147,14 @@ namespace ts.JsDoc {
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
-        const { comment } = tag;
-        switch (tag.kind) {
+        const { comment, kind } = tag;
+        switch (kind) {
             case SyntaxKind.JSDocImplementsTag:
                 return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
+                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "), typeParameterNamePart);
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
@@ -164,7 +164,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocCallbackTag | JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
                 return name
-                    ? withNode(name, syntaxKindDisplayPartFunctionDict[tag.kind])
+                    ? withNode(name, syntaxKindDisplayPartFunctionDict[kind])
                     : comment === undefined
                     ? undefined
                     : getDisplayPartsFromComment(comment, checker);
