@@ -100,7 +100,7 @@
           "text": [
             {
               "text": "T",
-              "kind": "text"
+              "kind": "typeParameterName"
             },
             {
               "text": " ",
@@ -152,7 +152,7 @@
           "text": [
             {
               "text": "x",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",
