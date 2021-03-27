@@ -8,11 +8,11 @@ new A().#foo = 4;               // Error
 
 //// [privateNameNotAccessibleOutsideDefiningClass.js]
 "use strict";
-var _foo;
+var _A_foo;
 class A {
     constructor() {
-        _foo.set(this, 3);
+        _A_foo.set(this, 3);
     }
 }
-_foo = new WeakMap();
+_A_foo = new WeakMap();
 new A(). = 4; // Error

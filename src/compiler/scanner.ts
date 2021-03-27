@@ -127,6 +127,7 @@ namespace ts {
         private: SyntaxKind.PrivateKeyword,
         protected: SyntaxKind.ProtectedKeyword,
         public: SyntaxKind.PublicKeyword,
+        override: SyntaxKind.OverrideKeyword,
         readonly: SyntaxKind.ReadonlyKeyword,
         require: SyntaxKind.RequireKeyword,
         global: SyntaxKind.GlobalKeyword,
@@ -2335,6 +2336,7 @@ namespace ts {
                         tokenValue += ":";
                         pos++;
                         namespaceSeparator = true;
+                        token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
                         continue;
                     }
                     const oldPos = pos;

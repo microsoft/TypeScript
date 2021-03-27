@@ -372,7 +372,7 @@ var x = 0;`, {
         });
 
         transpilesCorrectly("Supports setting 'rootDir'", "x;", {
-            options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "input.js", reportDiagnostics: true }
+            options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "./rootDir/input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'rootDirs'", "x;", {
