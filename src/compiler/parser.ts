@@ -3213,7 +3213,10 @@ namespace ts {
 
         function isTypeMemberStart(): boolean {
             // Return true if we have the start of a signature member
-            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
+            if (token() === SyntaxKind.OpenParenToken ||
+                token() === SyntaxKind.LessThanToken ||
+                token() === SyntaxKind.GetKeyword ||
+                token() === SyntaxKind.SetKeyword) {
                 return true;
             }
             let idToken = false;
@@ -3254,6 +3257,14 @@ namespace ts {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiers();
+            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor);
+            }
+
+            if (parseContextualModifier(SyntaxKind.SetKeyword)) {
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor);
+            }
+
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers);
             }
@@ -7541,6 +7552,9 @@ namespace ts {
                             break;
                         case "readonly":
                             tag = parseSimpleTag(start, factory.createJSDocReadonlyTag, tagName, margin, indentText);
+                            break;
+                        case "override":
+                            tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
                             break;
                         case "deprecated":
                             hasDeprecatedTag = true;

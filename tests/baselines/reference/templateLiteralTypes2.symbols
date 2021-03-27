@@ -257,68 +257,107 @@ function ft14(t: `foo${number}`) {
 >t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
 }
 
+declare function g1<T>(x: T): T;
+>g1 : Symbol(g1, Decl(templateLiteralTypes2.ts, 70, 1))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 72, 20))
+>x : Symbol(x, Decl(templateLiteralTypes2.ts, 72, 23))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 72, 20))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 72, 20))
+
+declare function g2<T extends string>(x: T): T;
+>g2 : Symbol(g2, Decl(templateLiteralTypes2.ts, 72, 32))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 73, 20))
+>x : Symbol(x, Decl(templateLiteralTypes2.ts, 73, 38))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 73, 20))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 73, 20))
+
+function ft20(s: string) {
+>ft20 : Symbol(ft20, Decl(templateLiteralTypes2.ts, 73, 47))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 75, 14))
+
+    let x1 = g1(`xyz-${s}`);  // string
+>x1 : Symbol(x1, Decl(templateLiteralTypes2.ts, 76, 7))
+>g1 : Symbol(g1, Decl(templateLiteralTypes2.ts, 70, 1))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 75, 14))
+
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+>x2 : Symbol(x2, Decl(templateLiteralTypes2.ts, 77, 7))
+>g2 : Symbol(g2, Decl(templateLiteralTypes2.ts, 72, 32))
+>s : Symbol(s, Decl(templateLiteralTypes2.ts, 75, 14))
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
->takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 70, 1))
->T : Symbol(T, Decl(templateLiteralTypes2.ts, 74, 30))
->literal : Symbol(literal, Decl(templateLiteralTypes2.ts, 74, 48))
->T : Symbol(T, Decl(templateLiteralTypes2.ts, 74, 30))
->T : Symbol(T, Decl(templateLiteralTypes2.ts, 74, 30))
->R : Symbol(R, Decl(templateLiteralTypes2.ts, 74, 87))
->R : Symbol(R, Decl(templateLiteralTypes2.ts, 74, 87))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 82, 30))
+>literal : Symbol(literal, Decl(templateLiteralTypes2.ts, 82, 48))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 82, 30))
+>T : Symbol(T, Decl(templateLiteralTypes2.ts, 82, 30))
+>R : Symbol(R, Decl(templateLiteralTypes2.ts, 82, 87))
+>R : Symbol(R, Decl(templateLiteralTypes2.ts, 82, 87))
 
 const t1 = takesLiteral("foo.bar.baz"); // "baz"
->t1 : Symbol(t1, Decl(templateLiteralTypes2.ts, 76, 5))
->takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 70, 1))
+>t1 : Symbol(t1, Decl(templateLiteralTypes2.ts, 84, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
 
 const id2 = "foo.bar.baz";
->id2 : Symbol(id2, Decl(templateLiteralTypes2.ts, 77, 5))
+>id2 : Symbol(id2, Decl(templateLiteralTypes2.ts, 85, 5))
 
 const t2 = takesLiteral(id2); // "baz"
->t2 : Symbol(t2, Decl(templateLiteralTypes2.ts, 78, 5))
->takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 70, 1))
->id2 : Symbol(id2, Decl(templateLiteralTypes2.ts, 77, 5))
+>t2 : Symbol(t2, Decl(templateLiteralTypes2.ts, 86, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>id2 : Symbol(id2, Decl(templateLiteralTypes2.ts, 85, 5))
 
 declare const someString: string;
->someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 80, 13))
+>someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
 
 const t3 = takesLiteral(`foo.bar.${someString}`);  // string
->t3 : Symbol(t3, Decl(templateLiteralTypes2.ts, 81, 5))
->takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 70, 1))
->someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 80, 13))
+>t3 : Symbol(t3, Decl(templateLiteralTypes2.ts, 89, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
 
 const id4 = `foo.bar.${someString}`;
->id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 83, 5))
->someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 80, 13))
+>id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 91, 5))
+>someString : Symbol(someString, Decl(templateLiteralTypes2.ts, 88, 13))
 
 const t4 = takesLiteral(id4);  // string
->t4 : Symbol(t4, Decl(templateLiteralTypes2.ts, 84, 5))
->takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 70, 1))
->id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 83, 5))
+>t4 : Symbol(t4, Decl(templateLiteralTypes2.ts, 92, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>id4 : Symbol(id4, Decl(templateLiteralTypes2.ts, 91, 5))
 
 declare const someUnion: 'abc' | 'def' | 'ghi';
->someUnion : Symbol(someUnion, Decl(templateLiteralTypes2.ts, 86, 13))
+>someUnion : Symbol(someUnion, Decl(templateLiteralTypes2.ts, 94, 13))
 
 const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
->t5 : Symbol(t5, Decl(templateLiteralTypes2.ts, 87, 5))
->takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 70, 1))
->someUnion : Symbol(someUnion, Decl(templateLiteralTypes2.ts, 86, 13))
+>t5 : Symbol(t5, Decl(templateLiteralTypes2.ts, 95, 5))
+>takesLiteral : Symbol(takesLiteral, Decl(templateLiteralTypes2.ts, 78, 1))
+>someUnion : Symbol(someUnion, Decl(templateLiteralTypes2.ts, 94, 13))
 
 // Repro from #41732
 
 const pixelValue: number = 22;
->pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 91, 5))
+>pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 99, 5))
 
 type PixelValueType = `${number}px`;
->PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 91, 30))
+>PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 99, 30))
 
 const pixelString: PixelValueType = `22px`;
->pixelString : Symbol(pixelString, Decl(templateLiteralTypes2.ts, 95, 5))
->PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 91, 30))
+>pixelString : Symbol(pixelString, Decl(templateLiteralTypes2.ts, 103, 5))
+>PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 99, 30))
 
 const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
->pixelStringWithTemplate : Symbol(pixelStringWithTemplate, Decl(templateLiteralTypes2.ts, 97, 5))
->PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 91, 30))
->pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 91, 5))
+>pixelStringWithTemplate : Symbol(pixelStringWithTemplate, Decl(templateLiteralTypes2.ts, 105, 5))
+>PixelValueType : Symbol(PixelValueType, Decl(templateLiteralTypes2.ts, 99, 30))
+>pixelValue : Symbol(pixelValue, Decl(templateLiteralTypes2.ts, 99, 5))
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : Symbol(getCardTitle, Decl(templateLiteralTypes2.ts, 105, 66))
+>title : Symbol(title, Decl(templateLiteralTypes2.ts, 109, 22))
+
+    return `test-${title}`;
+>title : Symbol(title, Decl(templateLiteralTypes2.ts, 109, 22))
+}
 

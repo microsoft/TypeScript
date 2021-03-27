@@ -1,0 +1,61 @@
+=== tests/cases/conformance/override/override4.ts ===
+class B {
+>B : Symbol(B, Decl(override4.ts, 0, 0))
+
+    p1: number = 1;
+>p1 : Symbol(B.p1, Decl(override4.ts, 0, 9))
+
+    p2: number = 1;
+>p2 : Symbol(B.p2, Decl(override4.ts, 1, 19))
+
+    p3: () => void;
+>p3 : Symbol(B.p3, Decl(override4.ts, 2, 19))
+
+    p4: () => void;
+>p4 : Symbol(B.p4, Decl(override4.ts, 3, 19))
+
+    foo (v: string) {}
+>foo : Symbol(B.foo, Decl(override4.ts, 4, 19))
+>v : Symbol(v, Decl(override4.ts, 5, 9))
+
+    fooo (v: string) {}
+>fooo : Symbol(B.fooo, Decl(override4.ts, 5, 22))
+>v : Symbol(v, Decl(override4.ts, 6, 10))
+}
+
+class D extends B {
+>D : Symbol(D, Decl(override4.ts, 7, 1))
+>B : Symbol(B, Decl(override4.ts, 0, 0))
+
+    p1: number = 2;
+>p1 : Symbol(D.p1, Decl(override4.ts, 9, 19))
+
+    override p2: number = 3;
+>p2 : Symbol(D.p2, Decl(override4.ts, 10, 19))
+
+    p3: () => void;
+>p3 : Symbol(D.p3, Decl(override4.ts, 11, 28))
+
+    override p4: () => void;
+>p4 : Symbol(D.p4, Decl(override4.ts, 12, 19))
+
+    override foo (v: string) {}
+>foo : Symbol(D.foo, Decl(override4.ts, 13, 28))
+>v : Symbol(v, Decl(override4.ts, 14, 18))
+
+    fooo (v: string) {}
+>fooo : Symbol(D.fooo, Decl(override4.ts, 14, 31))
+>v : Symbol(v, Decl(override4.ts, 16, 10))
+
+}
+
+class DD extends B {
+>DD : Symbol(DD, Decl(override4.ts, 18, 1))
+>B : Symbol(B, Decl(override4.ts, 0, 0))
+
+    override foo: () => void
+>foo : Symbol(DD.foo, Decl(override4.ts, 20, 20))
+
+    fooo: () => void;
+>fooo : Symbol(DD.fooo, Decl(override4.ts, 21, 28))
+}

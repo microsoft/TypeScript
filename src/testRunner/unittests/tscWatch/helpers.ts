@@ -390,6 +390,7 @@ namespace ts.tscWatch {
         let programs = watchBaseline({
             baseline,
             getPrograms,
+            oldPrograms: emptyArray,
             sys,
             oldSnap,
             baselineSourceMap,
@@ -402,6 +403,7 @@ namespace ts.tscWatch {
             programs = watchBaseline({
                 baseline,
                 getPrograms,
+                oldPrograms: programs,
                 sys,
                 oldSnap,
                 baselineSourceMap,
@@ -422,12 +424,13 @@ namespace ts.tscWatch {
     }
 
     export interface WatchBaseline extends Baseline, TscWatchCheckOptions {
+        oldPrograms: readonly (CommandLineProgram | undefined)[];
         getPrograms: () => readonly CommandLineProgram[];
     }
-    export function watchBaseline({ baseline, getPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
+    export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         sys.serializeOutput(baseline);
-        const programs = baselinePrograms(baseline, getPrograms, baselineDependencies);
+        const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
         sys.serializeWatches(baseline);
         baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
         sys.diff(baseline, oldSnap);
@@ -438,45 +441,56 @@ namespace ts.tscWatch {
         return programs;
     }
 
-    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], baselineDependencies: boolean | undefined) {
+    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
         const programs = getPrograms();
-        for (const program of programs) {
-            baselineProgram(baseline, program, baselineDependencies);
+        for (let i = 0; i < programs.length; i++) {
+            baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
         }
         return programs;
     }
 
-    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, baselineDependencies: boolean | undefined) {
-        const options = program.getCompilerOptions();
-        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
-        baseline.push(`Program options: ${JSON.stringify(options)}`);
-        baseline.push(`Program structureReused: ${(<any>ts).StructureIsReused[program.structureIsReused]}`);
-        baseline.push("Program files::");
-        for (const file of program.getSourceFiles()) {
-            baseline.push(file.fileName);
+    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
+        if (program !== oldProgram?.[0]) {
+            const options = program.getCompilerOptions();
+            baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
+            baseline.push(`Program options: ${JSON.stringify(options)}`);
+            baseline.push(`Program structureReused: ${(<any>ts).StructureIsReused[program.structureIsReused]}`);
+            baseline.push("Program files::");
+            for (const file of program.getSourceFiles()) {
+                baseline.push(file.fileName);
+            }
+        }
+        else {
+            baseline.push(`Program: Same as old program`);
         }
         baseline.push("");
+
         if (!builderProgram) return;
-        const state = builderProgram.getState();
-        if (state.semanticDiagnosticsPerFile?.size) {
-            baseline.push("Semantic diagnostics in builder refreshed for::");
-            for (const file of program.getSourceFiles()) {
-                if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
-                    baseline.push(file.fileName);
+        if (builderProgram !== oldProgram?.[1]) {
+            const state = builderProgram.getState();
+            if (state.semanticDiagnosticsPerFile?.size) {
+                baseline.push("Semantic diagnostics in builder refreshed for::");
+                for (const file of program.getSourceFiles()) {
+                    if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
+                        baseline.push(file.fileName);
+                    }
+                }
+            }
+            else {
+                baseline.push("No cached semantic diagnostics in the builder::");
+            }
+            baseline.push("");
+            if (!baselineDependencies) return;
+            baseline.push("Dependencies for::");
+            for (const file of builderProgram.getSourceFiles()) {
+                baseline.push(`${file.fileName}:`);
+                for (const depenedency of builderProgram.getAllDependencies(file)) {
+                    baseline.push(`  ${depenedency}`);
                 }
             }
         }
         else {
-            baseline.push("No cached semantic diagnostics in the builder::");
-        }
-        baseline.push("");
-        if (!baselineDependencies) return;
-        baseline.push("Dependencies for::");
-        for (const file of builderProgram.getSourceFiles()) {
-            baseline.push(`${file.fileName}:`);
-            for (const depenedency of builderProgram.getAllDependencies(file)) {
-                baseline.push(`  ${depenedency}`);
-            }
+            baseline.push(`BuilderProgram: Same as old builder program`);
         }
         baseline.push("");
     }

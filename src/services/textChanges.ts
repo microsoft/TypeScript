@@ -505,6 +505,16 @@ namespace ts.textChanges {
             }
         }
 
+        public insertNodeAtConstructorStartAfterSuperCall(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
+            const superCallStatement = find(ctr.body!.statements, stmt => isExpressionStatement(stmt) && isSuperCall(stmt.expression));
+            if (!superCallStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body!.statements, newStatement]);
+            }
+            else {
+                this.insertNodeAfter(sourceFile, superCallStatement, newStatement);
+            }
+        }
+
         public insertNodeAtConstructorEnd(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
             const lastStatement = lastOrUndefined(ctr.body!.statements);
             if (!lastStatement || !ctr.body!.multiLine) {

@@ -1706,11 +1706,7 @@
         "category": "Error",
         "code": 2378
     },
-    "Getter and setter accessors do not agree in visibility.": {
-        "category": "Error",
-        "code": 2379
-    },
-    "'get' and 'set' accessor must have the same type.": {
+    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
         "code": 2380
     },
@@ -3308,6 +3304,10 @@
         "category": "Error",
         "code": 2807
     },
+    "A get accessor must be at least as accessible as the setter": {
+        "category": "Error",
+        "code": 2808
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3684,6 +3684,26 @@
     "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
         "category": "Error",
         "code": 4111
+    },
+    "This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4112
+    },
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4113
+    },
+    "This member must have an 'override' modifier because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4114
+    },
+    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+        "category": "Error",
+        "code": 4115
+    },
+    "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4116
     },
 
     "The current host does not support the '{0}' option.": {
@@ -5018,14 +5038,18 @@
         "category": "Message",
         "code": 6505
     },
-    "Require undeclared properties from index signatures to use element accesses.": {
-        "category": "Error",
-        "code": 6803
-    },
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
         "code": 6800
+    },
+    "Ensure overriding members in derived classes are marked with an 'override' modifier.": {
+        "category": "Message",
+        "code": 6801
+    },
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Message",
+        "code": 6802
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -6300,6 +6324,22 @@
     "Function not implemented.": {
         "category": "Message",
         "code": 95159
+    },
+    "Add 'override' modifier": {
+        "category": "Message",
+        "code": 95160
+    },
+    "Remove 'override' modifier": {
+        "category": "Message",
+        "code": 95161
+    },
+    "Add all missing 'override' modifiers": {
+        "category": "Message",
+        "code": 95162
+    },
+    "Remove all unnecessary 'override' modifiers": {
+        "category": "Message",
+        "code": 95163
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

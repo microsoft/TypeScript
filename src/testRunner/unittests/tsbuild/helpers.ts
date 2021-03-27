@@ -333,7 +333,6 @@ interface Symbol {
 
     interface VerifyIncrementalCorrectness {
         scenario: TscCompile["scenario"];
-        subScenario: TscCompile["subScenario"];
         commandLineArgs: TscCompile["commandLineArgs"];
         modifyFs: TscCompile["modifyFs"];
         incrementalModifyFs: TscIncremental["modifyFs"];
@@ -342,10 +341,10 @@ interface Symbol {
         newSys: TscCompileSystem;
         cleanBuildDiscrepancies: TscIncremental["cleanBuildDiscrepancies"];
     }
-    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number) {
-        it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index}`, () => {
+    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number, subScenario: TscCompile["subScenario"]) {
+        it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index} ${subScenario}`, () => {
             const {
-                scenario, subScenario, commandLineArgs, cleanBuildDiscrepancies,
+                scenario, commandLineArgs, cleanBuildDiscrepancies,
                 modifyFs, incrementalModifyFs,
                 tick, baseFs, newSys
             } = input();
@@ -594,7 +593,6 @@ interface Symbol {
                     verifyTscBaseline(() => newSys);
                     verifyIncrementalCorrectness(() => ({
                         scenario,
-                        subScenario: incrementalSubScenario || subScenario,
                         baseFs,
                         newSys,
                         commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
@@ -602,7 +600,7 @@ interface Symbol {
                         incrementalModifyFs,
                         modifyFs,
                         tick
-                    }), index);
+                    }), index, incrementalSubScenario || subScenario);
                 });
             });
         });
@@ -692,7 +690,6 @@ interface Symbol {
             describe("incremental correctness", () => {
                 incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs, subScenario, buildKind, cleanBuildDiscrepancies }, index) => verifyIncrementalCorrectness(() => ({
                     scenario,
-                    subScenario: subScenario || buildKind,
                     baseFs,
                     newSys: incrementalSys[index],
                     commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
@@ -704,7 +701,7 @@ interface Symbol {
                     },
                     modifyFs,
                     tick
-                }), index));
+                }), index, subScenario || buildKind));
             });
         });
     }

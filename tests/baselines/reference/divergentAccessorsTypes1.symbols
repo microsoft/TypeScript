@@ -1,0 +1,185 @@
+=== tests/cases/compiler/divergentAccessorsTypes1.ts ===
+class Test1 {
+>Test1 : Symbol(Test1, Decl(divergentAccessorsTypes1.ts, 0, 0))
+
+    get foo(): string { return "" }
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes1.ts, 0, 13), Decl(divergentAccessorsTypes1.ts, 1, 35))
+
+    set foo(s: string | number) {
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes1.ts, 0, 13), Decl(divergentAccessorsTypes1.ts, 1, 35))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 2, 12))
+
+        let a = s as string;
+>a : Symbol(a, Decl(divergentAccessorsTypes1.ts, 3, 11))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 2, 12))
+
+        let b = s as number;
+>b : Symbol(b, Decl(divergentAccessorsTypes1.ts, 4, 11))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 2, 12))
+    }
+
+    get bar(): string | number { return "" }
+>bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+
+    set bar(s: string | number | boolean) {
+>bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 8, 12))
+    }
+}
+
+interface Test2 {
+>Test2 : Symbol(Test2, Decl(divergentAccessorsTypes1.ts, 10, 1))
+
+    get foo(): string;
+>foo : Symbol(Test2.foo, Decl(divergentAccessorsTypes1.ts, 12, 17), Decl(divergentAccessorsTypes1.ts, 13, 22))
+
+    set foo(s: string | number);
+>foo : Symbol(Test2.foo, Decl(divergentAccessorsTypes1.ts, 12, 17), Decl(divergentAccessorsTypes1.ts, 13, 22))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 14, 12))
+
+    get bar(): string | number;
+>bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+
+    set bar(s: string | number | boolean);
+>bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 17, 12))
+}
+
+type Test3 = {
+>Test3 : Symbol(Test3, Decl(divergentAccessorsTypes1.ts, 18, 1))
+
+    get foo(): string;
+>foo : Symbol(foo, Decl(divergentAccessorsTypes1.ts, 20, 14), Decl(divergentAccessorsTypes1.ts, 21, 22))
+
+    set foo(s: string | number);
+>foo : Symbol(foo, Decl(divergentAccessorsTypes1.ts, 20, 14), Decl(divergentAccessorsTypes1.ts, 21, 22))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 22, 12))
+
+    get bar(): string | number;
+>bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+
+    set bar(s: string | number | boolean);
+>bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+>s : Symbol(s, Decl(divergentAccessorsTypes1.ts, 25, 12))
+
+};
+
+{
+    const t = new Test1();
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>Test1 : Symbol(Test1, Decl(divergentAccessorsTypes1.ts, 0, 0))
+
+    t.foo = 32;
+>t.foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes1.ts, 0, 13), Decl(divergentAccessorsTypes1.ts, 1, 35))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes1.ts, 0, 13), Decl(divergentAccessorsTypes1.ts, 1, 35))
+
+    let m: string = t.foo;
+>m : Symbol(m, Decl(divergentAccessorsTypes1.ts, 31, 7))
+>t.foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes1.ts, 0, 13), Decl(divergentAccessorsTypes1.ts, 1, 35))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>foo : Symbol(Test1.foo, Decl(divergentAccessorsTypes1.ts, 0, 13), Decl(divergentAccessorsTypes1.ts, 1, 35))
+
+    // See how CFA interacts with out-of-type writes
+    t.bar = 42;
+>t.bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+
+    let n: number = t.bar;
+>n : Symbol(n, Decl(divergentAccessorsTypes1.ts, 35, 7))
+>t.bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+
+    t.bar = false;
+>t.bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+
+    let o = t.bar;
+>o : Symbol(o, Decl(divergentAccessorsTypes1.ts, 37, 7))
+>t.bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 29, 9))
+>bar : Symbol(Test1.bar, Decl(divergentAccessorsTypes1.ts, 5, 5), Decl(divergentAccessorsTypes1.ts, 7, 44))
+}
+
+{
+    const t = {} as Test2;
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>Test2 : Symbol(Test2, Decl(divergentAccessorsTypes1.ts, 10, 1))
+
+    t.foo = 32;
+>t.foo : Symbol(Test2.foo, Decl(divergentAccessorsTypes1.ts, 12, 17), Decl(divergentAccessorsTypes1.ts, 13, 22))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>foo : Symbol(Test2.foo, Decl(divergentAccessorsTypes1.ts, 12, 17), Decl(divergentAccessorsTypes1.ts, 13, 22))
+
+    let m: string = t.foo;
+>m : Symbol(m, Decl(divergentAccessorsTypes1.ts, 43, 7))
+>t.foo : Symbol(Test2.foo, Decl(divergentAccessorsTypes1.ts, 12, 17), Decl(divergentAccessorsTypes1.ts, 13, 22))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>foo : Symbol(Test2.foo, Decl(divergentAccessorsTypes1.ts, 12, 17), Decl(divergentAccessorsTypes1.ts, 13, 22))
+
+    // See how CFA interacts with out-of-type writes
+    t.bar = 42;
+>t.bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+
+    let n: number = t.bar;
+>n : Symbol(n, Decl(divergentAccessorsTypes1.ts, 47, 7))
+>t.bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+
+    t.bar = false;
+>t.bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+
+    let o = t.bar;
+>o : Symbol(o, Decl(divergentAccessorsTypes1.ts, 49, 7))
+>t.bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 41, 9))
+>bar : Symbol(Test2.bar, Decl(divergentAccessorsTypes1.ts, 14, 32), Decl(divergentAccessorsTypes1.ts, 16, 31))
+}
+
+{
+    const t = {} as Test3;
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>Test3 : Symbol(Test3, Decl(divergentAccessorsTypes1.ts, 18, 1))
+
+    t.foo = 32;
+>t.foo : Symbol(foo, Decl(divergentAccessorsTypes1.ts, 20, 14), Decl(divergentAccessorsTypes1.ts, 21, 22))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>foo : Symbol(foo, Decl(divergentAccessorsTypes1.ts, 20, 14), Decl(divergentAccessorsTypes1.ts, 21, 22))
+
+    let m: string = t.foo;
+>m : Symbol(m, Decl(divergentAccessorsTypes1.ts, 55, 7))
+>t.foo : Symbol(foo, Decl(divergentAccessorsTypes1.ts, 20, 14), Decl(divergentAccessorsTypes1.ts, 21, 22))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>foo : Symbol(foo, Decl(divergentAccessorsTypes1.ts, 20, 14), Decl(divergentAccessorsTypes1.ts, 21, 22))
+
+    // See how CFA interacts with out-of-type writes
+    t.bar = 42;
+>t.bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+
+    let n: number = t.bar;
+>n : Symbol(n, Decl(divergentAccessorsTypes1.ts, 59, 7))
+>t.bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+
+    t.bar = false;
+>t.bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+
+    let o = t.bar;
+>o : Symbol(o, Decl(divergentAccessorsTypes1.ts, 61, 7))
+>t.bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+>t : Symbol(t, Decl(divergentAccessorsTypes1.ts, 53, 9))
+>bar : Symbol(bar, Decl(divergentAccessorsTypes1.ts, 22, 32), Decl(divergentAccessorsTypes1.ts, 24, 31))
+}
