@@ -1,8 +1,9 @@
 tests/cases/compiler/throwType_function_parameter.ts(4,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
 tests/cases/compiler/throwType_function_parameter.ts(4,24): error TS2809: Type instantiated results in a throw type saying: 
     No zero
-tests/cases/compiler/throwType_function_parameter.ts(7,69): error TS2693: 'T' only refers to a type, but is being used as a value here.
-tests/cases/compiler/throwType_function_parameter.ts(8,70): error TS2693: 'T' only refers to a type, but is being used as a value here.
+tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+tests/cases/compiler/throwType_function_parameter.ts(13,4): error TS2809: Type instantiated results in a throw type saying: 
+    "found ""str""
 
 
 ==== tests/cases/compiler/throwType_function_parameter.ts (4 errors) ====
@@ -17,13 +18,16 @@ tests/cases/compiler/throwType_function_parameter.ts(8,70): error TS2693: 'T' on
 !!! error TS2809:     No zero
     checkParameterPosition(12345678)
     
-    type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
-                                                                        ~
-!!! error TS2693: 'T' only refers to a type, but is being used as a value here.
-    type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
-                                                                         ~
-!!! error TS2693: 'T' only refers to a type, but is being used as a value here.
+    type MustNumber<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
+    type MustNumber2<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
     function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
         a = b
     }
+    
+    f2('str', {})
+       ~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+       ~~~~~
+!!! error TS2809: Type instantiated results in a throw type saying: 
+!!! error TS2809:     "found ""str""
     

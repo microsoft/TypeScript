@@ -19,13 +19,11 @@ checkParameterPosition(12345678)
 >checkParameterPosition : <T extends number>(y: T extends 1234 ? never : T) => void
 >12345678 : 12345678
 
-type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
+type MustNumber<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
 >MustNumber : MustNumber<T>
->T : any
 
-type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
+type MustNumber2<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
 >MustNumber2 : MustNumber2<T>
->T : any
 
 function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
 >f2 : <T>(a: MustNumber<T>, b: MustNumber2<T>) => void
@@ -37,4 +35,10 @@ function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
 >a : MustNumber<T>
 >b : MustNumber2<T>
 }
+
+f2('str', {})
+>f2('str', {}) : void
+>f2 : <T>(a: MustNumber<T>, b: MustNumber2<T>) => void
+>'str' : "str"
+>{} : {}
 

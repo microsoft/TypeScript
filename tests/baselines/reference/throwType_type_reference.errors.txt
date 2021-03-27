@@ -1,15 +1,12 @@
-tests/cases/compiler/throwType_type_reference.ts(1,89): error TS2693: 'T' only refers to a type, but is being used as a value here.
 tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2809: Type instantiated results in a throw type saying: 
-    `Expected number, but found "${any}"`
+    Expected number, but found ""Window & typeof globalThis""
 
 
-==== tests/cases/compiler/throwType_type_reference.ts (2 errors) ====
-    type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${typeof T}"`
-                                                                                            ~
-!!! error TS2693: 'T' only refers to a type, but is being used as a value here.
+==== tests/cases/compiler/throwType_type_reference.ts (1 errors) ====
+    type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${TypeToString<T>}"`
     type A = MustNumber<1>
-    type B = MustNumber<typeof window>
-             ~~~~~~~~~~~~~~~~~~~~~~~~~
+    type B = MustNumber<TypeToString<typeof window>>
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2809: Type instantiated results in a throw type saying: 
-!!! error TS2809:     `Expected number, but found "${any}"`
+!!! error TS2809:     Expected number, but found ""Window & typeof globalThis""
     

@@ -1,12 +1,11 @@
 === tests/cases/compiler/throwType_type_reference.ts ===
-type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${typeof T}"`
+type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${TypeToString<T>}"`
 >MustNumber : MustNumber<T>
->T : any
 
 type A = MustNumber<1>
 >A : 1
 
-type B = MustNumber<typeof window>
+type B = MustNumber<TypeToString<typeof window>>
 >B : never
 >window : Window & typeof globalThis
 

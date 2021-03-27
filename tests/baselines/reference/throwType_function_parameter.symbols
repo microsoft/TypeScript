@@ -17,30 +17,37 @@ checkParameterPosition(1234)
 checkParameterPosition(12345678)
 >checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
 
-type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
+type MustNumber<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
 >MustNumber : Symbol(MustNumber, Decl(throwType_function_parameter.ts, 4, 32))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
+>TypeToString : Symbol(TypeToString, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
 
-type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
->MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 72))
+type MustNumber2<T> = T extends number ? T : throw `"found "${TypeToString<T>}"`
+>MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 79))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
+>TypeToString : Symbol(TypeToString, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
 
 function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
->f2 : Symbol(f2, Decl(throwType_function_parameter.ts, 7, 73))
+>f2 : Symbol(f2, Decl(throwType_function_parameter.ts, 7, 80))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 8, 12))
 >a : Symbol(a, Decl(throwType_function_parameter.ts, 8, 15))
 >MustNumber : Symbol(MustNumber, Decl(throwType_function_parameter.ts, 4, 32))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 8, 12))
 >b : Symbol(b, Decl(throwType_function_parameter.ts, 8, 32))
->MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 72))
+>MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 79))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 8, 12))
 
     a = b
 >a : Symbol(a, Decl(throwType_function_parameter.ts, 8, 15))
 >b : Symbol(b, Decl(throwType_function_parameter.ts, 8, 32))
 }
+
+f2('str', {})
+>f2 : Symbol(f2, Decl(throwType_function_parameter.ts, 7, 80))
 
