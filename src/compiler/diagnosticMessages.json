@@ -1706,11 +1706,7 @@
         "category": "Error",
         "code": 2378
     },
-    "Getter and setter accessors do not agree in visibility.": {
-        "category": "Error",
-        "code": 2379
-    },
-    "'get' and 'set' accessor must have the same type.": {
+    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
         "code": 2380
     },
@@ -3307,6 +3303,10 @@
     "This syntax requires an imported helper named '{1}' with {2} parameters, which is not compatible with the one in '{0}'. Consider upgrading your version of '{0}'.": {
         "category": "Error",
         "code": 2807
+    },
+    "A get accessor must be at least as accessible as the setter": {
+        "category": "Error",
+        "code": 2808
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

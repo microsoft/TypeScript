@@ -8855,7 +8855,7 @@ namespace ts {
             return links.type;
         }
 
-        function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol) {
+        function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol): Type {
             // Handle prototype property
             if (symbol.flags & SymbolFlags.Prototype) {
                 return getTypeOfPrototypeProperty(symbol);
@@ -8905,7 +8905,7 @@ namespace ts {
                 }
                 return reportCircularityError(symbol);
             }
-            let type: Type | undefined;
+            let type: Type;
             if (declaration.kind === SyntaxKind.ExportAssignment) {
                 type = widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
@@ -8962,7 +8962,7 @@ namespace ts {
                 type = getTypeOfEnumMember(symbol);
             }
             else if (isAccessor(declaration)) {
-                type = resolveTypeOfAccessors(symbol);
+                type = resolveTypeOfAccessors(symbol) || Debug.fail("Non-write accessor resolution must always produce a type");
             }
             else {
                 return Debug.fail("Unhandled declaration kind! " + Debug.formatSyntaxKind(declaration.kind) + " for " + Debug.formatSymbol(symbol));
@@ -9008,15 +9008,20 @@ namespace ts {
 
         function getTypeOfAccessors(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
-            return links.type || (links.type = getTypeOfAccessorsWorker(symbol));
+            return links.type || (links.type = getTypeOfAccessorsWorker(symbol) || Debug.fail("Read type of accessor must always produce a type"));
         }
 
-        function getTypeOfAccessorsWorker(symbol: Symbol): Type {
+        function getTypeOfSetAccessor(symbol: Symbol): Type | undefined {
+            const links = getSymbolLinks(symbol);
+            return links.writeType || (links.writeType = getTypeOfAccessorsWorker(symbol, /*isWrite*/ true));
+        }
+
+        function getTypeOfAccessorsWorker(symbol: Symbol, writing = false): Type | undefined {
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                 return errorType;
             }
 
-            let type = resolveTypeOfAccessors(symbol);
+            let type = resolveTypeOfAccessors(symbol, writing);
 
             if (!popTypeResolution()) {
                 type = anyType;
@@ -9028,9 +9033,23 @@ namespace ts {
             return type;
         }
 
-        function resolveTypeOfAccessors(symbol: Symbol) {
+        function resolveTypeOfAccessors(symbol: Symbol, isWrite = false) {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
+
+            // For write operations, prioritize type annotations on the setter
+            if (isWrite) {
+                const setterParameterType = getAnnotatedAccessorType(setter);
+                if (setterParameterType) {
+                    const flags = getCheckFlags(symbol);
+                    if (flags & CheckFlags.Instantiated) {
+                        const links = getSymbolLinks(symbol);
+                        return instantiateType(setterParameterType, links.mapper);
+                    }
+                    return setterParameterType;
+                }
+            }
+            // Else defer to the getter type
 
             if (getter && isInJSFile(getter)) {
                 const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
@@ -9038,39 +9057,39 @@ namespace ts {
                     return jsDocType;
                 }
             }
-            // First try to see if the user specified a return type on the get-accessor.
+
+            // Try to see if the user specified a return type on the get-accessor.
             const getterReturnType = getAnnotatedAccessorType(getter);
             if (getterReturnType) {
                 return getterReturnType;
             }
-            else {
-                // If the user didn't specify a return type, try to use the set-accessor's parameter type.
-                const setterParameterType = getAnnotatedAccessorType(setter);
-                if (setterParameterType) {
-                    return setterParameterType;
-                }
-                else {
-                    // If there are no specified types, try to infer it from the body of the get accessor if it exists.
-                    if (getter && getter.body) {
-                        return getReturnTypeFromBody(getter);
-                    }
-                    // Otherwise, fall back to 'any'.
-                    else {
-                        if (setter) {
-                            if (!isPrivateWithinAmbient(setter)) {
-                                errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
-                            }
-                        }
-                        else {
-                            Debug.assert(!!getter, "there must exist a getter as we are current checking either setter or getter in this function");
-                            if (!isPrivateWithinAmbient(getter)) {
-                                errorOrSuggestion(noImplicitAny, getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
-                            }
-                        }
-                        return anyType;
-                    }
-                }
+
+            // If the user didn't specify a return type, try to use the set-accessor's parameter type.
+            const setterParameterType = getAnnotatedAccessorType(setter);
+            if (setterParameterType) {
+                return setterParameterType;
             }
+
+            // If there are no specified types, try to infer it from the body of the get accessor if it exists.
+            if (getter && getter.body) {
+                return getReturnTypeFromBody(getter);
+            }
+
+            // Otherwise, fall back to 'any'.
+            if (setter) {
+                if (!isPrivateWithinAmbient(setter)) {
+                    errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                }
+                return anyType;
+            }
+            else if (getter) {
+                Debug.assert(!!getter, "there must exist a getter as we are current checking either setter or getter in this function");
+                if (!isPrivateWithinAmbient(getter)) {
+                    errorOrSuggestion(noImplicitAny, getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                }
+                return anyType;
+            }
+            return undefined;
         }
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
@@ -9195,6 +9214,16 @@ namespace ts {
                 links.type = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralConstituents) : getIntersectionType(links.deferralConstituents);
             }
             return links.type;
+        }
+
+        function getSetAccessorTypeOfSymbol(symbol: Symbol): Type {
+            if (symbol.flags & SymbolFlags.Accessor) {
+                const type = getTypeOfSetAccessor(symbol);
+                if (type) {
+                    return type;
+                }
+            }
+            return getTypeOfSymbol(symbol);
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
@@ -26589,8 +26618,9 @@ namespace ts {
          */
         function checkPropertyAccessibility(
             node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
-            isSuper: boolean, type: Type, prop: Symbol, reportError = true): boolean {
-            const flags = getDeclarationModifierFlagsFromSymbol(prop);
+            isSuper: boolean, isWrite: boolean, type: Type, prop: Symbol, reportError = true): boolean {
+
+            const flags = getDeclarationModifierFlagsFromSymbol(prop, isWrite);
             const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right :
                 node.kind === SyntaxKind.ImportType ? node :
                 node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName : node.name;
@@ -26965,13 +26995,16 @@ namespace ts {
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, isSelfTypeAccess(left, parentSymbol));
                 getNodeLinks(node).resolvedSymbol = prop;
-                checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, apparentType, prop);
+                const isWrite = isWriteAccess(node);
+                checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, isWrite, apparentType, prop);
                 if (isAssignmentToReadonlyEntity(node as Expression, prop, assignmentKind)) {
                     error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
                     return errorType;
                 }
-                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : getTypeOfSymbol(prop);
+
+                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getSetAccessorTypeOfSymbol(prop) : getTypeOfSymbol(prop);
             }
+
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
         }
 
@@ -27361,7 +27394,7 @@ namespace ts {
                     const declClass = getContainingClass(prop.valueDeclaration);
                     return !isOptionalChain(node) && !!findAncestor(node, parent => parent === declClass);
                 }
-                return checkPropertyAccessibility(node, isSuper, type, prop, /* reportError */ false);
+                return checkPropertyAccessibility(node, isSuper, /*isWrite*/ false, type, prop, /* reportError */ false);
             }
             // In js files properties of unions are allowed in completion
             return isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
@@ -31000,7 +31033,7 @@ namespace ts {
                     const prop = getPropertyOfType(objectLiteralType, text);
                     if (prop) {
                         markPropertyAsReferenced(prop, property, rightIsThis);
-                        checkPropertyAccessibility(property, /*isSuper*/ false, objectLiteralType, prop);
+                        checkPropertyAccessibility(property, /*isSuper*/ false, /*isWrite*/ true, objectLiteralType, prop);
                     }
                 }
                 const elementType = getIndexedAccessType(objectLiteralType, exprType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
@@ -33014,22 +33047,25 @@ namespace ts {
                 if (hasBindableName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
-                    const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(node), otherKind);
-                    if (otherAccessor) {
-                        const nodeFlags = getEffectiveModifierFlags(node);
-                        const otherFlags = getEffectiveModifierFlags(otherAccessor);
-                        if ((nodeFlags & ModifierFlags.AccessibilityModifier) !== (otherFlags & ModifierFlags.AccessibilityModifier)) {
-                            error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
-                        }
-                        if ((nodeFlags & ModifierFlags.Abstract) !== (otherFlags & ModifierFlags.Abstract)) {
+                    const symbol = getSymbolOfNode(node);
+                    const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
+                    const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
+                    if (getter && setter) {
+                        const getterFlags = getEffectiveModifierFlags(getter);
+                        const setterFlags = getEffectiveModifierFlags(setter);
+                        if ((getterFlags & ModifierFlags.Abstract) !== (setterFlags & ModifierFlags.Abstract)) {
                             error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
+                        if (((getterFlags & ModifierFlags.Protected) && !(setterFlags & (ModifierFlags.Protected | ModifierFlags.Private))) ||
+                            ((getterFlags & ModifierFlags.Private) && !(setterFlags & ModifierFlags.Private))) {
+                            error(node.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
+                        }
 
-                        // TypeScript 1.0 spec (April 2014): 4.5
-                        // If both accessors include type annotations, the specified types must be identical.
-                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type);
-                        checkAccessorDeclarationTypesIdentical(node, otherAccessor, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
+                        const getterType = getAnnotatedAccessorType(getter);
+                        const setterType = getAnnotatedAccessorType(setter);
+                        if (getterType && setterType) {
+                            checkTypeAssignableTo(getterType, setterType, getter, Diagnostics.The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type);
+                        }
                     }
                 }
                 const returnType = getTypeOfAccessors(getSymbolOfNode(node));
@@ -33039,14 +33075,6 @@ namespace ts {
             }
             checkSourceElement(node.body);
             setNodeLinksForPrivateIdentifierScope(node);
-        }
-
-        function checkAccessorDeclarationTypesIdentical(first: AccessorDeclaration, second: AccessorDeclaration, getAnnotatedType: (a: AccessorDeclaration) => Type | undefined, message: DiagnosticMessage) {
-            const firstType = getAnnotatedType(first);
-            const secondType = getAnnotatedType(second);
-            if (firstType && secondType && !isTypeIdenticalTo(firstType, secondType)) {
-                error(first, message);
-            }
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -34968,7 +34996,7 @@ namespace ts {
                         const property = getPropertyOfType(parentType, nameText);
                         if (property) {
                             markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isSelfTypeAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
+                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, parentType, property);
                         }
                     }
                 }
@@ -41056,7 +41084,7 @@ namespace ts {
         }
 
         function checkGrammarAccessor(accessor: AccessorDeclaration): boolean {
-            if (!(accessor.flags & NodeFlags.Ambient)) {
+            if (!(accessor.flags & NodeFlags.Ambient) && (accessor.parent.kind !== SyntaxKind.TypeLiteral) && (accessor.parent.kind !== SyntaxKind.InterfaceDeclaration)) {
                 if (languageVersion < ScriptTarget.ES5) {
                     return grammarErrorOnNode(accessor.name, Diagnostics.Accessors_are_only_available_when_targeting_ECMAScript_5_and_higher);
                 }
@@ -41067,8 +41095,13 @@ namespace ts {
                     return grammarErrorAtPos(accessor, accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
                 }
             }
-            if (accessor.body && hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
-                return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
+            if (accessor.body) {
+                if (hasSyntacticModifier(accessor, ModifierFlags.Abstract)) {
+                    return grammarErrorOnNode(accessor, Diagnostics.An_abstract_accessor_cannot_have_an_implementation);
+                }
+                if (accessor.parent.kind === SyntaxKind.TypeLiteral || accessor.parent.kind === SyntaxKind.InterfaceDeclaration) {
+                    return grammarErrorOnNode(accessor.body, Diagnostics.An_implementation_cannot_be_declared_in_ambient_contexts);
+                }
             }
             if (accessor.typeParameters) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_have_type_parameters);
