@@ -418,7 +418,7 @@ x(1)`
             const tags = [{
                 name: "param",
                 text: [{
-                    kind: "text",
+                    kind: "parameterName",
                     text: "y"
                 }, {
                     kind: "space",
@@ -489,7 +489,7 @@ x(1)`
             const tags = [{
                 name: "param",
                 text: [{
-                    kind: "text",
+                    kind: "parameterName",
                     text: "y"
                 }, {
                     kind: "space",
@@ -603,7 +603,7 @@ foo`
                 tags: [{
                     name: "param",
                     text: [{
-                        kind: "text",
+                        kind: "parameterName",
                         text: "x"
                     }, {
                         kind: "space",
@@ -652,7 +652,7 @@ foo`
                 tags: [{
                     name: "param",
                     text: [{
-                        kind: "text",
+                        kind: "parameterName",
                         text: "x"
                     }, {
                         kind: "space",
