@@ -283,7 +283,7 @@ namespace ts {
     }
 
     export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
-        fileWatcher: FileWatcher;
+        watcher: FileWatcher;
         projects: Set<T>;
     }
 
@@ -292,12 +292,12 @@ namespace ts {
      */
     export function updateSharedExtendedConfigFileWatcher<T>(
         projectPath: T,
-        parsed: ParsedCommandLine | undefined,
+        options: CompilerOptions | undefined,
         extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
         createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
         toPath: (fileName: string) => Path,
     ) {
-        const extendedConfigs = arrayToMap(parsed?.options.configFile?.extendedSourceFiles || emptyArray, toPath);
+        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
         // remove project from all unrelated watchers
         extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
             if (!extendedConfigs.has(extendedConfigFilePath)) {
@@ -315,14 +315,42 @@ namespace ts {
                 // start watching previously unseen extended config
                 extendedConfigFilesMap.set(extendedConfigFilePath, {
                     projects: new Set([projectPath]),
-                    fileWatcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
+                    watcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
                     close: () => {
                         const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
                         if (!existing || existing.projects.size !== 0) return;
-                        existing.fileWatcher.close();
+                        existing.watcher.close();
                         extendedConfigFilesMap.delete(extendedConfigFilePath);
                     },
                 });
+            }
+        });
+    }
+
+    /**
+     * Remove the project from the extended config file watchers and close not needed watches
+     */
+    export function clearSharedExtendedConfigFileWatcher<T>(
+        projectPath: T,
+        extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+    ) {
+        extendedConfigFilesMap.forEach(watcher => {
+            if (watcher.projects.delete(projectPath)) watcher.close();
+        });
+    }
+
+    /**
+     * Clean the extendsConfigCache when extended config file has changed
+     */
+    export function cleanExtendedConfigCache(
+        extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
+        extendedConfigFilePath: Path,
+        toPath: (fileName: string) => Path,
+    ) {
+        if (!extendedConfigCache.delete(extendedConfigFilePath)) return;
+        extendedConfigCache.forEach(({ extendedResult }, key) => {
+            if (extendedResult.extendedSourceFiles?.some(extendedFile => toPath(extendedFile) === extendedConfigFilePath)) {
+                cleanExtendedConfigCache(extendedConfigCache, key as Path, toPath);
             }
         });
     }
@@ -406,18 +434,19 @@ namespace ts {
         fileOrDirectoryPath: Path;
         configFileName: string;
         options: CompilerOptions;
-        program: BuilderProgram | Program | undefined;
+        program: BuilderProgram | Program | readonly string[] | undefined;
         extraFileExtensions?: readonly FileExtensionInfo[];
         currentDirectory: string;
         useCaseSensitiveFileNames: boolean;
         writeLog: (s: string) => void;
+        toPath: (fileName: string) => Path;
     }
     /* @internal */
     export function isIgnoredFileFromWildCardWatching({
         watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
         configFileName, options, program, extraFileExtensions,
         currentDirectory, useCaseSensitiveFileNames,
-        writeLog,
+        writeLog, toPath,
     }: IsIgnoredFileFromWildCardWatchingInput): boolean {
         const newPath = removeIgnoredPath(fileOrDirectoryPath);
         if (!newPath) {
@@ -457,7 +486,8 @@ namespace ts {
 
         // just check if sourceFile with the name exists
         const filePathWithoutExtension = removeFileExtension(fileOrDirectoryPath);
-        const realProgram = isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+        const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+        const builderProgram = !realProgram && !isArray(program) ? program as BuilderProgram : undefined;
         if (hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
             hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)) {
             writeLog(`Project: ${configFileName} Detected output file: ${fileOrDirectory}`);
@@ -465,10 +495,12 @@ namespace ts {
         }
         return false;
 
-        function hasSourceFile(file: Path) {
+        function hasSourceFile(file: Path): boolean {
             return realProgram ?
                 !!realProgram.getSourceFileByPath(file) :
-                (program as BuilderProgram).getState().fileInfos.has(file);
+                builderProgram ?
+                    builderProgram.getState().fileInfos.has(file) :
+                    !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
         }
     }
 

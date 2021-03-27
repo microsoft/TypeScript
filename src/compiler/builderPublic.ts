@@ -15,6 +15,11 @@ namespace ts {
          * this callback if present would be used to write files
          */
         writeFile?: WriteFileCallback;
+        /**
+         * disable using source file version as signature for testing
+         */
+        /*@internal*/
+        disableUseFileVersionAsSignature?: boolean;
     }
 
     /**

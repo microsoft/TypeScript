@@ -237,8 +237,10 @@ namespace ts.codefix {
         if (isParameter(parent)) {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
         }
-        else if (!isFixAll || !(isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
-            changes.delete(sourceFile, isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
+        else if (!(isFixAll && isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
+            const node = isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent;
+            Debug.assert(node !== sourceFile, "should not delete whole source file");
+            changes.delete(sourceFile, node);
         }
     }
 

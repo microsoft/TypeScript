@@ -722,23 +722,57 @@ namespace ts {
                     pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;
+                    let commentStart = tag.tagName.end;
 
                     switch (tag.kind) {
                         case SyntaxKind.JSDocParameterTag:
-                            processJSDocParameterTag(<JSDocParameterTag>tag);
+                            const param = tag as JSDocParameterTag;
+                            processJSDocParameterTag(param);
+                            commentStart = param.isNameFirst && param.typeExpression?.end || param.name.end;
+                            break;
+                        case SyntaxKind.JSDocPropertyTag:
+                            const prop = tag as JSDocPropertyTag;
+                            commentStart = prop.isNameFirst && prop.typeExpression?.end || prop.name.end;
                             break;
                         case SyntaxKind.JSDocTemplateTag:
                             processJSDocTemplateTag(<JSDocTemplateTag>tag);
                             pos = tag.end;
+                            commentStart = (tag as JSDocTemplateTag).typeParameters.end;
+                            break;
+                        case SyntaxKind.JSDocTypedefTag:
+                            const type = tag as JSDocTypedefTag;
+                            commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end || commentStart;
+                            break;
+                        case SyntaxKind.JSDocCallbackTag:
+                            commentStart = (tag as JSDocCallbackTag).typeExpression.end;
                             break;
                         case SyntaxKind.JSDocTypeTag:
                             processElement((<JSDocTypeTag>tag).typeExpression);
                             pos = tag.end;
+                            commentStart = (tag as JSDocTypeTag).typeExpression.end;
+                            break;
+                        case SyntaxKind.JSDocThisTag:
+                        case SyntaxKind.JSDocEnumTag:
+                            commentStart = (tag as JSDocThisTag | JSDocEnumTag).typeExpression.end;
                             break;
                         case SyntaxKind.JSDocReturnTag:
                             processElement((<JSDocReturnTag>tag).typeExpression);
                             pos = tag.end;
+                            commentStart = (tag as JSDocReturnTag).typeExpression?.end || commentStart;
                             break;
+                        case SyntaxKind.JSDocSeeTag:
+                            commentStart = (tag as JSDocSeeTag).name?.end || commentStart;
+                            break;
+                        case SyntaxKind.JSDocAugmentsTag:
+                        case SyntaxKind.JSDocImplementsTag:
+                            commentStart = (tag as JSDocImplementsTag | JSDocAugmentsTag).class.end;
+                            break;
+                    }
+                    if (typeof tag.comment === "object") {
+                        pushCommentRange(tag.comment.pos, tag.comment.end - tag.comment.pos);
+                    }
+                    else if (typeof tag.comment === "string") {
+                        pushCommentRange(commentStart, tag.end - commentStart);
                     }
                 }
             }

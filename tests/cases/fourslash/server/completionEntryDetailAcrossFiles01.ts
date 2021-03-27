@@ -14,7 +14,15 @@
 //// import a = require("./a");
 //// a.fo/*2*/
 
-const entry = (text: string): FourSlashInterface.ExpectedCompletionEntry => ({ name: "foo", text, documentation: "Modify the parameter", tags: [{ name: "param", text: "p1" }] });
+const entry = (text: string): FourSlashInterface.ExpectedCompletionEntry => ({
+    name: "foo",
+    text,
+    documentation: "Modify the parameter",
+    tags: [{
+        name: "param",
+        text: "p1",
+    }]
+});
 verify.completions(
     { marker: "1", includes: entry("var foo: (p1: string) => void") },
     { marker: "2", exact: entry("(alias) var foo: (p1: string) => void\nimport a.foo") },
