@@ -23811,7 +23811,7 @@ namespace ts {
                 }
             }
             else if (isAlias) {
-                declaration = symbol.declarations?.find(isSomeImportDeclaration);
+                declaration = getDeclarationOfAliasSymbol(symbol);
             }
             else {
                 return type;
@@ -41662,22 +41662,6 @@ namespace ts {
                 return isIdentifier(name);
             default:
                 return isDeclarationName(name);
-        }
-    }
-
-    function isSomeImportDeclaration(decl: Node): boolean {
-        switch (decl.kind) {
-            case SyntaxKind.ImportClause: // For default import
-            case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.ImportSpecifier: // For rename import `x as y`
-            case SyntaxKind.BindingElement: // For commonjs import.
-                return true;
-            case SyntaxKind.Identifier:
-                // For regular import, `decl` is an Identifier under the ImportSpecifier.
-                return decl.parent.kind === SyntaxKind.ImportSpecifier;
-            default:
-                return false;
         }
     }
 
