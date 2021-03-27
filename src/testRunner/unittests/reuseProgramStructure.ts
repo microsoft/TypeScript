@@ -916,6 +916,7 @@ namespace ts {
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
                 /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
+                /*getParsedCommandLine*/ returnUndefined,
                 /*projectReferences*/ undefined
             );
         }
@@ -951,7 +952,7 @@ namespace ts {
                     configFileName,
                     system
                 })).getCurrentProgram().getProgram();
-                const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, /*watchOptionsToExtend*/ undefined, system, notImplemented)!; // TODO: GH#18217
+                const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, notImplemented)!; // TODO: GH#18217
                 verifyProgramIsUptoDate(program, fileNames, options);
             }
 

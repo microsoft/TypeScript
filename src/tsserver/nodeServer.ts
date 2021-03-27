@@ -180,21 +180,6 @@ namespace ts.server {
         const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
         const logger = createLogger();
 
-        // REVIEW: for now this implementation uses polling.
-        // The advantage of polling is that it works reliably
-        // on all os and with network mounted files.
-        // For 90 referenced files, the average time to detect
-        // changes is 2*msInterval (by default 5 seconds).
-        // The overhead of this is .04 percent (1/2500) with
-        // average pause of < 1 millisecond (and max
-        // pause less than 1.5 milliseconds); question is
-        // do we anticipate reference sets in the 100s and
-        // do we care about waiting 10-20 seconds to detect
-        // changes for large reference sets? If so, do we want
-        // to increase the chunk size or decrease the interval
-        // time dynamically to match the large reference set?
-        const pollingWatchedFileSet = createPollingWatchedFileSet();
-
         const pending: Buffer[] = [];
         let canWrite = true;
 
@@ -248,12 +233,20 @@ namespace ts.server {
 
         // Override sys.write because fs.writeSync is not reliable on Node 4
         sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
-        sys.watchFile = (fileName, callback) => {
-            const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
-            return {
-                close: () => pollingWatchedFileSet.removeFile(watchedFile)
-            };
-        };
+         // REVIEW: for now this implementation uses polling.
+        // The advantage of polling is that it works reliably
+        // on all os and with network mounted files.
+        // For 90 referenced files, the average time to detect
+        // changes is 2*msInterval (by default 5 seconds).
+        // The overhead of this is .04 percent (1/2500) with
+        // average pause of < 1 millisecond (and max
+        // pause less than 1.5 milliseconds); question is
+        // do we anticipate reference sets in the 100s and
+        // do we care about waiting 10-20 seconds to detect
+        // changes for large reference sets? If so, do we want
+        // to increase the chunk size or decrease the interval
+        // time dynamically to match the large reference set?
+        sys.defaultWatchFileKind = () => WatchFileKind.FixedChunkSizePolling;
 
         /* eslint-disable no-restricted-globals */
         sys.setTimeout = setTimeout;
@@ -323,89 +316,6 @@ namespace ts.server {
 
             const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
             return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
-        }
-        // This places log file in the directory containing editorServices.js
-        // TODO: check that this location is writable
-
-        // average async stat takes about 30 microseconds
-        // set chunk size to do 30 files in < 1 millisecond
-        function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
-            const watchedFiles: WatchedFile[] = [];
-            let nextFileToCheck = 0;
-            return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
-
-            function getModifiedTime(fileName: string): Date {
-                // Caller guarantees that `fileName` exists, so there'd be no benefit from throwIfNoEntry
-                return fs.statSync(fileName).mtime;
-            }
-
-            function poll(checkedIndex: number) {
-                const watchedFile = watchedFiles[checkedIndex];
-                if (!watchedFile) {
-                    return;
-                }
-
-                fs.stat(watchedFile.fileName, (err, stats) => {
-                    if (err) {
-                        if (err.code === "ENOENT") {
-                            if (watchedFile.mtime.getTime() !== 0) {
-                                watchedFile.mtime = missingFileModifiedTime;
-                                watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Deleted);
-                            }
-                        }
-                        else {
-                            watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
-                        }
-                    }
-                    else {
-                        onWatchedFileStat(watchedFile, stats.mtime);
-                    }
-                });
-            }
-
-            // this implementation uses polling and
-            // stat due to inconsistencies of fs.watch
-            // and efficiency of stat on modern filesystems
-            function startWatchTimer() {
-                // eslint-disable-next-line no-restricted-globals
-                setInterval(() => {
-                    let count = 0;
-                    let nextToCheck = nextFileToCheck;
-                    let firstCheck = -1;
-                    while ((count < chunkSize) && (nextToCheck !== firstCheck)) {
-                        poll(nextToCheck);
-                        if (firstCheck < 0) {
-                            firstCheck = nextToCheck;
-                        }
-                        nextToCheck++;
-                        if (nextToCheck === watchedFiles.length) {
-                            nextToCheck = 0;
-                        }
-                        count++;
-                    }
-                    nextFileToCheck = nextToCheck;
-                }, interval);
-            }
-
-            function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
-                const file: WatchedFile = {
-                    fileName,
-                    callback,
-                    mtime: sys.fileExists(fileName)
-                        ? getModifiedTime(fileName)
-                        : missingFileModifiedTime // Any subsequent modification will occur after this time
-                };
-
-                watchedFiles.push(file);
-                if (watchedFiles.length === 1) {
-                    startWatchTimer();
-                }
-                return file;
-            }
-
-            function removeFile(file: WatchedFile) {
-                unorderedRemoveItem(watchedFiles, file);
-            }
         }
 
         function writeMessage(buf: Buffer) {
@@ -833,9 +743,7 @@ namespace ts.server {
             exit() {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
-                if (traceDir) {
-                    tracing.stopTracing(ts.emptyArray);
-                }
+                tracing?.stopTracing();
                 process.exit(0);
             }
 
@@ -863,7 +771,7 @@ namespace ts.server {
             ? stripQuotes(commandLineTraceDir)
             : process.env.TSS_TRACE;
         if (traceDir) {
-            tracing.startTracing(tracing.Mode.Server, traceDir);
+            startTracing("server", traceDir);
         }
 
         const ioSession = new IOSession();

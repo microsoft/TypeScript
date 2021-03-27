@@ -13,13 +13,13 @@ class A {
 
 //// [privateNameAndIndexSignature.js]
 "use strict";
-var _foo;
+var _A_foo;
 class A {
     constructor(message) {
-        _foo.set(this, 3);
+        _A_foo.set(this, 3);
         this["#bar"] = this["#bar"]; // Error (private identifiers should not prevent circularity checking for computeds)
         this. = 3; // Error (index signatures do not implicitly declare private names)
         this["#foo"] = 3; // Okay (type has index signature and "#foo" does not collide with private identifier #foo)
     }
 }
-_foo = new WeakMap();
+_A_foo = new WeakMap();

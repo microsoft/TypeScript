@@ -261,7 +261,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = new Map<string, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -502,6 +502,16 @@ namespace ts.textChanges {
             }
             else {
                 this.insertNodeBefore(sourceFile, firstStatement, newStatement);
+            }
+        }
+
+        public insertNodeAtConstructorStartAfterSuperCall(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
+            const superCallStatement = find(ctr.body!.statements, stmt => isExpressionStatement(stmt) && isSuperCall(stmt.expression));
+            if (!superCallStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body!.statements, newStatement]);
+            }
+            else {
+                this.insertNodeAfter(sourceFile, superCallStatement, newStatement);
             }
         }
 
@@ -1037,11 +1047,12 @@ namespace ts.textChanges {
         let lastNonTriviaPosition = 0;
 
         const writer = createTextWriter(newLine);
-        const onEmitNode: PrintHandlers["onEmitNode"] = (hint, node, printCallback) => {
+        const onBeforeEmitNode: PrintHandlers["onBeforeEmitNode"] = node => {
             if (node) {
                 setPos(node, lastNonTriviaPosition);
             }
-            printCallback(hint, node);
+        };
+        const onAfterEmitNode: PrintHandlers["onAfterEmitNode"] = node => {
             if (node) {
                 setEnd(node, lastNonTriviaPosition);
             }
@@ -1163,7 +1174,8 @@ namespace ts.textChanges {
         }
 
         return {
-            onEmitNode,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
             onBeforeEmitToken,
@@ -1361,7 +1373,11 @@ namespace ts.textChanges {
                     break;
 
                 default:
-                    if (isImportClause(node.parent) && node.parent.name === node) {
+                    if (!node.parent) {
+                        // a misbehaving client can reach here with the SourceFile node
+                        deleteNode(changes, sourceFile, node);
+                    }
+                    else if (isImportClause(node.parent) && node.parent.name === node) {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
                     else if (isCallExpression(node.parent) && contains(node.parent.arguments, node)) {

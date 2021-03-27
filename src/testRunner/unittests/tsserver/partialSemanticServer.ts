@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: Semantic operations on PartialSemantic server", () => {
+    describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
         function setup() {
             const file1: File = {
                 path: `${tscWatch.projectRoot}/a.ts`,
@@ -70,7 +70,10 @@ import { something } from "something";
                     isPackageJsonImport: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
-                    source: undefined
+                    source: undefined,
+                    data: undefined,
+                    sourceDisplay: undefined,
+                    isSnippet: undefined,
                 };
             }
         });
@@ -202,6 +205,21 @@ function fooB() { }`
             assert.isFalse(project.autoImportProviderHost);
             assert.isUndefined(project.getPackageJsonAutoImportProvider());
             assert.deepEqual(project.getPackageJsonsForAutoImport(), emptyArray);
+        });
+
+        it("should support go-to-definition on module specifiers", () => {
+            const { session, file1, file2 } = setup();
+            openFilesForSession([file1], session);
+            const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
+                command: protocol.CommandTypes.DefinitionAndBoundSpan,
+                arguments: protocolFileLocationFromSubstring(file1, `"./b"`)
+            }).response as protocol.DefinitionInfoAndBoundSpan;
+            assert.isDefined(response);
+            assert.deepEqual(response.definitions, [{
+                file: file2.path,
+                start: { line: 1, offset: 1 },
+                end: { line: 1, offset: 1 }
+            }]);
         });
     });
 }

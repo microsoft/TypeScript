@@ -4,26 +4,26 @@ class C {
 
     [Symbol.iterator](x: string): { x: string };
 >[Symbol.iterator] : { (x: string): {    x: string;}; (x: "hello"): { x: string; hello: string; }; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >x : string
 >x : string
 
     [Symbol.iterator](x: "hello"): { x: string; hello: string };
 >[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): {    x: string;    hello: string;}; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >x : "hello"
 >x : string
 >hello : string
 
     [Symbol.iterator](x: any) {
 >[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >x : any
 
         return undefined;
@@ -40,17 +40,17 @@ c[Symbol.iterator]("");
 >c[Symbol.iterator]("") : { x: string; }
 >c[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
 >c : C
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >"" : ""
 
 c[Symbol.iterator]("hello");
 >c[Symbol.iterator]("hello") : { x: string; hello: string; }
 >c[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
 >c : C
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >"hello" : "hello"
 

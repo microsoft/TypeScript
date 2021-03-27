@@ -231,7 +231,7 @@ namespace ts.FindAllReferences {
         }
         else {
             const queue = entries && [...entries];
-            const seenNodes = new Map<string, true>();
+            const seenNodes = new Map<number, true>();
             while (queue && queue.length) {
                 const entry = queue.shift() as NodeEntry;
                 if (!addToSeen(seenNodes, getNodeId(entry.node))) {
@@ -624,7 +624,7 @@ namespace ts.FindAllReferences {
             }
             if (isSourceFile(node)) {
                 const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
-                if (!resolvedRef) {
+                if (!resolvedRef?.file) {
                     return undefined;
                 }
                 const moduleSymbol = program.getTypeChecker().getMergedSymbol(resolvedRef.file.symbol);
@@ -656,7 +656,7 @@ namespace ts.FindAllReferences {
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
                 if (!options.implementations && isStringLiteralLike(node)) {
-                    if (isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ true) || isExternalModuleReference(node.parent) || isImportDeclaration(node.parent) || isImportCall(node.parent)) {
+                    if (isModuleSpecifierLike(node)) {
                         const fileIncludeReasons = program.getFileIncludeReasons();
                         const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
                         const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
@@ -839,7 +839,7 @@ namespace ts.FindAllReferences {
             }
 
             const exported = symbol.exports!.get(InternalSymbolName.ExportEquals);
-            if (exported) {
+            if (exported?.declarations) {
                 for (const decl of exported.declarations) {
                     const sourceFile = decl.getSourceFile();
                     if (sourceFilesSet.has(sourceFile.fileName)) {
@@ -916,12 +916,12 @@ namespace ts.FindAllReferences {
             const result: SymbolAndEntries[] = [];
             const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
-            const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) ? undefined : find(symbol.declarations, isExportSpecifier);
+            const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) || !symbol.declarations ? undefined : find(symbol.declarations, isExportSpecifier);
             if (exportSpecifier) {
                 // When renaming at an export specifier, rename the export and not the thing being exported.
                 getReferencesAtExportSpecifier(exportSpecifier.name, symbol, exportSpecifier, state.createSearch(node, originalSymbol, /*comingFrom*/ undefined), state, /*addReferencesHere*/ true, /*alwaysGetReferences*/ true);
             }
-            else if (node && node.kind === SyntaxKind.DefaultKeyword) {
+            else if (node && node.kind === SyntaxKind.DefaultKeyword && symbol.escapedName === InternalSymbolName.Default) {
                 addReference(node, symbol, state);
                 searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.checkDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
             }
@@ -1242,7 +1242,7 @@ namespace ts.FindAllReferences {
 
             // If this is private property or method, the scope is the containing class
             if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const privateDeclaration = find(declarations, d => hasEffectiveModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
+                const privateDeclaration = find(declarations, d => hasEffectiveModifier(d, ModifierFlags.Private) || isPrivateIdentifierClassElementDeclaration(d));
                 if (privateDeclaration) {
                     return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                 }
@@ -2154,7 +2154,7 @@ namespace ts.FindAllReferences {
          *                                The value of previousIterationSymbol is undefined when the function is first called.
          */
         function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-            const seen = new Map<string, true>();
+            const seen = new Map<SymbolId, true>();
             return recur(symbol);
 
             function recur(symbol: Symbol): T | undefined {

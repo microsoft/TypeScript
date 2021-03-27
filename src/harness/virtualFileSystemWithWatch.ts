@@ -127,7 +127,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return { close: () => map.remove(path, callback) };
     }
 
-    function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
+    export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -195,7 +195,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFiles(host: TestServerHost, expectedFiles: string[], additionalInfo?: string) {
+    export function checkWatchedFiles(host: TestServerHost, expectedFiles: readonly string[], additionalInfo?: string) {
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
 
@@ -395,6 +395,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
+        public defaultWatchFileKind?: () => WatchFileKind | undefined;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(
@@ -439,7 +440,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                 realpath: this.realpath.bind(this),
                 tscWatchFile,
-                tscWatchDirectory
+                tscWatchDirectory,
+                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
@@ -1001,14 +1003,18 @@ interface Array<T> { length: number; [n: number]: T; }`
 
             // base folder has to be present
             const base = getDirectoryPath(file.path);
-            const folder = this.fs.get(base) as FsFolder;
-            Debug.assert(isFsFolder(folder));
+            const folder = Debug.checkDefined(this.getRealFolder(base));
 
-            if (!this.fs.has(file.path)) {
-                this.addFileOrFolderInFolder(folder, file);
+            if (folder.path === base) {
+                if (!this.fs.has(file.path)) {
+                    this.addFileOrFolderInFolder(folder, file);
+                }
+                else {
+                    this.modifyFile(path, content);
+                }
             }
             else {
-                this.modifyFile(path, content);
+                this.writeFile(this.realpath(path), content);
             }
         }
 
