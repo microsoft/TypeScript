@@ -1,0 +1,83 @@
+tests/cases/conformance/override/override5.ts(12,13): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/override5.ts(14,14): error TS1040: 'override' modifier cannot be used in an ambient context.
+tests/cases/conformance/override/override5.ts(20,14): error TS1243: 'static' modifier cannot be used with 'override' modifier.
+tests/cases/conformance/override/override5.ts(22,14): error TS1030: 'override' modifier already seen.
+tests/cases/conformance/override/override5.ts(25,14): error TS1029: 'public' modifier must precede 'override' modifier.
+tests/cases/conformance/override/override5.ts(27,5): error TS1089: 'override' modifier cannot appear on a constructor declaration.
+tests/cases/conformance/override/override5.ts(44,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+tests/cases/conformance/override/override5.ts(45,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+
+
+==== tests/cases/conformance/override/override5.ts (8 errors) ====
+    class B {
+        p1: number = 1;
+        p2: number = 2;
+        p3: number = 3;
+        p4: number = 4;
+        oop: number;
+        pp: number;
+        op: number;
+    }
+    
+    class D extends B{
+        declare p1: number
+                ~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+    
+        override declare p2: number;
+                 ~~~~~~~
+!!! error TS1040: 'override' modifier cannot be used in an ambient context.
+    
+        readonly override p3: number;
+    
+        override readonly p4: number;
+    
+        override static sp: number;
+                 ~~~~~~
+!!! error TS1243: 'static' modifier cannot be used with 'override' modifier.
+    
+        override override oop: number;
+                 ~~~~~~~~
+!!! error TS1030: 'override' modifier already seen.
+    
+        public override pp: number;
+        override public op: number;
+                 ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'override' modifier.
+    
+        override constructor () {
+        ~~~~~~~~
+!!! error TS1089: 'override' modifier cannot appear on a constructor declaration.
+            super();
+        }
+    }
+    
+    
+    abstract class AB {
+        abstract f (): void;
+        abstract b (): void;
+    }
+    
+    abstract class AD extends AB {
+        override abstract f(): void;
+        abstract override b(): void;
+    }
+    
+    abstract class AND {
+        override abstract f(): void;
+                          ~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+        abstract override b(): void;
+                          ~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+    }
+    
+    class ADD extends AD {
+        f(): void {
+    
+        }
+        override b(): void {
+    
+        }
+    }
+    

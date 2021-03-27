@@ -197,13 +197,13 @@ namespace ts.SymbolDisplay {
             }
 
             if (callExpressionLike) {
-                signature = typeChecker.getResolvedSignature(callExpressionLike)!; // TODO: GH#18217
+                signature = typeChecker.getResolvedSignature(callExpressionLike); // TODO: GH#18217
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
                 const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                if (signature && !contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
                     // Get the first signature if there is one -- allSignatures may contain
                     // either the original signature or its target, so check for either
                     signature = allSignatures.length ? allSignatures[0] : undefined;
@@ -278,7 +278,7 @@ namespace ts.SymbolDisplay {
                 if (locationIsSymbolDeclaration) {
                     const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
                     if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
-                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration)!; // TODO: GH#18217
+                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration); // TODO: GH#18217
                     }
                     else {
                         signature = allSignatures[0];
@@ -294,8 +294,9 @@ namespace ts.SymbolDisplay {
                         addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
                             !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
                     }
-
-                    addSignatureDisplayParts(signature, allSignatures);
+                    if (signature) {
+                        addSignatureDisplayParts(signature, allSignatures);
+                    }
                     hasAddedSymbolInfo = true;
                     hasMultipleSignatures = allSignatures.length > 1;
                 }

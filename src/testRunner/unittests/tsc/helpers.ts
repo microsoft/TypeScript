@@ -116,7 +116,7 @@ namespace ts {
         sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
         if (baselinePrograms) {
             const baseline: string[] = [];
-            tscWatch.baselinePrograms(baseline, getPrograms, baselineDependencies);
+            tscWatch.baselinePrograms(baseline, getPrograms, emptyArray, baselineDependencies);
             sys.write(baseline.join("\n"));
         }
         if (baselineReadFileCalls) {

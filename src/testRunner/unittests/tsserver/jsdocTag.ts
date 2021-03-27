@@ -592,6 +592,7 @@ foo`
                 kindModifiers: "",
                 name: "foo",
                 source: undefined,
+                sourceDisplay: undefined,
                 tags,
             }]);
         }
