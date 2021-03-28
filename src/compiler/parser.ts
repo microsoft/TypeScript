@@ -1547,11 +1547,11 @@ namespace ts {
                 return;
             }
 
-            // Tagged template literals are sometimes used in places where only simple strings are allowed, e.g.:
+            // Tagged template literals are sometimes used in places where only simple strings are allowed, i.e.:
             //   module `M1` {
-            //   ^^^^^^^^^^^ This block is parsed as a template literal as with module`M1`.
+            //   ^^^^^^^^^^^ This block is parsed as a template literal like module`M1`.
             if (isTaggedTemplateExpression(expression)) {
-                parseErrorAt(skipTrivia(sourceText, expression.template.pos), expression.template.end, Diagnostics.Template_literal_not_allowed_as_a_string_at_this_position);
+                parseErrorAt(skipTrivia(sourceText, expression.template.pos), expression.template.end, Diagnostics.Module_declaration_names_may_only_use_or_quoted_strings);
                 return;
             }
 

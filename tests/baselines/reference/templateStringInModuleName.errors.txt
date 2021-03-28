@@ -1,11 +1,11 @@
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,1): error TS1433: Unexpected keyword or identifier.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,1): error TS2304: Cannot find name 'declare'.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,16): error TS1442: Template literal not allowed as a string at this position.
+tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,16): error TS1442: Module declaration names may only use ' or " quoted strings.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,1): error TS1433: Unexpected keyword or identifier.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,1): error TS2304: Cannot find name 'declare'.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,16): error TS1442: Template literal not allowed as a string at this position.
+tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,16): error TS1442: Module declaration names may only use ' or " quoted strings.
 
 
 ==== tests/cases/conformance/es6/templates/templateStringInModuleName.ts (8 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,16): error
             ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                    ~~~~
-!!! error TS1442: Template literal not allowed as a string at this position.
+!!! error TS1442: Module declaration names may only use ' or " quoted strings.
     }
     
     declare module `M${2}` {
@@ -28,5 +28,5 @@ tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,16): error
             ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                    ~~~~~~~
-!!! error TS1442: Template literal not allowed as a string at this position.
+!!! error TS1442: Module declaration names may only use ' or " quoted strings.
     }

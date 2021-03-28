@@ -1396,13 +1396,9 @@
         "category": "Error",
         "code": 1441
     },
-    "Template literal not allowed as a string at this position.": {
+    "Module declaration names may only use ' or \" quoted strings.": {
         "category": "Error",
         "code": 1442
-    },
-    "Template literal not allowed as a string at this position. Did you mean '{0}'?": {
-        "category": "Error",
-        "code": 1443
     },
 
     "The types of '{0}' are incompatible between these types.": {
