@@ -8,6 +8,7 @@
         "es2018",
         "es2019",
         "es2020",
+        "es2021",
         "esnext",
         // Host only
         "dom.generated",
@@ -47,10 +48,10 @@
         "es2020.string",
         "es2020.symbol.wellknown",
         "es2020.intl",
+        "es2021.string",
+        "es2021.promise",
+        "es2021.weakref",
         "esnext.intl",
-        "esnext.string",
-        "esnext.promise",
-        "esnext.weakref",
         // Default libraries
         "es5.full",
         "es2015.full",
@@ -59,6 +60,7 @@
         "es2018.full",
         "es2019.full",
         "es2020.full",
+        "es2021.full",
         "esnext.full"
     ],
     "paths": {

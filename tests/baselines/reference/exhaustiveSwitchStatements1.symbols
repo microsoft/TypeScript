@@ -603,3 +603,26 @@ function ff(o: O, k: K) {
 >k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
 }
 
+// Repro from #35431
+type A = { kind: "abc" } | { kind: "def" };
+>A : Symbol(A, Decl(exhaustiveSwitchStatements1.ts, 236, 1))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 28))
+
+function f35431(a: A) {
+>f35431 : Symbol(f35431, Decl(exhaustiveSwitchStatements1.ts, 239, 43))
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+>A : Symbol(A, Decl(exhaustiveSwitchStatements1.ts, 236, 1))
+
+  switch (a.kind) {
+>a.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10), Decl(exhaustiveSwitchStatements1.ts, 239, 28))
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10), Decl(exhaustiveSwitchStatements1.ts, 239, 28))
+
+    case "abc":
+    case "def": return;
+    default:
+      a!.kind; // Error expected
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+  }
+}

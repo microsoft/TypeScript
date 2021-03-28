@@ -252,7 +252,7 @@ namespace ts.codefix {
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
-        name: Identifier,
+        name: Identifier | string,
         modifierFlags: ModifierFlags,
         contextNode: Node
     ) {

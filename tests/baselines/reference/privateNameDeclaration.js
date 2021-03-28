@@ -11,17 +11,17 @@ class A {
 
 
 //// [privateNameDeclaration.js]
-var _foo, _bar;
+var _A_foo, _A_bar;
 class A {
     constructor() {
-        _foo.set(this, void 0);
-        _bar.set(this, 6);
+        _A_foo.set(this, void 0);
+        _A_bar.set(this, 6);
         this.qux = 6;
     }
     quux() {
     }
 }
-_foo = new WeakMap(), _bar = new WeakMap();
+_A_foo = new WeakMap(), _A_bar = new WeakMap();
 
 
 //// [privateNameDeclaration.d.ts]

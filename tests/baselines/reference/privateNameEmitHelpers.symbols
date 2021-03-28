@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/members/privateNames/main.ts ===
+export class C {
+>C : Symbol(C, Decl(main.ts, 0, 0))
+
+    #a = 1;
+>#a : Symbol(C.#a, Decl(main.ts, 0, 16))
+
+    #b() { this.#c = 42; }
+>#b : Symbol(C.#b, Decl(main.ts, 1, 11))
+>this.#c : Symbol(C.#c, Decl(main.ts, 2, 26))
+>this : Symbol(C, Decl(main.ts, 0, 0))
+
+    set #c(v: number) { this.#a += v; }
+>#c : Symbol(C.#c, Decl(main.ts, 2, 26))
+>v : Symbol(v, Decl(main.ts, 3, 11))
+>this.#a : Symbol(C.#a, Decl(main.ts, 0, 16))
+>this : Symbol(C, Decl(main.ts, 0, 0))
+>v : Symbol(v, Decl(main.ts, 3, 11))
+}
+
+=== tests/cases/conformance/classes/members/privateNames/tslib.d.ts ===
+// these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
+export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, --, --))
+>T : Symbol(T, Decl(tslib.d.ts, --, --))
+>V : Symbol(V, Decl(tslib.d.ts, --, --))
+>receiver : Symbol(receiver, Decl(tslib.d.ts, --, --))
+>T : Symbol(T, Decl(tslib.d.ts, --, --))
+>state : Symbol(state, Decl(tslib.d.ts, --, --))
+>V : Symbol(V, Decl(tslib.d.ts, --, --))
+
+export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;
+>__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, --, --))
+>T : Symbol(T, Decl(tslib.d.ts, --, --))
+>V : Symbol(V, Decl(tslib.d.ts, --, --))
+>receiver : Symbol(receiver, Decl(tslib.d.ts, --, --))
+>T : Symbol(T, Decl(tslib.d.ts, --, --))
+>state : Symbol(state, Decl(tslib.d.ts, --, --))
+>value : Symbol(value, Decl(tslib.d.ts, --, --))
+>V : Symbol(V, Decl(tslib.d.ts, --, --))
+>V : Symbol(V, Decl(tslib.d.ts, --, --))
+

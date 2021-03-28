@@ -1502,7 +1502,7 @@ namespace ts {
                         : undefined,
                     visitNode(node.condition, visitor, isExpression),
                     visitNode(node.incrementor, visitor, isExpression),
-                    visitNode(node.statement, visitor, isStatement, factory.liftToBlock)
+                    visitIterationBody(node.statement, visitor, context)
                 );
             }
             else {

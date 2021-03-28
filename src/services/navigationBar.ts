@@ -629,7 +629,8 @@ namespace ts.NavigationBar {
             case SyntaxKind.SetAccessor:
                 return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
             case SyntaxKind.ModuleDeclaration:
-                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
+                return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b)
+                    && getFullyQualifiedModuleName(<ModuleDeclaration>a) === getFullyQualifiedModuleName(<ModuleDeclaration>b);
             default:
                 return true;
         }
@@ -649,7 +650,6 @@ namespace ts.NavigationBar {
     // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
     // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
     function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-        // TODO: GH#18217
         return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
     }
 
@@ -869,6 +869,10 @@ namespace ts.NavigationBar {
             return getTextOfNode(moduleDeclaration.name);
         }
 
+        return getFullyQualifiedModuleName(moduleDeclaration);
+    }
+
+    function getFullyQualifiedModuleName(moduleDeclaration: ModuleDeclaration): string {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result = [getTextOfIdentifierOrLiteral(moduleDeclaration.name)];
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {

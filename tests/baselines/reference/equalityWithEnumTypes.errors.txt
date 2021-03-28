@@ -1,0 +1,51 @@
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(14,9): error TS2367: This condition will always return 'true' since the types 'E1' and '0' have no overlap.
+tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(23,9): error TS2367: This condition will always return 'true' since the types 'E1' and '3' have no overlap.
+
+
+==== tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts (2 errors) ====
+    // Literal enum type
+    enum E1 {
+        a = 1,
+        b = 2,
+    }
+    
+    // Numeric enum type
+    enum E2 {
+        a = 1 << 0,
+        b = 1 << 1
+    }
+    
+    function f1(v: E1) {
+        if (v !== 0) {  // Error
+            ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'E1' and '0' have no overlap.
+            v;
+        }
+        if (v !== 1) {
+            v;
+        }
+        if (v !== 2) {
+            v;
+        }
+        if (v !== 3) {  // Error
+            ~~~~~~~
+!!! error TS2367: This condition will always return 'true' since the types 'E1' and '3' have no overlap.
+            v;
+        }
+    }
+    
+    function f2(v: E2) {
+        if (v !== 0) {
+            v;
+        }
+        if (v !== 1) {
+            v;
+        }
+        if (v !== 2) {
+            v;
+        }
+        if (v !== 3) {
+            v;
+        }
+    }
+    

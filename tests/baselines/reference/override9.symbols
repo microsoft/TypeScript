@@ -1,0 +1,28 @@
+=== tests/cases/conformance/override/override9.ts ===
+interface B {
+>B : Symbol(B, Decl(override9.ts, 0, 0))
+
+    foo (): void
+>foo : Symbol(B.foo, Decl(override9.ts, 0, 13))
+
+    bar (): void
+>bar : Symbol(B.bar, Decl(override9.ts, 1, 16))
+}
+
+interface D extends B {
+>D : Symbol(D, Decl(override9.ts, 3, 1))
+>B : Symbol(B, Decl(override9.ts, 0, 0))
+
+    foo (): void;
+>foo : Symbol(D.foo, Decl(override9.ts, 5, 23))
+
+    override bar(): void;
+>bar : Symbol(D.bar, Decl(override9.ts, 6, 17))
+
+    baz(): void;
+>baz : Symbol(D.baz, Decl(override9.ts, 7, 25))
+
+    override bazz(): void;
+>bazz : Symbol(D.bazz, Decl(override9.ts, 8, 16))
+}
+
