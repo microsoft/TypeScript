@@ -1598,6 +1598,7 @@ namespace ts {
             const suggestion = getSpellingSuggestion(expressionText, commonKeywords, n => n) || getSpaceSuggestion(expressionText);
             if (suggestion) {
                 parseErrorAt(pos, expression.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
+                return;
             }
 
             // We know this is a slightly more precise case than a missing expected semicolon.
@@ -1630,7 +1631,7 @@ namespace ts {
                     return;
 
                 case "(":
-                    parseErrorAtCurrentToken(Diagnostics.Function_call_not_allowed_at_this_location);
+                    parseErrorAtCurrentToken(Diagnostics.Function_call_is_not_a_type_annotation);
                     nextToken();
                     return;
             }

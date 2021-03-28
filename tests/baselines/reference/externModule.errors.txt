@@ -1,4 +1,3 @@
-tests/cases/compiler/externModule.ts(1,1): error TS1433: Unexpected keyword or identifier.
 tests/cases/compiler/externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
 tests/cases/compiler/externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 tests/cases/compiler/externModule.ts(1,16): error TS1436: Namespace must be given a name.
@@ -14,10 +13,8 @@ tests/cases/compiler/externModule.ts(36,7): error TS2552: Cannot find name 'XDat
 tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
 
 
-==== tests/cases/compiler/externModule.ts (14 errors) ====
+==== tests/cases/compiler/externModule.ts (13 errors) ====
     declare module {
-    ~~~~~~~
-!!! error TS1433: Unexpected keyword or identifier.
     ~~~~~~~
 !!! error TS2304: Cannot find name 'declare'.
             ~~~~~~

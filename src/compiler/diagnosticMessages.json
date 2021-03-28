@@ -1388,7 +1388,7 @@
         "category": "Error",
         "code": 1439
     },
-    "Function call not allowed at this location.": {
+    "Function call is not a type annotation.": {
         "category": "Error",
         "code": 1440
     },
