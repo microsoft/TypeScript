@@ -9013,7 +9013,7 @@ namespace ts {
 
         function getTypeOfSetAccessor(symbol: Symbol): Type | undefined {
             const links = getSymbolLinks(symbol);
-            return links.writeType || (links.writeType = getTypeOfAccessorsWorker(symbol, /*isWrite*/ true));
+            return links.writeType || (links.writeType = getTypeOfAccessorsWorker(symbol, /*writing*/ true));
         }
 
         function getTypeOfAccessorsWorker(symbol: Symbol, writing = false): Type | undefined {
@@ -9033,12 +9033,12 @@ namespace ts {
             return type;
         }
 
-        function resolveTypeOfAccessors(symbol: Symbol, isWrite = false) {
+        function resolveTypeOfAccessors(symbol: Symbol, writing = false) {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
             // For write operations, prioritize type annotations on the setter
-            if (isWrite) {
+            if (writing) {
                 const setterParameterType = getAnnotatedAccessorType(setter);
                 if (setterParameterType) {
                     const flags = getCheckFlags(symbol);
@@ -26618,9 +26618,9 @@ namespace ts {
          */
         function checkPropertyAccessibility(
             node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
-            isSuper: boolean, isWrite: boolean, type: Type, prop: Symbol, reportError = true): boolean {
+            isSuper: boolean, writing: boolean, type: Type, prop: Symbol, reportError = true): boolean {
 
-            const flags = getDeclarationModifierFlagsFromSymbol(prop, isWrite);
+            const flags = getDeclarationModifierFlagsFromSymbol(prop, writing);
             const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right :
                 node.kind === SyntaxKind.ImportType ? node :
                 node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName : node.name;
@@ -26995,14 +26995,14 @@ namespace ts {
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, isSelfTypeAccess(left, parentSymbol));
                 getNodeLinks(node).resolvedSymbol = prop;
-                const isWrite = isWriteAccess(node);
-                checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, isWrite, apparentType, prop);
+                const writing = isWriteAccess(node);
+                checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, writing, apparentType, prop);
                 if (isAssignmentToReadonlyEntity(node as Expression, prop, assignmentKind)) {
                     error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
                     return errorType;
                 }
 
-                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getSetAccessorTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : writing ? getSetAccessorTypeOfSymbol(prop) : getTypeOfSymbol(prop);
             }
 
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
@@ -27394,7 +27394,7 @@ namespace ts {
                     const declClass = getContainingClass(prop.valueDeclaration);
                     return !isOptionalChain(node) && !!findAncestor(node, parent => parent === declClass);
                 }
-                return checkPropertyAccessibility(node, isSuper, /*isWrite*/ false, type, prop, /* reportError */ false);
+                return checkPropertyAccessibility(node, isSuper, /*writing*/ false, type, prop, /* reportError */ false);
             }
             // In js files properties of unions are allowed in completion
             return isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
@@ -31033,7 +31033,7 @@ namespace ts {
                     const prop = getPropertyOfType(objectLiteralType, text);
                     if (prop) {
                         markPropertyAsReferenced(prop, property, rightIsThis);
-                        checkPropertyAccessibility(property, /*isSuper*/ false, /*isWrite*/ true, objectLiteralType, prop);
+                        checkPropertyAccessibility(property, /*isSuper*/ false, /*writing*/ true, objectLiteralType, prop);
                     }
                 }
                 const elementType = getIndexedAccessType(objectLiteralType, exprType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
@@ -34996,7 +34996,7 @@ namespace ts {
                         const property = getPropertyOfType(parentType, nameText);
                         if (property) {
                             markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isSelfTypeAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, parentType, property);
+                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, /*writing*/ false, parentType, property);
                         }
                     }
                 }
