@@ -1572,6 +1572,10 @@ namespace ts {
                     parseErrorAt(pos, expression.end, Diagnostics.Variable_declaration_not_allowed_at_this_location);
                     return;
 
+                case "declare":
+                    // If a declared node failed to parse, it would have emitted a diagnostic already.
+                    return;
+
                 case "interface":
                     parseErrorForExpectedName(scanner.getTokenText(), "{", Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0);
                     return;
