@@ -1,8 +1,8 @@
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
 
 
 ==== tests/cases/compiler/truthinessCallExpressionCoercion1.ts (5 errors) ====
@@ -10,7 +10,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: T
         // error
         required ? console.log('required') : undefined;
         ~~~~~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
     
         // ok
         optional ? console.log('optional') : undefined;
@@ -28,7 +28,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: T
         // error
         test ? console.log('test') : undefined;
         ~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
     
         // ok
         test ? console.log(test) : undefined;
@@ -44,7 +44,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: T
         // error
         test
         ~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
             ? [() => null].forEach(test => { test() })
             : undefined;
     }
@@ -59,7 +59,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: T
         // error
         x.foo.bar ? console.log('x.foo.bar') : undefined;
         ~~~~~~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
     
         // ok
         x.foo.bar ? x.foo.bar : undefined;
@@ -91,7 +91,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: T
             // error
             this.isUser ? console.log('this.isUser') : undefined;
             ~~~~~~~~~~~
-!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+!!! error TS2774: This condition will always return true since this function appears to always be defined. Did you mean to call it instead?
     
             // ok
             this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;

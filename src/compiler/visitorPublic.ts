@@ -312,6 +312,24 @@ namespace ts {
     }
 
     /**
+     * Visits an iteration body, adding any block-scoped variables required by the transformation.
+     */
+    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement {
+        context.startBlockScope();
+        const updated = visitNode(body, visitor, isStatement, context.factory.liftToBlock);
+        const declarations = context.endBlockScope();
+        if (some(declarations)) {
+            if (isBlock(updated)) {
+                declarations.push(...updated.statements);
+                return context.factory.updateBlock(updated, declarations);
+            }
+            declarations.push(updated);
+            return context.factory.createBlock(declarations);
+        }
+        return updated;
+    }
+
+    /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
      * @param node The Node whose children will be visited.
@@ -872,14 +890,14 @@ namespace ts {
             case SyntaxKind.DoStatement:
                 Debug.type<DoStatement>(node);
                 return factory.updateDoStatement(node,
-                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock),
+                    visitIterationBody(node.statement, visitor, context),
                     nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.WhileStatement:
                 Debug.type<WhileStatement>(node);
                 return factory.updateWhileStatement(node,
                     nodeVisitor(node.expression, visitor, isExpression),
-                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock));
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ForStatement:
                 Debug.type<ForStatement>(node);
@@ -887,14 +905,14 @@ namespace ts {
                     nodeVisitor(node.initializer, visitor, isForInitializer),
                     nodeVisitor(node.condition, visitor, isExpression),
                     nodeVisitor(node.incrementor, visitor, isExpression),
-                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock));
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ForInStatement:
                 Debug.type<ForInStatement>(node);
                 return factory.updateForInStatement(node,
                     nodeVisitor(node.initializer, visitor, isForInitializer),
                     nodeVisitor(node.expression, visitor, isExpression),
-                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock));
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ForOfStatement:
                 Debug.type<ForOfStatement>(node);
@@ -902,7 +920,7 @@ namespace ts {
                     nodeVisitor(node.awaitModifier, tokenVisitor, isAwaitKeyword),
                     nodeVisitor(node.initializer, visitor, isForInitializer),
                     nodeVisitor(node.expression, visitor, isExpression),
-                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock));
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ContinueStatement:
                 Debug.type<ContinueStatement>(node);

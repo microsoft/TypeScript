@@ -11,7 +11,7 @@ verify.syntacticClassificationsAre(
     c.punctuation("{"),
     c.keyword("number"),
     c.punctuation("}"),
-    c.comment(" */"),
+    c.comment("*/"),
     c.keyword("var"),
     c.identifier("v"),
     c.punctuation(";"));

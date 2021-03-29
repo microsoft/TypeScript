@@ -84,7 +84,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var {...r5} = k;   // Error, index
 >r5 : any
->k : keyof T
+>k : string | number | symbol
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
 >r6 : { [P in keyof T]: T[P]; }

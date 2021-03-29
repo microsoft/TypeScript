@@ -97,8 +97,18 @@ export function multiply(a, b) { return a * b; }
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.esnext.d.ts","../../lib/lib.esnext.full.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />","signature":"8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />","affectsGlobalScope":false},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-2676574883-export const World = \"hello\";\r\n","affectsGlobalScope":false},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","affectsGlobalScope":false},{"version":"-9253692965-declare const dts: any;\r\n","signature":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"options":{"incremental":true,"listFiles":true,"listEmittedFiles":true,"target":99,"configFilePath":"./tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+
+//// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.esnext.d.ts",
+      "../../lib/lib.esnext.full.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
+    ],
     "fileInfos": {
       "../../lib/lib.esnext.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -112,12 +122,12 @@ export function multiply(a, b) { return a * b; }
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-8396256275-export declare const World = \"hello\";\r\n",
+        "signature": "-2676574883-export const World = \"hello\";\r\n",
         "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n",
+        "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
         "affectsGlobalScope": false
       },
       "./some_decl.d.ts": {
@@ -143,7 +153,8 @@ export function multiply(a, b) { return a * b; }
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2289
 }
 
 
@@ -201,8 +212,18 @@ exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","../../lib/lib.esnext.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />","signature":"8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />","affectsGlobalScope":false},{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-2676574883-export const World = \"hello\";\r\n","affectsGlobalScope":false},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","affectsGlobalScope":false},{"version":"-9253692965-declare const dts: any;\r\n","signature":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"options":{"incremental":true,"listFiles":true,"listEmittedFiles":true,"target":1,"configFilePath":"./tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+
+//// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "../../lib/lib.esnext.d.ts",
+      "./anothermodule.ts",
+      "./index.ts",
+      "./some_decl.d.ts"
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "8926001564-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />",
@@ -216,12 +237,12 @@ exports.multiply = multiply;
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-8396256275-export declare const World = \"hello\";\r\n",
+        "signature": "-2676574883-export const World = \"hello\";\r\n",
         "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n",
+        "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
         "affectsGlobalScope": false
       },
       "./some_decl.d.ts": {
@@ -247,6 +268,7 @@ exports.multiply = multiply;
       "./some_decl.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 2276
 }
 

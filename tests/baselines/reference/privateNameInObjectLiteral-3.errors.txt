@@ -1,0 +1,15 @@
+tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-3.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-3.ts(2,9): error TS18016: Private identifiers are not allowed outside class bodies.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-3.ts (2 errors) ====
+    const obj = {
+        get #foo() {
+            ~~~~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+            ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+            return ""
+        }
+    };
+    
