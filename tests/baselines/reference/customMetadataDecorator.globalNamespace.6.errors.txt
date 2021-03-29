@@ -1,0 +1,51 @@
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(1,1): error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+  Unable to resolve signature of class decorator when called as an expression.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(3,5): error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+  Unable to resolve signature of property decorator when called as an expression.
+    The return type of a property decorator function must be either 'void' or 'any'.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(7,5): error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+  Unable to resolve signature of method decorator when called as an expression.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(8,12): error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+  Unable to resolve signature of parameter decorator when called as an expression.
+    The return type of a parameter decorator function must be either 'void' or 'any'.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(10,5): error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+  Unable to resolve signature of method decorator when called as an expression.
+
+
+==== tests/cases/conformance/decorators/decoratorMetadata/global.d.ts (0 errors) ====
+    declare namespace Reflect {
+        function metadata(target: Function): true;
+        function metadata(target: object, key: string, desc?: PropertyDescriptor): true;
+        function metadata(target: object, key: string, parameterIndex: number): true;
+    }
+    declare const dec: any;
+==== tests/cases/conformance/decorators/decoratorMetadata/main.ts (5 errors) ====
+    @dec
+    ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+!!! error TS1433:   Unable to resolve signature of class decorator when called as an expression.
+    class C {
+        @dec x!: number;
+        ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+!!! error TS1433:   Unable to resolve signature of property decorator when called as an expression.
+!!! error TS1433:     The return type of a property decorator function must be either 'void' or 'any'.
+    
+        constructor(x: number) {}
+    
+        @dec
+        ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+!!! error TS1433:   Unable to resolve signature of method decorator when called as an expression.
+        method(@dec x: number): string { return ""; }
+               ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+!!! error TS1433:   Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1433:     The return type of a parameter decorator function must be either 'void' or 'any'.
+    
+        @dec
+        ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'Reflect.metadata' when called as an expression.
+!!! error TS1433:   Unable to resolve signature of method decorator when called as an expression.
+        get accessor(): string { return ""; }
+    }

@@ -1502,6 +1502,7 @@ namespace ts {
             case SyntaxKind.NonNullExpression:
             case SyntaxKind.MetaProperty:
             case SyntaxKind.ImportKeyword: // technically this is only an Expression if it's in a CallExpression
+            case SyntaxKind.SyntheticCallExpression:
                 return true;
             default:
                 return false;
@@ -1561,6 +1562,7 @@ namespace ts {
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.CommaListExpression:
             case SyntaxKind.PartiallyEmittedExpression:
+            case SyntaxKind.SyntheticExpression:
                 return true;
             default:
                 return isUnaryExpressionKind(kind);

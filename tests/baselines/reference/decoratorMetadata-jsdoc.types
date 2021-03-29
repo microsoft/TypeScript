@@ -1,4 +1,4 @@
-=== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts ===
+=== tests/cases/conformance/decorators/decoratorMetadata/decoratorMetadata-jsdoc.ts ===
 declare var decorator: any;
 >decorator : any
 

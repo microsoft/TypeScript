@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/decorators/decoratorMetadata.ts] ////
+//// [tests/cases/conformance/decorators/decoratorMetadata/decoratorMetadata.ts] ////
 
 //// [service.ts]
 export default class Service {

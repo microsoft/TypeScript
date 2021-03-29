@@ -269,6 +269,7 @@ namespace ts {
         NonNullExpression,
         MetaProperty,
         SyntheticExpression,
+        SyntheticCallExpression,
 
         // Misc
         TemplateSpan,
@@ -1098,7 +1099,6 @@ namespace ts {
         readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-        /*@internal*/ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
@@ -2305,6 +2305,15 @@ namespace ts {
     // see: https://tc39.github.io/ecma262/#prod-SuperProperty
     export type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
 
+    export interface SyntheticCallExpression extends LeftHandSideExpression {
+        readonly kind: SyntaxKind.SyntheticCallExpression;
+        readonly thisArg?: LeftHandSideExpression | SyntheticExpression;
+        readonly expression: Expression;
+        readonly typeArguments?: readonly TypeNode[];
+        readonly arguments: readonly Expression[];
+        /* @internal */ containingMessageChain?: () => DiagnosticMessageChain | undefined;
+    }
+
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         readonly kind: SyntaxKind.CallExpression;
         readonly expression: LeftHandSideExpression;
@@ -2420,6 +2429,7 @@ namespace ts {
         | TaggedTemplateExpression
         | Decorator
         | JsxOpeningLikeElement
+        | SyntheticCallExpression
         ;
 
     export interface AsExpression extends Expression {
@@ -5889,6 +5899,8 @@ namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
+        metadataDecorator?: string;
+        metadataDecoratorImportSource?: string;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/generateCpuProfile?: string;
@@ -6590,6 +6602,8 @@ namespace ts {
         externalHelpers?: boolean;
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
+        generatedImportReference?: ImportSpecifier; // For a synthetic import, specifies the synthesized import reference so that
+                                                    // the import can be resolved during subsequent transformations.
     }
 
     export const enum EmitFlags {
@@ -7341,6 +7355,7 @@ namespace ts {
         // Synthetic Nodes
         //
         /* @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
+        /* @internal */ createSyntheticCallExpression(thisArg: LeftHandSideExpression | SyntheticExpression | undefined, expression: Expression | SyntheticExpression, typeArguments: readonly TypeNode[] | undefined, argumentList: readonly Expression[], containingMessageChain?: () => DiagnosticMessageChain | undefined): SyntheticCallExpression;
         /* @internal */ createSyntaxList(children: Node[]): SyntaxList;
 
         //

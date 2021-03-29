@@ -932,6 +932,7 @@ namespace ts {
         let lastFlowNode: FlowNode | undefined;
         let lastFlowNodeReachable: boolean;
         let flowTypeCache: Type[] | undefined;
+        let speculativeAliasResolution = false; // indicates whether we are speculatively resolving an alias for a spelling suggestion.
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -975,7 +976,7 @@ namespace ts {
         let _jsxNamespace: __String;
         let _jsxFactoryEntity: EntityName | undefined;
         let outofbandVarianceMarkerHandler: ((onlyUnreliable: boolean) => void) | undefined;
-
+        const metadataDecoratorImportSymbols = new Map<SourceFile, Symbol>();
         const subtypeRelation = new Map<string, RelationComparisonResult>();
         const strictSubtypeRelation = new Map<string, RelationComparisonResult>();
         const assignableRelation = new Map<string, RelationComparisonResult>();
@@ -1088,6 +1089,27 @@ namespace ts {
             return diagnostic;
         }
 
+        /**
+         * Reports an error, attaching it to an optional containing message chain.
+         * @param location The location at which the error is to be reported.
+         * @param containingMessageChain An optional callback that can return a `DiagnosticMessageChain` that should contain the message.
+         * @param message The Diagnostic message to report.
+         * @returns The newly created diagnostic.
+         */
+        function errorWithContainingMessageChain(location: Node | undefined, containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number) {
+            const headChain = containingMessageChain?.();
+            if (headChain) {
+                const tailChain = chainDiagnosticMessages(/*details*/ undefined, message, arg0, arg1, arg2, arg3);
+                concatenateDiagnosticMessageChains(headChain, tailChain);
+                const diagnostic = location
+                    ? createDiagnosticForNodeFromMessageChain(location, headChain)
+                    : createCompilerDiagnosticFromMessageChain(headChain);
+                diagnostics.add(diagnostic);
+                return diagnostic;
+            }
+            return error(location, message, arg0, arg1, arg2, arg3);
+        }
+
         function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
                 diagnostics.add(diagnostic);
@@ -1096,18 +1118,37 @@ namespace ts {
                 suggestionDiagnostics.add({ ...diagnostic, category: DiagnosticCategory.Suggestion });
             }
         }
+
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
              // Pseudo-synthesized input node
-            if (location.pos < 0 || location.end < 0) {
+            if (nodeIsSynthesized(location)) {
                 if (!isError) {
                     return; // Drop suggestions (we have no span to suggest on)
                 }
                 // Issue errors globally
                 const file = getSourceFileOfNode(location);
-                addErrorOrSuggestion(isError, "message" in message ? createFileDiagnostic(file, 0, 0, message, arg0, arg1, arg2, arg3) : createDiagnosticForFileFromMessageChain(file, message)); // eslint-disable-line no-in-operator
+                addErrorOrSuggestion(isError, isDiagnosticMessageChain(message) ? createDiagnosticForFileFromMessageChain(file, message) : createFileDiagnostic(file, 0, 0, message, arg0, arg1, arg2, arg3));
                 return;
             }
-            addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator
+            addErrorOrSuggestion(isError, isDiagnosticMessageChain(message) ? createDiagnosticForNodeFromMessageChain(location, message) : createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3));
+        }
+
+        /**
+         * Reports an error or suggestion, attaching it to an optional containing message chain.
+         * @param isError Indicates whether to report as an error (`true`), or as a suggestion (`false`).
+         * @param location The location at which the error is to be reported.
+         * @param containingMessageChain An optional callback that can return a `DiagnosticMessageChain` that should contain the message.
+         * @param message The Diagnostic message or nested diagnostic message chain to report.
+         * @returns The newly created diagnostic.
+         */
+        function errorOrSuggestionWithContainingMessageChain(isError: boolean, location: Node, containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+            const headChain = containingMessageChain?.();
+            if (headChain) {
+                const tailChain = isDiagnosticMessageChain(message) ? message : chainDiagnosticMessages(/*details*/ undefined, message, arg0, arg1, arg2, arg3);
+                concatenateDiagnosticMessageChains(headChain, tailChain);
+                message = headChain;
+            }
+            errorOrSuggestion(isError, location, message, arg0, arg1, arg2, arg3);
         }
 
         function errorAndMaybeSuggestAwait(
@@ -1414,20 +1455,30 @@ namespace ts {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
+        /**
+         * Returns whether the provided symbol (or its target if the symbol is an Alias) has the correct meaning.
+         */
+        function resolvedSymbolHasCorrectMeaning(symbol: Symbol, meaning: SymbolFlags) {
+            Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
+            if (symbol.flags & meaning) {
+                return true;
+            }
+            if (symbol.flags & SymbolFlags.Alias) {
+                const target = resolveAlias(symbol);
+                // Unknown symbol means an error occurred in alias resolution, treat it as positive answer to avoid cascading errors
+                if (target === unknownSymbol || target.flags & meaning) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function getSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined {
             if (meaning) {
                 const symbol = getMergedSymbol(symbols.get(name));
                 if (symbol) {
-                    Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
-                    if (symbol.flags & meaning) {
+                    if (resolvedSymbolHasCorrectMeaning(symbol, meaning)) {
                         return symbol;
-                    }
-                    if (symbol.flags & SymbolFlags.Alias) {
-                        const target = resolveAlias(symbol);
-                        // Unknown symbol means an error occurred in alias resolution, treat it as positive answer to avoid cascading errors
-                        if (target === unknownSymbol || target.flags & meaning) {
-                            return symbol;
-                        }
                     }
                 }
             }
@@ -1702,7 +1753,15 @@ namespace ts {
          * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
          * the given name can be found.
          *
-         * @param isUse If true, this will count towards --noUnusedLocals / --noUnusedParameters.
+         * @param location The location at which to begin name resolution.
+         * @param name The escaped name of the symbol to resolve.
+         * @param meaning The meaning of the symbol to resolve.
+         * @param nameNotFoundMessage The diagnostic message to report if the name is not found. Pass `undefined` to disable error reporting.
+         * @param nameArg An `Identifier` or escaped string from which to derive the name used when reporting diagnostics.
+         * @param isUse If true, this will count towards `--noUnusedLocals` / `--noUnusedParameters`.
+         * @param excludeGlobals Indicates that the global symbol table should not be used when resolving this name (default `false`).
+         * @param suggestedNameNotFoundMessage A secondary diagnostic message used to provide "Did you mean...?" spelling suggestions. Ignored if `nameNotfoundMessage` is not provided.
+         * @returns The resolved `Symbol`, or `undefined` if no `Symbol` with the given name and meaning can be found.
          */
         function resolveName(
             location: Node | undefined,
@@ -1713,9 +1772,29 @@ namespace ts {
             isUse: boolean,
             excludeGlobals = false,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, suggestedNameNotFoundMessage);
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, suggestedNameNotFoundMessage, /*errorLocation*/ undefined, /*containingMessageChain*/ undefined);
         }
 
+        /**
+         * Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
+         * the `nameNotFoundMessage` argument is not `undefined`.
+         * 
+         * ***NOTE**: You should not call this directly. This function is intended to be used only by `resolveName`, 
+         * `resolveEntityName`, and `getSuggestedSymbolForNonexistentSymbol`.
+         *
+         * @param location The location at which to begin name resolution.
+         * @param name The escaped name of the symbol to resolve.
+         * @param meaning The meaning of the symbol to resolve.
+         * @param nameNotFoundMessage The diagnostic message to report if the name is not found. Pass `undefined` to disable error reporting.
+         * @param nameArg An `Identifier` or escaped string from which to derive the name used when reporting diagnostics.
+         * @param isUse If true, this will count towards `--noUnusedLocals` / `--noUnusedParameters`.
+         * @param excludeGlobals Indicates that the global symbol table should not be used when resolving this name (default `false`).
+         * @param lookup The function to use to perform symbol lookup against a `SymbolTable`.
+         * @param suggestedNameNotFoundMessage A secondary diagnostic message used to provide "Did you mean...?" spelling suggestions. Ignored if `nameNotfoundMessage` is not provided.
+         * @param errorLocation The location at which to report any resolution errors. Defaults to `location` if not provided. Ignored if `nameNotFoundMessage` is not provided.
+         * @param containingMessageChain An optional callback that provides a containing `DiagnosticMessageChain` to provide more context for name resolution diagnostics. Ignored if `nameNotFoundMessage` is not provided.
+         * @returns The resolved `Symbol`, or `undefined` if no `Symbol` with the given name and meaning can be found.
+         */
         function resolveNameHelper(
             location: Node | undefined,
             name: __String,
@@ -1725,7 +1804,10 @@ namespace ts {
             isUse: boolean,
             excludeGlobals: boolean,
             lookup: typeof getSymbol,
-            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined {
+            suggestedNameNotFoundMessage?: DiagnosticMessage,
+            errorLocation = location,
+            containingMessageChain?: () => DiagnosticMessageChain | undefined
+        ): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -1733,7 +1815,6 @@ namespace ts {
             let propertyWithInvalidInitializer: Node | undefined;
             let associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined;
             let withinDeferredContext = false;
-            const errorLocation = location;
             let grandparent: Node;
             let isInExternalModule = false;
 
@@ -1878,7 +1959,7 @@ namespace ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Static_members_cannot_reference_class_type_parameters);
                                 return undefined;
                             }
                             break loop;
@@ -1897,7 +1978,7 @@ namespace ts {
                             const container = location.parent.parent;
                             if (isClassLike(container) && (result = lookup(getSymbolOfNode(container).members!, name, meaning & SymbolFlags.Type))) {
                                 if (nameNotFoundMessage) {
-                                    error(errorLocation, Diagnostics.Base_class_expressions_cannot_reference_class_type_parameters);
+                                    errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Base_class_expressions_cannot_reference_class_type_parameters);
                                 }
                                 return undefined;
                             }
@@ -1916,7 +1997,7 @@ namespace ts {
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
                             }
                         }
@@ -2054,13 +2135,13 @@ namespace ts {
             if (!result) {
                 if (nameNotFoundMessage) {
                     if (!errorLocation ||
-                        !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
-                        !checkAndReportErrorForExtendingInterface(errorLocation) &&
-                        !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
-                        !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
-                        !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
-                        !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
-                        !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
+                        !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg, containingMessageChain) && // TODO: GH#18217
+                        !checkAndReportErrorForExtendingInterface(errorLocation, containingMessageChain) &&
+                        !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning, containingMessageChain) &&
+                        !checkAndReportErrorForExportingPrimitiveType(errorLocation, name, containingMessageChain) &&
+                        !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning, containingMessageChain) &&
+                        !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning, containingMessageChain) &&
+                        !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning, containingMessageChain)) {
                         let suggestion: Symbol | undefined;
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
@@ -2070,7 +2151,7 @@ namespace ts {
                             }
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
-                                const diagnostic = error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg!), suggestionName);
+                                const diagnostic = errorWithContainingMessageChain(errorLocation, containingMessageChain, suggestedNameNotFoundMessage, diagnosticName(nameArg ?? name), suggestionName);
                                 if (suggestion.valueDeclaration) {
                                     addRelatedInfo(
                                         diagnostic,
@@ -2083,10 +2164,10 @@ namespace ts {
                             if (nameArg) {
                                 const lib = getSuggestedLibForNonExistentName(nameArg);
                                 if (lib) {
-                                    error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), lib);
+                                    errorWithContainingMessageChain(errorLocation, containingMessageChain, nameNotFoundMessage, diagnosticName(nameArg), lib);
                                 }
                                 else {
-                                    error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
+                                    errorWithContainingMessageChain(errorLocation, containingMessageChain, nameNotFoundMessage, diagnosticName(nameArg));
                                 }
                             }
                         }
@@ -2103,8 +2184,8 @@ namespace ts {
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.
                     const propertyName = (<PropertyDeclaration>propertyWithInvalidInitializer).name;
-                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                        declarationNameToString(propertyName), diagnosticName(nameArg!));
+                    errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        declarationNameToString(propertyName), diagnosticName(nameArg ?? name));
                     return undefined;
                 }
 
@@ -2124,7 +2205,7 @@ namespace ts {
                      ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
-                        checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
+                        checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation, containingMessageChain);
                     }
                 }
 
@@ -2132,7 +2213,7 @@ namespace ts {
                 if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value && !(originalLocation!.flags & NodeFlags.JSDoc)) {
                     const merged = getMergedSymbol(result);
                     if (length(merged.declarations) && every(merged.declarations, d => isNamespaceExportDeclaration(d) || isSourceFile(d) && !!d.symbol.globalExports)) {
-                        errorOrSuggestion(!compilerOptions.allowUmdGlobalAccess, errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
+                        errorOrSuggestionWithContainingMessageChain(!compilerOptions.allowUmdGlobalAccess, errorLocation!, containingMessageChain, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
                     }
                 }
 
@@ -2142,21 +2223,21 @@ namespace ts {
                     const root = (getRootDeclaration(associatedDeclarationForContainingInitializerOrBindingName) as ParameterDeclaration);
                     // A parameter initializer or binding pattern initializer within a parameter cannot refer to itself
                     if (candidate === getSymbolOfNode(associatedDeclarationForContainingInitializerOrBindingName)) {
-                        error(errorLocation, Diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name));
+                        errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Parameter_0_cannot_reference_itself, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name));
                     }
                     // And it cannot refer to any declarations which come after it
                     else if (candidate.valueDeclaration && candidate.valueDeclaration.pos > associatedDeclarationForContainingInitializerOrBindingName.pos && root.parent.locals && lookup(root.parent.locals, candidate.escapedName, meaning) === candidate) {
-                        error(errorLocation, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(<Identifier>errorLocation));
+                        errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializerOrBindingName.name), declarationNameToString(<Identifier>errorLocation));
                     }
                 }
                 if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias) {
-                    checkSymbolUsageInExpressionContext(result, name, errorLocation);
+                    checkSymbolUsageInExpressionContext(result, name, errorLocation, containingMessageChain);
                 }
             }
             return result;
         }
 
-        function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node) {
+        function checkSymbolUsageInExpressionContext(symbol: Symbol, name: __String, useSite: Node, containingMessageChain?: () => DiagnosticMessageChain | undefined) {
             if (!isValidTypeOnlyAliasUseSite(useSite)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
@@ -2169,7 +2250,7 @@ namespace ts {
                         : Diagnostics._0_was_imported_here;
                     const unescapedName = unescapeLeadingUnderscores(name);
                     addRelatedInfo(
-                        error(useSite, message, unescapedName),
+                        errorWithContainingMessageChain(useSite, containingMessageChain, message, unescapedName),
                         createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, unescapedName));
                 }
             }
@@ -2226,7 +2307,7 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: __String, nameArg: __String | Identifier): boolean {
+        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: __String, nameArg: __String | Identifier | undefined, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (!isIdentifier(errorLocation) || errorLocation.escapedText !== name || isTypeReferenceIdentifier(errorLocation) || isInTypeQuery(errorLocation)) {
                 return false;
             }
@@ -2243,7 +2324,7 @@ namespace ts {
                     // Check to see if a static member exists.
                     const constructorType = getTypeOfSymbol(classSymbol);
                     if (getPropertyOfType(constructorType, name)) {
-                        error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, diagnosticName(nameArg), symbolToString(classSymbol));
+                        errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, diagnosticName(nameArg ?? name), symbolToString(classSymbol));
                         return true;
                     }
 
@@ -2252,7 +2333,7 @@ namespace ts {
                     if (location === container && !hasSyntacticModifier(location, ModifierFlags.Static)) {
                         const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType!; // TODO: GH#18217
                         if (getPropertyOfType(instanceType, name)) {
-                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, diagnosticName(nameArg));
+                            errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, diagnosticName(nameArg ?? name));
                             return true;
                         }
                     }
@@ -2264,10 +2345,10 @@ namespace ts {
         }
 
 
-        function checkAndReportErrorForExtendingInterface(errorLocation: Node): boolean {
+        function checkAndReportErrorForExtendingInterface(errorLocation: Node, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             const expression = getEntityNameForExtendingInterface(errorLocation);
             if (expression && resolveEntityName(expression, SymbolFlags.Interface, /*ignoreErrors*/ true)) {
-                error(errorLocation, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
+                errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements, getTextOfNode(expression));
                 return true;
             }
             return false;
@@ -2291,7 +2372,7 @@ namespace ts {
             }
         }
 
-        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             const namespaceMeaning = SymbolFlags.Namespace | (isInJSFile(errorLocation) ? SymbolFlags.Value : 0);
             if (meaning === namespaceMeaning) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~namespaceMeaning, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
@@ -2302,8 +2383,9 @@ namespace ts {
                         const propName = parent.right.escapedText;
                         const propType = getPropertyOfType(getDeclaredTypeOfSymbol(symbol), propName);
                         if (propType) {
-                            error(
+                            errorWithContainingMessageChain(
                                 parent,
+                                containingMessageChain,
                                 Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1,
                                 unescapeLeadingUnderscores(name),
                                 unescapeLeadingUnderscores(propName),
@@ -2311,7 +2393,7 @@ namespace ts {
                             return true;
                         }
                     }
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here, unescapeLeadingUnderscores(name));
+                    errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
@@ -2319,11 +2401,11 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingValueAsType(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingValueAsType(errorLocation: Node, name: __String, meaning: SymbolFlags, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (meaning & (SymbolFlags.Type & ~SymbolFlags.Namespace)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, ~SymbolFlags.Type & SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol && !(symbol.flags & SymbolFlags.Namespace)) {
-                    error(errorLocation, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0, unescapeLeadingUnderscores(name));
+                    errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
@@ -2334,31 +2416,31 @@ namespace ts {
             return name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never" || name === "unknown";
         }
 
-        function checkAndReportErrorForExportingPrimitiveType(errorLocation: Node, name: __String): boolean {
+        function checkAndReportErrorForExportingPrimitiveType(errorLocation: Node, name: __String, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (isPrimitiveTypeName(name) && errorLocation.parent.kind === SyntaxKind.ExportSpecifier) {
-                error(errorLocation, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, name as string);
+                errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, name as string);
                 return true;
             }
             return false;
         }
 
-        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
                 if (isPrimitiveTypeName(name)) {
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
+                    errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
                     const rawName = unescapeLeadingUnderscores(name);
                     if (isES2015OrLaterConstructorName(name)) {
-                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, rawName);
+                        errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, rawName);
                     }
                     else if (maybeMappedType(errorLocation, symbol)) {
-                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0, rawName, rawName === "K" ? "P" : "K");
+                        errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0, rawName, rawName === "K" ? "P" : "K");
                     }
                     else {
-                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, rawName);
+                        errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, rawName);
                     }
                     return true;
                 }
@@ -2389,12 +2471,13 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
-                    error(
+                    errorWithContainingMessageChain(
                         errorLocation,
+                        containingMessageChain,
                         Diagnostics.Cannot_use_namespace_0_as_a_value,
                         unescapeLeadingUnderscores(name));
                     return true;
@@ -2403,14 +2486,14 @@ namespace ts {
             else if (meaning & (SymbolFlags.Type & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Value)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
-                    error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
+                    errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
             return false;
         }
 
-        function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
+        function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node, containingMessageChain?: () => DiagnosticMessageChain | undefined): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
             if (result.flags & (SymbolFlags.Function | SymbolFlags.FunctionScopedVariable | SymbolFlags.Assignment) && result.flags & SymbolFlags.Class) {
                 // constructor functions aren't block scoped
@@ -2426,18 +2509,18 @@ namespace ts {
                 let diagnosticMessage;
                 const declarationName = declarationNameToString(getNameOfDeclaration(declaration));
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
-                    diagnosticMessage = error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
+                    diagnosticMessage = errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.Class) {
-                    diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                    diagnosticMessage = errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Class_0_used_before_its_declaration, declarationName);
                 }
                 else if (result.flags & SymbolFlags.RegularEnum) {
-                    diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
+                    diagnosticMessage = errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                 }
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
                     if (shouldPreserveConstEnums(compilerOptions)) {
-                        diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
+                        diagnosticMessage = errorWithContainingMessageChain(errorLocation, containingMessageChain, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                     }
                 }
 
@@ -2968,6 +3051,12 @@ namespace ts {
                 const node = getDeclarationOfAliasSymbol(symbol);
                 if (!node) return Debug.fail();
                 const target = getTargetOfAliasDeclaration(node);
+                // Don't cache resolutions when we are speculatively resolving an alias for spelling suggestions
+                // as that can cause us to incorrectly warn about circular definitions below.
+                if (speculativeAliasResolution) {
+                    links.target = undefined;
+                    return target || unknownSymbol;
+                }
                 if (links.target === resolvingSymbol) {
                     links.target = target || unknownSymbol;
                 }
@@ -2976,6 +3065,11 @@ namespace ts {
                 }
             }
             else if (links.target === resolvingSymbol) {
+                // If we are speculatively resolving an alias for spelling suggestions, do not change the
+                // target as that can result in an incorrect warning about circular definitions.
+                if (speculativeAliasResolution) {
+                    return unknownSymbol;
+                }
                 links.target = unknownSymbol;
             }
             return links.target;
@@ -2984,7 +3078,14 @@ namespace ts {
         function tryResolveAlias(symbol: Symbol): Symbol | undefined {
             const links = getSymbolLinks(symbol);
             if (links.target !== resolvingSymbol) {
-                return resolveAlias(symbol);
+                const savedSpeculativeAliasResolution = speculativeAliasResolution;
+                speculativeAliasResolution = true;
+                try {
+                    return resolveAlias(symbol);
+                }
+                finally {
+                    speculativeAliasResolution = savedSpeculativeAliasResolution;
+                }
             }
 
             return undefined;
@@ -3123,8 +3224,16 @@ namespace ts {
 
         /**
          * Resolves a qualified name and any involved aliases.
+         * @param name The `EntityName` or `EntityNameExpression` to resolve.
+         * @param meaning The meaning of the symbol we are looking for.
+         * @param ignoreErrors Indicates whether to report errors when a symbol cannot be found.
+         * @param dontResolveAlias Indicates that we should not resolve Alias symbols.
+         * @param location The node at which start name resolution for the left-most identifier of the entity name.
+         * @param errorNode When provided, overrides the location used to report an error for a missing symbol.
+         * @param rootSymbol When provided, overrides the symbol to use for the left-most identifier of the entity name.
+         * @param containingMessageChain When provided, creates a diagnostic message chain that is prepended to the error.
          */
-        function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined {
+        function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node, errorNode?: Node, rootSymbol?: Symbol, containingMessageChain?: () => DiagnosticMessageChain | undefined): Symbol | undefined {
             if (nodeIsMissing(name)) {
                 return undefined;
             }
@@ -3132,9 +3241,22 @@ namespace ts {
             const namespaceMeaning = SymbolFlags.Namespace | (isInJSFile(name) ? meaning & SymbolFlags.Value : 0);
             let symbol: Symbol | undefined;
             if (name.kind === SyntaxKind.Identifier) {
-                const message = meaning === namespaceMeaning || nodeIsSynthesized(name) ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
+                const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(name);
+                if (rootSymbol) {
+                    if (resolvedSymbolHasCorrectMeaning(rootSymbol, meaning)) {
+                        return rootSymbol;
+                    }
+                    if (!ignoreErrors) {
+                        errorWithContainingMessageChain(errorNode || location || name, containingMessageChain, message, idText(name));
+                    }
+                    return undefined;
+                }
+                const suggestionMessage =
+                    message === Diagnostics.Cannot_find_name_0 ? Diagnostics.Cannot_find_name_0_Did_you_mean_1 :
+                    message === Diagnostics.Cannot_find_namespace_0 ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1 :
+                    undefined;
                 const symbolFromJSPrototype = isInJSFile(name) && !nodeIsSynthesized(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
-                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true));
+                symbol = getMergedSymbol(resolveNameHelper(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true, /*excludeGlobals*/ false, getSymbol, suggestionMessage, errorNode, containingMessageChain));
                 if (!symbol) {
                     return getMergedSymbol(symbolFromJSPrototype);
                 }
@@ -3142,7 +3264,7 @@ namespace ts {
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
                 const left = name.kind === SyntaxKind.QualifiedName ? name.left : name.expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                let namespace = resolveEntityName(left, namespaceMeaning, ignoreErrors, /*dontResolveAlias*/ false, location);
+                let namespace = resolveEntityName(left, namespaceMeaning, ignoreErrors, /*dontResolveAlias*/ false, location, errorNode, rootSymbol, containingMessageChain);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
@@ -3168,12 +3290,25 @@ namespace ts {
                 symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, meaning));
                 if (!symbol) {
                     if (!ignoreErrors) {
-                        const namespaceName = getFullyQualifiedName(namespace);
+                        let namespaceName = getFullyQualifiedName(namespace);
+                        let moduleName: string | undefined;
+                        const match = /^"([^"]+)"\.(.*)$/.exec(namespaceName);
+                        if (match) {
+                            moduleName = match[1];
+                            namespaceName = match[2];
+                        }
                         const declarationName = declarationNameToString(right);
                         const suggestion = getSuggestedSymbolForNonexistentModule(right, namespace);
-                        suggestion ?
-                            error(right, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestion)) :
-                            error(right, Diagnostics.Namespace_0_has_no_exported_member_1, namespaceName, declarationName);
+                        const diagnostic = suggestion ?
+                            moduleName ?
+                                errorWithContainingMessageChain(errorNode || right, containingMessageChain, Diagnostics._0_from_module_1_has_no_exported_member_named_2_Did_you_mean_3, namespaceName, moduleName, declarationName, symbolToString(suggestion)) :
+                                errorWithContainingMessageChain(errorNode || right, containingMessageChain, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestion)) :
+                            moduleName ?
+                                errorWithContainingMessageChain(errorNode || right, containingMessageChain, Diagnostics.Namespace_0_from_module_1_has_no_exported_member_2, namespaceName, moduleName, declarationName) :
+                                errorWithContainingMessageChain(errorNode || right, containingMessageChain, Diagnostics.Namespace_0_has_no_exported_member_1, namespaceName, declarationName);
+                        if (suggestion?.valueDeclaration) {
+                            addRelatedInfo(diagnostic, createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, symbolName(suggestion)));
+                        }
                     }
                     return undefined;
                 }
@@ -21576,7 +21711,7 @@ namespace ts {
                 case "BigUint64Array":
                     return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later;
                 default:
-                    if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                    if (node.parent?.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
                     }
                     else {
@@ -25614,6 +25749,10 @@ namespace ts {
             return checkIteratedTypeOrElementType(IterationUse.Spread, arrayOrIterableType, undefinedType, node.expression);
         }
 
+        function checkSyntheticCallExpression(node: SyntheticCallExpression): Type {
+            return getReturnTypeOfSignature(getResolvedSignature(node));
+        }
+
         function checkSyntheticExpression(node: SyntheticExpression): Type {
             return node.isSpread ? getIndexedAccessType(node.type, numberType) : node.type;
         }
@@ -27308,7 +27447,7 @@ namespace ts {
                 // So the table *contains* `x` but `x` isn't actually in scope.
                 // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
                 return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning);
-            });
+            }, /*suggestedNameNotFoundMessage*/ undefined, /*errorLocation*/ undefined, /*containingMessageChain*/ undefined);
             return result;
         }
 
@@ -27558,7 +27697,7 @@ namespace ts {
             else if (isJsxOpeningLikeElement(node)) {
                 checkExpression(node.attributes);
             }
-            else if (node.kind !== SyntaxKind.Decorator) {
+            else if (node.kind !== SyntaxKind.Decorator && node.kind !== SyntaxKind.SyntheticCallExpression) {
                 forEach((<CallExpression>node).arguments, argument => {
                     checkExpression(argument);
                 });
@@ -27685,7 +27824,7 @@ namespace ts {
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
                 // If we are missing the close parenthesis, the call is incomplete.
-                callIsIncomplete = node.arguments.end === node.end;
+                callIsIncomplete = !isSyntheticCallExpression(node) && node.arguments.end === node.end;
 
                 // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
                 const spreadArgIndex = getSpreadArgumentIndex(args);
@@ -27775,7 +27914,7 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function getThisArgumentType(thisArgumentNode: LeftHandSideExpression | undefined) {
+        function getThisArgumentType(thisArgumentNode: LeftHandSideExpression | SyntheticExpression | undefined) {
             if (!thisArgumentNode) {
                 return voidType;
             }
@@ -28140,8 +28279,11 @@ namespace ts {
         /**
          * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
          */
-        function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | undefined {
-            if (node.kind === SyntaxKind.CallExpression) {
+        function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | SyntheticExpression | undefined {
+            if (isSyntheticCallExpression(node) && node.thisArg) {
+                return node.thisArg;
+            }
+            if (isCallExpression(node) || isSyntheticCallExpression(node)) {
                 const callee = skipOuterExpressions(node.expression);
                 if (isAccessExpression(callee)) {
                     return callee.expression;
@@ -28151,6 +28293,13 @@ namespace ts {
 
         function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember) {
             const result = parseNodeFactory.createSyntheticExpression(type, isSpread, tupleNameSource);
+            setTextRange(result, parent);
+            setParent(result, parent);
+            return result;
+        }
+
+        function createSyntheticCallExpression(parent: Node, thisArg: LeftHandSideExpression | SyntheticExpression | undefined, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentList: readonly Expression[], containingMessageChain?: () => DiagnosticMessageChain | undefined) {
+            const result = parseNodeFactory.createSyntheticCallExpression(thisArg, expression, typeArguments, argumentList, containingMessageChain);
             setTextRange(result, parent);
             setParent(result, parent);
             return result;
@@ -28171,7 +28320,7 @@ namespace ts {
                 return args;
             }
             if (node.kind === SyntaxKind.Decorator) {
-                return getEffectiveDecoratorArguments(node);
+                return getEffectiveDecoratorArguments(node.parent, node.expression);
             }
             if (isJsxOpeningLikeElement(node)) {
                 return node.attributes.properties.length > 0 || (isJsxOpeningElement(node) && node.parent.children.length > 0) ? [node.attributes] : emptyArray;
@@ -28205,25 +28354,23 @@ namespace ts {
         /**
          * Returns the synthetic argument list for a decorator invocation.
          */
-        function getEffectiveDecoratorArguments(node: Decorator): readonly Expression[] {
-            const parent = node.parent;
-            const expr = node.expression;
-            switch (parent.kind) {
+        function getEffectiveDecoratorArguments(decoratorTarget: NamedDeclaration, errorNode: Node): readonly Expression[] {
+            switch (decoratorTarget.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     // For a class decorator, the `target` is the type of the class (e.g. the
                     // "static" or "constructor" side of the class).
                     return [
-                        createSyntheticExpression(expr, getTypeOfSymbol(getSymbolOfNode(parent)))
+                        createSyntheticExpression(errorNode, getTypeOfSymbol(getSymbolOfNode(decoratorTarget)))
                     ];
                 case SyntaxKind.Parameter:
                     // A parameter declaration decorator will have three arguments (see
                     // `ParameterDecorator` in core.d.ts).
-                    const func = <FunctionLikeDeclaration>parent.parent;
+                    const func = <FunctionLikeDeclaration>decoratorTarget.parent;
                     return [
-                        createSyntheticExpression(expr, parent.parent.kind === SyntaxKind.Constructor ? getTypeOfSymbol(getSymbolOfNode(func)) : errorType),
-                        createSyntheticExpression(expr, anyType),
-                        createSyntheticExpression(expr, numberType)
+                        createSyntheticExpression(errorNode, decoratorTarget.parent.kind === SyntaxKind.Constructor ? getTypeOfSymbol(getSymbolOfNode(func)) : errorType),
+                        createSyntheticExpression(errorNode, anyType),
+                        createSyntheticExpression(errorNode, numberType)
                     ];
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
@@ -28232,11 +28379,11 @@ namespace ts {
                     // A method or accessor declaration decorator will have two or three arguments (see
                     // `PropertyDecorator` and `MethodDecorator` in core.d.ts). If we are emitting decorators
                     // for ES3, we will only pass two arguments.
-                    const hasPropDesc = parent.kind !== SyntaxKind.PropertyDeclaration && languageVersion !== ScriptTarget.ES3;
+                    const hasPropDesc = decoratorTarget.kind !== SyntaxKind.PropertyDeclaration && languageVersion !== ScriptTarget.ES3;
                     return [
-                        createSyntheticExpression(expr, getParentTypeOfClassElement(<ClassElement>parent)),
-                        createSyntheticExpression(expr, getClassElementPropertyKeyType(<ClassElement>parent)),
-                        createSyntheticExpression(expr, hasPropDesc ? createTypedPropertyDescriptorType(getTypeOfNode(parent)) : anyType)
+                        createSyntheticExpression(errorNode, getParentTypeOfClassElement(<ClassElement>decoratorTarget)),
+                        createSyntheticExpression(errorNode, getClassElementPropertyKeyType(<ClassElement>decoratorTarget)),
+                        createSyntheticExpression(errorNode, hasPropDesc ? createTypedPropertyDescriptorType(getTypeOfNode(decoratorTarget)) : anyType)
                     ];
             }
             return Debug.fail();
@@ -28286,6 +28433,11 @@ namespace ts {
                 return createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2, arg3);
             }
             else {
+                const headChain = isSyntheticCallExpression(node) ? node.containingMessageChain?.() : undefined;
+                if (headChain) {
+                    const errorInfo = chainDiagnosticMessages(/*details*/ undefined, message, arg0, arg1, arg2, arg3);
+                    return createDiagnosticForNodeFromMessageChain(node, concatenateDiagnosticMessageChains(headChain, errorInfo));
+                }
                 return createDiagnosticForNode(node, message, arg0, arg1, arg2, arg3);
             }
         }
@@ -28364,7 +28516,7 @@ namespace ts {
                 }
             }
 
-            if (!hasSpreadArgument && argCount < min) {
+            if (!hasSpreadArgument && argCount < min || isSyntheticCallExpression(node)) {
                 const diagnostic = getDiagnosticForCallNode(node, error, paramRange, argCount);
                 return related ? addRelatedInfo(diagnostic, related) : diagnostic;
             }
@@ -28527,6 +28679,7 @@ namespace ts {
                             chain = chainDiagnosticMessages(chain, Diagnostics.The_last_overload_gave_the_following_error);
                             chain = chainDiagnosticMessages(chain, Diagnostics.No_overload_matches_this_call);
                         }
+                        chain = concatenateDiagnosticMessageChains(isSyntheticCallExpression(node) ? node.containingMessageChain?.() : undefined, chain);
                         const diags = getSignatureApplicabilityError(node, args, last, assignableRelation, CheckMode.Normal, /*reportErrors*/ true, () => chain);
                         if (diags) {
                             for (const d of diags) {
@@ -28566,9 +28719,11 @@ namespace ts {
 
                         const diags = max > 1 ? allDiagnostics[minIndex] : flatten(allDiagnostics);
                         Debug.assert(diags.length > 0, "No errors reported for 3 or fewer overload signatures");
-                        const chain = chainDiagnosticMessages(
-                            map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText),
-                            Diagnostics.No_overload_matches_this_call);
+                        const chain = concatenateDiagnosticMessageChains(
+                            isSyntheticCallExpression(node) ? node.containingMessageChain?.() : undefined,
+                            chainDiagnosticMessages(
+                                map(diags, d => typeof d.messageText === "string" ? (d as DiagnosticMessageChain) : d.messageText),
+                                Diagnostics.No_overload_matches_this_call));
                         // The below is a spread to guarantee we get a new (mutable) array - our `flatMap` helper tries to do "smart" optimizations where it reuses input
                         // arrays and the emptyArray singleton where possible, which is decidedly not what we want while we're still constructing this diagnostic
                         const related = [...flatMap(diags, d => (d as Diagnostic).relatedInformation) as DiagnosticRelatedInformation[]];
@@ -28837,7 +28992,7 @@ namespace ts {
             return maxParamsIndex;
         }
 
-        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+        function resolveCallExpression(node: CallExpression | SyntheticCallExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
@@ -28920,7 +29075,7 @@ namespace ts {
                             relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon);
                         }
                     }
-                    invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
+                    invocationError(node.expression, node, apparentType, SignatureKind.Call, relatedInformation);
                 }
                 return resolveErrorCall(node);
             }
@@ -29042,7 +29197,7 @@ namespace ts {
                 return signature;
             }
 
-            invocationError(node.expression, expressionType, SignatureKind.Construct);
+            invocationError(node.expression, node, expressionType, SignatureKind.Construct);
             return resolveErrorCall(node);
         }
 
@@ -29115,7 +29270,7 @@ namespace ts {
             return true;
         }
 
-        function invocationErrorDetails(errorTarget: Node, apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain, relatedMessage: DiagnosticMessage | undefined } {
+        function invocationErrorDetails(errorTarget: Node, invocationNode: CallLikeExpression, apparentType: Type, kind: SignatureKind): { messageChain: DiagnosticMessageChain, relatedMessage: DiagnosticMessage | undefined } {
             let errorInfo: DiagnosticMessageChain | undefined;
             const isCall = kind === SignatureKind.Call;
             const awaitedType = getAwaitedType(apparentType);
@@ -29188,20 +29343,28 @@ namespace ts {
             let headMessage = isCall ? Diagnostics.This_expression_is_not_callable : Diagnostics.This_expression_is_not_constructable;
 
             // Diagnose get accessors incorrectly called as functions
-            if (isCallExpression(errorTarget.parent) && errorTarget.parent.arguments.length === 0) {
+            if (isCallExpression(invocationNode) && invocationNode.arguments.length === 0) {
                 const { resolvedSymbol } = getNodeLinks(errorTarget);
                 if (resolvedSymbol && resolvedSymbol.flags & SymbolFlags.GetAccessor) {
                     headMessage = Diagnostics.This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without;
                 }
             }
 
+            let messageChain = chainDiagnosticMessages(errorInfo, headMessage);
+            if (isSyntheticCallExpression(invocationNode)) {
+                const headChain = invocationNode.containingMessageChain?.();
+                if (headChain) {
+                    concatenateDiagnosticMessageChains(headChain, messageChain);
+                    messageChain = headChain;
+                }
+            }
             return {
-                messageChain: chainDiagnosticMessages(errorInfo, headMessage),
+                messageChain,
                 relatedMessage: maybeMissingAwait ? Diagnostics.Did_you_forget_to_use_await : undefined,
             };
         }
-        function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
-            const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(errorTarget, apparentType, kind);
+        function invocationError(errorTarget: Node, invocationNode: CallLikeExpression, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
+            const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(errorTarget, invocationNode, apparentType, kind);
             const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
             if (relatedInfo) {
                 addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
@@ -29255,7 +29418,7 @@ namespace ts {
                     return resolveErrorCall(node);
                 }
 
-                invocationError(node.tag, apparentType, SignatureKind.Call);
+                invocationError(node.tag, node, apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
             }
 
@@ -29265,8 +29428,8 @@ namespace ts {
         /**
          * Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
          */
-        function getDiagnosticHeadMessageForDecoratorResolution(node: Decorator) {
-            switch (node.parent.kind) {
+        function getDiagnosticHeadMessageForDecoratorResolution(decoratorTarget: NamedDeclaration) {
+            switch (decoratorTarget.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                     return Diagnostics.Unable_to_resolve_signature_of_class_decorator_when_called_as_an_expression;
@@ -29309,9 +29472,9 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
+            const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node.parent);
             if (!callSignatures.length) {
-                const errorDetails = invocationErrorDetails(node.expression, apparentType, SignatureKind.Call);
+                const errorDetails = invocationErrorDetails(node.expression, node, apparentType, SignatureKind.Call);
                 const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
                 const diag = createDiagnosticForNodeFromMessageChain(node.expression, messageChain);
                 if (errorDetails.relatedMessage) {
@@ -29396,6 +29559,7 @@ namespace ts {
         function resolveSignature(node: CallLikeExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
+                case SyntaxKind.SyntheticCallExpression:
                     return resolveCallExpression(node, candidatesOutArray, checkMode);
                 case SyntaxKind.NewExpression:
                     return resolveNewExpression(node, candidatesOutArray, checkMode);
@@ -32493,6 +32657,8 @@ namespace ts {
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.SyntheticExpression:
                     return checkSyntheticExpression(<SyntheticExpression>node);
+                case SyntaxKind.SyntheticCallExpression:
+                    return checkSyntheticCallExpression(<SyntheticCallExpression>node);
                 case SyntaxKind.JsxExpression:
                     return checkJsxExpression(<JsxExpression>node, checkMode);
                 case SyntaxKind.JsxElement:
@@ -34075,44 +34241,36 @@ namespace ts {
             checkAwaitedType(returnType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
         }
 
-        /** Check a decorator */
-        function checkDecorator(node: Decorator): void {
-            const signature = getResolvedSignature(node);
-            checkDeprecatedSignature(signature, node);
-            const returnType = getReturnTypeOfSignature(signature);
+        function checkDecoratorReturnType(decorationTarget: NamedDeclaration, returnType: Type, errorNode: Node, containingMessageChain?: () => DiagnosticMessageChain) {
             if (returnType.flags & TypeFlags.Any) {
                 return;
             }
 
             let expectedReturnType: Type;
-            const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
-            let errorInfo: DiagnosticMessageChain | undefined;
-            switch (node.parent.kind) {
+            let headMessage = getDiagnosticHeadMessageForDecoratorResolution(decorationTarget);
+            let tailMessage: DiagnosticMessage | undefined;
+            switch (decorationTarget.kind) {
                 case SyntaxKind.ClassDeclaration:
-                    const classSymbol = getSymbolOfNode(node.parent);
+                    const classSymbol = getSymbolOfNode(decorationTarget);
                     const classConstructorType = getTypeOfSymbol(classSymbol);
                     expectedReturnType = getUnionType([classConstructorType, voidType]);
                     break;
 
                 case SyntaxKind.Parameter:
                     expectedReturnType = voidType;
-                    errorInfo = chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
-
+                    tailMessage = headMessage;
+                    headMessage = Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any;
                     break;
-
                 case SyntaxKind.PropertyDeclaration:
                     expectedReturnType = voidType;
-                    errorInfo = chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.The_return_type_of_a_property_decorator_function_must_be_either_void_or_any);
+                    tailMessage = headMessage;
+                    headMessage = Diagnostics.The_return_type_of_a_property_decorator_function_must_be_either_void_or_any;
                     break;
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    const methodType = getTypeOfNode(node.parent);
+                    const methodType = getTypeOfNode(decorationTarget);
                     const descriptorType = createTypedPropertyDescriptorType(methodType);
                     expectedReturnType = getUnionType([descriptorType, voidType]);
                     break;
@@ -34121,12 +34279,34 @@ namespace ts {
                     return Debug.fail();
             }
 
+            if (tailMessage) {
+                if (containingMessageChain) {
+                    const previousContainingMessageChain = containingMessageChain;
+                    containingMessageChain = () => {
+                        const headChain = previousContainingMessageChain();
+                        concatenateDiagnosticMessageChains(headChain, chainDiagnosticMessages(/*details*/ undefined, tailMessage!));
+                        return headChain;
+                    };
+                }
+                else {
+                    containingMessageChain = () => chainDiagnosticMessages(/*details*/ undefined, tailMessage!);
+                }
+            }
+
             checkTypeAssignableTo(
                 returnType,
                 expectedReturnType,
-                node,
+                errorNode,
                 headMessage,
-                () => errorInfo);
+                containingMessageChain);
+        }
+
+        /** Check a decorator */
+        function checkDecorator(node: Decorator): void {
+            const signature = getResolvedSignature(node);
+            checkDeprecatedSignature(signature, node);
+            const returnType = getReturnTypeOfSignature(signature);
+            checkDecoratorReturnType(node.parent, returnType, node);
         }
 
         /**
@@ -34229,6 +34409,92 @@ namespace ts {
             return isRestParameter(node) ? getRestParameterElementType(typeNode) : typeNode;
         }
 
+        function checkSyntheticMetadataDecorator(node: DecoratableDeclaration, firstDecorator: Decorator) {
+            let useMetadataHelper = true;
+            // Attempt to use a user-defined metadata decorator, if one is provided.
+            const metadataDecorator = compilerOptions.metadataDecorator ?
+                parseIsolatedEntityName(compilerOptions.metadataDecorator, getEmitScriptTarget(compilerOptions)) :
+                undefined;
+            if (metadataDecorator) {
+                const containingMessageChain = () => importSource ?
+                    chainDiagnosticMessages(
+                        /*details*/ undefined,
+                        Diagnostics.Unable_to_resolve_signature_of_implicit_decorator_0_from_module_1_when_called_as_an_expression,
+                        compilerOptions.metadataDecorator,
+                        importSource) :
+                    chainDiagnosticMessages(
+                        /*details*/ undefined,
+                        Diagnostics.Unable_to_resolve_signature_of_implicit_decorator_0_when_called_as_an_expression,
+                        compilerOptions.metadataDecorator);
+
+                let decoratorSymbol: Symbol | undefined;
+
+                // Mark all positions in the parsed entity name as synthetic so that we don't
+                // report (Missing).
+                setSyntheticPositionsRecursive(metadataDecorator);
+
+                // If the metadata decorator is imported, we resolve the decorator
+                // using the exports of the source module
+                const importSource = getMetadataDecoratorImportSource(compilerOptions);
+                if (importSource) {
+                    // If `--metadataDecoratorImportSource` is provided, we only use the custom
+                    // metadata decorator if we believe the source file is a module.
+                    const sourceFile = getSourceFileOfNode(node);
+                    if (isEffectiveExternalModule(sourceFile, compilerOptions)) {
+                        useMetadataHelper = false;
+                        // Cache the resolution so that we don't perform this lookup repeatedly
+                        decoratorSymbol = metadataDecoratorImportSymbols.get(sourceFile);
+                        if (!decoratorSymbol) {
+                            const moduleSymbol = resolveExternalModule(sourceFile, importSource, Diagnostics.This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found, firstDecorator);
+                            if (moduleSymbol) {
+                                // If `--metadataDecorator` is an entity name like `foo.bar`, we first resolve
+                                // the export `foo` from the source module, and then resolve the rest of the
+                                // entity name relative to that export.
+                                const firstIdentifier = getFirstIdentifier(metadataDecorator);
+                                const decoratorBaseSymbol = getMergedSymbol(getSymbol(moduleSymbol.exports!, firstIdentifier.escapedText, SymbolFlags.Value));
+                                if (!decoratorBaseSymbol) {
+                                    error(firstDecorator, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, importSource, idText(firstIdentifier));
+                                }
+                                else {
+                                    if (firstIdentifier === metadataDecorator) {
+                                        decoratorSymbol = decoratorBaseSymbol;
+                                    }
+                                    else if (decoratorBaseSymbol.valueDeclaration) {
+                                        decoratorSymbol = resolveEntityName(metadataDecorator, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, /*location*/ undefined, firstDecorator, decoratorBaseSymbol, containingMessageChain);
+                                    }
+                                }
+                            }
+                            metadataDecoratorImportSymbols.set(sourceFile, decoratorSymbol || unknownSymbol);
+                        }
+                    }
+                    else {
+                        error(firstDecorator, Diagnostics.Unable_to_import_implicit_decorator_0_from_module_1_as_this_file_is_not_a_module, compilerOptions.metadataDecorator, importSource);
+                    }
+                }
+                else {
+                    useMetadataHelper = false;
+                    decoratorSymbol = resolveEntityName(metadataDecorator, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, firstDecorator, firstDecorator, /*rootSymbol*/ undefined, containingMessageChain);
+                }
+                if (decoratorSymbol && decoratorSymbol !== unknownSymbol) {
+                    const syntheticCall = createSyntheticCallExpression(
+                        firstDecorator,
+                        isEntityName(metadataDecorator) && decoratorSymbol.parent ? createSyntheticExpression(firstDecorator, getTypeOfSymbol(decoratorSymbol.parent)) : undefined,
+                        createSyntheticExpression(firstDecorator, getTypeOfSymbol(decoratorSymbol)),
+                        /*typeArguments*/ undefined,
+                        getEffectiveDecoratorArguments(node, firstDecorator),
+                        containingMessageChain);
+                    const returnType = checkSyntheticCallExpression(syntheticCall);
+                    checkDecoratorReturnType(node, returnType, firstDecorator, containingMessageChain);
+                }
+            }
+
+            // We don't use the metadata helper when `--metadataDecorator` is provided, unless `--metadataDecoratorImportSource` is *also* provided
+            // and the node's source file is not an external module.
+            if (useMetadataHelper) {
+                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
+            }
+        }
+
         /** Check the decorators of a node */
         function checkDecorators(node: Node): void {
             if (!node.decorators) {
@@ -34252,12 +34518,12 @@ namespace ts {
             }
 
             if (compilerOptions.emitDecoratorMetadata) {
-                checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
+                checkSyntheticMetadataDecorator(node, firstDecorator);
 
                 // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
                 switch (node.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
+                        const constructor = getFirstConstructorWithBody(node);
                         if (constructor) {
                             for (const parameter of constructor.parameters) {
                                 markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
@@ -34268,23 +34534,23 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                        const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(node as AccessorDeclaration), otherKind);
-                        markDecoratorMedataDataTypeNodeAsReferenced(getAnnotatedAccessorTypeNode(node as AccessorDeclaration) || otherAccessor && getAnnotatedAccessorTypeNode(otherAccessor));
+                        const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfNode(node), otherKind);
+                        markDecoratorMedataDataTypeNodeAsReferenced(getAnnotatedAccessorTypeNode(node) || otherAccessor && getAnnotatedAccessorTypeNode(otherAccessor));
                         break;
                     case SyntaxKind.MethodDeclaration:
-                        for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
+                        for (const parameter of node.parameters) {
                             markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                         }
 
-                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(<FunctionLikeDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(node));
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
-                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(<ParameterDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(node));
                         break;
 
                     case SyntaxKind.Parameter:
-                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(node));
                         const containingSignature = (node as ParameterDeclaration).parent;
                         for (const parameter of containingSignature.parameters) {
                             markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
@@ -39347,8 +39613,9 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
         // that import. Otherwise, return undefined.
         function getReferencedImportDeclaration(nodeIn: Identifier): Declaration | undefined {
-            if (nodeIn.generatedImportReference) {
-                return nodeIn.generatedImportReference;
+            const syntheticImportReference = getGeneratedImportReference(nodeIn);
+            if (syntheticImportReference) {
+                return syntheticImportReference;
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
@@ -40266,7 +40533,7 @@ namespace ts {
                 }
             }
             else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
-                const accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
+                const accessors = getAllAccessorDeclarations(node.parent.members, node);
                 if (accessors.firstAccessor.decorators && node === accessors.secondAccessor) {
                     return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
                 }

@@ -23,14 +23,14 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.CallExpression: {
                     const updated = visitNonOptionalCallExpression(node as CallExpression, /*captureThisArg*/ false);
-                    Debug.assertNotNode(updated, isSyntheticReference);
+                    Debug.assertNotNode(updated, isSyntheticReferenceExpression);
                     return updated;
                 }
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     if (isOptionalChain(node)) {
                         const updated = visitOptionalExpression(node, /*captureThisArg*/ false, /*isDelete*/ false);
-                        Debug.assertNotNode(updated, isSyntheticReference);
+                        Debug.assertNotNode(updated, isSyntheticReferenceExpression);
                         return updated;
                     }
                     return visitEachChild(node, visitor, context);
@@ -59,7 +59,7 @@ namespace ts {
 
         function visitNonOptionalParenthesizedExpression(node: ParenthesizedExpression, captureThisArg: boolean, isDelete: boolean): Expression {
             const expression = visitNonOptionalExpression(node.expression, captureThisArg, isDelete);
-            if (isSyntheticReference(expression)) {
+            if (isSyntheticReferenceExpression(expression)) {
                 // `(a.b)` -> { expression `((_a = a).b)`, thisArg: `_a` }
                 // `(a[b])` -> { expression `((_a = a)[b])`, thisArg: `_a` }
                 return factory.createSyntheticReferenceExpression(factory.updateParenthesizedExpression(node, expression.expression), expression.thisArg);
@@ -74,7 +74,7 @@ namespace ts {
             }
 
             let expression: Expression = visitNode(node.expression, visitor, isExpression);
-            Debug.assertNotNode(expression, isSyntheticReference);
+            Debug.assertNotNode(expression, isSyntheticReferenceExpression);
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
@@ -102,7 +102,7 @@ namespace ts {
                 // capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
                 const expression = visitNonOptionalParenthesizedExpression(node.expression, /*captureThisArg*/ true, /*isDelete*/ false);
                 const args = visitNodes(node.arguments, visitor, isExpression);
-                if (isSyntheticReference(expression)) {
+                if (isSyntheticReferenceExpression(expression)) {
                     return setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
                 }
                 return factory.updateCallExpression(node, expression, /*typeArguments*/ undefined, args);
@@ -123,8 +123,8 @@ namespace ts {
         function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean): Expression {
             const { expression, chain } = flattenChain(node);
             const left = visitNonOptionalExpression(expression, isCallChain(chain[0]), /*isDelete*/ false);
-            const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
-            let leftExpression = isSyntheticReference(left) ? left.expression : left;
+            const leftThisArg = isSyntheticReferenceExpression(left) ? left.thisArg : undefined;
+            let leftExpression = isSyntheticReferenceExpression(left) ? left.expression : left;
             let capturedLeft: Expression = leftExpression;
             if (!isSimpleCopiableExpression(leftExpression)) {
                 capturedLeft = factory.createTempVariable(hoistVariableDeclaration);

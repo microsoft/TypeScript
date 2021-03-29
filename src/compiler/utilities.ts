@@ -927,7 +927,16 @@ namespace ts {
     // Computed property names will just be emitted as "[<expr>]", where <expr> is the source
     // text of the expression in the computed property.
     export function declarationNameToString(name: DeclarationName | QualifiedName | undefined) {
-        return !name || getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
+        if (name) {
+            if (getFullWidth(name) !== 0) {
+                return getTextOfNode(name);
+            }
+            if (nodeIsSynthesized(name)) {
+                if (isIdentifier(name)) return idText(name);
+                if (isQualifiedName(name)) return entityNameToString(name);
+            }
+        }
+        return "(Missing)";
     }
 
     export function getNameFromIndexInfo(info: IndexInfo): string | undefined {
@@ -995,6 +1004,10 @@ namespace ts {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
+    }
+
+    export function isDiagnosticMessageChain(message: DiagnosticMessage | DiagnosticMessageChain): message is DiagnosticMessageChain {
+        return !("message" in message); // eslint-disable-line no-in-operator
     }
 
     function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
@@ -1772,9 +1785,39 @@ namespace ts {
         }
     }
 
+    export interface DecoratablePropertyDeclaration extends PropertyDeclaration {
+        readonly parent: ClassDeclaration;
+    }
+    export interface DecoratableGetAccessorDeclaration extends GetAccessorDeclaration {
+        readonly parent: ClassDeclaration;
+    }
+    export interface DecoratableSetAccessorDeclaration extends SetAccessorDeclaration {
+        readonly parent: ClassDeclaration;
+    }
+    export interface DecoratableMethodDeclaration extends MethodDeclaration {
+        readonly parent: ClassDeclaration;
+        readonly body: Block;
+    }
+    export interface DecoratableParameterDeclaration extends ParameterDeclaration {
+        readonly parent: ConstructorDeclaration | DecoratableMethodDeclaration | DecoratableGetAccessorDeclaration | DecoratableSetAccessorDeclaration;
+    }
+
+    export type DecoratableClassElement =
+        | DecoratablePropertyDeclaration
+        | DecoratableGetAccessorDeclaration
+        | DecoratableSetAccessorDeclaration
+        | DecoratableMethodDeclaration
+        ;
+
+    export type DecoratableDeclaration =
+        | ClassDeclaration
+        | DecoratableClassElement
+        | DecoratableParameterDeclaration
+        ;
+
     export function nodeCanBeDecorated(node: ClassDeclaration): true;
-    export function nodeCanBeDecorated(node: ClassElement, parent: Node): boolean;
-    export function nodeCanBeDecorated(node: Node, parent: Node, grandparent: Node): boolean;
+    export function nodeCanBeDecorated(node: ClassElement, parent: Node): node is DecoratableClassElement;
+    export function nodeCanBeDecorated(node: Node, parent: Node, grandparent: Node): node is DecoratableDeclaration;
     export function nodeCanBeDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
         // private names cannot be used with decorators yet
         if (isNamedDeclaration(node) && isPrivateIdentifier(node.name)) {
@@ -5889,6 +5932,12 @@ namespace ts {
         };
     }
 
+    /**
+     * Creates a new outer `DiagnosticMessageChain` that optionally points back to a more specific set of diagnostics.
+     * @param details The inner `DiagnosticMessageChain` to surround.
+     * @param message The message for the new `DiagnosticMessageChain`.
+     * @param args Format arguments for the message.
+     */
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | DiagnosticMessageChain[] | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
@@ -5905,13 +5954,26 @@ namespace ts {
         };
     }
 
-    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): void {
+    /**
+     * Sets `tailChain` as the innermost `DiagnosticMessageChain` of `headChain`, returning the outermost chain.
+     *
+     * @param headChain The outermost `DiagnosticMessageChain` into which to insert `tailChain`.
+     * @param tailChain A `DiagnosticMessageChain` to insert into `headChain`.
+     */
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain | undefined): DiagnosticMessageChain;
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain | undefined, tailChain: DiagnosticMessageChain): DiagnosticMessageChain;
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain | undefined, tailChain: DiagnosticMessageChain | undefined): DiagnosticMessageChain | undefined;
+    export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain | undefined, tailChain: DiagnosticMessageChain | undefined): DiagnosticMessageChain | undefined {
+        if (!headChain) return tailChain;
+        if (!tailChain) return headChain;
+
         let lastChain = headChain;
         while (lastChain.next) {
             lastChain = lastChain.next[0];
         }
 
         lastChain.next = [tailChain];
+        return headChain;
     }
 
     function getDiagnosticFilePath(diagnostic: Diagnostic): string | undefined {
@@ -6103,6 +6165,10 @@ namespace ts {
 
     export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
         return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
+    }
+
+    export function getMetadataDecoratorImportSource(compilerOptions: CompilerOptions): string | undefined {
+        return compilerOptions.metadataDecoratorImportSource;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -7094,6 +7160,26 @@ namespace ts {
         function bindParentToChild(child: Node, parent: Node) {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
         }
+    }
+
+    /**
+     * **WARNING:** This is an inherently unsafe operation and should be used with care.
+     *
+     * Sets the text range of `rootNode` and each of its children recursively to `{pos: -1, end: -1}`.
+     *
+     * Only sets the text ranges of children whose parent is `undefined` or points to the parent (reused
+     * subtrees are not reset).
+     */
+    /* @internal */
+    export function setSyntheticPositionsRecursive<T extends Node>(rootNode: T): T {
+        setTextRangePosEnd(rootNode, -1, -1);
+        forEachChildRecursively(rootNode, (child, parent) => {
+            if (child.parent !== undefined && child.parent !== parent) {
+                return "skip";
+            }
+            setTextRangePosEnd(child, -1, -1);
+        });
+        return rootNode;
     }
 
     function isPackedElement(node: Expression) {

@@ -1360,6 +1360,19 @@
         "category": "Error",
         "code": 1432
     },
+    "Unable to resolve signature of implicit decorator '{0}' when called as an expression.": {
+        "category": "Error",
+        "code": 1433
+    },
+    "Unable to resolve signature of implicit decorator '{0}' from module '{1}' when called as an expression.": {
+        "category": "Error",
+        "code": 1434
+    },
+    "Unable to import implicit decorator '{0}' from module '{1}' as this file is not a module.": {
+        "category": "Error",
+        "code": 1435
+    },
+
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3308,6 +3321,18 @@
         "category": "Error",
         "code": 2808
     },
+    "Namespace '{0}' from module '{1}' has no exported member '{2}'.": {
+        "category": "Error",
+        "code": 2809
+    },
+    "'{0}' from module '{1}' has no exported member named '{2}'. Did you mean '{3}'?": {
+        "category": "Error",
+        "code": 2810
+    },
+    "Cannot find namespace '{0}'. Did you mean '{1}?": {
+        "category": "Error",
+        "code": 2811
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3814,7 +3839,7 @@
         "category": "Error",
         "code": 5066
     },
-    "Invalid value for 'jsxFactory'. '{0}' is not a valid identifier or qualified-name.": {
+    "Invalid value for '{0}'. '{1}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 5067
     },
@@ -4820,6 +4845,14 @@
     "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
         "category": "Error",
         "code": 6238
+    },
+    "Specify the name of the metadata decorator function to use when '--emitDecoratorMetadata' is set": {
+        "category": "Message",
+        "code": 6239
+    },
+    "Specify the module specifier to be used to import the metadata decorator provided by '--metadataDecorator'.": {
+        "category": "Message",
+        "code": 6240
     },
 
     "Projects to reference": {
@@ -6437,10 +6470,6 @@
     "Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.": {
         "category": "Message",
         "code": 18034
-    },
-    "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
-        "category": "Error",
-        "code": 18035
     },
     "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
         "category": "Error",

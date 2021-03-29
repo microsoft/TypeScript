@@ -234,7 +234,7 @@ namespace ts {
 
         // ES2017 Helpers
 
-        function createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
+        function createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityNameOrEntityNameExpression | undefined, body: Block) {
             context.requestEmitHelper(awaiterHelper);
 
             const generatorFunc = factory.createFunctionExpression(
@@ -256,7 +256,7 @@ namespace ts {
                 [
                     hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
                     hasLexicalArguments ? factory.createIdentifier("arguments") : factory.createVoidZero(),
-                    promiseConstructor ? createExpressionFromEntityName(factory, promiseConstructor) : factory.createVoidZero(),
+                    promiseConstructor ? isEntityName(promiseConstructor) ? createExpressionFromEntityName(factory, promiseConstructor) : promiseConstructor : factory.createVoidZero(),
                     generatorFunc
                 ]
             );

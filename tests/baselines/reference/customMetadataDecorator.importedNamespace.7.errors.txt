@@ -1,0 +1,69 @@
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(1,1): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  Argument of type 'typeof C' is not assignable to parameter of type 'number'.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(3,5): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  No overload matches this call.
+    Overload 1 of 3, '(target: number, key: string, desc?: PropertyDescriptor): void', gave the following error.
+      Argument of type 'C' is not assignable to parameter of type 'number'.
+    Overload 2 of 3, '(target: number, key: string, parameterIndex: number): void', gave the following error.
+      Argument of type 'C' is not assignable to parameter of type 'number'.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(7,5): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  No overload matches this call.
+    Overload 1 of 3, '(target: number, key: string, desc?: PropertyDescriptor): void', gave the following error.
+      Argument of type 'C' is not assignable to parameter of type 'number'.
+    Overload 2 of 3, '(target: number, key: string, parameterIndex: number): void', gave the following error.
+      Argument of type 'C' is not assignable to parameter of type 'number'.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(10,5): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  No overload matches this call.
+    Overload 1 of 3, '(target: number, key: string, desc?: PropertyDescriptor): void', gave the following error.
+      Argument of type 'C' is not assignable to parameter of type 'number'.
+    Overload 2 of 3, '(target: number, key: string, parameterIndex: number): void', gave the following error.
+      Argument of type 'C' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/conformance/decorators/decoratorMetadata/global.d.ts (0 errors) ====
+    declare module "foo" {
+        namespace Reflect {
+            function metadata(target: number): void;
+            function metadata(target: number, key: string, desc?: PropertyDescriptor): void;
+            function metadata(target: number, key: string, parameterIndex: number): void;
+        }
+    }
+    declare const dec: any;
+==== tests/cases/conformance/decorators/decoratorMetadata/main.ts (4 errors) ====
+    @dec
+    ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   Argument of type 'typeof C' is not assignable to parameter of type 'number'.
+    class C {
+        @dec x!: number;
+        ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   No overload matches this call.
+!!! error TS1434:     Overload 1 of 3, '(target: number, key: string, desc?: PropertyDescriptor): void', gave the following error.
+!!! error TS1434:       Argument of type 'C' is not assignable to parameter of type 'number'.
+!!! error TS1434:     Overload 2 of 3, '(target: number, key: string, parameterIndex: number): void', gave the following error.
+!!! error TS1434:       Argument of type 'C' is not assignable to parameter of type 'number'.
+    
+        constructor(x: number) {}
+    
+        @dec
+        ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   No overload matches this call.
+!!! error TS1434:     Overload 1 of 3, '(target: number, key: string, desc?: PropertyDescriptor): void', gave the following error.
+!!! error TS1434:       Argument of type 'C' is not assignable to parameter of type 'number'.
+!!! error TS1434:     Overload 2 of 3, '(target: number, key: string, parameterIndex: number): void', gave the following error.
+!!! error TS1434:       Argument of type 'C' is not assignable to parameter of type 'number'.
+        method(@dec x: number): string { return ""; }
+    
+        @dec
+        ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   No overload matches this call.
+!!! error TS1434:     Overload 1 of 3, '(target: number, key: string, desc?: PropertyDescriptor): void', gave the following error.
+!!! error TS1434:       Argument of type 'C' is not assignable to parameter of type 'number'.
+!!! error TS1434:     Overload 2 of 3, '(target: number, key: string, parameterIndex: number): void', gave the following error.
+!!! error TS1434:       Argument of type 'C' is not assignable to parameter of type 'number'.
+        get accessor(): string { return ""; }
+    }
+    export {};

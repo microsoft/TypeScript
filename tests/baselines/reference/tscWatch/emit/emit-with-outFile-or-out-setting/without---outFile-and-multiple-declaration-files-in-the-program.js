@@ -38,6 +38,11 @@ Output::
 [7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
 [7m [0m [91m                                                                                                                 ~[0m
 
+  [96ma/b/output/AnotherDependency/file1.d.ts[0m:[93m1[0m:[93m59[0m
+    [7m1[0m declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }
+    [7m [0m [96m                                                          ~[0m
+    'Z' is declared here.
+
 [[90m12:00:36 AM[0m] Found 1 error. Watching for file changes.
 
 

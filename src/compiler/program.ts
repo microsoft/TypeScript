@@ -2290,6 +2290,14 @@ namespace ts {
                     // synthesize `import "base/jsx-runtime"` declaration
                     (imports ||= []).push(createSyntheticImport(jsxImport, file));
                 }
+                if (file.transformFlags & TransformFlags.ContainsTypeScriptClassSyntax &&
+                    options.emitDecoratorMetadata &&
+                    options.metadataDecorator) {
+                    const metadataDecoratorImport = options.metadataDecoratorImportSource;
+                    if (metadataDecoratorImport) {
+                        (imports ||= []).push(createSyntheticImport(metadataDecoratorImport, file));
+                    }
+                }
             }
 
             for (const node of file.statements) {
@@ -3244,6 +3252,30 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators");
             }
 
+            if (options.metadataDecorator) {
+                if (!options.experimentalDecorators) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "metadataDecorator", "experimentalDecorators");
+                }
+                if (!options.emitDecoratorMetadata) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "metadataDecorator", "emitDecoratorMetadata");
+                }
+                if (!parseIsolatedEntityName(options.metadataDecorator, languageVersion)) {
+                    createOptionValueDiagnostic("metadataDecorator", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_or_qualified_name, "metadataDecorator", options.metadataDecorator);
+                }
+            }
+
+            if (options.metadataDecoratorImportSource) {
+                if (!options.experimentalDecorators) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "metadataDecorator", "experimentalDecorators");
+                }
+                if (!options.emitDecoratorMetadata) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "metadataDecorator", "emitDecoratorMetadata");
+                }
+                if (!options.metadataDecorator) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "metadataDecoratorImportSource", "metadataDecorator");
+                }
+            }
+
             if (options.jsxFactory) {
                 if (options.reactNamespace) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
@@ -3252,7 +3284,7 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFactory", inverseJsxOptionMap.get("" + options.jsx));
                 }
                 if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
-                    createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
+                    createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_or_qualified_name, "jsxFactory", options.jsxFactory);
                 }
             }
             else if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
@@ -3267,7 +3299,7 @@ namespace ts {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFragmentFactory", inverseJsxOptionMap.get("" + options.jsx));
                 }
                 if (!parseIsolatedEntityName(options.jsxFragmentFactory, languageVersion)) {
-                    createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
+                    createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_or_qualified_name, "jsxFragmentFactory", options.jsxFragmentFactory);
                 }
             }
 
@@ -3553,8 +3585,8 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
-        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
-            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
+        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string, arg1?: string) {
+            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0, arg1);
         }
 
         function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {

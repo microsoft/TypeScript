@@ -1,0 +1,54 @@
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(1,1): error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+  This expression is not callable.
+    Type 'Number' has no call signatures.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(3,5): error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+  This expression is not callable.
+    Type 'Number' has no call signatures.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(7,5): error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+  This expression is not callable.
+    Type 'Number' has no call signatures.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(8,12): error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+  This expression is not callable.
+    Type 'Number' has no call signatures.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(10,5): error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+  This expression is not callable.
+    Type 'Number' has no call signatures.
+
+
+==== tests/cases/conformance/decorators/decoratorMetadata/global.d.ts (0 errors) ====
+    declare const metadata: number;
+    declare const dec: any;
+==== tests/cases/conformance/decorators/decoratorMetadata/main.ts (5 errors) ====
+    @dec
+    ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+!!! error TS1433:   This expression is not callable.
+!!! error TS1433:     Type 'Number' has no call signatures.
+!!! related TS2734 tests/cases/conformance/decorators/decoratorMetadata/main.ts:1:1: Are you missing a semicolon?
+    class C {
+        @dec x!: number;
+        ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+!!! error TS1433:   This expression is not callable.
+!!! error TS1433:     Type 'Number' has no call signatures.
+    
+        constructor(x: number) {}
+    
+        @dec
+        ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+!!! error TS1433:   This expression is not callable.
+!!! error TS1433:     Type 'Number' has no call signatures.
+        method(@dec x: number): string { return ""; }
+               ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+!!! error TS1433:   This expression is not callable.
+!!! error TS1433:     Type 'Number' has no call signatures.
+    
+        @dec
+        ~~~~
+!!! error TS1433: Unable to resolve signature of implicit decorator 'metadata' when called as an expression.
+!!! error TS1433:   This expression is not callable.
+!!! error TS1433:     Type 'Number' has no call signatures.
+        get accessor(): string { return ""; }
+    }

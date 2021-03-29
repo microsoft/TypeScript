@@ -259,4 +259,24 @@ namespace ts {
         getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
     }
+
+    /**
+     * For a synthetic import, specifies the synthesized import reference so that the import can be resolved during subsequent transformations.
+     *
+     * @param node Imported identifier
+     * @param importReference The `ImportSpecifier` to use for the reference, or `undefined`.
+     */
+    /* @internal */
+    export function setGeneratedImportReference<T extends Identifier>(node: T, importReference: ImportSpecifier | undefined) {
+        getOrCreateEmitNode(node).generatedImportReference = importReference;
+        return node;
+    }
+
+    /**
+     * For a synthetic import, gets any associated synthesized import reference.
+     */
+    /* @internal */
+    export function getGeneratedImportReference(node: Identifier) {
+        return node.emitNode?.generatedImportReference;
+    }
 }

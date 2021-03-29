@@ -57,7 +57,7 @@ namespace ts {
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
             const specifier = factory.createImportSpecifier(factory.createIdentifier(name), generatedName);
-            generatedName.generatedImportReference = specifier;
+            setGeneratedImportReference(generatedName, specifier);
             specifierSourceImports.set(name, specifier);
             return generatedName;
         }
@@ -525,7 +525,7 @@ namespace ts {
                     return factory.createStringLiteral(idText(name));
                 }
                 else {
-                    return createExpressionFromEntityName(factory, name);
+                    return name;
                 }
             }
         }

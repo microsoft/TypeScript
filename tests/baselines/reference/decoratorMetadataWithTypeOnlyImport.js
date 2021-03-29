@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/decorators/decoratorMetadataWithTypeOnlyImport.ts] ////
+//// [tests/cases/conformance/decorators/decoratorMetadata/decoratorMetadataWithTypeOnlyImport.ts] ////
 
 //// [service.ts]
 export class Service {

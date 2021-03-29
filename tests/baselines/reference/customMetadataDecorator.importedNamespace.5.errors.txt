@@ -1,0 +1,48 @@
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(1,1): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  Expected 0 arguments, but got 1.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(3,5): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  Expected 0 arguments, but got 3.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(7,5): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  Expected 0 arguments, but got 3.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(8,12): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  Expected 0 arguments, but got 3.
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(10,5): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  Expected 0 arguments, but got 3.
+
+
+==== tests/cases/conformance/decorators/decoratorMetadata/global.d.ts (0 errors) ====
+    declare module "foo" {
+        namespace Reflect {
+            function metadata(): void;
+        }
+    }
+    declare const dec: any;
+==== tests/cases/conformance/decorators/decoratorMetadata/main.ts (5 errors) ====
+    @dec
+    ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   Expected 0 arguments, but got 1.
+    class C {
+        @dec x!: number;
+        ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   Expected 0 arguments, but got 3.
+    
+        constructor(x: number) {}
+    
+        @dec
+        ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   Expected 0 arguments, but got 3.
+        method(@dec x: number): string { return ""; }
+               ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   Expected 0 arguments, but got 3.
+    
+        @dec
+        ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   Expected 0 arguments, but got 3.
+        get accessor(): string { return ""; }
+    }
+    export {};

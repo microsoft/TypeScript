@@ -873,6 +873,21 @@ namespace ts {
         },
 
         {
+            name: "metadataDecorator",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_the_name_of_the_metadata_decorator_function_to_use_when_emitDecoratorMetadata_is_set
+        },
+        {
+            name: "metadataDecoratorImportSource",
+            type: "string",
+            affectsEmit: true,
+            affectsModuleResolution: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_the_module_specifier_to_be_used_to_import_the_metadata_decorator_provided_by_metadataDecorator
+        },
+
+        {
             name: "out",
             type: "string",
             affectsEmit: true,

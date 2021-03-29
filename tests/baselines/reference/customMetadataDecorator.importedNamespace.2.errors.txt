@@ -1,0 +1,29 @@
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(1,1): error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+  'Reflect' from module 'foo' has no exported member named 'metadata'. Did you mean 'metadat'?
+
+
+==== tests/cases/conformance/decorators/decoratorMetadata/global.d.ts (0 errors) ====
+    declare module "foo" {
+        namespace Reflect {
+            const metadat: any;
+        }
+    }
+    declare const dec: any;
+==== tests/cases/conformance/decorators/decoratorMetadata/main.ts (1 errors) ====
+    @dec
+    ~~~~
+!!! error TS1434: Unable to resolve signature of implicit decorator 'Reflect.metadata' from module 'foo' when called as an expression.
+!!! error TS1434:   'Reflect' from module 'foo' has no exported member named 'metadata'. Did you mean 'metadat'?
+!!! related TS2728 tests/cases/conformance/decorators/decoratorMetadata/global.d.ts:3:15: 'metadat' is declared here.
+    class C {
+        @dec x!: number;
+    
+        constructor(x: number) {}
+    
+        @dec
+        method(@dec x: number): string { return ""; }
+    
+        @dec
+        get accessor(): string { return ""; }
+    }
+    export {};

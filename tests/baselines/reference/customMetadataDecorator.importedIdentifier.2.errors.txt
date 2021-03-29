@@ -1,0 +1,24 @@
+tests/cases/conformance/decorators/decoratorMetadata/main.ts(1,1): error TS2343: This syntax requires an imported helper named 'metadata' which does not exist in 'foo'. Consider upgrading your version of 'foo'.
+
+
+==== tests/cases/conformance/decorators/decoratorMetadata/global.d.ts (0 errors) ====
+    declare module "foo" {
+        const metadat: any;
+    }
+    declare const dec: any;
+==== tests/cases/conformance/decorators/decoratorMetadata/main.ts (1 errors) ====
+    @dec
+    ~~~~
+!!! error TS2343: This syntax requires an imported helper named 'metadata' which does not exist in 'foo'. Consider upgrading your version of 'foo'.
+    class C {
+        @dec x!: number;
+    
+        constructor(x: number) {}
+    
+        @dec
+        method(@dec x: number): string { return ""; }
+    
+        @dec
+        get accessor(): string { return ""; }
+    }
+    export {};

@@ -444,6 +444,10 @@ namespace ts {
         return node.kind === SyntaxKind.CommaListExpression;
     }
 
+    export function isSyntheticCallExpression(node: Node): node is SyntheticCallExpression {
+        return node.kind === SyntaxKind.SyntheticCallExpression;
+    }
+
     // Misc
 
     export function isTemplateSpan(node: Node): node is TemplateSpan {
@@ -629,7 +633,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function isSyntheticReference(node: Node): node is SyntheticReferenceExpression {
+    export function isSyntheticReferenceExpression(node: Node): node is SyntheticReferenceExpression {
         return node.kind === SyntaxKind.SyntheticReferenceExpression;
     }
 

@@ -67,6 +67,9 @@ namespace ts {
         let currentNameScope: ClassDeclaration | undefined;
         let currentScopeFirstDeclarationsOfName: UnderscoreEscapedMap<Node> | undefined;
         let currentClassHasParameterProperties: boolean | undefined;
+        let currentMetadataDecoratorImportSpecifier: ImportSpecifier | undefined;
+
+        const getMetadataDecoratorEntityNameExpression = memoize(getMetadataDecoratorEntityNameExpressionWorker);
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -120,6 +123,7 @@ namespace ts {
             addEmitHelpers(visited, context.readEmitHelpers());
 
             currentSourceFile = undefined!;
+            currentMetadataDecoratorImportSpecifier = undefined;
             return visited;
         }
 
@@ -560,9 +564,39 @@ namespace ts {
                 !(isExternalModule(node) && moduleKind >= ModuleKind.ES2015) &&
                 !isJsonSourceFile(node);
 
-            return factory.updateSourceFile(
-                node,
-                visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
+            let statements = visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict);
+            if (compilerOptions.metadataDecoratorImportSource && currentMetadataDecoratorImportSpecifier) {
+                if (isExternalModule(node) || compilerOptions.isolatedModules) {
+                    const importStatement = factory.createImportDeclaration(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        factory.createImportClause(
+                            /*typeOnly*/ false,
+                            /*name*/ undefined,
+                            factory.createNamedImports([currentMetadataDecoratorImportSpecifier])
+                        ),
+                        factory.createStringLiteral(compilerOptions.metadataDecoratorImportSource));
+                    setParentRecursive(importStatement, /*incremental*/ false);
+                    statements = setTextRange(factory.createNodeArray(insertStatementAfterCustomPrologue(statements.slice(), importStatement)), statements);
+                }
+                else if (isExternalOrCommonJsModule(node)) {
+                    // Add `require` statement
+                    const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                        factory.createVariableDeclaration(
+                            factory.createObjectBindingPattern([
+                                factory.createBindingElement(/*dotdotdot*/ undefined, currentMetadataDecoratorImportSpecifier.propertyName, currentMetadataDecoratorImportSpecifier.name)
+                            ]),
+                            /*exclaimationToken*/ undefined,
+                            /*type*/ undefined,
+                            factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(compilerOptions.metadataDecoratorImportSource)])
+                        )
+                    ], NodeFlags.Const));
+                    setParentRecursive(requireStatement, /*incremental*/ false);
+                    statements = setTextRange(factory.createNodeArray(insertStatementAfterCustomPrologue(statements.slice(), requireStatement)), statements);
+                }
+            }
+
+            return factory.updateSourceFile(node, statements);
         }
 
         /**
@@ -1309,16 +1343,59 @@ namespace ts {
             }
         }
 
+        function replaceFirstIdentifier(name: EntityNameExpression, newFirst: Identifier): EntityNameExpression {
+            return isPropertyAccessEntityNameExpression(name) ?
+                factory.updatePropertyAccessExpression(name, replaceFirstIdentifier(name.expression, newFirst), name.name) as PropertyAccessEntityNameExpression :
+                newFirst;
+        }
+
+        function getMetadataDecoratorEntityNameExpressionWorker() {
+            if (compilerOptions.metadataDecorator) {
+                const entityName = parseIsolatedEntityName(compilerOptions.metadataDecorator, getEmitScriptTarget(compilerOptions));
+                return entityName && serializeEntityNameAsExpression(entityName, /*emulateParseTree*/ false);
+            }
+        }
+
+        function getMetadataDecoratorExpression() {
+            const entityNameExpression = getMetadataDecoratorEntityNameExpression();
+            if (entityNameExpression) {
+                if (compilerOptions.metadataDecoratorImportSource) {
+                    if (!currentMetadataDecoratorImportSpecifier) {
+                        const first = getFirstIdentifier(entityNameExpression);
+                        const generatedName = factory.createUniqueName(idText(first), GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+                        currentMetadataDecoratorImportSpecifier = factory.createImportSpecifier(first, generatedName);
+                        setGeneratedImportReference(generatedName, currentMetadataDecoratorImportSpecifier);
+                    }
+                    return replaceFirstIdentifier(entityNameExpression, currentMetadataDecoratorImportSpecifier.name);
+                }
+                return entityNameExpression;
+            }
+        }
+
+        function createMetadataDecorator(metadataKey: string, metadataValue: Expression) {
+            const decoratorExpression = getMetadataDecoratorExpression();
+            if (decoratorExpression) {
+                return setSourceMapRange(factory.createCallExpression(
+                    decoratorExpression,
+                    /*typeArguments*/ undefined,
+                    [
+                        factory.createStringLiteral(metadataKey),
+                        metadataValue
+                    ]), getSourceMapRange(metadataValue));
+            }
+            return emitHelpers().createMetadataHelper(metadataKey, metadataValue);
+        }
+
         function addOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration, decoratorExpressions: Expression[]) {
             if (compilerOptions.emitDecoratorMetadata) {
                 if (shouldAddTypeMetadata(node)) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:type", serializeTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataDecorator("design:type", serializeTypeOfNode(node)));
                 }
                 if (shouldAddParamTypesMetadata(node)) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:paramtypes", serializeParameterTypesOfNode(node, container)));
+                    decoratorExpressions.push(createMetadataDecorator("design:paramtypes", serializeParameterTypesOfNode(node, container)));
                 }
                 if (shouldAddReturnTypeMetadata(node)) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:returntype", serializeReturnTypeOfNode(node)));
+                    decoratorExpressions.push(createMetadataDecorator("design:returntype", serializeReturnTypeOfNode(node)));
                 }
             }
         }
@@ -1336,7 +1413,7 @@ namespace ts {
                     (properties || (properties = [])).push(factory.createPropertyAssignment("returnType", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true)));
+                    decoratorExpressions.push(createMetadataDecorator("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true)));
                 }
             }
         }
@@ -1505,73 +1582,73 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
-                    return factory.createVoidZero();
+                    return setSourceMapRange(factory.createVoidZero(), node);
 
                 case SyntaxKind.ParenthesizedType:
                     return serializeTypeNode((<ParenthesizedTypeNode>node).type);
 
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    return factory.createIdentifier("Function");
+                    return setSourceMapRange(factory.createIdentifier("Function"), node);
 
                 case SyntaxKind.ArrayType:
                 case SyntaxKind.TupleType:
-                    return factory.createIdentifier("Array");
+                    return setSourceMapRange(factory.createIdentifier("Array"), node);
 
                 case SyntaxKind.TypePredicate:
                 case SyntaxKind.BooleanKeyword:
-                    return factory.createIdentifier("Boolean");
+                    return setSourceMapRange(factory.createIdentifier("Boolean"), node);
 
                 case SyntaxKind.StringKeyword:
-                    return factory.createIdentifier("String");
+                    return setSourceMapRange(factory.createIdentifier("String"), node);
 
                 case SyntaxKind.ObjectKeyword:
-                    return factory.createIdentifier("Object");
+                    return setSourceMapRange(factory.createIdentifier("Object"), node);
 
                 case SyntaxKind.LiteralType:
                     switch ((<LiteralTypeNode>node).literal.kind) {
                         case SyntaxKind.StringLiteral:
                         case SyntaxKind.NoSubstitutionTemplateLiteral:
-                            return factory.createIdentifier("String");
+                            return setSourceMapRange(factory.createIdentifier("String"), node);
 
                         case SyntaxKind.PrefixUnaryExpression:
                         case SyntaxKind.NumericLiteral:
-                            return factory.createIdentifier("Number");
+                            return setSourceMapRange(factory.createIdentifier("Number"), node);
 
                         case SyntaxKind.BigIntLiteral:
-                            return getGlobalBigIntNameWithFallback();
+                            return setSourceMapRange(getGlobalBigIntNameWithFallback(), node);
 
                         case SyntaxKind.TrueKeyword:
                         case SyntaxKind.FalseKeyword:
-                            return factory.createIdentifier("Boolean");
+                            return setSourceMapRange(factory.createIdentifier("Boolean"), node);
 
                         case SyntaxKind.NullKeyword:
-                            return factory.createVoidZero();
+                            return setSourceMapRange(factory.createVoidZero(), node);
 
                         default:
                             return Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
                     }
 
                 case SyntaxKind.NumberKeyword:
-                    return factory.createIdentifier("Number");
+                    return setSourceMapRange(factory.createIdentifier("Number"), node);
 
                 case SyntaxKind.BigIntKeyword:
-                    return getGlobalBigIntNameWithFallback();
+                    return setSourceMapRange(getGlobalBigIntNameWithFallback(), node);
 
                 case SyntaxKind.SymbolKeyword:
                     return languageVersion < ScriptTarget.ES2015
-                        ? getGlobalSymbolNameWithFallback()
-                        : factory.createIdentifier("Symbol");
+                        ? setSourceMapRange(getGlobalSymbolNameWithFallback(), node)
+                        : setSourceMapRange(factory.createIdentifier("Symbol"), node);
 
                 case SyntaxKind.TypeReference:
-                    return serializeTypeReferenceNode(<TypeReferenceNode>node);
+                    return setSourceMapRange(serializeTypeReferenceNode(<TypeReferenceNode>node), node);
 
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    return serializeTypeList((<UnionOrIntersectionTypeNode>node).types);
+                    return setSourceMapRange(serializeTypeList((<UnionOrIntersectionTypeNode>node).types), node);
 
                 case SyntaxKind.ConditionalType:
-                    return serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
+                    return setSourceMapRange(serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]), node);
 
                 case SyntaxKind.TypeOperator:
                     if ((<TypeOperatorNode>node).operator === SyntaxKind.ReadonlyKeyword) {
@@ -1605,7 +1682,7 @@ namespace ts {
                     return Debug.failBadSyntaxKind(node);
             }
 
-            return factory.createIdentifier("Object");
+            return setSourceMapRange(factory.createIdentifier("Object"), node);
         }
 
         function serializeTypeList(types: readonly TypeNode[]): SerializedTypeNode {
@@ -1635,7 +1712,7 @@ namespace ts {
                     if (!isIdentifier(serializedUnion) ||
                         !isIdentifier(serializedIndividual) ||
                         serializedUnion.escapedText !== serializedIndividual.escapedText) {
-                        return factory.createIdentifier("Object");
+                        return (factory.createIdentifier("Object"));
                     }
                 }
                 else {
@@ -1660,7 +1737,7 @@ namespace ts {
                 case TypeReferenceSerializationKind.Unknown:
                     // From conditional type type reference that cannot be resolved is Similar to any or unknown
                     if (findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && (n.parent.trueType === n || n.parent.falseType === n))) {
-                        return factory.createIdentifier("Object");
+                        return (factory.createIdentifier("Object"));
                     }
 
                     const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
@@ -1751,18 +1828,21 @@ namespace ts {
          *
          * @param node The entity name to serialize.
          */
-        function serializeEntityNameAsExpression(node: EntityName): SerializedEntityNameAsExpression {
+        function serializeEntityNameAsExpression(node: EntityName, emulateParseTree = true): EntityNameExpression {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
                     // a source tree node for the purposes of the checker.
-                    const name = setParent(setTextRange(parseNodeFactory.cloneNode(node), node), node.parent);
-                    name.original = undefined;
-                    setParent(name, getParseTreeNode(currentLexicalScope)); // ensure the parent is set to a parse tree node.
+                    const name = parseNodeFactory.cloneNode(node);
+                    if (emulateParseTree) {
+                        setTextRange(name, node);
+                        setParent(name, getParseTreeNode(currentLexicalScope)); // ensure the parent is set to a parse tree node.
+                        name.original = undefined;
+                    }
                     return name;
 
                 case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(node);
+                    return serializeQualifiedNameAsExpression(node, emulateParseTree);
             }
         }
 
@@ -1773,8 +1853,8 @@ namespace ts {
          * @param useFallback A value indicating whether to use logical operators to test for the
          *                    qualified name at runtime.
          */
-        function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityNameAsExpression {
-            return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right);
+        function serializeQualifiedNameAsExpression(node: QualifiedName, emulateParseTree: boolean): PropertyAccessEntityNameExpression {
+            return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left, emulateParseTree), node.right) as PropertyAccessEntityNameExpression;
         }
 
         /**

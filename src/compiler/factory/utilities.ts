@@ -157,16 +157,27 @@ namespace ts {
         }
     }
 
-    export function createExpressionFromEntityName(factory: NodeFactory, node: EntityName | Expression): Expression {
+    export function createExpressionFromEntityName(factory: NodeFactory, node: EntityName, emulateParseTree = true): EntityNameExpression {
         if (isQualifiedName(node)) {
-            const left = createExpressionFromEntityName(factory, node.left);
-            // TODO(rbuckton): Does this need to be parented?
-            const right = setParent(setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
-            return setTextRange(factory.createPropertyAccessExpression(left, right), node);
+            const left = createExpressionFromEntityName(factory, node.left, emulateParseTree);
+            const right = factory.cloneNode(node.right);
+            if (emulateParseTree) {
+                setTextRange(right, node.right);
+                setParent(right, node.right.parent);
+            }
+            const expression = factory.createPropertyAccessExpression(left, right);
+            if (emulateParseTree) {
+                setTextRange(expression, node);
+            }
+            return expression as PropertyAccessEntityNameExpression;
         }
         else {
-            // TODO(rbuckton): Does this need to be parented?
-            return setParent(setTextRange(factory.cloneNode(node), node), node.parent);
+            const name = factory.cloneNode(node);
+            if (emulateParseTree) {
+                setTextRange(name, node);
+                setParent(name, node.parent);
+            }
+            return name;
         }
     }
 
