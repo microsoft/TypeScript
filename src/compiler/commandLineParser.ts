@@ -1122,9 +1122,7 @@ namespace ts {
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         hasProperty(option, "transpileOptionValue"));
 
-    /* @internal */
-    export const buildOpts: CommandLineOption[] = [
-        ...commonOptionsWithBuild,
+    const commandOptionsOnlyBuild: CommandLineOption[]  = [
         {
             name: "verbose",
             shortName: "v",
@@ -1152,6 +1150,12 @@ namespace ts {
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean"
         }
+    ];
+
+    /* @internal */
+    export const buildOpts: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsOnlyBuild,
     ];
 
     /* @internal */
@@ -1466,7 +1470,7 @@ namespace ts {
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         alternateMode: {
             diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
-            options: new Set(["clean", "dry", "force", "verbose"])
+            options: new Set(commandOptionsOnlyBuild.map(option => option.name))
         },
         getOptionsNameMap,
         optionDeclarations,
@@ -1512,7 +1516,7 @@ namespace ts {
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         alternateMode: {
             diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
-            options: new Set(commandOptionsWithoutBuild.map(option => option.name)),
+            options: new Set(commandOptionsWithoutBuild.map(option => option.name))
         },
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
