@@ -306,10 +306,8 @@ namespace ts {
         description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
     };
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
+    const commandOptionsWithoutBuild: CommandLineOption[] = [
         // CommandLine only options
-        ...commonOptionsWithBuild,
         {
             name: "all",
             type: "boolean",
@@ -1099,6 +1097,12 @@ namespace ts {
     ];
 
     /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsWithoutBuild,
+    ];
+
+    /* @internal */
     export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1506,6 +1510,10 @@ namespace ts {
     }
 
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: {
+            diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+            options: new Set(commandOptionsWithoutBuild.map(option => option.name)),
+        },
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,

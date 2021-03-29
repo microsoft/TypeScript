@@ -807,9 +807,9 @@ namespace ts {
             assertParseResult(["--listFilesOnly"],
                 {
                     errors: [{
-                        messageText: "Unknown build option '--listFilesOnly'.",
-                        category: Diagnostics.Unknown_build_option_0.category,
-                        code: Diagnostics.Unknown_build_option_0.code,
+                        messageText: "Compiler option '--listFilesOnly' may not be used with '--build'.",
+                        category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                        code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                         file: undefined,
                         start: undefined,
                         length: undefined,
@@ -880,9 +880,9 @@ namespace ts {
             assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"],
                 {
                     errors: [{
-                        messageText: "Unknown build option '--tsBuildInfoFile'.",
-                        category: Diagnostics.Unknown_build_option_0.category,
-                        code: Diagnostics.Unknown_build_option_0.code,
+                        messageText: "Compiler option '--tsBuildInfoFile' may not be used with '--build'.",
+                        category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                        code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
                         file: undefined,
                         start: undefined,
                         length: undefined
@@ -891,6 +891,24 @@ namespace ts {
                     buildOptions: {},
                     watchOptions: undefined,
                 });
+        });
+
+        it("reports other common 'may not be used with --build' flags", () => {
+            const buildFlags = ["--declaration", "--strict"];
+
+            assertParseResult(buildFlags, {
+                errors: buildFlags.map(buildFlag => ({
+                    messageText: `Compiler option '${buildFlag}' may not be used with '--build'.`,
+                    category: Diagnostics.Compiler_option_0_may_not_be_used_with_build.category,
+                    code: Diagnostics.Compiler_option_0_may_not_be_used_with_build.code,
+                    file: undefined,
+                    start: undefined,
+                    length: undefined
+                })),
+                buildOptions: {},
+                projects: ["."],
+                watchOptions: undefined,
+            });
         });
 
         describe("Combining options that make no sense together", () => {
