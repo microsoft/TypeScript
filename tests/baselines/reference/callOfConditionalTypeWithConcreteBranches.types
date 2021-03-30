@@ -1,0 +1,37 @@
+=== tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts ===
+type Q<T> = number extends T ? (n: number) => void : never;
+>Q : Q<T>
+>n : number
+
+function fn<T>(arg: Q<T>) {
+>fn : <T>(arg: Q<T>) => void
+>arg : Q<T>
+
+  // Expected: OK
+  // Actual: Cannot convert 10 to number & T
+  arg(10);
+>arg(10) : void
+>arg : Q<T>
+>10 : 10
+}
+// Legal invocations are not problematic
+fn<string | number>(m => m.toFixed());
+>fn<string | number>(m => m.toFixed()) : void
+>fn : <T>(arg: Q<T>) => void
+>m => m.toFixed() : (m: number) => string
+>m : number
+>m.toFixed() : string
+>m.toFixed : (fractionDigits?: number) => string
+>m : number
+>toFixed : (fractionDigits?: number) => string
+
+fn<number>(m => m.toFixed());
+>fn<number>(m => m.toFixed()) : void
+>fn : <T>(arg: Q<T>) => void
+>m => m.toFixed() : (m: number) => string
+>m : number
+>m.toFixed() : string
+>m.toFixed : (fractionDigits?: number) => string
+>m : number
+>toFixed : (fractionDigits?: number) => string
+

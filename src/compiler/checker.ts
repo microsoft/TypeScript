@@ -12849,9 +12849,13 @@ namespace ts {
 
         function getConditionalFlowTypeOfType(type: Type, node: Node) {
             let constraints: Type[] | undefined;
+            let covariant = true;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                if (parent.kind === SyntaxKind.Parameter || parent.kind === SyntaxKind.TypeOperator && (parent as TypeOperatorNode).operator === SyntaxKind.KeyOfKeyword) {
+                    covariant = !covariant;
+                }
+                if (covariant && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(type, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
                         constraints = append(constraints, constraint);

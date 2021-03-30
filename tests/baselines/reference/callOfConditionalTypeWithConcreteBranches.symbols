@@ -1,0 +1,34 @@
+=== tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts ===
+type Q<T> = number extends T ? (n: number) => void : never;
+>Q : Symbol(Q, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 0))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 7))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 7))
+>n : Symbol(n, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 32))
+
+function fn<T>(arg: Q<T>) {
+>fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 12))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 15))
+>Q : Symbol(Q, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 0))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 12))
+
+  // Expected: OK
+  // Actual: Cannot convert 10 to number & T
+  arg(10);
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 1, 15))
+}
+// Legal invocations are not problematic
+fn<string | number>(m => m.toFixed());
+>fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
+>m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+fn<number>(m => m.toFixed());
+>fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
+>m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
