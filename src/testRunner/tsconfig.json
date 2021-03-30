@@ -113,6 +113,7 @@
         "unittests/services/textChanges.ts",
         "unittests/services/transpile.ts",
         "unittests/tsbuild/amdModulesWithOut.ts",
+        "unittests/tsbuild/clean.ts",
         "unittests/tsbuild/configFileErrors.ts",
         "unittests/tsbuild/configFileExtends.ts",
         "unittests/tsbuild/containerOnlyReferenced.ts",
