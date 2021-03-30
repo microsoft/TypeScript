@@ -36566,6 +36566,7 @@ namespace ts {
             switch (name.escapedText) {
                 case "any":
                 case "unknown":
+                case "never":
                 case "number":
                 case "bigint":
                 case "boolean":
