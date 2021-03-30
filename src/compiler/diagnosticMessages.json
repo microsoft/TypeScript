@@ -3308,7 +3308,7 @@
         "category": "Error",
         "code": 2808
     },
-    "Cannot use 'this' in static property initializer in a decorated class.": {
+    "Cannot use 'this' in a static property initializer of a decorated class.": {
         "category": "Error",
         "code": 2809
     },

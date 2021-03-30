@@ -24093,7 +24093,7 @@ namespace ts {
         function checkThisInStaticClassFieldInitializerInDecoratedClass(thisExpression: Node, container: Node) {
             if (isPropertyDeclaration(container) && hasStaticModifier(container) &&
                 container.initializer && textRangeContainsPositionInclusive(container.initializer, thisExpression.pos) && length(container.parent.decorators)) {
-                    error(thisExpression, Diagnostics.Cannot_use_this_in_static_property_initializer_in_a_decorated_class);
+                    error(thisExpression, Diagnostics.Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class);
             }
         }
 
@@ -24471,8 +24471,6 @@ namespace ts {
                     // 'super' property access is allowed
                     // - In a constructor, instance member function, instance member accessor, or instance member variable initializer where this references a derived class instance
                     // - In a static member function or static member accessor
-                    // (March 2021)
-                    // - In a static property declaration
 
                     // topmost container must be something that is directly nested in the class declaration\object literal expression
                     if (isClassLike(container.parent) || container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -26637,8 +26635,6 @@ namespace ts {
                 // - In a static member function or static member accessor
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
-                // (March 2021):
-                // - All static class member can be access via super.
                 if (languageVersion < ScriptTarget.ES2015) {
                     const isStatic = flags & ModifierFlags.Static;
                     if (isStatic ? symbolHasNonClassMemberDeclaration(prop) : symbolHasNonMethodDeclaration(prop)) {

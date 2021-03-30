@@ -195,7 +195,7 @@ namespace ts {
             const shouldCareAboutSuper = shouldRewriteSuper || shouldAvoidThisOrSuper;
 
             function staticFieldThisOrSuperVisitor(node: Expression): Expression {
-                if (!(node.transformFlags & (TransformFlags.ContainsLexicalThis | (shouldCareAboutSuper ? TransformFlags.ContainsLexicalSuper : TransformFlags.None)))) {
+                if (!(node.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     return node;
                 }
 
