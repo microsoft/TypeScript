@@ -151,7 +151,7 @@ namespace ts.projectSystem {
 
             session.logger.logs.push("Write file that could not be resolved by referenced path::");
             host.writeFile(`${tscWatch.projectRoot}/src/globalFileNotFound.ts`, "function globalSomething2() { return 20; }");
-                host.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks();
             appendProjectFileText(project, session);
 
             session.logger.logs.push(`Modify main file::`);
@@ -189,6 +189,12 @@ namespace ts.projectSystem {
 
             session.logger.logs.push("Write file that could not be resolved");
             host.writeFile(`${tscWatch.projectRoot}/src/fileNotFound.ts`, "export function something2() { return 20; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
+            session.logger.logs.push("Delete file that could not be resolved");
+            host.deleteFile(`${tscWatch.projectRoot}/src/fileNotFound.ts`);
             host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
             host.runQueuedTimeoutCallbacks(); // Actual Update
             appendProjectFileText(project, session);
@@ -291,6 +297,12 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks(); // Actual Update
             appendProjectFileText(project, session);
 
+            session.logger.logs.push("Delete file that could not be resolved");
+            host.deleteFile(`${tscWatch.projectRoot}/src/fileNotFound.ts`);
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
             baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is not present", session);
         });
 
@@ -385,6 +397,12 @@ namespace ts.projectSystem {
 
             session.logger.logs.push("Write file that could not be resolved");
             host.writeFile(`${tscWatch.projectRoot}/src/fileNotFound.ts`, "export function something2() { return 20; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
+            session.logger.logs.push("Delete file that could not be resolved");
+            host.deleteFile(`${tscWatch.projectRoot}/src/fileNotFound.ts`);
             host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
             host.runQueuedTimeoutCallbacks(); // Actual Update
             appendProjectFileText(project, session);

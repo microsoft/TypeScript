@@ -900,3 +900,159 @@ something();
 {"fileName":"/user/username/projects/myproject/src/fileNotFound.ts","version":"-497034637-export function something2() { return 20; }"}
 export function something2() { return 20; }
 
+
+Delete file that could not be resolved
+FileWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts 2:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.ts 500 undefined WatchType: Closed Script info
+Scheduled: /user/username/projects/myproject/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts 2:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.ts 500 undefined WatchType: Closed Script info
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Running: /user/username/projects/myproject/tsconfig.json
+Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
+Reusing resolution of module './newFile' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 8 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+	Files (12)
+	/a/lib/lib.d.ts
+	/user/username/projects/myproject/src/filePresent.ts
+	/user/username/projects/myproject/src/anotherFileReusingResolution.ts
+	/user/username/projects/myproject/src/types.ts
+	/user/username/projects/myproject/src/fileWithRef.ts
+	/user/username/projects/myproject/src/globalFilePresent.ts
+	/user/username/projects/myproject/src/globalFileNotFound.ts
+	/user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.ts
+	/user/username/projects/myproject/src/globalNewFile.ts
+	/user/username/projects/myproject/src/globalMain.ts
+	/user/username/projects/myproject/src/newFile.ts
+	/user/username/projects/myproject/src/main.ts
+
+
+	../../../../a/lib/lib.d.ts
+	  Default library
+	src/filePresent.ts
+	  Imported via "./filePresent" from file 'src/anotherFileReusingResolution.ts'
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	  Imported via "./filePresent" from file 'src/main.ts'
+	  Imported via "./filePresent" from file 'src/main.ts'
+	src/anotherFileReusingResolution.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/types.ts
+	  Referenced via './types.ts' from file 'src/fileWithRef.ts'
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/fileWithRef.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/globalFilePresent.ts
+	  Referenced via './globalFilePresent.ts' from file 'src/globalAnotherFileWithSameReferenes.ts'
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	  Referenced via './globalFilePresent.ts' from file 'src/globalMain.ts'
+	src/globalFileNotFound.ts
+	  Referenced via './globalFileNotFound.ts' from file 'src/globalAnotherFileWithSameReferenes.ts'
+	  Referenced via './globalFileNotFound.ts' from file 'src/globalMain.ts'
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/globalAnotherFileWithSameReferenes.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/globalNewFile.ts
+	  Referenced via './globalNewFile.ts' from file 'src/globalMain.ts'
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/globalMain.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/newFile.ts
+	  Imported via "./newFile" from file 'src/main.ts'
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/main.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+
+-----------------------------------------------
+Running: *ensureProjectForOpenFiles*
+Before ensureProjectForOpenFiles:
+Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+	Files (12)
+
+-----------------------------------------------
+Open files: 
+	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+		Projects: /user/username/projects/myproject/tsconfig.json
+	FileName: /user/username/projects/myproject/src/globalMain.ts ProjectRootPath: undefined
+		Projects: /user/username/projects/myproject/tsconfig.json
+After ensureProjectForOpenFiles:
+Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+	Files (12)
+
+-----------------------------------------------
+Open files: 
+	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+		Projects: /user/username/projects/myproject/tsconfig.json
+	FileName: /user/username/projects/myproject/src/globalMain.ts ProjectRootPath: undefined
+		Projects: /user/username/projects/myproject/tsconfig.json
+
+Project: /user/username/projects/myproject/tsconfig.json
+{"fileName":"/a/lib/lib.d.ts","version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"}
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+{"fileName":"/user/username/projects/myproject/src/filePresent.ts","version":"11598859296-export function something() { return 10; }"}
+export function something() { return 10; }
+
+{"fileName":"/user/username/projects/myproject/src/anotherFileReusingResolution.ts","version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";"}
+import { something } from "./filePresent";
+import { something2 } from "./fileNotFound";
+
+{"fileName":"/user/username/projects/myproject/src/types.ts","version":"-12575322908-interface SomeType {}"}
+interface SomeType {}
+
+{"fileName":"/user/username/projects/myproject/src/fileWithRef.ts","version":"-6085631553-/// <reference path=\"./types.ts\"/>"}
+/// <reference path="./types.ts"/>
+
+{"fileName":"/user/username/projects/myproject/src/globalFilePresent.ts","version":"-5627034801-function globalSomething() { return 10; }"}
+function globalSomething() { return 10; }
+
+{"fileName":"/user/username/projects/myproject/src/globalFileNotFound.ts","version":"-6310824062-function globalSomething2() { return 20; }"}
+function globalSomething2() { return 20; }
+
+{"fileName":"/user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.ts","version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n"}
+/// <reference path="./globalFilePresent.ts"/>
+/// <reference path="./globalFileNotFound.ts"/>
+function globalAnotherFileWithSameReferenes() { }
+
+
+{"fileName":"/user/username/projects/myproject/src/globalNewFile.ts","version":"4916490342-function globalFoo() { return 20; }"}
+function globalFoo() { return 20; }
+
+{"fileName":"/user/username/projects/myproject/src/globalMain.ts","version":"-9112452180-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();\nglobalFoo();\n"}
+/// <reference path="./globalNewFile.ts"/>
+/// <reference path="./globalFilePresent.ts"/>
+/// <reference path="./globalFileNotFound.ts"/>
+function globalMain() { }
+globalSomething();
+globalFoo();
+
+
+{"fileName":"/user/username/projects/myproject/src/newFile.ts","version":"4428918903-export function foo() { return 20; }"}
+export function foo() { return 20; }
+
+{"fileName":"/user/username/projects/myproject/src/main.ts","version":"-94210647-import { foo } from \"./newFile\";\nimport { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nsomething();\n"}
+import { foo } from "./newFile";
+import { something } from "./filePresent";
+import { something as something1 } from "./filePresent";
+import { something2 } from "./fileNotFound";
+something();
+
+

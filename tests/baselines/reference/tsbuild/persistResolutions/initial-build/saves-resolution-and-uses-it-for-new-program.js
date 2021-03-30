@@ -6278,3 +6278,15 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
   "size": 8426
 }
 
+
+
+Change:: Delete file that could not be resolved
+Input::
+//// [/src/project/src/fileNotFound.ts] unlink
+
+
+Output::
+/lib/tsc --b src/project
+exitCode:: ExitStatus.Success
+
+

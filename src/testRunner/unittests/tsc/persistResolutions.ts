@@ -120,6 +120,11 @@ namespace ts {
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
                 },
+                {
+                    subScenario: "Delete file that could not be resolved",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: sys => sys.unlinkSync(`/src/project/src/fileNotFound.ts`),
+                },
             ],
             baselinePrograms: true,
         });
@@ -211,6 +216,11 @@ namespace ts {
                     subScenario: "Modify main file",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => appendText(fs, `/src/project/src/main.ts`, `something();`),
+                },
+                {
+                    subScenario: "Delete file that could not be resolved",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: sys => sys.unlinkSync(`/src/project/src/fileNotFound.ts`),
                 },
             ],
             baselinePrograms: true,

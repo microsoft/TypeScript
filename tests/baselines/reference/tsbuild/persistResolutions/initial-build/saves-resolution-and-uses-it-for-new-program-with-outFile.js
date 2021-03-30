@@ -5655,3 +5655,15 @@ declare module "src/main" { }
   "size": 8038
 }
 
+
+
+Change:: Delete file that could not be resolved
+Input::
+//// [/src/project/src/fileNotFound.ts] unlink
+
+
+Output::
+/lib/tsc --b src/project
+exitCode:: ExitStatus.Success
+
+

@@ -133,7 +133,15 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
-                }
+                },
+                {
+                    caption: "Delete file that could not be resolved",
+                    change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -182,7 +190,15 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
-                }
+                },
+                {
+                    caption: "Delete file that could not be resolved",
+                    change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -231,7 +247,15 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
-                }
+                },
+                {
+                    caption: "Delete file that could not be resolved",
+                    change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
 
@@ -281,7 +305,15 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
-                }
+                },
+                {
+                    caption: "Delete file that could not be resolved",
+                    change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -330,7 +362,15 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
-                }
+                },
+                {
+                    caption: "Delete file that could not be resolved",
+                    change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -379,7 +419,15 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
-                }
+                },
+                {
+                    caption: "Delete file that could not be resolved",
+                    change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
     });

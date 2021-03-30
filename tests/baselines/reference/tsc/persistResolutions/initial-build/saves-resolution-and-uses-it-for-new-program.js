@@ -6058,3 +6058,611 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
   "size": 8441
 }
 
+
+
+Change:: Delete file that could not be resolved
+Input::
+//// [/src/project/src/fileNotFound.ts] unlink
+
+
+Output::
+/lib/tsc --p src/project
+Reusing resolution of module './filePresent' from '/src/project/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/src/project/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/src/project/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/src/project/src/fileNotFound.ts'.
+Reusing resolution of module './newFile' from '/src/project/src/main.ts' of old program, it was successfully resolved to '/src/project/src/newFile.ts'.
+Reusing resolution of module './filePresent' from '/src/project/src/main.ts' of old program, it was successfully resolved to '/src/project/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/src/project/src/main.ts' of old program, it was successfully resolved to '/src/project/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/src/project/src/main.ts' of old program, it was successfully resolved to '/src/project/src/fileNotFound.ts'.
+[96msrc/project/src/anotherFileReusingResolution.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+[7m2[0m import { something2 } from "./fileNotFound";
+[7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
+
+[96msrc/project/src/main.ts[0m:[93m3[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+
+[7m3[0m import { something2 } from "./fileNotFound";something();something();
+[7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
+
+
+Found 2 errors.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+Program root files: ["/src/project/src/anotherFileReusingResolution.ts","/src/project/src/fileNotFound.d.ts","/src/project/src/filePresent.ts","/src/project/src/fileWithRef.ts","/src/project/src/globalAnotherFileWithSameReferenes.ts","/src/project/src/globalFileNotFound.ts","/src/project/src/globalFilePresent.ts","/src/project/src/globalMain.ts","/src/project/src/globalNewFile.ts","/src/project/src/main.ts","/src/project/src/newFile.ts","/src/project/src/types.ts"]
+Program options: {"module":2,"composite":true,"persistResolutions":true,"traceResolution":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/lib/lib.d.ts
+/src/project/src/filePresent.ts
+/src/project/src/anotherFileReusingResolution.ts
+/src/project/src/fileNotFound.d.ts
+/src/project/src/types.ts
+/src/project/src/fileWithRef.ts
+/src/project/src/globalFilePresent.ts
+/src/project/src/globalFileNotFound.ts
+/src/project/src/globalAnotherFileWithSameReferenes.ts
+/src/project/src/globalNewFile.ts
+/src/project/src/globalMain.ts
+/src/project/src/newFile.ts
+/src/project/src/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/src/project/src/anotherFileReusingResolution.ts
+/src/project/src/fileNotFound.d.ts
+/src/project/src/main.ts
+
+
+//// [/src/project/src/anotherFileReusingResolution.d.ts] file written with same contents
+//// [/src/project/src/anotherFileReusingResolution.js] file written with same contents
+//// [/src/project/src/main.d.ts] file written with same contents
+//// [/src/project/src/main.js] file written with same contents
+//// [/src/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.d.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.d.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/filenotfound.ts","./src/fileNotFound.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-15062742831-export declare function something(): number;\r\n"},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":"-4882119183-export {};\r\n"},"-13705775197-export declare function something2(): number;\r\n",{"version":"-12575322908-interface SomeType {}","signature":"-10608150606-interface SomeType {\r\n}\r\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-3515861877-/// <reference path=\"types.d.ts\" />\r\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-6032143744-declare function globalSomething(): number;\r\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-7753781454-declare function globalSomething2(): number;\r\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-18570932929-/// <reference path=\"globalFilePresent.d.ts\" />\r\n/// <reference path=\"globalFileNotFound.d.ts\" />\r\ndeclare function globalAnotherFileWithSameReferenes(): void;\r\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4157970454-declare function globalFoo(): number;\r\n","affectsGlobalScope":true},{"version":"-5021007197-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();globalSomething();","signature":"3235645566-/// <reference path=\"globalNewFile.d.ts\" />\r\n/// <reference path=\"globalFilePresent.d.ts\" />\r\n/// <reference path=\"globalFileNotFound.d.ts\" />\r\ndeclare function globalMain(): void;\r\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-3405156953-export declare function foo(): number;\r\n"},{"version":"26360741061-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();something();","signature":"-4882119183-export {};\r\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","module":2,"persistResolutions":true,"project":"./","traceResolution":true},"fileIdsList":[[2],[5],[7,8],[7,8,10],[2,12]],"referencedMap":[[3,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,2,6,9,8,7,11,10,[13,[{"file":"./src/main.ts","start":159,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],12,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":3,"index":0},{"kind":0,"index":2},{"kind":3,"file":13,"index":1},{"kind":3,"file":13,"index":2}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-13705775197-export declare function something2(): number;\r\n","flags":0,"includeReasons":[{"kind":0,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":11}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-5021007197-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();globalSomething();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":23,"originalFileName":23,"path":12,"resolvedPath":12,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":13,"index":0},{"kind":0,"index":10}]},{"fileName":13,"originalFileName":13,"path":13,"resolvedPath":13,"version":"26360741061-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./newFile",3],["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":9}]}],"rootFileNames":[15,16,14,17,20,19,18,22,21,13,23,5],"filesByName":[[24,0]],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":25,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":23,"extension":".ts"}}]}},"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/anotherfilereusingresolution.ts",
+      "./src/filenotfound.d.ts",
+      "./src/types.ts",
+      "./src/filewithref.ts",
+      "./src/globalfilepresent.ts",
+      "./src/globalfilenotfound.ts",
+      "./src/globalanotherfilewithsamereferenes.ts",
+      "./src/globalnewfile.ts",
+      "./src/globalmain.ts",
+      "./src/newfile.ts",
+      "./src/main.ts",
+      "./src/filePresent.ts",
+      "./src/anotherFileReusingResolution.ts",
+      "./src/fileNotFound.d.ts",
+      "./src/fileWithRef.ts",
+      "./src/globalFilePresent.ts",
+      "./src/globalFileNotFound.ts",
+      "./src/globalAnotherFileWithSameReferenes.ts",
+      "./src/globalNewFile.ts",
+      "./src/globalMain.ts",
+      "./src/newFile.ts",
+      "./src/filenotfound.ts",
+      "./src/fileNotFound.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts"
+      ],
+      [
+        "./src/types.ts"
+      ],
+      [
+        "./src/globalfilepresent.ts",
+        "./src/globalfilenotfound.ts"
+      ],
+      [
+        "./src/globalfilepresent.ts",
+        "./src/globalfilenotfound.ts",
+        "./src/globalnewfile.ts"
+      ],
+      [
+        "./src/filepresent.ts",
+        "./src/newfile.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./src/filepresent.ts": {
+        "version": "11598859296-export function something() { return 10; }",
+        "signature": "-15062742831-export declare function something(): number;\r\n"
+      },
+      "./src/anotherfilereusingresolution.ts": {
+        "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./src/filenotfound.d.ts": {
+        "version": "-13705775197-export declare function something2(): number;\r\n",
+        "signature": "-13705775197-export declare function something2(): number;\r\n"
+      },
+      "./src/types.ts": {
+        "version": "-12575322908-interface SomeType {}",
+        "signature": "-10608150606-interface SomeType {\r\n}\r\n",
+        "affectsGlobalScope": true
+      },
+      "./src/filewithref.ts": {
+        "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
+        "signature": "-3515861877-/// <reference path=\"types.d.ts\" />\r\n"
+      },
+      "./src/globalfilepresent.ts": {
+        "version": "-5627034801-function globalSomething() { return 10; }",
+        "signature": "-6032143744-declare function globalSomething(): number;\r\n",
+        "affectsGlobalScope": true
+      },
+      "./src/globalfilenotfound.ts": {
+        "version": "-6310824062-function globalSomething2() { return 20; }",
+        "signature": "-7753781454-declare function globalSomething2(): number;\r\n",
+        "affectsGlobalScope": true
+      },
+      "./src/globalanotherfilewithsamereferenes.ts": {
+        "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
+        "signature": "-18570932929-/// <reference path=\"globalFilePresent.d.ts\" />\r\n/// <reference path=\"globalFileNotFound.d.ts\" />\r\ndeclare function globalAnotherFileWithSameReferenes(): void;\r\n",
+        "affectsGlobalScope": true
+      },
+      "./src/globalnewfile.ts": {
+        "version": "4916490342-function globalFoo() { return 20; }",
+        "signature": "4157970454-declare function globalFoo(): number;\r\n",
+        "affectsGlobalScope": true
+      },
+      "./src/globalmain.ts": {
+        "version": "-5021007197-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();globalSomething();",
+        "signature": "3235645566-/// <reference path=\"globalNewFile.d.ts\" />\r\n/// <reference path=\"globalFilePresent.d.ts\" />\r\n/// <reference path=\"globalFileNotFound.d.ts\" />\r\ndeclare function globalMain(): void;\r\n",
+        "affectsGlobalScope": true
+      },
+      "./src/newfile.ts": {
+        "version": "4428918903-export function foo() { return 20; }",
+        "signature": "-3405156953-export declare function foo(): number;\r\n"
+      },
+      "./src/main.ts": {
+        "version": "26360741061-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();something();",
+        "signature": "-4882119183-export {};\r\n"
+      }
+    },
+    "options": {
+      "composite": true,
+      "configFilePath": "./tsconfig.json",
+      "module": 2,
+      "persistResolutions": true,
+      "project": "./",
+      "traceResolution": true
+    },
+    "referencedMap": {
+      "./src/anotherfilereusingresolution.ts": [
+        "./src/filepresent.ts"
+      ],
+      "./src/filewithref.ts": [
+        "./src/types.ts"
+      ],
+      "./src/globalanotherfilewithsamereferenes.ts": [
+        "./src/globalfilepresent.ts",
+        "./src/globalfilenotfound.ts"
+      ],
+      "./src/globalmain.ts": [
+        "./src/globalfilepresent.ts",
+        "./src/globalfilenotfound.ts",
+        "./src/globalnewfile.ts"
+      ],
+      "./src/main.ts": [
+        "./src/filepresent.ts",
+        "./src/newfile.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      [
+        "./src/anotherfilereusingresolution.ts",
+        [
+          {
+            "file": "./src/anotherfilereusingresolution.ts",
+            "start": 70,
+            "length": 16,
+            "messageText": "Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
+            "category": 1,
+            "code": 2792
+          }
+        ]
+      ],
+      "./src/filenotfound.d.ts",
+      "./src/filepresent.ts",
+      "./src/filewithref.ts",
+      "./src/globalanotherfilewithsamereferenes.ts",
+      "./src/globalfilenotfound.ts",
+      "./src/globalfilepresent.ts",
+      "./src/globalmain.ts",
+      "./src/globalnewfile.ts",
+      [
+        "./src/main.ts",
+        [
+          {
+            "file": "./src/main.ts",
+            "start": 159,
+            "length": 16,
+            "messageText": "Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
+            "category": 1,
+            "code": 2792
+          }
+        ]
+      ],
+      "./src/newfile.ts",
+      "./src/types.ts"
+    ],
+    "peristedProgram": {
+      "files": [
+        {
+          "fileName": "../../lib/lib.d.ts",
+          "originalFileName": "../../lib/lib.d.ts",
+          "path": "../../lib/lib.d.ts",
+          "resolvedPath": "../../lib/lib.d.ts",
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "flags": 0,
+          "hasNoDefaultLib": true,
+          "includeReasons": [
+            {
+              "kind": "LibFile"
+            }
+          ]
+        },
+        {
+          "fileName": "./src/filePresent.ts",
+          "originalFileName": "./src/filePresent.ts",
+          "path": "./src/filepresent.ts",
+          "resolvedPath": "./src/filepresent.ts",
+          "version": "11598859296-export function something() { return 10; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "Import",
+              "file": "./src/anotherfilereusingresolution.ts",
+              "index": 0
+            },
+            {
+              "kind": "RootFile",
+              "index": 2
+            },
+            {
+              "kind": "Import",
+              "file": "./src/main.ts",
+              "index": 1
+            },
+            {
+              "kind": "Import",
+              "file": "./src/main.ts",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "fileName": "./src/anotherFileReusingResolution.ts",
+          "originalFileName": "./src/anotherFileReusingResolution.ts",
+          "path": "./src/anotherfilereusingresolution.ts",
+          "resolvedPath": "./src/anotherfilereusingresolution.ts",
+          "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";",
+          "flags": 0,
+          "imports": [
+            {
+              "kind": 10,
+              "text": "./filePresent"
+            },
+            {
+              "kind": 10,
+              "text": "./fileNotFound"
+            }
+          ],
+          "resolvedModules": [
+            [
+              "./filePresent",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/filePresent.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "./fileNotFound",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/fileNotFound.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 0
+            }
+          ]
+        },
+        {
+          "fileName": "./src/fileNotFound.d.ts",
+          "originalFileName": "./src/fileNotFound.d.ts",
+          "path": "./src/filenotfound.d.ts",
+          "resolvedPath": "./src/filenotfound.d.ts",
+          "version": "-13705775197-export declare function something2(): number;\r\n",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "fileName": "./src/types.ts",
+          "originalFileName": "./src/types.ts",
+          "path": "./src/types.ts",
+          "resolvedPath": "./src/types.ts",
+          "version": "-12575322908-interface SomeType {}",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "ReferenceFile",
+              "file": "./src/filewithref.ts",
+              "index": 0
+            },
+            {
+              "kind": "RootFile",
+              "index": 11
+            }
+          ]
+        },
+        {
+          "fileName": "./src/fileWithRef.ts",
+          "originalFileName": "./src/fileWithRef.ts",
+          "path": "./src/filewithref.ts",
+          "resolvedPath": "./src/filewithref.ts",
+          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
+          "flags": 0,
+          "referencedFiles": [
+            "./types.ts"
+          ],
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 3
+            }
+          ]
+        },
+        {
+          "fileName": "./src/globalFilePresent.ts",
+          "originalFileName": "./src/globalFilePresent.ts",
+          "path": "./src/globalfilepresent.ts",
+          "resolvedPath": "./src/globalfilepresent.ts",
+          "version": "-5627034801-function globalSomething() { return 10; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "ReferenceFile",
+              "file": "./src/globalanotherfilewithsamereferenes.ts",
+              "index": 0
+            },
+            {
+              "kind": "RootFile",
+              "index": 6
+            },
+            {
+              "kind": "ReferenceFile",
+              "file": "./src/globalmain.ts",
+              "index": 1
+            }
+          ]
+        },
+        {
+          "fileName": "./src/globalFileNotFound.ts",
+          "originalFileName": "./src/globalFileNotFound.ts",
+          "path": "./src/globalfilenotfound.ts",
+          "resolvedPath": "./src/globalfilenotfound.ts",
+          "version": "-6310824062-function globalSomething2() { return 20; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "ReferenceFile",
+              "file": "./src/globalanotherfilewithsamereferenes.ts",
+              "index": 1
+            },
+            {
+              "kind": "RootFile",
+              "index": 5
+            },
+            {
+              "kind": "ReferenceFile",
+              "file": "./src/globalmain.ts",
+              "index": 2
+            }
+          ]
+        },
+        {
+          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
+          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
+          "path": "./src/globalanotherfilewithsamereferenes.ts",
+          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
+          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
+          "flags": 0,
+          "referencedFiles": [
+            "./globalFilePresent.ts",
+            "./globalFileNotFound.ts"
+          ],
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 4
+            }
+          ]
+        },
+        {
+          "fileName": "./src/globalNewFile.ts",
+          "originalFileName": "./src/globalNewFile.ts",
+          "path": "./src/globalnewfile.ts",
+          "resolvedPath": "./src/globalnewfile.ts",
+          "version": "4916490342-function globalFoo() { return 20; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "ReferenceFile",
+              "file": "./src/globalmain.ts",
+              "index": 0
+            },
+            {
+              "kind": "RootFile",
+              "index": 8
+            }
+          ]
+        },
+        {
+          "fileName": "./src/globalMain.ts",
+          "originalFileName": "./src/globalMain.ts",
+          "path": "./src/globalmain.ts",
+          "resolvedPath": "./src/globalmain.ts",
+          "version": "-5021007197-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();globalSomething();",
+          "flags": 0,
+          "referencedFiles": [
+            "./globalNewFile.ts",
+            "./globalFilePresent.ts",
+            "./globalFileNotFound.ts"
+          ],
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 7
+            }
+          ]
+        },
+        {
+          "fileName": "./src/newFile.ts",
+          "originalFileName": "./src/newFile.ts",
+          "path": "./src/newfile.ts",
+          "resolvedPath": "./src/newfile.ts",
+          "version": "4428918903-export function foo() { return 20; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "Import",
+              "file": "./src/main.ts",
+              "index": 0
+            },
+            {
+              "kind": "RootFile",
+              "index": 10
+            }
+          ]
+        },
+        {
+          "fileName": "./src/main.ts",
+          "originalFileName": "./src/main.ts",
+          "path": "./src/main.ts",
+          "resolvedPath": "./src/main.ts",
+          "version": "26360741061-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();something();",
+          "flags": 0,
+          "imports": [
+            {
+              "kind": 10,
+              "text": "./newFile"
+            },
+            {
+              "kind": 10,
+              "text": "./filePresent"
+            },
+            {
+              "kind": 10,
+              "text": "./filePresent"
+            },
+            {
+              "kind": 10,
+              "text": "./fileNotFound"
+            }
+          ],
+          "resolvedModules": [
+            [
+              "./newFile",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/newFile.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "./filePresent",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/filePresent.ts",
+                  "extension": ".ts"
+                }
+              }
+            ],
+            [
+              "./fileNotFound",
+              {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/fileNotFound.ts",
+                  "extension": ".ts"
+                }
+              }
+            ]
+          ],
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 9
+            }
+          ]
+        }
+      ],
+      "rootFileNames": [
+        "./src/anotherFileReusingResolution.ts",
+        "./src/fileNotFound.d.ts",
+        "./src/filePresent.ts",
+        "./src/fileWithRef.ts",
+        "./src/globalAnotherFileWithSameReferenes.ts",
+        "./src/globalFileNotFound.ts",
+        "./src/globalFilePresent.ts",
+        "./src/globalMain.ts",
+        "./src/globalNewFile.ts",
+        "./src/main.ts",
+        "./src/newFile.ts",
+        "./src/types.ts"
+      ],
+      "filesByName": {
+        "./src/filenotfound.ts": 0
+      },
+      "resolutions": [
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/fileNotFound.ts",
+            "extension": ".ts"
+          }
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/newFile.ts",
+            "extension": ".ts"
+          }
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 8867
+}
+
