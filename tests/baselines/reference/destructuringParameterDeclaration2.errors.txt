@@ -39,6 +39,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
                                 ~
 !!! error TS1005: ',' expected.
+!!! related TS1007 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:7:4: The parser expected to find a ']' to match the '[' token here.
     a0([1, 2, [["world"]], "string"]);  // Error
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.

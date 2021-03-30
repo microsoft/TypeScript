@@ -121,6 +121,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                     if (retValue != 0 ^=  {
                                       ~~
 !!! error TS1005: ')' expected.
+!!! related TS1007 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts:22:20: The parser expected to find a ')' to match the '(' token here.
                                           ~
     
     
@@ -504,6 +505,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
 !!! error TS1135: Argument expression expected.
                                     ~
 !!! error TS1005: '(' expected.
+!!! related TS1007 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts:257:33: The parser expected to find a ')' to match the '(' token here.
                                       ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                               ~~~
