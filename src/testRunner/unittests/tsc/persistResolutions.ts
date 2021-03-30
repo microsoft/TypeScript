@@ -97,10 +97,6 @@ namespace ts {
                     subScenario: "Write file that could not be resolved",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "export function something2() { return 20; }"),
-                    // when doing clean build, fileNotFound.ts would be resolved so tsbuildinfo will contain the fileNotFound
-                    cleanBuildDiscrepancies: () => new Map([
-                        [`/src/project/tsconfig.tsbuildinfo`, CleanBuildDescrepancy.CleanFileTextDifferent]
-                    ]),
                 },
                 {
                     subScenario: "Clean resolutions",
@@ -191,13 +187,6 @@ namespace ts {
                     subScenario: "Write file that could not be resolved",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "export function something2() { return 20; }"),
-                    // when doing clean build, fileNotFound.ts would be resolved so the output order in outFile.js would change
-                    cleanBuildDiscrepancies: () => new Map([
-                        ["/src/project/outfile.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent],
-                        ["/src/project/outfile.js", CleanBuildDescrepancy.CleanFileTextDifferent],
-                        ["/src/project/outfile.d.ts", CleanBuildDescrepancy.CleanFileTextDifferent],
-                        ["/src/project/outfile.tsbuildinfo.baseline.txt", CleanBuildDescrepancy.CleanFileTextDifferent]
-                    ]),
                 },
                 {
                     subScenario: "Clean resolutions",

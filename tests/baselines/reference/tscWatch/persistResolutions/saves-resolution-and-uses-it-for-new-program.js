@@ -72,6 +72,8 @@ File '/user/username/projects/myproject/src/fileNotFound.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileNotFound.js' does not exist.
 File '/user/username/projects/myproject/src/fileNotFound.jsx' does not exist.
 ======== Module name './fileNotFound' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/filePresent.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileWithRef.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/types.ts 250 undefined Source file
@@ -79,19 +81,44 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalAno
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFilePresent.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalMain.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
-======== Resolving module './filePresent' from '/user/username/projects/myproject/src/main.ts'. ========
-Resolution for module './filePresent' was found in cache from location '/user/username/projects/myproject/src'.
-======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
-======== Resolving module './filePresent' from '/user/username/projects/myproject/src/main.ts'. ========
-Resolution for module './filePresent' was found in cache from location '/user/username/projects/myproject/src'.
-======== Module name './filePresent' was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'. ========
-======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/main.ts'. ========
-Resolution for module './fileNotFound' was found in cache from location '/user/username/projects/myproject/src'.
-======== Module name './fileNotFound' was not resolved. ========
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was not resolved.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalfilenotfound.ts 500 undefined Missing file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/filePresent.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/filePresent.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/filePresent.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/filePresent.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/anotherFileReusingResolution.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/anotherFileReusingResolution.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/anotherFileReusingResolution.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/anotherFileReusingResolution.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/types.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/types.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/types.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/types.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileWithRef.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileWithRef.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileWithRef.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileWithRef.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFilePresent.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFilePresent.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFilePresent.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFilePresent.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalMain.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalMain.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalMain.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalMain.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 [96msrc/anotherFileReusingResolution.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 [7m2[0m import { something2 } from "./fileNotFound";
@@ -170,10 +197,11 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -825,10 +853,11 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -1321,6 +1350,9 @@ function globalFoo() { return 20; }
 
 
 Output::
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -1343,9 +1375,13 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalNew
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/src/globalNewFile.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/src/globalNewFile.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -1429,10 +1465,11 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -1972,6 +2009,9 @@ FileWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNot
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/globalfilenotfound.ts 500 undefined Missing file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts 0:: WatchInfo: /user/username/projects/myproject/src/globalfilenotfound.ts 500 undefined Missing file
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -1988,9 +2028,13 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFil
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/src/globalFileNotFound.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/src/globalFileNotFound.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalFileNotFound.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -2066,10 +2110,11 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -2685,10 +2730,11 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -3204,6 +3250,9 @@ export function foo() { return 20; }
 
 
 Output::
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -3221,15 +3270,19 @@ Reusing resolution of module './filePresent' from '/user/username/projects/mypro
 Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
 ======== Resolving module './newFile' from '/user/username/projects/myproject/src/main.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/user/username/projects/myproject/src/newFile.ts' exist - use it as a name resolution result.
 ======== Module name './newFile' was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'. ========
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/newFile.ts 250 undefined Source file
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/src/newFile.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/src/newFile.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/newFile.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -3299,10 +3352,11 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -3871,9 +3925,13 @@ export function something2() { return 20; }
 
 
 Output::
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
+Scheduling update
 [[90m12:05:07 AM[0m] File change detected. Starting incremental compilation...
 
 Reloading new file names and options
@@ -3882,29 +3940,23 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/anotherFileReusingResolution.ts","/user/username/projects/myproject/src/fileNotFound.ts","/user/username/projects/myproject/src/filePresent.ts","/user/username/projects/myproject/src/fileWithRef.ts","/user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.ts","/user/username/projects/myproject/src/globalFileNotFound.ts","/user/username/projects/myproject/src/globalFilePresent.ts","/user/username/projects/myproject/src/globalMain.ts","/user/username/projects/myproject/src/globalNewFile.ts","/user/username/projects/myproject/src/main.ts","/user/username/projects/myproject/src/newFile.ts","/user/username/projects/myproject/src/types.ts"]
   options: {"module":2,"composite":true,"persistResolutions":true,"traceResolution":true,"project":"/user/username/projects/myproject","watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
+======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
+Module resolution kind is not specified, using 'Classic'.
+File '/user/username/projects/myproject/src/fileNotFound.ts' exist - use it as a name resolution result.
+======== Module name './fileNotFound' was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.ts 250 undefined Source file
 Reusing resolution of module './newFile' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.ts'.
+DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/src/fileNotFound.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/src/fileNotFound.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.d.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
-[96msrc/anotherFileReusingResolution.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-
-[7m2[0m import { something2 } from "./fileNotFound";
-[7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
-
-[96msrc/main.ts[0m:[93m3[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-
-[7m3[0m import { something2 } from "./fileNotFound";something();
-[7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
-
-[[90m12:05:15 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:05:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -3914,8 +3966,8 @@ Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/filePresent.ts
-/user/username/projects/myproject/src/anotherFileReusingResolution.ts
 /user/username/projects/myproject/src/fileNotFound.ts
+/user/username/projects/myproject/src/anotherFileReusingResolution.ts
 /user/username/projects/myproject/src/types.ts
 /user/username/projects/myproject/src/fileWithRef.ts
 /user/username/projects/myproject/src/globalFilePresent.ts
@@ -3928,6 +3980,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/src/fileNotFound.ts
+/user/username/projects/myproject/src/anotherFileReusingResolution.ts
+/user/username/projects/myproject/src/main.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -3962,15 +4016,19 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/src/anotherFileReusingResolution.js] file written with same contents
+//// [/user/username/projects/myproject/src/anotherFileReusingResolution.d.ts] file written with same contents
+//// [/user/username/projects/myproject/src/main.js] file written with same contents
+//// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2],[5],[7,8],[7,8,10],[2,12]],"referencedMap":[[3,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,2,6,9,8,7,11,10,[13,[{"file":"./src/main.ts","start":159,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],12,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":3,"index":0},{"kind":0,"index":2},{"kind":3,"file":13,"index":1},{"kind":3,"file":13,"index":2}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":11}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":23,"originalFileName":23,"path":12,"resolvedPath":12,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":13,"index":0},{"kind":0,"index":10}]},{"fileName":13,"originalFileName":13,"path":13,"resolvedPath":13,"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./newFile",3],["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":9}]}],"rootFileNames":[15,16,14,17,20,19,18,22,21,13,23,5],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"failedLookupLocations":[16,24,25,26,27]},{"resolvedModule":{"resolvedFileName":23,"extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/fileNotFound.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10],[2,3,12]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,9,8,7,11,10,13,12,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":13,"index":1},{"kind":3,"file":13,"index":2}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1},{"kind":0,"index":1},{"kind":3,"file":13,"index":3}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":11}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":23,"originalFileName":23,"path":12,"resolvedPath":12,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":13,"index":0},{"kind":0,"index":10}]},{"fileName":13,"originalFileName":13,"path":13,"resolvedPath":13,"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./newFile",3],["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":9}]}],"rootFileNames":[16,15,14,17,20,19,18,22,21,13,23,5],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":15,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":23,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -3978,8 +4036,8 @@ exitCode:: ExitStatus.undefined
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
       "./src/filepresent.ts",
-      "./src/anotherfilereusingresolution.ts",
       "./src/filenotfound.ts",
+      "./src/anotherfilereusingresolution.ts",
       "./src/types.ts",
       "./src/filewithref.ts",
       "./src/globalfilepresent.ts",
@@ -3990,23 +4048,20 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./src/filePresent.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.ts",
+      "./src/anotherFileReusingResolution.ts",
       "./src/fileWithRef.ts",
       "./src/globalFilePresent.ts",
       "./src/globalFileNotFound.ts",
       "./src/globalAnotherFileWithSameReferenes.ts",
       "./src/globalNewFile.ts",
       "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./src/fileNotFound.tsx",
-      "./src/fileNotFound.d.ts",
-      "./src/fileNotFound.js",
-      "./src/fileNotFound.jsx"
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
-        "./src/filepresent.ts"
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
       ],
       [
         "./src/types.ts"
@@ -4022,6 +4077,7 @@ exitCode:: ExitStatus.undefined
       ],
       [
         "./src/filepresent.ts",
+        "./src/filenotfound.ts",
         "./src/newfile.ts"
       ]
     ],
@@ -4035,13 +4091,13 @@ exitCode:: ExitStatus.undefined
         "version": "11598859296-export function something() { return 10; }",
         "signature": "-13601649692-export declare function something(): number;\n"
       },
-      "./src/anotherfilereusingresolution.ts": {
-        "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";",
-        "signature": "-3531856636-export {};\n"
-      },
       "./src/filenotfound.ts": {
         "version": "-497034637-export function something2() { return 20; }",
         "signature": "-14992185226-export declare function something2(): number;\n"
+      },
+      "./src/anotherfilereusingresolution.ts": {
+        "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";",
+        "signature": "-3531856636-export {};\n"
       },
       "./src/types.ts": {
         "version": "-12575322908-interface SomeType {}",
@@ -4098,7 +4154,8 @@ exitCode:: ExitStatus.undefined
     },
     "referencedMap": {
       "./src/anotherfilereusingresolution.ts": [
-        "./src/filepresent.ts"
+        "./src/filepresent.ts",
+        "./src/filenotfound.ts"
       ],
       "./src/filewithref.ts": [
         "./src/types.ts"
@@ -4114,25 +4171,14 @@ exitCode:: ExitStatus.undefined
       ],
       "./src/main.ts": [
         "./src/filepresent.ts",
+        "./src/filenotfound.ts",
         "./src/newfile.ts"
       ]
     },
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
-      [
-        "./src/anotherfilereusingresolution.ts",
-        [
-          {
-            "file": "./src/anotherfilereusingresolution.ts",
-            "start": 70,
-            "length": 16,
-            "messageText": "Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
-            "category": 1,
-            "code": 2792
-          }
-        ]
-      ],
+      "./src/anotherfilereusingresolution.ts",
       "./src/filenotfound.ts",
       "./src/filepresent.ts",
       "./src/filewithref.ts",
@@ -4141,19 +4187,7 @@ exitCode:: ExitStatus.undefined
       "./src/globalfilepresent.ts",
       "./src/globalmain.ts",
       "./src/globalnewfile.ts",
-      [
-        "./src/main.ts",
-        [
-          {
-            "file": "./src/main.ts",
-            "start": 159,
-            "length": 16,
-            "messageText": "Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
-            "category": 1,
-            "code": 2792
-          }
-        ]
-      ],
+      "./src/main.ts",
       "./src/newfile.ts",
       "./src/types.ts"
     ],
@@ -4203,6 +4237,30 @@ exitCode:: ExitStatus.undefined
           ]
         },
         {
+          "fileName": "./src/fileNotFound.ts",
+          "originalFileName": "./src/fileNotFound.ts",
+          "path": "./src/filenotfound.ts",
+          "resolvedPath": "./src/filenotfound.ts",
+          "version": "-497034637-export function something2() { return 20; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "Import",
+              "file": "./src/anotherfilereusingresolution.ts",
+              "index": 1
+            },
+            {
+              "kind": "RootFile",
+              "index": 1
+            },
+            {
+              "kind": "Import",
+              "file": "./src/main.ts",
+              "index": 3
+            }
+          ]
+        },
+        {
           "fileName": "./src/anotherFileReusingResolution.ts",
           "originalFileName": "./src/anotherFileReusingResolution.ts",
           "path": "./src/anotherfilereusingresolution.ts",
@@ -4232,13 +4290,10 @@ exitCode:: ExitStatus.undefined
             [
               "./fileNotFound",
               {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
+                "resolvedModule": {
+                  "resolvedFileName": "./src/fileNotFound.ts",
+                  "extension": ".ts"
+                }
               }
             ]
           ],
@@ -4246,20 +4301,6 @@ exitCode:: ExitStatus.undefined
             {
               "kind": "RootFile",
               "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 1
             }
           ]
         },
@@ -4469,13 +4510,10 @@ exitCode:: ExitStatus.undefined
             [
               "./fileNotFound",
               {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
+                "resolvedModule": {
+                  "resolvedFileName": "./src/fileNotFound.ts",
+                  "extension": ".ts"
+                }
               }
             ]
           ],
@@ -4509,13 +4547,10 @@ exitCode:: ExitStatus.undefined
           }
         },
         {
-          "failedLookupLocations": [
-            "./src/fileNotFound.ts",
-            "./src/fileNotFound.tsx",
-            "./src/fileNotFound.d.ts",
-            "./src/fileNotFound.js",
-            "./src/fileNotFound.jsx"
-          ]
+          "resolvedModule": {
+            "resolvedFileName": "./src/fileNotFound.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -4527,7 +4562,7 @@ exitCode:: ExitStatus.undefined
     }
   },
   "version": "FakeTSVersion",
-  "size": 8741
+  "size": 8235
 }
 
 //// [/user/username/projects/myproject/src/fileNotFound.js]
@@ -4557,7 +4592,7 @@ Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
-[[90m12:05:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:05:32 AM[0m] File change detected. Starting incremental compilation...
 
 Reloading new file names and options
 Synchronizing program
@@ -4565,24 +4600,20 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/anotherFileReusingResolution.ts","/user/username/projects/myproject/src/fileNotFound.d.ts","/user/username/projects/myproject/src/filePresent.ts","/user/username/projects/myproject/src/fileWithRef.ts","/user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.ts","/user/username/projects/myproject/src/globalFileNotFound.ts","/user/username/projects/myproject/src/globalFilePresent.ts","/user/username/projects/myproject/src/globalMain.ts","/user/username/projects/myproject/src/globalNewFile.ts","/user/username/projects/myproject/src/main.ts","/user/username/projects/myproject/src/newFile.ts","/user/username/projects/myproject/src/types.ts"]
   options: {"module":2,"composite":true,"persistResolutions":true,"traceResolution":true,"project":"/user/username/projects/myproject","watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
+======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
+Module resolution kind is not specified, using 'Classic'.
+File '/user/username/projects/myproject/src/fileNotFound.ts' does not exist.
+File '/user/username/projects/myproject/src/fileNotFound.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileNotFound.d.ts' exist - use it as a name resolution result.
+======== Module name './fileNotFound' was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.d.ts 250 undefined Source file
 Reusing resolution of module './newFile' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.d.ts'.
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileNotFound.ts 250 undefined Source file
-[96msrc/anotherFileReusingResolution.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-
-[7m2[0m import { something2 } from "./fileNotFound";
-[7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
-
-[96msrc/main.ts[0m:[93m3[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-
-[7m3[0m import { something2 } from "./fileNotFound";something();
-[7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
-
-[[90m12:05:24 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:05:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -4592,8 +4623,8 @@ Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/filePresent.ts
-/user/username/projects/myproject/src/anotherFileReusingResolution.ts
 /user/username/projects/myproject/src/fileNotFound.d.ts
+/user/username/projects/myproject/src/anotherFileReusingResolution.ts
 /user/username/projects/myproject/src/types.ts
 /user/username/projects/myproject/src/fileWithRef.ts
 /user/username/projects/myproject/src/globalFilePresent.ts
@@ -4606,6 +4637,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/src/fileNotFound.d.ts
+/user/username/projects/myproject/src/anotherFileReusingResolution.ts
+/user/username/projects/myproject/src/main.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -4640,15 +4673,20 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/src/anotherFileReusingResolution.js] file written with same contents
+//// [/user/username/projects/myproject/src/anotherFileReusingResolution.d.ts] file written with same contents
+//// [/user/username/projects/myproject/src/main.js] file written with same contents
+//// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.d.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.d.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.js","./src/fileNotFound.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":"-3531856636-export {};\n"},"-14992185226-export declare function something2(): number;\n",{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2],[5],[7,8],[7,8,10],[2,12]],"referencedMap":[[3,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,2,6,9,8,7,11,10,[13,[{"file":"./src/main.ts","start":159,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],12,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":3,"index":0},{"kind":0,"index":2},{"kind":3,"file":13,"index":1},{"kind":3,"file":13,"index":2}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":0,"index":1}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":11}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":23,"originalFileName":23,"path":12,"resolvedPath":12,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":13,"index":0},{"kind":0,"index":10}]},{"fileName":13,"originalFileName":13,"path":13,"resolvedPath":13,"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./newFile",3],["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":9}]}],"rootFileNames":[15,16,14,17,20,19,18,22,21,13,23,5],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"failedLookupLocations":[24,25,16,26,27]},{"resolvedModule":{"resolvedFileName":23,"extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n",{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10],[2,3,12]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,6,9,8,7,11,10,13,12,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":13,"index":1},{"kind":3,"file":13,"index":2}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":4,"index":1},{"kind":0,"index":1},{"kind":3,"file":13,"index":3}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":11}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":23,"originalFileName":23,"path":12,"resolvedPath":12,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":13,"index":0},{"kind":0,"index":10}]},{"fileName":13,"originalFileName":13,"path":13,"resolvedPath":13,"version":"28260231563-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"}],"resolvedModules":[["./newFile",3],["./filePresent",1],["./fileNotFound",2]],"includeReasons":[{"kind":0,"index":9}]}],"rootFileNames":[16,15,14,17,20,19,18,22,21,13,23,5],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":15,"extension":".d.ts"},"failedLookupLocations":[24,25]},{"resolvedModule":{"resolvedFileName":23,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -4656,8 +4694,8 @@ exitCode:: ExitStatus.undefined
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
       "./src/filepresent.ts",
-      "./src/anotherfilereusingresolution.ts",
       "./src/filenotfound.d.ts",
+      "./src/anotherfilereusingresolution.ts",
       "./src/types.ts",
       "./src/filewithref.ts",
       "./src/globalfilepresent.ts",
@@ -4668,8 +4706,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./src/filePresent.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.d.ts",
+      "./src/anotherFileReusingResolution.ts",
       "./src/fileWithRef.ts",
       "./src/globalFilePresent.ts",
       "./src/globalFileNotFound.ts",
@@ -4678,13 +4716,12 @@ exitCode:: ExitStatus.undefined
       "./src/globalMain.ts",
       "./src/newFile.ts",
       "./src/fileNotFound.ts",
-      "./src/fileNotFound.tsx",
-      "./src/fileNotFound.js",
-      "./src/fileNotFound.jsx"
+      "./src/fileNotFound.tsx"
     ],
     "fileNamesList": [
       [
-        "./src/filepresent.ts"
+        "./src/filepresent.ts",
+        "./src/filenotfound.d.ts"
       ],
       [
         "./src/types.ts"
@@ -4700,6 +4737,7 @@ exitCode:: ExitStatus.undefined
       ],
       [
         "./src/filepresent.ts",
+        "./src/filenotfound.d.ts",
         "./src/newfile.ts"
       ]
     ],
@@ -4713,13 +4751,13 @@ exitCode:: ExitStatus.undefined
         "version": "11598859296-export function something() { return 10; }",
         "signature": "-13601649692-export declare function something(): number;\n"
       },
-      "./src/anotherfilereusingresolution.ts": {
-        "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";",
-        "signature": "-3531856636-export {};\n"
-      },
       "./src/filenotfound.d.ts": {
         "version": "-14992185226-export declare function something2(): number;\n",
         "signature": "-14992185226-export declare function something2(): number;\n"
+      },
+      "./src/anotherfilereusingresolution.ts": {
+        "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";",
+        "signature": "-3531856636-export {};\n"
       },
       "./src/types.ts": {
         "version": "-12575322908-interface SomeType {}",
@@ -4776,7 +4814,8 @@ exitCode:: ExitStatus.undefined
     },
     "referencedMap": {
       "./src/anotherfilereusingresolution.ts": [
-        "./src/filepresent.ts"
+        "./src/filepresent.ts",
+        "./src/filenotfound.d.ts"
       ],
       "./src/filewithref.ts": [
         "./src/types.ts"
@@ -4792,25 +4831,14 @@ exitCode:: ExitStatus.undefined
       ],
       "./src/main.ts": [
         "./src/filepresent.ts",
+        "./src/filenotfound.d.ts",
         "./src/newfile.ts"
       ]
     },
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
-      [
-        "./src/anotherfilereusingresolution.ts",
-        [
-          {
-            "file": "./src/anotherfilereusingresolution.ts",
-            "start": 70,
-            "length": 16,
-            "messageText": "Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
-            "category": 1,
-            "code": 2792
-          }
-        ]
-      ],
+      "./src/anotherfilereusingresolution.ts",
       "./src/filenotfound.d.ts",
       "./src/filepresent.ts",
       "./src/filewithref.ts",
@@ -4819,19 +4847,7 @@ exitCode:: ExitStatus.undefined
       "./src/globalfilepresent.ts",
       "./src/globalmain.ts",
       "./src/globalnewfile.ts",
-      [
-        "./src/main.ts",
-        [
-          {
-            "file": "./src/main.ts",
-            "start": 159,
-            "length": 16,
-            "messageText": "Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
-            "category": 1,
-            "code": 2792
-          }
-        ]
-      ],
+      "./src/main.ts",
       "./src/newfile.ts",
       "./src/types.ts"
     ],
@@ -4881,6 +4897,30 @@ exitCode:: ExitStatus.undefined
           ]
         },
         {
+          "fileName": "./src/fileNotFound.d.ts",
+          "originalFileName": "./src/fileNotFound.d.ts",
+          "path": "./src/filenotfound.d.ts",
+          "resolvedPath": "./src/filenotfound.d.ts",
+          "version": "-14992185226-export declare function something2(): number;\n",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "Import",
+              "file": "./src/anotherfilereusingresolution.ts",
+              "index": 1
+            },
+            {
+              "kind": "RootFile",
+              "index": 1
+            },
+            {
+              "kind": "Import",
+              "file": "./src/main.ts",
+              "index": 3
+            }
+          ]
+        },
+        {
           "fileName": "./src/anotherFileReusingResolution.ts",
           "originalFileName": "./src/anotherFileReusingResolution.ts",
           "path": "./src/anotherfilereusingresolution.ts",
@@ -4910,12 +4950,13 @@ exitCode:: ExitStatus.undefined
             [
               "./fileNotFound",
               {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/fileNotFound.d.ts",
+                  "extension": ".d.ts"
+                },
                 "failedLookupLocations": [
                   "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
+                  "./src/fileNotFound.tsx"
                 ]
               }
             ]
@@ -4924,20 +4965,6 @@ exitCode:: ExitStatus.undefined
             {
               "kind": "RootFile",
               "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 1
             }
           ]
         },
@@ -5147,12 +5174,13 @@ exitCode:: ExitStatus.undefined
             [
               "./fileNotFound",
               {
+                "resolvedModule": {
+                  "resolvedFileName": "./src/fileNotFound.d.ts",
+                  "extension": ".d.ts"
+                },
                 "failedLookupLocations": [
                   "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
+                  "./src/fileNotFound.tsx"
                 ]
               }
             ]
@@ -5187,12 +5215,13 @@ exitCode:: ExitStatus.undefined
           }
         },
         {
+          "resolvedModule": {
+            "resolvedFileName": "./src/fileNotFound.d.ts",
+            "extension": ".d.ts"
+          },
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
-            "./src/fileNotFound.tsx",
-            "./src/fileNotFound.d.ts",
-            "./src/fileNotFound.js",
-            "./src/fileNotFound.jsx"
+            "./src/fileNotFound.tsx"
           ]
         },
         {
@@ -5205,6 +5234,6 @@ exitCode:: ExitStatus.undefined
     }
   },
   "version": "FakeTSVersion",
-  "size": 8668
+  "size": 8247
 }
 

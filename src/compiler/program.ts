@@ -1339,30 +1339,10 @@ namespace ts {
             let result: (ResolvedModuleWithFailedLookupLocations | typeof predictedToResolveToAmbientModuleMarker)[] | undefined;
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
-                if (options.persistResolutions) {
-                    const oldResolvedModule = oldSourceFile?.resolvedModules?.get(moduleName);
-                    if (oldResolvedModule) {
-                        if (isTraceEnabled(options, host)) {
-                            trace(
-                                host,
-                                oldResolvedModule.resolvedModule?.resolvedFileName ?
-                                    oldResolvedModule.resolvedModule.packageId ?
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
-                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved,
-                                moduleName,
-                                getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
-                                oldResolvedModule?.resolvedModule?.resolvedFileName,
-                                oldResolvedModule?.resolvedModule?.packageId && packageIdToString(oldResolvedModule.resolvedModule.packageId)
-                            );
-                        }
-                        (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
-                        (reusedNames || (reusedNames = [])).push(moduleName);
-                        continue;
-                    }
-                }
-                // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
-                else if (oldSourceFile && file.version === oldSourceFile.version && !hasInvalidatedResolution(oldSourceFile.path)) {
+                // If the source file is unchanged or persistResolutions and doesnt have invalidated resolution, reuse the module resolutions
+                if (oldSourceFile &&
+                    (options.persistResolutions || file.version === oldSourceFile.version) &&
+                    !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile.resolvedModules?.get(moduleName);
                     if (oldResolvedModule?.resolvedModule) {
                         if (isTraceEnabled(options, host)) {
