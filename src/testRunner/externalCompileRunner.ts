@@ -68,6 +68,9 @@ namespace Harness {
 
                         cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
                     }
+                    const npmVersionText = exec("npm", ["--version"], { cwd, stdio: "pipe" })?.trim();
+                    const npmVersion = npmVersionText ? ts.Version.tryParse(npmVersionText.trim()) : undefined;
+                    const isV7OrLater = !!npmVersion && npmVersion.major >= 7;
                     if (fs.existsSync(path.join(cwd, "package.json"))) {
                         if (fs.existsSync(path.join(cwd, "package-lock.json"))) {
                             fs.unlinkSync(path.join(cwd, "package-lock.json"));
@@ -75,24 +78,25 @@ namespace Harness {
                         if (fs.existsSync(path.join(cwd, "node_modules"))) {
                             del.sync(path.join(cwd, "node_modules"), { force: true });
                         }
-                        exec("npm", ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                        exec("npm", ["i", "--ignore-scripts", ...(isV7OrLater ? ["--legacy-peer-deps"] : [])], { cwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                     }
                     const args = [path.join(IO.getWorkspaceRoot(), "built/local/tsc.js")];
                     if (types) {
                         args.push("--types", types.join(","));
                         // Also actually install those types (for, eg, the js projects which need node)
                         if (types.length) {
-                            exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
+                            exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts", ...(isV7OrLater ? ["--legacy-peer-deps"] : [])], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                         }
                     }
                     args.push("--noEmit");
                     Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
 
-                    function exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
+                    function exec(command: string, args: string[], options: { cwd: string, timeout?: number, stdio?: import("child_process").StdioOptions }): string | undefined {
                         const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { shell: true, stdio, ...options });
                         if (res.status !== 0) {
                             throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stdout && res.stdout.toString()}`);
                         }
+                        return options.stdio === "pipe" ? res.stdout.toString("utf8") : undefined;
                     }
                 });
             });

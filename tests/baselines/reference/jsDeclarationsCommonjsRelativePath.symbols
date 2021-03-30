@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsdoc/declarations/reexport.js ===
+'use strict';
+const Thing = require('./thing').Thing
+>Thing : Symbol(Thing, Decl(reexport.js, 1, 5))
+>require('./thing').Thing : Symbol(Thing, Decl(thing.js, 2, 18))
+>require : Symbol(require)
+>'./thing' : Symbol("tests/cases/conformance/jsdoc/declarations/thing", Decl(thing.js, 0, 0))
+>Thing : Symbol(Thing, Decl(thing.js, 2, 18))
+
+module.exports = { Thing }
+>module.exports : Symbol(module.exports, Decl(reexport.js, 0, 0))
+>module : Symbol(module, Decl(reexport.js, 1, 38))
+>exports : Symbol(module.exports, Decl(reexport.js, 0, 0))
+>Thing : Symbol(Thing, Decl(reexport.js, 2, 18))
+
+=== tests/cases/conformance/jsdoc/declarations/thing.js ===
+'use strict';
+class Thing {}
+>Thing : Symbol(Thing, Decl(thing.js, 0, 13))
+
+module.exports = { Thing }
+>module.exports : Symbol(module.exports, Decl(thing.js, 0, 0))
+>module : Symbol(module, Decl(thing.js, 1, 14))
+>exports : Symbol(module.exports, Decl(thing.js, 0, 0))
+>Thing : Symbol(Thing, Decl(thing.js, 2, 18))
+

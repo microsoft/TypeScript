@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 5
+      "position": 5,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "enum",
@@ -31,7 +32,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 13
+      "position": 13,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -92,7 +94,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 21
+      "position": 21,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -153,7 +156,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 34
+      "position": 34,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -214,7 +218,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 43
+      "position": 43,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "var",
@@ -255,7 +260,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 54
+      "position": 54,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "enum",
@@ -284,7 +290,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 57
+      "position": 57,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "var",
@@ -325,7 +332,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 69
+      "position": 69,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "enum",
@@ -354,7 +362,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 71
+      "position": 71,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -415,7 +424,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 75
+      "position": 75,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "var",
@@ -456,7 +466,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 87
+      "position": 87,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "enum",
@@ -485,7 +496,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 89
+      "position": 89,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -546,7 +558,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 93
+      "position": 93,
+      "name": "13"
     },
     "quickInfo": {
       "kind": "var",
@@ -587,7 +600,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 105
+      "position": 105,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "enum",
@@ -616,7 +630,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 107
+      "position": 107,
+      "name": "15"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -677,7 +692,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 122
+      "position": 122,
+      "name": "16"
     },
     "quickInfo": {
       "kind": "enum",
@@ -714,7 +730,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 135
+      "position": 135,
+      "name": "17"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -775,7 +792,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 143
+      "position": 143,
+      "name": "18"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -836,7 +854,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 156
+      "position": 156,
+      "name": "19"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -897,7 +916,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 165
+      "position": 165,
+      "name": "20"
     },
     "quickInfo": {
       "kind": "var",
@@ -938,7 +958,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 177
+      "position": 177,
+      "name": "21"
     },
     "quickInfo": {
       "kind": "enum",
@@ -975,7 +996,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 185
+      "position": 185,
+      "name": "22"
     },
     "quickInfo": {
       "kind": "var",
@@ -1016,7 +1038,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 198
+      "position": 198,
+      "name": "23"
     },
     "quickInfo": {
       "kind": "enum",
@@ -1053,7 +1076,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 205
+      "position": 205,
+      "name": "24"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -1114,7 +1138,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 209
+      "position": 209,
+      "name": "25"
     },
     "quickInfo": {
       "kind": "var",
@@ -1155,7 +1180,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 222
+      "position": 222,
+      "name": "26"
     },
     "quickInfo": {
       "kind": "enum",
@@ -1192,7 +1218,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 229
+      "position": 229,
+      "name": "27"
     },
     "quickInfo": {
       "kind": "enum member",
@@ -1253,7 +1280,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 233
+      "position": 233,
+      "name": "28"
     },
     "quickInfo": {
       "kind": "var",
@@ -1294,7 +1322,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 246
+      "position": 246,
+      "name": "29"
     },
     "quickInfo": {
       "kind": "enum",
@@ -1331,7 +1360,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsEnum1.ts",
-      "position": 253
+      "position": 253,
+      "name": "30"
     },
     "quickInfo": {
       "kind": "enum member",

@@ -1,5 +1,5 @@
 FROM node:current
-RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git /depot_tools
+RUN git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git /depot_tools
 ENV PATH=/depot_tools:$PATH
 WORKDIR /
 RUN mkdir devtools

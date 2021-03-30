@@ -99,6 +99,7 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
 !!! error TS2769:     Argument of type 'C1' is not assignable to parameter of type 'IFoo2'.
 !!! error TS2769:       The types returned by 'p1(...)' are incompatible between these types.
 !!! error TS2769:         Type 'string' is not assignable to type 'number'.
+!!! related TS2793 tests/cases/compiler/incompatibleTypes.ts:39:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     
     function of1(n: { a: { a: string; }; b: string; }): number;
@@ -114,6 +115,7 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
 !!! error TS2769:   Overload 2 of 2, '(s: { c: { b: string; }; d: string; }): string', gave the following error.
 !!! error TS2769:     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ c: { b: string; }; d: string; }'.
 !!! error TS2769:       Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
+!!! related TS2793 tests/cases/compiler/incompatibleTypes.ts:47:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     interface IMap {
      [key:string]:string;

@@ -275,6 +275,14 @@ namespace ts {
             }
         }
 
+        /**
+         * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
+         * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
+         * as a result can reduce the number of unnecessary casts.
+         */
+        export function type<T>(value: unknown): asserts value is T;
+        export function type(_value: unknown) { }
+
         export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
@@ -365,6 +373,10 @@ namespace ts {
 
         export function formatTypeFlags(flags: TypeFlags | undefined): string {
             return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
+        }
+
+        export function formatSignatureFlags(flags: SignatureFlags | undefined): string {
+            return formatEnum(flags, (<any>ts).SignatureFlags, /*isFlags*/ true);
         }
 
         export function formatObjectFlags(flags: ObjectFlags | undefined): string {
@@ -571,6 +583,11 @@ namespace ts {
                         return text;
                     }
                 },
+            });
+
+            Object.defineProperties(objectAllocator.getSignatureConstructor().prototype, {
+                __debugFlags: { get(this: Signature) { return formatSignatureFlags(this.flags); } },
+                __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } }
             });
 
             const nodeConstructors = [

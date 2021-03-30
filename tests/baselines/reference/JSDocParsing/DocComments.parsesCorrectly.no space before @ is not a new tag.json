@@ -1,0 +1,99 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 91,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 7,
+            "end": 29,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 13,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": "(@is@)",
+            "name": {
+                "kind": "Identifier",
+                "pos": 14,
+                "end": 18,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "originalKeywordKind": "ThisKeyword",
+                "escapedText": "this"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "1": {
+            "kind": "JSDocParameterTag",
+            "pos": 29,
+            "end": 50,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 30,
+                "end": 35,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": "its@fine",
+            "name": {
+                "kind": "Identifier",
+                "pos": 36,
+                "end": 40,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "fine"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "2": {
+            "kind": "JSDocTag",
+            "pos": 50,
+            "end": 62,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 51,
+                "end": 60,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "zerowidth"
+            }
+        },
+        "3": {
+            "kind": "JSDocTag",
+            "pos": 62,
+            "end": 89,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 63,
+                "end": 73,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "singlestar"
+            },
+            "comment": "*@doublestar"
+        },
+        "length": 4,
+        "pos": 7,
+        "end": 89,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

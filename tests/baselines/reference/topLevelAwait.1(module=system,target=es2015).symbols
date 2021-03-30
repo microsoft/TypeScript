@@ -126,3 +126,18 @@ export { _await as await };
 >_await : Symbol(_await, Decl(other.ts, 0, 5))
 >await : Symbol(await, Decl(other.ts, 3, 8))
 
+// for-await-of
+const arr = [Promise.resolve()];
+>arr : Symbol(arr, Decl(other.ts, 6, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+for await (const item of arr) {
+>item : Symbol(item, Decl(other.ts, 8, 16))
+>arr : Symbol(arr, Decl(other.ts, 6, 5))
+
+  item;
+>item : Symbol(item, Decl(other.ts, 8, 16))
+}
+

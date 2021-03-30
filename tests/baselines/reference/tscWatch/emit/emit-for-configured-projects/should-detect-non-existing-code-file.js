@@ -41,6 +41,7 @@ Output::
 
 Program root files: ["/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/referenceFile1.ts
@@ -111,6 +112,7 @@ Output::
 
 Program root files: ["/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/referenceFile1.ts
@@ -175,6 +177,7 @@ Output::
 
 Program root files: ["/a/b/moduleFile2.ts","/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile2.ts

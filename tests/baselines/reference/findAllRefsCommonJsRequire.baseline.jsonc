@@ -1,6 +1,6 @@
 // === /b.js ===
-// const { [|f|]/*FIND ALL REFS*/ } = require('./a')
-// [|f|]
+// const { [|f|] } = require('./a')
+// /*FIND ALL REFS*/[|f|]
 
 // === /a.js ===
 // function [|f|]() { }

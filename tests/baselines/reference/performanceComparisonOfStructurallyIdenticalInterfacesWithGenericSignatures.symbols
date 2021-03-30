@@ -1,0 +1,402 @@
+=== tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts ===
+export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 82))
+>U : Symbol(U, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 82))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
+
+export interface InterfaceA<T> {
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+
+    filter(callback: (newValue: T, oldValue: T) => boolean): InterfaceA<T>;
+>filter : Symbol(InterfaceA.filter, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 32))
+>callback : Symbol(callback, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 3, 11))
+>newValue : Symbol(newValue, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 3, 22))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>oldValue : Symbol(oldValue, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 3, 34))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+
+    map<D>(callback: (value: T) => D): InterfaceA<D>;
+>map : Symbol(InterfaceA.map, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 3, 75))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 4, 8))
+>callback : Symbol(callback, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 4, 11))
+>value : Symbol(value, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 4, 22))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 4, 8))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 4, 8))
+
+    await<R extends ThenArg<T>>(): InterfaceA<R>;
+>await : Symbol(InterfaceA.await, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 4, 53))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 5, 10))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 5, 10))
+
+    awaitLatest<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitLatest : Symbol(InterfaceA.awaitLatest, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 5, 49))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 6, 16))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 6, 16))
+
+    awaitOrdered<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered : Symbol(InterfaceA.awaitOrdered, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 6, 55))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 7, 17))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 7, 17))
+
+    awaitOrdered2<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered2 : Symbol(InterfaceA.awaitOrdered2, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 7, 56))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 8, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 8, 18))
+
+    awaitOrdered3<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered3 : Symbol(InterfaceA.awaitOrdered3, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 8, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 9, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 9, 18))
+
+    awaitOrdered4<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered4 : Symbol(InterfaceA.awaitOrdered4, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 9, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 10, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 10, 18))
+
+    awaitOrdered5<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered5 : Symbol(InterfaceA.awaitOrdered5, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 10, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 11, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 11, 18))
+
+    awaitOrdered6<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered6 : Symbol(InterfaceA.awaitOrdered6, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 11, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 12, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 12, 18))
+
+    awaitOrdered7<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered7 : Symbol(InterfaceA.awaitOrdered7, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 12, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 13, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 13, 18))
+
+    awaitOrdered8<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered8 : Symbol(InterfaceA.awaitOrdered8, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 13, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 14, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 14, 18))
+
+    awaitOrdered9<R extends ThenArg<T>>(): InterfaceA<R>;
+>awaitOrdered9 : Symbol(InterfaceA.awaitOrdered9, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 14, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 15, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 2, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 15, 18))
+}
+
+export interface InterfaceB<T> extends InterfaceA<T> {
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceA : Symbol(InterfaceA, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 94))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+
+    map<D>(callback: (value: T) => D): InterfaceB<D>;
+>map : Symbol(InterfaceB.map, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 54))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 19, 8))
+>callback : Symbol(callback, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 19, 11))
+>value : Symbol(value, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 19, 22))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 19, 8))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 19, 8))
+
+    await<R extends ThenArg<T>>(): InterfaceB<R>;
+>await : Symbol(InterfaceB.await, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 19, 53))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 20, 10))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 20, 10))
+
+    awaitLatest<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitLatest : Symbol(InterfaceB.awaitLatest, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 20, 49))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 21, 16))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 21, 16))
+
+    awaitOrdered<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered : Symbol(InterfaceB.awaitOrdered, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 21, 55))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 22, 17))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 22, 17))
+
+    awaitOrdered2<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered2 : Symbol(InterfaceB.awaitOrdered2, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 22, 56))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 23, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 23, 18))
+
+    awaitOrdered3<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered3 : Symbol(InterfaceB.awaitOrdered3, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 23, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 24, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 24, 18))
+
+    awaitOrdered4<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered4 : Symbol(InterfaceB.awaitOrdered4, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 24, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 25, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 25, 18))
+
+    awaitOrdered5<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered5 : Symbol(InterfaceB.awaitOrdered5, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 25, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 26, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 26, 18))
+
+    awaitOrdered6<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered6 : Symbol(InterfaceB.awaitOrdered6, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 26, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 27, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 27, 18))
+
+    awaitOrdered7<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered7 : Symbol(InterfaceB.awaitOrdered7, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 27, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 28, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 28, 18))
+
+    awaitOrdered8<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered8 : Symbol(InterfaceB.awaitOrdered8, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 28, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 29, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 29, 18))
+
+    awaitOrdered9<R extends ThenArg<T>>(): InterfaceB<R>;
+>awaitOrdered9 : Symbol(InterfaceB.awaitOrdered9, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 29, 57))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 30, 18))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 18, 28))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 30, 18))
+}
+
+export class A<T> implements InterfaceB<T> {
+>A : Symbol(A, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 31, 1))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>InterfaceB : Symbol(InterfaceB, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 16, 1))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+
+    public filter(callback: (newValue: T, oldValue: T) => boolean): B<T> {
+>filter : Symbol(A.filter, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 44))
+>callback : Symbol(callback, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 34, 18))
+>newValue : Symbol(newValue, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 34, 29))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>oldValue : Symbol(oldValue, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 34, 41))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public map<D>(callback: (value: T) => D): B<D> {
+>map : Symbol(A.map, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 36, 5))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 38, 15))
+>callback : Symbol(callback, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 38, 18))
+>value : Symbol(value, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 38, 29))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 38, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>D : Symbol(D, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 38, 15))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public await<R extends ThenArg<T>>(): B<R> {
+>await : Symbol(A.await, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 40, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 42, 17))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 42, 17))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered : Symbol(A.awaitOrdered, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 44, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 46, 24))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 46, 24))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered2<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered2 : Symbol(A.awaitOrdered2, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 48, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 50, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 50, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered3<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered3 : Symbol(A.awaitOrdered3, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 52, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 54, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 54, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered4<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered4 : Symbol(A.awaitOrdered4, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 56, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 58, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 58, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered5<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered5 : Symbol(A.awaitOrdered5, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 60, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 62, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 62, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered6<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered6 : Symbol(A.awaitOrdered6, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 64, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 66, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 66, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered7<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered7 : Symbol(A.awaitOrdered7, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 68, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 70, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 70, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered8<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered8 : Symbol(A.awaitOrdered8, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 72, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 74, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 74, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitOrdered9<R extends ThenArg<T>>(): B<R> {
+>awaitOrdered9 : Symbol(A.awaitOrdered9, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 76, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 78, 25))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 78, 25))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+
+    public awaitLatest<R extends ThenArg<T>>(): B<R> {
+>awaitLatest : Symbol(A.awaitLatest, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 80, 5))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 82, 23))
+>ThenArg : Symbol(ThenArg, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 33, 15))
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>R : Symbol(R, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 82, 23))
+
+        return undefined as any;
+>undefined : Symbol(undefined)
+    }
+}
+
+export class B<T> extends A<T> { }
+>B : Symbol(B, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 85, 1))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 87, 15))
+>A : Symbol(A, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 31, 1))
+>T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 87, 15))
+

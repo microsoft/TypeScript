@@ -32,6 +32,7 @@ namespace ts.tscWatch {
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
             const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
+            let oldPrograms: readonly CommandLineProgram[] = emptyArray;
             const { cb, getPrograms } = commandLineCallbacks(sys);
             build(oldSnap);
 
@@ -48,9 +49,10 @@ namespace ts.tscWatch {
                     cb,
                     argsToPass,
                 );
-                watchBaseline({
+                oldPrograms = watchBaseline({
                     baseline,
                     getPrograms,
+                    oldPrograms,
                     sys,
                     oldSnap
                 });
@@ -134,7 +136,7 @@ namespace ts.tscWatch {
                 it("verify that state is read correctly", () => {
                     const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
                     const reportDiagnostic = createDiagnosticReporter(system);
-                    const parsedConfig = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
+                    const parsedConfig = parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
                     performIncrementalCompilation({
                         rootNames: parsedConfig.fileNames,
                         options: parsedConfig.options,
@@ -144,7 +146,7 @@ namespace ts.tscWatch {
                         system
                     });
 
-                    const command = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, noop)!;
+                    const command = parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, noop)!;
                     const builderProgram = createIncrementalProgram({
                         rootNames: command.fileNames,
                         options: command.options,
@@ -164,12 +166,12 @@ namespace ts.tscWatch {
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
-                        signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`),
+                        signature: system.createHash(file1.content),
                         affectsGlobalScope: false,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
-                        signature: system.createHash("export declare const y: string;\n"),
+                        signature: system.createHash(fileModified.content),
                         affectsGlobalScope: false,
                     });
 
@@ -275,6 +277,83 @@ export interface A {
                 { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true, } }) }
             ],
             modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
+        });
+
+        describe("with option jsxImportSource", () => {
+            const jsxImportSourceOptions = { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" };
+            const jsxLibraryContent = `export namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: {
+            propA?: boolean;
+        };
+    }
+}
+export function jsx(...args: any[]): void;
+export function jsxs(...args: any[]): void;
+export const Fragment: unique symbol;
+`;
+
+            verifyIncrementalWatchEmit({
+                subScenario: "jsxImportSource option changed",
+                files: () => [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
+                    { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
+                    { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
+                    { path: `${project}/node_modules/preact/package.json`, content: JSON.stringify({ name: "preact", version: "0.0.1" }) },
+                    { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                    { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+                ],
+                modifyFs: host => host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
+                optionsToExtend: ["--explainFiles"]
+            });
+
+            verifyIncrementalWatchEmit({
+                subScenario: "jsxImportSource backing types added",
+                files: () => [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                    { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+                ],
+                modifyFs: host => {
+                    host.createDirectory(`${project}/node_modules`);
+                    host.createDirectory(`${project}/node_modules/react`);
+                    host.createDirectory(`${project}/node_modules/react/jsx-runtime`);
+                    host.writeFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`, jsxLibraryContent);
+                    host.writeFile(`${project}/node_modules/react/package.json`, JSON.stringify({ name: "react", version: "0.0.1" }));
+                }
+            });
+
+            verifyIncrementalWatchEmit({
+                subScenario: "jsxImportSource backing types removed",
+                files: () => [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
+                    { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
+                    { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                    { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+                ],
+                modifyFs: host => {
+                    host.deleteFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`);
+                    host.deleteFile(`${project}/node_modules/react/package.json`);
+                }
+            });
+
+            verifyIncrementalWatchEmit({
+                subScenario: "importHelpers backing types removed",
+                files: () => [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
+                    { path: `${project}/node_modules/tslib/package.json`, content: JSON.stringify({ name: "tslib", version: "0.0.1" }) },
+                    { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
+                    { path: configFile.path, content: JSON.stringify({ compilerOptions: { importHelpers: true } }) }
+                ],
+                modifyFs: host => {
+                    host.deleteFile(`${project}/node_modules/tslib/index.d.ts`);
+                    host.deleteFile(`${project}/node_modules/tslib/package.json`);
+                }
+            });
         });
     });
 }

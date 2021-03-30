@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: Semantic operations on PartialSemantic server", () => {
+    describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
         function setup() {
             const file1: File = {
                 path: `${tscWatch.projectRoot}/a.ts`,
@@ -70,7 +70,10 @@ import { something } from "something";
                     isPackageJsonImport: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
-                    source: undefined
+                    source: undefined,
+                    data: undefined,
+                    sourceDisplay: undefined,
+                    isSnippet: undefined,
                 };
             }
         });
@@ -171,6 +174,52 @@ function fooB() { }`
             // Open file with non relative external module name
             openFilesForSession([file2], session);
             checkProjectActualFiles(project, [libFile.path, file2.path, file3.path]);
+        });
+
+        it("should not create autoImportProvider or handle package jsons", () => {
+            const angularFormsDts: File = {
+                path: "/node_modules/@angular/forms/forms.d.ts",
+                content: "export declare class PatternValidator {}",
+            };
+            const angularFormsPackageJson: File = {
+                path: "/node_modules/@angular/forms/package.json",
+                content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: `{ "compilerOptions": { "module": "commonjs" } }`,
+            };
+            const packageJson: File = {
+                path: "/package.json",
+                content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`
+            };
+            const indexTs: File = {
+                path: "/index.ts",
+                content: ""
+            };
+            const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+            const service = session.getProjectService();
+            openFilesForSession([indexTs], session);
+            const project = service.inferredProjects[0];
+            assert.isFalse(project.autoImportProviderHost);
+            assert.isUndefined(project.getPackageJsonAutoImportProvider());
+            assert.deepEqual(project.getPackageJsonsForAutoImport(), emptyArray);
+        });
+
+        it("should support go-to-definition on module specifiers", () => {
+            const { session, file1, file2 } = setup();
+            openFilesForSession([file1], session);
+            const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
+                command: protocol.CommandTypes.DefinitionAndBoundSpan,
+                arguments: protocolFileLocationFromSubstring(file1, `"./b"`)
+            }).response as protocol.DefinitionInfoAndBoundSpan;
+            assert.isDefined(response);
+            assert.deepEqual(response.definitions, [{
+                file: file2.path,
+                start: { line: 1, offset: 1 },
+                end: { line: 1, offset: 1 }
+            }]);
         });
     });
 }
