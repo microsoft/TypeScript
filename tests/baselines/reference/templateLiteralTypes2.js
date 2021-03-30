@@ -112,6 +112,12 @@ function getCardTitle(title: string): `test-${string}` {
     return `test-${title}`;
 }
 
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+C2(`rotate(${interpolatedStyle.rotate}dig)`);
+
 
 //// [templateLiteralTypes2.js]
 "use strict";
@@ -194,6 +200,10 @@ var pixelStringWithTemplate = pixelValue + "px";
 function getCardTitle(title) {
     return "test-" + title;
 }
+// Repro from #43424
+var interpolatedStyle = { rotate: 12 };
+function C2(transform) { return 12; }
+C2("rotate(" + interpolatedStyle.rotate + "dig)");
 
 
 //// [templateLiteralTypes2.d.ts]
@@ -225,3 +235,7 @@ declare type PixelValueType = `${number}px`;
 declare const pixelString: PixelValueType;
 declare const pixelStringWithTemplate: PixelValueType;
 declare function getCardTitle(title: string): `test-${string}`;
+declare const interpolatedStyle: {
+    rotate: number;
+};
+declare function C2(transform: "-moz-initial" | (string & {})): number;

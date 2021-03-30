@@ -123,3 +123,9 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2
         return `test-${title}`;
     }
     
+    // Repro from #43424
+    
+    const interpolatedStyle = { rotate: 12 };
+    function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+    C2(`rotate(${interpolatedStyle.rotate}dig)`);
+    
