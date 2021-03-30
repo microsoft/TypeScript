@@ -12852,7 +12852,9 @@ namespace ts {
             let covariant = true;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.Parameter || parent.kind === SyntaxKind.TypeOperator && (parent as TypeOperatorNode).operator === SyntaxKind.KeyOfKeyword) {
+                // only consider variance flipped by parameter locations - `keyof` types would usually be considered variance inverting, but
+                // often get used in indexed accesses where they behave sortof invariantly, but our checking is lax
+                if (parent.kind === SyntaxKind.Parameter) {
                     covariant = !covariant;
                 }
                 if (covariant && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {

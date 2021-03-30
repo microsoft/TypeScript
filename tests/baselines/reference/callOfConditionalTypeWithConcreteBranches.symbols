@@ -32,3 +32,22 @@ fn<number>(m => m.toFixed());
 >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
+// Ensure the following real-world example that relies on substitution still works
+type ExtractParameters<T> = "parameters" extends keyof T
+>ExtractParameters : Symbol(ExtractParameters, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 29))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+
+  // The above allows "parameters" to index `T` since all later
+  // instances are actually implicitly `"parameters" & keyof T`
+  ?  {
+        [K in keyof T["parameters"]]: T["parameters"][K];
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 15, 9))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 15, 9))
+
+      }[keyof T["parameters"]]
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
+
+  : {};
