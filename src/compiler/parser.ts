@@ -1542,6 +1542,20 @@ namespace ts {
             return false;
         }
 
+        function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openPosition: number) {
+            if (!parseExpected(closeKind)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(openKind), tokenToString(closeKind))
+                    );
+                }
+                return false;
+            }
+            return true;
+        }
+
         function parseOptional(t: SyntaxKind): boolean {
             if (token() === t) {
                 nextToken();
@@ -5430,15 +5444,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenBracketToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
-            if (!parseExpected(SyntaxKind.CloseBracketToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openBracketPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenBracketToken), tokenToString(SyntaxKind.CloseBracketToken))
-                    );
-                }
-            }
+            parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketPosition);
             return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
         }
 
@@ -5600,15 +5606,7 @@ namespace ts {
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 const multiLine = scanner.hasPrecedingLineBreak();
                 const statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                    const lastError = lastOrUndefined(parseDiagnostics);
-                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                        addRelatedInfo(
-                            lastError,
-                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenBraceToken), tokenToString(SyntaxKind.CloseBraceToken))
-                        );
-                    }
-                }
+                parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBracePosition);
                 return finishNode(factory.createBlock(statements, multiLine), pos);
             }
             else {
@@ -5659,15 +5657,7 @@ namespace ts {
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            if (!parseExpected(SyntaxKind.CloseParenToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
-                    );
-                }
-            }
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const thenStatement = parseStatement();
             const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
             return finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos);
@@ -5681,15 +5671,7 @@ namespace ts {
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            if (!parseExpected(SyntaxKind.CloseParenToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
-                    );
-                }
-            }
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
             // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in
@@ -5705,15 +5687,7 @@ namespace ts {
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            if (!parseExpected(SyntaxKind.CloseParenToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
-                    );
-                }
-            }
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const statement = parseStatement();
             return finishNode(factory.createWhileStatement(expression, statement), pos);
         }
@@ -5788,15 +5762,7 @@ namespace ts {
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            if (!parseExpected(SyntaxKind.CloseParenToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
-                    );
-                }
-            }
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
             return finishNode(factory.createWithStatement(expression, statement), pos);
         }
