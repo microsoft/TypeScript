@@ -45,3 +45,46 @@ type ExtractParameters<T> = "parameters" extends keyof T
         [K in keyof T["parameters"]]: T["parameters"][K];
       }[keyof T["parameters"]]
   : {};
+
+type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
+>Q2 : Q2<T>
+>cb : (n: number) => void
+>n : number
+
+function fn2<T>(arg: Q2<T>) {
+>fn2 : <T>(arg: Q2<T>) => void
+>arg : Q2<T>
+
+  function useT(_arg: T): void {}
+>useT : (_arg: T) => void
+>_arg : T
+
+  // Expected: OK
+  arg(arg => useT(arg));
+>arg(arg => useT(arg)) : void
+>arg : Q2<T>
+>arg => useT(arg) : (arg: T & number) => void
+>arg : T & number
+>useT(arg) : void
+>useT : (_arg: T) => void
+>arg : T & number
+}
+// Legal invocations are not problematic
+fn2<string | number>(m => m(42));
+>fn2<string | number>(m => m(42)) : void
+>fn2 : <T>(arg: Q2<T>) => void
+>m => m(42) : (m: (n: number) => void) => void
+>m : (n: number) => void
+>m(42) : void
+>m : (n: number) => void
+>42 : 42
+
+fn2<number>(m => m(42));
+>fn2<number>(m => m(42)) : void
+>fn2 : <T>(arg: Q2<T>) => void
+>m => m(42) : (m: (n: number) => void) => void
+>m : (n: number) => void
+>m(42) : void
+>m : (n: number) => void
+>42 : 42
+

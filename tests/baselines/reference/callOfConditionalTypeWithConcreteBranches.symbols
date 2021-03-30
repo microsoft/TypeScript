@@ -51,3 +51,41 @@ type ExtractParameters<T> = "parameters" extends keyof T
 >T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 11, 23))
 
   : {};
+
+type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
+>Q2 : Symbol(Q2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 17, 7))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 8))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 8))
+>cb : Symbol(cb, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 33))
+>n : Symbol(n, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 38))
+
+function fn2<T>(arg: Q2<T>) {
+>fn2 : Symbol(fn2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 74))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 13))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 16))
+>Q2 : Symbol(Q2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 17, 7))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 13))
+
+  function useT(_arg: T): void {}
+>useT : Symbol(useT, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 29))
+>_arg : Symbol(_arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 21, 16))
+>T : Symbol(T, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 13))
+
+  // Expected: OK
+  arg(arg => useT(arg));
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 16))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 23, 6))
+>useT : Symbol(useT, Decl(callOfConditionalTypeWithConcreteBranches.ts, 20, 29))
+>arg : Symbol(arg, Decl(callOfConditionalTypeWithConcreteBranches.ts, 23, 6))
+}
+// Legal invocations are not problematic
+fn2<string | number>(m => m(42));
+>fn2 : Symbol(fn2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 74))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 26, 21))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 26, 21))
+
+fn2<number>(m => m(42));
+>fn2 : Symbol(fn2, Decl(callOfConditionalTypeWithConcreteBranches.ts, 19, 74))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 27, 12))
+>m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 27, 12))
+
