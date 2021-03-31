@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '}' to match the '{' token here.": {
+    "The parser expected to find a '{1}' to match the '{0}' token here.": {
         "category": "Error",
         "code": 1007
     },
@@ -3168,7 +3168,7 @@
         "category": "Error",
         "code": 2773
     },
-    "This condition will always return true since the function is always defined. Did you mean to call it instead?": {
+    "This condition will always return true since this function appears to always be defined. Did you mean to call it instead?": {
         "category": "Error",
         "code": 2774
     },
@@ -3276,7 +3276,7 @@
         "category": "Error",
         "code": 2800
     },
-    "This condition will always return true since the Promise is always truthy.": {
+    "This condition will always return true since this '{0}' appears to always be defined.": {
         "category": "Error",
         "code": 2801
     },
@@ -3307,6 +3307,10 @@
     "A get accessor must be at least as accessible as the setter": {
         "category": "Error",
         "code": 2808
+    },
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+        "category": "Error",
+        "code": 2809
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

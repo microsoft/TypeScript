@@ -18274,6 +18274,11 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral) {
+                    if (source.flags & TypeFlags.TemplateLiteral) {
+                        // Report unreliable variance for type variables referenced in template literal type placeholders.
+                        // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
+                        instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
+                    }
                     const result = inferTypesFromTemplateLiteralType(source, target as TemplateLiteralType);
                     if (result && every(result, (r, i) => isValidTypeForTemplateLiteralPlaceholder(r, (target as TemplateLiteralType).types[i]))) {
                         return Ternary.True;
@@ -18314,20 +18319,6 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
-                        resetErrorInfo(saveErrorInfo);
-                        return result;
-                    }
-                }
-                else if (source.flags & TypeFlags.TemplateLiteral) {
-                    if (target.flags & TypeFlags.TemplateLiteral &&
-                        (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
-                        (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
-                        every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
-                        every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
-                        return Ternary.True;
-                    }
-                    const constraint = getBaseConstraintOfType(source);
-                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -27125,7 +27116,7 @@ namespace ts {
             if (isInPropertyInitializer(node)
                 && !(isAccessExpression(node) && isAccessExpression(node.expression))
                 && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
-                && !isPropertyDeclaredInAncestorClass(prop)) {
+                && (compilerOptions.useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
                 diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
             }
             else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
@@ -35254,8 +35245,8 @@ namespace ts {
                 errorAndMaybeSuggestAwait(
                     condExpr,
                     /*maybeMissingAwait*/ true,
-                    Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
-                    "true", getTypeNameForErrorDisplay(type), "false");
+                    Diagnostics.This_condition_will_always_return_true_since_this_0_appears_to_always_be_defined,
+                    getTypeNameForErrorDisplay(type));
                 return;
             }
 
@@ -35288,7 +35279,7 @@ namespace ts {
             const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
                 || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
             if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_appears_to_always_be_defined_Did_you_mean_to_call_it_instead);
             }
         }
 
@@ -36572,6 +36563,7 @@ namespace ts {
             switch (name.escapedText) {
                 case "any":
                 case "unknown":
+                case "never":
                 case "number":
                 case "bigint":
                 case "boolean":
