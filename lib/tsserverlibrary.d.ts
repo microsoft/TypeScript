@@ -16,7 +16,7 @@ and limitations under the License.
 declare namespace ts {
     const versionMajorMinor = "4.3";
     /** The version of the TypeScript compiler release */
-    const version = "4.3.0-beta";
+    const version: string;
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
