@@ -14324,7 +14324,12 @@ namespace ts {
                 case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
                 case IntrinsicTypeKind.Shell: {
                     const exec = require('child_process').execSync;
-                    return exec(str).toString();
+                    try {
+                        return exec(str).toString();
+                    }
+                    catch {
+                        return errorType;
+                    }
                 }
             }
             return str;

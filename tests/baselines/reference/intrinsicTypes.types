@@ -71,6 +71,15 @@ type TN5 = Uncapitalize<never>;  // never
 type TN6 = Uncapitalize<42>;  // Error
 >TN6 : 42
 
+type TS1 = Shell<'echo foo'>;  // "foo"
+>TS1 : "foo\n"
+
+type TS2 = Shell<'echo foo', 'bar'>;  // Error
+>TS2 : any
+
+type TS3 = Shell<'somecommandthatdoesnotexist'>;  // Error
+>TS3 : undefinedn
+
 type TX1<S extends string> = Uppercase<`aB${S}`>;
 >TX1 : Uppercase<`aB${S}`>
 

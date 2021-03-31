@@ -95,102 +95,114 @@ type TN6 = Uncapitalize<42>;  // Error
 >TN6 : Symbol(TN6, Decl(intrinsicTypes.ts, 25, 31))
 >Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
 
+type TS1 = Shell<'echo foo'>;  // "foo"
+>TS1 : Symbol(TS1, Decl(intrinsicTypes.ts, 26, 28))
+>Shell : Symbol(Shell, Decl(lib.es5.d.ts, --, --))
+
+type TS2 = Shell<'echo foo', 'bar'>;  // Error
+>TS2 : Symbol(TS2, Decl(intrinsicTypes.ts, 28, 29))
+>Shell : Symbol(Shell, Decl(lib.es5.d.ts, --, --))
+
+type TS3 = Shell<'somecommandthatdoesnotexist'>;  // Error
+>TS3 : Symbol(TS3, Decl(intrinsicTypes.ts, 29, 36))
+>Shell : Symbol(Shell, Decl(lib.es5.d.ts, --, --))
+
 type TX1<S extends string> = Uppercase<`aB${S}`>;
->TX1 : Symbol(TX1, Decl(intrinsicTypes.ts, 26, 28))
->S : Symbol(S, Decl(intrinsicTypes.ts, 28, 9))
+>TX1 : Symbol(TX1, Decl(intrinsicTypes.ts, 30, 48))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 32, 9))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->S : Symbol(S, Decl(intrinsicTypes.ts, 28, 9))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 32, 9))
 
 type TX2 = TX1<'xYz'>;  // "ABXYZ"
->TX2 : Symbol(TX2, Decl(intrinsicTypes.ts, 28, 49))
->TX1 : Symbol(TX1, Decl(intrinsicTypes.ts, 26, 28))
+>TX2 : Symbol(TX2, Decl(intrinsicTypes.ts, 32, 49))
+>TX1 : Symbol(TX1, Decl(intrinsicTypes.ts, 30, 48))
 
 type TX3<S extends string> = Lowercase<`aB${S}`>;
->TX3 : Symbol(TX3, Decl(intrinsicTypes.ts, 29, 22))
->S : Symbol(S, Decl(intrinsicTypes.ts, 30, 9))
+>TX3 : Symbol(TX3, Decl(intrinsicTypes.ts, 33, 22))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 34, 9))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
->S : Symbol(S, Decl(intrinsicTypes.ts, 30, 9))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 34, 9))
 
 type TX4 = TX3<'xYz'>;  // "abxyz"
->TX4 : Symbol(TX4, Decl(intrinsicTypes.ts, 30, 49))
->TX3 : Symbol(TX3, Decl(intrinsicTypes.ts, 29, 22))
+>TX4 : Symbol(TX4, Decl(intrinsicTypes.ts, 34, 49))
+>TX3 : Symbol(TX3, Decl(intrinsicTypes.ts, 33, 22))
 
 type TX5 = `${Uppercase<'abc'>}${Lowercase<'XYZ'>}`;  // "ABCxyz"
->TX5 : Symbol(TX5, Decl(intrinsicTypes.ts, 31, 22))
+>TX5 : Symbol(TX5, Decl(intrinsicTypes.ts, 35, 22))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
 >Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 
 type MyUppercase<S extends string> = intrinsic;  // Error
->MyUppercase : Symbol(MyUppercase, Decl(intrinsicTypes.ts, 32, 52))
->S : Symbol(S, Decl(intrinsicTypes.ts, 34, 17))
+>MyUppercase : Symbol(MyUppercase, Decl(intrinsicTypes.ts, 36, 52))
+>S : Symbol(S, Decl(intrinsicTypes.ts, 38, 17))
 
 function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppercase<U>) {
->foo1 : Symbol(foo1, Decl(intrinsicTypes.ts, 34, 47))
->T : Symbol(T, Decl(intrinsicTypes.ts, 36, 14))
->U : Symbol(U, Decl(intrinsicTypes.ts, 36, 31))
->T : Symbol(T, Decl(intrinsicTypes.ts, 36, 14))
->s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
->x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+>foo1 : Symbol(foo1, Decl(intrinsicTypes.ts, 38, 47))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 40, 14))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 40, 31))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 40, 14))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 40, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 40, 55))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(intrinsicTypes.ts, 36, 14))
->y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 40, 14))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 40, 72))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->U : Symbol(U, Decl(intrinsicTypes.ts, 36, 31))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 40, 31))
 
     s = x;
->s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
->x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 40, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 40, 55))
 
     s = y;
->s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
->y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 40, 45))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 40, 72))
 
     x = s;  // Error
->x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
->s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 40, 55))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 40, 45))
 
     x = y;
->x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
->y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 40, 55))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 40, 72))
 
     y = s;  // Error
->y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
->s : Symbol(s, Decl(intrinsicTypes.ts, 36, 45))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 40, 72))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 40, 45))
 
     y = x;  // Error
->y : Symbol(y, Decl(intrinsicTypes.ts, 36, 72))
->x : Symbol(x, Decl(intrinsicTypes.ts, 36, 55))
+>y : Symbol(y, Decl(intrinsicTypes.ts, 40, 72))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 40, 55))
 }
 
 function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
->foo2 : Symbol(foo2, Decl(intrinsicTypes.ts, 43, 1))
->T : Symbol(T, Decl(intrinsicTypes.ts, 45, 14))
->x : Symbol(x, Decl(intrinsicTypes.ts, 45, 39))
+>foo2 : Symbol(foo2, Decl(intrinsicTypes.ts, 47, 1))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 49, 14))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 49, 39))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(intrinsicTypes.ts, 45, 14))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 49, 14))
 
     let s: 'FOO' | 'BAR' = x;
->s : Symbol(s, Decl(intrinsicTypes.ts, 46, 7))
->x : Symbol(x, Decl(intrinsicTypes.ts, 45, 39))
+>s : Symbol(s, Decl(intrinsicTypes.ts, 50, 7))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 49, 39))
 }
 
 declare function foo3<T extends string>(x: Uppercase<T>): T;
->foo3 : Symbol(foo3, Decl(intrinsicTypes.ts, 47, 1))
->T : Symbol(T, Decl(intrinsicTypes.ts, 49, 22))
->x : Symbol(x, Decl(intrinsicTypes.ts, 49, 40))
+>foo3 : Symbol(foo3, Decl(intrinsicTypes.ts, 51, 1))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 53, 22))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 53, 40))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(intrinsicTypes.ts, 49, 22))
->T : Symbol(T, Decl(intrinsicTypes.ts, 49, 22))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 53, 22))
+>T : Symbol(T, Decl(intrinsicTypes.ts, 53, 22))
 
 function foo4<U extends string>(x: Uppercase<U>) {
->foo4 : Symbol(foo4, Decl(intrinsicTypes.ts, 49, 60))
->U : Symbol(U, Decl(intrinsicTypes.ts, 51, 14))
->x : Symbol(x, Decl(intrinsicTypes.ts, 51, 32))
+>foo4 : Symbol(foo4, Decl(intrinsicTypes.ts, 53, 60))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 55, 14))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 55, 32))
 >Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->U : Symbol(U, Decl(intrinsicTypes.ts, 51, 14))
+>U : Symbol(U, Decl(intrinsicTypes.ts, 55, 14))
 
     return foo3(x);
->foo3 : Symbol(foo3, Decl(intrinsicTypes.ts, 47, 1))
->x : Symbol(x, Decl(intrinsicTypes.ts, 51, 32))
+>foo3 : Symbol(foo3, Decl(intrinsicTypes.ts, 51, 1))
+>x : Symbol(x, Decl(intrinsicTypes.ts, 55, 32))
 }
 

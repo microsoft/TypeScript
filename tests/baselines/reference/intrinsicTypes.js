@@ -27,6 +27,10 @@ type TN4 = Uncapitalize<any>;  // any
 type TN5 = Uncapitalize<never>;  // never
 type TN6 = Uncapitalize<42>;  // Error
 
+type TS1 = Shell<'echo foo'>;  // "foo"
+type TS2 = Shell<'echo foo', 'bar'>;  // Error
+type TS3 = Shell<'somecommandthatdoesnotexist'>;  // Error
+
 type TX1<S extends string> = Uppercase<`aB${S}`>;
 type TX2 = TX1<'xYz'>;  // "ABXYZ"
 type TX3<S extends string> = Lowercase<`aB${S}`>;
@@ -98,6 +102,9 @@ declare type TN3 = Uncapitalize<string>;
 declare type TN4 = Uncapitalize<any>;
 declare type TN5 = Uncapitalize<never>;
 declare type TN6 = Uncapitalize<42>;
+declare type TS1 = Shell<'echo foo'>;
+declare type TS2 = Shell<'echo foo', 'bar'>;
+declare type TS3 = Shell<'somecommandthatdoesnotexist'>;
 declare type TX1<S extends string> = Uppercase<`aB${S}`>;
 declare type TX2 = TX1<'xYz'>;
 declare type TX3<S extends string> = Lowercase<`aB${S}`>;
