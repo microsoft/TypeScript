@@ -11236,6 +11236,11 @@ interface ParentNode {
      */
     prepend(...nodes: (Node | string)[]): void;
     /**
+     * Replaces the existing children with a specified new set of children. These can be DOMString or Node objects.
+     */
+    replaceChildren(): void;
+    replaceChildren(...nodes: (Node | string)[]): void;
+    /**
      * Returns the first element that is a descendant of node that matches selectors.
      */
     querySelector<K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null;
