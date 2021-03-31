@@ -127,6 +127,7 @@ namespace ts {
         private: SyntaxKind.PrivateKeyword,
         protected: SyntaxKind.ProtectedKeyword,
         public: SyntaxKind.PublicKeyword,
+        override: SyntaxKind.OverrideKeyword,
         readonly: SyntaxKind.ReadonlyKeyword,
         require: SyntaxKind.RequireKeyword,
         global: SyntaxKind.GlobalKeyword,

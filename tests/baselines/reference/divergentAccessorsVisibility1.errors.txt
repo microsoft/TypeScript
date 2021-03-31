@@ -1,0 +1,314 @@
+tests/cases/compiler/divergentAccessorsVisibility1.ts(11,19): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(12,9): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(20,17): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(21,9): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(23,17): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(24,19): error TS2808: A get accessor must be at least as accessible as the setter
+tests/cases/compiler/divergentAccessorsVisibility1.ts(66,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(69,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(72,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(80,19): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(81,19): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(82,19): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(86,14): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(89,14): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(92,14): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(99,10): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(100,10): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(102,10): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(103,10): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(105,10): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(106,10): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(111,15): error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(112,15): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(113,15): error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(114,15): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(115,15): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(116,15): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(119,10): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(120,10): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(122,10): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(123,10): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(125,10): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(126,10): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(129,11): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(130,11): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(132,11): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(133,11): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(135,11): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(136,11): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(141,16): error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(142,16): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(143,16): error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(144,16): error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(145,16): error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(146,16): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(149,11): error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(150,11): error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(152,11): error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(153,11): error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(155,11): error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+tests/cases/compiler/divergentAccessorsVisibility1.ts(156,11): error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+
+
+==== tests/cases/compiler/divergentAccessorsVisibility1.ts (51 errors) ====
+    class Base {
+        get PublicPublic() { return 0; }
+        set PublicPublic(v) { return; }
+    
+        get PublicProtected() { return 0; }
+        protected set PublicProtected(v) { return; }
+    
+        get PublicPrivate() { return 0; }
+        private set PublicPrivate(v) { return; }
+    
+        protected get ProtectedPublic() { return 0; }
+                      ~~~~~~~~~~~~~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+        set ProtectedPublic(v) { return; }
+            ~~~~~~~~~~~~~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+    
+        protected get ProtectedProtected() { return 0; }
+        protected set ProtectedProtected(v) { return; }
+    
+        protected get ProtectedPrivate() { return 0; }
+        private set ProtectedPrivate(v) { return; }
+    
+        private get PrivatePublic() { return 0; }
+                    ~~~~~~~~~~~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+        set PrivatePublic(v) { return; }
+            ~~~~~~~~~~~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+    
+        private get PrivateProtected() { return 0; }
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+        protected set PrivateProtected(v) { return; }
+                      ~~~~~~~~~~~~~~~~
+!!! error TS2808: A get accessor must be at least as accessible as the setter
+    
+        private get PrivatePrivate() { return 0; }
+        private set PrivatePrivate(v) { return; }
+    
+        test() {
+            this.PublicPublic = 0;
+            this.PublicProtected = 0;
+            this.PublicPrivate = 0;
+            this.ProtectedPublic = 0;
+            this.ProtectedProtected = 0;
+            this.ProtectedPrivate = 0;
+            this.PrivatePublic = 0;
+            this.PrivateProtected = 0;
+            this.PrivatePrivate = 0;
+    
+            void this.PublicPublic;
+            void this.PublicProtected;
+            void this.PublicPrivate;
+            void this.ProtectedPublic;
+            void this.ProtectedProtected;
+            void this.ProtectedPrivate;
+            void this.PrivatePublic;
+            void this.PrivateProtected;
+            void this.PrivatePrivate;
+    
+            this.PublicPublic += 0;
+            this.PublicProtected += 0;
+            this.PublicPrivate += 0;
+            this.ProtectedPublic += 0;
+            this.ProtectedProtected += 0;
+            this.ProtectedPrivate += 0;
+            this.PrivatePublic += 0;
+            this.PrivateProtected += 0;
+            this.PrivatePrivate += 0;
+        }
+    }
+    
+    class Derived extends Base {
+        test2() {
+            this.PublicPublic = 0;
+            this.PublicProtected = 0;
+            this.PublicPrivate = 0;
+                 ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+            this.ProtectedPublic = 0;
+            this.ProtectedProtected = 0;
+            this.ProtectedPrivate = 0;
+                 ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+            this.PrivatePublic = 0;
+            this.PrivateProtected = 0;
+            this.PrivatePrivate = 0;
+                 ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+            void this.PublicPublic;
+            void this.PublicProtected;
+            void this.PublicPrivate;
+            void this.ProtectedPublic;
+            void this.ProtectedProtected;
+            void this.ProtectedPrivate;
+            void this.PrivatePublic;
+                      ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+            void this.PrivateProtected;
+                      ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+            void this.PrivatePrivate;
+                      ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+            this.PublicPublic += 0;
+            this.PublicProtected += 0;
+            this.PublicPrivate += 0;
+                 ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+            this.ProtectedPublic += 0;
+            this.ProtectedProtected += 0;
+            this.ProtectedPrivate += 0;
+                 ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+            this.PrivatePublic += 0;
+            this.PrivateProtected += 0;
+            this.PrivatePrivate += 0;
+                 ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+        }
+    }
+    
+    declare const base: Base, deriv: Derived;
+    function fn() {
+        base.PublicPublic = 0;
+        base.PublicProtected = 0;
+             ~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+        base.PublicPrivate = 0;
+             ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+        base.ProtectedPublic = 0;
+        base.ProtectedProtected = 0;
+             ~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+        base.ProtectedPrivate = 0;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+        base.PrivatePublic = 0;
+        base.PrivateProtected = 0;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+        base.PrivatePrivate = 0;
+             ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+        void base.PublicPublic;
+        void base.PublicProtected;
+        void base.PublicPrivate;
+        void base.ProtectedPublic;
+                  ~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
+        void base.ProtectedProtected;
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+        void base.ProtectedPrivate;
+                  ~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
+        void base.PrivatePublic;
+                  ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+        void base.PrivateProtected;
+                  ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+        void base.PrivatePrivate;
+                  ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+        base.PublicPublic += 0;
+        base.PublicProtected += 0;
+             ~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+        base.PublicPrivate += 0;
+             ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+        base.ProtectedPublic += 0;
+        base.ProtectedProtected += 0;
+             ~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+        base.ProtectedPrivate += 0;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+        base.PrivatePublic += 0;
+        base.PrivateProtected += 0;
+             ~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+        base.PrivatePrivate += 0;
+             ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+        deriv.PublicPublic = 0;
+        deriv.PublicProtected = 0;
+              ~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+        deriv.PublicPrivate = 0;
+              ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+        deriv.ProtectedPublic = 0;
+        deriv.ProtectedProtected = 0;
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+        deriv.ProtectedPrivate = 0;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+        deriv.PrivatePublic = 0;
+        deriv.PrivateProtected = 0;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+        deriv.PrivatePrivate = 0;
+              ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+        void deriv.PublicPublic;
+        void deriv.PublicProtected;
+        void deriv.PublicPrivate;
+        void deriv.ProtectedPublic;
+                   ~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedPublic' is protected and only accessible within class 'Base' and its subclasses.
+        void deriv.ProtectedProtected;
+                   ~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+        void deriv.ProtectedPrivate;
+                   ~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedPrivate' is protected and only accessible within class 'Base' and its subclasses.
+        void deriv.PrivatePublic;
+                   ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePublic' is private and only accessible within class 'Base'.
+        void deriv.PrivateProtected;
+                   ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivateProtected' is private and only accessible within class 'Base'.
+        void deriv.PrivatePrivate;
+                   ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    
+        deriv.PublicPublic += 0;
+        deriv.PublicProtected += 0;
+              ~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PublicProtected' is protected and only accessible within class 'Base' and its subclasses.
+        deriv.PublicPrivate += 0;
+              ~~~~~~~~~~~~~
+!!! error TS2341: Property 'PublicPrivate' is private and only accessible within class 'Base'.
+        deriv.ProtectedPublic += 0;
+        deriv.ProtectedProtected += 0;
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'ProtectedProtected' is protected and only accessible within class 'Base' and its subclasses.
+        deriv.ProtectedPrivate += 0;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'ProtectedPrivate' is private and only accessible within class 'Base'.
+        deriv.PrivatePublic += 0;
+        deriv.PrivateProtected += 0;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'PrivateProtected' is protected and only accessible within class 'Base' and its subclasses.
+        deriv.PrivatePrivate += 0;
+              ~~~~~~~~~~~~~~
+!!! error TS2341: Property 'PrivatePrivate' is private and only accessible within class 'Base'.
+    }
+    

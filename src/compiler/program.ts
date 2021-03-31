@@ -656,46 +656,33 @@ namespace ts {
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: HasChangedAutomaticTypeDirectiveNames | undefined,
+        getParsedCommandLine: (fileName: string) => ParsedCommandLine | undefined,
         projectReferences: readonly ProjectReference[] | undefined
     ): boolean {
         // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
-        if (!program || hasChangedAutomaticTypeDirectiveNames?.()) {
-            return false;
-        }
+        if (!program || hasChangedAutomaticTypeDirectiveNames?.()) return false;
 
         // If root file names don't match
-        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) {
-            return false;
-        }
+        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) return false;
 
         let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
         // If project references don't match
-        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
-            return false;
-        }
+        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) return false;
 
         // If any file is not up-to-date, then the whole program is not up-to-date
-        if (program.getSourceFiles().some(sourceFileNotUptoDate)) {
-            return false;
-        }
+        if (program.getSourceFiles().some(sourceFileNotUptoDate)) return false;
 
         // If any of the missing file paths are now created
-        if (program.getMissingFilePaths().some(fileExists)) {
-            return false;
-        }
+        if (program.getMissingFilePaths().some(fileExists)) return false;
 
         const currentOptions = program.getCompilerOptions();
         // If the compilation settings do no match, then the program is not up-to-date
-        if (!compareDataObjects(currentOptions, newOptions)) {
-            return false;
-        }
+        if (!compareDataObjects(currentOptions, newOptions)) return false;
 
         // If everything matches but the text of config file is changed,
         // error locations can change for program options, so update the program
-        if (currentOptions.configFile && newOptions.configFile) {
-            return currentOptions.configFile.text === newOptions.configFile.text;
-        }
+        if (currentOptions.configFile && newOptions.configFile) return currentOptions.configFile.text === newOptions.configFile.text;
 
         return true;
 
@@ -709,23 +696,26 @@ namespace ts {
         }
 
         function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
-            if (!projectReferenceIsEqualTo(oldRef, newRef)) {
-                return false;
-            }
-            return resolvedProjectReferenceUptoDate(program!.getResolvedProjectReferences()![index], oldRef);
+            return projectReferenceIsEqualTo(oldRef, newRef) &&
+                resolvedProjectReferenceUptoDate(program!.getResolvedProjectReferences()![index], oldRef);
         }
 
         function resolvedProjectReferenceUptoDate(oldResolvedRef: ResolvedProjectReference | undefined, oldRef: ProjectReference): boolean {
             if (oldResolvedRef) {
-                if (contains(seenResolvedRefs, oldResolvedRef)) {
                     // Assume true
-                    return true;
-                }
+                if (contains(seenResolvedRefs, oldResolvedRef)) return true;
 
-                // If sourceFile for the oldResolvedRef existed, check the version for uptodate
-                if (!sourceFileVersionUptoDate(oldResolvedRef.sourceFile)) {
-                    return false;
-                }
+                const refPath = resolveProjectReferencePath(oldRef);
+                const newParsedCommandLine = getParsedCommandLine(refPath);
+
+                // Check if config file exists
+                if (!newParsedCommandLine) return false;
+
+                // If change in source file
+                if (oldResolvedRef.commandLine.options.configFile !== newParsedCommandLine.options.configFile) return false;
+
+                // check file names
+                if (!arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newParsedCommandLine.fileNames)) return false;
 
                 // Add to seen before checking the referenced paths of this config file
                 (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
@@ -737,7 +727,8 @@ namespace ts {
 
             // In old program, not able to resolve project reference path,
             // so if config file doesnt exist, it is uptodate.
-            return !fileExists(resolveProjectReferencePath(oldRef));
+            const refPath = resolveProjectReferencePath(oldRef);
+            return !getParsedCommandLine(refPath);
         }
     }
 
@@ -1021,11 +1012,28 @@ namespace ts {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
             }
-            oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
-                if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                    host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
+            if (!host.getParsedCommandLine) {
+                oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
+                    if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
+                        host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
+                    }
+                });
+            }
+        }
+
+        // Release commandlines that new program does not use
+        if (oldProgram && host.onReleaseParsedCommandLine) {
+            forEachProjectReference(
+                oldProgram.getProjectReferences(),
+                oldProgram.getResolvedProjectReferences(),
+                (oldResolvedRef, parent, index) => {
+                    const oldReference = parent?.commandLine.projectReferences![index] || oldProgram!.getProjectReferences()![index];
+                    const oldRefPath = resolveProjectReferencePath(oldReference);
+                    if (!projectReferenceRedirects?.has(toPath(oldRefPath))) {
+                        host.onReleaseParsedCommandLine!(oldRefPath, oldResolvedRef, oldProgram!.getCompilerOptions());
+                    }
                 }
-            });
+            );
         }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -1367,7 +1375,9 @@ namespace ts {
                     const newResolvedRef = parseProjectReferenceConfigFile(newRef);
                     if (oldResolvedRef) {
                         // Resolved project reference has gone missing or changed
-                        return !newResolvedRef || newResolvedRef.sourceFile !== oldResolvedRef.sourceFile;
+                        return !newResolvedRef ||
+                            newResolvedRef.sourceFile !== oldResolvedRef.sourceFile ||
+                            !arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames);
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
@@ -2138,6 +2148,7 @@ namespace ts {
                             case SyntaxKind.ReadonlyKeyword:
                             case SyntaxKind.DeclareKeyword:
                             case SyntaxKind.AbstractKeyword:
+                            case SyntaxKind.OverrideKeyword:
                                 diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                 break;
 

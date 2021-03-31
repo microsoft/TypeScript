@@ -1335,24 +1335,27 @@ namespace ts {
             return inContext(NodeFlags.AwaitContext);
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
-            parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
+            return parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
         }
 
-        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
+            let result: DiagnosticWithDetachedLocation | undefined;
             if (!lastError || start !== lastError.start) {
-                parseDiagnostics.push(createDetachedDiagnostic(fileName, start, length, message, arg0));
+                result = createDetachedDiagnostic(fileName, start, length, message, arg0);
+                parseDiagnostics.push(result);
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
             // node we finish so that it can't be reused incrementally.
             parseErrorBeforeNextFinishedNode = true;
+            return result;
         }
 
-        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): void {
-            parseErrorAtPosition(start, end - start, message, arg0);
+        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
+            return parseErrorAtPosition(start, end - start, message, arg0);
         }
 
         function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
@@ -1540,6 +1543,20 @@ namespace ts {
             }
             parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
             return false;
+        }
+
+        function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openPosition: number) {
+            if (token() === closeKind) {
+                nextToken();
+                return;
+            }
+            const lastError = parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(closeKind));
+            if (lastError) {
+                addRelatedInfo(
+                    lastError,
+                    createDetachedDiagnostic(fileName, openPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(openKind), tokenToString(closeKind))
+                );
+            }
         }
 
         function parseOptional(t: SyntaxKind): boolean {
@@ -3212,7 +3229,10 @@ namespace ts {
 
         function isTypeMemberStart(): boolean {
             // Return true if we have the start of a signature member
-            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
+            if (token() === SyntaxKind.OpenParenToken ||
+                token() === SyntaxKind.LessThanToken ||
+                token() === SyntaxKind.GetKeyword ||
+                token() === SyntaxKind.SetKeyword) {
                 return true;
             }
             let idToken = false;
@@ -3253,6 +3273,14 @@ namespace ts {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiers();
+            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor);
+            }
+
+            if (parseContextualModifier(SyntaxKind.SetKeyword)) {
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor);
+            }
+
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers);
             }
@@ -5414,10 +5442,11 @@ namespace ts {
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
             const pos = getNodePos();
+            const openBracketPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenBracketToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
-            parseExpected(SyntaxKind.CloseBracketToken);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketPosition);
             return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
         }
 
@@ -5486,15 +5515,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenBraceToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                    );
-                }
-            }
+            parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBracePosition);
             return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
         }
 
@@ -5579,15 +5600,7 @@ namespace ts {
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 const multiLine = scanner.hasPrecedingLineBreak();
                 const statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                    const lastError = lastOrUndefined(parseDiagnostics);
-                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                        addRelatedInfo(
-                            lastError,
-                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                        );
-                    }
-                }
+                parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBracePosition);
                 const result = finishNode(factory.createBlock(statements, multiLine), pos);
                 if (token() === SyntaxKind.EqualsToken) {
                     parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
@@ -5641,9 +5654,10 @@ namespace ts {
         function parseIfStatement(): IfStatement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.IfKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const thenStatement = parseStatement();
             const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
             return finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos);
@@ -5654,9 +5668,10 @@ namespace ts {
             parseExpected(SyntaxKind.DoKeyword);
             const statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
             // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in
@@ -5669,9 +5684,10 @@ namespace ts {
         function parseWhileStatement(): WhileStatement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.WhileKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const statement = parseStatement();
             return finishNode(factory.createWhileStatement(expression, statement), pos);
         }
@@ -5743,9 +5759,10 @@ namespace ts {
         function parseWithStatement(): WithStatement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.WithKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
             return finishNode(factory.createWithStatement(expression, statement), pos);
         }
@@ -7547,6 +7564,9 @@ namespace ts {
                         case "readonly":
                             tag = parseSimpleTag(start, factory.createJSDocReadonlyTag, tagName, margin, indentText);
                             break;
+                        case "override":
+                            tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
+                            break;
                         case "deprecated":
                             hasDeprecatedTag = true;
                             tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
@@ -7964,13 +7984,9 @@ namespace ts {
                             hasChildren = true;
                             if (child.kind === SyntaxKind.JSDocTypeTag) {
                                 if (childTypeTag) {
-                                    parseErrorAtCurrentToken(Diagnostics.A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags);
-                                    const lastError = lastOrUndefined(parseDiagnostics);
+                                    const lastError = parseErrorAtCurrentToken(Diagnostics.A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags);
                                     if (lastError) {
-                                        addRelatedInfo(
-                                            lastError,
-                                            createDetachedDiagnostic(fileName, 0, 0, Diagnostics.The_tag_was_first_specified_here)
-                                        );
+                                        addRelatedInfo(lastError, createDetachedDiagnostic(fileName, 0, 0, Diagnostics.The_tag_was_first_specified_here));
                                     }
                                     break;
                                 }
@@ -8002,7 +8018,7 @@ namespace ts {
                     }
 
                     const typedefTag = factory.createJSDocTypedefTag(tagName, typeExpression, fullName, comment);
-                    return finishNode(typedefTag, start);
+                    return finishNode(typedefTag, start, end);
                 }
 
                 function parseJSDocTypeNameWithNamespace(nested?: boolean) {

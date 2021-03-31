@@ -305,7 +305,9 @@ namespace ts {
         /* @internal */
         getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
-        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
+        getExportMapCache?(): ExportMapCache;
+        /* @internal */
+        getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
@@ -314,6 +316,8 @@ namespace ts {
         getPackageJsonAutoImportProvider?(): Program | undefined;
         /* @internal */
         sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     }
 
     /* @internal */
@@ -550,7 +554,7 @@ namespace ts {
 
     export type OrganizeImportsScope = CombinedCodeFixScope;
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
@@ -1138,11 +1142,14 @@ namespace ts {
          * must be used to commit that completion entry.
          */
         optionalReplacementSpan?: TextSpan;
-
         /**
          * true when the current location also allows for a new identifier
          */
         isNewIdentifierLocation: boolean;
+        /**
+         * Indicates to client to continue requesting completions on subsequent keystrokes.
+         */
+        isIncomplete?: true;
         entries: CompletionEntry[];
     }
 
@@ -1158,6 +1165,10 @@ namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        /**
+         * Set for auto imports with eagerly resolved module specifiers.
+         */
+        moduleSpecifier?: string;
     }
 
     // see comments in protocol.ts
@@ -1167,6 +1178,7 @@ namespace ts {
         kindModifiers?: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
         insertText?: string;
+        isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
@@ -1175,6 +1187,7 @@ namespace ts {
         replacementSpan?: TextSpan;
         hasAction?: true;
         source?: string;
+        sourceDisplay?: SymbolDisplayPart[];
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -1197,7 +1210,9 @@ namespace ts {
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        /** @deprecated Use `sourceDisplay` instead. */
         source?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
     }
 
     export interface OutliningSpan {

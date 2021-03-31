@@ -852,6 +852,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocReadonlyTag;
     }
 
+    export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {
+        return node.kind === SyntaxKind.JSDocOverrideTag;
+    }
+
     export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
         return node.kind === SyntaxKind.JSDocDeprecatedTag;
     }
