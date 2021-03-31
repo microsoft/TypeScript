@@ -1335,29 +1335,29 @@ namespace ts {
             return inContext(NodeFlags.AwaitContext);
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | false {
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
             return parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
         }
 
-        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | false {
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
-            let result: DiagnosticWithDetachedLocation | false;
+            let result: DiagnosticWithDetachedLocation | undefined;
             if (!lastError || start !== lastError.start) {
-                result = createDetachedDiagnostic(fileName, start, length, message, arg0)
+                result = createDetachedDiagnostic(fileName, start, length, message, arg0);
                 parseDiagnostics.push(result);
             }
             else {
-                result = false;
+                result = undefined;
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
             // node we finish so that it can't be reused incrementally.
             parseErrorBeforeNextFinishedNode = true;
-            return result
+            return result;
         }
 
-        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | false {
+        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
             return parseErrorAtPosition(start, end - start, message, arg0);
         }
 
@@ -1539,24 +1539,6 @@ namespace ts {
             return false;
         }
 
-        /** Like parseExpected, but returns true=succeed, diagnostic=fail, false=fail+failed to log error */
-        function parseTokenForError(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): DiagnosticWithDetachedLocation | boolean {
-            if (token() === kind) {
-                if (shouldAdvance) {
-                    nextToken();
-                }
-                return true;
-            }
-
-            // Report specific message if provided with one.  Otherwise, report generic fallback message.
-            if (diagnosticMessage) {
-                return parseErrorAtCurrentToken(diagnosticMessage);
-            }
-            else {
-                return parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
-            }
-        }
-
         function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
             if (token() === kind) {
                 nextTokenJSDoc();
@@ -1567,16 +1549,18 @@ namespace ts {
         }
 
         function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openPosition: number) {
-            const lastError = parseTokenForError(closeKind);
-            if (typeof lastError === 'boolean')
-                return lastError
-            else {
+            if (token() === closeKind) {
+                nextToken();
+                return true;
+            }
+            const lastError = parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(closeKind));
+            if (lastError) {
                 addRelatedInfo(
                     lastError,
                     createDetachedDiagnostic(fileName, openPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(openKind), tokenToString(closeKind))
                 );
-                return false;
             }
+            return false;
         }
 
         function parseOptional(t: SyntaxKind): boolean {
