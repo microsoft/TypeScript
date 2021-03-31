@@ -3778,7 +3778,9 @@ namespace ts {
             const result = new Type(checker, flags);
             typeCount++;
             result.id = typeCount;
-            typeCatalog.push(result);
+            if (tracing) {
+                typeCatalog.push(result);
+            }
             return result;
         }
 
