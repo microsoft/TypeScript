@@ -1347,9 +1347,6 @@ namespace ts {
                 result = createDetachedDiagnostic(fileName, start, length, message, arg0);
                 parseDiagnostics.push(result);
             }
-            else {
-                result = undefined;
-            }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
             // node we finish so that it can't be reused incrementally.
