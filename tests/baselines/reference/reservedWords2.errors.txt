@@ -105,7 +105,6 @@ tests/cases/compiler/reservedWords2.ts(12,17): error TS1138: Parameter declarati
 !!! error TS1005: ';' expected.
                      ~
 !!! error TS1005: '(' expected.
-!!! related TS1007 tests/cases/compiler/reservedWords2.ts:9:18: The parser expected to find a ')' to match the '(' token here.
                        ~
 !!! error TS1128: Declaration or statement expected.
     enum void {}
