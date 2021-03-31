@@ -1217,7 +1217,25 @@ namespace ts {
 
     /* @internal */
     export function getOptionsNameMap(): OptionsNameMap {
-        return optionsNameMapCache || (optionsNameMapCache = createOptionNameMap(optionDeclarations));
+        return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
+    }
+
+    let compilerOptionsAlternateModeCache: AlternateModeDiagnostics;
+
+    function getCompilerOptionsAlternateMode(): AlternateModeDiagnostics {
+        return compilerOptionsAlternateModeCache ||= {
+            diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
+            options: new Set(commandOptionsOnlyBuild.map(option => option.name))
+        };
+    }
+
+    let buildModeAlternateModeCache: AlternateModeDiagnostics;
+
+    function getBuildOptionsAlternateMode(): AlternateModeDiagnostics {
+        return buildModeAlternateModeCache ||= {
+            diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+            options: new Set(commandOptionsWithoutBuild.map(option => option.name))
+        };
     }
 
     /* @internal */
@@ -1299,8 +1317,9 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
-        if (diagnostics.alternateMode?.options.has(unknownOption)) {
-            return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
+        const alternateMode = diagnostics.getAlternateMode?.();
+        if (alternateMode?.options.has(unknownOption)) {
+            return createDiagnostics(alternateMode.diagnostic, unknownOption);
         }
 
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
@@ -1468,10 +1487,7 @@ namespace ts {
 
     /*@internal*/
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        alternateMode: {
-            diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
-            options: new Set(commandOptionsOnlyBuild.map(option => option.name))
-        },
+        getAlternateMode: getCompilerOptionsAlternateMode,
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -1514,10 +1530,7 @@ namespace ts {
     }
 
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        alternateMode: {
-            diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
-            options: new Set(commandOptionsWithoutBuild.map(option => option.name))
-        },
+        getAlternateMode: getBuildOptionsAlternateMode,
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,

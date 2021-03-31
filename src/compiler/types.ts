@@ -6131,7 +6131,7 @@ namespace ts {
 
     /* @internal */
     export interface DidYouMeanOptionsDiagnostics {
-        alternateMode?: AlternateModeDiagnostics;
+        getAlternateMode?: () => AlternateModeDiagnostics;
         optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,
