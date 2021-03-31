@@ -1548,7 +1548,7 @@ namespace ts {
         function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openPosition: number) {
             if (token() === closeKind) {
                 nextToken();
-                return true;
+                return;
             }
             const lastError = parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(closeKind));
             if (lastError) {
@@ -1557,7 +1557,6 @@ namespace ts {
                     createDetachedDiagnostic(fileName, openPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(openKind), tokenToString(closeKind))
                 );
             }
-            return false;
         }
 
         function parseOptional(t: SyntaxKind): boolean {
