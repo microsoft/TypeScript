@@ -2489,6 +2489,7 @@ namespace ts {
          * module.exports = <EntityNameExpression>
          * {<Identifier>}
          * {name: <EntityNameExpression>}
+         * const { x } = require ...
          */
         function isAliasSymbolDeclaration(node: Node): boolean {
             return node.kind === SyntaxKind.ImportEqualsDeclaration
@@ -9013,7 +9014,7 @@ namespace ts {
 
         function getTypeOfSetAccessor(symbol: Symbol): Type | undefined {
             const links = getSymbolLinks(symbol);
-            return links.writeType || (links.writeType = getTypeOfAccessorsWorker(symbol, /*isWrite*/ true));
+            return links.writeType || (links.writeType = getTypeOfAccessorsWorker(symbol, /*writing*/ true));
         }
 
         function getTypeOfAccessorsWorker(symbol: Symbol, writing = false): Type | undefined {
@@ -9033,12 +9034,12 @@ namespace ts {
             return type;
         }
 
-        function resolveTypeOfAccessors(symbol: Symbol, isWrite = false) {
+        function resolveTypeOfAccessors(symbol: Symbol, writing = false) {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
             // For write operations, prioritize type annotations on the setter
-            if (isWrite) {
+            if (writing) {
                 const setterParameterType = getAnnotatedAccessorType(setter);
                 if (setterParameterType) {
                     const flags = getCheckFlags(symbol);
@@ -14295,9 +14296,7 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? (<StringLiteralType>type).value :
                 type.flags & TypeFlags.NumberLiteral ? "" + (<NumberLiteralType>type).value :
                 type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((<BigIntLiteralType>type).value) :
-                type.flags & TypeFlags.BooleanLiteral ? (<IntrinsicType>type).intrinsicName :
-                type.flags & TypeFlags.Null ? "null" :
-                type.flags & TypeFlags.Undefined ? "undefined" :
+                type.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) ? (<IntrinsicType>type).intrinsicName :
                 undefined;
         }
 
@@ -14577,7 +14576,7 @@ namespace ts {
         }
 
         function isPatternLiteralPlaceholderType(type: Type) {
-            return templateConstraintType.types.indexOf(type) !== -1 || !!(type.flags & TypeFlags.Any);
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt));
         }
 
         function isPatternLiteralType(type: Type) {
@@ -18275,13 +18274,15 @@ namespace ts {
                         return localResult;
                     }
                 }
-                else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
-                    if (isPatternLiteralType(target)) {
-                        // match all non-`string` segments
-                        const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
-                        if (result && every(result, (r, i) => isStringLiteralTypeValueParsableAsType(r, (target as TemplateLiteralType).types[i]))) {
-                            return Ternary.True;
-                        }
+                else if (target.flags & TypeFlags.TemplateLiteral) {
+                    if (source.flags & TypeFlags.TemplateLiteral) {
+                        // Report unreliable variance for type variables referenced in template literal type placeholders.
+                        // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
+                        instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
+                    }
+                    const result = inferTypesFromTemplateLiteralType(source, target as TemplateLiteralType);
+                    if (result && every(result, (r, i) => isValidTypeForTemplateLiteralPlaceholder(r, (target as TemplateLiteralType).types[i]))) {
+                        return Ternary.True;
                     }
                 }
 
@@ -18319,20 +18320,6 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
-                        resetErrorInfo(saveErrorInfo);
-                        return result;
-                    }
-                }
-                else if (source.flags & TypeFlags.TemplateLiteral) {
-                    if (target.flags & TypeFlags.TemplateLiteral &&
-                        (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
-                        (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
-                        every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
-                        every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
-                        return Ternary.True;
-                    }
-                    const constraint = getBaseConstraintOfType(source);
-                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -19794,7 +19781,13 @@ namespace ts {
         function isArrayLikeType(type: Type): boolean {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
-            return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+            return isArrayType(type) || hasArrayOrReadonlyArrayBaseType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+        }
+
+        function hasArrayOrReadonlyArrayBaseType(type: Type): boolean {
+            return !!(getObjectFlags(type) & ObjectFlags.Reference)
+                && !!(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)
+                && some(getBaseTypes((type as TypeReference).target as InterfaceType), isArrayType);
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
@@ -20688,43 +20681,108 @@ namespace ts {
             return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
         }
 
-        function isStringLiteralTypeValueParsableAsType(s: StringLiteralType, target: Type): boolean {
-            if (target.flags & TypeFlags.Union) {
-                return someType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
+        function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
+            if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
+                return true;
             }
-            switch (target) {
-                case stringType: return true;
-                case numberType: return s.value !== "" && isFinite(+(s.value));
-                case bigintType: return s.value !== "" && isValidBigIntString(s.value);
-                // the next 4 should be handled in `getTemplateLiteralType`, as they are all exactly one value, but are here for completeness, just in case
-                // this function is ever used on types which don't come from template literal holes
-                case trueType: return s.value === "true";
-                case falseType: return s.value === "false";
-                case undefinedType: return s.value === "undefined";
-                case nullType: return s.value === "null";
-                default: return !!(target.flags & TypeFlags.Any);
+            if (source.flags & TypeFlags.StringLiteral) {
+                const value = (<StringLiteralType>source).value;
+                return !!(target.flags & TypeFlags.Number && value !== "" && isFinite(+value) ||
+                    target.flags & TypeFlags.BigInt && value !== "" && isValidBigIntString(value) ||
+                    target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (<IntrinsicType>target).intrinsicName);
             }
+            if (source.flags & TypeFlags.TemplateLiteral) {
+                const texts = (<TemplateLiteralType>source).texts;
+                return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((<TemplateLiteralType>source).types[0], target);
+            }
+            return isTypeAssignableTo(source, target);
         }
 
-        function inferLiteralsFromTemplateLiteralType(source: StringLiteralType, target: TemplateLiteralType): StringLiteralType[] | undefined {
-            const value = source.value;
-            const texts = target.texts;
-            const lastIndex = texts.length - 1;
-            const startText = texts[0];
-            const endText = texts[lastIndex];
-            if (!(value.startsWith(startText) && value.slice(startText.length).endsWith(endText))) return undefined;
-            const matches = [];
-            const str = value.slice(startText.length, value.length - endText.length);
-            let pos = 0;
-            for (let i = 1; i < lastIndex; i++) {
-                const delim = texts[i];
-                const delimPos = delim.length > 0 ? str.indexOf(delim, pos) : pos < str.length ? pos + 1 : -1;
-                if (delimPos < 0) return undefined;
-                matches.push(getLiteralType(str.slice(pos, delimPos)));
-                pos = delimPos + delim.length;
+        function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
+            return source.flags & TypeFlags.StringLiteral ? inferFromLiteralPartsToTemplateLiteral([(<StringLiteralType>source).value], emptyArray, target) :
+                source.flags & TypeFlags.TemplateLiteral ?
+                    arraysEqual((<TemplateLiteralType>source).texts, target.texts) ? map((<TemplateLiteralType>source).types, getStringLikeTypeForType) :
+                    inferFromLiteralPartsToTemplateLiteral((<TemplateLiteralType>source).texts, (<TemplateLiteralType>source).types, target) :
+                undefined;
+        }
+
+        function getStringLikeTypeForType(type: Type) {
+            return type.flags & (TypeFlags.Any | TypeFlags.StringLike) ? type : getTemplateLiteralType(["", ""], [type]);
+        }
+
+        // This function infers from the text parts and type parts of a source literal to a target template literal. The number
+        // of text parts is always one more than the number of type parts, and a source string literal is treated as a source
+        // with one text part and zero type parts. The function returns an array of inferred string or template literal types
+        // corresponding to the placeholders in the target template literal, or undefined if the source doesn't match the target.
+        //
+        // We first check that the starting source text part matches the starting target text part, and that the ending source
+        // text part ends matches the ending target text part. We then iterate through the remaining target text parts, finding
+        // a match for each in the source and inferring string or template literal types created from the segments of the source
+        // that occur between the matches. During this iteration, seg holds the index of the current text part in the sourceTexts
+        // array and pos holds the current character position in the current text part.
+        //
+        // Consider inference from type `<<${string}>.<${number}-${number}>>` to type `<${string}.${string}>`, i.e.
+        //   sourceTexts = ['<<', '>.<', '-', '>>']
+        //   sourceTypes = [string, number, number]
+        //   target.texts = ['<', '.', '>']
+        // We first match '<' in the target to the start of '<<' in the source and '>' in the target to the end of '>>' in
+        // the source. The first match for the '.' in target occurs at character 1 in the source text part at index 1, and thus
+        // the first inference is the template literal type `<${string}>`. The remainder of the source makes up the second
+        // inference, the template literal type `<${number}-${number}>`.
+        function inferFromLiteralPartsToTemplateLiteral(sourceTexts: readonly string[], sourceTypes: readonly Type[], target: TemplateLiteralType): Type[] | undefined {
+            const lastSourceIndex = sourceTexts.length - 1;
+            const sourceStartText = sourceTexts[0];
+            const sourceEndText = sourceTexts[lastSourceIndex];
+            const targetTexts = target.texts;
+            const lastTargetIndex = targetTexts.length - 1;
+            const targetStartText = targetTexts[0];
+            const targetEndText = targetTexts[lastTargetIndex];
+            if (lastSourceIndex === 0 && sourceStartText.length < targetStartText.length + targetEndText.length ||
+                !sourceStartText.startsWith(targetStartText) || !sourceEndText.endsWith(targetEndText)) return undefined;
+            const remainingEndText = sourceEndText.slice(0, sourceEndText.length - targetEndText.length);
+            const matches: Type[] = [];
+            let seg = 0;
+            let pos = targetStartText.length;
+            for (let i = 1; i < lastTargetIndex; i++) {
+                const delim = targetTexts[i];
+                if (delim.length > 0) {
+                    let s = seg;
+                    let p = pos;
+                    while (true) {
+                        p = getSourceText(s).indexOf(delim, p);
+                        if (p >= 0) break;
+                        s++;
+                        if (s === sourceTexts.length) return undefined;
+                        p = 0;
+                    }
+                    addMatch(s, p);
+                    pos += delim.length;
+                }
+                else if (pos < getSourceText(seg).length) {
+                    addMatch(seg, pos + 1);
+                }
+                else if (seg < lastSourceIndex) {
+                    addMatch(seg + 1, 0);
+                }
+                else {
+                    return undefined;
+                }
             }
-            matches.push(getLiteralType(str.slice(pos)));
+            addMatch(lastSourceIndex, getSourceText(lastSourceIndex).length);
             return matches;
+            function getSourceText(index: number) {
+                return index < lastSourceIndex ? sourceTexts[index] : remainingEndText;
+            }
+            function addMatch(s: number, p: number) {
+                const matchType = s === seg ?
+                    getLiteralType(getSourceText(s).slice(pos, p)) :
+                    getTemplateLiteralType(
+                        [sourceTexts[seg].slice(pos), ...sourceTexts.slice(seg + 1, s), getSourceText(s).slice(0, p)],
+                        sourceTypes.slice(seg, s));
+                matches.push(matchType);
+                seg = s;
+                pos = p;
+            }
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
@@ -21189,9 +21247,7 @@ namespace ts {
             }
 
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
-                const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateLiteralType(<StringLiteralType>source, target) :
-                    source.flags & TypeFlags.TemplateLiteral && arraysEqual((<TemplateLiteralType>source).texts, target.texts) ? (<TemplateLiteralType>source).types :
-                    undefined;
+                const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
                 for (let i = 0; i < types.length; i++) {
                     inferFromTypes(matches ? matches[i] : neverType, types[i]);
@@ -23878,7 +23934,7 @@ namespace ts {
                 }
             }
             else if (isAlias) {
-                declaration = symbol.declarations?.find(isSomeImportDeclaration);
+                declaration = getDeclarationOfAliasSymbol(symbol);
             }
             else {
                 return type;
@@ -26618,9 +26674,9 @@ namespace ts {
          */
         function checkPropertyAccessibility(
             node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
-            isSuper: boolean, isWrite: boolean, type: Type, prop: Symbol, reportError = true): boolean {
+            isSuper: boolean, writing: boolean, type: Type, prop: Symbol, reportError = true): boolean {
 
-            const flags = getDeclarationModifierFlagsFromSymbol(prop, isWrite);
+            const flags = getDeclarationModifierFlagsFromSymbol(prop, writing);
             const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right :
                 node.kind === SyntaxKind.ImportType ? node :
                 node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName : node.name;
@@ -26995,14 +27051,14 @@ namespace ts {
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, isSelfTypeAccess(left, parentSymbol));
                 getNodeLinks(node).resolvedSymbol = prop;
-                const isWrite = isWriteAccess(node);
-                checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, isWrite, apparentType, prop);
+                const writing = isWriteAccess(node);
+                checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, writing, apparentType, prop);
                 if (isAssignmentToReadonlyEntity(node as Expression, prop, assignmentKind)) {
                     error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
                     return errorType;
                 }
 
-                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : isWrite ? getSetAccessorTypeOfSymbol(prop) : getTypeOfSymbol(prop);
+                propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : writing ? getSetAccessorTypeOfSymbol(prop) : getTypeOfSymbol(prop);
             }
 
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
@@ -27061,7 +27117,7 @@ namespace ts {
             if (isInPropertyInitializer(node)
                 && !(isAccessExpression(node) && isAccessExpression(node.expression))
                 && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
-                && !isPropertyDeclaredInAncestorClass(prop)) {
+                && (compilerOptions.useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
                 diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
             }
             else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
@@ -27394,7 +27450,7 @@ namespace ts {
                     const declClass = getContainingClass(prop.valueDeclaration);
                     return !isOptionalChain(node) && !!findAncestor(node, parent => parent === declClass);
                 }
-                return checkPropertyAccessibility(node, isSuper, /*isWrite*/ false, type, prop, /* reportError */ false);
+                return checkPropertyAccessibility(node, isSuper, /*writing*/ false, type, prop, /* reportError */ false);
             }
             // In js files properties of unions are allowed in completion
             return isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
@@ -31033,7 +31089,7 @@ namespace ts {
                     const prop = getPropertyOfType(objectLiteralType, text);
                     if (prop) {
                         markPropertyAsReferenced(prop, property, rightIsThis);
-                        checkPropertyAccessibility(property, /*isSuper*/ false, /*isWrite*/ true, objectLiteralType, prop);
+                        checkPropertyAccessibility(property, /*isSuper*/ false, /*writing*/ true, objectLiteralType, prop);
                     }
                 }
                 const elementType = getIndexedAccessType(objectLiteralType, exprType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
@@ -34996,7 +35052,7 @@ namespace ts {
                         const property = getPropertyOfType(parentType, nameText);
                         if (property) {
                             markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isSelfTypeAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, parentType, property);
+                            checkPropertyAccessibility(node, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, /*writing*/ false, parentType, property);
                         }
                     }
                 }
@@ -35190,8 +35246,8 @@ namespace ts {
                 errorAndMaybeSuggestAwait(
                     condExpr,
                     /*maybeMissingAwait*/ true,
-                    Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
-                    "true", getTypeNameForErrorDisplay(type), "false");
+                    Diagnostics.This_condition_will_always_return_true_since_this_0_appears_to_always_be_defined,
+                    getTypeNameForErrorDisplay(type));
                 return;
             }
 
@@ -35224,7 +35280,7 @@ namespace ts {
             const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
                 || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
             if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_appears_to_always_be_defined_Did_you_mean_to_call_it_instead);
             }
         }
 
@@ -36508,6 +36564,7 @@ namespace ts {
             switch (name.escapedText) {
                 case "any":
                 case "unknown":
+                case "never":
                 case "number":
                 case "bigint":
                 case "boolean":
@@ -41891,21 +41948,6 @@ namespace ts {
                 return isIdentifier(name);
             default:
                 return isDeclarationName(name);
-        }
-    }
-
-    function isSomeImportDeclaration(decl: Node): boolean {
-        switch (decl.kind) {
-            case SyntaxKind.ImportClause: // For default import
-            case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.ImportSpecifier: // For rename import `x as y`
-                return true;
-            case SyntaxKind.Identifier:
-                // For regular import, `decl` is an Identifier under the ImportSpecifier.
-                return decl.parent.kind === SyntaxKind.ImportSpecifier;
-            default:
-                return false;
         }
     }
 
