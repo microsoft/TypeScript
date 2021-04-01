@@ -18,6 +18,7 @@ type ExtractParameters<T> = "parameters" extends keyof T
       }[keyof T["parameters"]]
   : {};
 
+// Original example, but with inverted variance
 type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
 function fn2<T>(arg: Q2<T>) {
   function useT(_arg: T): void {}
@@ -28,6 +29,10 @@ function fn2<T>(arg: Q2<T>) {
 fn2<string | number>(m => m(42));
 fn2<number>(m => m(42));
 
+// webidl-conversions example where substituion must occur, despite contravariance of the position
+// due to the invariant usage in `Parameters`
+
+type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;
 
 //// [callOfConditionalTypeWithConcreteBranches.js]
 function fn(arg) {
