@@ -188,13 +188,14 @@ namespace ts.projectSystem {
         it("goToDefinition", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
-            assert.deepEqual(response, [
-                protocolFileSpanWithContextFromSubstring({
+            assert.deepEqual(response, [{
+                ...protocolFileSpanWithContextFromSubstring({
                     file: aTs,
                     text: "fnA",
                     contextText: "export function fnA() {}"
-                })
-            ]);
+                }),
+                unverified: undefined
+            }]);
             verifySingleInferredProject(session);
         });
 
@@ -272,13 +273,14 @@ namespace ts.projectSystem {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
             // bTs does not exist, so stick with bDts
-            assert.deepEqual(response, [
-                protocolFileSpanWithContextFromSubstring({
+            assert.deepEqual(response, [{
+                ...protocolFileSpanWithContextFromSubstring({
                     file: bDts,
                     text: "fnB",
                     contextText: "export declare function fnB(): void;"
-                })
-            ]);
+                }),
+                unverified: undefined,
+            }]);
             verifySingleInferredProject(session);
         });
 
