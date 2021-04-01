@@ -15,9 +15,9 @@ const Component = ({ foo }: Required<Props>) => <p>{foo}</p>;
 >foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 6, 20))
 >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
 >Props : Symbol(Props, Decl(narrowedJsxSpread.tsx, 1, 26))
->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 >foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 6, 20))
->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 
 const Example = (props: Props) => (
 >Example : Symbol(Example, Decl(narrowedJsxSpread.tsx, 7, 5))
