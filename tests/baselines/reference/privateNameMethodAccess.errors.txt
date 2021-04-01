@@ -1,0 +1,35 @@
+tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts(12,10): error TS18013: Property '#method' is not accessible outside class 'A2' because it has a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts(15,14): error TS18013: Property '#method' is not accessible outside class 'A2' because it has a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts(20,18): error TS18013: Property '#method' is not accessible outside class 'A2' because it has a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts (3 errors) ====
+    class A2 {
+        #method() { return "" }
+        constructor() {
+            console.log(this.#method);
+            let a: A2 = this;
+            a.#method();
+            function  foo (){
+                a.#method();
+            }
+        }
+    }
+    new A2().#method(); // Error
+             ~~~~~~~
+!!! error TS18013: Property '#method' is not accessible outside class 'A2' because it has a private identifier.
+    
+    function  foo (){
+        new A2().#method(); // Error
+                 ~~~~~~~
+!!! error TS18013: Property '#method' is not accessible outside class 'A2' because it has a private identifier.
+    }
+    
+    class B2 {
+        m() {
+            new A2().#method();
+                     ~~~~~~~
+!!! error TS18013: Property '#method' is not accessible outside class 'A2' because it has a private identifier.
+        }
+    }
+    

@@ -23,8 +23,8 @@ var react_1 = require("react");
 function Counter(_a) {
     var _b = _a.count, count = _b === void 0 ? 0 : _b;
     var _c = null, cnt = _c[0], setCnt = _c[1];
-    return react_1.createElement(react_1.Fragment, null,
-        react_1.createElement("p", null, cnt),
-        react_1.createElement("button", { onClick: function () { return setCnt(function (prev) { return prev + 1; }); }, type: "button" }, "Update"));
+    return (0, react_1.createElement)(react_1.Fragment, null,
+        (0, react_1.createElement)("p", null, cnt),
+        (0, react_1.createElement)("button", { onClick: function () { return setCnt(function (prev) { return prev + 1; }); }, type: "button" }, "Update"));
 }
 exports.Counter = Counter;

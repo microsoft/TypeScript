@@ -37,7 +37,7 @@ verify.signatureHelp({
     text: "z(a: number | boolean, b: string[]): string",
     parameterDocComment: "The first param",
     tags: [
-        { name: "param", text: "a The first param" },
-        { name: "param", text: "b The second param" },
+        { name: "param", text: [{ kind: "text", text: "a" }, { kind: "space", text: " " }, { kind: "text", text: "The first param" }] },
+        { name: "param", text: [{ kind: "text", text: "b" }, { kind: "space", text: " " }, { kind: "text", text: "The second param" }] },
     ],
 });

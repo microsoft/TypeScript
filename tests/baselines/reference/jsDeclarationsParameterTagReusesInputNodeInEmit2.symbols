@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/declarations/base.js ===
+class Base {
+>Base : Symbol(Base, Decl(base.js, 0, 0))
+
+    constructor() {}
+}
+
+const BaseFactory = () => {
+>BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
+
+    return new Base();
+>Base : Symbol(Base, Decl(base.js, 0, 0))
+
+};
+
+BaseFactory.Base = Base;
+>BaseFactory.Base : Symbol(BaseFactory.Base, Decl(base.js, 6, 2))
+>BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
+>Base : Symbol(BaseFactory.Base, Decl(base.js, 6, 2))
+>Base : Symbol(Base, Decl(base.js, 0, 0))
+
+module.exports = BaseFactory;
+>module.exports : Symbol(module.exports, Decl(base.js, 0, 0))
+>module : Symbol(export=, Decl(base.js, 8, 24))
+>exports : Symbol(export=, Decl(base.js, 8, 24))
+>BaseFactory : Symbol(BaseFactory, Decl(base.js, 4, 5), Decl(base.js, 6, 2))
+
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/** @typedef {typeof import('./base')} BaseFactory */
+
+/**
+ *
+ * @param {InstanceType<BaseFactory["Base"]>} base
+ * @returns {InstanceType<BaseFactory["Base"]>}
+ */
+const test = (base) => {
+>test : Symbol(test, Decl(file.js, 7, 5))
+>base : Symbol(base, Decl(file.js, 7, 14))
+
+    return base;
+>base : Symbol(base, Decl(file.js, 7, 14))
+
+};
+

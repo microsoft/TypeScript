@@ -14,6 +14,7 @@ namespace ts.codefix {
         Diagnostics.Operator_0_cannot_be_applied_to_type_1.code,
         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code,
         Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code,
+        Diagnostics.This_condition_will_always_return_true_since_this_0_appears_to_always_be_defined.code,
         Diagnostics.Type_0_is_not_an_array_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators.code,

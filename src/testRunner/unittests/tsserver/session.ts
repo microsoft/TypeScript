@@ -207,6 +207,8 @@ namespace ts.server {
                 CommandNames.Implementation,
                 CommandNames.ImplementationFull,
                 CommandNames.Exit,
+                CommandNames.FileReferences,
+                CommandNames.FileReferencesFull,
                 CommandNames.Format,
                 CommandNames.Formatonkey,
                 CommandNames.FormatFull,

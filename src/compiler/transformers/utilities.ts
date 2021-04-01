@@ -269,8 +269,7 @@ namespace ts {
      * any such locations
      */
     export function isSimpleInlineableExpression(expression: Expression) {
-        return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
-            isWellKnownSymbolSyntactically(expression);
+        return !isIdentifier(expression) && isSimpleCopiableExpression(expression);
     }
 
     export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
@@ -364,5 +363,14 @@ namespace ts {
     export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
         return member.kind === SyntaxKind.PropertyDeclaration
             && (<PropertyDeclaration>member).initializer !== undefined;
+    }
+
+    /**
+     * Gets a value indicating whether a class element is a private instance method or accessor.
+     *
+     * @param member The class element node.
+     */
+    export function isNonStaticMethodOrAccessorWithPrivateName(member: ClassElement): member is PrivateIdentifierMethodDeclaration | PrivateIdentifierAccessorDeclaration {
+        return !hasStaticModifier(member) && isMethodOrAccessor(member) && isPrivateIdentifier(member.name);
     }
 }

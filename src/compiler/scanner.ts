@@ -40,9 +40,10 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanJsxToken(allowMultilineJsxText?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
+        reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
@@ -126,6 +127,7 @@ namespace ts {
         private: SyntaxKind.PrivateKeyword,
         protected: SyntaxKind.ProtectedKeyword,
         public: SyntaxKind.PublicKeyword,
+        override: SyntaxKind.OverrideKeyword,
         readonly: SyntaxKind.ReadonlyKeyword,
         require: SyntaxKind.RequireKeyword,
         global: SyntaxKind.GlobalKeyword,
@@ -966,6 +968,7 @@ namespace ts {
             reScanJsxToken,
             reScanLessThanToken,
             reScanQuestionToken,
+            reScanInvalidIdentifier,
             scanJsxToken,
             scanJsDocToken,
             scan,
@@ -2041,14 +2044,9 @@ namespace ts {
                         }
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
-                        if (isIdentifierStart(ch, languageVersion)) {
-                            pos += charSize(ch);
-                            while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
-                            tokenValue = text.substring(tokenPos, pos);
-                            if (ch === CharacterCodes.backslash) {
-                                tokenValue += scanIdentifierParts();
-                            }
-                            return token = getIdentifierToken();
+                        const identifierKind = scanIdentifier(ch, languageVersion);
+                        if (identifierKind) {
+                            return token = identifierKind;
                         }
                         else if (isWhiteSpaceSingleLine(ch)) {
                             pos += charSize(ch);
@@ -2063,6 +2061,32 @@ namespace ts {
                         pos += charSize(ch);
                         return token = SyntaxKind.Unknown;
                 }
+            }
+        }
+
+        function reScanInvalidIdentifier(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+            pos = tokenPos = startPos;
+            tokenFlags = 0;
+            const ch = codePointAt(text, pos);
+            const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
+            if (identifierKind) {
+                return token = identifierKind;
+            }
+            pos += charSize(ch);
+            return token; // Still `SyntaKind.Unknown`
+        }
+
+        function scanIdentifier(startCharacter: number, languageVersion: ScriptTarget) {
+            let ch = startCharacter;
+            if (isIdentifierStart(ch, languageVersion)) {
+                pos += charSize(ch);
+                while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
+                tokenValue = text.substring(tokenPos, pos);
+                if (ch === CharacterCodes.backslash) {
+                    tokenValue += scanIdentifierParts();
+                }
+                return getIdentifierToken();
             }
         }
 
@@ -2200,9 +2224,9 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
-        function reScanJsxToken(): JsxTokenSyntaxKind {
+        function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
-            return token = scanJsxToken();
+            return token = scanJsxToken(allowMultilineJsxText);
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2219,7 +2243,7 @@ namespace ts {
             return token = SyntaxKind.QuestionToken;
         }
 
-        function scanJsxToken(): JsxTokenSyntaxKind {
+        function scanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
             if (pos >= end) {
@@ -2243,19 +2267,11 @@ namespace ts {
 
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
-            let lastNonWhitespace = -1;
 
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
-
-                // We want to keep track of the last non-whitespace (but including
-                // newlines character for hitting the end of the JSX Text region)
-                if (!isWhiteSpaceSingleLine(char)) {
-                    lastNonWhitespace = pos;
-                }
-
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -2274,8 +2290,6 @@ namespace ts {
                     error(Diagnostics.Unexpected_token_Did_you_mean_or_rbrace, pos, 1);
                 }
 
-                if (lastNonWhitespace > 0) lastNonWhitespace++;
-
                 // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
                 // i.e (- : whitespace)
                 //      <div>----
@@ -2285,6 +2299,11 @@ namespace ts {
                 if (isLineBreak(char) && firstNonWhitespace === 0) {
                     firstNonWhitespace = -1;
                 }
+                else if (!allowMultilineJsxText && isLineBreak(char) && firstNonWhitespace > 0) {
+                    // Stop JsxText on each line during formatting. This allows the formatter to
+                    // indent each line correctly.
+                    break;
+                }
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
                 }
@@ -2292,8 +2311,7 @@ namespace ts {
                 pos++;
             }
 
-            const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
-            tokenValue = text.substring(startPos, endPosition);
+            tokenValue = text.substring(startPos, pos);
 
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
@@ -2318,6 +2336,7 @@ namespace ts {
                         tokenValue += ":";
                         pos++;
                         namespaceSeparator = true;
+                        token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
                         continue;
                     }
                     const oldPos = pos;

@@ -4,7 +4,7 @@ class C {
 
     [Symbol.toPrimitive]: number;
 >[Symbol.toPrimitive] : number
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 }

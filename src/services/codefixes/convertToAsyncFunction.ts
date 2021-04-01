@@ -65,7 +65,7 @@ namespace ts.codefix {
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap);
-        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
+        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
         if (!returnStatements.length) {
             return;
@@ -90,10 +90,10 @@ namespace ts.codefix {
         }
     }
 
-    function getReturnStatementsWithPromiseHandlers(body: Block): readonly ReturnStatement[] {
+    function getReturnStatementsWithPromiseHandlers(body: Block, checker: TypeChecker): readonly ReturnStatement[] {
         const res: ReturnStatement[] = [];
         forEachReturnStatement(body, ret => {
-            if (isReturnStatementWithFixablePromiseHandler(ret)) res.push(ret);
+            if (isReturnStatementWithFixablePromiseHandler(ret, checker)) res.push(ret);
         });
         return res;
     }
@@ -168,7 +168,10 @@ namespace ts.codefix {
                 // so we push an entry for 'response'.
                 if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                     const firstParameter = firstOrUndefined(lastCallSignature.parameters);
-                    const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
+                    const ident = firstParameter?.valueDeclaration
+                        && isParameter(firstParameter.valueDeclaration)
+                        && tryCast(firstParameter.valueDeclaration.name, isIdentifier)
+                        || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
                     collidingSymbolMap.add(ident.text, symbol);
@@ -235,7 +238,6 @@ namespace ts.codefix {
             return transformThen(node, transformer, prevArgName);
         }
         if (isPromiseReturningCallExpression(node, transformer.checker, "catch")) {
-            if (node.arguments.length === 0) return silentFail();
             return transformCatch(node, transformer, prevArgName);
         }
         if (isPropertyAccessExpression(node)) {
@@ -252,15 +254,13 @@ namespace ts.codefix {
     }
 
     function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
-        const func = node.arguments[0];
-        const argName = getArgBindingName(func, transformer);
+        const func = singleOrUndefined(node.arguments);
+        const argName = func ? getArgBindingName(func, transformer) : undefined;
         let possibleNameForVarDecl: SynthIdentifier | undefined;
 
-        /*
-            If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
-            To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
-            We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
-        */
+        // If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
+        // To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
+        // We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
         if (prevArgName && !shouldReturn(node, transformer)) {
             if (isSynthIdentifier(prevArgName)) {
                 possibleNameForVarDecl = prevArgName;
@@ -282,14 +282,12 @@ namespace ts.codefix {
         }
 
         const tryBlock = factory.createBlock(transformExpression(node.expression, transformer, possibleNameForVarDecl));
-        const transformationBody = getTransformationBody(func, possibleNameForVarDecl, argName, node, transformer);
+        const transformationBody = func ? getTransformationBody(func, possibleNameForVarDecl, argName, node, transformer) : emptyArray;
         const catchArg = argName ? isSynthIdentifier(argName) ? argName.identifier.text : argName.bindingPattern : "e";
         const catchVariableDeclaration = factory.createVariableDeclaration(catchArg);
         const catchClause = factory.createCatchClause(catchVariableDeclaration, factory.createBlock(transformationBody));
 
-        /*
-            In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
-        */
+        // In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
         let varDeclList: VariableStatement | undefined;
         let varDeclIdentifier: Identifier | undefined;
         if (possibleNameForVarDecl && !shouldReturn(node, transformer)) {
@@ -379,13 +377,14 @@ namespace ts.codefix {
             case SyntaxKind.NullKeyword:
                 // do not produce a transformed statement for a null argument
                 break;
+            case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.Identifier: // identifier includes undefined
                 if (!argName) {
                     // undefined was argument passed to promise handler
                     break;
                 }
 
-                const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
+                const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier | PropertyAccessExpression), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
                 if (shouldReturn(parent, transformer)) {
                     return maybeAnnotateAndReturn(synthCall, parent.typeArguments?.[0]);
                 }
@@ -415,7 +414,7 @@ namespace ts.codefix {
                     for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
-                            if (isReturnStatementWithFixablePromiseHandler(statement)) {
+                            if (isReturnStatementWithFixablePromiseHandler(statement, transformer.checker)) {
                                 refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                             }
                             else {
@@ -437,7 +436,7 @@ namespace ts.codefix {
                             seenReturnStatement);
                 }
                 else {
-                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [factory.createReturnStatement(funcBody)] : emptyArray;
+                    const innerRetStmts = isFixablePromiseHandler(funcBody, transformer.checker) ? [factory.createReturnStatement(funcBody)] : emptyArray;
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
@@ -540,6 +539,9 @@ namespace ts.codefix {
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryOrDefault(funcNode);
+        }
+        else if (isPropertyAccessExpression(funcNode) && isIdentifier(funcNode.name)) {
+            name = getMapEntryOrDefault(funcNode.name);
         }
 
         // return undefined argName when arg is null or undefined

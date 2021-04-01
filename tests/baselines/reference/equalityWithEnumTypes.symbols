@@ -1,0 +1,85 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts ===
+// Literal enum type
+enum E1 {
+>E1 : Symbol(E1, Decl(equalityWithEnumTypes.ts, 0, 0))
+
+    a = 1,
+>a : Symbol(E1.a, Decl(equalityWithEnumTypes.ts, 1, 9))
+
+    b = 2,
+>b : Symbol(E1.b, Decl(equalityWithEnumTypes.ts, 2, 10))
+}
+
+// Numeric enum type
+enum E2 {
+>E2 : Symbol(E2, Decl(equalityWithEnumTypes.ts, 4, 1))
+
+    a = 1 << 0,
+>a : Symbol(E2.a, Decl(equalityWithEnumTypes.ts, 7, 9))
+
+    b = 1 << 1
+>b : Symbol(E2.b, Decl(equalityWithEnumTypes.ts, 8, 15))
+}
+
+function f1(v: E1) {
+>f1 : Symbol(f1, Decl(equalityWithEnumTypes.ts, 10, 1))
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+>E1 : Symbol(E1, Decl(equalityWithEnumTypes.ts, 0, 0))
+
+    if (v !== 0) {  // Error
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+    }
+    if (v !== 1) {
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+    }
+    if (v !== 2) {
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+    }
+    if (v !== 3) {  // Error
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 12, 12))
+    }
+}
+
+function f2(v: E2) {
+>f2 : Symbol(f2, Decl(equalityWithEnumTypes.ts, 25, 1))
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+>E2 : Symbol(E2, Decl(equalityWithEnumTypes.ts, 4, 1))
+
+    if (v !== 0) {
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+    }
+    if (v !== 1) {
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+    }
+    if (v !== 2) {
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+    }
+    if (v !== 3) {
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+
+        v;
+>v : Symbol(v, Decl(equalityWithEnumTypes.ts, 27, 12))
+    }
+}
+

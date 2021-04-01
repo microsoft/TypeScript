@@ -57,6 +57,11 @@ namespace ts {
     /* @internal */
     export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
 
+    /* @internal */
+    export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
+        return host.getModifiedTime(fileName) || missingFileModifiedTime;
+    }
+
     interface Levels {
         Low: number;
         Medium: number;
@@ -126,6 +131,64 @@ namespace ts {
         }
     }
 
+    interface WatchedFileWithIsClosed extends WatchedFile {
+        isClosed?: boolean;
+    }
+    function pollWatchedFileQueue<T extends WatchedFileWithIsClosed>(
+        host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; },
+        queue: (T | undefined)[],
+        pollIndex: number, chunkSize: number,
+        callbackOnWatchFileStat?: (watchedFile: T, pollIndex: number, fileChanged: boolean) => void
+    ) {
+        let definedValueCopyToIndex = pollIndex;
+        // Max visit would be all elements of the queue
+        for (let canVisit = queue.length; chunkSize && canVisit; nextPollIndex(), canVisit--) {
+            const watchedFile = queue[pollIndex];
+            if (!watchedFile) {
+                continue;
+            }
+            else if (watchedFile.isClosed) {
+                queue[pollIndex] = undefined;
+                continue;
+            }
+
+            // Only files polled count towards chunkSize
+            chunkSize--;
+            const fileChanged = onWatchedFileStat(watchedFile, getModifiedTime(host, watchedFile.fileName));
+            if (watchedFile.isClosed) {
+                // Closed watcher as part of callback
+                queue[pollIndex] = undefined;
+                continue;
+            }
+
+            callbackOnWatchFileStat?.(watchedFile, pollIndex, fileChanged);
+            // Defragment the queue while we are at it
+            if (queue[pollIndex]) {
+                // Copy this file to the non hole location
+                if (definedValueCopyToIndex < pollIndex) {
+                    queue[definedValueCopyToIndex] = watchedFile;
+                    queue[pollIndex] = undefined;
+                }
+                definedValueCopyToIndex++;
+            }
+        }
+
+        // Return next poll index
+        return pollIndex;
+
+        function nextPollIndex() {
+            pollIndex++;
+            if (pollIndex === queue.length) {
+                if (definedValueCopyToIndex < pollIndex) {
+                    // There are holes from definedValueCopyToIndex to end of queue, change queue size
+                    queue.length = definedValueCopyToIndex;
+                }
+                pollIndex = 0;
+                definedValueCopyToIndex = 0;
+            }
+        }
+    }
+
     /* @internal */
     export function createDynamicPriorityPollingWatchFile(host: {
         getModifiedTime: NonNullable<System["getModifiedTime"]>;
@@ -154,7 +217,7 @@ namespace ts {
                 fileName,
                 callback,
                 unchangedPolls: 0,
-                mtime: getModifiedTime(fileName)
+                mtime: getModifiedTime(host, fileName)
             };
             watchedFiles.push(file);
 
@@ -203,26 +266,16 @@ namespace ts {
         }
 
         function pollQueue(queue: (WatchedFile | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
-            // Max visit would be all elements of the queue
-            let needsVisit = queue.length;
-            let definedValueCopyToIndex = pollIndex;
-            for (let polled = 0; polled < chunkSize && needsVisit > 0; nextPollIndex(), needsVisit--) {
-                const watchedFile = queue[pollIndex];
-                if (!watchedFile) {
-                    continue;
-                }
-                else if (watchedFile.isClosed) {
-                    queue[pollIndex] = undefined;
-                    continue;
-                }
+            return pollWatchedFileQueue(
+                host,
+                queue,
+                pollIndex,
+                chunkSize,
+                onWatchFileStat
+            );
 
-                polled++;
-                const fileChanged = onWatchedFileStat(watchedFile, getModifiedTime(watchedFile.fileName));
-                if (watchedFile.isClosed) {
-                    // Closed watcher as part of callback
-                    queue[pollIndex] = undefined;
-                }
-                else if (fileChanged) {
+            function onWatchFileStat(watchedFile: WatchedFile, pollIndex: number, fileChanged: boolean) {
+                if (fileChanged) {
                     watchedFile.unchangedPolls = 0;
                     // Changed files go to changedFilesInLastPoll queue
                     if (queue !== changedFilesInLastPoll) {
@@ -243,30 +296,6 @@ namespace ts {
                     watchedFile.unchangedPolls++;
                     queue[pollIndex] = undefined;
                     addToPollingIntervalQueue(watchedFile, pollingInterval === PollingInterval.Low ? PollingInterval.Medium : PollingInterval.High);
-                }
-
-                if (queue[pollIndex]) {
-                    // Copy this file to the non hole location
-                    if (definedValueCopyToIndex < pollIndex) {
-                        queue[definedValueCopyToIndex] = watchedFile;
-                        queue[pollIndex] = undefined;
-                    }
-                    definedValueCopyToIndex++;
-                }
-            }
-
-            // Return next poll index
-            return pollIndex;
-
-            function nextPollIndex() {
-                pollIndex++;
-                if (pollIndex === queue.length) {
-                    if (definedValueCopyToIndex < pollIndex) {
-                        // There are holes from nextDefinedValueIndex to end of queue, change queue size
-                        queue.length = definedValueCopyToIndex;
-                    }
-                    pollIndex = 0;
-                    definedValueCopyToIndex = 0;
                 }
             }
         }
@@ -300,10 +329,6 @@ namespace ts {
 
         function scheduleNextPoll(pollingInterval: PollingInterval) {
             pollingIntervalQueue(pollingInterval).pollScheduled = host.setTimeout(pollingInterval === PollingInterval.Low ? pollLowPollingIntervalQueue : pollPollingIntervalQueue, pollingInterval, pollingIntervalQueue(pollingInterval));
-        }
-
-        function getModifiedTime(fileName: string) {
-            return host.getModifiedTime(fileName) || missingFileModifiedTime;
         }
     }
 
@@ -358,6 +383,43 @@ namespace ts {
             watcher.referenceCount = 0;
             dirWatchers.set(dirPath, watcher);
             return watcher;
+        }
+    }
+
+    function createFixedChunkSizePollingWatchFile(host: {
+        getModifiedTime: NonNullable<System["getModifiedTime"]>;
+        setTimeout: NonNullable<System["setTimeout"]>;
+    }): HostWatchFile {
+        const watchedFiles: (WatchedFileWithIsClosed | undefined)[] = [];
+        let pollIndex = 0;
+        let pollScheduled: any;
+        return watchFile;
+
+        function watchFile(fileName: string, callback: FileWatcherCallback): FileWatcher {
+            const file: WatchedFileWithIsClosed = {
+                fileName,
+                callback,
+                mtime: getModifiedTime(host, fileName)
+            };
+            watchedFiles.push(file);
+            scheduleNextPoll();
+            return {
+                close: () => {
+                    file.isClosed = true;
+                    unorderedRemoveItem(watchedFiles, file);
+                }
+            };
+        }
+
+        function pollQueue() {
+            pollScheduled = undefined;
+            pollIndex = pollWatchedFileQueue(host, watchedFiles, pollIndex, pollingChunkSize[PollingInterval.Low]);
+            scheduleNextPoll();
+        }
+
+        function scheduleNextPoll() {
+            if (!watchedFiles.length || pollScheduled) return;
+            pollScheduled = host.setTimeout(pollQueue, PollingInterval.High);
         }
     }
 
@@ -795,6 +857,7 @@ namespace ts {
         tscWatchFile: string | undefined;
         useNonPollingWatchers?: boolean;
         tscWatchDirectory: string | undefined;
+        defaultWatchFileKind: System["defaultWatchFileKind"];
     }
 
     /*@internal*/
@@ -814,8 +877,10 @@ namespace ts {
         tscWatchFile,
         useNonPollingWatchers,
         tscWatchDirectory,
+        defaultWatchFileKind,
     }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
         let dynamicPollingWatchFile: HostWatchFile | undefined;
+        let fixedChunkSizePollingWatchFile: HostWatchFile | undefined;
         let nonPollingWatchFile: HostWatchFile | undefined;
         let hostRecursiveDirectoryWatcher: HostWatchDirectory | undefined;
         return {
@@ -833,6 +898,8 @@ namespace ts {
                     return pollingWatchFile(fileName, callback, pollingInterval, /*options*/ undefined);
                 case WatchFileKind.DynamicPriorityPolling:
                     return ensureDynamicPollingWatchFile()(fileName, callback, pollingInterval, /*options*/ undefined);
+                case WatchFileKind.FixedChunkSizePolling:
+                    return ensureFixedChunkSizePollingWatchFile()(fileName, callback, /* pollingInterval */ undefined!, /*options*/ undefined);
                 case WatchFileKind.UseFsEvents:
                     return fsWatch(
                         fileName,
@@ -853,8 +920,11 @@ namespace ts {
         }
 
         function ensureDynamicPollingWatchFile() {
-            return dynamicPollingWatchFile ||
-                (dynamicPollingWatchFile = createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout }));
+            return dynamicPollingWatchFile ||= createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
+        }
+
+        function ensureFixedChunkSizePollingWatchFile() {
+            return fixedChunkSizePollingWatchFile ||= createFixedChunkSizePollingWatchFile({ getModifiedTime, setTimeout });
         }
 
         function updateOptionsForWatchFile(options: WatchOptions | undefined, useNonPollingWatchers?: boolean): WatchOptions {
@@ -880,7 +950,7 @@ namespace ts {
                         // Use notifications from FS to watch with falling back to fs.watchFile
                         generateWatchFileOptions(WatchFileKind.UseFsEventsOnParentDirectory, PollingWatchKind.PriorityInterval, options) :
                         // Default to do not use fixed polling interval
-                        { watchFile: WatchFileKind.FixedPollingInterval };
+                        { watchFile: defaultWatchFileKind?.() || WatchFileKind.FixedPollingInterval };
             }
         }
 
@@ -942,6 +1012,13 @@ namespace ts {
                         directoryName,
                         () => callback(directoryName),
                         PollingInterval.Medium,
+                        /*options*/ undefined
+                    );
+                case WatchDirectoryKind.FixedChunkSizePolling:
+                    return ensureFixedChunkSizePollingWatchFile()(
+                        directoryName,
+                        () => callback(directoryName),
+                        /* pollingInterval */ undefined!,
                         /*options*/ undefined
                     );
                 case WatchDirectoryKind.UseFsEvents:
@@ -1116,6 +1193,7 @@ namespace ts {
         exit(exitCode?: number): void;
         /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): boolean;
         /*@internal*/ disableCPUProfiler?(continuation: () => void): boolean;
+        /*@internal*/ cpuProfilingEnabled?(): boolean;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
@@ -1129,7 +1207,9 @@ namespace ts {
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
         // For testing
         /*@internal*/ now?(): Date;
+        /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
+        /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
     }
 
     export interface FileWatcher {
@@ -1185,6 +1265,7 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
+
             const Buffer: {
                 new (input: string, encoding?: string): any;
                 from?(input: string, encoding?: string): any;
@@ -1196,6 +1277,8 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
+            const realpathSync = useCaseSensitiveFileNames ? (_fs.realpathSync.native ?? _fs.realpathSync) : _fs.realpathSync;
+
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
@@ -1216,6 +1299,7 @@ namespace ts {
                 tscWatchFile: process.env.TSC_WATCHFILE,
                 useNonPollingWatchers: process.env.TSC_NONPOLLING_WATCHER,
                 tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
+                defaultWatchFileKind: () => sys!.defaultWatchFileKind?.(),
             });
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -1284,6 +1368,7 @@ namespace ts {
                 },
                 enableCPUProfiler,
                 disableCPUProfiler,
+                cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
                 realpath,
                 debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
@@ -1556,7 +1641,7 @@ namespace ts {
                     return event === "rename" &&
                         (!relativeName ||
                             relativeName === lastDirectoryPart ||
-                            relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length) &&
+                            (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
                         !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                         invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
                         callback(event, relativeName);
@@ -1749,7 +1834,7 @@ namespace ts {
 
             function realpath(path: string): string {
                 try {
-                    return _fs.realpathSync(path);
+                    return realpathSync(path);
                 }
                 catch {
                     return path;

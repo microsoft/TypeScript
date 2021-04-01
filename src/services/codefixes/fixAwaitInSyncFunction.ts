@@ -3,7 +3,7 @@ namespace ts.codefix {
     const fixId = "fixAwaitInSyncFunction";
     const errorCodes = [
         Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
-        Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator.code,
+        Diagnostics.for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
     ];
     registerCodeFix({
         errorCodes,
@@ -16,7 +16,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seen = new Map<string, true>();
+            const seen = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file, diag.start);
                 if (!nodes || !addToSeen(seen, getNodeId(nodes.insertBefore))) return;

@@ -43,38 +43,36 @@ o2?.b()!.toString!;
 
 //// [callChain.js]
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
 o1 === null || o1 === void 0 ? void 0 : o1();
 o1 === null || o1 === void 0 ? void 0 : o1(1);
 o1 === null || o1 === void 0 ? void 0 : o1.apply(void 0, [1, 2]);
-o1 === null || o1 === void 0 ? void 0 : o1.apply(void 0, __spreadArrays([1], [2, 3], [4]));
+o1 === null || o1 === void 0 ? void 0 : o1.apply(void 0, __spreadArray(__spreadArray([1], [2, 3]), [4]));
 o2 === null || o2 === void 0 ? void 0 : o2.b();
 o2 === null || o2 === void 0 ? void 0 : o2.b(1);
 o2 === null || o2 === void 0 ? void 0 : o2.b.apply(o2, [1, 2]);
-o2 === null || o2 === void 0 ? void 0 : o2.b.apply(o2, __spreadArrays([1], [2, 3], [4]));
+o2 === null || o2 === void 0 ? void 0 : o2.b.apply(o2, __spreadArray(__spreadArray([1], [2, 3]), [4]));
 o2 === null || o2 === void 0 ? void 0 : o2["b"]();
 o2 === null || o2 === void 0 ? void 0 : o2["b"](1);
 o2 === null || o2 === void 0 ? void 0 : o2["b"].apply(o2, [1, 2]);
-o2 === null || o2 === void 0 ? void 0 : o2["b"].apply(o2, __spreadArrays([1], [2, 3], [4]));
+o2 === null || o2 === void 0 ? void 0 : o2["b"].apply(o2, __spreadArray(__spreadArray([1], [2, 3]), [4]));
 (_a = o3.b) === null || _a === void 0 ? void 0 : _a.call(o3).c;
 (_b = o3.b) === null || _b === void 0 ? void 0 : _b.call(o3, 1).c;
-(_c = o3.b) === null || _c === void 0 ? void 0 : _c.call.apply(_c, __spreadArrays([o3], [1, 2])).c;
-(_d = o3.b) === null || _d === void 0 ? void 0 : _d.call.apply(_d, __spreadArrays([o3, 1], [2, 3], [4])).c;
+(_c = o3.b) === null || _c === void 0 ? void 0 : _c.call.apply(_c, __spreadArray([o3], [1, 2])).c;
+(_d = o3.b) === null || _d === void 0 ? void 0 : _d.call.apply(_d, __spreadArray(__spreadArray([o3, 1], [2, 3]), [4])).c;
 (_e = o3.b) === null || _e === void 0 ? void 0 : _e.call(o3)["c"];
 (_f = o3.b) === null || _f === void 0 ? void 0 : _f.call(o3, 1)["c"];
-(_g = o3.b) === null || _g === void 0 ? void 0 : _g.call.apply(_g, __spreadArrays([o3], [1, 2]))["c"];
-(_h = o3.b) === null || _h === void 0 ? void 0 : _h.call.apply(_h, __spreadArrays([o3, 1], [2, 3], [4]))["c"];
+(_g = o3.b) === null || _g === void 0 ? void 0 : _g.call.apply(_g, __spreadArray([o3], [1, 2]))["c"];
+(_h = o3.b) === null || _h === void 0 ? void 0 : _h.call.apply(_h, __spreadArray(__spreadArray([o3, 1], [2, 3]), [4]))["c"];
 (_j = o3["b"]) === null || _j === void 0 ? void 0 : _j.call(o3).c;
 (_k = o3["b"]) === null || _k === void 0 ? void 0 : _k.call(o3, 1).c;
-(_l = o3["b"]) === null || _l === void 0 ? void 0 : _l.call.apply(_l, __spreadArrays([o3], [1, 2])).c;
-(_m = o3["b"]) === null || _m === void 0 ? void 0 : _m.call.apply(_m, __spreadArrays([o3, 1], [2, 3], [4])).c;
+(_l = o3["b"]) === null || _l === void 0 ? void 0 : _l.call.apply(_l, __spreadArray([o3], [1, 2])).c;
+(_m = o3["b"]) === null || _m === void 0 ? void 0 : _m.call.apply(_m, __spreadArray(__spreadArray([o3, 1], [2, 3]), [4])).c;
 var v = o4 === null || o4 === void 0 ? void 0 : o4(incr);
 (_o = o5()) === null || _o === void 0 ? void 0 : _o();
 // GH#36031

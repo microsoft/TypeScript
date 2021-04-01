@@ -1,0 +1,17 @@
+tests/cases/compiler/divergentAccessorsTypes2.ts(10,1): error TS2322: Type '42' is not assignable to type 'string | undefined'.
+
+
+==== tests/cases/compiler/divergentAccessorsTypes2.ts (1 errors) ====
+    class Test1<T> {
+        get foo(): T { return null as any }
+        set foo(s: T | undefined ) {
+        }
+    }
+    
+    const s = new Test1<string>();
+    s.foo = undefined;
+    s.foo = "hello";
+    s.foo = 42;
+    ~~~~~
+!!! error TS2322: Type '42' is not assignable to type 'string | undefined'.
+    

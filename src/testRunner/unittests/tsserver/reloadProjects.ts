@@ -62,7 +62,7 @@ namespace ts.projectSystem {
 
         it("inferred project", () => {
             const host = createServerHost([libFile, file1, file2]);
-            const service = createProjectService(host, /*parameters*/ undefined, { useInferredProjectPerProjectRoot: true, });
+            const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, });
             service.setHostConfiguration({ watchOptions: { excludeFiles: [file2.path] } });
             const timeoutId = host.getNextTimeoutId();
             service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["node_modules"] }, tscWatch.projectRoot);

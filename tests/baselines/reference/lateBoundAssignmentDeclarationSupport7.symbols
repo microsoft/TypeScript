@@ -43,7 +43,7 @@ module.exports.F = F;
 >module.exports.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
 >module.exports : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7", Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 0))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 0))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport7.js, 1, 27), Decl(lateBoundAssignmentDeclarationSupport7.js, 4, 1), Decl(lateBoundAssignmentDeclarationSupport7.js, 5, 15))
 
@@ -51,7 +51,7 @@ module.exports.S = _sym;
 >module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
 >module.exports : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
->exports : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport7", Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 0))
+>exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 0))
 >S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport7.js, 7, 21))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport7.js, 0, 5))
 

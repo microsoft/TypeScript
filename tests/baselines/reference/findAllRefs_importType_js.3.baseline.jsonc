@@ -1,6 +1,6 @@
 // === /a.js ===
-// /*FIND ALL REFS*/module.exports = class C {};
-// module.exports.D = class [|D|] {};
+// module.exports = class C {};
+// module.exports.D = class /*FIND ALL REFS*/[|D|] {};
 
 // === /b.js ===
 // /** @type {import("./a")} */
@@ -15,7 +15,7 @@
       "containerName": "",
       "fileName": "/a.js",
       "kind": "local class",
-      "name": "(local class) D",
+      "name": "(local class) module.exports.D",
       "textSpan": {
         "start": 54,
         "length": 1
@@ -38,8 +38,24 @@
           "kind": "space"
         },
         {
+          "text": "module",
+          "kind": "localName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "exports",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
           "text": "D",
-          "kind": "className"
+          "kind": "aliasName"
         }
       ],
       "contextSpan": {

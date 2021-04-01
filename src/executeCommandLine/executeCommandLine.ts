@@ -286,7 +286,8 @@ namespace ts {
             fileName => getNormalizedAbsolutePath(fileName, currentDirectory)
         );
         if (configFileName) {
-            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+            const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
+            const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
                 if (configParseResult.errors.length !== 0) {
                     reportDiagnostic = updateReportDiagnostic(
@@ -315,6 +316,7 @@ namespace ts {
                     configParseResult,
                     commandLineOptions,
                     commandLine.watchOptions,
+                    extendedConfigCache,
                 );
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
@@ -501,7 +503,7 @@ namespace ts {
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
-        tracing.dumpLegend();
+        dumpTracingLegend(); // Will no-op if there hasn't been any tracing
         return sys.exit(exitStatus);
     }
 
@@ -618,6 +620,7 @@ namespace ts {
         configParseResult: ParsedCommandLine,
         optionsToExtend: CompilerOptions,
         watchOptionsToExtend: WatchOptions | undefined,
+        extendedConfigCache: Map<ExtendedConfigCacheEntry>,
     ) {
         const watchCompilerHost = createWatchCompilerHostOfConfigFile({
             configFileName: configParseResult.options.configFilePath!,
@@ -629,6 +632,7 @@ namespace ts {
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
+        watchCompilerHost.extendedConfigCache = extendedConfigCache;
         return createWatchProgram(watchCompilerHost);
     }
 
@@ -662,11 +666,12 @@ namespace ts {
 
     function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
         if (canReportDiagnostics(system, compilerOptions)) {
-            performance.enable();
+            performance.enable(system);
         }
 
         if (canTrace(system, compilerOptions)) {
-            tracing.startTracing(isBuildMode ? tracing.Mode.Build : tracing.Mode.Project, compilerOptions.generateTrace!, compilerOptions.configFilePath);
+            startTracing(isBuildMode ? "build" : "project",
+                         compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
     }
 
@@ -674,7 +679,7 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
 
         if (canTrace(sys, compilerOptions)) {
-            tracing.stopTracing(program.getTypeCatalog());
+            tracing?.stopTracing();
         }
 
         let statistics: Statistic[];

@@ -39,10 +39,104 @@ namespace ts {
         return node.kind === SyntaxKind.TemplateTail;
     }
 
+    // Punctuation
+
+    export function isDotDotDotToken(node: Node): node is DotDotDotToken {
+        return node.kind === SyntaxKind.DotDotDotToken;
+    }
+
+    /*@internal*/
+    export function isCommaToken(node: Node): node is Token<SyntaxKind.CommaToken> {
+        return node.kind === SyntaxKind.CommaToken;
+    }
+
+    export function isPlusToken(node: Node): node is PlusToken {
+        return node.kind === SyntaxKind.PlusToken;
+    }
+
+    export function isMinusToken(node: Node): node is MinusToken {
+        return node.kind === SyntaxKind.MinusToken;
+    }
+
+    export function isAsteriskToken(node: Node): node is AsteriskToken {
+        return node.kind === SyntaxKind.AsteriskToken;
+    }
+
+    /*@internal*/
+    export function isExclamationToken(node: Node): node is ExclamationToken {
+        return node.kind === SyntaxKind.ExclamationToken;
+    }
+
+    /*@internal*/
+    export function isQuestionToken(node: Node): node is QuestionToken {
+        return node.kind === SyntaxKind.QuestionToken;
+    }
+
+    /*@internal*/
+    export function isColonToken(node: Node): node is ColonToken {
+        return node.kind === SyntaxKind.ColonToken;
+    }
+
+    /*@internal*/
+    export function isQuestionDotToken(node: Node): node is QuestionDotToken {
+        return node.kind === SyntaxKind.QuestionDotToken;
+    }
+
+    /*@internal*/
+    export function isEqualsGreaterThanToken(node: Node): node is EqualsGreaterThanToken {
+        return node.kind === SyntaxKind.EqualsGreaterThanToken;
+    }
+
     // Identifiers
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
+    }
+
+    export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
+        return node.kind === SyntaxKind.PrivateIdentifier;
+    }
+
+    // Reserved Words
+
+    /* @internal */
+    export function isExportModifier(node: Node): node is ExportKeyword {
+        return node.kind === SyntaxKind.ExportKeyword;
+    }
+
+    /* @internal */
+    export function isAsyncModifier(node: Node): node is AsyncKeyword {
+        return node.kind === SyntaxKind.AsyncKeyword;
+    }
+
+    /* @internal */
+    export function isAssertsKeyword(node: Node): node is AssertsKeyword {
+        return node.kind === SyntaxKind.AssertsKeyword;
+    }
+
+    /* @internal */
+    export function isAwaitKeyword(node: Node): node is AwaitKeyword {
+        return node.kind === SyntaxKind.AwaitKeyword;
+    }
+
+    /* @internal */
+    export function isReadonlyKeyword(node: Node): node is ReadonlyKeyword {
+        return node.kind === SyntaxKind.ReadonlyKeyword;
+    }
+
+    /* @internal */
+    export function isStaticModifier(node: Node): node is StaticKeyword {
+        return node.kind === SyntaxKind.StaticKeyword;
+    }
+
+    /*@internal*/
+    export function isSuperKeyword(node: Node): node is SuperExpression {
+        return node.kind === SyntaxKind.SuperKeyword;
+    }
+
+    /*@internal*/
+    export function isImportKeyword(node: Node): node is ImportExpression {
+        return node.kind === SyntaxKind.ImportKeyword;
     }
 
     // Names
@@ -53,37 +147,6 @@ namespace ts {
 
     export function isComputedPropertyName(node: Node): node is ComputedPropertyName {
         return node.kind === SyntaxKind.ComputedPropertyName;
-    }
-
-    export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
-        return node.kind === SyntaxKind.PrivateIdentifier;
-    }
-
-    // Tokens
-
-    /*@internal*/
-    export function isSuperKeyword(node: Node): node is Token<SyntaxKind.SuperKeyword> {
-        return node.kind === SyntaxKind.SuperKeyword;
-    }
-
-    /*@internal*/
-    export function isImportKeyword(node: Node): node is Token<SyntaxKind.ImportKeyword> {
-        return node.kind === SyntaxKind.ImportKeyword;
-    }
-
-    /*@internal*/
-    export function isCommaToken(node: Node): node is Token<SyntaxKind.CommaToken> {
-        return node.kind === SyntaxKind.CommaToken;
-    }
-
-    /*@internal*/
-    export function isQuestionToken(node: Node): node is Token<SyntaxKind.QuestionToken> {
-        return node.kind === SyntaxKind.QuestionToken;
-    }
-
-    /*@internal*/
-    export function isExclamationToken(node: Node): node is Token<SyntaxKind.ExclamationToken> {
-        return node.kind === SyntaxKind.ExclamationToken;
     }
 
     // Signature elements
@@ -707,6 +770,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocNameReference;
     }
 
+    export function isJSDocLink(node: Node): node is JSDocLink {
+        return node.kind === SyntaxKind.JSDocLink;
+    }
+
     export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }
@@ -785,10 +852,18 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocReadonlyTag;
     }
 
+    export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {
+        return node.kind === SyntaxKind.JSDocOverrideTag;
+    }
+
     export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
         return node.kind === SyntaxKind.JSDocDeprecatedTag;
-
     }
+
+    export function isJSDocSeeTag(node: Node): node is JSDocSeeTag {
+        return node.kind === SyntaxKind.JSDocSeeTag;
+    }
+
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
         return node.kind === SyntaxKind.JSDocEnumTag;
     }

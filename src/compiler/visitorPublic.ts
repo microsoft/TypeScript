@@ -1,5 +1,13 @@
 namespace ts {
-    const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
+    /**
+     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+     *
+     * @param node The Node to visit.
+     * @param visitor The callback used to visit the Node.
+     * @param test A callback to execute to verify the Node is valid.
+     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+     */
+    export function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
 
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
@@ -9,19 +17,9 @@ namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T;
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
 
-    /**
-     * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
-     *
-     * @param node The Node to visit.
-     * @param visitor The callback used to visit the Node.
-     * @param test A callback to execute to verify the Node is valid.
-     * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
-     */
-    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
-
-    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined {
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined {
         if (node === undefined || visitor === undefined) {
             return node;
         }
@@ -314,6 +312,24 @@ namespace ts {
     }
 
     /**
+     * Visits an iteration body, adding any block-scoped variables required by the transformation.
+     */
+    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement {
+        context.startBlockScope();
+        const updated = visitNode(body, visitor, isStatement, context.factory.liftToBlock);
+        const declarations = context.endBlockScope();
+        if (some(declarations)) {
+            if (isBlock(updated)) {
+                declarations.push(...updated.statements);
+                return context.factory.updateBlock(updated, declarations);
+            }
+            declarations.push(updated);
+            return context.factory.createBlock(declarations);
+        }
+        return updated;
+    }
+
+    /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
      * @param node The Node whose children will be visited.
@@ -350,754 +366,889 @@ namespace ts {
             // Names
 
             case SyntaxKind.Identifier:
-                return factory.updateIdentifier(<Identifier>node,
-                    nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
+                Debug.type<Identifier>(node);
+                return factory.updateIdentifier(node,
+                    nodesVisitor(node.typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
 
             case SyntaxKind.QualifiedName:
-                return factory.updateQualifiedName(<QualifiedName>node,
-                    nodeVisitor((<QualifiedName>node).left, visitor, isEntityName),
-                    nodeVisitor((<QualifiedName>node).right, visitor, isIdentifier));
+                Debug.type<QualifiedName>(node);
+                return factory.updateQualifiedName(node,
+                    nodeVisitor(node.left, visitor, isEntityName),
+                    nodeVisitor(node.right, visitor, isIdentifier));
 
             case SyntaxKind.ComputedPropertyName:
-                return factory.updateComputedPropertyName(<ComputedPropertyName>node,
-                    nodeVisitor((<ComputedPropertyName>node).expression, visitor, isExpression));
+                Debug.type<ComputedPropertyName>(node);
+                return factory.updateComputedPropertyName(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             // Signature elements
             case SyntaxKind.TypeParameter:
-                return factory.updateTypeParameterDeclaration(<TypeParameterDeclaration>node,
-                    nodeVisitor((<TypeParameterDeclaration>node).name, visitor, isIdentifier),
-                    nodeVisitor((<TypeParameterDeclaration>node).constraint, visitor, isTypeNode),
-                    nodeVisitor((<TypeParameterDeclaration>node).default, visitor, isTypeNode));
+                Debug.type<TypeParameterDeclaration>(node);
+                return factory.updateTypeParameterDeclaration(node,
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodeVisitor(node.constraint, visitor, isTypeNode),
+                    nodeVisitor(node.default, visitor, isTypeNode));
 
             case SyntaxKind.Parameter:
-                return factory.updateParameterDeclaration(<ParameterDeclaration>node,
-                    nodesVisitor((<ParameterDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<ParameterDeclaration>node).dotDotDotToken, tokenVisitor, isToken),
-                    nodeVisitor((<ParameterDeclaration>node).name, visitor, isBindingName),
-                    nodeVisitor((<ParameterDeclaration>node).questionToken, tokenVisitor, isToken),
-                    nodeVisitor((<ParameterDeclaration>node).type, visitor, isTypeNode),
-                    nodeVisitor((<ParameterDeclaration>node).initializer, visitor, isExpression));
+                Debug.type<ParameterDeclaration>(node);
+                return factory.updateParameterDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
+                    nodeVisitor(node.name, visitor, isBindingName),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.initializer, visitor, isExpression));
 
             case SyntaxKind.Decorator:
-                return factory.updateDecorator(<Decorator>node,
-                    nodeVisitor((<Decorator>node).expression, visitor, isExpression));
+                Debug.type<Decorator>(node);
+                return factory.updateDecorator(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             // Type elements
             case SyntaxKind.PropertySignature:
-                return factory.updatePropertySignature((<PropertySignature>node),
-                    nodesVisitor((<PropertySignature>node).modifiers, visitor, isToken),
-                    nodeVisitor((<PropertySignature>node).name, visitor, isPropertyName),
-                    nodeVisitor((<PropertySignature>node).questionToken, tokenVisitor, isToken),
-                    nodeVisitor((<PropertySignature>node).type, visitor, isTypeNode));
+                Debug.type<PropertySignature>(node);
+                return factory.updatePropertySignature(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    nodeVisitor(node.questionToken, tokenVisitor, isToken),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.PropertyDeclaration:
-                return factory.updatePropertyDeclaration(<PropertyDeclaration>node,
-                    nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<PropertyDeclaration>node).name, visitor, isPropertyName),
+                Debug.type<PropertyDeclaration>(node);
+                return factory.updatePropertyDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isPropertyName),
                     // QuestionToken and ExclamationToken is uniqued in Property Declaration and the signature of 'updateProperty' is that too
-                    nodeVisitor((<PropertyDeclaration>node).questionToken || (<PropertyDeclaration>node).exclamationToken, tokenVisitor, isToken),
-                    nodeVisitor((<PropertyDeclaration>node).type, visitor, isTypeNode),
-                    nodeVisitor((<PropertyDeclaration>node).initializer, visitor, isExpression));
+                    nodeVisitor(node.questionToken || node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.initializer, visitor, isExpression));
 
             case SyntaxKind.MethodSignature:
-                return factory.updateMethodSignature(<MethodSignature>node,
-                    nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<MethodSignature>node).name, visitor, isPropertyName),
-                    nodeVisitor((<MethodSignature>node).questionToken, tokenVisitor, isToken),
-                    nodesVisitor((<MethodSignature>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<MethodSignature>node).parameters, visitor, isParameterDeclaration),
-                    nodeVisitor((<MethodSignature>node).type, visitor, isTypeNode));
+                Debug.type<MethodSignature>(node);
+                return factory.updateMethodSignature(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.MethodDeclaration:
-                return factory.updateMethodDeclaration(<MethodDeclaration>node,
-                    nodesVisitor((<MethodDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<MethodDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<MethodDeclaration>node).asteriskToken, tokenVisitor, isToken),
-                    nodeVisitor((<MethodDeclaration>node).name, visitor, isPropertyName),
-                    nodeVisitor((<MethodDeclaration>node).questionToken, tokenVisitor, isToken),
-                    nodesVisitor((<MethodDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    visitParameterList((<MethodDeclaration>node).parameters, visitor, context, nodesVisitor),
-                    nodeVisitor((<MethodDeclaration>node).type, visitor, isTypeNode),
-                    visitFunctionBody((<MethodDeclaration>node).body!, visitor, context, nodeVisitor));
+                Debug.type<MethodDeclaration>(node);
+                return factory.updateMethodDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
             case SyntaxKind.Constructor:
-                return factory.updateConstructorDeclaration(<ConstructorDeclaration>node,
-                    nodesVisitor((<ConstructorDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ConstructorDeclaration>node).modifiers, visitor, isModifier),
-                    visitParameterList((<ConstructorDeclaration>node).parameters, visitor, context, nodesVisitor),
-                    visitFunctionBody((<ConstructorDeclaration>node).body!, visitor, context, nodeVisitor));
+                Debug.type<ConstructorDeclaration>(node);
+                return factory.updateConstructorDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
             case SyntaxKind.GetAccessor:
-                return factory.updateGetAccessorDeclaration(<GetAccessorDeclaration>node,
-                    nodesVisitor((<GetAccessorDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<GetAccessorDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<GetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    visitParameterList((<GetAccessorDeclaration>node).parameters, visitor, context, nodesVisitor),
-                    nodeVisitor((<GetAccessorDeclaration>node).type, visitor, isTypeNode),
-                    visitFunctionBody((<GetAccessorDeclaration>node).body!, visitor, context, nodeVisitor));
+                Debug.type<GetAccessorDeclaration>(node);
+                return factory.updateGetAccessorDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
             case SyntaxKind.SetAccessor:
-                return factory.updateSetAccessorDeclaration(<SetAccessorDeclaration>node,
-                    nodesVisitor((<SetAccessorDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<SetAccessorDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<SetAccessorDeclaration>node).name, visitor, isPropertyName),
-                    visitParameterList((<SetAccessorDeclaration>node).parameters, visitor, context, nodesVisitor),
-                    visitFunctionBody((<SetAccessorDeclaration>node).body!, visitor, context, nodeVisitor));
+                Debug.type<SetAccessorDeclaration>(node);
+                return factory.updateSetAccessorDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    visitFunctionBody(node.body!, visitor, context, nodeVisitor));
 
             case SyntaxKind.CallSignature:
-                return factory.updateCallSignature(<CallSignatureDeclaration>node,
-                    nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<CallSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
-                    nodeVisitor((<CallSignatureDeclaration>node).type, visitor, isTypeNode));
+                Debug.type<CallSignatureDeclaration>(node);
+                return factory.updateCallSignature(node,
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.ConstructSignature:
-                return factory.updateConstructSignature(<ConstructSignatureDeclaration>node,
-                    nodesVisitor((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<ConstructSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
-                    nodeVisitor((<ConstructSignatureDeclaration>node).type, visitor, isTypeNode));
+                Debug.type<ConstructSignatureDeclaration>(node);
+                return factory.updateConstructSignature(node,
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.IndexSignature:
-                return factory.updateIndexSignature(<IndexSignatureDeclaration>node,
-                    nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier),
-                    nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
-                    nodeVisitor((<IndexSignatureDeclaration>node).type, visitor, isTypeNode));
+                Debug.type<IndexSignatureDeclaration>(node);
+                return factory.updateIndexSignature(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             // Types
             case SyntaxKind.TypePredicate:
-                return factory.updateTypePredicateNode(<TypePredicateNode>node,
-                    nodeVisitor((<TypePredicateNode>node).assertsModifier, visitor),
-                    nodeVisitor((<TypePredicateNode>node).parameterName, visitor),
-                    nodeVisitor((<TypePredicateNode>node).type, visitor, isTypeNode));
+                Debug.type<TypePredicateNode>(node);
+                return factory.updateTypePredicateNode(node,
+                    nodeVisitor(node.assertsModifier, visitor, isAssertsKeyword),
+                    nodeVisitor(node.parameterName, visitor, isIdentifierOrThisTypeNode),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.TypeReference:
-                return factory.updateTypeReferenceNode(<TypeReferenceNode>node,
-                    nodeVisitor((<TypeReferenceNode>node).typeName, visitor, isEntityName),
-                    nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode));
+                Debug.type<TypeReferenceNode>(node);
+                return factory.updateTypeReferenceNode(node,
+                    nodeVisitor(node.typeName, visitor, isEntityName),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode));
 
             case SyntaxKind.FunctionType:
-                return factory.updateFunctionTypeNode(<FunctionTypeNode>node,
-                    nodesVisitor((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<FunctionTypeNode>node).parameters, visitor, isParameterDeclaration),
-                    nodeVisitor((<FunctionTypeNode>node).type, visitor, isTypeNode));
+                Debug.type<FunctionTypeNode>(node);
+                return factory.updateFunctionTypeNode(node,
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.ConstructorType:
-                return factory.updateConstructorTypeNode(<ConstructorTypeNode>node,
-                    nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<ConstructorTypeNode>node).parameters, visitor, isParameterDeclaration),
-                    nodeVisitor((<ConstructorTypeNode>node).type, visitor, isTypeNode));
+                Debug.type<ConstructorTypeNode>(node);
+                return factory.updateConstructorTypeNode(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.parameters, visitor, isParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.TypeQuery:
-                return factory.updateTypeQueryNode((<TypeQueryNode>node),
-                    nodeVisitor((<TypeQueryNode>node).exprName, visitor, isEntityName));
+                Debug.type<TypeQueryNode>(node);
+                return factory.updateTypeQueryNode(node,
+                    nodeVisitor(node.exprName, visitor, isEntityName));
 
             case SyntaxKind.TypeLiteral:
-                return factory.updateTypeLiteralNode((<TypeLiteralNode>node),
-                    nodesVisitor((<TypeLiteralNode>node).members, visitor, isTypeElement));
+                Debug.type<TypeLiteralNode>(node);
+                return factory.updateTypeLiteralNode(node,
+                    nodesVisitor(node.members, visitor, isTypeElement));
 
             case SyntaxKind.ArrayType:
-                return factory.updateArrayTypeNode(<ArrayTypeNode>node,
-                    nodeVisitor((<ArrayTypeNode>node).elementType, visitor, isTypeNode));
+                Debug.type<ArrayTypeNode>(node);
+                return factory.updateArrayTypeNode(node,
+                    nodeVisitor(node.elementType, visitor, isTypeNode));
 
             case SyntaxKind.TupleType:
-                return factory.updateTupleTypeNode((<TupleTypeNode>node),
-                    nodesVisitor((<TupleTypeNode>node).elements, visitor, isTypeNode));
+                Debug.type<TupleTypeNode>(node);
+                return factory.updateTupleTypeNode(node,
+                    nodesVisitor(node.elements, visitor, isTypeNode));
 
             case SyntaxKind.OptionalType:
-                return factory.updateOptionalTypeNode((<OptionalTypeNode>node),
-                    nodeVisitor((<OptionalTypeNode>node).type, visitor, isTypeNode));
+                Debug.type<OptionalTypeNode>(node);
+                return factory.updateOptionalTypeNode(node,
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.RestType:
-                return factory.updateRestTypeNode((<RestTypeNode>node),
-                    nodeVisitor((<RestTypeNode>node).type, visitor, isTypeNode));
+                Debug.type<RestTypeNode>(node);
+                return factory.updateRestTypeNode(node,
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.UnionType:
-                return factory.updateUnionTypeNode(<UnionTypeNode>node,
-                    nodesVisitor((<UnionTypeNode>node).types, visitor, isTypeNode));
+                Debug.type<UnionTypeNode>(node);
+                return factory.updateUnionTypeNode(node,
+                    nodesVisitor(node.types, visitor, isTypeNode));
 
             case SyntaxKind.IntersectionType:
-                return factory.updateIntersectionTypeNode(<IntersectionTypeNode>node,
-                    nodesVisitor((<IntersectionTypeNode>node).types, visitor, isTypeNode));
+                Debug.type<IntersectionTypeNode>(node);
+                return factory.updateIntersectionTypeNode(node,
+                    nodesVisitor(node.types, visitor, isTypeNode));
 
             case SyntaxKind.ConditionalType:
-                return factory.updateConditionalTypeNode(<ConditionalTypeNode>node,
-                    nodeVisitor((<ConditionalTypeNode>node).checkType, visitor, isTypeNode),
-                    nodeVisitor((<ConditionalTypeNode>node).extendsType, visitor, isTypeNode),
-                    nodeVisitor((<ConditionalTypeNode>node).trueType, visitor, isTypeNode),
-                    nodeVisitor((<ConditionalTypeNode>node).falseType, visitor, isTypeNode));
+                Debug.type<ConditionalTypeNode>(node);
+                return factory.updateConditionalTypeNode(node,
+                    nodeVisitor(node.checkType, visitor, isTypeNode),
+                    nodeVisitor(node.extendsType, visitor, isTypeNode),
+                    nodeVisitor(node.trueType, visitor, isTypeNode),
+                    nodeVisitor(node.falseType, visitor, isTypeNode));
 
             case SyntaxKind.InferType:
-                return factory.updateInferTypeNode(<InferTypeNode>node,
-                    nodeVisitor((<InferTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration));
+                Debug.type<InferTypeNode>(node);
+                return factory.updateInferTypeNode(node,
+                    nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration));
 
             case SyntaxKind.ImportType:
-                return factory.updateImportTypeNode(<ImportTypeNode>node,
-                    nodeVisitor((<ImportTypeNode>node).argument, visitor, isTypeNode),
-                    nodeVisitor((<ImportTypeNode>node).qualifier, visitor, isEntityName),
-                    visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
-                    (<ImportTypeNode>node).isTypeOf
+                Debug.type<ImportTypeNode>(node);
+                return factory.updateImportTypeNode(node,
+                    nodeVisitor(node.argument, visitor, isTypeNode),
+                    nodeVisitor(node.qualifier, visitor, isEntityName),
+                    visitNodes(node.typeArguments, visitor, isTypeNode),
+                    node.isTypeOf
                 );
 
             case SyntaxKind.NamedTupleMember:
-                return factory.updateNamedTupleMember(<NamedTupleMember>node,
-                    visitNode((<NamedTupleMember>node).dotDotDotToken, visitor, isToken),
-                    visitNode((<NamedTupleMember>node).name, visitor, isIdentifier),
-                    visitNode((<NamedTupleMember>node).questionToken, visitor, isToken),
-                    visitNode((<NamedTupleMember>node).type, visitor, isTypeNode),
+                Debug.type<NamedTupleMember>(node);
+                return factory.updateNamedTupleMember(node,
+                    visitNode(node.dotDotDotToken, visitor, isDotDotDotToken),
+                    visitNode(node.name, visitor, isIdentifier),
+                    visitNode(node.questionToken, visitor, isQuestionToken),
+                    visitNode(node.type, visitor, isTypeNode),
                 );
 
             case SyntaxKind.ParenthesizedType:
-                return factory.updateParenthesizedType(<ParenthesizedTypeNode>node,
-                    nodeVisitor((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
+                Debug.type<ParenthesizedTypeNode>(node);
+                return factory.updateParenthesizedType(node,
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.TypeOperator:
-                return factory.updateTypeOperatorNode(<TypeOperatorNode>node,
-                    nodeVisitor((<TypeOperatorNode>node).type, visitor, isTypeNode));
+                Debug.type<TypeOperatorNode>(node);
+                return factory.updateTypeOperatorNode(node,
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.IndexedAccessType:
-                return factory.updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node),
-                    nodeVisitor((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode),
-                    nodeVisitor((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
+                Debug.type<IndexedAccessTypeNode>(node);
+                return factory.updateIndexedAccessTypeNode(node,
+                    nodeVisitor(node.objectType, visitor, isTypeNode),
+                    nodeVisitor(node.indexType, visitor, isTypeNode));
 
             case SyntaxKind.MappedType:
-                return factory.updateMappedTypeNode((<MappedTypeNode>node),
-                    nodeVisitor((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
-                    nodeVisitor((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
-                    nodeVisitor((<MappedTypeNode>node).nameType, visitor, isTypeNode),
-                    nodeVisitor((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
-                    nodeVisitor((<MappedTypeNode>node).type, visitor, isTypeNode));
+                Debug.type<MappedTypeNode>(node);
+                return factory.updateMappedTypeNode(node,
+                    nodeVisitor(node.readonlyToken, tokenVisitor, isReadonlyKeywordOrPlusOrMinusToken),
+                    nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration),
+                    nodeVisitor(node.nameType, visitor, isTypeNode),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
-                return factory.updateLiteralTypeNode(<LiteralTypeNode>node,
-                    nodeVisitor((<LiteralTypeNode>node).literal, visitor, isExpression));
+                Debug.type<LiteralTypeNode>(node);
+                return factory.updateLiteralTypeNode(node,
+                    nodeVisitor(node.literal, visitor, isExpression));
 
             case SyntaxKind.TemplateLiteralType:
-                return factory.updateTemplateLiteralType(<TemplateLiteralTypeNode>node,
-                    nodeVisitor((<TemplateLiteralTypeNode>node).head, visitor, isTemplateHead),
-                    nodesVisitor((<TemplateLiteralTypeNode>node).templateSpans, visitor, isTemplateLiteralTypeSpan));
+                Debug.type<TemplateLiteralTypeNode>(node);
+                return factory.updateTemplateLiteralType(node,
+                    nodeVisitor(node.head, visitor, isTemplateHead),
+                    nodesVisitor(node.templateSpans, visitor, isTemplateLiteralTypeSpan));
 
             case SyntaxKind.TemplateLiteralTypeSpan:
-                return factory.updateTemplateLiteralTypeSpan(<TemplateLiteralTypeSpan>node,
-                    nodeVisitor((<TemplateLiteralTypeSpan>node).type, visitor, isTypeNode),
-                    nodeVisitor((<TemplateLiteralTypeSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
+                Debug.type<TemplateLiteralTypeSpan>(node);
+                return factory.updateTemplateLiteralTypeSpan(node,
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
-                return factory.updateObjectBindingPattern(<ObjectBindingPattern>node,
-                    nodesVisitor((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
+                Debug.type<ObjectBindingPattern>(node);
+                return factory.updateObjectBindingPattern(node,
+                    nodesVisitor(node.elements, visitor, isBindingElement));
 
             case SyntaxKind.ArrayBindingPattern:
-                return factory.updateArrayBindingPattern(<ArrayBindingPattern>node,
-                    nodesVisitor((<ArrayBindingPattern>node).elements, visitor, isArrayBindingElement));
+                Debug.type<ArrayBindingPattern>(node);
+                return factory.updateArrayBindingPattern(node,
+                    nodesVisitor(node.elements, visitor, isArrayBindingElement));
 
             case SyntaxKind.BindingElement:
-                return factory.updateBindingElement(<BindingElement>node,
-                    nodeVisitor((<BindingElement>node).dotDotDotToken, tokenVisitor, isToken),
-                    nodeVisitor((<BindingElement>node).propertyName, visitor, isPropertyName),
-                    nodeVisitor((<BindingElement>node).name, visitor, isBindingName),
-                    nodeVisitor((<BindingElement>node).initializer, visitor, isExpression));
+                Debug.type<BindingElement>(node);
+                return factory.updateBindingElement(node,
+                    nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
+                    nodeVisitor(node.propertyName, visitor, isPropertyName),
+                    nodeVisitor(node.name, visitor, isBindingName),
+                    nodeVisitor(node.initializer, visitor, isExpression));
 
             // Expression
             case SyntaxKind.ArrayLiteralExpression:
-                return factory.updateArrayLiteralExpression(<ArrayLiteralExpression>node,
-                    nodesVisitor((<ArrayLiteralExpression>node).elements, visitor, isExpression));
+                Debug.type<ArrayLiteralExpression>(node);
+                return factory.updateArrayLiteralExpression(node,
+                    nodesVisitor(node.elements, visitor, isExpression));
 
             case SyntaxKind.ObjectLiteralExpression:
-                return factory.updateObjectLiteralExpression(<ObjectLiteralExpression>node,
-                    nodesVisitor((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElementLike));
+                Debug.type<ObjectLiteralExpression>(node);
+                return factory.updateObjectLiteralExpression(node,
+                    nodesVisitor(node.properties, visitor, isObjectLiteralElementLike));
 
             case SyntaxKind.PropertyAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
-                    return factory.updatePropertyAccessChain(<PropertyAccessChain>node,
-                        nodeVisitor((<PropertyAccessChain>node).expression, visitor, isExpression),
-                        nodeVisitor((<PropertyAccessChain>node).questionDotToken, tokenVisitor, isToken),
-                        nodeVisitor((<PropertyAccessChain>node).name, visitor, isIdentifier));
+                    Debug.type<PropertyAccessChain>(node);
+                    return factory.updatePropertyAccessChain(node,
+                        nodeVisitor(node.expression, visitor, isExpression),
+                        nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
+                        nodeVisitor(node.name, visitor, isMemberName));
                 }
-                return factory.updatePropertyAccessExpression(<PropertyAccessExpression>node,
-                    nodeVisitor((<PropertyAccessExpression>node).expression, visitor, isExpression),
-                    nodeVisitor((<PropertyAccessExpression>node).name, visitor, isIdentifierOrPrivateIdentifier));
+                Debug.type<PropertyAccessExpression>(node);
+                return factory.updatePropertyAccessExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.name, visitor, isMemberName));
 
             case SyntaxKind.ElementAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
-                    return factory.updateElementAccessChain(<ElementAccessChain>node,
-                        nodeVisitor((<ElementAccessChain>node).expression, visitor, isExpression),
-                        nodeVisitor((<ElementAccessChain>node).questionDotToken, tokenVisitor, isToken),
-                        nodeVisitor((<ElementAccessChain>node).argumentExpression, visitor, isExpression));
+                    Debug.type<ElementAccessChain>(node);
+                    return factory.updateElementAccessChain(node,
+                        nodeVisitor(node.expression, visitor, isExpression),
+                        nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
+                        nodeVisitor(node.argumentExpression, visitor, isExpression));
                 }
-                return factory.updateElementAccessExpression(<ElementAccessExpression>node,
-                    nodeVisitor((<ElementAccessExpression>node).expression, visitor, isExpression),
-                    nodeVisitor((<ElementAccessExpression>node).argumentExpression, visitor, isExpression));
+                Debug.type<ElementAccessExpression>(node);
+                return factory.updateElementAccessExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.argumentExpression, visitor, isExpression));
 
             case SyntaxKind.CallExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
-                    return factory.updateCallChain(<CallChain>node,
-                        nodeVisitor((<CallChain>node).expression, visitor, isExpression),
-                        nodeVisitor((<CallChain>node).questionDotToken, tokenVisitor, isToken),
-                        nodesVisitor((<CallChain>node).typeArguments, visitor, isTypeNode),
-                        nodesVisitor((<CallChain>node).arguments, visitor, isExpression));
+                    Debug.type<CallChain>(node);
+                    return factory.updateCallChain(node,
+                        nodeVisitor(node.expression, visitor, isExpression),
+                        nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
+                        nodesVisitor(node.typeArguments, visitor, isTypeNode),
+                        nodesVisitor(node.arguments, visitor, isExpression));
                 }
-                return factory.updateCallExpression(<CallExpression>node,
-                    nodeVisitor((<CallExpression>node).expression, visitor, isExpression),
-                    nodesVisitor((<CallExpression>node).typeArguments, visitor, isTypeNode),
-                    nodesVisitor((<CallExpression>node).arguments, visitor, isExpression));
+                Debug.type<CallExpression>(node);
+                return factory.updateCallExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
+                    nodesVisitor(node.arguments, visitor, isExpression));
 
             case SyntaxKind.NewExpression:
-                return factory.updateNewExpression(<NewExpression>node,
-                    nodeVisitor((<NewExpression>node).expression, visitor, isExpression),
-                    nodesVisitor((<NewExpression>node).typeArguments, visitor, isTypeNode),
-                    nodesVisitor((<NewExpression>node).arguments, visitor, isExpression));
+                Debug.type<NewExpression>(node);
+                return factory.updateNewExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
+                    nodesVisitor(node.arguments, visitor, isExpression));
 
             case SyntaxKind.TaggedTemplateExpression:
-                return factory.updateTaggedTemplateExpression(<TaggedTemplateExpression>node,
-                    nodeVisitor((<TaggedTemplateExpression>node).tag, visitor, isExpression),
-                    visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isExpression),
-                    nodeVisitor((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
+                Debug.type<TaggedTemplateExpression>(node);
+                return factory.updateTaggedTemplateExpression(node,
+                    nodeVisitor(node.tag, visitor, isExpression),
+                    visitNodes(node.typeArguments, visitor, isTypeNode),
+                    nodeVisitor(node.template, visitor, isTemplateLiteral));
 
             case SyntaxKind.TypeAssertionExpression:
-                return factory.updateTypeAssertion(<TypeAssertion>node,
-                    nodeVisitor((<TypeAssertion>node).type, visitor, isTypeNode),
-                    nodeVisitor((<TypeAssertion>node).expression, visitor, isExpression));
+                Debug.type<TypeAssertion>(node);
+                return factory.updateTypeAssertion(node,
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.ParenthesizedExpression:
-                return factory.updateParenthesizedExpression(<ParenthesizedExpression>node,
-                    nodeVisitor((<ParenthesizedExpression>node).expression, visitor, isExpression));
+                Debug.type<ParenthesizedExpression>(node);
+                return factory.updateParenthesizedExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.FunctionExpression:
-                return factory.updateFunctionExpression(<FunctionExpression>node,
-                    nodesVisitor((<FunctionExpression>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<FunctionExpression>node).asteriskToken, tokenVisitor, isToken),
-                    nodeVisitor((<FunctionExpression>node).name, visitor, isIdentifier),
-                    nodesVisitor((<FunctionExpression>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    visitParameterList((<FunctionExpression>node).parameters, visitor, context, nodesVisitor),
-                    nodeVisitor((<FunctionExpression>node).type, visitor, isTypeNode),
-                    visitFunctionBody((<FunctionExpression>node).body, visitor, context, nodeVisitor));
+                Debug.type<FunctionExpression>(node);
+                return factory.updateFunctionExpression(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    visitFunctionBody(node.body, visitor, context, nodeVisitor));
 
             case SyntaxKind.ArrowFunction:
-                return factory.updateArrowFunction(<ArrowFunction>node,
-                    nodesVisitor((<ArrowFunction>node).modifiers, visitor, isModifier),
-                    nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
-                    nodeVisitor((<ArrowFunction>node).type, visitor, isTypeNode),
-                    nodeVisitor((<ArrowFunction>node).equalsGreaterThanToken, tokenVisitor, isToken),
-                    visitFunctionBody((<ArrowFunction>node).body, visitor, context, nodeVisitor));
+                Debug.type<ArrowFunction>(node);
+                return factory.updateArrowFunction(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken),
+                    visitFunctionBody(node.body, visitor, context, nodeVisitor));
 
             case SyntaxKind.DeleteExpression:
-                return factory.updateDeleteExpression(<DeleteExpression>node,
-                    nodeVisitor((<DeleteExpression>node).expression, visitor, isExpression));
+                Debug.type<DeleteExpression>(node);
+                return factory.updateDeleteExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.TypeOfExpression:
-                return factory.updateTypeOfExpression(<TypeOfExpression>node,
-                    nodeVisitor((<TypeOfExpression>node).expression, visitor, isExpression));
+                Debug.type<TypeOfExpression>(node);
+                return factory.updateTypeOfExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.VoidExpression:
-                return factory.updateVoidExpression(<VoidExpression>node,
-                    nodeVisitor((<VoidExpression>node).expression, visitor, isExpression));
+                Debug.type<VoidExpression>(node);
+                return factory.updateVoidExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.AwaitExpression:
-                return factory.updateAwaitExpression(<AwaitExpression>node,
-                    nodeVisitor((<AwaitExpression>node).expression, visitor, isExpression));
+                Debug.type<AwaitExpression>(node);
+                return factory.updateAwaitExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.PrefixUnaryExpression:
-                return factory.updatePrefixUnaryExpression(<PrefixUnaryExpression>node,
-                    nodeVisitor((<PrefixUnaryExpression>node).operand, visitor, isExpression));
+                Debug.type<PrefixUnaryExpression>(node);
+                return factory.updatePrefixUnaryExpression(node,
+                    nodeVisitor(node.operand, visitor, isExpression));
 
             case SyntaxKind.PostfixUnaryExpression:
-                return factory.updatePostfixUnaryExpression(<PostfixUnaryExpression>node,
-                    nodeVisitor((<PostfixUnaryExpression>node).operand, visitor, isExpression));
+                Debug.type<PostfixUnaryExpression>(node);
+                return factory.updatePostfixUnaryExpression(node,
+                    nodeVisitor(node.operand, visitor, isExpression));
 
             case SyntaxKind.BinaryExpression:
-                return factory.updateBinaryExpression(<BinaryExpression>node,
-                    nodeVisitor((<BinaryExpression>node).left, visitor, isExpression),
-                    nodeVisitor((<BinaryExpression>node).operatorToken, tokenVisitor, isToken),
-                    nodeVisitor((<BinaryExpression>node).right, visitor, isExpression));
+                Debug.type<BinaryExpression>(node);
+                return factory.updateBinaryExpression(node,
+                    nodeVisitor(node.left, visitor, isExpression),
+                    nodeVisitor(node.operatorToken, tokenVisitor, isBinaryOperatorToken),
+                    nodeVisitor(node.right, visitor, isExpression));
 
             case SyntaxKind.ConditionalExpression:
-                return factory.updateConditionalExpression(<ConditionalExpression>node,
-                    nodeVisitor((<ConditionalExpression>node).condition, visitor, isExpression),
-                    nodeVisitor((<ConditionalExpression>node).questionToken, tokenVisitor, isToken),
-                    nodeVisitor((<ConditionalExpression>node).whenTrue, visitor, isExpression),
-                    nodeVisitor((<ConditionalExpression>node).colonToken, tokenVisitor, isToken),
-                    nodeVisitor((<ConditionalExpression>node).whenFalse, visitor, isExpression));
+                Debug.type<ConditionalExpression>(node);
+                return factory.updateConditionalExpression(node,
+                    nodeVisitor(node.condition, visitor, isExpression),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+                    nodeVisitor(node.whenTrue, visitor, isExpression),
+                    nodeVisitor(node.colonToken, tokenVisitor, isColonToken),
+                    nodeVisitor(node.whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
-                return factory.updateTemplateExpression(<TemplateExpression>node,
-                    nodeVisitor((<TemplateExpression>node).head, visitor, isTemplateHead),
-                    nodesVisitor((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
+                Debug.type<TemplateExpression>(node);
+                return factory.updateTemplateExpression(node,
+                    nodeVisitor(node.head, visitor, isTemplateHead),
+                    nodesVisitor(node.templateSpans, visitor, isTemplateSpan));
 
             case SyntaxKind.YieldExpression:
-                return factory.updateYieldExpression(<YieldExpression>node,
-                    nodeVisitor((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
-                    nodeVisitor((<YieldExpression>node).expression, visitor, isExpression));
+                Debug.type<YieldExpression>(node);
+                return factory.updateYieldExpression(node,
+                    nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
-                return factory.updateSpreadElement(<SpreadElement>node,
-                    nodeVisitor((<SpreadElement>node).expression, visitor, isExpression));
+                Debug.type<SpreadElement>(node);
+                return factory.updateSpreadElement(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.ClassExpression:
-                return factory.updateClassExpression(<ClassExpression>node,
-                    nodesVisitor((<ClassExpression>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ClassExpression>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<ClassExpression>node).name, visitor, isIdentifier),
-                    nodesVisitor((<ClassExpression>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<ClassExpression>node).heritageClauses, visitor, isHeritageClause),
-                    nodesVisitor((<ClassExpression>node).members, visitor, isClassElement));
+                Debug.type<ClassExpression>(node);
+                return factory.updateClassExpression(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
+                    nodesVisitor(node.members, visitor, isClassElement));
 
             case SyntaxKind.ExpressionWithTypeArguments:
-                return factory.updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node,
-                    nodeVisitor((<ExpressionWithTypeArguments>node).expression, visitor, isExpression),
-                    nodesVisitor((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNode));
+                Debug.type<ExpressionWithTypeArguments>(node);
+                return factory.updateExpressionWithTypeArguments(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode));
 
             case SyntaxKind.AsExpression:
-                return factory.updateAsExpression(<AsExpression>node,
-                    nodeVisitor((<AsExpression>node).expression, visitor, isExpression),
-                    nodeVisitor((<AsExpression>node).type, visitor, isTypeNode));
+                Debug.type<AsExpression>(node);
+                return factory.updateAsExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.NonNullExpression:
                 if (node.flags & NodeFlags.OptionalChain) {
-                    return factory.updateNonNullChain(<NonNullChain>node,
-                        nodeVisitor((<NonNullChain>node).expression, visitor, isExpression));
+                    Debug.type<NonNullChain>(node);
+                    return factory.updateNonNullChain(node,
+                        nodeVisitor(node.expression, visitor, isExpression));
                 }
-                return factory.updateNonNullExpression(<NonNullExpression>node,
-                    nodeVisitor((<NonNullExpression>node).expression, visitor, isExpression));
+                Debug.type<NonNullExpression>(node);
+                return factory.updateNonNullExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.MetaProperty:
-                return factory.updateMetaProperty(<MetaProperty>node,
-                    nodeVisitor((<MetaProperty>node).name, visitor, isIdentifier));
+                Debug.type<MetaProperty>(node);
+                return factory.updateMetaProperty(node,
+                    nodeVisitor(node.name, visitor, isIdentifier));
 
             // Misc
             case SyntaxKind.TemplateSpan:
-                return factory.updateTemplateSpan(<TemplateSpan>node,
-                    nodeVisitor((<TemplateSpan>node).expression, visitor, isExpression),
-                    nodeVisitor((<TemplateSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
+                Debug.type<TemplateSpan>(node);
+                return factory.updateTemplateSpan(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Element
             case SyntaxKind.Block:
-                return factory.updateBlock(<Block>node,
-                    nodesVisitor((<Block>node).statements, visitor, isStatement));
+                Debug.type<Block>(node);
+                return factory.updateBlock(node,
+                    nodesVisitor(node.statements, visitor, isStatement));
 
             case SyntaxKind.VariableStatement:
-                return factory.updateVariableStatement(<VariableStatement>node,
-                    nodesVisitor((<VariableStatement>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<VariableStatement>node).declarationList, visitor, isVariableDeclarationList));
+                Debug.type<VariableStatement>(node);
+                return factory.updateVariableStatement(node,
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.declarationList, visitor, isVariableDeclarationList));
 
             case SyntaxKind.ExpressionStatement:
-                return factory.updateExpressionStatement(<ExpressionStatement>node,
-                    nodeVisitor((<ExpressionStatement>node).expression, visitor, isExpression));
+                Debug.type<ExpressionStatement>(node);
+                return factory.updateExpressionStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.IfStatement:
-                return factory.updateIfStatement(<IfStatement>node,
-                    nodeVisitor((<IfStatement>node).expression, visitor, isExpression),
-                    nodeVisitor((<IfStatement>node).thenStatement, visitor, isStatement, factory.liftToBlock),
-                    nodeVisitor((<IfStatement>node).elseStatement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<IfStatement>(node);
+                return factory.updateIfStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.thenStatement, visitor, isStatement, factory.liftToBlock),
+                    nodeVisitor(node.elseStatement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.DoStatement:
-                return factory.updateDoStatement(<DoStatement>node,
-                    nodeVisitor((<DoStatement>node).statement, visitor, isStatement, factory.liftToBlock),
-                    nodeVisitor((<DoStatement>node).expression, visitor, isExpression));
+                Debug.type<DoStatement>(node);
+                return factory.updateDoStatement(node,
+                    visitIterationBody(node.statement, visitor, context),
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.WhileStatement:
-                return factory.updateWhileStatement(<WhileStatement>node,
-                    nodeVisitor((<WhileStatement>node).expression, visitor, isExpression),
-                    nodeVisitor((<WhileStatement>node).statement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<WhileStatement>(node);
+                return factory.updateWhileStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ForStatement:
-                return factory.updateForStatement(<ForStatement>node,
-                    nodeVisitor((<ForStatement>node).initializer, visitor, isForInitializer),
-                    nodeVisitor((<ForStatement>node).condition, visitor, isExpression),
-                    nodeVisitor((<ForStatement>node).incrementor, visitor, isExpression),
-                    nodeVisitor((<ForStatement>node).statement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<ForStatement>(node);
+                return factory.updateForStatement(node,
+                    nodeVisitor(node.initializer, visitor, isForInitializer),
+                    nodeVisitor(node.condition, visitor, isExpression),
+                    nodeVisitor(node.incrementor, visitor, isExpression),
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ForInStatement:
-                return factory.updateForInStatement(<ForInStatement>node,
-                    nodeVisitor((<ForInStatement>node).initializer, visitor, isForInitializer),
-                    nodeVisitor((<ForInStatement>node).expression, visitor, isExpression),
-                    nodeVisitor((<ForInStatement>node).statement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<ForInStatement>(node);
+                return factory.updateForInStatement(node,
+                    nodeVisitor(node.initializer, visitor, isForInitializer),
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ForOfStatement:
-                return factory.updateForOfStatement(<ForOfStatement>node,
-                    nodeVisitor((<ForOfStatement>node).awaitModifier, tokenVisitor, isToken),
-                    nodeVisitor((<ForOfStatement>node).initializer, visitor, isForInitializer),
-                    nodeVisitor((<ForOfStatement>node).expression, visitor, isExpression),
-                    nodeVisitor((<ForOfStatement>node).statement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<ForOfStatement>(node);
+                return factory.updateForOfStatement(node,
+                    nodeVisitor(node.awaitModifier, tokenVisitor, isAwaitKeyword),
+                    nodeVisitor(node.initializer, visitor, isForInitializer),
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    visitIterationBody(node.statement, visitor, context));
 
             case SyntaxKind.ContinueStatement:
-                return factory.updateContinueStatement(<ContinueStatement>node,
-                    nodeVisitor((<ContinueStatement>node).label, visitor, isIdentifier));
+                Debug.type<ContinueStatement>(node);
+                return factory.updateContinueStatement(node,
+                    nodeVisitor(node.label, visitor, isIdentifier));
 
             case SyntaxKind.BreakStatement:
-                return factory.updateBreakStatement(<BreakStatement>node,
-                    nodeVisitor((<BreakStatement>node).label, visitor, isIdentifier));
+                Debug.type<BreakStatement>(node);
+                return factory.updateBreakStatement(node,
+                    nodeVisitor(node.label, visitor, isIdentifier));
 
             case SyntaxKind.ReturnStatement:
-                return factory.updateReturnStatement(<ReturnStatement>node,
-                    nodeVisitor((<ReturnStatement>node).expression, visitor, isExpression));
+                Debug.type<ReturnStatement>(node);
+                return factory.updateReturnStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.WithStatement:
-                return factory.updateWithStatement(<WithStatement>node,
-                    nodeVisitor((<WithStatement>node).expression, visitor, isExpression),
-                    nodeVisitor((<WithStatement>node).statement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<WithStatement>(node);
+                return factory.updateWithStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.SwitchStatement:
-                return factory.updateSwitchStatement(<SwitchStatement>node,
-                    nodeVisitor((<SwitchStatement>node).expression, visitor, isExpression),
-                    nodeVisitor((<SwitchStatement>node).caseBlock, visitor, isCaseBlock));
+                Debug.type<SwitchStatement>(node);
+                return factory.updateSwitchStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodeVisitor(node.caseBlock, visitor, isCaseBlock));
 
             case SyntaxKind.LabeledStatement:
-                return factory.updateLabeledStatement(<LabeledStatement>node,
-                    nodeVisitor((<LabeledStatement>node).label, visitor, isIdentifier),
-                    nodeVisitor((<LabeledStatement>node).statement, visitor, isStatement, factory.liftToBlock));
+                Debug.type<LabeledStatement>(node);
+                return factory.updateLabeledStatement(node,
+                    nodeVisitor(node.label, visitor, isIdentifier),
+                    nodeVisitor(node.statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.ThrowStatement:
-                return factory.updateThrowStatement(<ThrowStatement>node,
-                    nodeVisitor((<ThrowStatement>node).expression, visitor, isExpression));
+                Debug.type<ThrowStatement>(node);
+                return factory.updateThrowStatement(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.TryStatement:
-                return factory.updateTryStatement(<TryStatement>node,
-                    nodeVisitor((<TryStatement>node).tryBlock, visitor, isBlock),
-                    nodeVisitor((<TryStatement>node).catchClause, visitor, isCatchClause),
-                    nodeVisitor((<TryStatement>node).finallyBlock, visitor, isBlock));
+                Debug.type<TryStatement>(node);
+                return factory.updateTryStatement(node,
+                    nodeVisitor(node.tryBlock, visitor, isBlock),
+                    nodeVisitor(node.catchClause, visitor, isCatchClause),
+                    nodeVisitor(node.finallyBlock, visitor, isBlock));
 
             case SyntaxKind.VariableDeclaration:
-                return factory.updateVariableDeclaration(<VariableDeclaration>node,
-                    nodeVisitor((<VariableDeclaration>node).name, visitor, isBindingName),
-                    nodeVisitor((<VariableDeclaration>node).exclamationToken, tokenVisitor, isToken),
-                    nodeVisitor((<VariableDeclaration>node).type, visitor, isTypeNode),
-                    nodeVisitor((<VariableDeclaration>node).initializer, visitor, isExpression));
+                Debug.type<VariableDeclaration>(node);
+                return factory.updateVariableDeclaration(node,
+                    nodeVisitor(node.name, visitor, isBindingName),
+                    nodeVisitor(node.exclamationToken, tokenVisitor, isExclamationToken),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.initializer, visitor, isExpression));
 
             case SyntaxKind.VariableDeclarationList:
-                return factory.updateVariableDeclarationList(<VariableDeclarationList>node,
-                    nodesVisitor((<VariableDeclarationList>node).declarations, visitor, isVariableDeclaration));
+                Debug.type<VariableDeclarationList>(node);
+                return factory.updateVariableDeclarationList(node,
+                    nodesVisitor(node.declarations, visitor, isVariableDeclaration));
 
             case SyntaxKind.FunctionDeclaration:
-                return factory.updateFunctionDeclaration(<FunctionDeclaration>node,
-                    nodesVisitor((<FunctionDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<FunctionDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<FunctionDeclaration>node).asteriskToken, tokenVisitor, isToken),
-                    nodeVisitor((<FunctionDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    visitParameterList((<FunctionDeclaration>node).parameters, visitor, context, nodesVisitor),
-                    nodeVisitor((<FunctionDeclaration>node).type, visitor, isTypeNode),
-                    visitFunctionBody((<FunctionExpression>node).body, visitor, context, nodeVisitor));
+                Debug.type<FunctionDeclaration>(node);
+                return factory.updateFunctionDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                    nodeVisitor(node.type, visitor, isTypeNode),
+                    visitFunctionBody(node.body, visitor, context, nodeVisitor));
 
             case SyntaxKind.ClassDeclaration:
-                return factory.updateClassDeclaration(<ClassDeclaration>node,
-                    nodesVisitor((<ClassDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ClassDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<ClassDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<ClassDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause),
-                    nodesVisitor((<ClassDeclaration>node).members, visitor, isClassElement));
+                Debug.type<ClassDeclaration>(node);
+                return factory.updateClassDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
+                    nodesVisitor(node.members, visitor, isClassElement));
 
             case SyntaxKind.InterfaceDeclaration:
-                return factory.updateInterfaceDeclaration(<InterfaceDeclaration>node,
-                    nodesVisitor((<InterfaceDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<InterfaceDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<InterfaceDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<InterfaceDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodesVisitor((<InterfaceDeclaration>node).heritageClauses, visitor, isHeritageClause),
-                    nodesVisitor((<InterfaceDeclaration>node).members, visitor, isTypeElement));
+                Debug.type<InterfaceDeclaration>(node);
+                return factory.updateInterfaceDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
+                    nodesVisitor(node.members, visitor, isTypeElement));
 
             case SyntaxKind.TypeAliasDeclaration:
-                return factory.updateTypeAliasDeclaration(<TypeAliasDeclaration>node,
-                    nodesVisitor((<TypeAliasDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<TypeAliasDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<TypeAliasDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
-                    nodeVisitor((<TypeAliasDeclaration>node).type, visitor, isTypeNode));
+                Debug.type<TypeAliasDeclaration>(node);
+                return factory.updateTypeAliasDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                    nodeVisitor(node.type, visitor, isTypeNode));
 
             case SyntaxKind.EnumDeclaration:
-                return factory.updateEnumDeclaration(<EnumDeclaration>node,
-                    nodesVisitor((<EnumDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<EnumDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<EnumDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<EnumDeclaration>node).members, visitor, isEnumMember));
+                Debug.type<EnumDeclaration>(node);
+                return factory.updateEnumDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodesVisitor(node.members, visitor, isEnumMember));
 
             case SyntaxKind.ModuleDeclaration:
-                return factory.updateModuleDeclaration(<ModuleDeclaration>node,
-                    nodesVisitor((<ModuleDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ModuleDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<ModuleDeclaration>node).name, visitor, isIdentifier),
-                    nodeVisitor((<ModuleDeclaration>node).body, visitor, isModuleBody));
+                Debug.type<ModuleDeclaration>(node);
+                return factory.updateModuleDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.name, visitor, isModuleName),
+                    nodeVisitor(node.body, visitor, isModuleBody));
 
             case SyntaxKind.ModuleBlock:
-                return factory.updateModuleBlock(<ModuleBlock>node,
-                    nodesVisitor((<ModuleBlock>node).statements, visitor, isStatement));
+                Debug.type<ModuleBlock>(node);
+                return factory.updateModuleBlock(node,
+                    nodesVisitor(node.statements, visitor, isStatement));
 
             case SyntaxKind.CaseBlock:
-                return factory.updateCaseBlock(<CaseBlock>node,
-                    nodesVisitor((<CaseBlock>node).clauses, visitor, isCaseOrDefaultClause));
+                Debug.type<CaseBlock>(node);
+                return factory.updateCaseBlock(node,
+                    nodesVisitor(node.clauses, visitor, isCaseOrDefaultClause));
 
             case SyntaxKind.NamespaceExportDeclaration:
-                return factory.updateNamespaceExportDeclaration(<NamespaceExportDeclaration>node,
-                    nodeVisitor((<NamespaceExportDeclaration>node).name, visitor, isIdentifier));
+                Debug.type<NamespaceExportDeclaration>(node);
+                return factory.updateNamespaceExportDeclaration(node,
+                    nodeVisitor(node.name, visitor, isIdentifier));
 
             case SyntaxKind.ImportEqualsDeclaration:
-                return factory.updateImportEqualsDeclaration(<ImportEqualsDeclaration>node,
-                    nodesVisitor((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier),
-                    (<ImportEqualsDeclaration>node).isTypeOnly,
-                    nodeVisitor((<ImportEqualsDeclaration>node).name, visitor, isIdentifier),
-                    nodeVisitor((<ImportEqualsDeclaration>node).moduleReference, visitor, isModuleReference));
+                Debug.type<ImportEqualsDeclaration>(node);
+                return factory.updateImportEqualsDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    node.isTypeOnly,
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodeVisitor(node.moduleReference, visitor, isModuleReference));
 
             case SyntaxKind.ImportDeclaration:
-                return factory.updateImportDeclaration(<ImportDeclaration>node,
-                    nodesVisitor((<ImportDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ImportDeclaration>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<ImportDeclaration>node).importClause, visitor, isImportClause),
-                    nodeVisitor((<ImportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                Debug.type<ImportDeclaration>(node);
+                return factory.updateImportDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.importClause, visitor, isImportClause),
+                    nodeVisitor(node.moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.ImportClause:
-                return factory.updateImportClause(<ImportClause>node,
-                    (<ImportClause>node).isTypeOnly,
-                    nodeVisitor((<ImportClause>node).name, visitor, isIdentifier),
-                    nodeVisitor((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
+                Debug.type<ImportClause>(node);
+                return factory.updateImportClause(node,
+                    node.isTypeOnly,
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodeVisitor(node.namedBindings, visitor, isNamedImportBindings));
 
             case SyntaxKind.NamespaceImport:
-                return factory.updateNamespaceImport(<NamespaceImport>node,
-                    nodeVisitor((<NamespaceImport>node).name, visitor, isIdentifier));
+                Debug.type<NamespaceImport>(node);
+                return factory.updateNamespaceImport(node,
+                    nodeVisitor(node.name, visitor, isIdentifier));
 
             case SyntaxKind.NamespaceExport:
-                    return factory.updateNamespaceExport(<NamespaceExport>node,
-                        nodeVisitor((<NamespaceExport>node).name, visitor, isIdentifier));
+                    Debug.type<NamespaceExport>(node);
+                    return factory.updateNamespaceExport(node,
+                        nodeVisitor(node.name, visitor, isIdentifier));
 
             case SyntaxKind.NamedImports:
-                return factory.updateNamedImports(<NamedImports>node,
-                    nodesVisitor((<NamedImports>node).elements, visitor, isImportSpecifier));
+                Debug.type<NamedImports>(node);
+                return factory.updateNamedImports(node,
+                    nodesVisitor(node.elements, visitor, isImportSpecifier));
 
             case SyntaxKind.ImportSpecifier:
-                return factory.updateImportSpecifier(<ImportSpecifier>node,
-                    nodeVisitor((<ImportSpecifier>node).propertyName, visitor, isIdentifier),
-                    nodeVisitor((<ImportSpecifier>node).name, visitor, isIdentifier));
+                Debug.type<ImportSpecifier>(node);
+                return factory.updateImportSpecifier(node,
+                    nodeVisitor(node.propertyName, visitor, isIdentifier),
+                    nodeVisitor(node.name, visitor, isIdentifier));
 
             case SyntaxKind.ExportAssignment:
-                return factory.updateExportAssignment(<ExportAssignment>node,
-                    nodesVisitor((<ExportAssignment>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ExportAssignment>node).modifiers, visitor, isModifier),
-                    nodeVisitor((<ExportAssignment>node).expression, visitor, isExpression));
+                Debug.type<ExportAssignment>(node);
+                return factory.updateExportAssignment(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.ExportDeclaration:
-                return factory.updateExportDeclaration(<ExportDeclaration>node,
-                    nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
-                    nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    (<ExportDeclaration>node).isTypeOnly,
-                    nodeVisitor((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
-                    nodeVisitor((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                Debug.type<ExportDeclaration>(node);
+                return factory.updateExportDeclaration(node,
+                    nodesVisitor(node.decorators, visitor, isDecorator),
+                    nodesVisitor(node.modifiers, visitor, isModifier),
+                    node.isTypeOnly,
+                    nodeVisitor(node.exportClause, visitor, isNamedExportBindings),
+                    nodeVisitor(node.moduleSpecifier, visitor, isExpression));
 
             case SyntaxKind.NamedExports:
-                return factory.updateNamedExports(<NamedExports>node,
-                    nodesVisitor((<NamedExports>node).elements, visitor, isExportSpecifier));
+                Debug.type<NamedExports>(node);
+                return factory.updateNamedExports(node,
+                    nodesVisitor(node.elements, visitor, isExportSpecifier));
 
             case SyntaxKind.ExportSpecifier:
-                return factory.updateExportSpecifier(<ExportSpecifier>node,
-                    nodeVisitor((<ExportSpecifier>node).propertyName, visitor, isIdentifier),
-                    nodeVisitor((<ExportSpecifier>node).name, visitor, isIdentifier));
+                Debug.type<ExportSpecifier>(node);
+                return factory.updateExportSpecifier(node,
+                    nodeVisitor(node.propertyName, visitor, isIdentifier),
+                    nodeVisitor(node.name, visitor, isIdentifier));
 
             // Module references
             case SyntaxKind.ExternalModuleReference:
-                return factory.updateExternalModuleReference(<ExternalModuleReference>node,
-                    nodeVisitor((<ExternalModuleReference>node).expression, visitor, isExpression));
+                Debug.type<ExternalModuleReference>(node);
+                return factory.updateExternalModuleReference(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             // JSX
             case SyntaxKind.JsxElement:
-                return factory.updateJsxElement(<JsxElement>node,
-                    nodeVisitor((<JsxElement>node).openingElement, visitor, isJsxOpeningElement),
-                    nodesVisitor((<JsxElement>node).children, visitor, isJsxChild),
-                    nodeVisitor((<JsxElement>node).closingElement, visitor, isJsxClosingElement));
+                Debug.type<JsxElement>(node);
+                return factory.updateJsxElement(node,
+                    nodeVisitor(node.openingElement, visitor, isJsxOpeningElement),
+                    nodesVisitor(node.children, visitor, isJsxChild),
+                    nodeVisitor(node.closingElement, visitor, isJsxClosingElement));
 
             case SyntaxKind.JsxSelfClosingElement:
-                return factory.updateJsxSelfClosingElement(<JsxSelfClosingElement>node,
-                    nodeVisitor((<JsxSelfClosingElement>node).tagName, visitor, isJsxTagNameExpression),
-                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
-                    nodeVisitor((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributes));
+                Debug.type<JsxSelfClosingElement>(node);
+                return factory.updateJsxSelfClosingElement(node,
+                    nodeVisitor(node.tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
+                    nodeVisitor(node.attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxOpeningElement:
-                return factory.updateJsxOpeningElement(<JsxOpeningElement>node,
-                    nodeVisitor((<JsxOpeningElement>node).tagName, visitor, isJsxTagNameExpression),
-                    nodesVisitor((<JsxSelfClosingElement>node).typeArguments, visitor, isTypeNode),
-                    nodeVisitor((<JsxOpeningElement>node).attributes, visitor, isJsxAttributes));
+                Debug.type<JsxOpeningElement>(node);
+                return factory.updateJsxOpeningElement(node,
+                    nodeVisitor(node.tagName, visitor, isJsxTagNameExpression),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
+                    nodeVisitor(node.attributes, visitor, isJsxAttributes));
 
             case SyntaxKind.JsxClosingElement:
-                return factory.updateJsxClosingElement(<JsxClosingElement>node,
-                    nodeVisitor((<JsxClosingElement>node).tagName, visitor, isJsxTagNameExpression));
+                Debug.type<JsxClosingElement>(node);
+                return factory.updateJsxClosingElement(node,
+                    nodeVisitor(node.tagName, visitor, isJsxTagNameExpression));
 
             case SyntaxKind.JsxFragment:
-                return factory.updateJsxFragment(<JsxFragment>node,
-                    nodeVisitor((<JsxFragment>node).openingFragment, visitor, isJsxOpeningFragment),
-                    nodesVisitor((<JsxFragment>node).children, visitor, isJsxChild),
-                    nodeVisitor((<JsxFragment>node).closingFragment, visitor, isJsxClosingFragment));
+                Debug.type<JsxFragment>(node);
+                return factory.updateJsxFragment(node,
+                    nodeVisitor(node.openingFragment, visitor, isJsxOpeningFragment),
+                    nodesVisitor(node.children, visitor, isJsxChild),
+                    nodeVisitor(node.closingFragment, visitor, isJsxClosingFragment));
 
             case SyntaxKind.JsxAttribute:
-                return factory.updateJsxAttribute(<JsxAttribute>node,
-                    nodeVisitor((<JsxAttribute>node).name, visitor, isIdentifier),
-                    nodeVisitor((<JsxAttribute>node).initializer, visitor, isStringLiteralOrJsxExpression));
+                Debug.type<JsxAttribute>(node);
+                return factory.updateJsxAttribute(node,
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodeVisitor(node.initializer, visitor, isStringLiteralOrJsxExpression));
 
             case SyntaxKind.JsxAttributes:
-                return factory.updateJsxAttributes(<JsxAttributes>node,
-                    nodesVisitor((<JsxAttributes>node).properties, visitor, isJsxAttributeLike));
+                Debug.type<JsxAttributes>(node);
+                return factory.updateJsxAttributes(node,
+                    nodesVisitor(node.properties, visitor, isJsxAttributeLike));
 
             case SyntaxKind.JsxSpreadAttribute:
-                return factory.updateJsxSpreadAttribute(<JsxSpreadAttribute>node,
-                    nodeVisitor((<JsxSpreadAttribute>node).expression, visitor, isExpression));
+                Debug.type<JsxSpreadAttribute>(node);
+                return factory.updateJsxSpreadAttribute(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.JsxExpression:
-                return factory.updateJsxExpression(<JsxExpression>node,
-                    nodeVisitor((<JsxExpression>node).expression, visitor, isExpression));
+                Debug.type<JsxExpression>(node);
+                return factory.updateJsxExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             // Clauses
             case SyntaxKind.CaseClause:
-                return factory.updateCaseClause(<CaseClause>node,
-                    nodeVisitor((<CaseClause>node).expression, visitor, isExpression),
-                    nodesVisitor((<CaseClause>node).statements, visitor, isStatement));
+                Debug.type<CaseClause>(node);
+                return factory.updateCaseClause(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodesVisitor(node.statements, visitor, isStatement));
 
             case SyntaxKind.DefaultClause:
-                return factory.updateDefaultClause(<DefaultClause>node,
-                    nodesVisitor((<DefaultClause>node).statements, visitor, isStatement));
+                Debug.type<DefaultClause>(node);
+                return factory.updateDefaultClause(node,
+                    nodesVisitor(node.statements, visitor, isStatement));
 
             case SyntaxKind.HeritageClause:
-                return factory.updateHeritageClause(<HeritageClause>node,
-                    nodesVisitor((<HeritageClause>node).types, visitor, isExpressionWithTypeArguments));
+                Debug.type<HeritageClause>(node);
+                return factory.updateHeritageClause(node,
+                    nodesVisitor(node.types, visitor, isExpressionWithTypeArguments));
 
             case SyntaxKind.CatchClause:
-                return factory.updateCatchClause(<CatchClause>node,
-                    nodeVisitor((<CatchClause>node).variableDeclaration, visitor, isVariableDeclaration),
-                    nodeVisitor((<CatchClause>node).block, visitor, isBlock));
+                Debug.type<CatchClause>(node);
+                return factory.updateCatchClause(node,
+                    nodeVisitor(node.variableDeclaration, visitor, isVariableDeclaration),
+                    nodeVisitor(node.block, visitor, isBlock));
 
             // Property assignments
             case SyntaxKind.PropertyAssignment:
-                return factory.updatePropertyAssignment(<PropertyAssignment>node,
-                    nodeVisitor((<PropertyAssignment>node).name, visitor, isPropertyName),
-                    nodeVisitor((<PropertyAssignment>node).initializer, visitor, isExpression));
+                Debug.type<PropertyAssignment>(node);
+                return factory.updatePropertyAssignment(node,
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    nodeVisitor(node.initializer, visitor, isExpression));
 
             case SyntaxKind.ShorthandPropertyAssignment:
-                return factory.updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node,
-                    nodeVisitor((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier),
-                    nodeVisitor((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpression));
+                Debug.type<ShorthandPropertyAssignment>(node);
+                return factory.updateShorthandPropertyAssignment(node,
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodeVisitor(node.objectAssignmentInitializer, visitor, isExpression));
 
             case SyntaxKind.SpreadAssignment:
-                return factory.updateSpreadAssignment(<SpreadAssignment>node,
-                    nodeVisitor((<SpreadAssignment>node).expression, visitor, isExpression));
+                Debug.type<SpreadAssignment>(node);
+                return factory.updateSpreadAssignment(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             // Enum
             case SyntaxKind.EnumMember:
-                return factory.updateEnumMember(<EnumMember>node,
-                    nodeVisitor((<EnumMember>node).name, visitor, isPropertyName),
-                    nodeVisitor((<EnumMember>node).initializer, visitor, isExpression));
+                Debug.type<EnumMember>(node);
+                return factory.updateEnumMember(node,
+                    nodeVisitor(node.name, visitor, isPropertyName),
+                    nodeVisitor(node.initializer, visitor, isExpression));
 
             // Top-level nodes
             case SyntaxKind.SourceFile:
-                return factory.updateSourceFile(<SourceFile>node,
-                    visitLexicalEnvironment((<SourceFile>node).statements, visitor, context));
+                Debug.type<SourceFile>(node);
+                return factory.updateSourceFile(node,
+                    visitLexicalEnvironment(node.statements, visitor, context));
 
             // Transformation nodes
             case SyntaxKind.PartiallyEmittedExpression:
-                return factory.updatePartiallyEmittedExpression(<PartiallyEmittedExpression>node,
-                    nodeVisitor((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
+                Debug.type<PartiallyEmittedExpression>(node);
+                return factory.updatePartiallyEmittedExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.CommaListExpression:
-                return factory.updateCommaListExpression(<CommaListExpression>node,
-                    nodesVisitor((<CommaListExpression>node).elements, visitor, isExpression));
+                Debug.type<CommaListExpression>(node);
+                return factory.updateCommaListExpression(node,
+                    nodesVisitor(node.elements, visitor, isExpression));
 
             default:
                 // No need to visit nodes with no children.

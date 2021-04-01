@@ -1,0 +1,70 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts ===
+class C {
+>C : C
+
+    #foo = 42;
+>#foo : number
+>42 : 42
+
+    #bar() { new C().#baz; }
+>#bar : () => void
+>new C().#baz : number
+>new C() : C
+>C : typeof C
+
+    get #baz() { return 42; }
+>#baz : number
+>42 : 42
+
+    m() {
+>m : () => typeof D
+
+        return class D {
+>class D {            #bar() {}            constructor() {                new C().#foo;                new C().#bar; // Error                new C().#baz;                new D().#bar;            }            n(x: any) {                x.#foo;                x.#bar;                x.#unknown; // Error            }        } : typeof D
+>D : typeof D
+
+            #bar() {}
+>#bar : () => void
+
+            constructor() {
+                new C().#foo;
+>new C().#foo : number
+>new C() : C
+>C : typeof C
+
+                new C().#bar; // Error
+>new C().#bar : any
+>new C() : C
+>C : typeof C
+
+                new C().#baz;
+>new C().#baz : number
+>new C() : C
+>C : typeof C
+
+                new D().#bar;
+>new D().#bar : () => void
+>new D() : D
+>D : typeof D
+            }
+
+            n(x: any) {
+>n : (x: any) => void
+>x : any
+
+                x.#foo;
+>x.#foo : any
+>x : any
+
+                x.#bar;
+>x.#bar : any
+>x : any
+
+                x.#unknown; // Error
+>x.#unknown : any
+>x : any
+            }
+        }
+    }
+}
+
