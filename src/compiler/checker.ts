@@ -18390,13 +18390,19 @@ namespace ts {
                             }
                         }
                     }
-                    // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
-                    // when `O` is a conditional (`never` is trivially aissgnable to `O`, as is `O`!).
-                    const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
-                    if (defaultConstraint) {
-                        if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
-                            resetErrorInfo(saveErrorInfo);
-                            return result;
+
+
+                    // We'll repeatedly decompose source side conditionals if they're recursive - check if we've already recured on the constraint a lot and, if so, bail
+                    // on the comparison.
+                    if (!isDeeplyNestedType(source, sourceStack, sourceDepth)) {
+                        // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+                        // when `O` is a conditional (`never` is trivially aissgnable to `O`, as is `O`!).
+                        const defaultConstraint = getDefaultConstraintOfConditionalType(<ConditionalType>source);
+                        if (defaultConstraint) {
+                            if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
                         }
                     }
                 }
