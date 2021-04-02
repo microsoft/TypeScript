@@ -11936,6 +11936,10 @@ namespace ts {
             return false;
         }
 
+        function isOptionalPropertyDeclaration(node: Declaration) {
+            return isPropertyDeclaration(node) && node.questionToken;
+        }
+
         function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
             if (!isJSDocPropertyLikeTag(node)) {
                 return false;
@@ -27115,6 +27119,7 @@ namespace ts {
             let diagnosticMessage;
             const declarationName = idText(right);
             if (isInPropertyInitializer(node)
+                && !isOptionalPropertyDeclaration(valueDeclaration)
                 && !(isAccessExpression(node) && isAccessExpression(node.expression))
                 && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
                 && (compilerOptions.useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
