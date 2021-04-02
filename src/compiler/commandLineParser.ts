@@ -676,6 +676,14 @@ namespace ts {
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
         {
+            name: "noImplicitOverride",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
+        },
+        {
             name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
             showInSimplifiedHelpView: false,
@@ -1564,7 +1572,7 @@ namespace ts {
      */
     export function getParsedCommandLineOfConfigFile(
         configFileName: string,
-        optionsToExtend: CompilerOptions,
+        optionsToExtend: CompilerOptions | undefined,
         host: ParseConfigFileHost,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions,

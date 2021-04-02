@@ -33,19 +33,3 @@ goTo.marker("3");
 verify.quickInfoIs("type FooHandler2 = (eventName?: string | undefined, eventName2?: string) => any", "- What, another one?");
 goTo.marker("8");
 verify.quickInfoIs("type FooHandler = (eventName: string, eventName2: number | string, eventName3: any) => number", "- A kind of magic");
-verify.signatureHelp({
-    marker: '4',
-    text: "t(eventName: string, eventName2: string | number, eventName3: any): number",
-    parameterDocComment: "- So many words",
-    tags: [{ name: "type", text: "{FooHandler} callback" }]
-});
-verify.signatureHelp({
-    marker: '5',
-    parameterDocComment: "- Silence is golden",
-    tags: [{ name: "type", text: "{FooHandler} callback" }]
-});
-verify.signatureHelp({
-    marker: '6',
-    parameterDocComment: "- Osterreich mos def",
-    tags: [{ name: "type", text: "{FooHandler} callback" }]
-});

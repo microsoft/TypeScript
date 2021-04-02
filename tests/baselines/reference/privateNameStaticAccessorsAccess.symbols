@@ -1,0 +1,60 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts ===
+export {}
+class A2 {
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+
+    static get #prop() { return ""; }
+>#prop : Symbol(A2.#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
+
+    static set #prop(param: string) { }
+>#prop : Symbol(A2.#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
+>param : Symbol(param, Decl(privateNameStaticAccessorsAccess.ts, 3, 21))
+
+    constructor() {
+        console.log(A2.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>A2.#prop : Symbol(A2.#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+
+        let a: typeof A2 = A2;
+>a : Symbol(a, Decl(privateNameStaticAccessorsAccess.ts, 7, 11))
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+
+        a.#prop;
+>a.#prop : Symbol(A2.#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
+>a : Symbol(a, Decl(privateNameStaticAccessorsAccess.ts, 7, 11))
+
+        function  foo (){
+>foo : Symbol(foo, Decl(privateNameStaticAccessorsAccess.ts, 8, 16))
+
+            a.#prop;
+>a.#prop : Symbol(A2.#prop, Decl(privateNameStaticAccessorsAccess.ts, 1, 10), Decl(privateNameStaticAccessorsAccess.ts, 2, 37))
+>a : Symbol(a, Decl(privateNameStaticAccessorsAccess.ts, 7, 11))
+        }
+    }
+}
+
+A2.#prop; // Error
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+
+function  foo (){
+>foo : Symbol(foo, Decl(privateNameStaticAccessorsAccess.ts, 15, 9))
+
+    A2.#prop; // Error
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+}
+
+class B2 {
+>B2 : Symbol(B2, Decl(privateNameStaticAccessorsAccess.ts, 19, 1))
+
+    m() {
+>m : Symbol(B2.m, Decl(privateNameStaticAccessorsAccess.ts, 21, 10))
+
+        A2.#prop;
+>A2 : Symbol(A2, Decl(privateNameStaticAccessorsAccess.ts, 0, 9))
+    }
+}
+

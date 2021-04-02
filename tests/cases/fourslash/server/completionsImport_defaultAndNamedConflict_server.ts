@@ -17,21 +17,23 @@ verify.completions({
       name: "someModule",
       source: "/someModule",
       sourceDisplay: "./someModule",
-      text: "const someModule: 0",
-      kind: "const",
+      text: "(property) default: 1",
+      kind: "property",
       kindModifiers: "export",
       hasAction: true,
-      sortText: completion.SortText.AutoImportSuggestions
+      sortText: completion.SortText.AutoImportSuggestions,
+      tags: []
     },
     {
       name: "someModule",
       source: "/someModule",
       sourceDisplay: "./someModule",
-      text: "(property) default: 1",
-      kind: "property",
+      text: "const someModule: 0",
+      kind: "const",
       kindModifiers: "export",
       hasAction: true,
-      sortText: completion.SortText.AutoImportSuggestions
+      sortText: completion.SortText.AutoImportSuggestions,
+      tags: []
     },
   ],
   preferences: {

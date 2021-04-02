@@ -327,19 +327,17 @@ namespace ts.moduleSpecifiers {
             : undefined);
     }
 
-    interface ModulePath {
-        path: string;
-        isInNodeModules: boolean;
-        isRedirect: boolean;
-    }
-
     /**
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
      */
-    function getAllModulePaths(importingFileName: string, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
-        const cwd = host.getCurrentDirectory();
+    function getAllModulePaths(importingFileName: Path, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
+        const cache = host.getModuleSpecifierCache?.();
         const getCanonicalFileName = hostGetCanonicalFileName(host);
+        if (cache) {
+            const cached = cache.get(importingFileName, toPath(importedFileName, host.getCurrentDirectory(), getCanonicalFileName));
+            if (typeof cached === "object") return cached;
+        }
         const allFileNames = new Map<string, { path: string, isRedirect: boolean, isInNodeModules: boolean }>();
         let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
@@ -358,7 +356,7 @@ namespace ts.moduleSpecifiers {
         // Sort by paths closest to importing file Name directory
         const sortedPaths: ModulePath[] = [];
         for (
-            let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));
+            let directory = getDirectoryPath(importingFileName);
             allFileNames.size !== 0;
         ) {
             const directoryStart = ensureTrailingDirectorySeparator(directory);
@@ -383,6 +381,10 @@ namespace ts.moduleSpecifiers {
             const remainingPaths = arrayFrom(allFileNames.values());
             if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByRedirectAndNumberOfDirectorySeparators);
             sortedPaths.push(...remainingPaths);
+        }
+
+        if (cache) {
+            cache.set(importingFileName, toPath(importedFileName, host.getCurrentDirectory(), getCanonicalFileName), sortedPaths);
         }
         return sortedPaths;
     }

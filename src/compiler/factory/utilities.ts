@@ -930,7 +930,7 @@ namespace ts {
         return isBinaryOperator(node.kind);
     }
 
-    type BinaryExpressionState = <TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }) => number;
+    type BinaryExpressionState = <TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, outerState: TOuterState) => number;
 
     namespace BinaryExpressionState {
         /**
@@ -939,10 +939,10 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function enter<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+        export function enter<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, outerState: TOuterState): number {
             const prevUserState = stackIndex > 0 ? userStateStack[stackIndex - 1] : undefined;
             Debug.assertEqual(stateStack[stackIndex], enter);
-            userStateStack[stackIndex] = machine.onEnter(nodeStack[stackIndex], prevUserState);
+            userStateStack[stackIndex] = machine.onEnter(nodeStack[stackIndex], prevUserState, outerState);
             stateStack[stackIndex] = nextState(machine, enter);
             return stackIndex;
         }
@@ -953,7 +953,7 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function left<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+        export function left<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
             Debug.assertEqual(stateStack[stackIndex], left);
             Debug.assertIsDefined(machine.onLeft);
             stateStack[stackIndex] = nextState(machine, left);
@@ -971,7 +971,7 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function operator<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+        export function operator<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
             Debug.assertEqual(stateStack[stackIndex], operator);
             Debug.assertIsDefined(machine.onOperator);
             stateStack[stackIndex] = nextState(machine, operator);
@@ -985,7 +985,7 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function right<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }): number {
+        export function right<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
             Debug.assertEqual(stateStack[stackIndex], right);
             Debug.assertIsDefined(machine.onRight);
             stateStack[stackIndex] = nextState(machine, right);
@@ -1003,7 +1003,7 @@ namespace ts {
          * @param frame The current frame
          * @returns The new frame
          */
-        export function exit<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }): number {
+        export function exit<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], nodeStack: BinaryExpression[], userStateStack: TState[], resultHolder: { value: TResult }, _outerState: TOuterState): number {
             Debug.assertEqual(stateStack[stackIndex], exit);
             stateStack[stackIndex] = nextState(machine, exit);
             const result = machine.onExit(nodeStack[stackIndex], userStateStack[stackIndex]);
@@ -1024,12 +1024,12 @@ namespace ts {
          * Handles a frame that is already done.
          * @returns The `done` state.
          */
-        export function done<TState, TResult>(_machine: BinaryExpressionStateMachine<TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult }): number {
+        export function done<TOuterState, TState, TResult>(_machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, stackIndex: number, stateStack: BinaryExpressionState[], _nodeStack: BinaryExpression[], _userStateStack: TState[], _resultHolder: { value: TResult }, _outerState: TOuterState): number {
             Debug.assertEqual(stateStack[stackIndex], done);
             return stackIndex;
         }
 
-        export function nextState<TState, TResult>(machine: BinaryExpressionStateMachine<TState, TResult>, currentState: BinaryExpressionState) {
+        export function nextState<TOuterState, TState, TResult>(machine: BinaryExpressionStateMachine<TOuterState, TState, TResult>, currentState: BinaryExpressionState) {
             switch (currentState) {
                 case enter:
                     if (machine.onLeft) return left;
@@ -1068,9 +1068,9 @@ namespace ts {
     /**
      * Holds state machine handler functions
      */
-    class BinaryExpressionStateMachine<TState, TResult> {
+    class BinaryExpressionStateMachine<TOuterState, TState, TResult> {
         constructor(
-            readonly onEnter: (node: BinaryExpression, prev: TState | undefined) => TState,
+            readonly onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
             readonly onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
             readonly onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
             readonly onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
@@ -1089,8 +1089,33 @@ namespace ts {
      * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
      * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
      */
-    export function createBinaryExpressionTrampoline<TState, TResult>(
+     export function createBinaryExpressionTrampoline<TState, TResult>(
         onEnter: (node: BinaryExpression, prev: TState | undefined) => TState,
+        onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+        onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        onExit: (node: BinaryExpression, userState: TState) => TResult,
+        foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
+    ): (node: BinaryExpression) => TResult;
+    /**
+     * Creates a state machine that walks a `BinaryExpression` using the heap to reduce call-stack depth on a large tree.
+     * @param onEnter Callback evaluated when entering a `BinaryExpression`. Returns new user-defined state to associate with the node while walking.
+     * @param onLeft Callback evaluated when walking the left side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the right side.
+     * @param onRight Callback evaluated when walking the right side of a `BinaryExpression`. Return a `BinaryExpression` to continue walking, or `void` to advance to the end of the node.
+     * @param onExit Callback evaluated when exiting a `BinaryExpression`. The result returned will either be folded into the parent's state, or returned from the walker if at the top frame.
+     * @param foldState Callback evaluated when the result from a nested `onExit` should be folded into the state of that node's parent.
+     * @returns A function that walks a `BinaryExpression` node using the above callbacks, returning the result of the call to `onExit` from the outermost `BinaryExpression` node.
+     */
+    export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
+        onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
+        onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
+        onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
+        onExit: (node: BinaryExpression, userState: TState) => TResult,
+        foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
+    ): (node: BinaryExpression, outerState: TOuterState) => TResult;
+    export function createBinaryExpressionTrampoline<TOuterState, TState, TResult>(
+        onEnter: (node: BinaryExpression, prev: TState | undefined, outerState: TOuterState) => TState,
         onLeft: ((left: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
         onOperator: ((operatorToken: BinaryOperatorToken, userState: TState, node: BinaryExpression) => void) | undefined,
         onRight: ((right: Expression, userState: TState, node: BinaryExpression) => BinaryExpression | void) | undefined,
@@ -1098,17 +1123,19 @@ namespace ts {
         foldState: ((userState: TState, result: TResult, side: "left" | "right") => TState) | undefined,
     ) {
         const machine = new BinaryExpressionStateMachine(onEnter, onLeft, onOperator, onRight, onExit, foldState);
-        return (node: BinaryExpression) => {
+        return trampoline;
+
+        function trampoline(node: BinaryExpression, outerState?: TOuterState) {
             const resultHolder: { value: TResult } = { value: undefined! };
             const stateStack: BinaryExpressionState[] = [BinaryExpressionState.enter];
             const nodeStack: BinaryExpression[] = [node];
             const userStateStack: TState[] = [undefined!];
             let stackIndex = 0;
             while (stateStack[stackIndex] !== BinaryExpressionState.done) {
-                stackIndex = stateStack[stackIndex](machine, stackIndex, stateStack, nodeStack, userStateStack, resultHolder);
+                stackIndex = stateStack[stackIndex](machine, stackIndex, stateStack, nodeStack, userStateStack, resultHolder, outerState);
             }
             Debug.assertEqual(stackIndex, 0);
             return resultHolder.value;
-        };
+        }
     }
 }

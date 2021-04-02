@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldNoInitializer.ts ===
+const C = class {
+>C : typeof C
+>class {    static #x;} : typeof C
+
+    static #x;
+>#x : any
+}
+
+class C2 {
+>C2 : C2
+
+    static #x;
+>#x : any
+}

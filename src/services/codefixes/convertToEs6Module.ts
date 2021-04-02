@@ -436,7 +436,9 @@ namespace ts.codefix {
 
     /**
      * Convert `import x = require("x").`
-     * Also converts uses like `x.y()` to `y()` and uses a named import.
+     * Also:
+     * - Convert `x.default()` to `x()` to handle ES6 default export
+     * - Converts uses like `x.y()` to `y()` and uses a named import.
      */
     function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: StringLiteralLike, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ConvertedImports {
         const nameSymbol = checker.getSymbolAtLocation(name);
@@ -454,15 +456,23 @@ namespace ts.codefix {
 
             const { parent } = use;
             if (isPropertyAccessExpression(parent)) {
-                const { expression, name: { text: propertyName } } = parent;
-                Debug.assert(expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
-                let idName = namedBindingsNames.get(propertyName);
-                if (idName === undefined) {
-                    idName = makeUniqueName(propertyName, identifiers);
-                    namedBindingsNames.set(propertyName, idName);
-                }
+                const { name: { text: propertyName } } = parent;
+                if (propertyName === "default") {
+                    needDefaultImport = true;
 
-                (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(idName));
+                    const importDefaultName = use.getText();
+                    (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(importDefaultName));
+                }
+                else {
+                    Debug.assert(parent.expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
+                    let idName = namedBindingsNames.get(propertyName);
+                    if (idName === undefined) {
+                        idName = makeUniqueName(propertyName, identifiers);
+                        namedBindingsNames.set(propertyName, idName);
+                    }
+
+                    (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(idName));
+                }
             }
             else {
                 needDefaultImport = true;

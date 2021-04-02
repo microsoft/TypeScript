@@ -72,6 +72,8 @@ import { something } from "something";
                     replacementSpan: undefined,
                     source: undefined,
                     data: undefined,
+                    sourceDisplay: undefined,
+                    isSnippet: undefined,
                 };
             }
         });

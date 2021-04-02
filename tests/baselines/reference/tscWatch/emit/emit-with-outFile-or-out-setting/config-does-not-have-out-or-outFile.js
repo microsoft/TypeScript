@@ -84,7 +84,7 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -98,6 +98,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
 
 WatchedFiles::
 /a/tsconfig.json:
@@ -123,3 +125,58 @@ exitCode:: ExitStatus.undefined
 var x = 11;
 
 
+//// [/a/b.js] file written with same contents
+
+Change:: Make change in the file again
+
+Input::
+//// [/a/a.ts]
+let xy = 11
+
+
+Output::
+>> Screen clear
+[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
+Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
+
+WatchedFiles::
+/a/tsconfig.json:
+  {"fileName":"/a/tsconfig.json","pollingInterval":250}
+/a/a.ts:
+  {"fileName":"/a/a.ts","pollingInterval":250}
+/a/b.ts:
+  {"fileName":"/a/b.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/a/node_modules/@types:
+  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a:
+  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/a/a.js]
+var xy = 11;
+
+
+//// [/a/b.js] file written with same contents
