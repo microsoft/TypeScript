@@ -1728,6 +1728,10 @@ export let sys: System = (() => {
         }
 
         function isFileSystemCaseSensitive(): boolean {
+            // The PnP runtime is always case-sensitive
+            if (typeof process.versions.pnp !== `undefined`) {
+                return true;
+            }
             // win32\win64 are case insensitive platforms
             if (platform === "win32" || platform === "win64") {
                 return false;

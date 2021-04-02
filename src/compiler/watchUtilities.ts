@@ -372,6 +372,8 @@ export enum ConfigFileProgramReloadLevel {
     Partial,
     /** Reload completely by re-reading contents of config file from disk and updating program */
     Full,
+    /** Reload the resolutions */
+    Resolutions,
 }
 
 /** @internal */

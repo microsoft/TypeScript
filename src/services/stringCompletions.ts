@@ -1,4 +1,8 @@
 import {
+    getPnpApi,
+    getPnpTypeRoots,
+} from "../compiler/pnp";
+import {
     addToSeen,
     altDirectorySeparator,
     arrayFrom,
@@ -925,7 +929,37 @@ function getCompletionEntriesForNonRelativeModules(
                     getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
                 }
             };
-            if (fragmentDirectory && getResolvePackageJsonExports(compilerOptions)) {
+
+            const checkExports = (
+                packageFile: string,
+                packageDirectory: string,
+                fragmentSubpath: string,
+            ) => {
+                const packageJson = readJson(packageFile, host);
+                const exports = (packageJson as any).exports;
+                if (exports) {
+                    if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                        return true; // null exports or entrypoint only, no sub-modules available
+                    }
+                    const keys = getOwnKeys(exports);
+                    const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
+                    addCompletionEntriesFromPathsOrExports(
+                        result,
+                        fragmentSubpath,
+                        packageDirectory,
+                        extensionOptions,
+                        host,
+                        keys,
+                        key => singleElementArray(getPatternFromFirstMatchingCondition(exports[key], conditions)),
+                        comparePatternKeys,
+                    );
+                    return true;
+                }
+                return false;
+            };
+
+            const shouldCheckExports = fragmentDirectory && getResolvePackageJsonExports(compilerOptions);
+            if (shouldCheckExports) {
                 const nodeModulesDirectoryLookup = ancestorLookup;
                 ancestorLookup = ancestor => {
                     const components = getPathComponents(fragment);
@@ -944,32 +978,50 @@ function getCompletionEntriesForNonRelativeModules(
                     const packageDirectory = combinePaths(ancestor, "node_modules", packagePath);
                     const packageFile = combinePaths(packageDirectory, "package.json");
                     if (tryFileExists(host, packageFile)) {
-                        const packageJson = readJson(packageFile, host);
-                        const exports = (packageJson as any).exports;
-                        if (exports) {
-                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
-                                return; // null exports or entrypoint only, no sub-modules available
-                            }
-                            const keys = getOwnKeys(exports);
-                            const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
-                            const conditions = getConditions(compilerOptions, mode === ModuleKind.ESNext);
-                            addCompletionEntriesFromPathsOrExports(
-                                result,
-                                fragmentSubpath,
-                                packageDirectory,
-                                extensionOptions,
-                                host,
-                                keys,
-                                key => singleElementArray(getPatternFromFirstMatchingCondition(exports[key], conditions)),
-                                comparePatternKeys,
-                            );
+                        const fragmentSubpath = components.join("/") + (components.length && hasTrailingDirectorySeparator(fragment) ? "/" : "");
+                        if (checkExports(packageFile, packageDirectory, fragmentSubpath)) {
                             return;
                         }
                     }
                     return nodeModulesDirectoryLookup(ancestor);
                 };
             }
-            forEachAncestorDirectory(scriptPath, ancestorLookup);
+
+            const pnpApi = getPnpApi(scriptPath);
+
+            if (pnpApi) {
+                // Splits a require request into its components, or return null if the request is a file path
+                const pathRegExp = /^(?![a-zA-Z]:[\\/]|\\\\|\.{0,2}(?:\/|$))((?:@[^/]+\/)?[^/]+)\/*(.*|)$/;
+                const dependencyNameMatch = fragment.match(pathRegExp);
+                if (dependencyNameMatch) {
+                    const [, dependencyName, subPath] = dependencyNameMatch;
+                    let unqualified;
+                    try {
+                        unqualified = pnpApi.resolveToUnqualified(dependencyName, scriptPath, { considerBuiltins: false });
+                    }
+                    catch {
+                        // It's fine if the resolution fails
+                    }
+                    if (unqualified) {
+                        const packageDirectory = normalizePath(unqualified);
+                        let shouldGetCompletions = true;
+
+                        if (shouldCheckExports) {
+                            const packageFile = combinePaths(packageDirectory, "package.json");
+                            if (tryFileExists(host, packageFile) && checkExports(packageFile, packageDirectory, subPath)) {
+                                shouldGetCompletions = false;
+                            }
+                        }
+
+                        if (shouldGetCompletions) {
+                            getCompletionEntriesForDirectoryFragment(subPath, packageDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, /*exclude*/ undefined, result);
+                        }
+                    }
+                }
+            }
+            else {
+                forEachAncestorDirectory(scriptPath, ancestorLookup);
+            }
         }
     }
 
@@ -1148,10 +1200,17 @@ function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: Com
         getCompletionEntriesFromDirectories(root);
     }
 
-    // Also get all @types typings installed in visible node_modules directories
-    for (const packageJson of findPackageJsons(scriptPath, host)) {
-        const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
-        getCompletionEntriesFromDirectories(typesDir);
+    if (getPnpApi(scriptPath)) {
+        for (const root of getPnpTypeRoots(scriptPath)) {
+            getCompletionEntriesFromDirectories(root);
+        }
+    }
+    else {
+        // Also get all @types typings installed in visible node_modules directories
+        for (const packageJson of findPackageJsons(scriptPath, host)) {
+            const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
+            getCompletionEntriesFromDirectories(typesDir);
+        }
     }
 
     return result;

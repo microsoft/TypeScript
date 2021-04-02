@@ -1,4 +1,8 @@
 import {
+    getPnpApi,
+    isImportablePathPnp,
+} from "../compiler/pnp";
+import {
     __String,
     addToSeen,
     arrayIsEqualTo,
@@ -403,6 +407,10 @@ export function isImportableFile(
  * A relative import to node_modules is usually a bad idea.
  */
 function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
+    if (getPnpApi(fromPath)) {
+        return isImportablePathPnp(fromPath, toPath);
+    }
+
     // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
     const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
     const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
