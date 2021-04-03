@@ -2157,13 +2157,8 @@ namespace ts {
         return { text, kind: SymbolDisplayPartKind[kind] };
     }
 
-    /**
-     * Functions that call displayPart with specific `SymbolDisplayPartKind`
-     */
-    export type ConstructSpecificDisplayPartFunction = (text: string) => ReturnType<typeof displayPart>;
-
-    export function callbackFunctionNamePart(text: string) {
-        return displayPart(text, SymbolDisplayPartKind.callbackFunctionName);
+    export function functionNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.functionName);
     }
 
     export function spacePart() {
@@ -2201,8 +2196,8 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.text);
     }
 
-    export function typeDefinitionNamePart(text: string) {
-        return displayPart(text, SymbolDisplayPartKind.typeDefinitionName);
+    export function typeAliasNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.aliasName);
     }
 
     export function typeParameterNamePart(text: string) {

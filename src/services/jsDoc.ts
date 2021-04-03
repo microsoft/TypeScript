@@ -79,11 +79,16 @@ namespace ts.JsDoc {
         "virtual",
         "yields"
     ];
-    const syntaxKindDisplayPartFunctionDict: Partial<Record<SyntaxKind, ConstructSpecificDisplayPartFunction>> = {
-        [SyntaxKind.JSDocCallbackTag]: callbackFunctionNamePart,
+    const syntaxKindDisplayPartFunctionDict = {
+        [SyntaxKind.JSDocAugmentsTag]: textPart,
+        [SyntaxKind.JSDocCallbackTag]: typeAliasNamePart,
+        [SyntaxKind.JSDocImplementsTag]: textPart,
         [SyntaxKind.JSDocParameterTag]: parameterNamePart,
         [SyntaxKind.JSDocPropertyTag]: propertyNamePart,
-        [SyntaxKind.JSDocTypedefTag]: typeDefinitionNamePart,
+        [SyntaxKind.JSDocSeeTag]: textPart,
+        [SyntaxKind.JSDocTemplateTag]: typeParameterNamePart,
+        [SyntaxKind.JSDocTypeTag]: textPart,
+        [SyntaxKind.JSDocTypedefTag]: typeAliasNamePart,
     };
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
@@ -150,33 +155,29 @@ namespace ts.JsDoc {
         const { comment, kind } = tag;
         switch (kind) {
             case SyntaxKind.JSDocImplementsTag:
-                return withNode((tag as JSDocImplementsTag).class);
+                return withNode((tag as JSDocImplementsTag).class, syntaxKindDisplayPartFunctionDict[kind]);
             case SyntaxKind.JSDocAugmentsTag:
-                return withNode((tag as JSDocAugmentsTag).class);
+                return withNode((tag as JSDocAugmentsTag).class, syntaxKindDisplayPartFunctionDict[kind]);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "), typeParameterNamePart);
+                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "), syntaxKindDisplayPartFunctionDict[kind]);
             case SyntaxKind.JSDocTypeTag:
-                return withNode((tag as JSDocTypeTag).typeExpression);
+                return withNode((tag as JSDocTypeTag).typeExpression, syntaxKindDisplayPartFunctionDict[kind]);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
-                const { name } = tag as JSDocCallbackTag | JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name
-                    ? withNode(name, syntaxKindDisplayPartFunctionDict[kind])
-                    : comment === undefined
-                    ? undefined
-                    : getDisplayPartsFromComment(comment, checker);
+                const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+                return name ? withNode(name, syntaxKindDisplayPartFunctionDict[kind]) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
 
-        function withNode(node: Node, constructDisplayPartFunc?: ConstructSpecificDisplayPartFunction) {
+        function withNode(node: Node, constructDisplayPartFunc?: (text: string) => SymbolDisplayPart) {
             return addComment(node.getText(), constructDisplayPartFunc);
         }
 
-        function addComment(s: string, constructDisplayPartFunc?: ConstructSpecificDisplayPartFunction) {
+        function addComment(s: string, constructDisplayPartFunc?: (text: string) => SymbolDisplayPart) {
             return comment
                 ? [!!constructDisplayPartFunc ? constructDisplayPartFunc(s) : textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
                 : [textPart(s)];

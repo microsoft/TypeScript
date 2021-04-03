@@ -1015,7 +1015,6 @@ namespace ts {
 
     export enum SymbolDisplayPartKind {
         aliasName,
-        callbackFunctionName,
         className,
         enumName,
         fieldName,
@@ -1033,7 +1032,6 @@ namespace ts {
         punctuation,
         space,
         text,
-        typeDefinitionName,
         typeParameterName,
         enumMemberName,
         functionName,
