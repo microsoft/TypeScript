@@ -44,6 +44,7 @@ namespace ts.JsDoc {
         "kind",
         "lends",
         "license",
+        "link",
         "listens",
         "member",
         "memberof",
