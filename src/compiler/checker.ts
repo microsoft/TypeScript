@@ -546,6 +546,7 @@ namespace ts {
                 return node && getContextualTypeForJsxAttribute(node);
             },
             isContextSensitive,
+            getTypeOfPropertyOfContextualType,
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
