@@ -13823,7 +13823,7 @@ namespace ts {
             const typeKey = !origin ? getTypeListId(types) :
                 origin.flags & TypeFlags.Union ? `|${getTypeListId((<UnionType>origin).types)}` :
                 origin.flags & TypeFlags.Intersection ? `&${getTypeListId((<IntersectionType>origin).types)}` :
-                `#${(<IndexType>origin).type.id}`;
+                `#${(<IndexType>origin).type.id}|${getTypeListId(types)}`; // origin type id alone is insufficient, as `keyof x` may resolve to multiple WIP values while `x` is still resolving
             const id = typeKey + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = unionTypes.get(id);
             if (!type) {
