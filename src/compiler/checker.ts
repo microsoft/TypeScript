@@ -19598,7 +19598,9 @@ namespace ts {
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
-                do { type = (type as IndexedAccessType).objectType } while (type.flags & TypeFlags.IndexedAccess);
+                do {
+                    type = (type as IndexedAccessType).objectType;
+                } while (type.flags & TypeFlags.IndexedAccess);
                 return type;
             }
             if (type.flags & TypeFlags.Conditional) {
