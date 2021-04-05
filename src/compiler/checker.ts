@@ -5142,9 +5142,26 @@ namespace ts {
                 return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
 
+            function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
+                // Use placeholders for reverse mapped types we've either already descended into, or which
+                // are nested reverse mappings within a mapping over a non-anonymous type. The later is a restriction mostly just to
+                // reduce the blowup in printback size from doing, eg, a deep reverse mapping over `Window`.
+                // Since anonymous types usually come from expressions, this allows us to preserve the output
+                // for deep mappings which likely come from expressions, while truncating those parts which
+                // come from mappings over library functions.
+                return !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped)
+                    && (
+                        contains(context.reverseMappedStack, propertySymbol as ReverseMappedSymbol)
+                        || (
+                            context.reverseMappedStack?.[0]
+                            && !(getObjectFlags(last(context.reverseMappedStack).propertyType) & ObjectFlags.Anonymous)
+                        )
+                    );
+            }
+
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
                 const propertyIsReverseMapped = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
-                const propertyType = propertyIsReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
+                const propertyType = shouldUsePlaceholderForProperty(propertySymbol, context) ?
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
@@ -5175,16 +5192,20 @@ namespace ts {
                     }
                 }
                 else {
-                    const savedFlags = context.flags;
-                    context.flags |= propertyIsReverseMapped ? NodeBuilderFlags.InReverseMappedType : 0;
                     let propertyTypeNode: TypeNode;
-                    if (propertyIsReverseMapped && !!(savedFlags & NodeBuilderFlags.InReverseMappedType)) {
+                    if (shouldUsePlaceholderForProperty(propertySymbol, context)) {
                         propertyTypeNode = createElidedInformationPlaceholder(context);
                     }
                     else {
+                        if (propertyIsReverseMapped) {
+                            context.reverseMappedStack ||= [];
+                            context.reverseMappedStack.push(propertySymbol as ReverseMappedSymbol);
+                        }
                         propertyTypeNode = propertyType ? serializeTypeForDeclaration(context, propertyType, propertySymbol, saveEnclosingDeclaration) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        if (propertyIsReverseMapped) {
+                            context.reverseMappedStack!.pop();
+                        }
                     }
-                    context.flags = savedFlags;
 
                     const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                     if (modifiers) {
@@ -7716,6 +7737,7 @@ namespace ts {
             typeParameterNamesByText?: Set<string>;
             usedSymbolNames?: Set<string>;
             remappedSymbolNames?: ESMap<SymbolId, string>;
+            reverseMappedStack?: ReverseMappedSymbol[];
         }
 
         function isDefaultBindingContext(location: Node) {
@@ -10870,6 +10892,14 @@ namespace ts {
             }
         }
 
+        type ReplaceableIndexedAccessType = IndexedAccessType & { objectType: TypeParameter, indexType: TypeParameter };
+        function replaceIndexedAccess(instantiable: Type, type: ReplaceableIndexedAccessType, replacement: Type) {
+            // map type.indexType to 0
+            // map type.objectType to `[TReplacement]`
+            // thus making the indexed access `[TReplacement][0]` or `TReplacement`
+            return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getLiteralType(0), createTupleType([replacement])]));
+        }
+
         function getIndexInfoOfIndexSymbol(indexSymbol: Symbol, indexKind: IndexKind) {
             const declaration = getIndexDeclarationOfIndexSymbol(indexSymbol, indexKind);
             if (!declaration) return undefined;
@@ -10890,8 +10920,21 @@ namespace ts {
                 inferredProp.declarations = prop.declarations;
                 inferredProp.nameType = getSymbolLinks(prop).nameType;
                 inferredProp.propertyType = getTypeOfSymbol(prop);
-                inferredProp.mappedType = type.mappedType;
-                inferredProp.constraintType = type.constraintType;
+                if (type.constraintType.type.flags & TypeFlags.IndexedAccess
+                    && (type.constraintType.type as IndexedAccessType).objectType.flags & TypeFlags.TypeParameter
+                    && (type.constraintType.type as IndexedAccessType).indexType.flags & TypeFlags.TypeParameter) {
+                    // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
+                    // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
+                    // type identities produced, we simplify such indexed access occurences
+                    const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
+                    const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
+                    inferredProp.mappedType = newMappedType as MappedType;
+                    inferredProp.constraintType = getIndexType(newTypeParam) as IndexType;
+                }
+                else {
+                    inferredProp.mappedType = type.mappedType;
+                    inferredProp.constraintType = type.constraintType;
+                }
                 members.set(prop.escapedName, inferredProp);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
@@ -20611,7 +20654,11 @@ namespace ts {
         }
 
         function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
-            return inferReverseMappedType(symbol.propertyType, symbol.mappedType, symbol.constraintType);
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                links.type = inferReverseMappedType(symbol.propertyType, symbol.mappedType, symbol.constraintType);
+            }
+            return links.type;
         }
 
         function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType): Type {
