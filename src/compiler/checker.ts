@@ -22013,7 +22013,10 @@ namespace ts {
                 return reduceLeft((<UnionType>type).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
             }
             if (flags & TypeFlags.Intersection) {
-                return reduceLeft((<UnionType>type).types, (facts, t) => facts & getTypeFacts(t), TypeFacts.All);
+                // When an intersection contains a primitive type we ignore object type constituents as they are
+                // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
+                const containsPrimitive = maybeTypeOfKind(type, TypeFlags.Primitive);
+                return reduceLeft((<UnionType>type).types, (facts, t) => t.flags & TypeFlags.Object && containsPrimitive ? facts : facts & getTypeFacts(t), TypeFacts.All);
             }
             return TypeFacts.All;
         }
