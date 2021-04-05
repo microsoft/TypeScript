@@ -12854,9 +12854,17 @@ namespace ts {
 
         function getConditionalFlowTypeOfType(type: Type, node: Node) {
             let constraints: Type[] | undefined;
+            let covariant = true;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                // only consider variance flipped by parameter locations - `keyof` types would usually be considered variance inverting, but
+                // often get used in indexed accesses where they behave sortof invariantly, but our checking is lax
+                if (parent.kind === SyntaxKind.Parameter) {
+                    covariant = !covariant;
+                }
+                // Always substitute on type parameters, regardless of variance, since even
+                // in contravarrying positions, they may be reliant on subtuted constraints to be valid
+                if ((covariant || type.flags & TypeFlags.TypeParameter) && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(type, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
                         constraints = append(constraints, constraint);
