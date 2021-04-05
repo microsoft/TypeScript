@@ -26982,12 +26982,11 @@ namespace ts {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
 
-                if (lexicallyScopedSymbol && (compilerOptions.target === ScriptTarget.ESNext && !useDefineForClassFields)) {
-                    const lexicalValueDecl = lexicallyScopedSymbol.valueDeclaration;
-                    const lexicalClass = lexicalValueDecl && getContainingClass(lexicalValueDecl);
+                if (lexicallyScopedSymbol?.valueDeclaration && (compilerOptions.target === ScriptTarget.ESNext && !useDefineForClassFields)) {
+                    const lexicalClass = getContainingClass(lexicallyScopedSymbol.valueDeclaration);
                     const parentStaticFieldInitializer = findAncestor(node, (n) => {
                         if (n === lexicalClass) return "quit";
-                        if (isPropertyDeclaration(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
+                        if (isPropertyDeclaration(n.parent) && hasStaticModifier(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
                             return true;
                         }
                         return false;
@@ -26996,7 +26995,7 @@ namespace ts {
                         const parentStaticFieldInitializerSymbol = getSymbolOfNode(parentStaticFieldInitializer.parent);
                         Debug.assert(parentStaticFieldInitializerSymbol, "Initializer without declaration symbol");
                         const diagnostic = error(node,
-                            Diagnostics.Property_0_is_used_in_a_static_property_s_initializer_in_the_same_class_This_is_only_supported_when_target_set_to_is_esnext_and_if_useDefineForClassFields_is_set_to_true,
+                            Diagnostics.Property_0_may_not_be_used_in_a_static_property_s_initializer_in_the_same_class_when_target_is_esnext_and_useDefineForClassFields_is_false,
                             symbolName(lexicallyScopedSymbol));
                         addRelatedInfo(diagnostic,
                             createDiagnosticForNode(parentStaticFieldInitializer.parent,

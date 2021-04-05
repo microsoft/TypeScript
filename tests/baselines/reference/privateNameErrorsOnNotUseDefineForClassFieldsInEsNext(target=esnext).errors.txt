@@ -1,34 +1,34 @@
-tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(3,17): error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
-tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(7,13): error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
-tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(11,17): error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
-tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(12,17): error TS2810: Property '#foo' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
-tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(19,21): error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(3,17): error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(7,13): error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(11,17): error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(12,17): error TS2810: Property '#foo' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
+tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts(19,21): error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts (5 errors) ====
-    class Test {
+    class TestWithErrors {
         #prop = 0 
-        static dd = new Test().#prop; // Err
-                    ~~~~~~~~~~~~~~~~
-!!! error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
+        static dd = new TestWithErrors().#prop; // Err
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
 !!! related TS2811 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:3:12: Initializer for property 'dd'
         static ["X_ z_ zz"] = class Inner {
             #foo  = 10   
             m() {
-                new Test().#prop // Err
-                ~~~~~~~~~~~~~~~~
-!!! error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
+                new TestWithErrors().#prop // Err
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
 !!! related TS2811 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:4:12: Initializer for property 'X_ z_ zz'
             }
             static C = class InnerInner {
                 m() {
-                    new Test().#prop // Err
-                    ~~~~~~~~~~~~~~~~
-!!! error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
+                    new TestWithErrors().#prop // Err
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
 !!! related TS2811 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:4:12: Initializer for property 'X_ z_ zz'
                     new Inner().#foo; // Err
                     ~~~~~~~~~~~~~~~~
-!!! error TS2810: Property '#foo' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
+!!! error TS2810: Property '#foo' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
 !!! related TS2811 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:9:16: Initializer for property 'C'
                 }
             }
@@ -36,9 +36,9 @@ tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDe
             static M(){
                 return class {
                     m() {
-                        new Test().#prop // Err
-                        ~~~~~~~~~~~~~~~~
-!!! error TS2810: Property '#prop' is used in a static property's initializer in the same class. This is only supported when 'target' set to is 'esnext' and if 'useDefineForClassFields' is set to 'true'
+                        new TestWithErrors().#prop // Err
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2810: Property '#prop' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.
 !!! related TS2811 tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts:4:12: Initializer for property 'X_ z_ zz'
                         new Inner().#foo; // OK
                     }
@@ -46,3 +46,29 @@ tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDe
             } 
         }
     }
+    
+    class TestNoErrors {
+        #prop = 0 
+        dd = new TestNoErrors().#prop; // OK
+        ["X_ z_ zz"] = class Inner {
+            #foo  = 10   
+            m() {
+                new TestNoErrors().#prop // Ok
+            }
+            C = class InnerInner {
+                m() {
+                    new TestNoErrors().#prop // Ok
+                    new Inner().#foo; // Ok
+                }
+            }
+      
+            static M(){
+                return class {
+                    m() {
+                        new TestNoErrors().#prop // OK
+                        new Inner().#foo; // OK
+                    }
+                }
+            } 
+        }
+      }
