@@ -1224,7 +1224,7 @@ namespace ts.server {
                     containerName: info.containerName,
                     kind: info.kind,
                     name: info.name,
-                    unverified: info.unverified,
+                    ...info.unverified && { unverified: info.unverified },
                 };
             });
         }
@@ -1302,7 +1302,7 @@ namespace ts.server {
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.DefinitionInfo[] {
-            return definitions.map(def => ({ ...this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project), unverified: def.unverified }));
+            return definitions.map(def => ({ ...this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project), ...def.unverified && { unverified: def.unverified } }));
         }
 
         /*

@@ -218,7 +218,8 @@ function fooB() { }`
             assert.deepEqual(response.definitions, [{
                 file: file2.path,
                 start: { line: 1, offset: 1 },
-                end: { line: 1, offset: 1 }
+                end: { line: 1, offset: 1 },
+                unverified: true,
             }]);
         });
     });
