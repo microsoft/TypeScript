@@ -876,6 +876,7 @@ namespace ts {
         | PropertyAssignment
         | FunctionExpression
         | LabeledStatement
+        | IfStatement
         | ExpressionStatement
         | VariableStatement
         | FunctionDeclaration
@@ -2659,7 +2660,7 @@ namespace ts {
         readonly expression: StringLiteral;
     }
 
-    export interface IfStatement extends Statement {
+    export interface IfStatement extends Statement, JSDocContainer {
         readonly kind: SyntaxKind.IfStatement;
         readonly expression: Expression;
         readonly thenStatement: Statement;

@@ -5654,6 +5654,7 @@ namespace ts {
 
         function parseIfStatement(): IfStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.IfKeyword);
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
@@ -5661,7 +5662,7 @@ namespace ts {
             parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const thenStatement = parseStatement();
             const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
-            return finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos);
+            return withJSDoc(finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
         }
 
         function parseDoStatement(): DoStatement {
