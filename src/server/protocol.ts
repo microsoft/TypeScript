@@ -1013,7 +1013,7 @@ namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     export interface DefinitionResponse extends Response {
-        body?: FileSpanWithContext[];
+        body?: DefinitionInfo[];
     }
 
     export interface DefinitionInfoAndBoundSpanResponse extends Response {
