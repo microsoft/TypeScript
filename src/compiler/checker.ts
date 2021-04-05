@@ -19610,14 +19610,12 @@ namespace ts {
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             if (depth >= 5) {
                 const identity = getRecursionIdentity(type);
-                if (identity) {
-                    let count = 0;
-                    for (let i = 0; i < depth; i++) {
-                        if (getRecursionIdentity(stack[i]) === identity) {
-                            count++;
-                            if (count >= 5) {
-                                return true;
-                            }
+                let count = 0;
+                for (let i = 0; i < depth; i++) {
+                    if (getRecursionIdentity(stack[i]) === identity) {
+                        count++;
+                        if (count >= 5) {
+                            return true;
                         }
                     }
                 }
@@ -19625,15 +19623,20 @@ namespace ts {
             return false;
         }
 
-        // Types with constituents that could circularly reference the type have a recursion identity. The recursion
-        // identity is some object that is common to instantiations of the type with the same origin.
-        function getRecursionIdentity(type: Type): object | undefined {
+        // The recursion identity of a type is an object identity that is shared among multiple instantiations of the type.
+        // We track recursion identities in order to identify deeply nested and possibly infinite type instantiations with
+        // the same origin. For example, when type parameters are in scope in an object type such as { x: T }, all
+        // instantiations of that type have the same recursion identity. The default recursion identity is the object
+        // identity of the type, meaning that every type is unique. Generally, types with constituents that could circularly
+        // reference the type have a recursion identity that differs from the object identity.
+        function getRecursionIdentity(type: Type): object {
+            // Object and array literals are known not to contain recursive references and don't need a recursion identity.
             if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
                 if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node) {
                     // Deferred type references are tracked through their associated AST node. This gives us finer
                     // granularity than using their associated target because each manifest type reference has a
                     // unique AST node.
-                    return (type as TypeReference).node;
+                    return (type as TypeReference).node!;
                 }
                 if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
                     // We track all object types that have an associated symbol (representing the origin of the type), but
@@ -19644,6 +19647,9 @@ namespace ts {
                     // Tuple types are tracked through their target type
                     return type.target;
                 }
+            }
+            if (type.flags & TypeFlags.TypeParameter) {
+                return type.symbol;
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
@@ -19656,7 +19662,7 @@ namespace ts {
                 // The root object represents the origin of the conditional type
                 return (type as ConditionalType).root;
             }
-            return undefined;
+            return type;
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -19840,13 +19846,7 @@ namespace ts {
         function isArrayLikeType(type: Type): boolean {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
-            return isArrayType(type) || hasArrayOrReadonlyArrayBaseType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
-        }
-
-        function hasArrayOrReadonlyArrayBaseType(type: Type): boolean {
-            return !!(getObjectFlags(type) & ObjectFlags.Reference)
-                && !!(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)
-                && some(getBaseTypes((type as TypeReference).target as InterfaceType), isArrayType);
+            return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
@@ -21083,16 +21083,16 @@ namespace ts {
                 // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
                 // the source side and the target side.
                 const saveExpandingFlags = expandingFlags;
-                const sourceIdentity = getRecursionIdentity(source) || source;
-                const targetIdentity = getRecursionIdentity(target) || target;
-                if (sourceIdentity && contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
-                if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+                const sourceIdentity = getRecursionIdentity(source);
+                const targetIdentity = getRecursionIdentity(target);
+                if (contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
+                if (contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
                 if (expandingFlags !== ExpandingFlags.Both) {
-                    if (sourceIdentity) (sourceStack || (sourceStack = [])).push(sourceIdentity);
-                    if (targetIdentity) (targetStack || (targetStack = [])).push(targetIdentity);
+                    (sourceStack || (sourceStack = [])).push(sourceIdentity);
+                    (targetStack || (targetStack = [])).push(targetIdentity);
                     action(source, target);
-                    if (targetIdentity) targetStack.pop();
-                    if (sourceIdentity) sourceStack.pop();
+                    targetStack.pop();
+                    sourceStack.pop();
                 }
                 else {
                     inferencePriority = InferencePriority.Circularity;
