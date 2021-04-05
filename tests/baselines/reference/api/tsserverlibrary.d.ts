@@ -2291,8 +2291,7 @@ declare namespace ts {
         IgnoreErrors = 70221824,
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
-        InInitialEntityName = 16777216,
-        InReverseMappedType = 33554432
+        InInitialEntityName = 16777216
     }
     export enum TypeFormatFlags {
         None = 0,
