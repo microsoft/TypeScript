@@ -18244,6 +18244,20 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
+                    if (source.flags & TypeFlags.IndexedAccess) {
+                        // Relate components directly before falling back to constraint relationships
+                        // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
+                        if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
+                            result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
+                        }
+                        if (result) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                        if (reportErrors) {
+                            originalErrorInfo = errorInfo;
+                        }
+                    }
                     // A type S is related to a type T[K] if S is related to C, where C is the base
                     // constraint of T[K] for writing.
                     if (relation === assignableRelation || relation === comparableRelation) {
@@ -18254,10 +18268,23 @@ namespace ts {
                         if (!isGenericObjectType(baseObjectType) && !isGenericIndexType(baseIndexType)) {
                             const accessFlags = AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0);
                             const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (<IndexedAccessType>target).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, accessFlags);
-                            if (constraint && (result = isRelatedTo(source, constraint, reportErrors))) {
-                                return result;
+                            if (constraint) {
+                                if (reportErrors && originalErrorInfo) {
+                                    // create a new chain for the constraint error
+                                    resetErrorInfo(saveErrorInfo);
+                                }
+                                if (result = isRelatedTo(source, constraint, reportErrors)) {
+                                    return result;
+                                }
+                                // prefer the shorter chain of the constraint comparison chain, and the direct comparison chain
+                                if (reportErrors && originalErrorInfo && errorInfo) {
+                                    errorInfo = countMessageChainBreadth([originalErrorInfo]) <= countMessageChainBreadth([errorInfo]) ? originalErrorInfo : errorInfo;
+                                }
                             }
                         }
+                    }
+                    if (reportErrors) {
+                        originalErrorInfo = undefined;
                     }
                 }
                 else if (isGenericMappedType(target) && !target.declaration.nameType) {
@@ -18346,17 +18373,8 @@ namespace ts {
                 }
 
                 if (source.flags & TypeFlags.TypeVariable) {
-                    if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
-                        // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
-                        if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
-                            result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
-                        }
-                        if (result) {
-                            resetErrorInfo(saveErrorInfo);
-                            return result;
-                        }
-                    }
-                    else {
+                    // IndexedAccess comparisons are handled above in the `target.flags & TypeFlage.IndexedAccess` branch
+                    if (!(source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess)) {
                         const constraint = getConstraintOfType(<TypeVariable>source);
                         if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                             // A type variable with no constraint is not related to the non-primitive object type.
@@ -18371,7 +18389,7 @@ namespace ts {
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, reportErrors, /*headMessage*/ undefined, intersectionState)) {
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, reportErrors && !(target.flags & source.flags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -18541,6 +18559,11 @@ namespace ts {
                     }
                 }
                 return Ternary.False;
+
+                function countMessageChainBreadth(info: DiagnosticMessageChain[] | undefined): number {
+                    if (!info) return 0;
+                    return reduceLeft(info, (value, chain) => value + 1 + countMessageChainBreadth(chain.next), 0);
+                }
 
                 function relateVariances(sourceTypeArguments: readonly Type[] | undefined, targetTypeArguments: readonly Type[] | undefined, variances: VarianceFlags[], intersectionState: IntersectionState) {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors, intersectionState)) {
