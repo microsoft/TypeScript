@@ -732,7 +732,7 @@ namespace ts.textChanges {
                     // ###b,
                     //   c,
                     const nextNode = containingList[index + 1];
-                    const startPos = nextNode.getStart(sourceFile);
+                    const startPos = skipWhitespacesAndLineBreaks(sourceFile.text, nextNode.getFullStart());
 
                     // write separator and leading trivia of the next element as suffix
                     const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, startPos)}`;
