@@ -40373,6 +40373,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
+                        else if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
+                        }
                         if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
                         }

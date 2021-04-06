@@ -1,4 +1,5 @@
 tests/cases/conformance/override/override7.ts(11,14): error TS1040: 'override' modifier cannot be used in an ambient context.
+tests/cases/conformance/override/override7.ts(13,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
 tests/cases/conformance/override/override7.ts(17,14): error TS1243: 'static' modifier cannot be used with 'override' modifier.
 tests/cases/conformance/override/override7.ts(19,14): error TS1030: 'override' modifier already seen.
 tests/cases/conformance/override/override7.ts(19,23): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
@@ -10,7 +11,7 @@ tests/cases/conformance/override/override7.ts(41,23): error TS4112: This member 
 tests/cases/conformance/override/override7.ts(42,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
 
 
-==== tests/cases/conformance/override/override7.ts (10 errors) ====
+==== tests/cases/conformance/override/override7.ts (11 errors) ====
     class B {
         p1: number = 1;
         p2: number = 2;
@@ -26,6 +27,8 @@ tests/cases/conformance/override/override7.ts(42,23): error TS4112: This member 
 !!! error TS1040: 'override' modifier cannot be used in an ambient context.
     
         readonly override p3: number;
+                 ~~~~~~~~
+!!! error TS1029: 'override' modifier must precede 'readonly' modifier.
     
         override readonly p4: number;
     
