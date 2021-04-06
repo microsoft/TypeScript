@@ -36,6 +36,7 @@ Output::
 
 Program root files: ["/a/c/f2.ts","/a/c/f3.ts"]
 Program options: {"watch":true,"project":"/a/c/tsconfig.json","configFilePath":"/a/c/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts

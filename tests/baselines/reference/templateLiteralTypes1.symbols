@@ -869,3 +869,82 @@ type BB = AA<-2, -2>;
 >BB : Symbol(BB, Decl(templateLiteralTypes1.ts, 211, 123))
 >AA : Symbol(AA, Decl(templateLiteralTypes1.ts, 208, 79))
 
+// Repro from #40970
+
+type PathKeys<T> =
+>PathKeys : Symbol(PathKeys, Decl(templateLiteralTypes1.ts, 213, 21))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+
+    T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 220, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+
+    T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 220, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
+
+    never;
+
+type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+>SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 220, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 222, 13))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 222, 13))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+>PathKeys : Symbol(PathKeys, Decl(templateLiteralTypes1.ts, 213, 21))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 222, 13))
+>K : Symbol(K, Decl(templateLiteralTypes1.ts, 222, 15))
+
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+>getProp2 : Symbol(getProp2, Decl(templateLiteralTypes1.ts, 222, 89))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 224, 28))
+>PathKeys : Symbol(PathKeys, Decl(templateLiteralTypes1.ts, 213, 21))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>obj : Symbol(obj, Decl(templateLiteralTypes1.ts, 224, 52))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>path : Symbol(path, Decl(templateLiteralTypes1.ts, 224, 59))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 224, 28))
+>PropType : Symbol(PropType, Decl(templateLiteralTypes1.ts, 138, 69))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 224, 26))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 224, 28))
+
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(templateLiteralTypes1.ts, 226, 5))
+
+    name: 'John',
+>name : Symbol(name, Decl(templateLiteralTypes1.ts, 226, 14))
+
+    age: 42,
+>age : Symbol(age, Decl(templateLiteralTypes1.ts, 227, 17))
+
+    cars: [
+>cars : Symbol(cars, Decl(templateLiteralTypes1.ts, 228, 12))
+
+        { make: 'Ford', age: 10 },
+>make : Symbol(make, Decl(templateLiteralTypes1.ts, 230, 9))
+>age : Symbol(age, Decl(templateLiteralTypes1.ts, 230, 23))
+
+        { make: 'Trabant', age: 35 }
+>make : Symbol(make, Decl(templateLiteralTypes1.ts, 231, 9))
+>age : Symbol(age, Decl(templateLiteralTypes1.ts, 231, 26))
+
+    ]
+} as const;
+
+let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+>make : Symbol(make, Decl(templateLiteralTypes1.ts, 235, 3))
+>getProp2 : Symbol(getProp2, Decl(templateLiteralTypes1.ts, 222, 89))
+>obj2 : Symbol(obj2, Decl(templateLiteralTypes1.ts, 226, 5))
+

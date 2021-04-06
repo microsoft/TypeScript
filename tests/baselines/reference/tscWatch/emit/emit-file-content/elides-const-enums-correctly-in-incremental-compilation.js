@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/user/someone/projects/myproject/file3.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts
@@ -95,6 +96,7 @@ Output::
 
 Program root files: ["/user/someone/projects/myproject/file3.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/someone/projects/myproject/file1.ts

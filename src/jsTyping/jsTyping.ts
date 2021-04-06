@@ -149,8 +149,9 @@ namespace ts.JsTyping {
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
             getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
         });
-        getTypingNamesFromSourceFileNames(fileNames);
-
+        if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
+            getTypingNamesFromSourceFileNames(fileNames);
+        }
         // add typings for unresolved imports
         if (unresolvedImports) {
             const module = deduplicate<string>(

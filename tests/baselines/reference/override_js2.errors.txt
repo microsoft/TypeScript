@@ -1,0 +1,35 @@
+tests/cases/conformance/override/a.js(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/a.js(11,5): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+tests/cases/conformance/override/a.js(17,5): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+tests/cases/conformance/override/a.js(19,5): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+
+
+==== tests/cases/conformance/override/a.js (4 errors) ====
+    class B {
+        foo (v) {}
+        fooo (v) {}
+    }
+    
+    class D extends B {
+        foo (v) {}
+        ~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+        /** @override */
+        fooo (v) {}
+        /** @override */
+        bar(v) {}
+        ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+    }
+    
+    class C {
+        foo () {}
+        /** @override */
+        fooo (v) {}
+        ~~~~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+        /** @override */
+        bar(v) {}
+        ~~~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+    }

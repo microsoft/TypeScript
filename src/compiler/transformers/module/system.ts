@@ -133,7 +133,7 @@ namespace ts {
             moduleInfo = undefined!;
             exportFunction = undefined!;
             contextObject = undefined!;
-            hoistedStatements = undefined!;
+            hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined!;
             return updated;
         }
@@ -1231,7 +1231,7 @@ namespace ts {
                 node.initializer && visitForInitializer(node.initializer),
                 visitNode(node.condition, destructuringAndImportCallVisitor, isExpression),
                 visitNode(node.incrementor, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1251,7 +1251,7 @@ namespace ts {
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1272,7 +1272,7 @@ namespace ts {
                 node.awaitModifier,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1320,7 +1320,7 @@ namespace ts {
         function visitDoStatement(node: DoStatement): VisitResult<Statement> {
             return factory.updateDoStatement(
                 node,
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock),
+                visitIterationBody(node.statement, nestedElementVisitor, context),
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression)
             );
         }
@@ -1334,7 +1334,7 @@ namespace ts {
             return factory.updateWhileStatement(
                 node,
                 visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, factory.liftToBlock)
+                visitIterationBody(node.statement, nestedElementVisitor, context)
             );
         }
 
@@ -1495,13 +1495,17 @@ namespace ts {
             //         }
             //     };
             // });
+            const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+            const firstArgument = visitNode(firstOrUndefined(node.arguments), destructuringAndImportCallVisitor);
+            // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
+            const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
             return factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                     contextObject,
                     factory.createIdentifier("import")
                 ),
                 /*typeArguments*/ undefined,
-                some(node.arguments) ? [visitNode(node.arguments[0], destructuringAndImportCallVisitor)] : []
+                argument ? [argument] : []
             );
         }
 
@@ -1678,7 +1682,7 @@ namespace ts {
                             factory.createPropertyAssignment(
                                 factory.cloneNode(name),
                                 factory.createPropertyAccessExpression(
-                                    factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                    factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                     factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                                 ),
                             ),
@@ -1747,7 +1751,7 @@ namespace ts {
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                             ),
                             /*location*/ node

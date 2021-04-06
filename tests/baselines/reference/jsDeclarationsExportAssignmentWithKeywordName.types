@@ -6,7 +6,7 @@ var x = 12;
 module.exports = {
 >module.exports = {    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
 >module.exports : { extends: string; more: { others: string[]; }; x: number; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { extends: string; more: { others: string[]; }; x: number; }; }
+>module : { exports: { extends: string; more: { others: string[]; }; x: number; }; }
 >exports : { extends: string; more: { others: string[]; }; x: number; }
 >{    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
 

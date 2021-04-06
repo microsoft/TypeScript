@@ -30,6 +30,7 @@ Output::
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /f.ts
 /a/lib/lib.d.ts
@@ -75,6 +76,7 @@ Output::
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /f.ts
 /a/lib/lib.d.ts

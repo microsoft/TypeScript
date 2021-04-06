@@ -1,18 +1,18 @@
 tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(15,20): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(32,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(34,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(32,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Base'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(34,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Derived2'.
 tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(35,20): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(36,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(52,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(53,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(36,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Derived4'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(52,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Base'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(53,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Derived1'.
 tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(55,20): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(73,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(74,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(75,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(77,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(93,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(94,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'.
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(95,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(73,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Base'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(74,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived1'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(75,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived2'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(77,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived4'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(93,19): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'. This is an instance of class 'Base'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(94,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'. This is an instance of class 'Derived1'.
+tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(95,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'. This is an instance of class 'Derived2'.
 tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(96,20): error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
 tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(110,3): error TS2445: Property 'x' is protected and only accessible within class 'Base' and its subclasses.
 tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinNestedSubclass1.ts(111,4): error TS2445: Property 'x' is protected and only accessible within class 'Base' and its subclasses.
@@ -57,17 +57,17 @@ tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAcce
     
                     b.x;            // Error, isn't accessed through an instance of the enclosing class
                       ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Base'.
                     d1.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
                     d2.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Derived2'.
                     d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                        ~
 !!! error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.
                     d4.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived1'. This is an instance of class 'Derived4'.
                 }
             }
         }
@@ -85,10 +85,10 @@ tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAcce
     
                     b.x;            // Error, isn't accessed through an instance of the enclosing class
                       ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Base'.
                     d1.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived2'. This is an instance of class 'Derived1'.
                     d2.x;           // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
                     d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                        ~
@@ -112,17 +112,17 @@ tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAcce
     
                     b.x;            // Error, isn't accessed through an instance of the enclosing class
                       ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Base'.
                     d1.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived1'.
                     d2.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived2'.
                     d3.x;           // OK, accessed within their declaring class
                     d4.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived3'. This is an instance of class 'Derived4'.
                 }
             }
         }
@@ -140,13 +140,13 @@ tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAcce
     
                     b.x;            // Error, isn't accessed through an instance of the enclosing class
                       ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'. This is an instance of class 'Base'.
                     d1.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'. This is an instance of class 'Derived1'.
                     d2.x;           // Error, isn't accessed through an instance of the enclosing class
                        ~
-!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'.
+!!! error TS2446: Property 'x' is protected and only accessible through an instance of class 'Derived4'. This is an instance of class 'Derived2'.
                     d3.x;           // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
                        ~
 !!! error TS2445: Property 'x' is protected and only accessible within class 'Derived3' and its subclasses.

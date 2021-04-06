@@ -36,6 +36,7 @@ Output::
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
@@ -86,12 +87,7 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+Program: Same as old program
 
 Semantic diagnostics in builder refreshed for::
 

@@ -23,30 +23,29 @@ a.copy(b); // error
 
 
 //// [b.js]
-var _x;
+var _Foo_x;
 export class Foo {
     constructor() {
-        _x.set(this, void 0);
+        _Foo_x.set(this, void 0);
     }
 }
-_x = new WeakMap();
+_Foo_x = new WeakMap();
 //// [a.js]
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _x;
+var _Foo_x;
 export class Foo {
     constructor() {
-        _x.set(this, void 0);
+        _Foo_x.set(this, void 0);
     }
     copy(other) {
-        __classPrivateFieldGet(other, _x); // error
+        __classPrivateFieldGet(other, _Foo_x, "f"); // error
     }
 }
-_x = new WeakMap();
+_Foo_x = new WeakMap();
 //// [main.js]
 import { Foo as A } from "./a";
 import { Foo as B } from "./b";

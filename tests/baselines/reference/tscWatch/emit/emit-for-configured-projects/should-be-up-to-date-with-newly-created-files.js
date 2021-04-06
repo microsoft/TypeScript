@@ -42,6 +42,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -137,6 +138,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/file1Consumer3.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -195,6 +197,6 @@ exports.Foo = Foo;
 "use strict";
 exports.__esModule = true;
 var moduleFile1_1 = require("./moduleFile1");
-var y = moduleFile1_1.Foo();
+var y = (0, moduleFile1_1.Foo)();
 
 

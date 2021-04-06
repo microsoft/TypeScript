@@ -62,7 +62,7 @@ class C implements I<number> {
     [Symbol.toPrimitive](hint: "number"): number;
     [Symbol.toPrimitive](hint: "default"): number;
     [Symbol.toPrimitive](hint: "string"): string;
-    [Symbol.toPrimitive](hint: any) {
+    [Symbol.toPrimitive](hint: any): string | number {
         throw new Error("Method not implemented.");
     }
     [Symbol.toStringTag]: string;

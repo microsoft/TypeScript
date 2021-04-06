@@ -25,7 +25,7 @@ type keys2working<
 > = O[K1] extends object ? keyof O[K1] : never;
 
 type keys2workaround<O extends DeepObject, K1 extends keyof O> = Extract<
->keys2workaround : Extract<O[K1] extends object ? keyof O[K1] : never, string>
+>keys2workaround : keys2workaround<O, K1>
 
   O[K1] extends object ? keyof O[K1] : never,
   string

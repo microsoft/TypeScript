@@ -43,17 +43,13 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -103,17 +99,13 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 [[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -165,6 +157,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -253,6 +246,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -305,6 +299,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -354,6 +349,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -408,6 +404,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts

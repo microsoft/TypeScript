@@ -47,17 +47,13 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -80,17 +76,13 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-  [96msrc/src/main.ts[0m:[93m2[0m:[93m11[0m
-    [7m2[0m const a = {
-    [7m [0m [96m          ~[0m
-    The parser expected to find a '}' to match the '{' token here.
-
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts
@@ -117,6 +109,7 @@ Output::
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
 Program options: {"outDir":"/src/dev-build","noEmitOnError":true,"configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /lib/lib.d.ts
 /src/shared/types/db.ts

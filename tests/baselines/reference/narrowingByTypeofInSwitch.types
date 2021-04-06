@@ -167,48 +167,48 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >'number' : "number"
 >assertNumber(x) : number
 >assertNumber : (x: number) => number
->x : T & number
+>x : number
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
 >assertBoolean(x) : boolean
 >assertBoolean : (x: boolean) => boolean
->x : (T & false) | (T & true)
+>x : boolean
 
         case 'function': assertAll(x); return;
 >'function' : "function"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T & Function
+>x : Function
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
 >assertSymbol(x) : symbol
 >assertSymbol : (x: symbol) => symbol
->x : T & symbol
+>x : symbol
 
         case 'object': assertAll(x); return;
 >'object' : "object"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : object
 
         case 'string': assertString(x); return;
 >'string' : "string"
 >assertString(x) : string
 >assertString : (x: string) => string
->x : T & string
+>x : string
 
         case 'undefined': assertUndefined(x); return;
 >'undefined' : "undefined"
 >assertUndefined(x) : undefined
 >assertUndefined : (x: undefined) => undefined
->x : T & undefined
+>x : undefined
     }
     assertAll(x);
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : never
 }
 
 function testAny(x: any) {
@@ -364,36 +364,36 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >'number' : "number"
 >assertNumber(x) : number
 >assertNumber : (x: number) => number
->x : T & number
+>x : number
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
 >assertBoolean(x) : boolean
 >assertBoolean : (x: boolean) => boolean
->x : (T & false) | (T & true)
+>x : boolean
 
         case 'function': assertAll(x); return;
 >'function' : "function"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T & Function
+>x : Function
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
 >assertSymbol(x) : symbol
 >assertSymbol : (x: symbol) => symbol
->x : T & symbol
+>x : symbol
 
         default: assertAll(x); return;
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : string | object | undefined
 
     }
 }
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
->testExtendsImplicitDefault : <T extends Basic>(x: T) => string | number | boolean | symbol | object | undefined
+>testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
 >x : T
 
     switch (typeof x) {
@@ -404,30 +404,30 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >'number' : "number"
 >assertNumber(x) : number
 >assertNumber : (x: number) => number
->x : T & number
+>x : number
 
         case 'boolean': assertBoolean(x); return;
 >'boolean' : "boolean"
 >assertBoolean(x) : boolean
 >assertBoolean : (x: boolean) => boolean
->x : (T & false) | (T & true)
+>x : boolean
 
         case 'function': assertAll(x); return;
 >'function' : "function"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T & Function
+>x : Function
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
 >assertSymbol(x) : symbol
 >assertSymbol : (x: symbol) => symbol
->x : T & symbol
+>x : symbol
     }
     return assertAll(x);
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : string | object | undefined
 }
 
 type L = (x: number) => string;
@@ -484,21 +484,21 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
         case 'number': return x.toString(2);
 >'number' : "number"
 >x.toString(2) : string
->x.toString : ((radix?: number | undefined) => string) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string))
->x : T & number
->toString : ((radix?: number | undefined) => string) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string)) | ((() => string) & ((radix?: number | undefined) => string))
+>x.toString : (radix?: number | undefined) => string
+>x : number
+>toString : (radix?: number | undefined) => string
 >2 : 2
 
         case 'string': return x;
 >'string' : "string"
->x : T & string
+>x : string
 
         case 'function': return (x as L)(42); // Can't narrow generic
 >'function' : "function"
 >(x as L)(42) : string
 >(x as L) : L
 >x as L : L
->x : T
+>x : L
 >42 : 42
 
         case 'object': return (x as R).x;            // Can't narrow generic
@@ -506,7 +506,7 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >(x as R).x : string
 >(x as R) : R
 >x as R : R
->x : T
+>x : R
 >x : string
     }
 }
@@ -783,7 +783,7 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >'number' : "number"
 >assertNumber(k) : number
 >assertNumber : (x: number) => number
->k : keyof S & number
+>k : number
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & number
@@ -792,7 +792,7 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >'symbol' : "symbol"
 >assertSymbol(k) : symbol
 >assertSymbol : (x: symbol) => symbol
->k : keyof S & symbol
+>k : symbol
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & symbol
@@ -801,7 +801,7 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >'string' : "string"
 >assertString(k) : string
 >assertString : (x: string) => string
->k : keyof S & string
+>k : string
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & string
@@ -1055,7 +1055,7 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >`number` : "number"
 >assertNumber(k) : number
 >assertNumber : (x: number) => number
->k : keyof S & number
+>k : number
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & number
@@ -1064,7 +1064,7 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >`symbol` : "symbol"
 >assertSymbol(k) : symbol
 >assertSymbol : (x: symbol) => symbol
->k : keyof S & symbol
+>k : symbol
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & symbol
@@ -1073,7 +1073,7 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >`string` : "string"
 >assertString(k) : string
 >assertString : (x: string) => string
->k : keyof S & string
+>k : string
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & string
