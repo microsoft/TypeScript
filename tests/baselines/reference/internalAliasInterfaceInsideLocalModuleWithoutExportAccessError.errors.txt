@@ -1,4 +1,4 @@
-tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(11,10): error TS2809: Namespace 'c' from module 'tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError' has no exported member 'b'.
+tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts(11,10): error TS2810: Namespace 'c' from module 'tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError' has no exported member 'b'.
 
 
 ==== tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
@@ -14,4 +14,4 @@ tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessE
     
     var x: c.b;
              ~
-!!! error TS2809: Namespace 'c' from module 'tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError' has no exported member 'b'.
+!!! error TS2810: Namespace 'c' from module 'tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExportAccessError' has no exported member 'b'.

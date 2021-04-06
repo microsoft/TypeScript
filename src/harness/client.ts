@@ -306,7 +306,8 @@ namespace ts.server {
                     fileName: entry.file,
                     textSpan: this.decodeSpan(entry),
                     kind: ScriptElementKind.unknown,
-                    name: ""
+                    name: "",
+                    unverified: entry.unverified,
                 })),
                 textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
             };

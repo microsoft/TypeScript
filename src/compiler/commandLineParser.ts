@@ -875,6 +875,7 @@ namespace ts {
         {
             name: "metadataDecorator",
             type: "string",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_the_name_of_the_metadata_decorator_function_to_use_when_emitDecoratorMetadata_is_set
         },

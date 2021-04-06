@@ -1,0 +1,5 @@
+=== tests/cases/compiler/missingCloseBracketInArray.ts ===
+var alphas:string[] = alphas = ["1","2","3","4"
+>alphas : Symbol(alphas, Decl(missingCloseBracketInArray.ts, 0, 3))
+>alphas : Symbol(alphas, Decl(missingCloseBracketInArray.ts, 0, 3))
+
