@@ -124,7 +124,7 @@
             },
             {
               "text": "toString",
-              "kind": "propertyName"
+              "kind": "methodName"
             },
             {
               "text": "(",
@@ -198,7 +198,7 @@
             },
             {
               "text": "toLocaleString",
-              "kind": "propertyName"
+              "kind": "methodName"
             },
             {
               "text": "(",
@@ -981,7 +981,7 @@
             },
             {
               "text": "join",
-              "kind": "propertyName"
+              "kind": "methodName"
             },
             {
               "text": "(",
