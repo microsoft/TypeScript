@@ -1659,8 +1659,9 @@ namespace ts.Completions {
 
         function isContextTokenValueLocation(contextToken: Node) {
             return contextToken &&
-                contextToken.kind === SyntaxKind.TypeOfKeyword &&
-                (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent));
+                ((contextToken.kind === SyntaxKind.TypeOfKeyword &&
+                    (contextToken.parent.kind === SyntaxKind.TypeQuery || isTypeOfExpression(contextToken.parent))) ||
+                (contextToken.kind === SyntaxKind.AssertsKeyword && contextToken.parent.kind === SyntaxKind.TypePredicate));
         }
 
         function isContextTokenTypeLocation(contextToken: Node): boolean {
