@@ -1230,6 +1230,7 @@ namespace ts {
         | FunctionTypeNode
         | ConstructorTypeNode
         | JSDocFunctionType
+        // | JSDocSignature
         | FunctionDeclaration
         | MethodDeclaration
         | ConstructorDeclaration

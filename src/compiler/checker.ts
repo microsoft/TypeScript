@@ -38404,7 +38404,8 @@ namespace ts {
             if (isJSDocTypeExpression(node.parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
                 const host = getHostSignatureFromJSDoc(paramTag);
-                if (host) {
+                const isCallbackTag = isJSDocCallbackTag(paramTag.parent.parent)
+                if (host || isCallbackTag) {
                     /*
                     Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
                     So in the following situation we will not create an array type:
@@ -38412,7 +38413,9 @@ namespace ts {
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = lastOrUndefined(host.parameters);
+                    const lastParamDeclaration = isCallbackTag
+                        ? lastOrUndefined((paramTag.parent.parent as unknown as JSDocCallbackTag).typeExpression.parameters)
+                        : lastOrUndefined(host!.parameters);
                     const symbol = getParameterSymbolFromJSDoc(paramTag);
                     if (!lastParamDeclaration ||
                         symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
