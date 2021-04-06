@@ -777,6 +777,8 @@ interface Date {
     getUTCMilliseconds(): number;
     /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
     getTimezoneOffset(): number;
+    /** Gets the years in a date, using local time. */
+    getYear(): number;
     /**
      * Sets the date and time value in the Date object.
      * @param time A numeric value representing the number of elapsed milliseconds since midnight, January 1, 1970 GMT.
