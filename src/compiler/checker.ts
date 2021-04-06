@@ -38404,7 +38404,7 @@ namespace ts {
             if (isJSDocTypeExpression(node.parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
                 const host = getHostSignatureFromJSDoc(paramTag);
-                const isCallbackTag = isJSDocCallbackTag(paramTag.parent.parent)
+                const isCallbackTag = isJSDocCallbackTag(paramTag.parent.parent);
                 if (host || isCallbackTag) {
                     /*
                     Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
