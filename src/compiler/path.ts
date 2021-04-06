@@ -564,7 +564,7 @@ namespace ts {
         const nonCanonicalizedPath = isRootedDiskPath(fileName)
             ? normalizePath(fileName)
             : getNormalizedAbsolutePath(fileName, basePath);
-        return <Path>getCanonicalFileName(nonCanonicalizedPath);
+        return getCanonicalFileName(nonCanonicalizedPath) as Path;
     }
 
     export function normalizePathAndParts(path: string): { path: string, parts: string[] } {

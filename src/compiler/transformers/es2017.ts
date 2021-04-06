@@ -113,19 +113,19 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.AwaitExpression:
-                    return visitAwaitExpression(<AwaitExpression>node);
+                    return visitAwaitExpression(node as AwaitExpression);
 
                 case SyntaxKind.MethodDeclaration:
-                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, <MethodDeclaration>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, node as MethodDeclaration);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, <FunctionDeclaration>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, node as FunctionDeclaration);
 
                 case SyntaxKind.FunctionExpression:
-                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, <FunctionExpression>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, node as FunctionExpression);
 
                 case SyntaxKind.ArrowFunction:
-                    return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, <ArrowFunction>node);
+                    return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, node as ArrowFunction);
 
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -134,7 +134,7 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
 
                 case SyntaxKind.ElementAccessExpression:
-                    if (capturedSuperProperties && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                    if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
@@ -481,14 +481,14 @@ namespace ts {
             let result: ConciseBody;
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
-                const statementOffset = factory.copyPrologue((<Block>node.body).statements, statements, /*ensureUseStrict*/ false, visitor);
+                const statementOffset = factory.copyPrologue((node.body as Block).statements, statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
                     factory.createReturnStatement(
                         emitHelpers().createAwaiterHelper(
                             inHasLexicalThisContext(),
                             hasLexicalArguments,
                             promiseConstructor,
-                            transformAsyncFunctionBodyWorker(<Block>node.body, statementOffset)
+                            transformAsyncFunctionBodyWorker(node.body as Block, statementOffset)
                         )
                     )
                 );
@@ -632,7 +632,7 @@ namespace ts {
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
             if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
-                return substituteExpression(<Expression>node);
+                return substituteExpression(node as Expression);
             }
 
             return node;
@@ -641,11 +641,11 @@ namespace ts {
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
+                    return substitutePropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.ElementAccessExpression:
-                    return substituteElementAccessExpression(<ElementAccessExpression>node);
+                    return substituteElementAccessExpression(node as ElementAccessExpression);
                 case SyntaxKind.CallExpression:
-                    return substituteCallExpression(<CallExpression>node);
+                    return substituteCallExpression(node as CallExpression);
             }
             return node;
         }
