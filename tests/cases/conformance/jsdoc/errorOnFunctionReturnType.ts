@@ -4,25 +4,49 @@
 // @Filename: foo.js
 
 /**
- * @callback Func
+ * @callback FunctionReturningPromise
  * @returns {Promise<number>}
  */
 
-/** @type {Func} */
-function test() {
+/** @type {FunctionReturningPromise} */
+function testPromise1() {
     console.log("Nope");
 }
 
-/** @type {Func} */
-async function test2() {
+/** @type {FunctionReturningPromise} */
+async function testPromise2() {
     return "asd";
 }
 
-var test3 = /** @type {Func} */ function() {
+var testPromise3 = /** @type {FunctionReturningPromise} */ function() {
     console.log("test")
 }
 
-/** @type {Func} */
-var test4 = function() {
+/** @type {FunctionReturningPromise} */
+var testPromise4 = function() {
+    console.log("test")
+}
+
+/**
+ * @callback FunctionReturningNever
+ * @returns {never}
+ */
+
+/** @type {FunctionReturningNever} */
+function testNever1() {
+
+}
+
+/** @type {FunctionReturningNever} */
+async function testNever2() {
+    return "asd";
+}
+
+var testNever3 = /** @type {FunctionReturningNever} */ function() {
+    console.log("test")
+}
+
+/** @type {FunctionReturningNever} */
+var testNever4 = function() {
     console.log("test")
 }
