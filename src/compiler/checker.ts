@@ -38175,7 +38175,7 @@ namespace ts {
                             return;
                         }
                         if (exportedDeclarationsCount > 1) {
-                            if (!isDuplicatedCommonJSExport(declarations!)) {
+                            if (!isDuplicatedCommonJSExport(declarations)) {
                                 for (const declaration of declarations!) {
                                     if (isNotOverload(declaration)) {
                                         diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
