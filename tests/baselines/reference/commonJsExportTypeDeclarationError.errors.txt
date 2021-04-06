@@ -1,0 +1,31 @@
+tests/cases/compiler/types1.ts(2,17): error TS1110: Type expected.
+tests/cases/compiler/types1.ts(3,1): error TS1005: '=' expected.
+tests/cases/compiler/types2.ts(2,19): error TS1110: Type expected.
+tests/cases/compiler/types3.ts(2,13): error TS2456: Type alias 'test' circularly references itself.
+
+
+==== tests/cases/compiler/test.js (0 errors) ====
+    module.exports = {
+       message: ""
+    }
+    
+==== tests/cases/compiler/types1.ts (2 errors) ====
+    import test from "./test";
+    export type test
+                    
+!!! error TS1110: Type expected.
+    
+    
+!!! error TS1005: '=' expected.
+==== tests/cases/compiler/types2.ts (1 errors) ====
+    import test from "./test";
+    export type test = 
+                      
+!!! error TS1110: Type expected.
+    
+==== tests/cases/compiler/types3.ts (1 errors) ====
+    import test from "./test";
+    export type test = test;
+                ~~~~
+!!! error TS2456: Type alias 'test' circularly references itself.
+    

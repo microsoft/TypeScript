@@ -51,11 +51,11 @@ Output::
 
 [[90m12:00:30 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:41 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
+[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
 
-[[90m12:00:42 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -124,8 +124,16 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project1.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
+
+//// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./commonfile1.ts",
+      "./commonfile2.ts"
+    ],
     "fileInfos": {
       "../lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -134,12 +142,12 @@ declare let y: number;
       },
       "./commonfile1.ts": {
         "version": "2167136208-let x = 1",
-        "signature": "2842409786-declare let x: number;\n",
+        "signature": "2167136208-let x = 1",
         "affectsGlobalScope": true
       },
       "./commonfile2.ts": {
         "version": "2168322129-let y = 1",
-        "signature": "784887931-declare let y: number;\n",
+        "signature": "2168322129-let y = 1",
         "affectsGlobalScope": true
       }
     },
@@ -156,7 +164,8 @@ declare let y: number;
       "../lib/lib.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1253
 }
 
 //// [/a/b/other.js]
@@ -168,8 +177,15 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project2.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
+
+//// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./other.ts"
+    ],
     "fileInfos": {
       "../lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -178,7 +194,7 @@ declare let z: number;
       },
       "./other.ts": {
         "version": "2874288940-let z = 0;",
-        "signature": "-1272633924-declare let z: number;\n",
+        "signature": "2874288940-let z = 0;",
         "affectsGlobalScope": true
       }
     },
@@ -194,7 +210,8 @@ declare let z: number;
       "../lib/lib.d.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1132
 }
 
 
@@ -207,9 +224,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -292,13 +292,10 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[]; // same
 
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
-
-        // Undefined is used to indicate the value has not been computed. If, after computing, the
-        // symbol has no JSDoc tags, then the empty array will be returned.
-        tags?: JSDocTagInfo[];
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
@@ -359,9 +356,9 @@ namespace ts {
             }
         }
 
-        getJsDocTags(): JSDocTagInfo[] {
+        getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations);
+                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations, checker);
             }
 
             return this.tags;
@@ -521,10 +518,7 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
-
-        // Undefined is used to indicate the value has not been computed. If, after computing, the
-        // symbol has no doc comment, then the empty array will be returned.
-        jsDocTags?: JSDocTagInfo[];
+        jsDocTags?: JSDocTagInfo[]; // same
 
         constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
@@ -550,7 +544,7 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? getJsDocTags([this.declaration], this.checker) : [];
+                this.jsDocTags = this.declaration ? getJsDocTagsOfSignature(this.declaration, this.checker) : [];
             }
             return this.jsDocTags;
         }
@@ -565,15 +559,13 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
-    function getJsDocTags(declarations: Declaration[], checker: TypeChecker): JSDocTagInfo[] {
-        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations);
-        if (tags.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
-            forEachUnique(declarations, declaration => {
-                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.getJsDocTags());
-                if (inheritedTags) {
-                    tags = [...inheritedTags, ...tags];
-                }
-            });
+    function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
+        let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
+        if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
+            const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
+            if (inheritedTags) {
+                tags = [...inheritedTags, ...tags];
+            }
         }
         return tags;
     }
@@ -581,18 +573,24 @@ namespace ts {
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
-        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations, checker);
         if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
-            forEachUnique(declarations, declaration => {
-                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
+            const seenSymbols = new Set<Symbol>();
+            for (const declaration of declarations) {
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => {
+                    if (!seenSymbols.has(symbol)) {
+                        seenSymbols.add(symbol);
+                        return symbol.getDocumentationComment(checker);
+                    }
+                });
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
-            });
+            }
         }
         return doc;
     }
 
-    function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[]): T[] | undefined {
+    function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
         return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
@@ -940,7 +938,6 @@ namespace ts {
     // the set of scripts handled by the host changes.
     class HostCache {
         private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
-        private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
@@ -953,17 +950,6 @@ namespace ts {
             for (const fileName of rootFileNames) {
                 this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
-
-            // store the compilation settings
-            this._compilationSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
-        }
-
-        public compilationSettings() {
-            return this._compilationSettings;
-        }
-
-        public getProjectReferences(): readonly ProjectReference[] | undefined {
-            return this.host.getProjectReferences && this.host.getProjectReferences();
         }
 
         private createEntry(fileName: string, path: Path) {
@@ -1310,12 +1296,23 @@ namespace ts {
             // Get a fresh cache of the host information
             let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
+            const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
-            const projectReferences = hostCache.getProjectReferences();
+            const projectReferences = host.getProjectReferences?.();
+            let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
+            const parseConfigHost: ParseConfigFileHost = {
+                useCaseSensitiveFileNames,
+                fileExists,
+                readFile,
+                readDirectory,
+                trace: maybeBind(host, host.trace),
+                getCurrentDirectory: () => currentDirectory,
+                onUnRecoverableConfigFileDiagnostic: noop,
+            };
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
             }
 
@@ -1325,8 +1322,6 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const newSettings = hostCache.compilationSettings();
-
             // Now create a new compiler
             const compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
@@ -1335,7 +1330,7 @@ namespace ts {
                 getCanonicalFileName,
                 useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
                 getNewLine: () => getNewLineCharacter(newSettings, () => getNewLineOrDefaultFromHost(host)),
-                getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
+                getDefaultLibFileName: options => host.getDefaultLibFileName(options),
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
@@ -1348,17 +1343,16 @@ namespace ts {
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
-                readDirectory(path, extensions, exclude, include, depth) {
-                    Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
-                    return host.readDirectory!(path, extensions, exclude, include, depth);
-                },
+                readDirectory,
                 onReleaseOldSourceFile,
+                onReleaseParsedCommandLine,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames,
-                trace: maybeBind(host, host.trace),
+                trace: parseConfigHost.trace,
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
+                getParsedCommandLine,
             };
             host.setCompilerHost?.(compilerHost);
 
@@ -1375,6 +1369,7 @@ namespace ts {
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
+            parsedCommandLines = undefined;
 
             // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
             // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
@@ -1385,6 +1380,42 @@ namespace ts {
             // pointers set property.
             program.getTypeChecker();
             return;
+
+            function getParsedCommandLine(fileName: string): ParsedCommandLine | undefined {
+                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                const existing = parsedCommandLines?.get(path);
+                if (existing !== undefined) return existing || undefined;
+
+                const result = host.getParsedCommandLine ?
+                    host.getParsedCommandLine(fileName) :
+                    getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
+                (parsedCommandLines ||= new Map()).set(path, result || false);
+                return result;
+            }
+
+            function getParsedCommandLineOfConfigFileUsingSourceFile(configFileName: string): ParsedCommandLine | undefined {
+                const result = getOrCreateSourceFile(configFileName, ScriptTarget.JSON) as JsonSourceFile | undefined;
+                if (!result) return undefined;
+                result.path = toPath(configFileName, currentDirectory, getCanonicalFileName);
+                result.resolvedPath = result.path;
+                result.originalFileName = result.fileName;
+                return parseJsonSourceFileConfigFileContent(
+                    result,
+                    parseConfigHost,
+                    getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory),
+                    /*optionsToExtend*/ undefined,
+                    getNormalizedAbsolutePath(configFileName, currentDirectory),
+                );
+            }
+
+            function onReleaseParsedCommandLine(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, oldOptions: CompilerOptions) {
+                if (host.getParsedCommandLine) {
+                    host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef, oldOptions);
+                }
+                else if (oldResolvedRef) {
+                    onReleaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
+                }
+            }
 
             function fileExists(fileName: string): boolean {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -1404,11 +1435,16 @@ namespace ts {
                 return host.readFile && host.readFile(fileName);
             }
 
+            function readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number) {
+                Debug.checkDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                return host.readDirectory!(path, extensions, exclude, include, depth);
+            }
+
             // Release any files we have acquired in the old program but are
             // not part of the new program.
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1457,9 +1493,13 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.");
-
-                        return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        if (hostFileInformation.scriptKind === oldSourceFile.scriptKind) {
+                            return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        }
+                        else {
+                            // Release old source file and fall through to aquire new file with new script kind
+                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind);
+                        }
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
@@ -1495,7 +1535,7 @@ namespace ts {
                 // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;
@@ -1558,14 +1598,14 @@ namespace ts {
                 options.triggerCharacter);
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {
+        function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
             synchronizeHostData();
             return Completions.getCompletionEntryDetails(
                 program,
                 log,
                 getValidSourceFile(fileName),
                 position,
-                { name, source },
+                { name, source, data },
                 host,
                 (formattingOptions && formatting.getFormatContext(formattingOptions, host))!, // TODO: GH#18217
                 preferences,
@@ -1600,7 +1640,7 @@ namespace ts {
                     textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                     displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                    tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                    tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined
                 };
             }
 
@@ -1621,6 +1661,9 @@ namespace ts {
             if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
                 return node.parent.expression;
             }
+            if (isNamedTupleMember(node.parent) && node.pos === node.parent.pos) {
+                return node.parent;
+            }
             return node;
         }
 
@@ -1635,6 +1678,7 @@ namespace ts {
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.SuperKeyword:
+                case SyntaxKind.NamedTupleMember:
                     return true;
                 default:
                     return false;
@@ -2492,6 +2536,17 @@ namespace ts {
             return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, preferences, formatOptions), refactorName, actionName);
         }
 
+        function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
+            // Go to Definition supports returning a zero-length span at position 0 for
+            // non-existent files. We need to special-case the conversion of position 0
+            // to avoid a crash trying to get the text for that file, since this function
+            // otherwise assumes that 'fileName' is the name of a file that exists.
+            if (position === 0) {
+                return { line: 0, character: 0 };
+            }
+            return sourceMapper.toLineColumnOffset(fileName, position);
+        }
+
         function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
             synchronizeHostData();
             const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
@@ -2567,7 +2622,7 @@ namespace ts {
             getAutoImportProvider,
             getApplicableRefactors,
             getEditsForRefactor,
-            toLineColumnOffset: sourceMapper.toLineColumnOffset,
+            toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
             clearSourceMapperCache: () => sourceMapper.clearCache(),
             prepareCallHierarchy,

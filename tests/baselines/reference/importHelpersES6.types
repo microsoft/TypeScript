@@ -61,9 +61,18 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >P : Function
 >generator : Function
 
-export declare function __classPrivateFieldGet(): any;
->__classPrivateFieldGet : () => any
+export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
+>__classPrivateFieldGet : (a: any, b: any, c: any, d: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
 
-export declare function __classPrivateFieldSet(): any;
->__classPrivateFieldSet : () => any
+export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
+>__classPrivateFieldSet : (a: any, b: any, c: any, d: any, e: any) => any
+>a : any
+>b : any
+>c : any
+>d : any
+>e : any
 

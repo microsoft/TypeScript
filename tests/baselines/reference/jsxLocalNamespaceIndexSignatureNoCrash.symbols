@@ -1,0 +1,37 @@
+=== tests/cases/compiler/index.tsx ===
+export class X {
+>X : Symbol(X, Decl(index.tsx, 0, 0), Decl(index.tsx, 4, 1))
+
+    static jsx() {
+>jsx : Symbol(X.jsx, Decl(index.tsx, 0, 16))
+
+        return document.createElement('p');
+>document.createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>createElement : Symbol(Document.createElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+    }
+}
+
+export namespace X {
+>X : Symbol(X, Decl(index.tsx, 0, 0), Decl(index.tsx, 4, 1))
+
+    export namespace JSX {
+>JSX : Symbol(JSX, Decl(index.tsx, 6, 20))
+
+        export type IntrinsicElements = {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.tsx, 7, 26))
+
+            [other: string]: any;
+>other : Symbol(other, Decl(index.tsx, 9, 13))
+
+        };
+    }
+}
+
+function A() {
+>A : Symbol(A, Decl(index.tsx, 12, 1))
+
+    return (<p>Hello</p>);
+>p : Symbol(__type, Decl(index.tsx, 8, 39))
+>p : Symbol(__type, Decl(index.tsx, 8, 39))
+}

@@ -45,6 +45,7 @@ tests/cases/compiler/reservedWords2.ts(12,17): error TS1138: Parameter declarati
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                                   ~
 !!! error TS1005: ')' expected.
+!!! related TS1007 tests/cases/compiler/reservedWords2.ts:1:14: The parser expected to find a ')' to match the '(' token here.
     import * as  while from "foo"
                
 !!! error TS2300: Duplicate identifier '(Missing)'.
@@ -58,6 +59,7 @@ tests/cases/compiler/reservedWords2.ts(12,17): error TS1138: Parameter declarati
 !!! error TS2304: Cannot find name 'from'.
                             ~~~~~
 !!! error TS1005: ')' expected.
+!!! related TS1007 tests/cases/compiler/reservedWords2.ts:2:20: The parser expected to find a ')' to match the '(' token here.
     
     var typeof = 10;
         ~~~~~~

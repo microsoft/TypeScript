@@ -21,11 +21,15 @@ namespace ts {
                 return node;
             }
             switch (node.kind) {
+                case SyntaxKind.CallExpression: {
+                    const updated = visitNonOptionalCallExpression(node as CallExpression, /*captureThisArg*/ false);
+                    Debug.assertNotNode(updated, isSyntheticReference);
+                    return updated;
+                }
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.CallExpression:
-                    if (node.flags & NodeFlags.OptionalChain) {
-                        const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false, /*isDelete*/ false);
+                    if (isOptionalChain(node)) {
+                        const updated = visitOptionalExpression(node, /*captureThisArg*/ false, /*isDelete*/ false);
                         Debug.assertNotNode(updated, isSyntheticReference);
                         return updated;
                     }
@@ -93,6 +97,15 @@ namespace ts {
             if (isOptionalChain(node)) {
                 // If `node` is an optional chain, then it is the outermost chain of an optional expression.
                 return visitOptionalExpression(node, captureThisArg, /*isDelete*/ false);
+            }
+            if (isParenthesizedExpression(node.expression) && isOptionalChain(skipParentheses(node.expression))) {
+                // capture thisArg for calls of parenthesized optional chains like `(foo?.bar)()`
+                const expression = visitNonOptionalParenthesizedExpression(node.expression, /*captureThisArg*/ true, /*isDelete*/ false);
+                const args = visitNodes(node.arguments, visitor, isExpression);
+                if (isSyntheticReference(expression)) {
+                    return setTextRange(factory.createFunctionCallCall(expression.expression, expression.thisArg, args), node);
+                }
+                return factory.updateCallExpression(node, expression, /*typeArguments*/ undefined, args);
             }
             return visitEachChild(node, visitor, context);
         }

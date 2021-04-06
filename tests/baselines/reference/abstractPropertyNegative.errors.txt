@@ -1,5 +1,4 @@
-tests/cases/compiler/abstractPropertyNegative.ts(10,18): error TS2380: 'get' and 'set' accessor must have the same type.
-tests/cases/compiler/abstractPropertyNegative.ts(11,18): error TS2380: 'get' and 'set' accessor must have the same type.
+tests/cases/compiler/abstractPropertyNegative.ts(10,18): error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'm' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'mismatch' from class 'B'.
 tests/cases/compiler/abstractPropertyNegative.ts(13,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'prop' from class 'B'.
@@ -19,7 +18,7 @@ tests/cases/compiler/abstractPropertyNegative.ts(40,9): error TS2676: Accessors 
 tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors must both be abstract or non-abstract.
 
 
-==== tests/cases/compiler/abstractPropertyNegative.ts (16 errors) ====
+==== tests/cases/compiler/abstractPropertyNegative.ts (15 errors) ====
     interface A {
         prop: string;
         m(): string;
@@ -31,10 +30,8 @@ tests/cases/compiler/abstractPropertyNegative.ts(41,18): error TS2676: Accessors
         abstract m(): string;
         abstract get mismatch(): string;
                      ~~~~~~~~
-!!! error TS2380: 'get' and 'set' accessor must have the same type.
+!!! error TS2380: The return type of a 'get' accessor must be assignable to its 'set' accessor type
         abstract set mismatch(val: number); // error, not same type
-                     ~~~~~~~~
-!!! error TS2380: 'get' and 'set' accessor must have the same type.
     }
     class C extends B {
           ~

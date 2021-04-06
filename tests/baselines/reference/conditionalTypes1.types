@@ -51,7 +51,7 @@ function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
 
     let s1: string = x;  // Error
 >s1 : string
->x : T
+>x : string
 
     let s2: string = y;
 >s2 : string
@@ -92,7 +92,7 @@ function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"
 
     let s1: string = x;  // Error
 >s1 : string
->x : T["x"]
+>x : string
 
     let s2: string = y;
 >s2 : string
@@ -476,11 +476,11 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
 
     let z1: number | string = y;
 >z1 : string | number
->y : ZeroOf<T>
+>y : "" | 0
 
     let z2: 0 | "" = y;
 >z2 : "" | 0
->y : ZeroOf<T>
+>y : "" | 0
 
     x = y;  // Error
 >x = y : ZeroOf<T>

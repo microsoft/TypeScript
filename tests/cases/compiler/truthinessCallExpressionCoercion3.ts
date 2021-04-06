@@ -11,3 +11,8 @@ function f(result: unknown) {
         return result
     }
 }
+function g(result: unknown) {
+    if (((result as I)).always) {
+        return result
+    }
+}

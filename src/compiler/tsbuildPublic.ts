@@ -356,6 +356,11 @@ namespace ts {
         return !!(entry as ParsedCommandLine).options;
     }
 
+    function getCachedParsedConfigFile(state: SolutionBuilderState, configFilePath: ResolvedConfigFilePath): ParsedCommandLine | undefined {
+        const value = state.configFileCache.get(configFilePath);
+        return value && isParsedCommandLine(value) ? value : undefined;
+    }
+
     function parseConfigFile(state: SolutionBuilderState, configFileName: ResolvedConfigFileName, configFilePath: ResolvedConfigFilePath): ParsedCommandLine | undefined {
         const { configFileCache } = state;
         const value = configFileCache.get(configFilePath);
@@ -1334,7 +1339,7 @@ namespace ts {
 
     function checkConfigFileUpToDateStatus(state: SolutionBuilderState, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
         // Check tsconfig time
-        const tsconfigTime = state.host.getModifiedTime(configFile) || missingFileModifiedTime;
+        const tsconfigTime = getModifiedTime(state.host, configFile);
         if (oldestOutputFileTime < tsconfigTime) {
             return {
                 type: UpToDateStatusType.OutOfDateWithSelf,
@@ -1357,7 +1362,7 @@ namespace ts {
                 };
             }
 
-            const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
+            const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
             if (inputTime > newestInputFileTime) {
                 newestInputFileName = inputFile;
                 newestInputFileTime = inputTime;
@@ -1390,7 +1395,7 @@ namespace ts {
                 break;
             }
 
-            const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
+            const outputTime = getModifiedTime(host, output);
             if (outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
@@ -1413,7 +1418,7 @@ namespace ts {
             // had its file touched but not had its contents changed - this allows us
             // to skip a downstream typecheck
             if (isDeclarationFile(output)) {
-                const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                const outputModifiedTime = getModifiedTime(host, output);
                 newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
             }
         }
@@ -1571,7 +1576,7 @@ namespace ts {
                 }
 
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, getModifiedTime(host, file));
                 }
 
                 host.setModifiedTime(file, now);
@@ -1712,7 +1717,11 @@ namespace ts {
                 continue;
             }
             const outputs = getAllProjectOutputs(parsed, !host.useCaseSensitiveFileNames());
+            if (!outputs.length) continue;
+            const inputFileNames = new Set(parsed.fileNames.map(f => toPath(state, f)));
             for (const output of outputs) {
+                // If output name is same as input file name, do not delete and ignore the error
+                if (inputFileNames.has(toPath(state, output))) continue;
                 if (host.fileExists(output)) {
                     if (filesToDelete) {
                         filesToDelete.push(output);
@@ -1804,7 +1813,7 @@ namespace ts {
     function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
         updateSharedExtendedConfigFileWatcher(
             resolvedPath,
-            parsed,
+            parsed?.options,
             state.allWatchedExtendedConfigFiles,
             (extendedConfigFileName, extendedConfigFilePath) => state.watchFile(
                 extendedConfigFileName,
@@ -1834,9 +1843,10 @@ namespace ts {
                         configFileName: resolved,
                         currentDirectory: state.currentDirectory,
                         options: parsed.options,
-                        program: state.builderPrograms.get(resolvedPath),
+                        program: state.builderPrograms.get(resolvedPath) || getCachedParsedConfigFile(state, resolvedPath)?.fileNames,
                         useCaseSensitiveFileNames: state.parseConfigFileHost.useCaseSensitiveFileNames,
-                        writeLog: s => state.writeLog(s)
+                        writeLog: s => state.writeLog(s),
+                        toPath: fileName => toPath(state, fileName)
                     })) return;
 
                     invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
@@ -1889,10 +1899,7 @@ namespace ts {
 
     function stopWatching(state: SolutionBuilderState) {
         clearMap(state.allWatchedConfigFiles, closeFileWatcher);
-        clearMap(state.allWatchedExtendedConfigFiles, watcher => {
-            watcher.projects.clear();
-            watcher.close();
-        });
+        clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
     }

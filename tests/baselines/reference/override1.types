@@ -1,0 +1,94 @@
+=== tests/cases/conformance/override/override1.ts ===
+class B {
+>B : B
+
+    foo (v: string) {}
+>foo : (v: string) => void
+>v : string
+
+    fooo (v: string) {}
+>fooo : (v: string) => void
+>v : string
+}
+
+class D extends B {
+>D : D
+>B : B
+
+    override foo (v: string) {}
+>foo : (v: string) => void
+>v : string
+
+    fooo (v: string) {}
+>fooo : (v: string) => void
+>v : string
+
+    override bar(v: string) {}
+>bar : (v: string) => void
+>v : string
+}
+
+class C {
+>C : C
+
+    override foo(v: string) {}
+>foo : (v: string) => void
+>v : string
+}
+
+function f () {
+>f : () => typeof (Anonymous class)
+
+    return class extends B {
+>class extends B {        override foo (v: string) {}            fooo (v: string) {}            override bar(v: string) {}    } : typeof (Anonymous class)
+>B : B
+
+        override foo (v: string) {}
+>foo : (v: string) => void
+>v : string
+    
+        fooo (v: string) {}
+>fooo : (v: string) => void
+>v : string
+    
+        override bar(v: string) {}
+>bar : (v: string) => void
+>v : string
+    }
+}
+
+class E extends (class {
+>E : E
+>(class {    foo () { }    bar () { }}) : (Anonymous class)
+>class {    foo () { }    bar () { }} : typeof (Anonymous class)
+
+    foo () { }
+>foo : () => void
+
+    bar () { }
+>bar : () => void
+
+}) {
+    override foo () { }
+>foo : () => void
+
+    bar () { }
+>bar : () => void
+
+    baz() {}
+>baz : () => void
+
+    override bazz () {}
+>bazz : () => void
+}
+
+function ff () {
+>ff : () => typeof (Anonymous class)
+
+    return class {
+>class {        override foo () {}    } : typeof (Anonymous class)
+
+        override foo () {}
+>foo : () => void
+    }
+}

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts ===
+class X {
+>X : Symbol(X, Decl(staticIndexSignature7.ts, 0, 0))
+
+    static [index: string]: string;
+>index : Symbol(index, Decl(staticIndexSignature7.ts, 1, 12))
+
+    static x = 12; // Should error, incompatible with index signature
+>x : Symbol(X.x, Decl(staticIndexSignature7.ts, 1, 35))
+}
+class Y {
+>Y : Symbol(Y, Decl(staticIndexSignature7.ts, 3, 1))
+
+    static [index: string]: string;
+>index : Symbol(index, Decl(staticIndexSignature7.ts, 5, 12))
+
+    static foo() {} // should error, incompatible with index signature
+>foo : Symbol(Y.foo, Decl(staticIndexSignature7.ts, 5, 35))
+}
+

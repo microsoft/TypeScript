@@ -1,8 +1,8 @@
 tests/cases/conformance/types/primitives/null/validNullAssignments.ts(10,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(15,1): error TS2539: Cannot assign to 'C' because it is not a variable.
+tests/cases/conformance/types/primitives/null/validNullAssignments.ts(15,1): error TS2629: Cannot assign to 'C' because it is a class.
 tests/cases/conformance/types/primitives/null/validNullAssignments.ts(20,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(23,1): error TS2539: Cannot assign to 'M' because it is not a variable.
-tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): error TS2539: Cannot assign to 'i' because it is not a variable.
+tests/cases/conformance/types/primitives/null/validNullAssignments.ts(23,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
 ==== tests/cases/conformance/types/primitives/null/validNullAssignments.ts (5 errors) ====
@@ -24,7 +24,7 @@ tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): err
     f = null; // ok
     C = null; // error
     ~
-!!! error TS2539: Cannot assign to 'C' because it is not a variable.
+!!! error TS2629: Cannot assign to 'C' because it is a class.
     
     interface I { foo: string }
     var g: I;
@@ -36,7 +36,7 @@ tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): err
     module M { export var x = 1; }
     M = null; // error
     ~
-!!! error TS2539: Cannot assign to 'M' because it is not a variable.
+!!! error TS2631: Cannot assign to 'M' because it is a namespace.
     
     var h: { f(): void } = null;
     
@@ -45,4 +45,4 @@ tests/cases/conformance/types/primitives/null/validNullAssignments.ts(30,1): err
     }
     i = null; // error
     ~
-!!! error TS2539: Cannot assign to 'i' because it is not a variable.
+!!! error TS2630: Cannot assign to 'i' because it is a function.
