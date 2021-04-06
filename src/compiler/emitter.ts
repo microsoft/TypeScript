@@ -2417,8 +2417,26 @@ namespace ts {
             emitTokenWithComment(SyntaxKind.CloseBracketToken, node.argumentExpression.end, writePunctuation, node);
         }
 
+        function maybeEmitIndirectCallPrefix(node: CallExpression | TaggedTemplateExpression) {
+            const indirect = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirect) {
+                writeTokenText(SyntaxKind.OpenParenToken, writePunctuation);
+                writeLiteral("0");
+                writeTokenText(SyntaxKind.CommaToken, writePunctuation);
+                writeSpace();
+                return true;
+            }
+            return false;
+        }
+
+        function emitIndirectCallSuffix() {
+            writeTokenText(SyntaxKind.CloseParenToken, writePunctuation);
+        }
+
         function emitCallExpression(node: CallExpression) {
+            const indirect = maybeEmitIndirectCallPrefix(node);
             emit(node.expression);
+            if (indirect) emitIndirectCallSuffix();
             emit(node.questionDotToken);
             emitTypeArguments(node, node.typeArguments);
             emitList(node, node.arguments, ListFormat.CallExpressionArguments);
@@ -2433,7 +2451,9 @@ namespace ts {
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            const indirect = maybeEmitIndirectCallPrefix(node);
             emit(node.tag);
+            if (indirect) emitIndirectCallSuffix();
             emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emit(node.template);

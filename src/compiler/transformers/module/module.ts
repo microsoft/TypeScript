@@ -1813,27 +1813,14 @@ namespace ts {
 
         function substituteCallExpression(node: CallExpression) {
             if (isIdentifier(node.expression) && getImportOrExportBindingReference(node.expression, /*removeEntry*/ false)) {
-                return isCallChain(node) ?
-                    factory.updateCallChain(node,
-                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
-                        node.questionDotToken,
-                        /*typeArguments*/ undefined,
-                        node.arguments) :
-                    factory.updateCallExpression(node,
-                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
-                        /*typeArguments*/ undefined,
-                        node.arguments);
+                addEmitFlags(node, EmitFlags.IndirectCall);
             }
             return node;
         }
 
         function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
             if (isIdentifier(node.tag) && getImportOrExportBindingReference(node.tag, /*removeEntry*/ false)) {
-                return factory.updateTaggedTemplateExpression(
-                    node,
-                    setTextRange(factory.createComma(factory.createNumericLiteral(0), node.tag), node.tag),
-                    /*typeArguments*/ undefined,
-                    node.template);
+                addEmitFlags(node, EmitFlags.IndirectCall);
             }
             return node;
         }

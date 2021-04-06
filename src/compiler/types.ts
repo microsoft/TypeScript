@@ -6624,6 +6624,7 @@ namespace ts {
         /*@internal*/ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
         /*@internal*/ NeverApplyImportHelper = 1 << 26, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
         /*@internal*/ IgnoreSourceNewlines = 1 << 27,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
+        /*@internal*/ IndirectCall = 1 << 28,   // Write `(0,` before the expression and `)` after the expression of a call to ensure the call is indirect (i.e., no `this` binding)
     }
 
     export interface EmitHelperBase {
