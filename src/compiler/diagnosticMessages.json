@@ -3324,6 +3324,10 @@
         "category": "Error",
         "code": 2811
     },
+    "Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2812
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

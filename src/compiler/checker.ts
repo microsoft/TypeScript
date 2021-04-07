@@ -22270,6 +22270,10 @@ namespace ts {
             return type.flags & TypeFlags.Union ? every((<UnionType>type).types, f) : f(type);
         }
 
+        function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
+            return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
+        }
+
         function filterType(type: Type, f: (t: Type) => boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
@@ -27336,7 +27340,10 @@ namespace ts {
                             relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                         }
                         else {
-                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, missingProperty, container);
+                            const diagnostic = containerSeemsToBeEmptyDomElement(containingType)
+                                ? Diagnostics.Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom
+                                : Diagnostics.Property_0_does_not_exist_on_type_1;
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), diagnostic, missingProperty, container);
                         }
                     }
                 }
@@ -27346,6 +27353,12 @@ namespace ts {
                 addRelatedInfo(resultDiagnostic, relatedInfo);
             }
             diagnostics.add(resultDiagnostic);
+        }
+
+        function containerSeemsToBeEmptyDomElement(containingType: Type) {
+            return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
+                everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
+                isEmptyObjectType(containingType);
         }
 
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {
