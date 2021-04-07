@@ -80,17 +80,6 @@ namespace ts.JsDoc {
         "virtual",
         "yields"
     ];
-    const tagNameDisplayPart = {
-        [SyntaxKind.JSDocAugmentsTag]: textPart,
-        [SyntaxKind.JSDocCallbackTag]: typeAliasNamePart,
-        [SyntaxKind.JSDocImplementsTag]: textPart,
-        [SyntaxKind.JSDocParameterTag]: parameterNamePart,
-        [SyntaxKind.JSDocPropertyTag]: propertyNamePart,
-        [SyntaxKind.JSDocSeeTag]: textPart,
-        [SyntaxKind.JSDocTemplateTag]: typeParameterNamePart,
-        [SyntaxKind.JSDocTypeTag]: textPart,
-        [SyntaxKind.JSDocTypedefTag]: typeAliasNamePart,
-    };
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
@@ -154,34 +143,52 @@ namespace ts.JsDoc {
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
         const { comment, kind } = tag;
+        const namePart = getTagNameDisplayPart(kind);
         switch (kind) {
             case SyntaxKind.JSDocImplementsTag:
-                return withNode((tag as JSDocImplementsTag).class, tagNameDisplayPart[kind]);
+                return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
-                return withNode((tag as JSDocAugmentsTag).class, tagNameDisplayPart[kind]);
+                return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "), tagNameDisplayPart[kind]);
+                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "));
             case SyntaxKind.JSDocTypeTag:
-                return withNode((tag as JSDocTypeTag).typeExpression, tagNameDisplayPart[kind]);
+                return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name, tagNameDisplayPart[kind]) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
+                return name ? withNode(name) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
 
-        function withNode(node: Node, constructDisplayPartFunc?: (text: string) => SymbolDisplayPart) {
-            return addComment(node.getText(), constructDisplayPartFunc);
+        function withNode(node: Node) {
+            return addComment(node.getText());
         }
 
-        function addComment(s: string, constructDisplayPartFunc?: (text: string) => SymbolDisplayPart) {
+        function addComment(s: string) {
             return comment
-                ? [!!constructDisplayPartFunc ? constructDisplayPartFunc(s) : textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
+                ? [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
                 : [textPart(s)];
+        }
+    }
+
+    function getTagNameDisplayPart(kind: SyntaxKind): (text: string) => SymbolDisplayPart {
+        switch (kind) {
+            case SyntaxKind.JSDocCallbackTag:
+                return typeAliasNamePart;
+            case SyntaxKind.JSDocParameterTag:
+                return parameterNamePart;
+            case SyntaxKind.JSDocPropertyTag:
+                return propertyNamePart;
+            case SyntaxKind.JSDocTemplateTag:
+                return typeParameterNamePart;
+            case SyntaxKind.JSDocTypedefTag:
+                return typeAliasNamePart;
+            default:
+                return textPart;
         }
     }
 
