@@ -1,6 +1,7 @@
 // @strict: true
 // @target: esnext
 // @lib: esnext
+// @useDefineForClassFields: false
 
 class A {
     static #foo(a: number) {}
