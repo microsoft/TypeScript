@@ -153,9 +153,9 @@ namespace ts.Completions {
             return stringCompletions;
         }
 
-        const typeLiteralCompletions = getTypeLiteralInTypeArgumentCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, log, preferences);
-        if (typeLiteralCompletions) {
-            return typeLiteralCompletions;
+        const objectTypeLiteralCompletions = getObjectTypeLiteralInTypeArgumentCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, log, preferences);
+        if (objectTypeLiteralCompletions) {
+            return objectTypeLiteralCompletions;
         }
 
         if (contextToken && isBreakOrContinueStatement(contextToken.parent)
@@ -988,56 +988,51 @@ namespace ts.Completions {
         return !!symbol.declarations?.some(d => d.kind === SyntaxKind.SourceFile);
     }
 
-    function getTypeLiteralInTypeArgumentCompletions(sourceFile: SourceFile, position: number, contextToken: Node | undefined, checker: TypeChecker, options: CompilerOptions, log: Log, preferences: UserPreferences): CompletionInfo | undefined{
+    function getObjectTypeLiteralInTypeArgumentCompletions(sourceFile: SourceFile, position: number, contextToken: Node | undefined, checker: TypeChecker, options: CompilerOptions, log: Log, preferences: UserPreferences): CompletionInfo | undefined{
         if (!contextToken) return undefined;
 
         const typeLiteralNode = tryGetTypeLiteralNode(contextToken);
+        if (!typeLiteralNode) return undefined;
 
-        if (typeLiteralNode) {
-            const intersectionTypeNode = isIntersectionTypeNode(typeLiteralNode.parent) ? typeLiteralNode.parent : undefined;
-            const containerTypeNode = intersectionTypeNode || typeLiteralNode;
+        const intersectionTypeNode = isIntersectionTypeNode(typeLiteralNode.parent) ? typeLiteralNode.parent : undefined;
+        const containerTypeNode = intersectionTypeNode || typeLiteralNode;
 
-            const containerExpectedType = tryGetTypeArgumentSubType(containerTypeNode, checker);
-            if (!containerExpectedType) {
-                return undefined;
-            }
+        const containerExpectedType = tryGetTypeArgumentSubType(containerTypeNode, checker);
+        if (!containerExpectedType) return undefined;
 
-            const containerActualType = checker.getTypeFromTypeNode(containerTypeNode);
+        const containerActualType = checker.getTypeFromTypeNode(containerTypeNode);
 
-            const members = getPropertiesForCompletion(containerExpectedType, checker);
-            const existingMembers = getPropertiesForCompletion(containerActualType, checker);
+        const members = getPropertiesForCompletion(containerExpectedType, checker);
+        const existingMembers = getPropertiesForCompletion(containerActualType, checker);
 
-            const existingMemberEscapedNames: Set<__String> = new Set();
-            forEach(existingMembers, s => existingMemberEscapedNames.add(s.escapedName));
+        const existingMemberEscapedNames: Set<__String> = new Set();
+        forEach(existingMembers, s => existingMemberEscapedNames.add(s.escapedName));
 
-            const missingMembers = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
+        const missingMembers = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
 
-            const location = getTouchingToken(sourceFile, position);
+        const location = getTouchingToken(sourceFile, position);
 
-            const entries: CompletionEntry[] = [];
-            getCompletionEntriesFromSymbols(
-                missingMembers,
-                entries,
-                /* contextToken */ undefined,
-                location,
-                sourceFile,
-                checker,
-                options.target!,
-                log,
-                CompletionKind.MemberLike,
-                preferences,
-                options
-            );
+        const entries: CompletionEntry[] = [];
+        getCompletionEntriesFromSymbols(
+            missingMembers,
+            entries,
+            /* contextToken */ undefined,
+            location,
+            sourceFile,
+            checker,
+            options.target!,
+            log,
+            CompletionKind.MemberLike,
+            preferences,
+            options
+        );
 
-            return {
-                isGlobalCompletion: false,
-                isMemberCompletion: true,
-                isNewIdentifierLocation: false,
-                entries
-            };
-        }
-
-        return undefined;
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: true,
+            isNewIdentifierLocation: false,
+            entries
+        };
     }
 
     function getCompletionData(
@@ -2943,18 +2938,16 @@ namespace ts.Completions {
         }
 
         const t = tryGetTypeArgumentSubType(node.parent, checker);
-        if (t) {
-            switch (node.kind) {
-                case SyntaxKind.PropertySignature:
-                    return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
-                case SyntaxKind.IntersectionType:
-                case SyntaxKind.TypeLiteral:
-                case SyntaxKind.UnionType:
-                    return t;
-            }
-        }
+        if (!t) return undefined;
 
-        return undefined;
+        switch (node.kind) {
+            case SyntaxKind.PropertySignature:
+                return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.UnionType:
+                return t;
+        }
     }
 
     // TODO: GH#19856 Would like to return `node is Node & { parent: (ClassElement | TypeElement) & { parent: ObjectTypeDeclaration } }` but then compilation takes > 10 minutes
