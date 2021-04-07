@@ -2473,7 +2473,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return symbol.declarations?.find(isAliasSymbolDeclaration);
+            return symbol.declarations && findLast<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         /**
@@ -8449,6 +8449,23 @@ namespace ts {
             };
         }
 
+        /** Create a synthetic property access flow node after the last statement of the file */
+        function getFlowTypeFromCommonJSExport(symbol: Symbol) {
+            const file = getSourceFileOfNode(symbol.declarations![0]);
+            const accessName = unescapeLeadingUnderscores(symbol.escapedName);
+            const areAllModuleExports = symbol.declarations!.every(d => isInJSFile(d) && isAccessExpression(d) && isModuleExportsAccessExpression(d.expression));
+            const reference = areAllModuleExports
+                ? factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(factory.createIdentifier("module"), factory.createIdentifier("exports")), accessName)
+                : factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
+            if (areAllModuleExports) {
+                setParent((reference.expression as PropertyAccessExpression).expression, reference.expression);
+            }
+            setParent(reference.expression, reference);
+            setParent(reference, file);
+            reference.flowNode = file.endFlowNode;
+            return getFlowTypeOfReference(reference, autoType, undefinedType);
+        }
+
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
             const accessName = startsWith(symbol.escapedName as string, "__#")
                 ? factory.createPrivateIdentifier((symbol.escapedName as string).split("@")[1])
@@ -9186,14 +9203,15 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
-
+                const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
                 // This check is important because without it, a call to getTypeOfSymbol could end
                 // up recursively calling getTypeOfAlias, causing a stack overflow.
-                links.type = targetSymbol.flags & SymbolFlags.Value
-                    ? getTypeOfSymbol(targetSymbol)
+                links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
+                    : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
             return links.type;
@@ -27133,7 +27151,10 @@ namespace ts {
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
             if (assignmentKind === AssignmentKind.Definite ||
-                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
+                prop &&
+                !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
+                && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)
+                && !isDuplicatedCommonJSExport(prop.declarations)) {
                 return propType;
             }
             if (propType === autoType) {
@@ -38154,9 +38175,11 @@ namespace ts {
                             return;
                         }
                         if (exportedDeclarationsCount > 1) {
-                            for (const declaration of declarations!) {
-                                if (isNotOverload(declaration)) {
-                                    diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                            if (!isDuplicatedCommonJSExport(declarations)) {
+                                for (const declaration of declarations!) {
+                                    if (isNotOverload(declaration)) {
+                                        diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                                    }
                                 }
                             }
                         }
@@ -38164,6 +38187,12 @@ namespace ts {
                 }
                 links.exportsChecked = true;
             }
+        }
+
+        function isDuplicatedCommonJSExport(declarations: Declaration[] | undefined) {
+            return declarations
+                && declarations.length > 1
+                && declarations.every(d => isInJSFile(d) && isAccessExpression(d) && (isExportsIdentifier(d.expression) || isModuleExportsAccessExpression(d.expression)));
         }
 
         function checkSourceElement(node: Node | undefined): void {
