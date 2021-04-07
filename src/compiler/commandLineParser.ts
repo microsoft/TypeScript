@@ -1222,12 +1222,7 @@ namespace ts {
 
     const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
         diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
-        options: new Set(commandOptionsOnlyBuild.map(option => option.name))
-    };
-
-    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
-        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
-        options: new Set(commandOptionsWithoutBuild.map(option => option.name))
+        getOptionsNameMap: getBuildOptionsNameMap
     };
 
     /* @internal */
@@ -1309,7 +1304,7 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
-        if (diagnostics.alternateMode?.options.has(unknownOption)) {
+        if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
             return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
         }
 
@@ -1519,6 +1514,11 @@ namespace ts {
     function getBuildOptionsNameMap(): OptionsNameMap {
         return buildOptionsNameMapCache || (buildOptionsNameMapCache = createOptionNameMap(buildOpts));
     }
+
+    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+        getOptionsNameMap
+    };
 
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
         alternateMode: buildOptionsAlternateMode,

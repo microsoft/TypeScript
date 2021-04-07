@@ -6126,7 +6126,7 @@ namespace ts {
     /* @internal */
     export interface AlternateModeDiagnostics {
         diagnostic: DiagnosticMessage;
-        options: ReadonlySet<string>;
+        getOptionsNameMap: () => OptionsNameMap;
     }
 
     /* @internal */
