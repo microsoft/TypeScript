@@ -9088,6 +9088,11 @@ namespace ts {
             // Try to see if the user specified a return type on the get-accessor.
             const getterReturnType = getAnnotatedAccessorType(getter);
             if (getterReturnType) {
+                const flags = getCheckFlags(symbol);
+                if (flags & CheckFlags.Instantiated) {
+                    const links = getSymbolLinks(symbol);
+                    return instantiateType(getterReturnType, links.mapper);
+                }
                 return getterReturnType;
             }
 

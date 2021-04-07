@@ -1,0 +1,60 @@
+=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
+module NonGeneric {
+>NonGeneric : Symbol(NonGeneric, Decl(genericSetterInClassType.ts, 0, 0))
+
+    class C {
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 19))
+
+        get y() {
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 13), Decl(genericSetterInClassType.ts, 4, 9))
+
+            return 1;
+        }
+        set y(v) { }
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 13), Decl(genericSetterInClassType.ts, 4, 9))
+>v : Symbol(v, Decl(genericSetterInClassType.ts, 5, 14))
+    }
+
+    var c = new C();
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 0, 19))
+
+    c.y = c.y;
+>c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 13), Decl(genericSetterInClassType.ts, 4, 9))
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 13), Decl(genericSetterInClassType.ts, 4, 9))
+>c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 13), Decl(genericSetterInClassType.ts, 4, 9))
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 8, 7))
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 1, 13), Decl(genericSetterInClassType.ts, 4, 9))
+}
+
+module Generic {
+>Generic : Symbol(Generic, Decl(genericSetterInClassType.ts, 10, 1))
+
+    class C<T> {
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 12, 16))
+>T : Symbol(T, Decl(genericSetterInClassType.ts, 13, 12))
+
+        get y(): T {
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 13, 16), Decl(genericSetterInClassType.ts, 16, 9))
+>T : Symbol(T, Decl(genericSetterInClassType.ts, 13, 12))
+
+            return 1 as never;
+        }
+        set y(v) { }
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 13, 16), Decl(genericSetterInClassType.ts, 16, 9))
+>v : Symbol(v, Decl(genericSetterInClassType.ts, 17, 14))
+    }
+
+    var c = new C<number>();
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 20, 7))
+>C : Symbol(C, Decl(genericSetterInClassType.ts, 12, 16))
+
+    c.y = c.y;
+>c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 13, 16), Decl(genericSetterInClassType.ts, 16, 9))
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 20, 7))
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 13, 16), Decl(genericSetterInClassType.ts, 16, 9))
+>c.y : Symbol(C.y, Decl(genericSetterInClassType.ts, 13, 16), Decl(genericSetterInClassType.ts, 16, 9))
+>c : Symbol(c, Decl(genericSetterInClassType.ts, 20, 7))
+>y : Symbol(C.y, Decl(genericSetterInClassType.ts, 13, 16), Decl(genericSetterInClassType.ts, 16, 9))
+}

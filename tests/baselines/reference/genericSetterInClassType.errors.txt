@@ -1,0 +1,38 @@
+tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts(3,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts(6,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts(15,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts(18,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts (4 errors) ====
+    module NonGeneric {
+        class C {
+            get y() {
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                return 1;
+            }
+            set y(v) { }
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    
+        var c = new C();
+        c.y = c.y;
+    }
+    
+    module Generic {
+        class C<T> {
+            get y(): T {
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+                return 1 as never;
+            }
+            set y(v) { }
+                ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        }
+    
+        var c = new C<number>();
+        c.y = c.y;
+    }

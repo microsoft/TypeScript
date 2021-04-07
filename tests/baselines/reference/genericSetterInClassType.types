@@ -1,0 +1,65 @@
+=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
+module NonGeneric {
+>NonGeneric : typeof NonGeneric
+
+    class C {
+>C : C
+
+        get y() {
+>y : number
+
+            return 1;
+>1 : 1
+        }
+        set y(v) { }
+>y : number
+>v : number
+    }
+
+    var c = new C();
+>c : C
+>new C() : C
+>C : typeof C
+
+    c.y = c.y;
+>c.y = c.y : number
+>c.y : number
+>c : C
+>y : number
+>c.y : number
+>c : C
+>y : number
+}
+
+module Generic {
+>Generic : typeof Generic
+
+    class C<T> {
+>C : C<T>
+
+        get y(): T {
+>y : T
+
+            return 1 as never;
+>1 as never : never
+>1 : 1
+        }
+        set y(v) { }
+>y : T
+>v : T
+    }
+
+    var c = new C<number>();
+>c : C<number>
+>new C<number>() : C<number>
+>C : typeof C
+
+    c.y = c.y;
+>c.y = c.y : number
+>c.y : number
+>c : C<number>
+>y : number
+>c.y : number
+>c : C<number>
+>y : number
+}
