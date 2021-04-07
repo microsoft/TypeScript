@@ -11695,9 +11695,10 @@ namespace ts {
                     // No symbol from a union/intersection should have a `.parent` set (since unions/intersections don't act as symbol parents)
                     // Unless that parent is "reconsituted" from the "first value declaration" on the symbol (which is likely different than its instantiated parent!)
                     // They also have a `.containingType` set, which affects some services endpoints behavior
-                    const clone = createSymbolWithType(singleProp, /*type*/ undefined);
+                    const clone = createSymbolWithType(singleProp, (singleProp as TransientSymbol).type);
                     clone.parent = singleProp.valueDeclaration?.symbol?.parent;
                     clone.containingType = containingType;
+                    clone.mapper = (singleProp as TransientSymbol).mapper;
                     return clone;
                 }
                 else {
