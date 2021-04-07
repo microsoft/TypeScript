@@ -80,7 +80,7 @@ namespace ts.JsDoc {
         "virtual",
         "yields"
     ];
-    const syntaxKindDisplayPartFunctionDict = {
+    const tagNameDisplayPart = {
         [SyntaxKind.JSDocAugmentsTag]: textPart,
         [SyntaxKind.JSDocCallbackTag]: typeAliasNamePart,
         [SyntaxKind.JSDocImplementsTag]: textPart,
@@ -156,20 +156,20 @@ namespace ts.JsDoc {
         const { comment, kind } = tag;
         switch (kind) {
             case SyntaxKind.JSDocImplementsTag:
-                return withNode((tag as JSDocImplementsTag).class, syntaxKindDisplayPartFunctionDict[kind]);
+                return withNode((tag as JSDocImplementsTag).class, tagNameDisplayPart[kind]);
             case SyntaxKind.JSDocAugmentsTag:
-                return withNode((tag as JSDocAugmentsTag).class, syntaxKindDisplayPartFunctionDict[kind]);
+                return withNode((tag as JSDocAugmentsTag).class, tagNameDisplayPart[kind]);
             case SyntaxKind.JSDocTemplateTag:
-                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "), syntaxKindDisplayPartFunctionDict[kind]);
+                return addComment((tag as JSDocTemplateTag).typeParameters.map(tp => tp.getText()).join(", "), tagNameDisplayPart[kind]);
             case SyntaxKind.JSDocTypeTag:
-                return withNode((tag as JSDocTypeTag).typeExpression, syntaxKindDisplayPartFunctionDict[kind]);
+                return withNode((tag as JSDocTypeTag).typeExpression, tagNameDisplayPart[kind]);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name, syntaxKindDisplayPartFunctionDict[kind]) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
+                return name ? withNode(name, tagNameDisplayPart[kind]) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
