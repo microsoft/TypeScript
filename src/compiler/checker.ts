@@ -33729,10 +33729,6 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     expectedReturnType = voidType;
 
-                    if (isThisIdentifier(node.parent.name)) {
-                        error(node, Diagnostics.Decorators_may_not_be_applied_to_this_parameters);
-                    }
-
                     errorInfo = chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);

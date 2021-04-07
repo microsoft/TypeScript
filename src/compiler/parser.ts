@@ -2976,6 +2976,11 @@ namespace ts {
                     parseTypeAnnotation(),
                     /*initializer*/ undefined
                 );
+
+                if (decorators) {
+                    parseErrorAtRange(decorators[0], Diagnostics.Decorators_may_not_be_applied_to_this_parameters);
+                }
+
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
             }
 
