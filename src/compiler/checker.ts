@@ -21946,7 +21946,7 @@ namespace ts {
                 resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
         }
 
-        function getTypeFacts(type: Type): TypeFacts {
+        function getTypeFacts(type: Type, ignoreObjects = false): TypeFacts {
             const flags = type.flags;
             if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
@@ -21983,7 +21983,7 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.Object) {
+            if (flags & TypeFlags.Object && !ignoreObjects) {
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(<ObjectType>type) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                     isFunctionObjectType(<ObjectType>type) ?
@@ -22006,17 +22006,17 @@ namespace ts {
                 return TypeFacts.None;
             }
             if (flags & TypeFlags.Instantiable) {
-                return !isPatternLiteralType(type) ? getTypeFacts(getBaseConstraintOfType(type) || unknownType) :
+                return !isPatternLiteralType(type) ? getTypeFacts(getBaseConstraintOfType(type) || unknownType, ignoreObjects) :
                     strictNullChecks ? TypeFacts.NonEmptyStringStrictFacts : TypeFacts.NonEmptyStringFacts;
             }
             if (flags & TypeFlags.Union) {
-                return reduceLeft((<UnionType>type).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
+                return reduceLeft((<UnionType>type).types, (facts, t) => facts | getTypeFacts(t, ignoreObjects), TypeFacts.None);
             }
             if (flags & TypeFlags.Intersection) {
                 // When an intersection contains a primitive type we ignore object type constituents as they are
                 // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
-                const containsPrimitive = maybeTypeOfKind(type, TypeFlags.Primitive);
-                return reduceLeft((<UnionType>type).types, (facts, t) => containsPrimitive && getBaseConstraintOrType(t).flags & TypeFlags.Object ? facts : facts & getTypeFacts(t), TypeFacts.All);
+                ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
+                return reduceLeft((<UnionType>type).types, (facts, t) => facts & getTypeFacts(t, ignoreObjects), TypeFacts.All);
             }
             return TypeFacts.All;
         }
