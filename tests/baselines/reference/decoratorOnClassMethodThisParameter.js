@@ -1,7 +1,7 @@
 //// [decoratorOnClassMethodThisParameter.ts]
 declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
 
-class C { 
+class C {
     method(@dec this: C) {}
 }
 

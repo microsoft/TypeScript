@@ -5,7 +5,7 @@ declare function dec(target: Object, propertyKey: string | symbol, parameterInde
 >propertyKey : string | symbol
 >parameterIndex : number
 
-class C { 
+class C {
 >C : C
 
     method(@dec this: C) {}

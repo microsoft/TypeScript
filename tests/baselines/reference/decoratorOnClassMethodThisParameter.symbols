@@ -6,7 +6,7 @@ declare function dec(target: Object, propertyKey: string | symbol, parameterInde
 >propertyKey : Symbol(propertyKey, Decl(decoratorOnClassMethodThisParameter.ts, 0, 36))
 >parameterIndex : Symbol(parameterIndex, Decl(decoratorOnClassMethodThisParameter.ts, 0, 66))
 
-class C { 
+class C {
 >C : Symbol(C, Decl(decoratorOnClassMethodThisParameter.ts, 0, 97))
 
     method(@dec this: C) {}
