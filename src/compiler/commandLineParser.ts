@@ -1220,23 +1220,15 @@ namespace ts {
         return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
     }
 
-    let compilerOptionsAlternateModeCache: AlternateModeDiagnostics;
+    const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
+        options: new Set(commandOptionsOnlyBuild.map(option => option.name))
+    };
 
-    function getCompilerOptionsAlternateMode(): AlternateModeDiagnostics {
-        return compilerOptionsAlternateModeCache ||= {
-            diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
-            options: new Set(commandOptionsOnlyBuild.map(option => option.name))
-        };
-    }
-
-    let buildModeAlternateModeCache: AlternateModeDiagnostics;
-
-    function getBuildOptionsAlternateMode(): AlternateModeDiagnostics {
-        return buildModeAlternateModeCache ||= {
-            diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
-            options: new Set(commandOptionsWithoutBuild.map(option => option.name))
-        };
-    }
+    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+        options: new Set(commandOptionsWithoutBuild.map(option => option.name))
+    };
 
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
@@ -1317,9 +1309,8 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
-        const alternateMode = diagnostics.getAlternateMode?.();
-        if (alternateMode?.options.has(unknownOption)) {
-            return createDiagnostics(alternateMode.diagnostic, unknownOption);
+        if (diagnostics.alternateMode?.options.has(unknownOption)) {
+            return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
         }
 
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
@@ -1487,7 +1478,7 @@ namespace ts {
 
     /*@internal*/
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        getAlternateMode: getCompilerOptionsAlternateMode,
+        alternateMode: compilerOptionsAlternateMode,
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -1530,7 +1521,7 @@ namespace ts {
     }
 
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
-        getAlternateMode: getBuildOptionsAlternateMode,
+        alternateMode: buildOptionsAlternateMode,
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
