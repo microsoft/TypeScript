@@ -40,3 +40,6 @@ export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as 
 >RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembersErrors.ts, 19, 71))
 >RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembersErrors.ts, 19, 71))
 
+export type NestedRest = [foo: number, ...[bar: number, ...[number]]]; // partially named, disallowed
+>NestedRest : Symbol(NestedRest, Decl(namedTupleMembersErrors.ts, 20, 66))
+

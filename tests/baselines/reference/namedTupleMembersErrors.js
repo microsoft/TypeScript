@@ -21,6 +21,7 @@ export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike re
 export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
 export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
 
+export type NestedRest = [foo: number, ...[bar: number, ...[number]]]; // partially named, disallowed
 
 //// [namedTupleMembersErrors.js]
 "use strict";
@@ -41,3 +42,4 @@ export declare type OptRest = [first: string, ...rest?: string[]];
 export declare type NonArrayRest = [first: string, ...rest: number];
 export declare type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
 export declare type RecusiveRest = [first: string, ...rest: RecusiveRest];
+export declare type NestedRest = [foo: number, ...[bar: number, ...[number]]];

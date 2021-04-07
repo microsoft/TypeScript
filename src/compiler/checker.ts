@@ -33295,13 +33295,32 @@ namespace ts {
             checkSourceElement(node.elementType);
         }
 
+        function checkTupleNamedElement(node: TupleTypeNode, hasNamedElement: boolean): boolean {
+            for (const e of node.elements) {
+                if (isRestTypeNode(e) && isTupleTypeNode(e.type)) {
+                    return checkTupleNamedElement(e.type, hasNamedElement);
+                }
+                else if (hasNamedElement !== isNamedTupleMember(e)) {
+                    grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         function checkTupleType(node: TupleTypeNode) {
             const elementTypes = node.elements;
             let seenOptionalElement = false;
             let seenRestElement = false;
             const hasNamedElement = some(elementTypes, isNamedTupleMember);
             for (const e of elementTypes) {
-                if (e.kind !== SyntaxKind.NamedTupleMember && hasNamedElement) {
+                if (isRestTypeNode(e) && isTupleTypeNode(e.type)) {
+                    if (!checkTupleNamedElement(e.type, hasNamedElement)) {
+                        break;
+                    }
+                }
+                else if (e.kind !== SyntaxKind.NamedTupleMember && hasNamedElement) {
                     grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
                     break;
                 }

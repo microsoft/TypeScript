@@ -202,3 +202,6 @@ export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments 
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
 >g : (elem: object, index: number) => object
 
+export type NestedRest = [foo: number, ...[bar: number, ...[baz: number]]];
+>NestedRest : [number, number, number]
+

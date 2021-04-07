@@ -77,3 +77,5 @@ declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): P
 
 export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
 export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
+
+export type NestedRest = [foo: number, ...[bar: number, ...[baz: number]]];

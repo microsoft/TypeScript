@@ -199,3 +199,6 @@ export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments 
 >getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
 >g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
 
+export type NestedRest = [foo: number, ...[bar: number, ...[baz: number]]];
+>NestedRest : Symbol(NestedRest, Decl(namedTupleMembers.ts, 76, 57))
+

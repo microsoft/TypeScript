@@ -21,3 +21,5 @@ export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike re
 
 export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
 export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+
+export type NestedRest = [foo: number, ...[bar: number, ...[number]]]; // partially named, disallowed

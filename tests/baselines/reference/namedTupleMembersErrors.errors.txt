@@ -12,9 +12,10 @@ tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(16,39): err
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(18,44): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(20,13): error TS2456: Type alias 'RecusiveRestUnlabeled' circularly references itself.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(21,13): error TS2456: Type alias 'RecusiveRest' circularly references itself.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(23,61): error TS5084: Tuple members must all have names or all not have names.
 
 
-==== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts (14 errors) ====
+==== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts (15 errors) ====
     export type Segment1 = [length: number, number]; // partially named, disallowed
                                             ~~~~~~
 !!! error TS5084: Tuple members must all have names or all not have names.
@@ -65,3 +66,6 @@ tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(21,13): err
                 ~~~~~~~~~~~~
 !!! error TS2456: Type alias 'RecusiveRest' circularly references itself.
     
+    export type NestedRest = [foo: number, ...[bar: number, ...[number]]]; // partially named, disallowed
+                                                                ~~~~~~
+!!! error TS5084: Tuple members must all have names or all not have names.

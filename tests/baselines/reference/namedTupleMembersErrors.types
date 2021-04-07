@@ -38,3 +38,6 @@ export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
 export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
 >RecusiveRest : any
 
+export type NestedRest = [foo: number, ...[bar: number, ...[number]]]; // partially named, disallowed
+>NestedRest : [number, number, number]
+
