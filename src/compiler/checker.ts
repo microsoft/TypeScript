@@ -36946,7 +36946,7 @@ namespace ts {
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
 
             for (const member of node.members) {
-                if (hasStaticModifier(member)) {
+                if (hasStaticModifier(member) || hasAmbientModifier(member)) {
                     continue;
                 }
 
