@@ -1,11 +1,11 @@
-//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias.ts] ////
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias2.ts] ////
 
 //// [moduleExportAliasDuplicateAlias.js]
-exports.apply = undefined;
+module.exports.apply = undefined;
 function a() { }
-exports.apply()
-exports.apply = a;
-exports.apply()
+module.exports.apply = a;
+module.exports.apply = a;
+module.exports.apply()
 
 //// [test.js]
 const { apply } = require('./moduleExportAliasDuplicateAlias')
@@ -14,11 +14,11 @@ apply()
 
 //// [moduleExportAliasDuplicateAlias.js]
 "use strict";
-exports.apply = undefined;
+module.exports.apply = undefined;
 function a() { }
-exports.apply();
-exports.apply = a;
-exports.apply();
+module.exports.apply = a;
+module.exports.apply = a;
+module.exports.apply();
 //// [test.js]
 "use strict";
 var apply = require('./moduleExportAliasDuplicateAlias').apply;
