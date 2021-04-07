@@ -36946,6 +36946,10 @@ namespace ts {
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
 
             for (const member of node.members) {
+                if (hasStaticModifier(member)) {
+                    continue;
+                }
+
                 if (isConstructorDeclaration(member)) {
                     forEach(member.parameters, param => {
                         if (isParameterPropertyDeclaration(param, member)) {
