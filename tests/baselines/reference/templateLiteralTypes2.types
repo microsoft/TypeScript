@@ -392,3 +392,24 @@ function getCardTitle(title: string): `test-${string}` {
 >title : string
 }
 
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+>interpolatedStyle : { rotate: number; }
+>{ rotate: 12 } : { rotate: number; }
+>rotate : number
+>12 : 12
+
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+>C2 : (transform: "-moz-initial" | (string & {})) => number
+>transform : (string & {}) | "-moz-initial"
+>12 : 12
+
+C2(`rotate(${interpolatedStyle.rotate}dig)`);
+>C2(`rotate(${interpolatedStyle.rotate}dig)`) : number
+>C2 : (transform: (string & {}) | "-moz-initial") => number
+>`rotate(${interpolatedStyle.rotate}dig)` : `rotate(${number}dig)`
+>interpolatedStyle.rotate : number
+>interpolatedStyle : { rotate: number; }
+>rotate : number
+

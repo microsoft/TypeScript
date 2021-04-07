@@ -1,0 +1,64 @@
+=== tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts ===
+// Repro from #43493
+
+declare const foo: unknown[];
+>foo : Symbol(foo, Decl(flatArrayNoExcessiveStackDepth.ts, 2, 13))
+
+const bar = foo.flatMap(bar => bar as Foo);
+>bar : Symbol(bar, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 5))
+>foo.flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>foo : Symbol(foo, Decl(flatArrayNoExcessiveStackDepth.ts, 2, 13))
+>flatMap : Symbol(Array.flatMap, Decl(lib.es2019.array.d.ts, --, --))
+>bar : Symbol(bar, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 24))
+>bar : Symbol(bar, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 24))
+>Foo : Symbol(Foo, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 43))
+
+interface Foo extends Array<string> {}
+>Foo : Symbol(Foo, Decl(flatArrayNoExcessiveStackDepth.ts, 3, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+// Repros from comments in #43249
+
+const repro_43249 = (value: unknown) => {
+>repro_43249 : Symbol(repro_43249, Decl(flatArrayNoExcessiveStackDepth.ts, 9, 5))
+>value : Symbol(value, Decl(flatArrayNoExcessiveStackDepth.ts, 9, 21))
+
+    if (typeof value !== "string") {
+>value : Symbol(value, Decl(flatArrayNoExcessiveStackDepth.ts, 9, 21))
+
+        throw new Error("No");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    const match = value.match(/anything/) || [];
+>match : Symbol(match, Decl(flatArrayNoExcessiveStackDepth.ts, 13, 9))
+>value.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(flatArrayNoExcessiveStackDepth.ts, 9, 21))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    const [, extracted] = match;
+>extracted : Symbol(extracted, Decl(flatArrayNoExcessiveStackDepth.ts, 14, 12))
+>match : Symbol(match, Decl(flatArrayNoExcessiveStackDepth.ts, 13, 9))
+
+};
+
+function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
+>f : Symbol(f, Decl(flatArrayNoExcessiveStackDepth.ts, 15, 2))
+>Arr : Symbol(Arr, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 11))
+>D : Symbol(D, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 15))
+>x : Symbol(x, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 34))
+>FlatArray : Symbol(FlatArray, Decl(lib.es2019.array.d.ts, --, --))
+>Arr : Symbol(Arr, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 11))
+>y : Symbol(y, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 57))
+>FlatArray : Symbol(FlatArray, Decl(lib.es2019.array.d.ts, --, --))
+>Arr : Symbol(Arr, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 11))
+>D : Symbol(D, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 15))
+
+    x = y;
+>x : Symbol(x, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 34))
+>y : Symbol(y, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 57))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 57))
+>x : Symbol(x, Decl(flatArrayNoExcessiveStackDepth.ts, 17, 34))
+}
+

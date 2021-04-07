@@ -2516,8 +2516,10 @@ namespace ts {
     }
 
     /* @internal */
-    export function needsParentheses(expression: Expression) {
-        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
+    export function needsParentheses(expression: Expression): boolean {
+        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
+            || isObjectLiteralExpression(expression)
+            || isAsExpression(expression) && isObjectLiteralExpression(expression.expression);
     }
 
     export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {

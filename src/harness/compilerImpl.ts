@@ -135,8 +135,6 @@ namespace compiler {
                     }
                 }
             }
-
-            this.diagnostics = diagnostics;
         }
 
         public get vfs(): vfs.FileSystem {

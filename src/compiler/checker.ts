@@ -2473,7 +2473,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return symbol.declarations?.find(isAliasSymbolDeclaration);
+            return symbol.declarations && findLast<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         /**
@@ -2489,6 +2489,7 @@ namespace ts {
          * module.exports = <EntityNameExpression>
          * {<Identifier>}
          * {name: <EntityNameExpression>}
+         * const { x } = require ...
          */
         function isAliasSymbolDeclaration(node: Node): boolean {
             return node.kind === SyntaxKind.ImportEqualsDeclaration
@@ -5141,9 +5142,26 @@ namespace ts {
                 return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
 
+            function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
+                // Use placeholders for reverse mapped types we've either already descended into, or which
+                // are nested reverse mappings within a mapping over a non-anonymous type. The later is a restriction mostly just to
+                // reduce the blowup in printback size from doing, eg, a deep reverse mapping over `Window`.
+                // Since anonymous types usually come from expressions, this allows us to preserve the output
+                // for deep mappings which likely come from expressions, while truncating those parts which
+                // come from mappings over library functions.
+                return !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped)
+                    && (
+                        contains(context.reverseMappedStack, propertySymbol as ReverseMappedSymbol)
+                        || (
+                            context.reverseMappedStack?.[0]
+                            && !(getObjectFlags(last(context.reverseMappedStack).propertyType) & ObjectFlags.Anonymous)
+                        )
+                    );
+            }
+
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
                 const propertyIsReverseMapped = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
-                const propertyType = propertyIsReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
+                const propertyType = shouldUsePlaceholderForProperty(propertySymbol, context) ?
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
@@ -5174,16 +5192,20 @@ namespace ts {
                     }
                 }
                 else {
-                    const savedFlags = context.flags;
-                    context.flags |= propertyIsReverseMapped ? NodeBuilderFlags.InReverseMappedType : 0;
                     let propertyTypeNode: TypeNode;
-                    if (propertyIsReverseMapped && !!(savedFlags & NodeBuilderFlags.InReverseMappedType)) {
+                    if (shouldUsePlaceholderForProperty(propertySymbol, context)) {
                         propertyTypeNode = createElidedInformationPlaceholder(context);
                     }
                     else {
+                        if (propertyIsReverseMapped) {
+                            context.reverseMappedStack ||= [];
+                            context.reverseMappedStack.push(propertySymbol as ReverseMappedSymbol);
+                        }
                         propertyTypeNode = propertyType ? serializeTypeForDeclaration(context, propertyType, propertySymbol, saveEnclosingDeclaration) : factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        if (propertyIsReverseMapped) {
+                            context.reverseMappedStack!.pop();
+                        }
                     }
-                    context.flags = savedFlags;
 
                     const modifiers = isReadonlySymbol(propertySymbol) ? [factory.createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
                     if (modifiers) {
@@ -6004,10 +6026,14 @@ namespace ts {
             function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
                 if (type !== errorType && context.enclosingDeclaration) {
                     const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-                    if (!!findAncestor(annotation, n => n === context.enclosingDeclaration) && annotation && instantiateType(getTypeFromTypeNode(annotation), signature.mapper) === type && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(annotation, type)) {
-                        const result = serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
-                        if (result) {
-                            return result;
+                    if (!!findAncestor(annotation, n => n === context.enclosingDeclaration) && annotation) {
+                        const annotated = getTypeFromTypeNode(annotation);
+                        const thisInstantiated = annotated.flags & TypeFlags.TypeParameter && (annotated as TypeParameter).isThisType ? instantiateType(annotated, signature.mapper) : annotated;
+                        if (thisInstantiated === type && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(annotation, type)) {
+                            const result = serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
+                            if (result) {
+                                return result;
+                            }
                         }
                     }
                 }
@@ -7711,6 +7737,7 @@ namespace ts {
             typeParameterNamesByText?: Set<string>;
             usedSymbolNames?: Set<string>;
             remappedSymbolNames?: ESMap<SymbolId, string>;
+            reverseMappedStack?: ReverseMappedSymbol[];
         }
 
         function isDefaultBindingContext(location: Node) {
@@ -8420,6 +8447,23 @@ namespace ts {
                     return container as ConstructorDeclaration;
                 }
             };
+        }
+
+        /** Create a synthetic property access flow node after the last statement of the file */
+        function getFlowTypeFromCommonJSExport(symbol: Symbol) {
+            const file = getSourceFileOfNode(symbol.declarations![0]);
+            const accessName = unescapeLeadingUnderscores(symbol.escapedName);
+            const areAllModuleExports = symbol.declarations!.every(d => isInJSFile(d) && isAccessExpression(d) && isModuleExportsAccessExpression(d.expression));
+            const reference = areAllModuleExports
+                ? factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(factory.createIdentifier("module"), factory.createIdentifier("exports")), accessName)
+                : factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
+            if (areAllModuleExports) {
+                setParent((reference.expression as PropertyAccessExpression).expression, reference.expression);
+            }
+            setParent(reference.expression, reference);
+            setParent(reference, file);
+            reference.flowNode = file.endFlowNode;
+            return getFlowTypeOfReference(reference, autoType, undefinedType);
         }
 
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
@@ -9159,14 +9203,15 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
-
+                const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
                 // This check is important because without it, a call to getTypeOfSymbol could end
                 // up recursively calling getTypeOfAlias, causing a stack overflow.
-                links.type = targetSymbol.flags & SymbolFlags.Value
-                    ? getTypeOfSymbol(targetSymbol)
+                links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
+                    : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
             return links.type;
@@ -10865,6 +10910,14 @@ namespace ts {
             }
         }
 
+        type ReplaceableIndexedAccessType = IndexedAccessType & { objectType: TypeParameter, indexType: TypeParameter };
+        function replaceIndexedAccess(instantiable: Type, type: ReplaceableIndexedAccessType, replacement: Type) {
+            // map type.indexType to 0
+            // map type.objectType to `[TReplacement]`
+            // thus making the indexed access `[TReplacement][0]` or `TReplacement`
+            return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getLiteralType(0), createTupleType([replacement])]));
+        }
+
         function getIndexInfoOfIndexSymbol(indexSymbol: Symbol, indexKind: IndexKind) {
             const declaration = getIndexDeclarationOfIndexSymbol(indexSymbol, indexKind);
             if (!declaration) return undefined;
@@ -10885,8 +10938,21 @@ namespace ts {
                 inferredProp.declarations = prop.declarations;
                 inferredProp.nameType = getSymbolLinks(prop).nameType;
                 inferredProp.propertyType = getTypeOfSymbol(prop);
-                inferredProp.mappedType = type.mappedType;
-                inferredProp.constraintType = type.constraintType;
+                if (type.constraintType.type.flags & TypeFlags.IndexedAccess
+                    && (type.constraintType.type as IndexedAccessType).objectType.flags & TypeFlags.TypeParameter
+                    && (type.constraintType.type as IndexedAccessType).indexType.flags & TypeFlags.TypeParameter) {
+                    // A reverse mapping of `{[K in keyof T[K_1]]: T[K_1]}` is the same as that of `{[K in keyof T]: T}`, since all we care about is
+                    // inferring to the "type parameter" (or indexed access) shared by the constraint and template. So, to reduce the number of
+                    // type identities produced, we simplify such indexed access occurences
+                    const newTypeParam = (type.constraintType.type as IndexedAccessType).objectType;
+                    const newMappedType = replaceIndexedAccess(type.mappedType, type.constraintType.type as ReplaceableIndexedAccessType, newTypeParam);
+                    inferredProp.mappedType = newMappedType as MappedType;
+                    inferredProp.constraintType = getIndexType(newTypeParam) as IndexType;
+                }
+                else {
+                    inferredProp.mappedType = type.mappedType;
+                    inferredProp.constraintType = type.constraintType;
+                }
                 members.set(prop.escapedName, inferredProp);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
@@ -11935,6 +12001,10 @@ namespace ts {
             return false;
         }
 
+        function isOptionalPropertyDeclaration(node: Declaration) {
+            return isPropertyDeclaration(node) && node.questionToken;
+        }
+
         function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
             if (!isJSDocPropertyLikeTag(node)) {
                 return false;
@@ -12849,9 +12919,17 @@ namespace ts {
 
         function getConditionalFlowTypeOfType(type: Type, node: Node) {
             let constraints: Type[] | undefined;
+            let covariant = true;
             while (node && !isStatement(node) && node.kind !== SyntaxKind.JSDocComment) {
                 const parent = node.parent;
-                if (parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                // only consider variance flipped by parameter locations - `keyof` types would usually be considered variance inverting, but
+                // often get used in indexed accesses where they behave sortof invariantly, but our checking is lax
+                if (parent.kind === SyntaxKind.Parameter) {
+                    covariant = !covariant;
+                }
+                // Always substitute on type parameters, regardless of variance, since even
+                // in contravarrying positions, they may be reliant on subtuted constraints to be valid
+                if ((covariant || type.flags & TypeFlags.TypeParameter) && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(type, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
                         constraints = append(constraints, constraint);
@@ -13763,7 +13841,7 @@ namespace ts {
             const typeKey = !origin ? getTypeListId(types) :
                 origin.flags & TypeFlags.Union ? `|${getTypeListId((<UnionType>origin).types)}` :
                 origin.flags & TypeFlags.Intersection ? `&${getTypeListId((<IntersectionType>origin).types)}` :
-                `#${(<IndexType>origin).type.id}`;
+                `#${(<IndexType>origin).type.id}|${getTypeListId(types)}`; // origin type id alone is insufficient, as `keyof x` may resolve to multiple WIP values while `x` is still resolving
             const id = typeKey + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = unionTypes.get(id);
             if (!type) {
@@ -14295,9 +14373,7 @@ namespace ts {
             return type.flags & TypeFlags.StringLiteral ? (<StringLiteralType>type).value :
                 type.flags & TypeFlags.NumberLiteral ? "" + (<NumberLiteralType>type).value :
                 type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((<BigIntLiteralType>type).value) :
-                type.flags & TypeFlags.BooleanLiteral ? (<IntrinsicType>type).intrinsicName :
-                type.flags & TypeFlags.Null ? "null" :
-                type.flags & TypeFlags.Undefined ? "undefined" :
+                type.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) ? (<IntrinsicType>type).intrinsicName :
                 undefined;
         }
 
@@ -14577,7 +14653,7 @@ namespace ts {
         }
 
         function isPatternLiteralPlaceholderType(type: Type) {
-            return templateConstraintType.types.indexOf(type) !== -1 || !!(type.flags & TypeFlags.Any);
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt));
         }
 
         function isPatternLiteralType(type: Type) {
@@ -18275,13 +18351,15 @@ namespace ts {
                         return localResult;
                     }
                 }
-                else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
-                    if (isPatternLiteralType(target)) {
-                        // match all non-`string` segments
-                        const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
-                        if (result && every(result, (r, i) => isStringLiteralTypeValueParsableAsType(r, (target as TemplateLiteralType).types[i]))) {
-                            return Ternary.True;
-                        }
+                else if (target.flags & TypeFlags.TemplateLiteral) {
+                    if (source.flags & TypeFlags.TemplateLiteral) {
+                        // Report unreliable variance for type variables referenced in template literal type placeholders.
+                        // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
+                        instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
+                    }
+                    const result = inferTypesFromTemplateLiteralType(source, target as TemplateLiteralType);
+                    if (result && every(result, (r, i) => isValidTypeForTemplateLiteralPlaceholder(r, (target as TemplateLiteralType).types[i]))) {
+                        return Ternary.True;
                     }
                 }
 
@@ -18319,20 +18397,6 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
-                        resetErrorInfo(saveErrorInfo);
-                        return result;
-                    }
-                }
-                else if (source.flags & TypeFlags.TemplateLiteral) {
-                    if (target.flags & TypeFlags.TemplateLiteral &&
-                        (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
-                        (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
-                        every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
-                        every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
-                        return Ternary.True;
-                    }
-                    const constraint = getBaseConstraintOfType(source);
-                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -19564,14 +19628,12 @@ namespace ts {
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             if (depth >= 5) {
                 const identity = getRecursionIdentity(type);
-                if (identity) {
-                    let count = 0;
-                    for (let i = 0; i < depth; i++) {
-                        if (getRecursionIdentity(stack[i]) === identity) {
-                            count++;
-                            if (count >= 5) {
-                                return true;
-                            }
+                let count = 0;
+                for (let i = 0; i < depth; i++) {
+                    if (getRecursionIdentity(stack[i]) === identity) {
+                        count++;
+                        if (count >= 5) {
+                            return true;
                         }
                     }
                 }
@@ -19579,15 +19641,20 @@ namespace ts {
             return false;
         }
 
-        // Types with constituents that could circularly reference the type have a recursion identity. The recursion
-        // identity is some object that is common to instantiations of the type with the same origin.
-        function getRecursionIdentity(type: Type): object | undefined {
+        // The recursion identity of a type is an object identity that is shared among multiple instantiations of the type.
+        // We track recursion identities in order to identify deeply nested and possibly infinite type instantiations with
+        // the same origin. For example, when type parameters are in scope in an object type such as { x: T }, all
+        // instantiations of that type have the same recursion identity. The default recursion identity is the object
+        // identity of the type, meaning that every type is unique. Generally, types with constituents that could circularly
+        // reference the type have a recursion identity that differs from the object identity.
+        function getRecursionIdentity(type: Type): object {
+            // Object and array literals are known not to contain recursive references and don't need a recursion identity.
             if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
                 if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node) {
                     // Deferred type references are tracked through their associated AST node. This gives us finer
                     // granularity than using their associated target because each manifest type reference has a
                     // unique AST node.
-                    return (type as TypeReference).node;
+                    return (type as TypeReference).node!;
                 }
                 if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
                     // We track all object types that have an associated symbol (representing the origin of the type), but
@@ -19598,6 +19665,9 @@ namespace ts {
                     // Tuple types are tracked through their target type
                     return type.target;
                 }
+            }
+            if (type.flags & TypeFlags.TypeParameter) {
+                return type.symbol;
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
@@ -19610,7 +19680,7 @@ namespace ts {
                 // The root object represents the origin of the conditional type
                 return (type as ConditionalType).root;
             }
-            return undefined;
+            return type;
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -20602,7 +20672,11 @@ namespace ts {
         }
 
         function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
-            return inferReverseMappedType(symbol.propertyType, symbol.mappedType, symbol.constraintType);
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                links.type = inferReverseMappedType(symbol.propertyType, symbol.mappedType, symbol.constraintType);
+            }
+            return links.type;
         }
 
         function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType): Type {
@@ -20688,43 +20762,108 @@ namespace ts {
             return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
         }
 
-        function isStringLiteralTypeValueParsableAsType(s: StringLiteralType, target: Type): boolean {
-            if (target.flags & TypeFlags.Union) {
-                return someType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
+        function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
+            if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
+                return true;
             }
-            switch (target) {
-                case stringType: return true;
-                case numberType: return s.value !== "" && isFinite(+(s.value));
-                case bigintType: return s.value !== "" && isValidBigIntString(s.value);
-                // the next 4 should be handled in `getTemplateLiteralType`, as they are all exactly one value, but are here for completeness, just in case
-                // this function is ever used on types which don't come from template literal holes
-                case trueType: return s.value === "true";
-                case falseType: return s.value === "false";
-                case undefinedType: return s.value === "undefined";
-                case nullType: return s.value === "null";
-                default: return !!(target.flags & TypeFlags.Any);
+            if (source.flags & TypeFlags.StringLiteral) {
+                const value = (<StringLiteralType>source).value;
+                return !!(target.flags & TypeFlags.Number && value !== "" && isFinite(+value) ||
+                    target.flags & TypeFlags.BigInt && value !== "" && isValidBigIntString(value) ||
+                    target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (<IntrinsicType>target).intrinsicName);
             }
+            if (source.flags & TypeFlags.TemplateLiteral) {
+                const texts = (<TemplateLiteralType>source).texts;
+                return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((<TemplateLiteralType>source).types[0], target);
+            }
+            return isTypeAssignableTo(source, target);
         }
 
-        function inferLiteralsFromTemplateLiteralType(source: StringLiteralType, target: TemplateLiteralType): StringLiteralType[] | undefined {
-            const value = source.value;
-            const texts = target.texts;
-            const lastIndex = texts.length - 1;
-            const startText = texts[0];
-            const endText = texts[lastIndex];
-            if (!(value.startsWith(startText) && value.slice(startText.length).endsWith(endText))) return undefined;
-            const matches = [];
-            const str = value.slice(startText.length, value.length - endText.length);
-            let pos = 0;
-            for (let i = 1; i < lastIndex; i++) {
-                const delim = texts[i];
-                const delimPos = delim.length > 0 ? str.indexOf(delim, pos) : pos < str.length ? pos + 1 : -1;
-                if (delimPos < 0) return undefined;
-                matches.push(getLiteralType(str.slice(pos, delimPos)));
-                pos = delimPos + delim.length;
+        function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
+            return source.flags & TypeFlags.StringLiteral ? inferFromLiteralPartsToTemplateLiteral([(<StringLiteralType>source).value], emptyArray, target) :
+                source.flags & TypeFlags.TemplateLiteral ?
+                    arraysEqual((<TemplateLiteralType>source).texts, target.texts) ? map((<TemplateLiteralType>source).types, getStringLikeTypeForType) :
+                    inferFromLiteralPartsToTemplateLiteral((<TemplateLiteralType>source).texts, (<TemplateLiteralType>source).types, target) :
+                undefined;
+        }
+
+        function getStringLikeTypeForType(type: Type) {
+            return type.flags & (TypeFlags.Any | TypeFlags.StringLike) ? type : getTemplateLiteralType(["", ""], [type]);
+        }
+
+        // This function infers from the text parts and type parts of a source literal to a target template literal. The number
+        // of text parts is always one more than the number of type parts, and a source string literal is treated as a source
+        // with one text part and zero type parts. The function returns an array of inferred string or template literal types
+        // corresponding to the placeholders in the target template literal, or undefined if the source doesn't match the target.
+        //
+        // We first check that the starting source text part matches the starting target text part, and that the ending source
+        // text part ends matches the ending target text part. We then iterate through the remaining target text parts, finding
+        // a match for each in the source and inferring string or template literal types created from the segments of the source
+        // that occur between the matches. During this iteration, seg holds the index of the current text part in the sourceTexts
+        // array and pos holds the current character position in the current text part.
+        //
+        // Consider inference from type `<<${string}>.<${number}-${number}>>` to type `<${string}.${string}>`, i.e.
+        //   sourceTexts = ['<<', '>.<', '-', '>>']
+        //   sourceTypes = [string, number, number]
+        //   target.texts = ['<', '.', '>']
+        // We first match '<' in the target to the start of '<<' in the source and '>' in the target to the end of '>>' in
+        // the source. The first match for the '.' in target occurs at character 1 in the source text part at index 1, and thus
+        // the first inference is the template literal type `<${string}>`. The remainder of the source makes up the second
+        // inference, the template literal type `<${number}-${number}>`.
+        function inferFromLiteralPartsToTemplateLiteral(sourceTexts: readonly string[], sourceTypes: readonly Type[], target: TemplateLiteralType): Type[] | undefined {
+            const lastSourceIndex = sourceTexts.length - 1;
+            const sourceStartText = sourceTexts[0];
+            const sourceEndText = sourceTexts[lastSourceIndex];
+            const targetTexts = target.texts;
+            const lastTargetIndex = targetTexts.length - 1;
+            const targetStartText = targetTexts[0];
+            const targetEndText = targetTexts[lastTargetIndex];
+            if (lastSourceIndex === 0 && sourceStartText.length < targetStartText.length + targetEndText.length ||
+                !sourceStartText.startsWith(targetStartText) || !sourceEndText.endsWith(targetEndText)) return undefined;
+            const remainingEndText = sourceEndText.slice(0, sourceEndText.length - targetEndText.length);
+            const matches: Type[] = [];
+            let seg = 0;
+            let pos = targetStartText.length;
+            for (let i = 1; i < lastTargetIndex; i++) {
+                const delim = targetTexts[i];
+                if (delim.length > 0) {
+                    let s = seg;
+                    let p = pos;
+                    while (true) {
+                        p = getSourceText(s).indexOf(delim, p);
+                        if (p >= 0) break;
+                        s++;
+                        if (s === sourceTexts.length) return undefined;
+                        p = 0;
+                    }
+                    addMatch(s, p);
+                    pos += delim.length;
+                }
+                else if (pos < getSourceText(seg).length) {
+                    addMatch(seg, pos + 1);
+                }
+                else if (seg < lastSourceIndex) {
+                    addMatch(seg + 1, 0);
+                }
+                else {
+                    return undefined;
+                }
             }
-            matches.push(getLiteralType(str.slice(pos)));
+            addMatch(lastSourceIndex, getSourceText(lastSourceIndex).length);
             return matches;
+            function getSourceText(index: number) {
+                return index < lastSourceIndex ? sourceTexts[index] : remainingEndText;
+            }
+            function addMatch(s: number, p: number) {
+                const matchType = s === seg ?
+                    getLiteralType(getSourceText(s).slice(pos, p)) :
+                    getTemplateLiteralType(
+                        [sourceTexts[seg].slice(pos), ...sourceTexts.slice(seg + 1, s), getSourceText(s).slice(0, p)],
+                        sourceTypes.slice(seg, s));
+                matches.push(matchType);
+                seg = s;
+                pos = p;
+            }
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
@@ -20962,16 +21101,16 @@ namespace ts {
                 // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
                 // the source side and the target side.
                 const saveExpandingFlags = expandingFlags;
-                const sourceIdentity = getRecursionIdentity(source) || source;
-                const targetIdentity = getRecursionIdentity(target) || target;
-                if (sourceIdentity && contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
-                if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+                const sourceIdentity = getRecursionIdentity(source);
+                const targetIdentity = getRecursionIdentity(target);
+                if (contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
+                if (contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
                 if (expandingFlags !== ExpandingFlags.Both) {
-                    if (sourceIdentity) (sourceStack || (sourceStack = [])).push(sourceIdentity);
-                    if (targetIdentity) (targetStack || (targetStack = [])).push(targetIdentity);
+                    (sourceStack || (sourceStack = [])).push(sourceIdentity);
+                    (targetStack || (targetStack = [])).push(targetIdentity);
                     action(source, target);
-                    if (targetIdentity) targetStack.pop();
-                    if (sourceIdentity) sourceStack.pop();
+                    targetStack.pop();
+                    sourceStack.pop();
                 }
                 else {
                     inferencePriority = InferencePriority.Circularity;
@@ -21189,9 +21328,7 @@ namespace ts {
             }
 
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
-                const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateLiteralType(<StringLiteralType>source, target) :
-                    source.flags & TypeFlags.TemplateLiteral && arraysEqual((<TemplateLiteralType>source).texts, target.texts) ? (<TemplateLiteralType>source).types :
-                    undefined;
+                const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
                 for (let i = 0; i < types.length; i++) {
                     inferFromTypes(matches ? matches[i] : neverType, types[i]);
@@ -23614,7 +23751,7 @@ namespace ts {
             // an dotted name expression, and if the location is not an assignment target, obtain the type
             // of the expression (which will reflect control flow analysis). If the expression indeed
             // resolved to the given symbol, return the narrowed type.
-            if (location.kind === SyntaxKind.Identifier) {
+            if (location.kind === SyntaxKind.Identifier || location.kind === SyntaxKind.PrivateIdentifier) {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
@@ -23878,7 +24015,7 @@ namespace ts {
                 }
             }
             else if (isAlias) {
-                declaration = symbol.declarations?.find(isSomeImportDeclaration);
+                declaration = getDeclarationOfAliasSymbol(symbol);
             }
             else {
                 return type;
@@ -27014,7 +27151,10 @@ namespace ts {
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
             if (assignmentKind === AssignmentKind.Definite ||
-                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
+                prop &&
+                !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
+                && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)
+                && !isDuplicatedCommonJSExport(prop.declarations)) {
                 return propType;
             }
             if (propType === autoType) {
@@ -27059,9 +27199,10 @@ namespace ts {
             let diagnosticMessage;
             const declarationName = idText(right);
             if (isInPropertyInitializer(node)
+                && !isOptionalPropertyDeclaration(valueDeclaration)
                 && !(isAccessExpression(node) && isAccessExpression(node.expression))
                 && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
-                && !isPropertyDeclaredInAncestorClass(prop)) {
+                && (compilerOptions.useDefineForClassFields || !isPropertyDeclaredInAncestorClass(prop))) {
                 diagnosticMessage = error(right, Diagnostics.Property_0_is_used_before_its_initialization, declarationName);
             }
             else if (valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
@@ -30454,18 +30595,18 @@ namespace ts {
             }
 
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
+            const errorNode = getEffectiveReturnTypeNode(func) || func;
 
             if (type && type.flags & TypeFlags.Never) {
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
+                error(errorNode, Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
             }
             else if (type && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+                error(errorNode, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
             else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
-                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
+                error(errorNode, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
             }
             else if (compilerOptions.noImplicitReturns) {
                 if (!type) {
@@ -30480,7 +30621,7 @@ namespace ts {
                         return;
                     }
                 }
-                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Not_all_code_paths_return_a_value);
+                error(errorNode, Diagnostics.Not_all_code_paths_return_a_value);
             }
         }
 
@@ -33685,11 +33826,14 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
                     case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.BinaryExpression:
+                        const node = d as ExportAssignment | BinaryExpression;
+                        const expression = isExportAssignment(node) ? node.expression : node.right;
                         // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
-                        if (!isEntityNameExpression((d as ExportAssignment).expression)) {
+                        if (!isEntityNameExpression(expression)) {
                             return DeclarationSpaces.ExportValue;
                         }
-                        d = (d as ExportAssignment).expression;
+                        d = expression;
 
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module.
                     // falls through
@@ -35190,8 +35334,8 @@ namespace ts {
                 errorAndMaybeSuggestAwait(
                     condExpr,
                     /*maybeMissingAwait*/ true,
-                    Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
-                    "true", getTypeNameForErrorDisplay(type), "false");
+                    Diagnostics.This_condition_will_always_return_true_since_this_0_appears_to_always_be_defined,
+                    getTypeNameForErrorDisplay(type));
                 return;
             }
 
@@ -35224,7 +35368,7 @@ namespace ts {
             const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
                 || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
             if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_appears_to_always_be_defined_Did_you_mean_to_call_it_instead);
             }
         }
 
@@ -36508,6 +36652,7 @@ namespace ts {
             switch (name.escapedText) {
                 case "any":
                 case "unknown":
+                case "never":
                 case "number":
                 case "bigint":
                 case "boolean":
@@ -38030,9 +38175,11 @@ namespace ts {
                             return;
                         }
                         if (exportedDeclarationsCount > 1) {
-                            for (const declaration of declarations!) {
-                                if (isNotOverload(declaration)) {
-                                    diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                            if (!isDuplicatedCommonJSExport(declarations)) {
+                                for (const declaration of declarations!) {
+                                    if (isNotOverload(declaration)) {
+                                        diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                                    }
                                 }
                             }
                         }
@@ -38040,6 +38187,12 @@ namespace ts {
                 }
                 links.exportsChecked = true;
             }
+        }
+
+        function isDuplicatedCommonJSExport(declarations: Declaration[] | undefined) {
+            return declarations
+                && declarations.length > 1
+                && declarations.every(d => isInJSFile(d) && isAccessExpression(d) && (isExportsIdentifier(d.expression) || isModuleExportsAccessExpression(d.expression)));
         }
 
         function checkSourceElement(node: Node | undefined): void {
@@ -40249,6 +40402,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
+                        else if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
+                        }
                         if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
                         }
@@ -40264,7 +40420,7 @@ namespace ts {
                         if (flags & ModifierFlags.AccessibilityModifier) {
                             return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
                         }
-                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                        else if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
                         }
                         else if (flags & ModifierFlags.Static) {
@@ -40300,7 +40456,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
                         }
-                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                        else if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         else if (flags & ModifierFlags.Async) {
@@ -40367,7 +40523,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                        else if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "override");
                         }
                         else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
@@ -40444,7 +40600,7 @@ namespace ts {
                 if (flags & ModifierFlags.Abstract) {
                     return grammarErrorOnNode(lastStatic!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract"); // TODO: GH#18217
                 }
-                if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                if (flags & ModifierFlags.Override) {
                     return grammarErrorOnNode(lastOverride!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override"); // TODO: GH#18217
                 }
                 else if (flags & ModifierFlags.Async) {
@@ -41891,21 +42047,6 @@ namespace ts {
                 return isIdentifier(name);
             default:
                 return isDeclarationName(name);
-        }
-    }
-
-    function isSomeImportDeclaration(decl: Node): boolean {
-        switch (decl.kind) {
-            case SyntaxKind.ImportClause: // For default import
-            case SyntaxKind.ImportEqualsDeclaration:
-            case SyntaxKind.NamespaceImport:
-            case SyntaxKind.ImportSpecifier: // For rename import `x as y`
-                return true;
-            case SyntaxKind.Identifier:
-                // For regular import, `decl` is an Identifier under the ImportSpecifier.
-                return decl.parent.kind === SyntaxKind.ImportSpecifier;
-            default:
-                return false;
         }
     }
 

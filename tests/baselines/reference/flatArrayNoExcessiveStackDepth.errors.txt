@@ -1,0 +1,44 @@
+tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts(20,5): error TS2322: Type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, 0 | 2 | 1 | -1 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20> : Arr' is not assignable to type 'FlatArray<Arr, D>'.
+  Type 'unknown' is not assignable to type 'FlatArray<Arr, D>'.
+    Type 'unknown' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
+      Type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, 0 | 2 | 1 | -1 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20> : Arr' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
+        Type 'unknown' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
+          Type 'FlatArray<InnerArr, 0 | 2 | 1 | -1 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20>' is not assignable to type 'FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]>'.
+            Type 'InnerArr' is not assignable to type 'FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]>'.
+              Type 'InnerArr' is not assignable to type '(InnerArr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]]> : InnerArr) & InnerArr'.
+                Type 'InnerArr' is not assignable to type 'InnerArr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]]> : InnerArr'.
+
+
+==== tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts (1 errors) ====
+    // Repro from #43493
+    
+    declare const foo: unknown[];
+    const bar = foo.flatMap(bar => bar as Foo);
+    
+    interface Foo extends Array<string> {}
+    
+    // Repros from comments in #43249
+    
+    const repro_43249 = (value: unknown) => {
+        if (typeof value !== "string") {
+            throw new Error("No");
+        }
+        const match = value.match(/anything/) || [];
+        const [, extracted] = match;
+    };
+    
+    function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
+        x = y;
+        y = x;  // Error
+        ~
+!!! error TS2322: Type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, 0 | 2 | 1 | -1 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20> : Arr' is not assignable to type 'FlatArray<Arr, D>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'FlatArray<Arr, D>'.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
+!!! error TS2322:       Type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, 0 | 2 | 1 | -1 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20> : Arr' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
+!!! error TS2322:         Type 'unknown' is not assignable to type 'Arr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]> : Arr'.
+!!! error TS2322:           Type 'FlatArray<InnerArr, 0 | 2 | 1 | -1 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20>' is not assignable to type 'FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]>'.
+!!! error TS2322:             Type 'InnerArr' is not assignable to type 'FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]>'.
+!!! error TS2322:               Type 'InnerArr' is not assignable to type '(InnerArr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]]> : InnerArr) & InnerArr'.
+!!! error TS2322:                 Type 'InnerArr' is not assignable to type 'InnerArr extends readonly (infer InnerArr)[] ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D]]> : InnerArr'.
+    }
+    
