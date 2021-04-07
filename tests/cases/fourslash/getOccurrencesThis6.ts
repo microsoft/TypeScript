@@ -90,7 +90,7 @@
 ////    }
 ////
 ////    public static staticB = this.staticMethod1;
-////    
+////
 ////    public static staticMethod1() {
 ////        this;
 ////        this;
@@ -139,6 +139,21 @@
 ////    g() {
 ////        this/*5*/;
 ////    }
+////    h: () => {
+////        /*7*/this;
+////    }
+////}
+////
+////const x = {
+////    get f() {
+////        /*8*/this;
+////    }
+////    set g() {
+////        /*9*/this;
+////    }
+////    h: () => {
+////        /*10*/this;
+////    }
 ////}
 
 
@@ -147,9 +162,13 @@ function verifyOccurrencesAtMarker(marker: string, count: number) {
     verify.occurrencesAtPositionCount(count);
 }
 
-verifyOccurrencesAtMarker("1", 2);
+verifyOccurrencesAtMarker("1", 4);
 verifyOccurrencesAtMarker("2", 6);
 verifyOccurrencesAtMarker("3", 1);
-verifyOccurrencesAtMarker("4", 1);
-verifyOccurrencesAtMarker("5", 1);
+verifyOccurrencesAtMarker("4", 2);
+verifyOccurrencesAtMarker("5", 2);
 verifyOccurrencesAtMarker("6", 0);
+verifyOccurrencesAtMarker("7", 4);
+verifyOccurrencesAtMarker("8", 2);
+verifyOccurrencesAtMarker("9", 2);
+verifyOccurrencesAtMarker("10", 4);
