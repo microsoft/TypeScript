@@ -52,3 +52,26 @@ typeMyType;
 var myVar1 = 1;
 vard myVar2 = 1;
 varMyVar;
+
+class NoSemicolonClassA {
+  ['a'] = 0
+  {}
+}
+
+class NoSemicolonClassB {
+  ['a'] = 0;
+  {}
+}
+
+class NoSemicolonClassC {
+    ['a'] = 0
+    ['b']() {}
+  }
+ 
+class NoSemicolonClassD {
+    ['a'] = 0
+    ['b']() {
+        c: true
+    }
+  }
+      
