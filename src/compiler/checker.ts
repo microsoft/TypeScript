@@ -346,6 +346,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
@@ -1501,7 +1502,7 @@ namespace ts {
                 }
                 else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
                     // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
-                    return !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
+                    return !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields
                              && getContainingClass(declaration) === getContainingClass(usage)
                              && isUsedInFunctionOrInstanceProperty(usage, declaration));
                 }
@@ -1532,7 +1533,7 @@ namespace ts {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
-                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
+                if (compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields
                     && getContainingClass(declaration)
                     && (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent))) {
                     return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
@@ -1680,7 +1681,7 @@ namespace ts {
                     case SyntaxKind.PropertyDeclaration:
                         // static properties in classes introduce temporary variables
                         if (hasStaticModifier(node)) {
-                            return target < ScriptTarget.ESNext || !compilerOptions.useDefineForClassFields;
+                            return target < ScriptTarget.ESNext || !useDefineForClassFields;
                         }
                         return requiresScopeChangeWorker((node as PropertyDeclaration).name);
                     default:
@@ -2098,7 +2099,7 @@ namespace ts {
 
             // Perform extra checks only if error reporting was requested
             if (nameNotFoundMessage) {
-                if (propertyWithInvalidInitializer && !(compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields)) {
+                if (propertyWithInvalidInitializer && !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.
@@ -2473,7 +2474,7 @@ namespace ts {
         }
 
         function getDeclarationOfAliasSymbol(symbol: Symbol): Declaration | undefined {
-            return symbol.declarations?.find(isAliasSymbolDeclaration);
+            return symbol.declarations && findLast<Declaration>(symbol.declarations, isAliasSymbolDeclaration);
         }
 
         /**
@@ -8449,6 +8450,23 @@ namespace ts {
             };
         }
 
+        /** Create a synthetic property access flow node after the last statement of the file */
+        function getFlowTypeFromCommonJSExport(symbol: Symbol) {
+            const file = getSourceFileOfNode(symbol.declarations![0]);
+            const accessName = unescapeLeadingUnderscores(symbol.escapedName);
+            const areAllModuleExports = symbol.declarations!.every(d => isInJSFile(d) && isAccessExpression(d) && isModuleExportsAccessExpression(d.expression));
+            const reference = areAllModuleExports
+                ? factory.createPropertyAccessExpression(factory.createPropertyAccessExpression(factory.createIdentifier("module"), factory.createIdentifier("exports")), accessName)
+                : factory.createPropertyAccessExpression(factory.createIdentifier("exports"), accessName);
+            if (areAllModuleExports) {
+                setParent((reference.expression as PropertyAccessExpression).expression, reference.expression);
+            }
+            setParent(reference.expression, reference);
+            setParent(reference, file);
+            reference.flowNode = file.endFlowNode;
+            return getFlowTypeOfReference(reference, autoType, undefinedType);
+        }
+
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
             const accessName = startsWith(symbol.escapedName as string, "__#")
                 ? factory.createPrivateIdentifier((symbol.escapedName as string).split("@")[1])
@@ -9186,14 +9204,15 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
-
+                const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
                 // This check is important because without it, a call to getTypeOfSymbol could end
                 // up recursively calling getTypeOfAlias, causing a stack overflow.
-                links.type = targetSymbol.flags & SymbolFlags.Value
-                    ? getTypeOfSymbol(targetSymbol)
+                links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
+                    : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
             return links.type;
@@ -24242,7 +24261,7 @@ namespace ts {
                     break;
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    if (hasSyntacticModifier(container, ModifierFlags.Static) && !(compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields)) {
+                    if (hasSyntacticModifier(container, ModifierFlags.Static) && !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields)) {
                         error(node, Diagnostics.this_cannot_be_referenced_in_a_static_property_initializer);
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
@@ -27039,6 +27058,30 @@ namespace ts {
                 if (assignmentKind && lexicallyScopedSymbol && lexicallyScopedSymbol.valueDeclaration && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
+
+                if (lexicallyScopedSymbol?.valueDeclaration && (compilerOptions.target === ScriptTarget.ESNext && !useDefineForClassFields)) {
+                    const lexicalClass = getContainingClass(lexicallyScopedSymbol.valueDeclaration);
+                    const parentStaticFieldInitializer = findAncestor(node, (n) => {
+                        if (n === lexicalClass) return "quit";
+                        if (isPropertyDeclaration(n.parent) && hasStaticModifier(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (parentStaticFieldInitializer) {
+                        const parentStaticFieldInitializerSymbol = getSymbolOfNode(parentStaticFieldInitializer.parent);
+                        Debug.assert(parentStaticFieldInitializerSymbol, "Initializer without declaration symbol");
+                        const diagnostic = error(node,
+                            Diagnostics.Property_0_may_not_be_used_in_a_static_property_s_initializer_in_the_same_class_when_target_is_esnext_and_useDefineForClassFields_is_false,
+                            symbolName(lexicallyScopedSymbol));
+                        addRelatedInfo(diagnostic,
+                            createDiagnosticForNode(parentStaticFieldInitializer.parent,
+                                Diagnostics.Initializer_for_property_0,
+                                symbolName(parentStaticFieldInitializerSymbol))
+                        );
+                    }
+                }
+
                 if (isAnyLike) {
                     if (lexicallyScopedSymbol) {
                         return apparentType;
@@ -27133,7 +27176,10 @@ namespace ts {
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
             if (assignmentKind === AssignmentKind.Definite ||
-                prop && !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor)) && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)) {
+                prop &&
+                !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
+                && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)
+                && !isDuplicatedCommonJSExport(prop.declarations)) {
                 return propType;
             }
             if (propType === autoType) {
@@ -30574,18 +30620,18 @@ namespace ts {
             }
 
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
+            const errorNode = getEffectiveReturnTypeNode(func) || func;
 
             if (type && type.flags & TypeFlags.Never) {
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
+                error(errorNode, Diagnostics.A_function_returning_never_cannot_have_a_reachable_end_point);
             }
             else if (type && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
-                error(getEffectiveReturnTypeNode(func), Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+                error(errorNode, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
             else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
-                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
+                error(errorNode, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
             }
             else if (compilerOptions.noImplicitReturns) {
                 if (!type) {
@@ -30600,7 +30646,7 @@ namespace ts {
                         return;
                     }
                 }
-                error(getEffectiveReturnTypeNode(func) || func, Diagnostics.Not_all_code_paths_return_a_value);
+                error(errorNode, Diagnostics.Not_all_code_paths_return_a_value);
             }
         }
 
@@ -33113,7 +33159,7 @@ namespace ts {
                     // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.
                     const superCallShouldBeFirst =
-                        (compilerOptions.target !== ScriptTarget.ESNext || !compilerOptions.useDefineForClassFields) &&
+                        (compilerOptions.target !== ScriptTarget.ESNext || !useDefineForClassFields) &&
                         (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                          some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
@@ -33805,11 +33851,14 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
                     case SyntaxKind.ExportAssignment:
+                    case SyntaxKind.BinaryExpression:
+                        const node = d as ExportAssignment | BinaryExpression;
+                        const expression = isExportAssignment(node) ? node.expression : node.right;
                         // Export assigned entity name expressions act as aliases and should fall through, otherwise they export values
-                        if (!isEntityNameExpression((d as ExportAssignment).expression)) {
+                        if (!isEntityNameExpression(expression)) {
                             return DeclarationSpaces.ExportValue;
                         }
-                        d = (d as ExportAssignment).expression;
+                        d = expression;
 
                     // The below options all declare an Alias, which is allowed to merge with other values within the importing module.
                     // falls through
@@ -37118,7 +37167,7 @@ namespace ts {
                                 Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor;
                             error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType), typeToString(type));
                         }
-                        else if (compilerOptions.useDefineForClassFields) {
+                        else if (useDefineForClassFields) {
                             const uninitialized = derived.declarations?.find(d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
                             if (uninitialized
                                 && !(derived.flags & SymbolFlags.Transient)
@@ -38151,9 +38200,11 @@ namespace ts {
                             return;
                         }
                         if (exportedDeclarationsCount > 1) {
-                            for (const declaration of declarations!) {
-                                if (isNotOverload(declaration)) {
-                                    diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                            if (!isDuplicatedCommonJSExport(declarations)) {
+                                for (const declaration of declarations!) {
+                                    if (isNotOverload(declaration)) {
+                                        diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
+                                    }
                                 }
                             }
                         }
@@ -38161,6 +38212,12 @@ namespace ts {
                 }
                 links.exportsChecked = true;
             }
+        }
+
+        function isDuplicatedCommonJSExport(declarations: Declaration[] | undefined) {
+            return declarations
+                && declarations.length > 1
+                && declarations.every(d => isInJSFile(d) && isAccessExpression(d) && (isExportsIdentifier(d.expression) || isModuleExportsAccessExpression(d.expression)));
         }
 
         function checkSourceElement(node: Node | undefined): void {
@@ -38401,7 +38458,8 @@ namespace ts {
             if (isJSDocTypeExpression(node.parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
                 const host = getHostSignatureFromJSDoc(paramTag);
-                if (host) {
+                const isCallbackTag = isJSDocCallbackTag(paramTag.parent.parent);
+                if (host || isCallbackTag) {
                     /*
                     Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
                     So in the following situation we will not create an array type:
@@ -38409,7 +38467,9 @@ namespace ts {
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = lastOrUndefined(host.parameters);
+                    const lastParamDeclaration = isCallbackTag
+                        ? lastOrUndefined((paramTag.parent.parent as unknown as JSDocCallbackTag).typeExpression.parameters)
+                        : lastOrUndefined(host!.parameters);
                     const symbol = getParameterSymbolFromJSDoc(paramTag);
                     if (!lastParamDeclaration ||
                         symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
@@ -40370,6 +40430,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
+                        else if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
+                        }
                         if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
                         }
@@ -40385,7 +40448,7 @@ namespace ts {
                         if (flags & ModifierFlags.AccessibilityModifier) {
                             return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
                         }
-                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                        else if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
                         }
                         else if (flags & ModifierFlags.Static) {
@@ -40421,7 +40484,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
                         }
-                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                        else if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         else if (flags & ModifierFlags.Async) {
@@ -40488,7 +40551,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                        else if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "override");
                         }
                         else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
@@ -40565,7 +40628,7 @@ namespace ts {
                 if (flags & ModifierFlags.Abstract) {
                     return grammarErrorOnNode(lastStatic!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract"); // TODO: GH#18217
                 }
-                if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
+                if (flags & ModifierFlags.Override) {
                     return grammarErrorOnNode(lastOverride!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override"); // TODO: GH#18217
                 }
                 else if (flags & ModifierFlags.Async) {

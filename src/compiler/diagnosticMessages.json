@@ -3312,6 +3312,14 @@
         "category": "Error",
         "code": 2809
     },
+    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
+        "category": "Error",
+        "code": 2810
+    },
+    "Initializer for property '{0}'": {
+        "category": "Error",
+        "code": 2811
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

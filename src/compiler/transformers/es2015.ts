@@ -1626,7 +1626,7 @@ namespace ts {
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
             const propertyName = visitNode(member.name, visitor, isPropertyName);
             let e: Expression;
-            if (!isPrivateIdentifier(propertyName) && context.getCompilerOptions().useDefineForClassFields) {
+            if (!isPrivateIdentifier(propertyName) && getUseDefineForClassFields(context.getCompilerOptions())) {
                 const name = isComputedPropertyName(propertyName) ? propertyName.expression
                     : isIdentifier(propertyName) ? factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
                     : propertyName;

@@ -683,6 +683,7 @@ namespace ts {
                 }
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
+                    (node as SourceFile).endFlowNode = currentFlow;
                 }
 
                 if (currentReturnTarget) {
