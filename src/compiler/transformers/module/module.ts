@@ -42,14 +42,14 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
         context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
+        const zeroLiteral = factory.createNumericLiteral(0);
         const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
         const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
-        let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
+        let noSubstitution: Set<Node>; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
-        let bindingReferenceCache: ESMap<Node, Identifier | SourceFile | ImportClause | ImportSpecifier | undefined> | undefined;
 
         return chainBundle(context, transformSourceFile);
 
@@ -1675,7 +1675,7 @@ namespace ts {
             if (node.kind === SyntaxKind.SourceFile) {
                 currentSourceFile = <SourceFile>node;
                 currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
-                noSubstitution = [];
+                noSubstitution = new Set();
 
                 previousOnEmitNode(hint, node, emitCallback);
 
@@ -1700,7 +1700,7 @@ namespace ts {
          */
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
-            if (node.id && noSubstitution[node.id]) {
+            if (noSubstitution.has(node)) {
                 return node;
             }
 
@@ -1766,7 +1766,7 @@ namespace ts {
          * - An `ImportClause` or `ImportSpecifier` if the node references an import binding.
          * - Otherwise, `undefined`.
          */
-        function getImportOrExportBindingReferenceWorker(node: Identifier): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
+        function getImportOrExportBindingReference(node: Identifier): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
                 const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
                 if (externalHelpersModuleName) {
@@ -1786,41 +1786,25 @@ namespace ts {
             return undefined;
         }
 
-        /**
-         * For an Identifier, gets the import or export binding that it references.
-         * @param removeEntry When `false`, the result is cached to avoid recomputing the result in a later substitution.
-         * When `true`, any cached result for the node is removed.
-         * @returns One of the following:
-         * - An `Identifier` if node references an external helpers module (i.e., `tslib`).
-         * - A `SourceFile` if the node references an export in the file.
-         * - An `ImportClause` or `ImportSpecifier` if the node references an import binding.
-         * - Otherwise, `undefined`.
-         */
-        function getImportOrExportBindingReference(node: Identifier, removeEntry: boolean): Identifier | SourceFile | ImportClause | ImportSpecifier | undefined {
-            let result = bindingReferenceCache?.get(node);
-            if (!result && !bindingReferenceCache?.has(node)) {
-                result = getImportOrExportBindingReferenceWorker(node);
-                if (!removeEntry) {
-                    bindingReferenceCache ||= new Map();
-                    bindingReferenceCache.set(node, result);
-                }
+        function substituteExpressionOfCallLike(node: Expression) {
+            const substitute = isIdentifier(node) ? substituteExpressionIdentifier(node) : node;
+            if (substitute !== node) {
+                return setTextRange(factory.createParenthesizedExpression(factory.createComma(zeroLiteral, substitute)), node);
             }
-            else if (removeEntry) {
-                bindingReferenceCache?.delete(node);
-            }
-            return result;
+            return node;
         }
 
         function substituteCallExpression(node: CallExpression) {
-            if (isIdentifier(node.expression) && getImportOrExportBindingReference(node.expression, /*removeEntry*/ false)) {
+            const expression = substituteExpressionOfCallLike(node.expression);
+            if (expression !== node.expression) {
                 return isCallChain(node) ?
                     factory.updateCallChain(node,
-                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
+                        expression,
                         node.questionDotToken,
                         /*typeArguments*/ undefined,
                         node.arguments) :
                     factory.updateCallExpression(node,
-                        setTextRange(factory.createComma(factory.createNumericLiteral(0), node.expression), node.expression),
+                        expression,
                         /*typeArguments*/ undefined,
                         node.arguments);
             }
@@ -1828,15 +1812,17 @@ namespace ts {
         }
 
         function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            if (isIdentifier(node.tag) && getImportOrExportBindingReference(node.tag, /*removeEntry*/ false)) {
+            const tag = substituteExpressionOfCallLike(node.tag);
+            if (tag !== node.tag) {
                 return factory.updateTaggedTemplateExpression(
                     node,
-                    setTextRange(factory.createComma(factory.createNumericLiteral(0), node.tag), node.tag),
+                    tag,
                     /*typeArguments*/ undefined,
                     node.template);
             }
             return node;
         }
+
 
         /**
          * Substitution for an Identifier expression that may contain an imported or exported
@@ -1845,36 +1831,47 @@ namespace ts {
          * @param node The node to substitute.
          */
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            const result = getImportOrExportBindingReference(node, /*removeEntry*/ true);
+            const result = getImportOrExportBindingReference(node);
             switch (result?.kind) {
                 case SyntaxKind.Identifier: // tslib import
+                    noSubstitution.add(result);
                     return factory.createPropertyAccessExpression(result, node);
-                case SyntaxKind.SourceFile: // top-level export
+                case SyntaxKind.SourceFile: { // top-level export
+                    const left = factory.createIdentifier("exports");
+                    noSubstitution.add(left);
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.createIdentifier("exports"),
+                            left,
                             factory.cloneNode(node)
                         ),
                         /*location*/ node
                     );
-                case SyntaxKind.ImportClause:
+                }
+                case SyntaxKind.ImportClause: {
+                    const left = factory.getGeneratedNameForNode(result.parent);
+                    noSubstitution.add(left);
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(result.parent),
+                            left,
                             factory.createIdentifier("default")
                         ),
                         /*location*/ node
                     );
-                case SyntaxKind.ImportSpecifier:
+                }
+                case SyntaxKind.ImportSpecifier: {
+                    const left = factory.getGeneratedNameForNode(result.parent?.parent?.parent || result);
+                    noSubstitution.add(left);
                     const name = result.propertyName || result.name;
                     return setTextRange(
                         factory.createPropertyAccessExpression(
-                            factory.getGeneratedNameForNode(result.parent?.parent?.parent || result),
+                            left,
                             factory.cloneNode(name)
                         ),
                         /*location*/ node
                     );
+                }
                 default:
+                    noSubstitution.add(node);
                     return node;
             }
         }
@@ -1904,7 +1901,7 @@ namespace ts {
                     let expression: Expression = node;
                     for (const exportName of exportedNames) {
                         // Mark the node to prevent triggering this rule again.
-                        noSubstitution[getNodeId(expression)] = true;
+                        noSubstitution.add(expression);
                         expression = createExportExpression(exportName, expression, /*location*/ node);
                     }
 
@@ -1947,11 +1944,11 @@ namespace ts {
                         : node;
                     for (const exportName of exportedNames) {
                         // Mark the node to prevent triggering this rule again.
-                        noSubstitution[getNodeId(expression)] = true;
+                        noSubstitution.add(expression);
                         expression = createExportExpression(exportName, expression);
                     }
                     if (node.kind === SyntaxKind.PostfixUnaryExpression) {
-                        noSubstitution[getNodeId(expression)] = true;
+                        noSubstitution.add(expression);
                         expression = node.operator === SyntaxKind.PlusPlusToken
                             ? factory.createSubtract(expression, factory.createNumericLiteral(1))
                             : factory.createAdd(expression, factory.createNumericLiteral(1));
