@@ -127,7 +127,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return { close: () => map.remove(path, callback) };
     }
 
-    function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
+    export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -395,6 +395,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
+        public defaultWatchFileKind?: () => WatchFileKind | undefined;
         watchFile: HostWatchFile;
         watchDirectory: HostWatchDirectory;
         constructor(
@@ -439,7 +440,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),
                 realpath: this.realpath.bind(this),
                 tscWatchFile,
-                tscWatchDirectory
+                tscWatchDirectory,
+                defaultWatchFileKind: () => this.defaultWatchFileKind?.(),
             });
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;

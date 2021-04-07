@@ -396,6 +396,14 @@ namespace FourSlashInterface {
             this.state.baselineQuickInfo();
         }
 
+        public baselineSignatureHelp() {
+            this.state.baselineSignatureHelp();
+        }
+
+        public baselineCompletions() {
+            this.state.baselineCompletions();
+        }
+
         public baselineSmartSelection() {
             this.state.baselineSmartSelection();
         }
@@ -1150,6 +1158,7 @@ namespace FourSlashInterface {
                     case "symbol":
                     case "type":
                     case "unique":
+                    case "override":
                     case "unknown":
                     case "global":
                     case "bigint":
@@ -1161,7 +1170,7 @@ namespace FourSlashInterface {
         }
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(keywordEntry);
+            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(keywordEntry);
 
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
@@ -1591,6 +1600,7 @@ namespace FourSlashInterface {
         readonly isFromUncheckedFile?: boolean; // If not specified, won't assert about this
         readonly kind?: string; // If not specified, won't assert about this
         readonly isPackageJsonImport?: boolean; // If not specified, won't assert about this
+        readonly isSnippet?: boolean;
         readonly kindModifiers?: string; // Must be paired with 'kind'
         readonly text?: string;
         readonly documentation?: string;
@@ -1701,6 +1711,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
+        data?: ts.CompletionEntryData;
         description: string;
         preferences?: ts.UserPreferences;
     }

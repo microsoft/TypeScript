@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '}' to match the '{' token here.": {
+    "The parser expected to find a '{1}' to match the '{0}' token here.": {
         "category": "Error",
         "code": 1007
     },
@@ -1706,11 +1706,7 @@
         "category": "Error",
         "code": 2378
     },
-    "Getter and setter accessors do not agree in visibility.": {
-        "category": "Error",
-        "code": 2379
-    },
-    "'get' and 'set' accessor must have the same type.": {
+    "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
         "code": 2380
     },
@@ -1962,7 +1958,7 @@
         "category": "Error",
         "code": 2445
     },
-    "Property '{0}' is protected and only accessible through an instance of class '{1}'.": {
+    "Property '{0}' is protected and only accessible through an instance of class '{1}'. This is an instance of class '{2}'.": {
         "category": "Error",
         "code": 2446
     },
@@ -2654,6 +2650,30 @@
         "category": "Error",
         "code": 2627
     },
+    "Cannot assign to '{0}' because it is an enum.": {
+        "category": "Error",
+        "code": 2628
+    },
+    "Cannot assign to '{0}' because it is a class.": {
+        "category": "Error",
+        "code": 2629
+    },
+    "Cannot assign to '{0}' because it is a function.": {
+        "category": "Error",
+        "code": 2630
+    },
+    "Cannot assign to '{0}' because it is a namespace.": {
+        "category": "Error",
+        "code": 2631
+    },
+    "Cannot assign to '{0}' because it is an import.": {
+        "category": "Error",
+        "code": 2632
+    },
+    "JSX property access expressions cannot include JSX namespace names": {
+        "category": "Error",
+        "code": 2633
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3148,7 +3168,7 @@
         "category": "Error",
         "code": 2773
     },
-    "This condition will always return true since the function is always defined. Did you mean to call it instead?": {
+    "This condition will always return true since this function appears to always be defined. Did you mean to call it instead?": {
         "category": "Error",
         "code": 2774
     },
@@ -3256,7 +3276,7 @@
         "category": "Error",
         "code": 2800
     },
-    "This condition will always return true since the Promise is always truthy.": {
+    "This condition will always return true since this '{0}' appears to always be defined.": {
         "category": "Error",
         "code": 2801
     },
@@ -3264,9 +3284,37 @@
         "category": "Error",
         "code": 2802
     },
-    "Property '{0}' does not exist on type '{1}'. Try changing the `lib` compiler option to include 'dom'.": {
+    "Cannot assign to private method '{0}'. Private methods are not writable.": {
         "category": "Error",
         "code": 2803
+    },
+    "Duplicate identifier '{0}'. Static and instance elements cannot share the same private name.": {
+        "category": "Error",
+        "code": 2804
+    },
+    "Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.": {
+        "category": "Error",
+        "code": 2805
+    },
+    "Private accessor was defined without a getter.": {
+        "category": "Error",
+        "code": 2806
+    },
+    "This syntax requires an imported helper named '{1}' with {2} parameters, which is not compatible with the one in '{0}'. Consider upgrading your version of '{0}'.": {
+        "category": "Error",
+        "code": 2807
+    },
+    "A get accessor must be at least as accessible as the setter": {
+        "category": "Error",
+        "code": 2808
+    },
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+        "category": "Error",
+        "code": 2809
+    },
+    "Property '{0}' does not exist on type '{1}'. Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2810
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3645,6 +3693,26 @@
         "category": "Error",
         "code": 4111
     },
+    "This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4112
+    },
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4113
+    },
+    "This member must have an 'override' modifier because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4114
+    },
+    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+        "category": "Error",
+        "code": 4115
+    },
+    "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4116
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3919,7 +3987,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -4705,15 +4773,15 @@
         "category": "Message",
         "code": 6224
     },
-    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
+    "Specify strategy for watching file: 'FixedPollingInterval' (default), 'PriorityPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling', 'UseFsEvents', 'UseFsEventsOnParentDirectory'.": {
         "category": "Message",
         "code": 6225
     },
-    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling'.": {
+    "Specify strategy for watching directory on platforms that don't support recursive watching natively: 'UseFsEvents' (default), 'FixedPollingInterval', 'DynamicPriorityPolling', 'FixedChunkSizePolling'.": {
         "category": "Message",
         "code": 6226
     },
-    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority'.": {
+    "Specify strategy for creating a polling watch when it fails to create using file system events: 'FixedInterval' (default), 'PriorityInterval', 'DynamicPriority', 'FixedChunkSize'.": {
         "category": "Message",
         "code": 6227
     },
@@ -4978,14 +5046,18 @@
         "category": "Message",
         "code": 6505
     },
-    "Require undeclared properties from index signatures to use element accesses.": {
-        "category": "Error",
-        "code": 6803
-    },
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
         "code": 6800
+    },
+    "Ensure overriding members in derived classes are marked with an 'override' modifier.": {
+        "category": "Message",
+        "code": 6801
+    },
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Message",
+        "code": 6802
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -6261,7 +6333,22 @@
         "category": "Message",
         "code": 95159
     },
-
+    "Add 'override' modifier": {
+        "category": "Message",
+        "code": 95160
+    },
+    "Remove 'override' modifier": {
+        "category": "Message",
+        "code": 95161
+    },
+    "Add all missing 'override' modifiers": {
+        "category": "Message",
+        "code": 95162
+    },
+    "Remove all unnecessary 'override' modifiers": {
+        "category": "Message",
+        "code": 95163
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -6319,14 +6406,6 @@
         "category": "Error",
         "code": 18019
     },
-    "A method cannot be named with a private identifier.": {
-        "category": "Error",
-        "code": 18022
-    },
-    "An accessor cannot be named with a private identifier.": {
-        "category": "Error",
-        "code": 18023
-    },
     "An enum member cannot be named with a private identifier.": {
         "category": "Error",
         "code": 18024
@@ -6370,5 +6449,9 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
+        "category": "Error",
+        "code": 18036
     }
 }

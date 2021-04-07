@@ -83,10 +83,6 @@ namespace ts.codefix {
         return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
     }
 
-    function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
-        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
-    }
-
     function prepareModifierFlagsForAccessor(modifierFlags: ModifierFlags): ModifierFlags {
         modifierFlags &= ~ModifierFlags.Readonly; // avoid Readonly modifier because it will convert to get accessor
         modifierFlags &= ~ModifierFlags.Private;
@@ -262,7 +258,7 @@ namespace ts.codefix {
             const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
             if (!superSymbol) break;
             const symbol = superSymbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(superSymbol) : superSymbol;
-            const superDecl = find(symbol.declarations, isClassLike);
+            const superDecl = symbol.declarations && find(symbol.declarations, isClassLike);
             if (!superDecl) break;
             res.push(superDecl);
             decl = superDecl;

@@ -118,10 +118,9 @@ namespace ts {
             returnsPromise(node, checker);
     }
 
-    function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
-        const functionType = checker.getTypeAtLocation(node);
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
-        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
+    export function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
+        const signature = checker.getSignatureFromDeclaration(node);
+        const returnType = signature ? checker.getReturnTypeOfSignature(signature) : undefined;
         return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
     }
 

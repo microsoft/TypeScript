@@ -99,8 +99,16 @@ exports.x = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-10726455937-export const x = 10;","affectsGlobalScope":false},{"version":"-4885977236-export type t = string;","signature":"-4885977236-export type t = string;","affectsGlobalScope":false}],"options":{"outDir":"./dist","rootDir":"./src","composite":true,"project":"./tsconfig.json","configFilePath":"./tsconfig.json"},"referencedMap":[],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+
+//// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../lib/lib.d.ts",
+      "./src/index.ts",
+      "./types/type.ts"
+    ],
     "fileInfos": {
       "../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -109,12 +117,12 @@ exports.x = 10;
       },
       "./src/index.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6057683066-export declare const x = 10;\r\n",
+        "signature": "-10726455937-export const x = 10;",
         "affectsGlobalScope": false
       },
       "./types/type.ts": {
         "version": "-4885977236-export type t = string;",
-        "signature": "-4409762125-export declare type t = string;\r\n",
+        "signature": "-4885977236-export type t = string;",
         "affectsGlobalScope": false
       }
     },
@@ -126,10 +134,10 @@ exports.x = 10;
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": []
+    "exportedModulesMap": {}
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1473
 }
 
 //// [/src/types/type.d.ts]

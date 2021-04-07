@@ -123,6 +123,11 @@ namespace ts.tscWatch {
             },
             changes: [
                 {
+                    caption: "change file to ensure signatures are updated",
+                    change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
                     caption: "delete file2",
                     change: sys => sys.deleteFile(commonFile2.path),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
@@ -171,6 +176,11 @@ namespace ts.tscWatch {
                 return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
             },
             changes: [
+                {
+                    caption: "change file to ensure signatures are updated",
+                    change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
                 {
                     caption: "Change config",
                     change: sys => sys.writeFile(configFilePath, `{
@@ -1730,6 +1740,77 @@ import { x } from "../b";`),
                 {
                     caption: "Add module3 to folder2",
                     change: sys => sys.writeFile(`${projectRoot}/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "when new file is added to the referenced project",
+            commandLineArgs: ["-w", "-p", `${projectRoot}/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
+            sys: () => {
+                const config1: File = {
+                    path: `${projectRoot}/projects/project1/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        },
+                        exclude: ["temp"]
+                    })
+                };
+                const class1: File = {
+                    path: `${projectRoot}/projects/project1/class1.ts`,
+                    content: `class class1 {}`
+                };
+                // Built file
+                const class1Dt: File = {
+                    path: `${projectRoot}/projects/project1/class1.d.ts`,
+                    content: `declare class class1 {}`
+                };
+                const config2: File = {
+                    path: `${projectRoot}/projects/project2/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        },
+                        references: [
+                            { path: "../project1" }
+                        ]
+                    })
+                };
+                const class2: File = {
+                    path: `${projectRoot}/projects/project2/class2.ts`,
+                    content: `class class2 {}`
+                };
+                return createWatchedSystem([config1, class1, config2, class2, libFile, class1Dt]);
+            },
+            changes: [
+                {
+                    caption: "Add class3 to project1",
+                    change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.ts`, `class class3 {}`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Add output of class3",
+                    change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Add excluded file to project1",
+                    change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                },
+                {
+                    caption: "Delete output of class3",
+                    change: sys => sys.deleteFile(`${projectRoot}/projects/project1/class3.d.ts`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Add output of class3",
+                    change: sys => sys.writeFile(`${projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
             ]

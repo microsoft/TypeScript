@@ -45,6 +45,12 @@ namespace ts {
          * Otherwise undefined
          */
         readonly exportedModulesMap: ESMap<Path, BuilderState.ReferencedSet> | undefined;
+
+        /**
+         * true if file version is used as signature
+         * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
+         */
+        useFileVersionAsSignature: boolean;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
@@ -166,7 +172,7 @@ namespace ts {
 
             // From ambient modules
             for (const ambientModule of program.getTypeChecker().getAmbientModules()) {
-                if (ambientModule.declarations.length > 1) {
+                if (ambientModule.declarations && ambientModule.declarations.length > 1) {
                     addReferenceFromAmbientModule(ambientModule);
                 }
             }
@@ -174,6 +180,9 @@ namespace ts {
             return referencedFiles;
 
             function addReferenceFromAmbientModule(symbol: Symbol) {
+                if (!symbol.declarations) {
+                    return;
+                }
                 // Add any file other than our own as reference
                 for (const declaration of symbol.declarations) {
                     const declarationSourceFile = getSourceFileOfNode(declaration);
@@ -199,7 +208,7 @@ namespace ts {
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>): BuilderState {
+        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? new Map<Path, ReferencedSet>() : undefined;
             const exportedModulesMap = referencedMap ? new Map<Path, ReferencedSet>() : undefined;
@@ -233,7 +242,8 @@ namespace ts {
                 fileInfos,
                 referencedMap,
                 exportedModulesMap,
-                hasCalledUpdateShapeSignature
+                hasCalledUpdateShapeSignature,
+                useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
             };
         }
 
@@ -255,6 +265,7 @@ namespace ts {
                 referencedMap: state.referencedMap && new Map(state.referencedMap),
                 exportedModulesMap: state.exportedModulesMap && new Map(state.exportedModulesMap),
                 hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
+                useFileVersionAsSignature: state.useFileVersionAsSignature,
             };
         }
 
@@ -313,16 +324,8 @@ namespace ts {
             if (!info) return Debug.fail();
 
             const prevSignature = info.signature;
-            let latestSignature: string;
-            if (sourceFile.isDeclarationFile) {
-                latestSignature = sourceFile.version;
-                if (exportedModulesMapCache && latestSignature !== prevSignature) {
-                    // All the references in this file are exported
-                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
-                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
-                }
-            }
-            else {
+            let latestSignature: string | undefined;
+            if (!sourceFile.isDeclarationFile && !state.useFileVersionAsSignature) {
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,
@@ -331,10 +334,7 @@ namespace ts {
                     /*customTransformers*/ undefined,
                     /*forceDtsEmit*/ true
                 );
-                const firstDts = emitOutput.outputFiles &&
-                    programOfThisState.getCompilerOptions().declarationMap ?
-                    emitOutput.outputFiles.length > 1 ? emitOutput.outputFiles[1] : undefined :
-                    emitOutput.outputFiles.length > 0 ? emitOutput.outputFiles[0] : undefined;
+                const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
                     Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
                     latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
@@ -342,14 +342,18 @@ namespace ts {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                     }
                 }
-                else {
-                    latestSignature = prevSignature!; // TODO: GH#18217
+            }
+            // Default is to use file version as signature
+            if (latestSignature === undefined) {
+                latestSignature = sourceFile.version;
+                if (exportedModulesMapCache && latestSignature !== prevSignature) {
+                    // All the references in this file are exported
+                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                    exportedModulesMapCache.set(sourceFile.resolvedPath, references || false);
                 }
-
             }
             cacheToUpdateSignature.set(sourceFile.resolvedPath, latestSignature);
-
-            return !prevSignature || latestSignature !== prevSignature;
+            return latestSignature !== prevSignature;
         }
 
         /**
@@ -476,7 +480,7 @@ namespace ts {
          */
         function isFileAffectingGlobalScope(sourceFile: SourceFile) {
             return containsGlobalScopeAugmentation(sourceFile) ||
-                !isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile);
+                !isExternalOrCommonJsModule(sourceFile) && !containsOnlyAmbientModules(sourceFile);
         }
 
         /**

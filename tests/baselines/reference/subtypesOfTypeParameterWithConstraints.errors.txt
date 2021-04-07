@@ -6,8 +6,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(50,5): error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'U' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-      Type 'V' is not assignable to type 'T'.
-        'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts(67,5): error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
   Type 'V' is not assignable to type 'T'.
@@ -113,8 +111,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! error TS2416:       Type 'V' is not assignable to type 'T'.
-!!! error TS2416:         'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
     }
     
     class D9<T extends U, U extends V, V> extends C3<U> {

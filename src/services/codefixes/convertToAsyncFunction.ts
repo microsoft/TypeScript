@@ -65,6 +65,10 @@ namespace ts.codefix {
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap);
+        if (!returnsPromise(functionToConvertRenamed, checker)) {
+            return;
+        }
+
         const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
         if (!returnStatements.length) {
@@ -168,7 +172,10 @@ namespace ts.codefix {
                 // so we push an entry for 'response'.
                 if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                     const firstParameter = firstOrUndefined(lastCallSignature.parameters);
-                    const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
+                    const ident = firstParameter?.valueDeclaration
+                        && isParameter(firstParameter.valueDeclaration)
+                        && tryCast(firstParameter.valueDeclaration.name, isIdentifier)
+                        || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
                     collidingSymbolMap.add(ident.text, symbol);

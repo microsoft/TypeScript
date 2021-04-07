@@ -83,7 +83,7 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -152,8 +152,16 @@ export declare class myClass {
 
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8106435186-export var myClassWithError = class {\n        tags() { }\n        \n    };","signature":"6892461904-export declare var myClassWithError: {\n    new (): {\n        tags(): void;\n    };\n};\n","affectsGlobalScope":false},{"version":"-11785903855-export class myClass { }","signature":"-11785903855-export class myClass { }","affectsGlobalScope":false}],"options":{"composite":true,"watch":true,"configFilePath":"./tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./filewitherror.ts",
+      "./filewithouterror.ts"
+    ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -167,7 +175,7 @@ export declare class myClass {
       },
       "./filewithouterror.ts": {
         "version": "-11785903855-export class myClass { }",
-        "signature": "-7432826827-export declare class myClass {\n}\n",
+        "signature": "-11785903855-export class myClass { }",
         "affectsGlobalScope": false
       }
     },
@@ -184,6 +192,7 @@ export declare class myClass {
       "./filewithouterror.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1449
 }
 
