@@ -33728,7 +33728,6 @@ namespace ts {
 
                 case SyntaxKind.Parameter:
                     expectedReturnType = voidType;
-
                     errorInfo = chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
