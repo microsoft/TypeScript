@@ -32,3 +32,10 @@ fn2<number>(m => m(42));
 // due to the invariant usage in `Parameters`
 
 type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;
+
+// vscode - another `Parameters` example
+export type AddFirstParameterToFunctions<Target> = {
+  [K in keyof Target]: Target[K] extends (...args: any[]) => void
+      ? (...args: Parameters<Target[K]>) => void
+      : void
+};

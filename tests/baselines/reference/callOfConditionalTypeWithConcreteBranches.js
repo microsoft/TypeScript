@@ -34,7 +34,16 @@ fn2<number>(m => m(42));
 
 type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;
 
+// vscode - another `Parameters` example
+export type AddFirstParameterToFunctions<Target> = {
+  [K in keyof Target]: Target[K] extends (...args: any[]) => void
+      ? (...args: Parameters<Target[K]>) => void
+      : void
+};
+
 //// [callOfConditionalTypeWithConcreteBranches.js]
+"use strict";
+exports.__esModule = true;
 function fn(arg) {
     // Expected: OK
     // Actual: Cannot convert 10 to number & T

@@ -12930,7 +12930,7 @@ namespace ts {
                 }
                 // Always substitute on type parameters, regardless of variance, since even
                 // in contravarrying positions, they may be reliant on subtuted constraints to be valid
-                if ((covariant || type.flags & TypeFlags.TypeParameter) && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
+                if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(type, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
                         constraints = append(constraints, constraint);
