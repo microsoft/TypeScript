@@ -133,28 +133,48 @@
 ////}
 ////
 ////var x = {
-////    f() {
-////        this/*4*/;
-////    },
-////    g() {
-////        this/*5*/;
-////    }
-////    h: () => {
-////        /*7*/this;
-////    }
-////}
+////    a: /*4*/this,
 ////
-////const x = {
-////    get f() {
+////    f() {
+////        this/*5*/;
+////        function foo() {
+////            this;
+////        }
+////        const bar = () => {
+////            this;
+////        }
+////    },
+////
+////    g() {
+////        this;
+////    },
+////
+////    get h() {
+////        /*7*/this;
+////        function foo() {
+////            this;
+////        }
+////        const bar = () => {
+////            this;
+////        }
+////        return;
+////    },
+////
+////    set h(foo: any) {
+////        this;
+////    },
+////
+////    l: () => {
 ////        /*8*/this;
-////    }
-////    set g() {
-////        /*9*/this;
-////    }
-////    h: () => {
-////        /*10*/this;
-////    }
-////}
+////        function foo() {
+////            this;
+////        }
+////        const bar = () => {
+////            this;
+////        }
+////    },
+////};
+////
 
 
 function verifyOccurrencesAtMarker(marker: string, count: number) {
@@ -162,13 +182,11 @@ function verifyOccurrencesAtMarker(marker: string, count: number) {
     verify.occurrencesAtPositionCount(count);
 }
 
-verifyOccurrencesAtMarker("1", 4);
+verifyOccurrencesAtMarker("1", 5);
 verifyOccurrencesAtMarker("2", 6);
 verifyOccurrencesAtMarker("3", 1);
-verifyOccurrencesAtMarker("4", 2);
-verifyOccurrencesAtMarker("5", 2);
+verifyOccurrencesAtMarker("4", 5);
+verifyOccurrencesAtMarker("5", 6);
 verifyOccurrencesAtMarker("6", 0);
-verifyOccurrencesAtMarker("7", 4);
-verifyOccurrencesAtMarker("8", 2);
-verifyOccurrencesAtMarker("9", 2);
-verifyOccurrencesAtMarker("10", 4);
+verifyOccurrencesAtMarker("7", 6);
+verifyOccurrencesAtMarker("8", 5);
