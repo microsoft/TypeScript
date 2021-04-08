@@ -1954,6 +1954,8 @@ namespace ts {
                 return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return (<ShorthandPropertyAssignment>parent).objectAssignmentInitializer === node;
+            case SyntaxKind.JSDocLink:
+                return (parent as JSDocLink).name === node;
             default:
                 return isExpressionNode(parent);
         }

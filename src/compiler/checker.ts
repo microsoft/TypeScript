@@ -39027,8 +39027,8 @@ namespace ts {
                         const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>name.parent);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-
-                    return resolveEntityName(name, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+                    const flags = isJSDocLink(name.parent) ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
+                    return resolveEntityName(name, flags, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
@@ -39052,10 +39052,6 @@ namespace ts {
             else if (isJSDocEntryNameReference(name)) {
                 const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
-            }
-            else if (isJSDocLink(name.parent)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ true);
             }
 
             if (name.parent.kind === SyntaxKind.TypePredicate) {
