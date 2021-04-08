@@ -177,8 +177,6 @@ namespace ts.JsDoc {
 
     function getTagNameDisplayPart(kind: SyntaxKind): (text: string) => SymbolDisplayPart {
         switch (kind) {
-            case SyntaxKind.JSDocCallbackTag:
-                return typeAliasNamePart;
             case SyntaxKind.JSDocParameterTag:
                 return parameterNamePart;
             case SyntaxKind.JSDocPropertyTag:
@@ -186,6 +184,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocTemplateTag:
                 return typeParameterNamePart;
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
                 return typeAliasNamePart;
             default:
                 return textPart;

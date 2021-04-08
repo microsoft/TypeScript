@@ -2157,10 +2157,6 @@ namespace ts {
         return { text, kind: SymbolDisplayPartKind[kind] };
     }
 
-    export function functionNamePart(text: string) {
-        return displayPart(text, SymbolDisplayPartKind.functionName);
-    }
-
     export function spacePart() {
         return displayPart(" ", SymbolDisplayPartKind.space);
     }
