@@ -36,6 +36,7 @@ namespace ts {
 
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
+        NodeBuilderFlags.AllowNodeModulesRelativePaths |
         NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
         NodeBuilderFlags.UseTypeOfFunction |
         NodeBuilderFlags.UseStructuralFallback |
