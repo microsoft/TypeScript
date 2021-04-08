@@ -7655,8 +7655,9 @@ namespace ts {
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
-                                if (state === JSDocState.SavingBackticks || !previousWhitespace && state === JSDocState.SavingComments) {
-                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace
+                                if (state === JSDocState.SavingBackticks
+                                    || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
+                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
                                     comments.push(scanner.getTokenText());
                                     break;
                                 }
@@ -7733,6 +7734,11 @@ namespace ts {
                     else if (comments.length) {
                         return comments.join("");
                     }
+                }
+
+                function isNextJSDocTokenWhitespace() {
+                    const next = nextTokenJSDoc();
+                    return next === SyntaxKind.WhitespaceTrivia || next === SyntaxKind.NewLineTrivia;
                 }
 
                 function parseJSDocLink(start: number) {
