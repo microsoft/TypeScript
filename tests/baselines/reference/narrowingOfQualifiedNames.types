@@ -1,0 +1,53 @@
+=== tests/cases/compiler/narrowingOfQualifiedNames.ts ===
+interface IProperties {
+    foo?: {
+>foo : { aaa: string; bbb: string; } | undefined
+
+        aaa: string
+>aaa : string
+
+        bbb: string
+>bbb : string
+    }
+}
+
+function init(properties: IProperties) {
+>init : (properties: IProperties) => void
+>properties : IProperties
+
+    if (properties.foo) {
+>properties.foo : { aaa: string; bbb: string; } | undefined
+>properties : IProperties
+>foo : { aaa: string; bbb: string; } | undefined
+
+        type FooOK = typeof properties.foo;
+>FooOK : { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+
+        properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+
+        for (const x of [1, 2, 3]) {
+>x : number
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+          properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+
+          type FooOrUndefined = typeof properties.foo; //type is { aaa: string; bbb: string; } | undefined
+>FooOrUndefined : { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+        }
+    }
+}

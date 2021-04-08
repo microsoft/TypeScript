@@ -1,0 +1,52 @@
+=== tests/cases/compiler/narrowingOfQualifiedNames.ts ===
+interface IProperties {
+>IProperties : Symbol(IProperties, Decl(narrowingOfQualifiedNames.ts, 0, 0))
+
+    foo?: {
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+
+        aaa: string
+>aaa : Symbol(aaa, Decl(narrowingOfQualifiedNames.ts, 1, 11))
+
+        bbb: string
+>bbb : Symbol(bbb, Decl(narrowingOfQualifiedNames.ts, 2, 19))
+    }
+}
+
+function init(properties: IProperties) {
+>init : Symbol(init, Decl(narrowingOfQualifiedNames.ts, 5, 1))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 7, 14))
+>IProperties : Symbol(IProperties, Decl(narrowingOfQualifiedNames.ts, 0, 0))
+
+    if (properties.foo) {
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 7, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+
+        type FooOK = typeof properties.foo;
+>FooOK : Symbol(FooOK, Decl(narrowingOfQualifiedNames.ts, 8, 25))
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 7, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+
+        properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 7, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+
+        for (const x of [1, 2, 3]) {
+>x : Symbol(x, Decl(narrowingOfQualifiedNames.ts, 11, 18))
+
+          properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 7, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+
+          type FooOrUndefined = typeof properties.foo; //type is { aaa: string; bbb: string; } | undefined
+>FooOrUndefined : Symbol(FooOrUndefined, Decl(narrowingOfQualifiedNames.ts, 12, 25))
+>properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+>properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 7, 14))
+>foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 0, 23))
+        }
+    }
+}
