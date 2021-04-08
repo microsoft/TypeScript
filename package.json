@@ -94,7 +94,7 @@
         "remove-internal": "^2.9.2",
         "source-map-support": "latest",
         "through2": "latest",
-        "typescript": "^4.2.3",
+        "typescript": "3.9",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"
