@@ -26,37 +26,23 @@ module Generic {
 //// [genericSetterInClassType.js]
 var NonGeneric;
 (function (NonGeneric) {
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        get y() {
+            return 1;
         }
-        Object.defineProperty(C.prototype, "y", {
-            get: function () {
-                return 1;
-            },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
+        set y(v) { }
+    }
     var c = new C();
     c.y = c.y;
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        get y() {
+            return 1;
         }
-        Object.defineProperty(C.prototype, "y", {
-            get: function () {
-                return 1;
-            },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
+        set y(v) { }
+    }
     var c = new C();
     c.y = c.y;
 })(Generic || (Generic = {}));

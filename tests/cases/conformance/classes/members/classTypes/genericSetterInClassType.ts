@@ -1,3 +1,5 @@
+// @target: esnext
+
 module NonGeneric {
     class C {
         get y() {
