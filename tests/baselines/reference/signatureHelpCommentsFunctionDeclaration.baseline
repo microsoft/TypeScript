@@ -409,7 +409,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
