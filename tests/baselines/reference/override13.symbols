@@ -30,3 +30,29 @@ class StaticSubFoo extends Foo {
     static staticProperty = 42;
 >staticProperty : Symbol(StaticSubFoo.staticProperty, Decl(override13.ts, 11, 25))
 }
+
+class Intermediate extends Foo {}
+>Intermediate : Symbol(Intermediate, Decl(override13.ts, 13, 1))
+>Foo : Symbol(Foo, Decl(override13.ts, 0, 0))
+
+class Derived extends Intermediate {
+>Derived : Symbol(Derived, Decl(override13.ts, 15, 33))
+>Intermediate : Symbol(Intermediate, Decl(override13.ts, 13, 1))
+
+    property = 42;
+>property : Symbol(Derived.property, Decl(override13.ts, 17, 36))
+
+    staticProperty = 42;
+>staticProperty : Symbol(Derived.staticProperty, Decl(override13.ts, 18, 18))
+}
+
+class StaticDerived extends Intermediate {
+>StaticDerived : Symbol(StaticDerived, Decl(override13.ts, 20, 1))
+>Intermediate : Symbol(Intermediate, Decl(override13.ts, 13, 1))
+
+    static property = 42;
+>property : Symbol(StaticDerived.property, Decl(override13.ts, 22, 42))
+
+    static staticProperty = 42;
+>staticProperty : Symbol(StaticDerived.staticProperty, Decl(override13.ts, 23, 25))
+}

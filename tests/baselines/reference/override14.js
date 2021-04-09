@@ -10,9 +10,7 @@ class SubFoo extends Foo {
 
 //// [override14.js]
 class Foo {
-    constructor() {
-        this.property = 1;
-    }
+    property = 1;
 }
 class SubFoo extends Foo {
 }
