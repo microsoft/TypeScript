@@ -38854,15 +38854,14 @@ namespace ts {
             return node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-        function isJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): boolean {
+        function getJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): JSDocNameReference | undefined {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent as QualifiedName;
             }
             while (node.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = node.parent as PropertyAccessExpression;
             }
-
-            return node.parent.kind === SyntaxKind.JSDocNameReference;
+            return isJSDocNameReference(node.parent) ? node.parent : undefined;
         }
 
         function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T | undefined): T | undefined {
@@ -39048,30 +39047,41 @@ namespace ts {
                 const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
             }
-            else if (isJSDocEntryNameReference(name)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
-            }
 
+            const jsdocReference = getJSDocEntryNameReference(name);
+            if (jsdocReference) {
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+                if (isJSDocSeeTag(jsdocReference.parent)) {
+                    return getSymbolOfJSDocLinkReference(name);
+                }
+                else {
+                    return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
+                }
+            }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(<Identifier>name, /*meaning*/ SymbolFlags.FunctionScopedVariable);
             }
             else if (isJSDocLink(name.parent)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false);
-                if (!symbol && isQualifiedName(name) && isIdentifier(name.left)) {
-                    // try again, but harder
-                    const t = checkIdentifier(name.left, CheckMode.Normal)
-                    if (getObjectFlags(t) & ObjectFlags.Class) {
-                        // get type and lookup (or just use checkQualifiedName)
-                        return getPropertyOfType(t, name.right.escapedText)
-                    }
-                }
-                return symbol;
+                return getSymbolOfJSDocLinkReference(name);
             }
 
             // Do we want to return undefined here?
             return undefined;
+        }
+
+        function getSymbolOfJSDocLinkReference(name: EntityName | PrivateIdentifier | PropertyAccessExpression) {
+            const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+            const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false);
+            if (symbol) {
+                return symbol;
+            }
+            else if (isQualifiedName(name) && isIdentifier(name.left)) {
+                const s = resolveEntityName(name.left, meaning, /*ignoreErrors*/ false)
+                if (s) {
+                    const t = getDeclaredTypeOfSymbol(s)
+                    return getPropertyOfType(t, name.right.escapedText)
+                }
+            }
         }
 
         function getSymbolAtLocation(node: Node, ignoreErrors?: boolean): Symbol | undefined {
