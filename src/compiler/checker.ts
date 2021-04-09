@@ -18219,6 +18219,22 @@ namespace ts {
                     return result;
                 }
 
+                if (isNonAugmentingArraySubtype(source) && isArrayType(target)) {
+                    let sourceBase = getBaseTypes((source as TypeReference).target as InterfaceType)[0];
+                    if (length((target as TypeReference).resolvedTypeArguments) === 2) {
+                        sourceBase = getTypeWithThisArgument(sourceBase, ((source as TypeReference).target as InterfaceType).thisType);
+                    }
+                    return isRelatedTo(sourceBase, target, reportErrors);
+                }
+
+                if (isArrayType(source) && isNonAugmentingArraySubtype(target)) {
+                    let targetBase = getBaseTypes((target as TypeReference).target as InterfaceType)[0];
+                    if (length((source as TypeReference).resolvedTypeArguments) === 2) {
+                        targetBase = getTypeWithThisArgument(targetBase, ((target as TypeReference).target as InterfaceType).thisType);
+                    }
+                    return isRelatedTo(source, targetBase, reportErrors);
+                }
+
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && !(<MappedType>source).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
@@ -19866,6 +19882,24 @@ namespace ts {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
             return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+        }
+
+        function isNonAugmentingArraySubtype(type: Type) {
+            if (!(getObjectFlags(type) & ObjectFlags.Reference) || !(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)) {
+                return false;
+            }
+            const target = (type as TypeReference).target as InterfaceType;
+            const bases = getBaseTypes(target);
+            if (bases.length !== 1) {
+                return false;
+            }
+            if (!isArrayType(bases[0])) {
+                return false;
+            }
+            if (getMembersOfSymbol(type.symbol).size) {
+                return false; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
+            }
+            return true;
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
