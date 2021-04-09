@@ -416,11 +416,9 @@ namespace ts {
             const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
 
             // The exported symbol for an export default function/class node is always named "default"
-            const name = isComputedName
-                ? InternalSymbolName.Computed
-                : isDefaultExport && parent
-                    ? InternalSymbolName.Default
-                    : getDeclarationName(node);
+            const name = isComputedName ? InternalSymbolName.Computed
+                : isDefaultExport && parent ? InternalSymbolName.Default
+                : getDeclarationName(node);
 
             let symbol: Symbol | undefined;
             if (name === undefined) {
