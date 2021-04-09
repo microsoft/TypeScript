@@ -18221,7 +18221,7 @@ namespace ts {
 
                 if (isNonAugmentingArraySubtype(source) && isArrayType(target)) {
                     let sourceBase = getBaseTypes((source as TypeReference).target as InterfaceType)[0];
-                    if (length((target as TypeReference).resolvedTypeArguments) === 2) {
+                    if (length(target.resolvedTypeArguments) === 2) {
                         sourceBase = getTypeWithThisArgument(sourceBase, ((source as TypeReference).target as InterfaceType).thisType);
                     }
                     return isRelatedTo(sourceBase, target, reportErrors);
@@ -18229,7 +18229,7 @@ namespace ts {
 
                 if (isArrayType(source) && isNonAugmentingArraySubtype(target)) {
                     let targetBase = getBaseTypes((target as TypeReference).target as InterfaceType)[0];
-                    if (length((source as TypeReference).resolvedTypeArguments) === 2) {
+                    if (length(source.resolvedTypeArguments) === 2) {
                         targetBase = getTypeWithThisArgument(targetBase, ((target as TypeReference).target as InterfaceType).thisType);
                     }
                     return isRelatedTo(source, targetBase, reportErrors);
