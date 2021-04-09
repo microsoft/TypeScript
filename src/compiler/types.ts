@@ -878,6 +878,7 @@ namespace ts {
         | LabeledStatement
         | ExpressionStatement
         | VariableStatement
+        | ReturnStatement
         | FunctionDeclaration
         | ConstructorDeclaration
         | MethodDeclaration
@@ -2725,7 +2726,7 @@ namespace ts {
         | ContinueStatement
         ;
 
-    export interface ReturnStatement extends Statement {
+    export interface ReturnStatement extends Statement, JSDocContainer {
         readonly kind: SyntaxKind.ReturnStatement;
         readonly expression?: Expression;
     }

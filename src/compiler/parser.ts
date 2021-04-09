@@ -5758,10 +5758,11 @@ namespace ts {
 
         function parseReturnStatement(): ReturnStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ReturnKeyword);
             const expression = canParseSemicolon() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
-            return finishNode(factory.createReturnStatement(expression), pos);
+            return withJSDoc(finishNode(factory.createReturnStatement(expression), pos), hasJSDoc);
         }
 
         function parseWithStatement(): WithStatement {
