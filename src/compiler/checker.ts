@@ -36943,7 +36943,7 @@ namespace ts {
                 }
             }
 
-            checkMembersForMissingOverrideModifier(node, type, typeWithThis);
+            checkMembersForMissingOverrideModifier(node, type, typeWithThis, staticType);
 
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
@@ -36980,13 +36980,18 @@ namespace ts {
             }
         }
 
-        function checkMembersForMissingOverrideModifier(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
+        function checkMembersForMissingOverrideModifier(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type, staticType: ObjectType) {
             const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             const baseTypes = baseTypeNode && getBaseTypes(type);
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
+            const baseStaticType = getBaseConstructorTypeOfClass(type);
 
             for (const member of node.members) {
+                if (hasAmbientModifier(member)) {
+                    continue;
+                }
+
                 if (isConstructorDeclaration(member)) {
                     forEach(member.parameters, param => {
                         if (isParameterPropertyDeclaration(param, member)) {
@@ -36996,17 +37001,22 @@ namespace ts {
                 }
                 checkClassMember(member);
             }
+
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
+                const hasStatic = hasStaticModifier(member);
                 if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (!declaredProp) {
                         return;
                     }
 
+                    const thisType = hasStatic ? staticType : typeWithThis;
+                    const baseType = hasStatic ? baseStaticType : baseWithThis;
+                    const prop = getPropertyOfType(thisType, declaredProp.escapedName);
+                    const baseProp = getPropertyOfType(baseType, declaredProp.escapedName);
+
                     const baseClassName = typeToString(baseWithThis);
-                    const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
-                    const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
                     if (prop && !baseProp && hasOverride) {
                         error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                     }
@@ -40443,9 +40453,6 @@ namespace ts {
                         else if (flags & ModifierFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "override", "declare");
                         }
-                        else if (flags & ModifierFlags.Static) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
-                        }
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
                         }
@@ -40499,9 +40506,6 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
-                        }
-                        else if (flags & ModifierFlags.Override) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
