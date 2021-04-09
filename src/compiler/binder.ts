@@ -2518,7 +2518,7 @@ namespace ts {
                     }
                     return checkContextualIdentifier(<Identifier>node);
                 case SyntaxKind.QualifiedName:
-                    if (currentFlow && parent.kind === SyntaxKind.TypeQuery) {
+                    if (currentFlow && isPartOfTypeQuery(node)) {
                         node.flowNode = currentFlow;
                     }
                     break;

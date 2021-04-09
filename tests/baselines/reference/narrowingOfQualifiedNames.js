@@ -29,21 +29,37 @@ interface DeepOptional {
 
 function init2(foo: DeepOptional) {
     if (foo.a) {
+        type A = typeof foo.a;
+        type B = typeof foo.a.b;
+        type C = typeof foo.a.b.c;
+
         for(const _ of [1]) {
             type A = typeof foo.a;
+            type B = typeof foo.a.b;
+            type C = typeof foo.a.b.c;
 
             if (foo.a.b) {
+                type A = typeof foo.a;
                 type B = typeof foo.a.b;
+                type C = typeof foo.a.b.c;
+
                 for(const _ of [1]) {
+                    type A = typeof foo.a;
                     type B = typeof foo.a.b;
+                    type C = typeof foo.a.b.c;
 
                     if (foo.a.b.c) {
+                        type A = typeof foo.a;
+                        type B = typeof foo.a.b;
                         type C = typeof foo.a.b.c;
+
                         for(const _ of [1]) {
+                            type A = typeof foo.a;
+                            type B = typeof foo.a.b;
                             type C = typeof foo.a.b.c;
                         }
                     }
-                } 
+                }
             }
         }
     }

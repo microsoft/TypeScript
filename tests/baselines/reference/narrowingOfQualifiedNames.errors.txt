@@ -1,12 +1,8 @@
-tests/cases/compiler/narrowingOfQualifiedNames.ts(35,33): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(37,37): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(40,41): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(40,41): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(42,45): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(42,45): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/narrowingOfQualifiedNames.ts(33,25): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/narrowingOfQualifiedNames.ts(38,29): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/compiler/narrowingOfQualifiedNames.ts (6 errors) ====
+==== tests/cases/compiler/narrowingOfQualifiedNames.ts (2 errors) ====
     // Repro from #43411
     
     interface IProperties {
@@ -37,33 +33,41 @@ tests/cases/compiler/narrowingOfQualifiedNames.ts(42,45): error TS2532: Object i
     
     function init2(foo: DeepOptional) {
         if (foo.a) {
+            type A = typeof foo.a;
+            type B = typeof foo.a.b;
+            type C = typeof foo.a.b.c;
+                            ~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
             for(const _ of [1]) {
                 type A = typeof foo.a;
+                type B = typeof foo.a.b;
+                type C = typeof foo.a.b.c;
+                                ~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     
                 if (foo.a.b) {
+                    type A = typeof foo.a;
                     type B = typeof foo.a.b;
-                                    ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+                    type C = typeof foo.a.b.c;
+    
                     for(const _ of [1]) {
+                        type A = typeof foo.a;
                         type B = typeof foo.a.b;
-                                        ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+                        type C = typeof foo.a.b.c;
     
                         if (foo.a.b.c) {
+                            type A = typeof foo.a;
+                            type B = typeof foo.a.b;
                             type C = typeof foo.a.b.c;
-                                            ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                                            ~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+    
                             for(const _ of [1]) {
+                                type A = typeof foo.a;
+                                type B = typeof foo.a.b;
                                 type C = typeof foo.a.b.c;
-                                                ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
-                                                ~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
                             }
                         }
-                    } 
+                    }
                 }
             }
         }
