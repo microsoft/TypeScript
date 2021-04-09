@@ -96,7 +96,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18774426152-export class C\n{\n    d: number;\n}","signature":"-18774426152-export class C\n{\n    d: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","affectsGlobalScope":false}],"options":{"isolatedModules":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"./tsconfig.json"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18774426152-export class C\n{\n    d: number;\n}","signature":"-18774426152-export class C\n{\n    d: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","declaration":true,"incremental":true,"isolatedModules":true,"watch":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -138,11 +138,11 @@ export {};
       }
     },
     "options": {
-      "isolatedModules": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "watch": true,
       "incremental": true,
-      "configFilePath": "./tsconfig.json"
+      "isolatedModules": true,
+      "watch": true
     },
     "referencedMap": {
       "./a.ts": [
@@ -235,7 +235,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-21444928214-export class C\n{\n    d2: number;\n}","signature":"-21444928214-export class C\n{\n    d2: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"isolatedModules":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"./tsconfig.json"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./a.ts","start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]],3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-21444928214-export class C\n{\n    d2: number;\n}","signature":"-21444928214-export class C\n{\n    d2: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","declaration":true,"incremental":true,"isolatedModules":true,"watch":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./a.ts","start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]],3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -277,11 +277,11 @@ exitCode:: ExitStatus.undefined
       }
     },
     "options": {
-      "isolatedModules": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "watch": true,
       "incremental": true,
-      "configFilePath": "./tsconfig.json"
+      "isolatedModules": true,
+      "watch": true
     },
     "referencedMap": {
       "./a.ts": [
@@ -378,7 +378,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18774426152-export class C\n{\n    d: number;\n}","signature":"-18774426152-export class C\n{\n    d: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"isolatedModules":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"./tsconfig.json"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18774426152-export class C\n{\n    d: number;\n}","signature":"-18774426152-export class C\n{\n    d: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","declaration":true,"incremental":true,"isolatedModules":true,"watch":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -420,11 +420,11 @@ exitCode:: ExitStatus.undefined
       }
     },
     "options": {
-      "isolatedModules": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "watch": true,
       "incremental": true,
-      "configFilePath": "./tsconfig.json"
+      "isolatedModules": true,
+      "watch": true
     },
     "referencedMap": {
       "./a.ts": [
@@ -514,7 +514,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-21444928214-export class C\n{\n    d2: number;\n}","signature":"-21444928214-export class C\n{\n    d2: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"isolatedModules":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"./tsconfig.json"},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./a.ts","start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]],3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.d.ts","./b.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-21444928214-export class C\n{\n    d2: number;\n}","signature":"-21444928214-export class C\n{\n    d2: number;\n}","affectsGlobalScope":false},{"version":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","signature":"-1688906387-import {C} from './c';\nexport class B\n{\n    c: C;\n}","affectsGlobalScope":false},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","declaration":true,"incremental":true,"isolatedModules":true,"watch":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"exportedModulesMap":[[3,2]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./a.ts","start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]],3,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -556,11 +556,11 @@ exitCode:: ExitStatus.undefined
       }
     },
     "options": {
-      "isolatedModules": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "watch": true,
       "incremental": true,
-      "configFilePath": "./tsconfig.json"
+      "isolatedModules": true,
+      "watch": true
     },
     "referencedMap": {
       "./a.ts": [
