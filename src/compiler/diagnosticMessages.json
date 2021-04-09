@@ -526,7 +526,7 @@
     "'extends' clause already seen.": {
         "category": "Error",
         "code": 1172
-    },
+    },
     "'extends' clause must precede 'implements' clause.": {
         "category": "Error",
         "code": 1173
