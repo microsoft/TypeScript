@@ -2,4 +2,4 @@
 
 ////"" as /**/const;
 
-verify.quickInfoAt("", "");
+verify.not.quickInfoExists();
