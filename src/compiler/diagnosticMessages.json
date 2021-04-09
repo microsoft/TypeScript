@@ -526,7 +526,7 @@
     "'extends' clause already seen.": {
         "category": "Error",
         "code": 1172
-    },
+    },
     "'extends' clause must precede 'implements' clause.": {
         "category": "Error",
         "code": 1173
@@ -878,6 +878,10 @@
     "An optional element cannot follow a rest element.": {
         "category": "Error",
         "code": 1266
+    },
+    "Property '{0}' cannot have an initializer because it is marked abstract.": {
+        "category": "Error",
+        "code": 1267
     },
 
     "'with' statements are not allowed in an async function block.": {
