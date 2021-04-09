@@ -72,6 +72,7 @@ namespace Harness {
 
                 for (const file of fs.readdirSync(folder)) {
                     const pathToFile = pathModule.join(folder, file);
+                    if (!fs.existsSync(pathToFile)) continue; // ignore invalid symlinks
                     const stat = fs.statSync(pathToFile);
                     if (options.recursive && stat.isDirectory()) {
                         paths = paths.concat(filesInFolder(pathToFile));
