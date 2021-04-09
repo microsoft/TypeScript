@@ -2939,7 +2939,7 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         if (hasDynamicName(node)) {
-                            bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol);
+                            bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol, constructorSymbol.members);
                         }
                         else {
                             declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
@@ -2958,8 +2958,7 @@ namespace ts {
                     const containingClass = thisContainer.parent;
                     const symbolTable = hasSyntacticModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
                     if (hasDynamicName(node)) {
-                        declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true, /*isComputedName*/ true);
-                        addLateBoundAssignmentDeclarationToSymbol(node, containingClass.symbol);
+                        bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol, symbolTable);
                     }
                     else {
                         declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
@@ -2983,8 +2982,8 @@ namespace ts {
             }
         }
 
-        function bindDynamicallyNamedThisPropertyAssignment(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol) {
-            bindAnonymousDeclaration(node, SymbolFlags.Property, InternalSymbolName.Computed);
+        function bindDynamicallyNamedThisPropertyAssignment(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol, symbolTable: SymbolTable) {
+            declareSymbol(symbolTable, symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true, /*isComputedName*/ true);
             addLateBoundAssignmentDeclarationToSymbol(node, symbol);
         }
 
