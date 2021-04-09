@@ -39027,8 +39027,7 @@ namespace ts {
                         const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>name.parent);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    const flags = isJSDocLink(name.parent) ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
-                    return resolveEntityName(name, flags, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+                    return resolveEntityName(name, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
@@ -39056,6 +39055,19 @@ namespace ts {
 
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(<Identifier>name, /*meaning*/ SymbolFlags.FunctionScopedVariable);
+            }
+            else if (isJSDocLink(name.parent)) {
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+                const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false);
+                if (!symbol && isQualifiedName(name) && isIdentifier(name.left)) {
+                    // try again, but harder
+                    const t = checkIdentifier(name.left, CheckMode.Normal)
+                    if (getObjectFlags(t) & ObjectFlags.Class) {
+                        // get type and lookup (or just use checkQualifiedName)
+                        return getPropertyOfType(t, name.right.escapedText)
+                    }
+                }
+                return symbol;
             }
 
             // Do we want to return undefined here?
