@@ -1360,45 +1360,49 @@
         "category": "Error",
         "code": 1432
     },
-    "Unexpected keyword or identifier.": {
+    "Decorators may not be applied to 'this' parameters.": {
         "category": "Error",
         "code": 1433
     },
-    "Unknown keyword or identifier. Did you mean '{0}'?": {
+    "Unexpected keyword or identifier.": {
         "category": "Error",
         "code": 1434
     },
-    "Decorators must precede all other keywords for property declarations.": {
+    "Unknown keyword or identifier. Did you mean '{0}'?": {
         "category": "Error",
         "code": 1435
     },
-    "Namespace must be given a name.": {
+    "Decorators must precede all other keywords for property declarations.": {
         "category": "Error",
         "code": 1436
     },
-    "Interface must be given a name.": {
+    "Namespace must be given a name.": {
         "category": "Error",
         "code": 1437
     },
-    "Type alias must be given a name.": {
+    "Interface must be given a name.": {
         "category": "Error",
         "code": 1438
     },
-    "Variable declaration not allowed at this location.": {
+    "Type alias must be given a name.": {
         "category": "Error",
         "code": 1439
     },
-    "Function call is not a type annotation.": {
+    "Variable declaration not allowed at this location.": {
         "category": "Error",
         "code": 1440
     },
-    "Missing '=' before default property value.": {
+    "Function call is not a type annotation.": {
         "category": "Error",
         "code": 1441
     },
-    "Module declaration names may only use ' or \" quoted strings.": {
+    "Missing '=' before default property value.": {
         "category": "Error",
         "code": 1442
+    },
+    "Module declaration names may only use ' or \" quoted strings.": {
+        "category": "Error",
+        "code": 1443
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3352,9 +3356,21 @@
         "category": "Error",
         "code": 2809
     },
-    "Namespace name cannot be '{0}'.": {
+    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
         "category": "Error",
         "code": 2810
+    },
+    "Initializer for property '{0}'": {
+        "category": "Error",
+        "code": 2811
+    },
+    "Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2812
+    },
+    "Namespace name cannot be '{0}'.": {
+        "category": "Error",
+        "code": 2813
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3965,6 +3981,14 @@
     "The root value of a '{0}' file must be an object.": {
         "category": "Error",
         "code": 5092
+    },
+    "Compiler option '--{0}' may only be used with '--build'.": {
+        "category": "Error",
+        "code": 5093
+    },
+    "Compiler option '--{0}' may not be used with '--build'.": {
+        "category": "Error",
+        "code": 5094
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

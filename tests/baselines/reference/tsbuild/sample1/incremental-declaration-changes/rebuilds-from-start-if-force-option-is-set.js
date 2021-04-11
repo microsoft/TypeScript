@@ -63,10 +63,10 @@ exitCode:: ExitStatus.Success
     },
     "options": {
       "composite": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
       "declarationMap": true,
-      "skipDefaultLibCheck": true,
-      "configFilePath": "./tsconfig.json"
+      "skipDefaultLibCheck": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -124,11 +124,11 @@ exitCode:: ExitStatus.Success
     },
     "options": {
       "composite": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
-      "configFilePath": "./tsconfig.json"
+      "sourceMap": true
     },
     "referencedMap": {
       "./index.ts": [
@@ -205,10 +205,10 @@ exitCode:: ExitStatus.Success
     },
     "options": {
       "composite": true,
+      "configFilePath": "./tsconfig.json",
       "declaration": true,
       "forceConsistentCasingInFileNames": true,
-      "skipDefaultLibCheck": true,
-      "configFilePath": "./tsconfig.json"
+      "skipDefaultLibCheck": true
     },
     "referencedMap": {
       "../logic/index.d.ts": [

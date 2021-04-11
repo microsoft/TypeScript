@@ -346,6 +346,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
@@ -1501,7 +1502,7 @@ namespace ts {
                 }
                 else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
                     // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
-                    return !(compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
+                    return !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields
                              && getContainingClass(declaration) === getContainingClass(usage)
                              && isUsedInFunctionOrInstanceProperty(usage, declaration));
                 }
@@ -1532,7 +1533,7 @@ namespace ts {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
-                if (compilerOptions.target === ScriptTarget.ESNext && !!compilerOptions.useDefineForClassFields
+                if (compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields
                     && getContainingClass(declaration)
                     && (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent))) {
                     return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
@@ -1680,7 +1681,7 @@ namespace ts {
                     case SyntaxKind.PropertyDeclaration:
                         // static properties in classes introduce temporary variables
                         if (hasStaticModifier(node)) {
-                            return target < ScriptTarget.ESNext || !compilerOptions.useDefineForClassFields;
+                            return target < ScriptTarget.ESNext || !useDefineForClassFields;
                         }
                         return requiresScopeChangeWorker((node as PropertyDeclaration).name);
                     default:
@@ -2098,7 +2099,7 @@ namespace ts {
 
             // Perform extra checks only if error reporting was requested
             if (nameNotFoundMessage) {
-                if (propertyWithInvalidInitializer && !(compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields)) {
+                if (propertyWithInvalidInitializer && !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.
@@ -21964,7 +21965,7 @@ namespace ts {
                 resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
         }
 
-        function getTypeFacts(type: Type): TypeFacts {
+        function getTypeFacts(type: Type, ignoreObjects = false): TypeFacts {
             const flags = type.flags;
             if (flags & TypeFlags.String) {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
@@ -22001,7 +22002,7 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.Object) {
+            if (flags & TypeFlags.Object && !ignoreObjects) {
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(<ObjectType>type) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                     isFunctionObjectType(<ObjectType>type) ?
@@ -22024,14 +22025,17 @@ namespace ts {
                 return TypeFacts.None;
             }
             if (flags & TypeFlags.Instantiable) {
-                return !isPatternLiteralType(type) ? getTypeFacts(getBaseConstraintOfType(type) || unknownType) :
+                return !isPatternLiteralType(type) ? getTypeFacts(getBaseConstraintOfType(type) || unknownType, ignoreObjects) :
                     strictNullChecks ? TypeFacts.NonEmptyStringStrictFacts : TypeFacts.NonEmptyStringFacts;
             }
             if (flags & TypeFlags.Union) {
-                return reduceLeft((<UnionType>type).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
+                return reduceLeft((<UnionType>type).types, (facts, t) => facts | getTypeFacts(t, ignoreObjects), TypeFacts.None);
             }
             if (flags & TypeFlags.Intersection) {
-                return reduceLeft((<UnionType>type).types, (facts, t) => facts & getTypeFacts(t), TypeFacts.All);
+                // When an intersection contains a primitive type we ignore object type constituents as they are
+                // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
+                ignoreObjects ||= maybeTypeOfKind(type, TypeFlags.Primitive);
+                return reduceLeft((<UnionType>type).types, (facts, t) => facts & getTypeFacts(t, ignoreObjects), TypeFacts.All);
             }
             return TypeFacts.All;
         }
@@ -22267,6 +22271,10 @@ namespace ts {
 
         function everyType(type: Type, f: (t: Type) => boolean): boolean {
             return type.flags & TypeFlags.Union ? every((<UnionType>type).types, f) : f(type);
+        }
+
+        function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
+            return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
@@ -24260,7 +24268,7 @@ namespace ts {
                     break;
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    if (hasSyntacticModifier(container, ModifierFlags.Static) && !(compilerOptions.target === ScriptTarget.ESNext && compilerOptions.useDefineForClassFields)) {
+                    if (hasSyntacticModifier(container, ModifierFlags.Static) && !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields)) {
                         error(node, Diagnostics.this_cannot_be_referenced_in_a_static_property_initializer);
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
@@ -27057,6 +27065,30 @@ namespace ts {
                 if (assignmentKind && lexicallyScopedSymbol && lexicallyScopedSymbol.valueDeclaration && isMethodDeclaration(lexicallyScopedSymbol.valueDeclaration)) {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
+
+                if (lexicallyScopedSymbol?.valueDeclaration && (compilerOptions.target === ScriptTarget.ESNext && !useDefineForClassFields)) {
+                    const lexicalClass = getContainingClass(lexicallyScopedSymbol.valueDeclaration);
+                    const parentStaticFieldInitializer = findAncestor(node, (n) => {
+                        if (n === lexicalClass) return "quit";
+                        if (isPropertyDeclaration(n.parent) && hasStaticModifier(n.parent) && n.parent.initializer === n && n.parent.parent === lexicalClass) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (parentStaticFieldInitializer) {
+                        const parentStaticFieldInitializerSymbol = getSymbolOfNode(parentStaticFieldInitializer.parent);
+                        Debug.assert(parentStaticFieldInitializerSymbol, "Initializer without declaration symbol");
+                        const diagnostic = error(node,
+                            Diagnostics.Property_0_may_not_be_used_in_a_static_property_s_initializer_in_the_same_class_when_target_is_esnext_and_useDefineForClassFields_is_false,
+                            symbolName(lexicallyScopedSymbol));
+                        addRelatedInfo(diagnostic,
+                            createDiagnosticForNode(parentStaticFieldInitializer.parent,
+                                Diagnostics.Initializer_for_property_0,
+                                symbolName(parentStaticFieldInitializerSymbol))
+                        );
+                    }
+                }
+
                 if (isAnyLike) {
                     if (lexicallyScopedSymbol) {
                         return apparentType;
@@ -27311,7 +27343,10 @@ namespace ts {
                             relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                         }
                         else {
-                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, missingProperty, container);
+                            const diagnostic = containerSeemsToBeEmptyDomElement(containingType)
+                                ? Diagnostics.Property_0_does_not_exist_on_type_1_Try_changing_the_lib_compiler_option_to_include_dom
+                                : Diagnostics.Property_0_does_not_exist_on_type_1;
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), diagnostic, missingProperty, container);
                         }
                     }
                 }
@@ -27321,6 +27356,12 @@ namespace ts {
                 addRelatedInfo(resultDiagnostic, relatedInfo);
             }
             diagnostics.add(resultDiagnostic);
+        }
+
+        function containerSeemsToBeEmptyDomElement(containingType: Type) {
+            return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
+                everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
+                isEmptyObjectType(containingType);
         }
 
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {
@@ -33134,7 +33175,7 @@ namespace ts {
                     // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.
                     const superCallShouldBeFirst =
-                        (compilerOptions.target !== ScriptTarget.ESNext || !compilerOptions.useDefineForClassFields) &&
+                        (compilerOptions.target !== ScriptTarget.ESNext || !useDefineForClassFields) &&
                         (some((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                          some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
@@ -36902,7 +36943,7 @@ namespace ts {
                 }
             }
 
-            checkMembersForMissingOverrideModifier(node, type, typeWithThis);
+            checkMembersForMissingOverrideModifier(node, type, typeWithThis, staticType);
 
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
@@ -36939,13 +36980,18 @@ namespace ts {
             }
         }
 
-        function checkMembersForMissingOverrideModifier(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
+        function checkMembersForMissingOverrideModifier(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type, staticType: ObjectType) {
             const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             const baseTypes = baseTypeNode && getBaseTypes(type);
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
+            const baseStaticType = getBaseConstructorTypeOfClass(type);
 
             for (const member of node.members) {
+                if (hasAmbientModifier(member)) {
+                    continue;
+                }
+
                 if (isConstructorDeclaration(member)) {
                     forEach(member.parameters, param => {
                         if (isParameterPropertyDeclaration(param, member)) {
@@ -36955,17 +37001,22 @@ namespace ts {
                 }
                 checkClassMember(member);
             }
+
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
+                const hasStatic = hasStaticModifier(member);
                 if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (!declaredProp) {
                         return;
                     }
 
+                    const thisType = hasStatic ? staticType : typeWithThis;
+                    const baseType = hasStatic ? baseStaticType : baseWithThis;
+                    const prop = getPropertyOfType(thisType, declaredProp.escapedName);
+                    const baseProp = getPropertyOfType(baseType, declaredProp.escapedName);
+
                     const baseClassName = typeToString(baseWithThis);
-                    const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
-                    const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
                     if (prop && !baseProp && hasOverride) {
                         error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                     }
@@ -37142,7 +37193,7 @@ namespace ts {
                                 Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor;
                             error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType), typeToString(type));
                         }
-                        else if (compilerOptions.useDefineForClassFields) {
+                        else if (useDefineForClassFields) {
                             const uninitialized = derived.declarations?.find(d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
                             if (uninitialized
                                 && !(derived.flags & SymbolFlags.Transient)
@@ -38433,7 +38484,8 @@ namespace ts {
             if (isJSDocTypeExpression(node.parent) && isJSDocParameterTag(paramTag)) {
                 // Else we will add a diagnostic, see `checkJSDocVariadicType`.
                 const host = getHostSignatureFromJSDoc(paramTag);
-                if (host) {
+                const isCallbackTag = isJSDocCallbackTag(paramTag.parent.parent);
+                if (host || isCallbackTag) {
                     /*
                     Only return an array type if the corresponding parameter is marked as a rest parameter, or if there are no parameters.
                     So in the following situation we will not create an array type:
@@ -38441,7 +38493,9 @@ namespace ts {
                         function f(a) {}
                     Because `a` will just be of type `number | undefined`. A synthetic `...args` will also be added, which *will* get an array type.
                     */
-                    const lastParamDeclaration = lastOrUndefined(host.parameters);
+                    const lastParamDeclaration = isCallbackTag
+                        ? lastOrUndefined((paramTag.parent.parent as unknown as JSDocCallbackTag).typeExpression.parameters)
+                        : lastOrUndefined(host!.parameters);
                     const symbol = getParameterSymbolFromJSDoc(paramTag);
                     if (!lastParamDeclaration ||
                         symbol && lastParamDeclaration.symbol === symbol && isRestParameter(lastParamDeclaration)) {
@@ -40399,9 +40453,6 @@ namespace ts {
                         else if (flags & ModifierFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "override", "declare");
                         }
-                        else if (flags & ModifierFlags.Static) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
-                        }
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
                         }
@@ -40455,9 +40506,6 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
-                        }
-                        else if (flags & ModifierFlags.Override) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
