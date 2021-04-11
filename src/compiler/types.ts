@@ -6351,13 +6351,13 @@ namespace ts {
     }
 
     export const enum Extension {
+        Extensionless = "",
         Ts = ".ts",
         Tsx = ".tsx",
         Dts = ".d.ts",
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
-        Jsonc = ".jsonc",
         TsBuildInfo = ".tsbuildinfo"
     }
 

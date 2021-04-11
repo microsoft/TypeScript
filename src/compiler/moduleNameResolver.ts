@@ -1060,19 +1060,12 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
-        // JSON files may be imported as a module only if there is an explicit .json extension
-        if (extensions === Extensions.Json) {
+        if (extensions === Extensions.Json || extensions === Extensions.TSConfig) {
             const extensionLess = tryRemoveExtension(candidate, Extension.Json);
-            return extensionLess === undefined ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
+            return (extensionLess === undefined && extensions === Extensions.Json) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
         }
 
-        // TSConfig files may exist as extensionless, '.json', or '.jsonc'
-        if (extensions === Extensions.TSConfig) {
-            const extensionLess = tryRemoveExtension(candidate, Extension.Json) || tryRemoveExtension(candidate, Extension.Jsonc);
-            return tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
-        }
-
-        // For all other file imports, first try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
+        // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
         const resolvedByAddingExtension = tryAddingExtensions(candidate, extensions, onlyRecordFailures, state);
         if (resolvedByAddingExtension) {
             return resolvedByAddingExtension;
@@ -1108,7 +1101,7 @@ namespace ts {
             case Extensions.JavaScript:
                 return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
             case Extensions.TSConfig:
-                return tryExtension(Extension.Json) || tryExtension(Extension.Jsonc);
+                return tryExtension(Extension.Json) || tryExtension(Extension.Extensionless);
             case Extensions.Json:
                 return tryExtension(Extension.Json);
         }
