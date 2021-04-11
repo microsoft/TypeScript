@@ -6,7 +6,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: context => {
             const { jsx } = context.program.getCompilerOptions();
-            if (jsx !== JsxEmit.React && jsx !== JsxEmit.ReactNative) {
+            if (!jsx || [JsxEmit.React, JsxEmit.ReactNative, JsxEmit.ReactJSX, JsxEmit.ReactJSXDev].indexOf(jsx) === -1) {
                 return undefined;
             }
             const { sourceFile, span } = context;
