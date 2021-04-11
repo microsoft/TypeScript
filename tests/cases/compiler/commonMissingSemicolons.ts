@@ -59,19 +59,23 @@ class NoSemicolonClassA {
 }
 
 class NoSemicolonClassB {
-  ['a'] = 0;
+  ['a'] = 0
   {}
 }
 
 class NoSemicolonClassC {
-    ['a'] = 0
-    ['b']() {}
-  }
- 
+  ['a'] = 0;
+  {}
+}
+
 class NoSemicolonClassD {
-    ['a'] = 0
-    ['b']() {
-        c: true
-    }
+  ['a'] = 0
+  ['b']() {}
+}
+ 
+class NoSemicolonClassE {
+  ['a'] = 0
+  ['b']() {
+    c: true
   }
-      
+}

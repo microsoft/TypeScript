@@ -1400,10 +1400,6 @@
         "category": "Error",
         "code": 1442
     },
-    "A new function block or object is not allowed after this class member value. Is a semicolon missing after the member value?": {
-        "category": "Error",
-        "code": 1443
-    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

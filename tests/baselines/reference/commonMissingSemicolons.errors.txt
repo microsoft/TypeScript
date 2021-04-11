@@ -64,17 +64,19 @@ tests/cases/compiler/commonMissingSemicolons.ts(50,1): error TS1434: Unknown key
 tests/cases/compiler/commonMissingSemicolons.ts(50,1): error TS2304: Cannot find name 'vard'.
 tests/cases/compiler/commonMissingSemicolons.ts(50,6): error TS2304: Cannot find name 'myVar2'.
 tests/cases/compiler/commonMissingSemicolons.ts(51,1): error TS2304: Cannot find name 'varMyVar'.
-tests/cases/compiler/commonMissingSemicolons.ts(55,3): error TS1005: ';' expected.
+tests/cases/compiler/commonMissingSemicolons.ts(55,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/compiler/commonMissingSemicolons.ts(56,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/commonMissingSemicolons.ts(60,3): error TS1005: ';' expected.
+tests/cases/compiler/commonMissingSemicolons.ts(60,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/compiler/commonMissingSemicolons.ts(61,1): error TS1128: Declaration or statement expected.
-tests/cases/compiler/commonMissingSemicolons.ts(65,13): error TS1005: ';' expected.
-tests/cases/compiler/commonMissingSemicolons.ts(66,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/commonMissingSemicolons.ts(70,13): error TS1005: ';' expected.
-tests/cases/compiler/commonMissingSemicolons.ts(73,3): error TS1128: Declaration or statement expected.
+tests/cases/compiler/commonMissingSemicolons.ts(65,3): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/compiler/commonMissingSemicolons.ts(66,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/commonMissingSemicolons.ts(70,11): error TS1005: ';' expected.
+tests/cases/compiler/commonMissingSemicolons.ts(71,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/commonMissingSemicolons.ts(75,11): error TS1005: ';' expected.
+tests/cases/compiler/commonMissingSemicolons.ts(78,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/commonMissingSemicolons.ts (74 errors) ====
+==== tests/cases/compiler/commonMissingSemicolons.ts (76 errors) ====
     async function myAsyncFunction1() {}
     asynd function myAsyncFunction2() {}
     ~~~~~
@@ -266,37 +268,46 @@ tests/cases/compiler/commonMissingSemicolons.ts(73,3): error TS1128: Declaration
       ['a'] = 0
       {}
       ~
-!!! error TS1005: ';' expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     }
     ~
 !!! error TS1128: Declaration or statement expected.
     
     class NoSemicolonClassB {
-      ['a'] = 0;
+      ['a'] = 0
       {}
       ~
-!!! error TS1005: ';' expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     }
     ~
 !!! error TS1128: Declaration or statement expected.
     
     class NoSemicolonClassC {
-        ['a'] = 0
-        ['b']() {}
-                ~
-!!! error TS1005: ';' expected.
-      }
+      ['a'] = 0;
+      {}
       ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    class NoSemicolonClassD {
+      ['a'] = 0
+      ['b']() {}
+              ~
+!!! error TS1005: ';' expected.
+    }
+    ~
 !!! error TS1128: Declaration or statement expected.
      
-    class NoSemicolonClassD {
-        ['a'] = 0
-        ['b']() {
-                ~
+    class NoSemicolonClassE {
+      ['a'] = 0
+      ['b']() {
+              ~
 !!! error TS1005: ';' expected.
-            c: true
-        }
+        c: true
       }
-      ~
+    }
+    ~
 !!! error TS1128: Declaration or statement expected.
-          
+    

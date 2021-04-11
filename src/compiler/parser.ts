@@ -1537,20 +1537,9 @@ namespace ts {
             return false;
         }
 
-        const commonKeywords = [
-            "async",
-            "class",
-            "const",
-            "declare",
-            "export",
-            "function",
-            "interface",
-            "let",
-            "type",
-            "var",
-        ];
+        const viableKeywordSuggestions = Object.keys(textToKeywordObj).filter(keyword => keyword.length > 2);
 
-        function parseSemicolonAfter(expression: Expression | PropertyName, initializer?: Node) {
+        function parseSemicolonAfter(parentKind: SyntaxKind, expression: Expression | PropertyName, initializer?: Node) {
             // Consume the semicolon if it was explicitly provided.
             if (canParseSemicolon()) {
                 if (token() === SyntaxKind.SemicolonToken) {
@@ -1561,8 +1550,14 @@ namespace ts {
             }
 
             // The only way not having a semicolon after an expression when expected shouldn't create an error
-            // would be if we've there's an initializer, which would indicate the initializer already has an error
+            // would be if there's an initializer, which would indicate the initializer already has an error...
             if (initializer) {
+                // ...unless we're parsing property declarations, in which case we can know that the initializer
+                // was fine but we included something invalid immediately after it
+                if (token() === SyntaxKind.OpenBraceToken && parentKind === SyntaxKind.PropertyDeclaration) {
+                    parseErrorAtCurrentToken(Diagnostics._0_expected, ";");
+                }
+
                 return;
             }
 
@@ -1614,7 +1609,7 @@ namespace ts {
             }
 
             // The user alternately might have misspelled or forgotten to add a space after a common keyword.
-            const suggestion = getSpellingSuggestion(expressionText, commonKeywords, n => n) || getSpaceSuggestion(expressionText);
+            const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) || getSpaceSuggestion(expressionText);
             if (suggestion) {
                 parseErrorAt(pos, expression.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
                 return;
@@ -1634,7 +1629,7 @@ namespace ts {
         }
 
         function getSpaceSuggestion(expressionText: string) {
-            for (const keyword of commonKeywords) {
+            for (const keyword of viableKeywordSuggestions) {
                 if (expressionText.length > keyword.length + 2 && startsWith(expressionText, keyword)) {
                     return `${keyword} ${expressionText.slice(keyword.length)}`;
                 }
@@ -1665,7 +1660,7 @@ namespace ts {
                 return;
             }
 
-            return parseSemicolonAfter(name, initializer);
+            return parseSemicolonAfter(SyntaxKind.PropertyDeclaration, name, initializer);
         }
 
         function getExpressionText(expression: Expression | PropertyName) {
@@ -2575,9 +2570,7 @@ namespace ts {
                 case ParsingContext.RestProperties: // fallthrough
                 case ParsingContext.TypeMembers: return parseErrorAtCurrentToken(Diagnostics.Property_or_signature_expected);
                 case ParsingContext.ClassMembers:
-                    return token() === SyntaxKind.OpenBraceToken
-                        ? parseErrorAtCurrentToken(Diagnostics._0_expected, ";")
-                        : parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected);
+                    return parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected);
                 case ParsingContext.EnumMembers: return parseErrorAtCurrentToken(Diagnostics.Enum_member_expected);
                 case ParsingContext.HeritageClauseElement: return parseErrorAtCurrentToken(Diagnostics.Expression_expected);
                 case ParsingContext.VariableDeclarations:
@@ -5964,7 +5957,7 @@ namespace ts {
                 identifierCount++;
                 expression = finishNode(factory.createIdentifier(""), getNodePos());
             }
-            parseSemicolonAfter(expression);
+            parseSemicolonAfter(SyntaxKind.Block, expression);
             return finishNode(factory.createThrowStatement(expression), pos);
         }
 
@@ -6025,7 +6018,7 @@ namespace ts {
                 node = factory.createLabeledStatement(expression, parseStatement());
             }
             else {
-                parseSemicolonAfter(expression);
+                parseSemicolonAfter(SyntaxKind.Block, expression);
                 node = factory.createExpressionStatement(expression);
                 if (hasParen) {
                     // do not parse the same jsdoc twice
