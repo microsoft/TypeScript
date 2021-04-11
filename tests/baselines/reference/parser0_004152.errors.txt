@@ -26,7 +26,7 @@ tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,82): error T
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,84): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,85): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,86): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,88): error TS1433: Unexpected keyword or identifier.
+tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,88): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,94): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,96): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,97): error TS1005: ';' expected.
@@ -93,7 +93,7 @@ tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(3,25): error T
                                                                                          ~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
                                                                                            ~~~~~~
-!!! error TS1433: Unexpected keyword or identifier.
+!!! error TS1434: Unexpected keyword or identifier.
                                                                                                  ~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
                                                                                                    ~
