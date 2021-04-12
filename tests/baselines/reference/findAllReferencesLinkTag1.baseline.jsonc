@@ -332,8 +332,8 @@
 //     /**
 //      * {@link s}
 //      * @see {s}
-//      * {@link C.s}
-//      * @see {C.s}
+//      * {@link C.[|s|]}
+//      * @see {C.[|s|]}
 //      */
 //     r() { }
 // }
@@ -435,6 +435,24 @@
         },
         "isWriteAccess": true,
         "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 492,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 510,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
       }
     ]
   }

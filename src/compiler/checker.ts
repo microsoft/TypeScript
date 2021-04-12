@@ -39056,6 +39056,17 @@ namespace ts {
                     return symbol;
                 }
                 else if (isQualifiedName(name) && isIdentifier(name.left)) {
+                    // resolve C.m as a static member first
+                    const links = getNodeLinks(name);
+                    if (links.resolvedSymbol) {
+                        return links.resolvedSymbol;
+                    }
+                    checkQualifiedName(name, CheckMode.Normal);
+                    if (links.resolvedSymbol) {
+                        return links.resolvedSymbol;
+                    }
+
+                    // then resolve it as an instance member
                     const s = resolveEntityName(name.left, meaning, /*ignoreErrors*/ false);
                     if (s) {
                         const t = getDeclaredTypeOfSymbol(s);
