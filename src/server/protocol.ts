@@ -680,6 +680,7 @@ namespace ts.server.protocol {
     export type OrganizeImportsScope = GetCombinedCodeFixScope;
 
     export interface OrganizeImportsRequestArgs {
+        allowDestructiveCodeActions?: boolean;
         scope: OrganizeImportsScope;
     }
 

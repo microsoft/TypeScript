@@ -13,12 +13,13 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program,
         preferences: UserPreferences,
+        allowDestructiveCodeActions = true
     ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
-            coalesceImports(removeUnusedImports(importGroup, sourceFile, program)),
+            coalesceImports(removeUnusedImports(importGroup, sourceFile, program, allowDestructiveCodeActions)),
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
@@ -83,9 +84,9 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
-        // As a precaution, if there are *syntax* errors in the file, don't trust unused import detection (GH #43051)
-        if (program.getSyntacticDiagnostics(sourceFile).length) {
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, allowDestructiveCodeActions: boolean) {
+        // As a precaution, if there are *syntax* errors in the file, consider unused import detection to be destructive (GH #43051)
+        if (!allowDestructiveCodeActions && program.getSyntacticDiagnostics(sourceFile).length) {
             return oldImports;
         }
 

@@ -701,7 +701,7 @@ namespace ts.server {
             };
         }
 
-        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): readonly FileTextChanges[] {
+        organizeImports(_args: OrganizeImportsArgs, _formatOptions: FormatCodeSettings): readonly FileTextChanges[] {
             return notImplemented();
         }
 
