@@ -1,5 +1,5 @@
 // === /tests/cases/fourslash/jsdocLink_findAllReferences1.ts ===
-// interface [|A|] {}
+// interface [|A|]/*FIND ALL REFS*/ {}
 // /**
 //  * {@link [|A|]()} is ok
 //  */

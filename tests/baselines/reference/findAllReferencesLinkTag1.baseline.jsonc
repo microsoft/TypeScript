@@ -1,6 +1,6 @@
 // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
 // class C {
-//     [|m|]() { }
+//     [|m|]/*FIND ALL REFS*/() { }
 //     n = 1
 //     static s() { }
 //     /**
@@ -157,7 +157,7 @@
 // === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
 // class C {
 //     m() { }
-//     [|n|] = 1
+//     [|n|]/*FIND ALL REFS*/ = 1
 //     static s() { }
 //     /**
 //      * {@link m}
