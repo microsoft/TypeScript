@@ -2370,12 +2370,18 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
-            return isDeclarationName(contextToken)
+            return (isDeclarationName(contextToken) || isTypeKeyword(contextToken.kind))
                 && !isShorthandPropertyAssignment(contextToken.parent)
                 && !isJsxAttribute(contextToken.parent)
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
                 // If `contextToken !== previousToken`, this is `class C ex/**/`.
-                && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+                && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end))
+                // Don't block completions for these 2:
+                // `class C { prop \n constructor/**/ }`
+                // `class C { prop: number \n constructor/**/ }`
+                && !(isClassLike(contextToken.parent.parent) && isPropertyDeclaration(contextToken.parent) &&
+                    (isIdentifier(contextToken) || isTypeKeyword(contextToken.kind))
+                    && previousToken.kind === SyntaxKind.ConstructorKeyword);
         }
 
         function isFunctionLikeButNotConstructor(kind: SyntaxKind) {
@@ -2831,11 +2837,22 @@ namespace ts.Completions {
 
         if (!contextToken) return undefined;
 
+        // class c { prop: number \n constructor| }
+        if (isTypeKeyword(contextToken.kind) && location.kind === SyntaxKind.ConstructorKeyword) {
+            return contextToken.parent.parent as ObjectTypeDeclaration;
+        }
+
         switch (contextToken.kind) {
             case SyntaxKind.EqualsToken: // class c { public prop = | /* global completions */ }
                 return undefined;
 
+            case SyntaxKind.Identifier: // class c { prop \n constructor| }
             case SyntaxKind.SemicolonToken: // class c {getValue(): number; | }
+                // class c { prop: number; constructor| }
+                if (location.kind === SyntaxKind.ConstructorKeyword) {
+                    return contextToken.parent.parent as ObjectTypeDeclaration;
+                }
+                // fall through
             case SyntaxKind.CloseBraceToken: // class c { method() { } | }
                 // class c { method() { } b| }
                 return isFromObjectTypeDeclaration(location) && (location.parent as ClassElement | TypeElement).name === location
