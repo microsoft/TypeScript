@@ -18420,6 +18420,16 @@ namespace ts {
                         return result;
                     }
                 }
+                else if (source.flags & TypeFlags.TemplateLiteral) {
+                    if (!(target.flags & TypeFlags.TemplateLiteral)) {
+                        const baseConstraint = getBaseConstraintOfType(source);
+                        const constraint = baseConstraint && baseConstraint !== source ? baseConstraint : stringType;
+                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
+                    }
+                }
                 else if (source.flags & TypeFlags.StringMapping) {
                     if (target.flags & TypeFlags.StringMapping && (<StringMappingType>source).symbol === (<StringMappingType>target).symbol) {
                         if (result = isRelatedTo((<StringMappingType>source).type, (<StringMappingType>target).type, reportErrors)) {
