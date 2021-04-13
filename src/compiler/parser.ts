@@ -2569,8 +2569,8 @@ namespace ts {
                 case ParsingContext.SwitchClauseStatements: return parseErrorAtCurrentToken(Diagnostics.Statement_expected);
                 case ParsingContext.RestProperties: // fallthrough
                 case ParsingContext.TypeMembers: return parseErrorAtCurrentToken(Diagnostics.Property_or_signature_expected);
-                case ParsingContext.ClassMembers:
-                    return parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected);
+                case ParsingContext.ClassMembers: return parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected);
+
                 case ParsingContext.EnumMembers: return parseErrorAtCurrentToken(Diagnostics.Enum_member_expected);
                 case ParsingContext.HeritageClauseElement: return parseErrorAtCurrentToken(Diagnostics.Expression_expected);
                 case ParsingContext.VariableDeclarations:
