@@ -28441,7 +28441,8 @@ namespace ts {
             for (const sig of signatures) {
                 const minCount = getMinArgumentCount(sig);
                 const maxCount = getParameterCount(sig);
-                if (minCount < argCount && minCount > belowArgCount) belowArgCount = minCount;
+                // TODO: Not sure why the opposite end of each comparison is here (eg minCount < argCount)
+                if (belowArgCount < minCount && minCount < argCount) belowArgCount = minCount;
                 if (argCount < maxCount && maxCount < aboveArgCount) aboveArgCount = maxCount;
                 if (minCount < min) {
                     min = minCount;
@@ -28455,9 +28456,9 @@ namespace ts {
             }
 
             const hasRestParameter = some(signatures, hasEffectiveRestParameter);
-            const paramRange = hasRestParameter ? min :
-                min < max ? min + "-" + max :
-                min;
+            const paramRange = hasRestParameter ? min
+                : min < max ? min + "-" + max
+                : min;
             const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
             if (argCount <= max && hasSpreadArgument) {
                 argCount--;
@@ -28466,15 +28467,34 @@ namespace ts {
             let spanArray: NodeArray<Node>;
             let related: DiagnosticWithLocation | undefined;
 
-            const error = hasRestParameter || hasSpreadArgument ?
-                hasRestParameter && hasSpreadArgument ?
-                    Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                    hasRestParameter ?
-                        Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                        Diagnostics.Expected_0_arguments_but_got_1_or_more :
-                    paramRange === 1 && argCount === 0 && isPromiseResolveArityError(node) ?
+            let error;
+            if (hasRestParameter || hasSpreadArgument) {
+                if (hasRestParameter && hasSpreadArgument) {
+                    // TODO: Also need to skip tuple rests but w/e
+                    const indexOfRest = Math.max(...signatures.filter(s => signatureHasRestParameter(s)).map(s => s.parameters.length - 1))
+                    const indexOfSpread = getSpreadArgumentIndex(args)
+                    if (indexOfRest < indexOfSpread)
+                        error = Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more;
+                    else
+                        // "The spread argument {0} is only assignable to a rest parameter."
+                        // "  related: This spread was applied to the parameter {0}. (where 0=sig.parameters[indexOfSpread])
+                        // TODO: also need to move error span to call.arguments[indexOfSpread]
+                        // OR
+                        // Expected 4 arguments but Typescript was not able to match a spread of T[] to the parameter X and following
+                        error = Diagnostics.Something_else;
+                }
+                else if (hasRestParameter) {
+                    error = Diagnostics.Expected_at_least_0_arguments_but_got_1;
+                } else {
+                    // Expected 4 arguments but Typescript could only prove that you provided 2.
+                    error = Diagnostics.Expected_0_arguments_but_got_1_or_more;
+                }
+            }
+            else {
+                error = (paramRange === 1 && argCount === 0 && isPromiseResolveArityError(node) ?
                         Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise :
-                        Diagnostics.Expected_0_arguments_but_got_1;
+                    Diagnostics.Expected_0_arguments_but_got_1);
+            }
 
             if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
                 const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
