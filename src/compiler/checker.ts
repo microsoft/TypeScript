@@ -35371,15 +35371,6 @@ namespace ts {
             if (!strictNullChecks) return;
             if (getFalsyFlags(type)) return;
 
-            if (getAwaitedTypeOfPromise(type)) {
-                errorAndMaybeSuggestAwait(
-                    condExpr,
-                    /*maybeMissingAwait*/ true,
-                    Diagnostics.This_condition_will_always_return_true_since_this_0_appears_to_always_be_defined,
-                    getTypeNameForErrorDisplay(type));
-                return;
-            }
-
             const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
             const testedNode = isIdentifier(location) ? location
                 : isPropertyAccessExpression(location) ? location.name
@@ -35392,12 +35383,13 @@ namespace ts {
             }
 
             // While it technically should be invalid for any known-truthy value
-            // to be tested, we de-scope to functions unrefenced in the block as a
-            // heuristic to identify the most common bugs. There are too many
-            // false positives for values sourced from type definitions without
-            // strictNullChecks otherwise.
+            // to be tested, we de-scope to functions and Promises unreferenced in
+            // the block as a heuristic to identify the most common bugs. There
+            // are too many false positives for values sourced from type
+            // definitions without strictNullChecks otherwise.
             const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
-            if (callSignatures.length === 0) {
+            const isPromise = !!getAwaitedTypeOfPromise(type);
+            if (callSignatures.length === 0 && !isPromise) {
                 return;
             }
 
@@ -35406,14 +35398,23 @@ namespace ts {
                 return;
             }
 
-            const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
+            const isUsed = isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+                || body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
             if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_appears_to_always_be_defined_Did_you_mean_to_call_it_instead);
+                if (isPromise) {
+                    errorAndMaybeSuggestAwait(
+                        location,
+                        /*maybeMissingAwait*/ true,
+                        Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined,
+                        getTypeNameForErrorDisplay(type));
+                }
+                else {
+                    error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
+                }
             }
         }
 
-        function isFunctionUsedInConditionBody(expr: Expression, body: Statement | Expression, testedNode: Node, testedSymbol: Symbol): boolean {
+        function isSymbolUsedInConditionBody(expr: Expression, body: Statement | Expression, testedNode: Node, testedSymbol: Symbol): boolean {
             return !!forEachChild(body, function check(childNode): boolean | undefined {
                 if (isIdentifier(childNode)) {
                     const childSymbol = getSymbolAtLocation(childNode);
@@ -35451,7 +35452,7 @@ namespace ts {
             });
         }
 
-        function isFunctionUsedInBinaryExpressionChain(node: Node, testedSymbol: Symbol): boolean {
+        function isSymbolUsedInBinaryExpressionChain(node: Node, testedSymbol: Symbol): boolean {
             while (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
                 const isUsed = forEachChild(node.right, function visit(child): boolean | undefined {
                     if (isIdentifier(child)) {
