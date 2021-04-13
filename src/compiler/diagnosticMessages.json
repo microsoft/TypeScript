@@ -1360,6 +1360,10 @@
         "category": "Error",
         "code": 1432
     },
+    "Decorators may not be applied to 'this' parameters.": {
+        "category": "Error",
+        "code": 1433
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3312,6 +3316,18 @@
         "category": "Error",
         "code": 2809
     },
+    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
+        "category": "Error",
+        "code": 2810
+    },
+    "Initializer for property '{0}'": {
+        "category": "Error",
+        "code": 2811
+    },
+    "Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2812
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3921,6 +3937,14 @@
     "The root value of a '{0}' file must be an object.": {
         "category": "Error",
         "code": 5092
+    },
+    "Compiler option '--{0}' may only be used with '--build'.": {
+        "category": "Error",
+        "code": 5093
+    },
+    "Compiler option '--{0}' may not be used with '--build'.": {
+        "category": "Error",
+        "code": 5094
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

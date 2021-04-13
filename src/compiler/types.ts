@@ -3546,6 +3546,7 @@ namespace ts {
         /* @internal */ localJsxFragmentFactory?: EntityName;
 
         /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+        /* @internal */ endFlowNode?: FlowNode;
     }
 
     /* @internal */
@@ -4344,7 +4345,6 @@ namespace ts {
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
-        InReverseMappedType                     = 1 << 25,
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -6167,7 +6167,14 @@ namespace ts {
     }
 
     /* @internal */
+    export interface AlternateModeDiagnostics {
+        diagnostic: DiagnosticMessage;
+        getOptionsNameMap: () => OptionsNameMap;
+    }
+
+    /* @internal */
     export interface DidYouMeanOptionsDiagnostics {
+        alternateMode?: AlternateModeDiagnostics;
         optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,

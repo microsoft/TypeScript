@@ -2991,9 +2991,16 @@ namespace ts {
         function parseParameterWorker(inOuterAwaitContext: boolean): ParameterDeclaration {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
+
+            // FormalParameter [Yield,Await]:
+            //      BindingElement[?Yield,?Await]
+
+            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
+            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
+
             if (token() === SyntaxKind.ThisKeyword) {
                 const node = factory.createParameterDeclaration(
-                    /*decorators*/ undefined,
+                    decorators,
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
                     createIdentifier(/*isIdentifier*/ true),
@@ -3001,14 +3008,14 @@ namespace ts {
                     parseTypeAnnotation(),
                     /*initializer*/ undefined
                 );
+
+                if (decorators) {
+                    parseErrorAtRange(decorators[0], Diagnostics.Decorators_may_not_be_applied_to_this_parameters);
+                }
+
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
             }
 
-            // FormalParameter [Yield,Await]:
-            //      BindingElement[?Yield,?Await]
-
-            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
             const savedTopLevel = topLevel;
             topLevel = false;
             const modifiers = parseModifiers();
@@ -7437,7 +7444,6 @@ namespace ts {
                                 state = JSDocState.SavingComments;
                                 const commentEnd = scanner.getStartPos();
                                 const linkStart = scanner.getTextPos() - 1;
-                                // TODO: redo here
                                 const link = parseJSDocLink(linkStart);
                                 if (link) {
                                     if (!linkEnd) {
@@ -7649,8 +7655,9 @@ namespace ts {
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
-                                if (state === JSDocState.SavingBackticks || !previousWhitespace && state === JSDocState.SavingComments) {
-                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace
+                                if (state === JSDocState.SavingBackticks
+                                    || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
+                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
                                     comments.push(scanner.getTokenText());
                                     break;
                                 }
@@ -7727,6 +7734,11 @@ namespace ts {
                     else if (comments.length) {
                         return comments.join("");
                     }
+                }
+
+                function isNextJSDocTokenWhitespace() {
+                    const next = nextTokenJSDoc();
+                    return next === SyntaxKind.WhitespaceTrivia || next === SyntaxKind.NewLineTrivia;
                 }
 
                 function parseJSDocLink(start: number) {

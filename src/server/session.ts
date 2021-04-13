@@ -1224,6 +1224,7 @@ namespace ts.server {
                     containerName: info.containerName,
                     kind: info.kind,
                     name: info.name,
+                    ...info.unverified && { unverified: info.unverified },
                 };
             });
         }
@@ -1300,8 +1301,8 @@ namespace ts.server {
             }));
         }
 
-        private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
-            return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
+        private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.DefinitionInfo[] {
+            return definitions.map(def => ({ ...this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project), ...def.unverified && { unverified: def.unverified } }));
         }
 
         /*
