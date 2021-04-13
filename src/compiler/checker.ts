@@ -38864,15 +38864,14 @@ namespace ts {
             return node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-        function isJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): boolean {
+        function getJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): JSDocNameReference | undefined {
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent as QualifiedName;
             }
             while (node.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 node = node.parent as PropertyAccessExpression;
             }
-
-            return node.parent.kind === SyntaxKind.JSDocNameReference;
+            return isJSDocNameReference(node.parent) ? node.parent : undefined;
         }
 
         function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T | undefined): T | undefined {
@@ -39037,7 +39036,6 @@ namespace ts {
                         const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>name.parent);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-
                     return resolveEntityName(name, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
@@ -39059,20 +39057,37 @@ namespace ts {
                 const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
             }
-            else if (isJSDocEntryNameReference(name)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
-            }
-            else if (isJSDocLink(name.parent)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ true);
-            }
 
+            const jsdocReference = getJSDocEntryNameReference(name);
+            if (jsdocReference || isJSDocLink(name.parent)) {
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+                const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, getHostSignatureFromJSDoc(name));
+                if (symbol) {
+                    return symbol;
+                }
+                else if (isQualifiedName(name) && isIdentifier(name.left)) {
+                    // resolve C.m as a static member first
+                    const links = getNodeLinks(name);
+                    if (links.resolvedSymbol) {
+                        return links.resolvedSymbol;
+                    }
+                    checkQualifiedName(name, CheckMode.Normal);
+                    if (links.resolvedSymbol) {
+                        return links.resolvedSymbol;
+                    }
+
+                    // then resolve it as an instance member
+                    const s = resolveEntityName(name.left, meaning, /*ignoreErrors*/ false);
+                    if (s) {
+                        const t = getDeclaredTypeOfSymbol(s);
+                        return getPropertyOfType(t, name.right.escapedText);
+                    }
+                }
+            }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(<Identifier>name, /*meaning*/ SymbolFlags.FunctionScopedVariable);
             }
 
-            // Do we want to return undefined here?
             return undefined;
         }
 

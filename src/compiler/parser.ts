@@ -7443,7 +7443,6 @@ namespace ts {
                                 state = JSDocState.SavingComments;
                                 const commentEnd = scanner.getStartPos();
                                 const linkStart = scanner.getTextPos() - 1;
-                                // TODO: redo here
                                 const link = parseJSDocLink(linkStart);
                                 if (link) {
                                     if (!linkEnd) {
