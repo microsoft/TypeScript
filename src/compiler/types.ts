@@ -6785,6 +6785,8 @@ namespace ts {
 
     /* @internal */
     export interface ParenthesizerRules {
+        getParenthesizeLeftSideOfBinaryForOperator(binaryOperator: SyntaxKind): (leftSide: Expression) => Expression;
+        getParenthesizeRightSideOfBinaryForOperator(binaryOperator: SyntaxKind): (rightSide: Expression) => Expression;
         parenthesizeLeftSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression): Expression;
         parenthesizeRightSideOfBinary(binaryOperator: SyntaxKind, leftSide: Expression | undefined, rightSide: Expression): Expression;
         parenthesizeExpressionOfComputedPropertyName(expression: Expression): Expression;
@@ -6798,6 +6800,7 @@ namespace ts {
         parenthesizeExpressionsOfCommaDelimitedList(elements: readonly Expression[]): NodeArray<Expression>;
         parenthesizeExpressionForDisallowedComma(expression: Expression): Expression;
         parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression;
+        parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
         parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode;
         parenthesizeMemberOfElementType(member: TypeNode): TypeNode;
