@@ -220,6 +220,8 @@ namespace ts {
             updateNonNullChain,
             createMetaProperty,
             updateMetaProperty,
+            createPipelineApplicationExpression,
+            updatePipelineApplicationExpression,
             createTemplateSpan,
             updateTemplateSpan,
             createSemicolonClassElement,
@@ -3057,6 +3059,28 @@ namespace ts {
         function updateMetaProperty(node: MetaProperty, name: Identifier) {
             return node.name !== name
                 ? update(createMetaProperty(node.keywordToken, name), node)
+                : node;
+        }
+
+        // @api
+        function createPipelineApplicationExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argument: Expression): PipelineApplicationExpression {
+            const node = createBaseExpression<PipelineApplicationExpression>(SyntaxKind.PipelineApplicationExpression);
+            node.argument = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(argument);
+            node.expression = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression);
+            node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);;
+            node.transformFlags |=
+                propagateChildFlags(node.argument) |
+                propagateChildFlags(node.expression) |
+                TransformFlags.ContainsPipeline;
+            return node;
+        }
+
+        // @api
+        function updatePipelineApplicationExpression(node: PipelineApplicationExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argument: Expression): PipelineApplicationExpression {
+            return node.expression !== expression
+                || node.argument !== argument
+                || node.typeArguments !== typeArguments
+                ? update(createPipelineApplicationExpression(expression, typeArguments, argument), node)
                 : node;
         }
 

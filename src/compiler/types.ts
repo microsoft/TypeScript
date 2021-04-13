@@ -246,6 +246,7 @@ namespace ts {
         PropertyAccessExpression,
         ElementAccessExpression,
         CallExpression,
+        PipelineApplicationExpression,
         NewExpression,
         TaggedTemplateExpression,
         TypeAssertionExpression,
@@ -1946,6 +1947,11 @@ namespace ts {
         | LogicalOperator
         ;
 
+    export type PipelineOperatorOrHigher
+        = LogicalOperatorOrHigher
+        | SyntaxKind.BarGreaterThanToken
+        ;
+
     // see: https://tc39.github.io/ecma262/#prod-AssignmentOperator
     export type CompoundAssignmentOperator =
         | SyntaxKind.PlusEqualsToken
@@ -1975,6 +1981,7 @@ namespace ts {
     export type AssignmentOperatorOrHigher =
         | SyntaxKind.QuestionQuestionToken
         | LogicalOperatorOrHigher
+        | PipelineOperatorOrHigher
         | AssignmentOperator
         ;
 
@@ -2332,6 +2339,14 @@ namespace ts {
         readonly arguments: NodeArray<Expression>;
     }
 
+    export interface PipelineApplicationExpression extends LeftHandSideExpression, Declaration {
+        readonly kind: SyntaxKind.PipelineApplicationExpression;
+        readonly expression: Expression;
+        readonly typeArguments?: NodeArray<TypeNode>;
+        readonly argument: Expression;
+        readonly barGreaterThanToken: BarGreaterThanToken;
+    }
+
     export interface CallChain extends CallExpression {
         _optionalChainBrand: any;
     }
@@ -2438,6 +2453,7 @@ namespace ts {
         | NewExpression
         | TaggedTemplateExpression
         | Decorator
+        | PipelineApplicationExpression
         | JsxOpeningLikeElement
         ;
 
@@ -7116,6 +7132,8 @@ namespace ts {
         updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain;
         createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty;
         updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty;
+        createPipelineApplicationExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argument: Expression): PipelineApplicationExpression;
+        updatePipelineApplicationExpression(node: PipelineApplicationExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argument: Expression): PipelineApplicationExpression;
 
         //
         // Misc

@@ -237,6 +237,11 @@ namespace ts {
                     visitNode(cbNode, (<CallExpression>node).questionDotToken) ||
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
                     visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
+            case SyntaxKind.PipelineApplicationExpression:
+                return visitNode(cbNode, (<PipelineApplicationExpression>node).argument) ||
+                    visitNode(cbNode, (<PipelineApplicationExpression>node).barGreaterThanToken) ||
+                    visitNode(cbNode, (<PipelineApplicationExpression>node).expression) ||
+                    visitNodes(cbNode, cbNodes, (<PipelineApplicationExpression>node).typeArguments) ;
             case SyntaxKind.TaggedTemplateExpression:
                 return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
                     visitNode(cbNode, (<TaggedTemplateExpression>node).questionDotToken) ||
@@ -4430,7 +4435,23 @@ namespace ts {
             return node;
         }
 
-        function parseConditionalExpressionRest(leftOperand: Expression, pos: number): Expression {
+        function parsePipelineApplicationExpression(leftOperand: Expression): Expression {
+            return finishNode(
+                factory.createPipelineApplicationExpression(
+                    parseBinaryExpressionOrHigher(/*precedence*/ 1),
+                    /*typeArguments*/ undefined,
+                    leftOperand
+                ),
+                leftOperand.pos
+            );
+        }
+
+        function parseConditionalExpressionRest(startLeftOperand: Expression, pos: number): Expression {
+            let leftOperand = startLeftOperand;
+            while (parseOptionalToken(SyntaxKind.BarGreaterThanToken)) {
+                leftOperand = parsePipelineApplicationExpression(leftOperand);
+            }
+
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.
             const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
             if (!questionToken) {
