@@ -29139,6 +29139,10 @@ namespace ts {
             let effectiveParameterCount = getParameterCount(signature);
             let effectiveMinimumArguments = getMinArgumentCount(signature);
 
+            if (isPipelineApplicationExpression(node)) {
+                return true;
+            }
+            else
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 argCount = args.length;
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
@@ -29670,7 +29674,9 @@ namespace ts {
             if (isJsxOpeningLikeElement(node)) {
                 return node.attributes.properties.length > 0 || (isJsxOpeningElement(node) && node.parent.children.length > 0) ? [node.attributes] : emptyArray;
             }
-            const args = node.arguments || emptyArray;
+            const args = isPipelineApplicationExpression(node)
+                ? [node.argument]
+                : node.arguments || emptyArray;
             const spreadIndex = getSpreadArgumentIndex(args);
             if (spreadIndex >= 0) {
                 // Create synthetic arguments from spreads of tuple types.
@@ -30387,7 +30393,7 @@ namespace ts {
                 }
                 else {
                     let relatedInformation: DiagnosticRelatedInformation | undefined;
-                    if (node.arguments.length === 1) {
+                    if (isPipelineApplicationExpression(node) || node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
                             relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon);
@@ -30420,6 +30426,85 @@ namespace ts {
             }
 
             return resolveCall(node, callSignatures, candidatesOutArray, checkMode, callChainFlags);
+        }
+
+        function resolvePipelineApplicationExpression(node: PipelineApplicationExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+            let funcType = checkExpression(node.expression);
+
+            funcType = checkNonNullTypeWithReporter(
+                funcType,
+                node.expression,
+                reportCannotInvokePossiblyNullOrUndefinedError
+            );
+
+            if (funcType === silentNeverType) {
+                return silentNeverSignature;
+            }
+
+            const apparentType = getApparentType(funcType);
+            if (apparentType === errorType) {
+                // Another error has already been reported
+                return resolveErrorCall(node);
+            }
+
+            // Technically, this signatures list may be incomplete. We are taking the apparent type,
+            // but we are not including call signatures that may have been added to the Object or
+            // Function interface, since they have none by default. This is a bit of a leap of faith
+            // that the user will not add any.
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
+
+            // TS 1.0 Spec: 4.12
+            // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
+            // types are provided for the argument expressions, and the result is always of type Any.
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, numConstructSignatures)) {
+                // The unknownType indicates that an error already occurred (and was reported).  No
+                // need to report another error in this case.
+                // if (funcType !== errorType && node.typeArguments) {
+                //     error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
+                // }
+                return resolveUntypedCall(node);
+            }
+            // If FuncExpr's apparent type(section 3.8.1) is a function type, the call is a typed function call.
+            // TypeScript employs overload resolution in typed function calls in order to support functions
+            // with multiple call signatures.
+            if (!callSignatures.length) {
+                if (numConstructSignatures) {
+                    error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
+                }
+                else {
+                    let relatedInformation: DiagnosticRelatedInformation | undefined;
+                    const text = getSourceFileOfNode(node).text;
+                    if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
+                        relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon);
+                    }
+                    invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
+                }
+                return resolveErrorCall(node);
+            }
+            // When a call to a generic function is an argument to an outer call to a generic function for which
+            // inference is in process, we have a choice to make. If the inner call relies on inferences made from
+            // its contextual type to its return type, deferring the inner call processing allows the best possible
+            // contextual type to accumulate. But if the outer call relies on inferences made from the return type of
+            // the inner call, the inner call should be processed early. There's no sure way to know which choice is
+            // right (only a full unification algorithm can determine that), so we resort to the following heuristic:
+            // If no type arguments are specified in the inner call and at least one call signature is generic and
+            // returns a function type, we choose to defer processing. This narrowly permits function composition
+            // operators to flow inferences through return types, but otherwise processes calls right away. We
+            // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
+            // propagated out and eventually turned into nonInferrableType (a type that is assignable to anything and
+            // from which we never make inferences).
+            if (checkMode & CheckMode.SkipGenericFunctions && callSignatures.some(isGenericFunctionReturningFunction)) {
+                skippedGenericFunction(node, checkMode);
+                return resolvingSignature;
+            }
+            // If the function is explicitly marked with `@class`, then it must be constructed.
+            if (callSignatures.some(sig => isInJSFile(sig.declaration) && !!getJSDocClassTag(sig.declaration!))) {
+                error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
+                return resolveErrorCall(node);
+            }
+
+            return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
         }
 
         function isGenericFunctionReturningFunction(signature: Signature) {
@@ -30879,6 +30964,8 @@ namespace ts {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     return resolveJsxOpeningLikeElement(node, candidatesOutArray, checkMode);
+                case SyntaxKind.PipelineApplicationExpression:
+                    return resolvePipelineApplicationExpression(node, candidatesOutArray, checkMode);
             }
             throw Debug.assertNever(node, "Branch in 'resolveSignature' should be unreachable.");
         }
@@ -31137,6 +31224,54 @@ namespace ts {
         function checkPipelineHackExpression(node: PipelineHackExpression, checkMode?: CheckMode): Type {
             checkExpression(node.argument, checkMode);
             return checkExpression(node.expression, checkMode);
+        }
+
+        function checkPipelineApplicationExpression(node: PipelineApplicationExpression, checkMode?: CheckMode): Type {
+            // if (!checkGrammarTypeArguments(node, node.typeArguments)) checkGrammarArguments(node.arguments);
+
+            const signature = getResolvedSignature(node, /*candidatesOutArray*/ undefined, checkMode);
+            if (signature === resolvingSignature) {
+                // CheckMode.SkipGenericFunctions is enabled and this is a call to a generic function that
+                // returns a function type. We defer checking and return nonInferrableType.
+                return nonInferrableType;
+            }
+
+            if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                return voidType;
+            }
+
+            // In JavaScript files, calls to any identifier 'require' are treated as external module imports
+            if (isInJSFile(node) && isCommonJsRequire(node)) {
+                return resolveExternalModuleTypeByLiteral(node.argument as StringLiteral);
+            }
+
+            const returnType = getReturnTypeOfSignature(signature);
+            // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
+            // as a fresh unique symbol literal type.
+            if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
+                return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
+            }
+            if (node.parent.kind === SyntaxKind.ExpressionStatement &&
+                returnType.flags & TypeFlags.Void && getTypePredicateOfSignature(signature)) {
+                if (!isDottedName(node.expression)) {
+                    error(node.expression, Diagnostics.Assertions_require_the_call_target_to_be_an_identifier_or_qualified_name);
+                }
+                // else if (!getEffectsSignature(node)) {
+                //     const diagnostic = error(node.expression, Diagnostics.Assertions_require_every_name_in_the_call_target_to_be_declared_with_an_explicit_type_annotation);
+                //     getTypeOfDottedName(node.expression, diagnostic);
+                // }
+            }
+
+            if (isInJSFile(node)) {
+                const jsSymbol = getSymbolOfExpando(node, /* allowDeclaration */ true);
+                if (jsSymbol && !!jsSymbol.exports?.size) {
+                    const jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, undefined, undefined);
+                    jsAssignmentType.objectFlags |= ObjectFlags.JSLiteral;
+                    return getIntersectionType([returnType, jsAssignmentType]);
+                }
+            }
+
+            return returnType;
         }
 
         function isSymbolOrSymbolForCall(node: Node) {
@@ -34093,6 +34228,8 @@ namespace ts {
                     return checkCallExpression(node as CallExpression, checkMode);
                 case SyntaxKind.PipelineHackExpression:
                     return checkPipelineHackExpression(node as PipelineHackExpression, checkMode);
+                case SyntaxKind.PipelineApplicationExpression:
+                    return checkPipelineApplicationExpression(node as PipelineApplicationExpression, checkMode);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.ParenthesizedExpression:

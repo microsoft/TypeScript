@@ -519,6 +519,9 @@ namespace ts {
                 case SyntaxKind.PipelineHackExpression:
                     return visitPipelineHackExpression(node as PipelineHackExpression);
 
+                case SyntaxKind.PipelineApplicationExpression:
+                    return visitPipelineApplicationExpression(node as PipelineApplicationExpression);
+
                 case SyntaxKind.NewExpression:
                     return visitNewExpression(node as NewExpression);
 
@@ -2273,6 +2276,14 @@ namespace ts {
             return factory.updatePipelineHackExpression(
                 node,
                 visitNode(node.expression, visitor, isExpression),
+                visitNode(node.argument, visitor, isExpression));
+        }
+
+        function visitPipelineApplicationExpression(node: PipelineApplicationExpression) {
+            return factory.updatePipelineApplicationExpression(
+                node,
+                visitNode(node.expression, visitor, isExpression),
+                /*typeArguments*/ undefined,
                 visitNode(node.argument, visitor, isExpression));
         }
 

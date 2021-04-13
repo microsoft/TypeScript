@@ -224,6 +224,8 @@ namespace ts {
             updateMetaProperty,
             createPipelineHackExpression,
             updatePipelineHackExpression,
+            createPipelineApplicationExpression,
+            updatePipelineApplicationExpression,
             createTemplateSpan,
             updateTemplateSpan,
             createSemicolonClassElement,
@@ -3164,11 +3166,31 @@ namespace ts {
             return node;
         }
 
+        function createPipelineApplicationExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argument: Expression): PipelineApplicationExpression {
+            const node = createBaseExpression<PipelineApplicationExpression>(SyntaxKind.PipelineApplicationExpression);
+            node.argument = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(argument);
+            node.expression = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression);
+            node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);;
+            node.transformFlags |=
+                propagateChildFlags(node.argument) |
+                propagateChildFlags(node.expression) |
+                TransformFlags.ContainsPipeline;
+            return node;
+        }
+
         // @api
         function updatePipelineHackExpression(node: PipelineHackExpression, expression: Expression, argument: Expression): PipelineHackExpression {
             return node.expression !== expression
                 || node.argument !== argument
                 ? update(createPipelineHackExpression(expression, argument), node)
+                : node;
+        }
+
+        function updatePipelineApplicationExpression(node: PipelineApplicationExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argument: Expression): PipelineApplicationExpression {
+            return node.expression !== expression
+                || node.argument !== argument
+                || node.typeArguments !== typeArguments
+                ? update(createPipelineApplicationExpression(expression, typeArguments, argument), node)
                 : node;
         }
 

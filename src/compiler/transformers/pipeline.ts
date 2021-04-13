@@ -44,6 +44,16 @@ namespace ts {
                                 ])
                             );
                         }
+                        if (isPipelineApplicationExpression(node)) {
+                            const call = factory.createCallExpression(
+                                visitNode(node.expression, findPipelineVisitor),
+                                /*typeArguments*/ undefined,
+                                [visitNode(node.argument, findPipelineVisitor)]
+                            );
+                            setSourceMapRange(call, node);
+                            setCommentRange(call, node);
+                            return call;
+                        }
                         return visitEachChild(node, findPipelineVisitor, context);
                     };
                     return node;

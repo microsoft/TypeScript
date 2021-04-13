@@ -726,6 +726,13 @@ namespace ts {
                     nodeVisitor(node.expression, visitor, isExpression),
                     nodeVisitor(node.argument, visitor, isExpression));
 
+            case SyntaxKind.PipelineApplicationExpression:
+                Debug.type<PipelineApplicationExpression>(node);
+                return factory.updatePipelineApplicationExpression(node,
+                    nodeVisitor(node.expression, visitor, isExpression),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
+                    nodeVisitor(node.argument, visitor, isExpression));
+
             case SyntaxKind.NewExpression:
                 Debug.type<NewExpression>(node);
                 return factory.updateNewExpression(node,
