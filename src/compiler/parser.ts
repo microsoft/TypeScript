@@ -5604,6 +5604,7 @@ namespace ts {
         // STATEMENTS
         function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 const multiLine = scanner.hasPrecedingLineBreak();
@@ -5619,7 +5620,7 @@ namespace ts {
             }
             else {
                 const statements = createMissingList<Statement>();
-                return finishNode(factory.createBlock(statements, /*multiLine*/ undefined), pos);
+                return withJSDoc(finishNode(factory.createBlock(statements, /*multiLine*/ undefined), pos), hasJSDoc);
             }
         }
 
@@ -5655,8 +5656,9 @@ namespace ts {
 
         function parseEmptyStatement(): Statement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.SemicolonToken);
-            return finishNode(factory.createEmptyStatement(), pos);
+            return withJSDoc(finishNode(factory.createEmptyStatement(), pos), hasJSDoc);
         }
 
         function parseIfStatement(): IfStatement {
@@ -5674,6 +5676,7 @@ namespace ts {
 
         function parseDoStatement(): DoStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.DoKeyword);
             const statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
@@ -5687,22 +5690,24 @@ namespace ts {
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             parseOptional(SyntaxKind.SemicolonToken);
-            return finishNode(factory.createDoStatement(statement, expression), pos);
+            return withJSDoc(finishNode(factory.createDoStatement(statement, expression), pos), hasJSDoc);
         }
 
         function parseWhileStatement(): WhileStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WhileKeyword);
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const statement = parseStatement();
-            return finishNode(factory.createWhileStatement(expression, statement), pos);
+            return withJSDoc(finishNode(factory.createWhileStatement(expression, statement), pos), hasJSDoc);
         }
 
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ForKeyword);
             const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
@@ -5741,11 +5746,12 @@ namespace ts {
                 node = factory.createForStatement(initializer, condition, incrementor, parseStatement());
             }
 
-            return finishNode(node, pos);
+            return withJSDoc(finishNode(node, pos) as ForStatement | ForInOrOfStatement, hasJSDoc);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
 
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             const label = canParseSemicolon() ? undefined : parseIdentifier();
@@ -5754,26 +5760,28 @@ namespace ts {
             const node = kind === SyntaxKind.BreakStatement
                 ? factory.createBreakStatement(label)
                 : factory.createContinueStatement(label);
-            return finishNode(node, pos);
+            return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
         function parseReturnStatement(): ReturnStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ReturnKeyword);
             const expression = canParseSemicolon() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
-            return finishNode(factory.createReturnStatement(expression), pos);
+            return withJSDoc(finishNode(factory.createReturnStatement(expression), pos), hasJSDoc);
         }
 
         function parseWithStatement(): WithStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WithKeyword);
             const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
             const statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
-            return finishNode(factory.createWithStatement(expression, statement), pos);
+            return withJSDoc(finishNode(factory.createWithStatement(expression, statement), pos), hasJSDoc);
         }
 
         function parseCaseClause(): CaseClause {
@@ -5807,12 +5815,13 @@ namespace ts {
 
         function parseSwitchStatement(): SwitchStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const caseBlock = parseCaseBlock();
-            return finishNode(factory.createSwitchStatement(expression, caseBlock), pos);
+            return withJSDoc(finishNode(factory.createSwitchStatement(expression, caseBlock), pos), hasJSDoc);
         }
 
         function parseThrowStatement(): ThrowStatement {
@@ -5820,6 +5829,7 @@ namespace ts {
             //      throw [no LineTerminator here]Expression[In, ?Yield];
 
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ThrowKeyword);
 
             // Because of automatic semicolon insertion, we need to report error if this
@@ -5833,12 +5843,13 @@ namespace ts {
                 expression = finishNode(factory.createIdentifier(""), getNodePos());
             }
             parseSemicolon();
-            return finishNode(factory.createThrowStatement(expression), pos);
+            return withJSDoc(finishNode(factory.createThrowStatement(expression), pos), hasJSDoc);
         }
 
         // TODO: Review for error recovery
         function parseTryStatement(): TryStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
 
             parseExpected(SyntaxKind.TryKeyword);
             const tryBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
@@ -5852,7 +5863,7 @@ namespace ts {
                 finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
-            return finishNode(factory.createTryStatement(tryBlock, catchClause, finallyBlock), pos);
+            return withJSDoc(finishNode(factory.createTryStatement(tryBlock, catchClause, finallyBlock), pos), hasJSDoc);
         }
 
         function parseCatchClause(): CatchClause {
@@ -5875,9 +5886,10 @@ namespace ts {
 
         function parseDebuggerStatement(): Statement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.DebuggerKeyword);
             parseSemicolon();
-            return finishNode(factory.createDebuggerStatement(), pos);
+            return withJSDoc(finishNode(factory.createDebuggerStatement(), pos), hasJSDoc);
         }
 
         function parseExpressionOrLabeledStatement(): ExpressionStatement | LabeledStatement {
