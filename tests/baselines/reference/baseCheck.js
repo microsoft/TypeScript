@@ -53,14 +53,16 @@ var C = /** @class */ (function () {
 var ELoc = /** @class */ (function (_super) {
     __extends(ELoc, _super);
     function ELoc(x) {
-        return _super.call(this, 0, x) || this;
+        var _this = _super.call(this, 0, x) || this;
+        return _this;
     }
     return ELoc;
 }(C));
 var ELocVar = /** @class */ (function (_super) {
     __extends(ELocVar, _super);
     function ELocVar(x) {
-        return _super.call(this, 0, loc) || this;
+        var _this = _super.call(this, 0, loc) || this;
+        return _this;
     }
     ELocVar.prototype.m = function () {
         var loc = 10;

@@ -61,7 +61,8 @@ var _0_2 = require("./0");
 var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C(prop) {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     C = __decorate([
         __param(0, _0_2.foo)

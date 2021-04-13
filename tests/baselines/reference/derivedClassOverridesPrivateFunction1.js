@@ -42,7 +42,8 @@ var BaseClass = /** @class */ (function () {
 var DerivedClass = /** @class */ (function (_super) {
     __extends(DerivedClass, _super);
     function DerivedClass() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     DerivedClass.prototype._init = function () {
     };

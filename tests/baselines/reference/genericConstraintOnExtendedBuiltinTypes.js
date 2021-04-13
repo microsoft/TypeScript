@@ -61,7 +61,8 @@ var EndGate;
         var NumberTween = /** @class */ (function (_super) {
             __extends(NumberTween, _super);
             function NumberTween(from) {
-                return _super.call(this, from) || this;
+                var _this = _super.call(this, from) || this;
+                return _this;
             }
             return NumberTween;
         }(Tweening.Tween));

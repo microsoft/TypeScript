@@ -119,7 +119,8 @@ var PortalFx;
                 var Validator = /** @class */ (function (_super) {
                     __extends(Validator, _super);
                     function Validator(message) {
-                        return _super.call(this, message) || this;
+                        var _this = _super.call(this, message) || this;
+                        return _this;
                     }
                     return Validator;
                 }(Portal.Controls.Validators.Validator));

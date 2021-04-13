@@ -54,7 +54,8 @@ var a = /** @class */ (function () {
 var b1 = /** @class */ (function (_super_1) {
     __extends(b1, _super_1);
     function b1(_super) {
-        return _super_1.call(this) || this;
+        var _this = _super_1.call(this) || this;
+        return _this;
     }
     return b1;
 }(a));
@@ -70,7 +71,8 @@ var b2 = /** @class */ (function (_super_1) {
 var b3 = /** @class */ (function (_super_1) {
     __extends(b3, _super_1);
     function b3(_super) {
-        return _super_1.call(this) || this;
+        var _this = _super_1.call(this) || this;
+        return _this;
     }
     return b3;
 }(a));

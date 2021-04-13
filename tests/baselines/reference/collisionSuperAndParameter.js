@@ -134,7 +134,8 @@ var Foo2 = /** @class */ (function (_super_1) {
 var Foo4 = /** @class */ (function (_super_1) {
     __extends(Foo4, _super_1);
     function Foo4(_super) {
-        return _super_1.call(this) || this;
+        var _this = _super_1.call(this) || this;
+        return _this;
     }
     Foo4.prototype.y = function (_super) {
         var _this = this;

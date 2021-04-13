@@ -34,7 +34,8 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.call(this, function (value) { return String(value); }) || this;
+        var _this = _super.call(this, function (value) { return String(value); }) || this;
+        return _this;
     }
     return B;
 }(A));

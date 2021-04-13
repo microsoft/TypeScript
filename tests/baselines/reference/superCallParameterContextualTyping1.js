@@ -37,7 +37,8 @@ var B = /** @class */ (function (_super) {
     __extends(B, _super);
     // Ensure 'value' is of type 'number (and not '{}') by using its 'toExponential()' method.
     function B() {
-        return _super.call(this, function (value) { return String(value.toExponential()); }) || this;
+        var _this = _super.call(this, function (value) { return String(value.toExponential()); }) || this;
+        return _this;
     }
     return B;
 }(A));

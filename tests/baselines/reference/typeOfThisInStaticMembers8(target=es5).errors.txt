@@ -1,12 +1,15 @@
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(3,42): error TS2334: 'this' cannot be referenced in a static property initializer.
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(5,49): error TS2339: Property 'f' does not exist on type '(Anonymous class)'.
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(11,22): error TS2339: Property 'f' does not exist on type 'CC'.
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts(13,29): error TS2339: Property 'f' does not exist on type 'CC'.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts (3 errors) ====
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts (4 errors) ====
     class C {
         static f = 1;
         static arrowFunctionBoundary = () => this.f + 1;
+                                             ~~~~
+!!! error TS2334: 'this' cannot be referenced in a static property initializer.
         static functionExprBoundary = function () { return this.f + 2 };
         static classExprBoundary = class { a = this.f + 3 };
                                                     ~

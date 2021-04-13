@@ -36,7 +36,8 @@ var C = /** @class */ (function (_super) {
     __extends(C, _super);
     // Ensure 'value' is not of type 'any' by invoking it with type arguments.
     function C() {
-        return _super.call(this, function (value) { return String(value()); }) || this;
+        var _this = _super.call(this, function (value) { return String(value()); }) || this;
+        return _this;
     }
     return C;
 }(A));

@@ -109,7 +109,8 @@ exports.User = User;
 var TimestampedUser = /** @class */ (function (_super) {
     __extends(TimestampedUser, _super);
     function TimestampedUser() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     return TimestampedUser;
 }((0, wrapClass_1.Timestamped)(User)));

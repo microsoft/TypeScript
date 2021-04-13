@@ -48,7 +48,8 @@ var Bar = /** @class */ (function () {
 var BarExtended = /** @class */ (function (_super) {
     __extends(BarExtended, _super);
     function BarExtended() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     return BarExtended;
 }(Bar));

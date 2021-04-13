@@ -42,14 +42,17 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     B.prototype.foo = function () {
+        var _this = this;
         return function () {
             _super.prototype.x;
         };
     };
     B.prototype.bar = function () {
+        var _this = this;
         return function () {
             _super.prototype["x"];
         };

@@ -39,7 +39,8 @@ var __extends = (this && this.__extends) || (function () {
 var SubText = /** @class */ (function (_super) {
     __extends(SubText, _super);
     function SubText(text, span) {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     return SubText;
 }(TextBase));

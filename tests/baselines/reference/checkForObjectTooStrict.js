@@ -59,14 +59,16 @@ var Foo;
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     return Bar;
 }(Foo.Object));
 var Baz = /** @class */ (function (_super) {
     __extends(Baz, _super);
     function Baz() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        return _this;
     }
     return Baz;
 }(Object));

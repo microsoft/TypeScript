@@ -13,11 +13,11 @@ class D extends C {
 
 //// [typeOfThisInStaticMembers7.js]
 class C {
+    static a = 1;
+    static b = this.a + 1;
 }
-C.a = 1;
-C.b = C.a + 1;
 class D extends C {
+    static c = 2;
+    static d = this.c + 1;
+    static e = 1 + (super.a) + (this.c + 1) + 1;
 }
-D.c = 2;
-D.d = D.c + 1;
-D.e = 1 + (C.a) + (D.c + 1) + 1;

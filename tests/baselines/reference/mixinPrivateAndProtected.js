@@ -182,7 +182,8 @@ function PersonMixin(Base) {
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
             }
-            return _super.apply(this, args) || this;
+            var _this = _super.apply(this, args) || this;
+            return _this;
         }
         class_4.prototype.myProtectedFunction = function () {
             _super.prototype.myProtectedFunction.call(this);

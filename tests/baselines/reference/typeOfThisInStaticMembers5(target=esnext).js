@@ -10,8 +10,9 @@ class C {
 
 //// [typeOfThisInStaticMembers5.js]
 class C {
+    foo;
+    static create = () => new this("yep");
     constructor(foo) {
         this.foo = foo;
     }
 }
-C.create = () => new C("yep");
