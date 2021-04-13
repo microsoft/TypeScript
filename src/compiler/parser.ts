@@ -1539,7 +1539,17 @@ namespace ts {
 
         const viableKeywordSuggestions = Object.keys(textToKeywordObj).filter(keyword => keyword.length > 2);
 
-        function parseSemicolonAfter(parentKind: SyntaxKind, expression: Expression | PropertyName, initializer?: Node) {
+        /**
+         * Attempts to consume the expected semicolon after an expression or property name.
+         *
+         * @param parentKind Kind of block the node and its expected semicolon are within.
+         * @param node Node preceding the expected semicolon location.
+         * @param initializer The preceding node's initializer, if it may exist and was able to parse.
+         * @remarks
+         * Use this to get a better error message than the generic "';' expected" if possible for
+         * known common variants of invalid syntax, such as mispelled names.
+         */
+        function parseSemicolonAfter(parentKind: SyntaxKind, node: Expression | PropertyName, initializer?: Node) {
             // Consume the semicolon if it was explicitly provided.
             if (canParseSemicolon()) {
                 if (token() === SyntaxKind.SemicolonToken) {
@@ -1549,11 +1559,15 @@ namespace ts {
                 return;
             }
 
-            // The only way not having a semicolon after an expression when expected shouldn't create an error
-            // would be if there's an initializer, which would indicate the initializer already has an error...
+            // If an initializer was parsed but there is still an error in finding the next semicolon,
+            // we generally know there was an error already reported in the initializer...
+            //   class Example { a = new Map([), ) }
+            //                                ~
             if (initializer) {
-                // ...unless we're parsing property declarations, in which case we can know that the initializer
-                // was fine but we included something invalid immediately after it
+                // ...unless we've found the start of a block after a property declaration, in which
+                // case we can know that regardless of the initializer we should complain on the block.
+                //   class Example { a = 0 {} }
+                //                         ~
                 if (token() === SyntaxKind.OpenBraceToken && parentKind === SyntaxKind.PropertyDeclaration) {
                     parseErrorAtCurrentToken(Diagnostics._0_expected, ";");
                 }
@@ -1564,26 +1578,26 @@ namespace ts {
             // Tagged template literals are sometimes used in places where only simple strings are allowed, i.e.:
             //   module `M1` {
             //   ^^^^^^^^^^^ This block is parsed as a template literal like module`M1`.
-            if (isTaggedTemplateExpression(expression)) {
-                parseErrorAt(skipTrivia(sourceText, expression.template.pos), expression.template.end, Diagnostics.Module_declaration_names_may_only_use_or_quoted_strings);
+            if (isTaggedTemplateExpression(node)) {
+                parseErrorAt(skipTrivia(sourceText, node.template.pos), node.template.end, Diagnostics.Module_declaration_names_may_only_use_or_quoted_strings);
                 return;
             }
 
             // Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
-            const expressionText = getExpressionText(expression);
+            const expressionText = getExpressionText(node);
             if (!expressionText || !isIdentifierText(expressionText, languageVersion)) {
                 parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
                 return;
             }
 
-            const pos = skipTrivia(sourceText, expression.pos);
+            const pos = skipTrivia(sourceText, node.pos);
 
             // Some known keywords are likely signs of syntax being used improperly.
             switch (expressionText) {
                 case "const":
                 case "let":
                 case "var":
-                    parseErrorAt(pos, expression.end, Diagnostics.Variable_declaration_not_allowed_at_this_location);
+                    parseErrorAt(pos, node.end, Diagnostics.Variable_declaration_not_allowed_at_this_location);
                     return;
 
                 case "declare":
@@ -1591,7 +1605,7 @@ namespace ts {
                     return;
 
                 case "interface":
-                    parseErrorForExpectedName(scanner.getTokenText(), "{", Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0);
+                    parseErrorForInvalidName(SyntaxKind.OpenBraceToken, Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0);
                     return;
 
                 case "is":
@@ -1600,31 +1614,38 @@ namespace ts {
 
                 case "module":
                 case "namespace":
-                    parseErrorForExpectedName(scanner.getTokenText(), "{", Diagnostics.Namespace_must_be_given_a_name, Diagnostics.Namespace_name_cannot_be_0);
+                    parseErrorForInvalidName(SyntaxKind.OpenBraceToken, Diagnostics.Namespace_must_be_given_a_name, Diagnostics.Namespace_name_cannot_be_0);
                     return;
 
                 case "type":
-                    parseErrorForExpectedName(scanner.getTokenText(), "=", Diagnostics.Type_alias_must_be_given_a_name, Diagnostics.Type_alias_name_cannot_be_0);
+                    parseErrorForInvalidName(SyntaxKind.EqualsToken, Diagnostics.Type_alias_must_be_given_a_name, Diagnostics.Type_alias_name_cannot_be_0);
                     return;
             }
 
-            // The user alternately might have misspelled or forgotten to add a space after a common keyword.
-            const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) || getSpaceSuggestion(expressionText);
+            // The user alternatively might have misspelled or forgotten to add a space after a common keyword.
+            const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) ?? getSpaceSuggestion(expressionText);
             if (suggestion) {
-                parseErrorAt(pos, expression.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
+                parseErrorAt(pos, node.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
                 return;
             }
 
             // We know this is a slightly more precise case than a missing expected semicolon.
-            parseErrorAt(pos, expression.end, Diagnostics.Unexpected_keyword_or_identifier);
+            parseErrorAt(pos, node.end, Diagnostics.Unexpected_keyword_or_identifier);
         }
 
-        function parseErrorForExpectedName(name: string, normalToken: string, blankDiagnostic: DiagnosticMessage, nameDiagnostic: DiagnosticMessage) {
-            if (name === normalToken) {
+        /**
+         * Reports a diagnostic error for the current token being an invalid name.
+         *
+         * @param tokenIfBlankName Current token if the name was invalid for being blank (not provided / skipped).
+         * @param blankDiagnostic Diagnostic to report for the case of the name being blank (matched tokenIfBlankName).
+         * @param nameDiagnostic Diagnostic to report for all other cases.
+         */
+        function parseErrorForInvalidName(tokenIfBlankName: SyntaxKind, blankDiagnostic: DiagnosticMessage, nameDiagnostic: DiagnosticMessage) {
+            if (token() === tokenIfBlankName) {
                 parseErrorAtCurrentToken(blankDiagnostic);
             }
             else {
-                parseErrorAtCurrentToken(nameDiagnostic, name);
+                parseErrorAtCurrentToken(nameDiagnostic, tokenToString(token()));
             }
         }
 
@@ -1639,12 +1660,12 @@ namespace ts {
         }
 
         function parseSemicolonAfterPropertyName(name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
-            switch (scanner.getTokenText()) {
-                case "@":
-                    parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_all_other_keywords_for_property_declarations);
+            switch (token()) {
+                case SyntaxKind.AtToken:
+                    parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_the_name_and_all_keywords_of_property_declarations);
                     return;
 
-                case "(":
+                case SyntaxKind.OpenParenToken:
                     parseErrorAtCurrentToken(Diagnostics.Function_call_is_not_a_type_annotation);
                     nextToken();
                     return;
@@ -2570,7 +2591,6 @@ namespace ts {
                 case ParsingContext.RestProperties: // fallthrough
                 case ParsingContext.TypeMembers: return parseErrorAtCurrentToken(Diagnostics.Property_or_signature_expected);
                 case ParsingContext.ClassMembers: return parseErrorAtCurrentToken(Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected);
-
                 case ParsingContext.EnumMembers: return parseErrorAtCurrentToken(Diagnostics.Enum_member_expected);
                 case ParsingContext.HeritageClauseElement: return parseErrorAtCurrentToken(Diagnostics.Expression_expected);
                 case ParsingContext.VariableDeclarations:

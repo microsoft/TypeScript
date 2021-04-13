@@ -1372,7 +1372,7 @@
         "category": "Error",
         "code": 1435
     },
-    "Decorators must precede all other keywords for property declarations.": {
+    "Decorators must precede the name and all keywords of property declarations.": {
         "category": "Error",
         "code": 1436
     },
