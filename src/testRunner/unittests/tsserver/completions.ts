@@ -37,6 +37,7 @@ namespace ts.projectSystem {
                 name: "foo",
                 replacementSpan: undefined,
                 isPackageJsonImport: undefined,
+                isImportStatementCompletion: undefined,
                 sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
                 sourceDisplay: undefined,
