@@ -93,6 +93,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
 !!! error TS2304: Cannot find name 'is'.
                     ~~~~~~
 !!! error TS1005: ')' expected.
+!!! related TS1007 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:44:3: The parser expected to find a ')' to match the '(' token here.
                     ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                                    ~
@@ -108,6 +109,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
 !!! error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
                                             ~~
 !!! error TS1005: ')' expected.
+!!! related TS1007 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:48:3: The parser expected to find a ')' to match the '(' token here.
                                             ~~
 !!! error TS2304: Cannot find name 'is'.
                                                ~~~~~~

@@ -1,0 +1,40 @@
+=== tests/cases/conformance/override/override12.ts ===
+class A {
+>A : Symbol(A, Decl(override12.ts, 0, 0))
+
+    public m1(): number {
+>m1 : Symbol(A.m1, Decl(override12.ts, 0, 9))
+
+        return 0;
+    }
+
+    public m2(): number {
+>m2 : Symbol(A.m2, Decl(override12.ts, 3, 5))
+
+        return 0;
+    }
+
+    public m3(): void {}
+>m3 : Symbol(A.m3, Decl(override12.ts, 7, 5))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(override12.ts, 10, 1))
+>A : Symbol(A, Decl(override12.ts, 0, 0))
+
+    override m1() {
+>m1 : Symbol(B.m1, Decl(override12.ts, 12, 19))
+
+        return 10;
+    }
+
+    override m2(): number {
+>m2 : Symbol(B.m2, Decl(override12.ts, 15, 5))
+
+        return 30;
+    }
+
+    override m3(): void {}
+>m3 : Symbol(B.m3, Decl(override12.ts, 19, 5))
+}
+

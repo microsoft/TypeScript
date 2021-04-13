@@ -39,7 +39,9 @@ namespace ts.projectSystem {
                 isPackageJsonImport: undefined,
                 sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
-                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined }
+                sourceDisplay: undefined,
+                isSnippet: undefined,
+                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined, moduleSpecifier: undefined }
             };
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
                 isGlobalCompletion: true,
@@ -69,7 +71,7 @@ namespace ts.projectSystem {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
-                tags: undefined,
+                sourceDisplay: [{ text: "./a", kind: "text" }],
             };
             assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
                 {
@@ -91,6 +93,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         },
                     ],
+                    tags: [],
                     ...detailsCommon,
                 },
             ]);
@@ -117,6 +120,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         }
                     ],
+                    tags: [],
                     ...detailsCommon,
                 }
             ]);

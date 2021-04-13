@@ -17,7 +17,7 @@ class BufferPool<E extends Enum, M extends TypeMap<E>> {
 
         array.length; // Requires exploration of >5 levels of constraints
 >array.length : number
->array : Extract<M[K], ArrayLike<any>>
+>array : string | number[]
 >length : number
     }
 }

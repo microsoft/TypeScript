@@ -239,3 +239,15 @@ function ff(o: O, k: K) {
     k === 'c';  // Error
     return o[k];
 }
+
+// Repro from #35431
+type A = { kind: "abc" } | { kind: "def" };
+
+function f35431(a: A) {
+  switch (a.kind) {
+    case "abc":
+    case "def": return;
+    default:
+      a!.kind; // Error expected
+  }
+}

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.binaryNegative.ts] ////
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.binaryNegative.ts] ////
 
 //// [1.ts]
 0b00_

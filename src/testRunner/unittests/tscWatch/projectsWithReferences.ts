@@ -295,5 +295,120 @@ X;`,
             ],
             baselineDependencies: true,
         });
+
+        verifyTscWatch({
+            scenario: "projectsWithReferences",
+            subScenario: "on transitive references in different folders with no files clause",
+            sys: () => createSystemWithSolutionBuild(
+                ["c"],
+                [
+                    libFile,
+                    {
+                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
+                        content: JSON.stringify({ compilerOptions: { composite: true } }),
+                    },
+                    {
+                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
+                        content: JSON.stringify({
+                            compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
+                            references: [{ path: `../a` }]
+                        }),
+                    },
+                    {
+                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
+                        content: JSON.stringify({
+                            compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
+                            references: [{ path: `../b` }]
+                        }),
+                    },
+                    {
+                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/index.ts"),
+                        content: `export class A {}`,
+                    },
+                    {
+                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"),
+                        content: `import {A} from '@ref/a';
+export const b = new A();`,
+                    },
+                    {
+                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/index.ts"),
+                        content: `import {b} from '../b';
+import {X} from "@ref/a";
+b;
+X;`,
+                    },
+                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
+                ],
+                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
+            ),
+            commandLineArgs: ["-w", "-p", "c"],
+            changes: [
+                {
+                    caption: "non local edit b ts, and build b",
+                    change: sys => {
+                        sys.appendFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"), `export function gfoo() { }`);
+                        const solutionBuilder = createSolutionBuilder(sys, ["b"]);
+                        solutionBuilder.build();
+                    },
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                {
+                    caption: "edit on config file",
+                    change: sys => {
+                        sys.ensureFileOrFolder({
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "nrefs/a.d.ts"),
+                            content: sys.readFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "refs/a.d.ts"))!
+                        });
+                        changeCompilerOpitonsPaths(sys, TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../nrefs/*"] });
+                    },
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                {
+                    caption: "Revert config file edit",
+                    change: sys => changeCompilerOpitonsPaths(sys, TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                {
+                    caption: "edit in referenced config file",
+                    change: sys => changeCompilerOpitonsPaths(sys, TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../nrefs/*"] }),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                {
+                    caption: "Revert referenced config file edit",
+                    change: sys => changeCompilerOpitonsPaths(sys, TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"), { "@ref/*": ["../refs/*"] }),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                {
+                    caption: "deleting referenced config file",
+                    change: sys => sys.deleteFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json")),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                },
+                {
+                    caption: "Revert deleting referenced config file",
+                    change: sys => sys.writeFile(
+                        TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
+                        JSON.stringify({
+                            compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
+                            references: [{ path: `../a` }]
+                        })
+                    ),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                },
+                {
+                    caption: "deleting transitively referenced config file",
+                    change: sys => sys.deleteFile(TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json")),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                },
+                {
+                    caption: "Revert deleting transitively referenced config file",
+                    change: sys => sys.writeFile(
+                        TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
+                        JSON.stringify({ compilerOptions: { composite: true } }),
+                    ),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
+                },
+            ],
+            baselineDependencies: true,
+        });
     });
 }
