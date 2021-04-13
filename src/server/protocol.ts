@@ -679,9 +679,8 @@ namespace ts.server.protocol {
 
     export type OrganizeImportsScope = GetCombinedCodeFixScope;
 
-    export interface OrganizeImportsRequestArgs {
+    export interface OrganizeImportsRequestArgs extends OrganizeImportsScope {
         allowDestructiveCodeActions?: boolean;
-        scope: OrganizeImportsScope;
     }
 
     export interface OrganizeImportsResponse extends Response {

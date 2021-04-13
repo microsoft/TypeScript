@@ -1975,8 +1975,8 @@ namespace ts {
 
         function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
             synchronizeHostData();
-            Debug.assert(args.scope.type === "file");
-            const sourceFile = getValidSourceFile(args.scope.fileName);
+            Debug.assert(args.type === "file");
+            const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.allowDestructiveCodeActions);

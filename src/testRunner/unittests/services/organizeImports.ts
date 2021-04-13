@@ -314,7 +314,7 @@ export const Other = 1;
                     content: "function F() { }",
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -324,7 +324,7 @@ export const Other = 1;
                     content: "declare module '*';",
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -334,7 +334,7 @@ export const Other = 1;
                     content: `import { f } from 'foo';\nf();`
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -450,7 +450,7 @@ D;
                         content: `import { f } from 'foo';\nf();`
                     };
                     const languageService = makeLanguageService(testFile);
-                    const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                    const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                     assert.isEmpty(changes);
                 });
 
@@ -474,7 +474,7 @@ import { } from "lib";
 `,
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -519,7 +519,7 @@ const o = { x };
 `
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -532,7 +532,7 @@ export { x };
 `
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ scope: { type: "file", fileName: testFile.path } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -1023,7 +1023,7 @@ export * from "lib";
             function runBaseline(baselinePath: string, allowDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
-                const changes = languageService.organizeImports({ allowDestructiveCodeActions, scope: { type: "file", fileName: testPath } }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ allowDestructiveCodeActions, type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
                 assert.equal(changes.length, 1);
                 assert.equal(changes[0].fileName, testPath);
 

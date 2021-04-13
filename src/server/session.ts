@@ -2166,12 +2166,13 @@ namespace ts.server {
         }
 
         private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
-            Debug.assert(args.scope.type === "file");
-            const { file, project } = this.getFileAndProject(args.scope.args);
+            Debug.assert(args.type === "file");
+            const { file, project } = this.getFileAndProject(args.args);
             const changes = project.getLanguageService().organizeImports(
                 {
                     allowDestructiveCodeActions: args.allowDestructiveCodeActions,
-                    scope: { type: "file", fileName: file },
+                    fileName: file,
+                    type: "file",
                 },
                 this.getFormatOptions(file),
                 this.getPreferences(file)

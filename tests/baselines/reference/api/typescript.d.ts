@@ -5628,9 +5628,8 @@ declare namespace ts {
         type: "file";
         fileName: string;
     }
-    interface OrganizeImportsArgs {
+    interface OrganizeImportsArgs extends CombinedCodeFixScope {
         allowDestructiveCodeActions?: boolean;
-        scope: CombinedCodeFixScope;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
     interface GetCompletionsAtPositionOptions extends UserPreferences {

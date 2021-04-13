@@ -548,9 +548,8 @@ namespace ts {
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
-    export interface OrganizeImportsArgs {
+    export interface OrganizeImportsArgs extends CombinedCodeFixScope {
         allowDestructiveCodeActions?: boolean;
-        scope: CombinedCodeFixScope;
     }
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
