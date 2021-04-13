@@ -85,8 +85,8 @@ namespace ts.OrganizeImports {
     }
 
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, allowDestructiveCodeActions: boolean) {
-        // As a precaution, if there are *syntax* errors in the file, consider unused import detection to be destructive (GH #43051)
-        if (!allowDestructiveCodeActions && program.getSyntacticDiagnostics(sourceFile).length) {
+        // As a precaution, consider unused import detection to be destructive (GH #43051)
+        if (!allowDestructiveCodeActions) {
             return oldImports;
         }
 
