@@ -1513,7 +1513,7 @@ namespace ts.FindAllReferences {
             }
 
             // Use the parent symbol if the location is commonjs require syntax on javascript files only.
-            referenceSymbol = isInJSFile(referenceLocation) && isRequireVariableDeclaration(referenceLocation.parent)
+            referenceSymbol = isInJSFile(referenceLocation) && referenceLocation.parent.kind === SyntaxKind.BindingElement && isRequireVariableDeclaration(referenceLocation.parent)
                 ? referenceLocation.parent.symbol
                 : referenceSymbol;
 
