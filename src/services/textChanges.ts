@@ -236,14 +236,6 @@ namespace ts.textChanges {
         return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
     }
 
-    function spaces(count: number) {
-        let s = "";
-        for (let i = 0; i < count; i++) {
-            s += " ";
-        }
-        return s;
-    }
-
     export interface TextChangesContext {
         host: LanguageServiceHost;
         formatContext: formatting.FormatContext;
@@ -727,49 +719,24 @@ namespace ts.textChanges {
                     // a, b, c
                     // create change for adding 'e' after 'a' as
                     // - find start of next element after a (it is b)
-                    // - use this start as start and end position in final change
-                    // - build text of change by formatting the text of node + separator + whitespace trivia of b
+                    // - use next element start as start and end position in final change
+                    // - build text of change by formatting the text of node + whitespace trivia of b
 
                     // in multiline case it will work as
                     //   a,
                     //   b,
                     //   c,
                     // result - '*' denotes leading trivia that will be inserted after new text (displayed as '#')
-                    //   a,*
-                    // ***insertedtext<separator>#
+                    //   a,
+                    //   insertedtext<separator>#
                     // ###b,
                     //   c,
-                    // find line and character of the next element
-                    const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
-                    // find line and character of the token that precedes next element (usually it is separator)
-                    const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
-                    let prefix: string | undefined;
-                    let startPos: number;
-                    if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
-                        // next element is located on the same line with separator:
-                        // a,$$$$b
-                        //  ^    ^
-                        //  |    |-next element
-                        //  |-separator
-                        // where $$$ is some leading trivia
-                        // for a newly inserted node we'll maintain the same relative position comparing to separator and replace leading trivia with spaces
-                        // a,    x,$$$$b
-                        //  ^    ^     ^
-                        //  |    |     |-next element
-                        //  |    |-new inserted node padded with spaces
-                        //  |-separator
-                        startPos = nextToken.end;
-                        prefix = spaces(lineAndCharOfNextElement.character - lineAndCharOfNextToken.character);
-                    }
-                    else {
-                        // next element is located on different line that separator
-                        // let insert position be the beginning of the line that contains next element
-                        startPos = getStartPositionOfLine(lineAndCharOfNextElement.line, sourceFile);
-                    }
+                    const nextNode = containingList[index + 1];
+                    const startPos = skipWhitespacesAndLineBreaks(sourceFile.text, nextNode.getFullStart());
 
                     // write separator and leading trivia of the next element as suffix
-                    const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`;
-                    this.replaceRange(sourceFile, createRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
+                    const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, startPos)}`;
+                    this.insertNodesAt(sourceFile, startPos, [newNode], { suffix });
                 }
             }
             else {

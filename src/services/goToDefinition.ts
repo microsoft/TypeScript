@@ -146,7 +146,7 @@ namespace ts.GoToDefinition {
                         end: node.getEnd(),
                         fileName: node.text
                     },
-                    unverified: !!verifiedFileName,
+                    unverified: !verifiedFileName,
                 };
             }
         }

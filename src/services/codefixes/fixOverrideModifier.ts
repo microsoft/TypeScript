@@ -81,7 +81,11 @@ namespace ts.codefix {
 
     function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const classElement = findContainerClassElement(sourceFile, pos);
-        changeTracker.insertModifierBefore(sourceFile, SyntaxKind.OverrideKeyword, classElement);
+        const accessibilityModifier = find(classElement.modifiers || emptyArray, m => isAccessibilityModifier(m.kind));
+        const modifierPos = accessibilityModifier ? accessibilityModifier.end :
+            classElement.decorators ? skipTrivia(sourceFile.text, classElement.decorators.end) : classElement.getStart(sourceFile);
+        const options = accessibilityModifier ? { prefix: " " } : { suffix: " " };
+        changeTracker.insertModifierAt(sourceFile, modifierPos, SyntaxKind.OverrideKeyword, options);
     }
 
     function doRemoveOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
