@@ -35383,7 +35383,7 @@ namespace ts {
             }
 
             // While it technically should be invalid for any known-truthy value
-            // to be tested, we de-scope to functions and Promises unrefenced in
+            // to be tested, we de-scope to functions and Promises unreferenced in
             // the block as a heuristic to identify the most common bugs. There
             // are too many false positives for values sourced from type
             // definitions without strictNullChecks otherwise.
@@ -35405,11 +35405,11 @@ namespace ts {
                     errorAndMaybeSuggestAwait(
                         location,
                         /*maybeMissingAwait*/ true,
-                        Diagnostics.This_condition_will_always_return_true_since_this_0_appears_to_always_be_defined,
+                        Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined,
                         getTypeNameForErrorDisplay(type));
                 }
                 else {
-                    error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_appears_to_always_be_defined_Did_you_mean_to_call_it_instead);
+                    error(location, Diagnostics.This_condition_will_always_return_true_since_this_function_is_always_defined_Did_you_mean_to_call_it_instead);
                 }
             }
         }
