@@ -46,12 +46,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [
-        {
-          "text": "The typedef tag should not appear in the quickinfo.",
-          "kind": "text"
-        }
-      ]
+      "documentation": []
     }
   },
   {

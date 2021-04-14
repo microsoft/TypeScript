@@ -92,9 +92,12 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const parts: SymbolDisplayPart[][] = [];
         forEachUnique(declarations, declaration => {
-            for (const { comment } of getCommentHavingNodes(declaration)) {
-                if (comment === undefined) continue;
-                const newparts = getDisplayPartsFromComment(comment, checker);
+            for (const jsdoc of getCommentHavingNodes(declaration)) {
+                if (jsdoc.comment === undefined
+                    || isJSDoc(jsdoc) && jsdoc.tags?.every(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)) {
+                    continue;
+                }
+                const newparts = getDisplayPartsFromComment(jsdoc.comment, checker);
                 if (!contains(parts, newparts, isIdenticalListOfDisplayParts)) {
                     parts.push(newparts);
                 }
