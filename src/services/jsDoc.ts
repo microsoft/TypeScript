@@ -142,8 +142,9 @@ namespace ts.JsDoc {
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
-        const { comment } = tag;
-        switch (tag.kind) {
+        const { comment, kind } = tag;
+        const namePart = getTagNameDisplayPart(kind);
+        switch (kind) {
             case SyntaxKind.JSDocImplementsTag:
                 return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
@@ -157,7 +158,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
-                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+                const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
                 return name ? withNode(name) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
@@ -168,7 +169,25 @@ namespace ts.JsDoc {
         }
 
         function addComment(s: string) {
-            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)];
+            return comment
+                ? [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
+                : [textPart(s)];
+        }
+    }
+
+    function getTagNameDisplayPart(kind: SyntaxKind): (text: string) => SymbolDisplayPart {
+        switch (kind) {
+            case SyntaxKind.JSDocParameterTag:
+                return parameterNamePart;
+            case SyntaxKind.JSDocPropertyTag:
+                return propertyNamePart;
+            case SyntaxKind.JSDocTemplateTag:
+                return typeParameterNamePart;
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
+                return typeAliasNamePart;
+            default:
+                return textPart;
         }
     }
 
