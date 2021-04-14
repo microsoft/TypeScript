@@ -421,7 +421,7 @@
               "text": [
                 {
                   "text": "items",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -906,7 +906,7 @@
               "text": [
                 {
                   "text": "items",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -923,7 +923,7 @@
               "text": [
                 {
                   "text": "items",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1036,7 +1036,7 @@
               "text": [
                 {
                   "text": "separator",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1405,7 +1405,7 @@
               "text": [
                 {
                   "text": "start",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1422,7 +1422,7 @@
               "text": [
                 {
                   "text": "end",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1715,7 +1715,7 @@
               "text": [
                 {
                   "text": "compareFn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1912,7 +1912,7 @@
               "text": [
                 {
                   "text": "start",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1929,7 +1929,7 @@
               "text": [
                 {
                   "text": "deleteCount",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2055,7 +2055,7 @@
               "text": [
                 {
                   "text": "items",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2188,7 +2188,7 @@
               "text": [
                 {
                   "text": "searchElement",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2205,7 +2205,7 @@
               "text": [
                 {
                   "text": "fromIndex",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2338,7 +2338,7 @@
               "text": [
                 {
                   "text": "searchElement",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2355,7 +2355,7 @@
               "text": [
                 {
                   "text": "fromIndex",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2892,7 +2892,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2909,7 +2909,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2926,7 +2926,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2943,7 +2943,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3292,7 +3292,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3309,7 +3309,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3658,7 +3658,7 @@
               "text": [
                 {
                   "text": "callbackfn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3675,7 +3675,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4044,7 +4044,7 @@
               "text": [
                 {
                   "text": "callbackfn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4061,7 +4061,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4590,7 +4590,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4607,7 +4607,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4624,7 +4624,7 @@
               "text": [
                 {
                   "text": "predicate",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4641,7 +4641,7 @@
               "text": [
                 {
                   "text": "thisArg",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -5326,7 +5326,7 @@
               "text": [
                 {
                   "text": "callbackfn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -5343,7 +5343,7 @@
               "text": [
                 {
                   "text": "initialValue",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -5360,7 +5360,7 @@
               "text": [
                 {
                   "text": "callbackfn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -5377,7 +5377,7 @@
               "text": [
                 {
                   "text": "initialValue",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -6062,7 +6062,7 @@
               "text": [
                 {
                   "text": "callbackfn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -6079,7 +6079,7 @@
               "text": [
                 {
                   "text": "initialValue",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -6096,7 +6096,7 @@
               "text": [
                 {
                   "text": "callbackfn",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -6113,7 +6113,7 @@
               "text": [
                 {
                   "text": "initialValue",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

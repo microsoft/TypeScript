@@ -4,6 +4,7 @@
 // @out: foo.js
 // @declaration: true
 // @Filename: jsdocReadonlyDeclarations.js
+// @useDefineForClassFields: false
 class C {
     /** @readonly */
     x = 6

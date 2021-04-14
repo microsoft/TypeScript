@@ -363,3 +363,19 @@ const templated2: Templated = `${value2} abc` as const;
 >`${value2} abc` : "abc abc"
 >value2 : "abc"
 
+// Repro from #43620
+
+type Prefixes = "foo" | "bar";
+>Prefixes : Prefixes
+
+type AllPrefixData = "foo:baz" | "bar:baz";
+>AllPrefixData : AllPrefixData
+
+type PrefixData<P extends Prefixes> = `${P}:baz`;
+>PrefixData : `${P}:baz`
+
+interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
+    blah: string;
+>blah : string
+}
+
