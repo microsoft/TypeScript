@@ -201,21 +201,21 @@ namespace ts {
         }
 
         function visitNameInStaticBoundaryFunction(node: AccessorDeclaration | MethodDeclaration) {
-            function nameInContextVisitor (n: Node): Node {
+            function nameInContextVisitor(n: Node): Node {
                 if (node.name === n) {
-                    return visitNode(n, visitor)
+                    return visitNode(n, visitor);
                 }
 
                 const savedStaticFieldInitializerContext = staticFieldInitializerContext;
                 staticFieldInitializerContext = undefined;
-                const result = visitNode(n, visitor)
+                const result = visitNode(n, visitor);
                 staticFieldInitializerContext = savedStaticFieldInitializerContext;
                 return result;
             }
             return visitEachChild(node, nameInContextVisitor, context);
         }
 
-        function visitNonStaticBoundaryFunction (node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration) {
+        function visitNonStaticBoundaryFunction(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration) {
             const savedStaticFieldInitializerContext = staticFieldInitializerContext;
             staticFieldInitializerContext = undefined;
             const result = visitEachChild(node, visitor, context);
@@ -225,7 +225,7 @@ namespace ts {
 
         function visitThisExpression(node: ThisExpression): Expression {
             if (!staticFieldInitializerContext) {
-                return visitEachChild(node, visitor, context)
+                return visitEachChild(node, visitor, context);
             }
 
             const { receiver, classHasDecorators } = staticFieldInitializerContext;
@@ -1072,14 +1072,14 @@ namespace ts {
             return expressions;
         }
 
-        function visitPropertyDeclarationInContext (property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, classHasDecorators: boolean | undefined) {
+        function visitPropertyDeclarationInContext(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, classHasDecorators: boolean | undefined) {
             const savedStaticFieldInitializerContext = staticFieldInitializerContext;
             staticFieldInitializerContext = hasStaticModifier(property) ? {
                 receiver,
                 baseClass,
                 classHasDecorators
             } : undefined;
-            const result = visitNode(property.initializer, visitor, isExpression)
+            const result = visitNode(property.initializer, visitor, isExpression);
             staticFieldInitializerContext = savedStaticFieldInitializerContext;
             return result;
         }
