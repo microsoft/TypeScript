@@ -5269,6 +5269,8 @@ namespace ts {
         resolvedTypeArguments?: readonly Type[];  // Resolved type reference type arguments
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
+        /* @internal */
+        cachedEquivalentBaseTypeOrSelf?: Type; // Only set on references to class or interfaces with a single base type and no augmentations
     }
 
     export interface DeferredTypeReference extends TypeReference {

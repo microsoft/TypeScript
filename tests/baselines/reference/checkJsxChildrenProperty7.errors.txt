@@ -1,5 +1,4 @@
 tests/cases/conformance/jsx/file.tsx(24,40): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.
-  Type 'string' is not assignable to type 'ReactElement<any>'.
 tests/cases/conformance/jsx/file.tsx(26,22): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.
 tests/cases/conformance/jsx/file.tsx(27,30): error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.
 
@@ -31,7 +30,6 @@ tests/cases/conformance/jsx/file.tsx(27,30): error TS2747: 'Comp' components don
     let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
                                            ~~
 !!! error TS2747: 'Comp' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element | Element[]'.
-!!! error TS2747:   Type 'string' is not assignable to type 'ReactElement<any>'.
     let k2 = <Comp a={10} b="hi"><Button />
         <AnotherButton />  </Comp>;
                          ~~

@@ -17140,12 +17140,12 @@ namespace ts {
 
         function getNormalizedType(type: Type, writing: boolean): Type {
             while (true) {
-                const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
+                const t = getSingleBaseForNonAugmentingSubtypeOrType(isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
                     type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
                     type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
-                    type;
+                    type);
                 if (t === type) break;
                 type = t;
             }
@@ -17647,8 +17647,10 @@ namespace ts {
 
                 function reportErrorResults(source: Type, target: Type, result: Ternary, isComparingJsxAttributes: boolean) {
                     if (!result && reportErrors) {
-                        source = originalSource.aliasSymbol ? originalSource : source;
-                        target = originalTarget.aliasSymbol ? originalTarget : target;
+                        const sourceHasBase = getSingleBaseForNonAugmentingSubtypeOrType(originalSource) !== originalSource;
+                        const targetHasBase = getSingleBaseForNonAugmentingSubtypeOrType(originalTarget) !== originalTarget;
+                        source = (originalSource.aliasSymbol || sourceHasBase) ? originalSource : source;
+                        target = (originalTarget.aliasSymbol || targetHasBase) ? originalTarget : target;
                         let maybeSuppress = overrideNextErrorInfo > 0;
                         if (maybeSuppress) {
                             overrideNextErrorInfo--;
@@ -18217,22 +18219,6 @@ namespace ts {
                 if (isSingleElementGenericTupleType(source) && !source.target.readonly && (result = isRelatedTo(getTypeArguments(source)[0], target)) ||
                     isSingleElementGenericTupleType(target) && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source)) && (result = isRelatedTo(source, getTypeArguments(target)[0]))) {
                     return result;
-                }
-
-                let sourceBase = getSingleBaseForNonAugmentingSubtype(source);
-                if (sourceBase) {
-                    if (getObjectFlags(target) & ObjectFlags.Reference && length(getTypeArguments((target as TypeReference))) > length((target as TypeReference).target.typeParameters)) {
-                        sourceBase = getTypeWithThisArgument(sourceBase, last(getTypeArguments(source as TypeReference)));
-                    }
-                    return isRelatedTo(sourceBase, target, reportErrors);
-                }
-
-                let targetBase = getSingleBaseForNonAugmentingSubtype(target);
-                if (targetBase) {
-                    if (getObjectFlags(source) & ObjectFlags.Reference && length(getTypeArguments((source as TypeReference))) > length((source as TypeReference).target.typeParameters)) {
-                        targetBase = getTypeWithThisArgument(targetBase, last(getTypeArguments(target as TypeReference)));
-                    }
-                    return isRelatedTo(source, targetBase, reportErrors);
                 }
 
                 if (target.flags & TypeFlags.TypeParameter) {
@@ -19917,19 +19903,26 @@ namespace ts {
             return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
-        function getSingleBaseForNonAugmentingSubtype(type: Type) {
+        function getSingleBaseForNonAugmentingSubtypeOrType(type: Type) {
             if (!(getObjectFlags(type) & ObjectFlags.Reference) || !(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)) {
-                return undefined;
+                return type;
+            }
+            if ((type as TypeReference).cachedEquivalentBaseTypeOrSelf) {
+                return (type as TypeReference).cachedEquivalentBaseTypeOrSelf!;
             }
             const target = (type as TypeReference).target as InterfaceType;
             const bases = getBaseTypes(target);
             if (bases.length !== 1) {
-                return undefined;
+                return (type as TypeReference).cachedEquivalentBaseTypeOrSelf = type;
             }
             if (getMembersOfSymbol(type.symbol).size) {
-                return undefined; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
+                return (type as TypeReference).cachedEquivalentBaseTypeOrSelf = type; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
             }
-            return !length(target.typeParameters) ? bases[0] : instantiateType(bases[0], createTypeMapper(target.typeParameters!, getTypeArguments(type as TypeReference).slice(0, target.typeParameters!.length)));
+            let instantiatedBase = !length(target.typeParameters) ? bases[0] : instantiateType(bases[0], createTypeMapper(target.typeParameters!, getTypeArguments(type as TypeReference).slice(0, target.typeParameters!.length)));
+            if (length(getTypeArguments(type as TypeReference)) > length(target.typeParameters)) {
+                instantiatedBase = getTypeWithThisArgument(instantiatedBase, last(getTypeArguments(type as TypeReference)));
+            }
+            return (type as TypeReference).cachedEquivalentBaseTypeOrSelf = instantiatedBase;
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {

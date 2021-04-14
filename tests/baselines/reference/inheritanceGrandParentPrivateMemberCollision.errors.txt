@@ -1,6 +1,5 @@
 tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error TS2415: Class 'C' incorrectly extends base class 'B'.
-  Type 'C' is not assignable to type 'A'.
-    Types have separate declarations of a private property 'myMethod'.
+  Types have separate declarations of a private property 'myMethod'.
 
 
 ==== tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts (1 errors) ====
@@ -13,8 +12,7 @@ tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error
     class C extends B {
           ~
 !!! error TS2415: Class 'C' incorrectly extends base class 'B'.
-!!! error TS2415:   Type 'C' is not assignable to type 'A'.
-!!! error TS2415:     Types have separate declarations of a private property 'myMethod'.
+!!! error TS2415:   Types have separate declarations of a private property 'myMethod'.
         private myMethod() { }
     }
     
