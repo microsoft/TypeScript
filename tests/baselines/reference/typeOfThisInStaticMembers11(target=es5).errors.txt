@@ -1,10 +1,12 @@
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(6,16): error TS2813: Cannot use 'this' in a static property initializer of a decorated class.
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(12,16): error TS2813: Cannot use 'this' in a static property initializer of a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(13,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(13,26): error TS2813: Cannot use 'this' in a static property initializer of a decorated class.
 tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(14,22): error TS2813: Cannot use 'this' in a static property initializer of a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts(35,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts (4 errors) ====
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts (6 errors) ====
     declare const foo: any;
     
     @foo
@@ -22,6 +24,8 @@ tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInSta
                    ~~~~
 !!! error TS2813: Cannot use 'this' in a static property initializer of a decorated class.
         static e = super.a + this.c + 1;
+                         ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
                              ~~~~
 !!! error TS2813: Cannot use 'this' in a static property initializer of a decorated class.
         static f = () => this.c + 1;
@@ -48,6 +52,8 @@ tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInSta
         static c = 2;
         static d = this.c + 1;
         static e = super.a + this.c + 1;
+                         ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         static f = () => this.c + 1;
         static ff = function () { this.c + 1 }
         static foo () {

@@ -26814,8 +26814,7 @@ namespace ts {
                 //   where this references the constructor function object of a derived class,
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
-                    const isStatic = flags & ModifierFlags.Static;
-                    if (isStatic ? symbolHasNonClassMemberDeclaration(prop) : symbolHasNonMethodDeclaration(prop)) {
+                    if (symbolHasNonMethodDeclaration(prop)) {
                         if (reportError) {
                             error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         }
@@ -26917,10 +26916,6 @@ namespace ts {
 
         function symbolHasNonMethodDeclaration(symbol: Symbol) {
             return !!forEachProperty(symbol, prop => !(prop.flags & SymbolFlags.Method));
-        }
-
-        function symbolHasNonClassMemberDeclaration(symbol: Symbol) {
-            return !!forEachProperty(symbol, prop => !(prop.flags & SymbolFlags.ClassMember));
         }
 
         function checkNonNullExpression(node: Expression | QualifiedName) {
