@@ -19,8 +19,8 @@ declare const b: (string | number)[] | null[] | undefined[] | {}[];
 let x = a.equalsShallow(b);
 >x : boolean
 >a.equalsShallow(b) : boolean
->a.equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean)
+>a.equalsShallow : <T>(this: readonly T[], other: readonly T[]) => boolean
 >a : (string | number)[] | null[] | undefined[] | {}[]
->equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean)
+>equalsShallow : <T>(this: readonly T[], other: readonly T[]) => boolean
 >b : (string | number)[] | null[] | undefined[] | {}[]
 

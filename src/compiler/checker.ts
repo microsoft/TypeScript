@@ -11641,6 +11641,7 @@ namespace ts {
             let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
             let syntheticFlag = CheckFlags.SyntheticMethod;
             let checkFlags = 0;
+            let mergedInstantiations = false;
             for (const current of containingType.types) {
                 const type = getApparentType(current);
                 if (!(type === errorType || type.flags & TypeFlags.Never)) {
@@ -11657,13 +11658,25 @@ namespace ts {
                             singleProp = prop;
                         }
                         else if (prop !== singleProp) {
-                            if (!propSet) {
-                                propSet = new Map<SymbolId, Symbol>();
-                                propSet.set(getSymbolId(singleProp), singleProp);
+                            const isInstantiation = (getTargetSymbol(prop) || prop) === (getTargetSymbol(singleProp) || singleProp);
+                            // If the symbols are instances of one another with identical types - consider the symbols
+                            // equivalent and just use the first one, which thus allows us to avoid eliding private
+                            // members when intersecting a (this-)instantiations of a class with it's raw base or another instance
+                            if (isInstantiation && isPropertyIdenticalTo(singleProp, prop)) {
+                                // If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
+                                // to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
+                                // back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
+                                mergedInstantiations = !!singleProp.parent && !!length(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.parent));
                             }
-                            const id = getSymbolId(prop);
-                            if (!propSet.has(id)) {
-                                propSet.set(id, prop);
+                            else {
+                                if (!propSet) {
+                                    propSet = new Map<SymbolId, Symbol>();
+                                    propSet.set(getSymbolId(singleProp), singleProp);
+                                }
+                                const id = getSymbolId(prop);
+                                if (!propSet.has(id)) {
+                                    propSet.set(id, prop);
+                                }
                             }
                         }
                         checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
@@ -11697,7 +11710,19 @@ namespace ts {
                 return undefined;
             }
             if (!propSet && !(checkFlags & CheckFlags.ReadPartial) && !indexTypes) {
-                return singleProp;
+                if (mergedInstantiations) {
+                    // No symbol from a union/intersection should have a `.parent` set (since unions/intersections don't act as symbol parents)
+                    // Unless that parent is "reconstituted" from the "first value declaration" on the symbol (which is likely different than its instantiated parent!)
+                    // They also have a `.containingType` set, which affects some services endpoints behavior, like `getRootSymbol`
+                    const clone = createSymbolWithType(singleProp, (singleProp as TransientSymbol).type);
+                    clone.parent = singleProp.valueDeclaration?.symbol?.parent;
+                    clone.containingType = containingType;
+                    clone.mapper = (singleProp as TransientSymbol).mapper;
+                    return clone;
+                }
+                else {
+                    return singleProp;
+                }
             }
             const props = propSet ? arrayFrom(propSet.values()) : [singleProp];
             let declarations: Declaration[] | undefined;
