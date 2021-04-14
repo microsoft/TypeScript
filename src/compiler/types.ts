@@ -7691,7 +7691,6 @@ namespace ts {
     /**
      * A function that accepts and possibly transforms a node.
      */
-
     export type Visitor = (node: Node) => VisitResult<Node>;
 
     export interface NodeVisitor {

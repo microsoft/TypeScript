@@ -977,8 +977,8 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                     transformFlags = TransformFlags.ContainsTypeScript;
                     break;
-                case SyntaxKind.SuperKeyword:
                 case SyntaxKind.StaticKeyword:
+                case SyntaxKind.SuperKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ThisKeyword:

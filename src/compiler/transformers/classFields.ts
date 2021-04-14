@@ -155,7 +155,7 @@ namespace ts {
             return visited;
         }
 
-        function visitor (node: Node): VisitResult<Node> {
+        function visitor(node: Node): VisitResult<Node> {
             if (!(node.transformFlags & TransformFlags.ContainsClassFields)) return node;
 
             switch (node.kind) {
