@@ -22,7 +22,7 @@ class C {
 class C {
 }
 C.f = 1;
-C.arrowFunctionBoundary = () => this.f + 1;
+C.arrowFunctionBoundary = () => C.f + 1;
 C.functionExprBoundary = function () { return this.f + 2; };
 C.classExprBoundary = class {
     constructor() {
@@ -38,7 +38,7 @@ C.functionAndClassDeclBoundary = (() => {
             this.a = this.f + 5;
         }
         method() {
-            return this.f + 6;
+            return C.f + 6;
         }
     }
 })();

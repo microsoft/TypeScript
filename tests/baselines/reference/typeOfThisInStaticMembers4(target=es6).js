@@ -24,7 +24,7 @@ Object.defineProperty(C, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: this.a + 1
+    value: C.a + 1
 });
 class D extends C {
 }
@@ -38,11 +38,11 @@ Object.defineProperty(D, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: this.c + 1
+    value: D.c + 1
 });
 Object.defineProperty(D, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: super.a + this.c + 1
+    value: C.a + D.c + 1
 });

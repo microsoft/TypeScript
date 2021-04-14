@@ -156,7 +156,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (!(node.transformFlags & TransformFlags.ContainsClassFields)) return node;
+            if (!(node.transformFlags & (TransformFlags.ContainsClassFields | TransformFlags.ContainsLexicalThisOrSuper))) return node;
 
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:

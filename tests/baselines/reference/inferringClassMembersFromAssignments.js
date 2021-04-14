@@ -133,7 +133,6 @@ var stringOrNumberOrUndefined = C.inStaticNestedArrowFunction;
 
 
 //// [output.js]
-var _this = this;
 var C = /** @class */ (function () {
     function C() {
         var _this = this;
@@ -227,10 +226,10 @@ var C = /** @class */ (function () {
     };
     C.prop = function () {
         if (Math.random()) {
-            _this.inStaticPropertyDeclaration = 0;
+            C.inStaticPropertyDeclaration = 0;
         }
         else {
-            _this.inStaticPropertyDeclaration = "string";
+            C.inStaticPropertyDeclaration = "string";
         }
     };
     return C;

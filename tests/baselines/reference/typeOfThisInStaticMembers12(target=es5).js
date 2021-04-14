@@ -20,8 +20,8 @@ var C = /** @class */ (function () {
             }
             return Inner;
         }()),
-        _a = this.c,
-        _b = this.c,
+        _a = C.c,
+        _b = C.c,
         _c[_a] = 123,
         _c);
     return C;

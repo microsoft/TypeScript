@@ -27,7 +27,7 @@ class C {
 C.f = 1;
 class D extends C {
 }
-D.arrowFunctionBoundary = () => super.f + 1;
+D.arrowFunctionBoundary = () => C.f + 1;
 D.functionExprBoundary = function () { return super.f + 2; };
 D.classExprBoundary = class {
     constructor() {
@@ -43,7 +43,7 @@ D.functionAndClassDeclBoundary = (() => {
             this.a = super.f + 5;
         }
         method() {
-            return super.f + 6;
+            return C.f + 6;
         }
     }
 })();

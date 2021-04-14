@@ -10,7 +10,7 @@
 
 verify.codeFix({
     description: "Initialize static property 'foo'",
-    index: 0,
+    index: 2,
     newFileContent: `class C {
     static p = ()=>{ this.foo === 10 };
 }

@@ -32,8 +32,8 @@ Object.defineProperty(C, "bar", {
                 });
             }
         },
-        _a = this.c,
-        _b = this.c,
+        _a = C.c,
+        _b = C.c,
         Object.defineProperty(_c, _a, {
             enumerable: true,
             configurable: true,

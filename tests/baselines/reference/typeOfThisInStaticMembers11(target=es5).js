@@ -70,7 +70,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var _this = this;
 var C = /** @class */ (function () {
     function C() {
     }
@@ -84,7 +83,7 @@ var C = /** @class */ (function () {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: this.a + 1
+        value: (void 0).a + 1
     });
     C = __decorate([
         foo
@@ -124,19 +123,19 @@ var D = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: this.c + 1
+        value: (void 0).c + 1
     });
     Object.defineProperty(D, "e", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: _super.a + this.c + 1
+        value: (void 0).a + (void 0).c + 1
     });
     Object.defineProperty(D, "f", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: function () { return _this.c + 1; }
+        value: function () { return (void 0).c + 1; }
     });
     Object.defineProperty(D, "ff", {
         enumerable: true,
@@ -162,7 +161,7 @@ var CC = /** @class */ (function () {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: this.a + 1
+        value: CC.a + 1
     });
     return CC;
 }());
@@ -199,19 +198,19 @@ var DD = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: this.c + 1
+        value: DD.c + 1
     });
     Object.defineProperty(DD, "e", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: _super.a + this.c + 1
+        value: _super.a + DD.c + 1
     });
     Object.defineProperty(DD, "f", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: function () { return _this.c + 1; }
+        value: function () { return DD.c + 1; }
     });
     Object.defineProperty(DD, "ff", {
         enumerable: true,

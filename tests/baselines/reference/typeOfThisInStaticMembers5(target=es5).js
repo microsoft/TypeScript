@@ -9,11 +9,10 @@ class C {
 
 
 //// [typeOfThisInStaticMembers5.js]
-var _this = this;
 var C = /** @class */ (function () {
     function C(foo) {
         this.foo = foo;
     }
-    C.create = function () { return new _this("yep"); };
+    C.create = function () { return new C("yep"); };
     return C;
 }());

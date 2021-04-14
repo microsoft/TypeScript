@@ -14,4 +14,4 @@ class C {
         this.foo = foo;
     }
 }
-C.create = () => new this("yep");
+C.create = () => new C("yep");
