@@ -1477,7 +1477,7 @@ namespace ts.FindAllReferences {
 
             if (!hasMatchingMeaning(referenceLocation, state)) return;
 
-            const referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
+            let referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
             if (!referenceSymbol) {
                 return;
             }
@@ -1513,6 +1513,11 @@ namespace ts.FindAllReferences {
                 default:
                     Debug.assertNever(state.specialSearchKind);
             }
+
+            // Use the parent symbol if the location is commonjs require syntax on javascript files only.
+            referenceSymbol = isInJSFile(referenceLocation) && referenceLocation.parent.kind === SyntaxKind.BindingElement && isRequireVariableDeclaration(referenceLocation.parent)
+                ? referenceLocation.parent.symbol
+                : referenceSymbol;
 
             getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
         }
