@@ -125,6 +125,7 @@ namespace ts.JsDoc {
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
+                if (tag.kind === SyntaxKind.JSDocTypedefTag || tag.kind === SyntaxKind.JSDocCallbackTag) continue;
                 tags.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
             }
         });

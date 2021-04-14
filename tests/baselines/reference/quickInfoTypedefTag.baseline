@@ -1,0 +1,132 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 114,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 113,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "The typedef tag should not appear in the quickinfo.",
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/a.js",
+      "position": 245,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 244,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "g",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A sandwiched comment",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "tag",
+          "text": [
+            {
+              "text": "comment 1",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "tag",
+          "text": [
+            {
+              "text": "comment 2",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
