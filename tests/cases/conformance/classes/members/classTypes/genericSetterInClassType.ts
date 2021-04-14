@@ -1,17 +1,5 @@
 // @target: esnext
 
-module NonGeneric {
-    class C {
-        get y() {
-            return 1;
-        }
-        set y(v) { }
-    }
-
-    var c = new C();
-    c.y = c.y;
-}
-
 module Generic {
     class C<T> {
         get y(): T {
@@ -22,4 +10,18 @@ module Generic {
 
     var c = new C<number>();
     c.y = c.y;
+
+    class Box<T> {
+        #value!: T;
+        
+        get value() {
+            return this.#value;
+        }
+    
+        set value(value) {
+            this.#value = value;
+        }
+    }
+    
+    new Box<number>().value = 3;
 }

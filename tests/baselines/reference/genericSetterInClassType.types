@@ -1,36 +1,4 @@
 === tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
-module NonGeneric {
->NonGeneric : typeof NonGeneric
-
-    class C {
->C : C
-
-        get y() {
->y : number
-
-            return 1;
->1 : 1
-        }
-        set y(v) { }
->y : number
->v : number
-    }
-
-    var c = new C();
->c : C
->new C() : C
->C : typeof C
-
-    c.y = c.y;
->c.y = c.y : number
->c.y : number
->c : C
->y : number
->c.y : number
->c : C
->y : number
-}
-
 module Generic {
 >Generic : typeof Generic
 
@@ -62,4 +30,38 @@ module Generic {
 >c.y : number
 >c : C<number>
 >y : number
+
+    class Box<T> {
+>Box : Box<T>
+
+        #value!: T;
+>#value : T
+        
+        get value() {
+>value : T
+
+            return this.#value;
+>this.#value : T
+>this : this
+        }
+    
+        set value(value) {
+>value : T
+>value : T
+
+            this.#value = value;
+>this.#value = value : T
+>this.#value : T
+>this : this
+>value : T
+        }
+    }
+    
+    new Box<number>().value = 3;
+>new Box<number>().value = 3 : 3
+>new Box<number>().value : number
+>new Box<number>() : Box<number>
+>Box : typeof Box
+>value : number
+>3 : 3
 }

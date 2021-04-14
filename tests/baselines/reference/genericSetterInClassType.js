@@ -1,16 +1,4 @@
 //// [genericSetterInClassType.ts]
-module NonGeneric {
-    class C {
-        get y() {
-            return 1;
-        }
-        set y(v) { }
-    }
-
-    var c = new C();
-    c.y = c.y;
-}
-
 module Generic {
     class C<T> {
         get y(): T {
@@ -21,20 +9,23 @@ module Generic {
 
     var c = new C<number>();
     c.y = c.y;
+
+    class Box<T> {
+        #value!: T;
+        
+        get value() {
+            return this.#value;
+        }
+    
+        set value(value) {
+            this.#value = value;
+        }
+    }
+    
+    new Box<number>().value = 3;
 }
 
 //// [genericSetterInClassType.js]
-var NonGeneric;
-(function (NonGeneric) {
-    class C {
-        get y() {
-            return 1;
-        }
-        set y(v) { }
-    }
-    var c = new C();
-    c.y = c.y;
-})(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
     class C {
@@ -45,4 +36,14 @@ var Generic;
     }
     var c = new C();
     c.y = c.y;
+    class Box {
+        #value;
+        get value() {
+            return this.#value;
+        }
+        set value(value) {
+            this.#value = value;
+        }
+    }
+    new Box().value = 3;
 })(Generic || (Generic = {}));
