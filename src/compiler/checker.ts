@@ -9061,16 +9061,6 @@ namespace ts {
         }
 
         function resolveTypeOfAccessors(symbol: Symbol, writing = false) {
-
-            function getInstanceOrType(type: Type, symbol: Symbol) {
-                if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                    const links = getSymbolLinks(symbol);
-                    return instantiateType(type, links.mapper);
-                }
-
-                return type;
-            }
-
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
@@ -9078,21 +9068,21 @@ namespace ts {
 
             // For write operations, prioritize type annotations on the setter
             if (writing && setterType) {
-                return getInstanceOrType(setterType, symbol);
+                return instantiateTypeIfNeeded(setterType, symbol);
             }
             // Else defer to the getter type
 
             if (getter && isInJSFile(getter)) {
                 const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
                 if (jsDocType) {
-                    return getInstanceOrType(jsDocType, symbol);
+                    return instantiateTypeIfNeeded(jsDocType, symbol);
                 }
             }
 
             // Try to see if the user specified a return type on the get-accessor.
             const getterType = getAnnotatedAccessorType(getter);
             if (getterType) {
-                return getInstanceOrType(getterType, symbol);
+                return instantiateTypeIfNeeded(getterType, symbol);
             }
 
             // If the user didn't specify a return type, try to use the set-accessor's parameter type.
@@ -9103,7 +9093,7 @@ namespace ts {
             // If there are no specified types, try to infer it from the body of the get accessor if it exists.
             if (getter && getter.body) {
                 const returnTypeFromBody = getReturnTypeFromBody(getter);
-                return getInstanceOrType(returnTypeFromBody, symbol);
+                return instantiateTypeIfNeeded(returnTypeFromBody, symbol);
             }
 
             // Otherwise, fall back to 'any'.
@@ -9121,6 +9111,15 @@ namespace ts {
                 return anyType;
             }
             return undefined;
+
+            function instantiateTypeIfNeeded(type: Type, symbol: Symbol) {
+                if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
+                    const links = getSymbolLinks(symbol);
+                    return instantiateType(type, links.mapper);
+                }
+
+                return type;
+            }
         }
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
