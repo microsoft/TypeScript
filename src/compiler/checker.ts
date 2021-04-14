@@ -11662,7 +11662,13 @@ namespace ts {
                             // If the symbols are instances of one another with identical types - consider the symbols
                             // equivalent and just use the first one, which thus allows us to avoid eliding private
                             // members when intersecting a (this-)instantiations of a class with it's raw base or another instance
-                            if (!isInstantiation || !isPropertyIdenticalTo(singleProp, prop)) {
+                            if (isInstantiation && isPropertyIdenticalTo(singleProp, prop)) {
+                                // If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
+                                // to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
+                                // back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
+                                mergedInstantiations = !!singleProp.parent && !!length(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.parent));
+                            }
+                            else {
                                 if (!propSet) {
                                     propSet = new Map<SymbolId, Symbol>();
                                     propSet.set(getSymbolId(singleProp), singleProp);
@@ -11671,12 +11677,6 @@ namespace ts {
                                 if (!propSet.has(id)) {
                                     propSet.set(id, prop);
                                 }
-                            }
-                            else {
-                                // If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
-                                // to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
-                                // back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
-                                mergedInstantiations = !!singleProp.parent && !!length(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(singleProp.parent));
                             }
                         }
                         checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
@@ -11712,8 +11712,8 @@ namespace ts {
             if (!propSet && !(checkFlags & CheckFlags.ReadPartial) && !indexTypes) {
                 if (mergedInstantiations) {
                     // No symbol from a union/intersection should have a `.parent` set (since unions/intersections don't act as symbol parents)
-                    // Unless that parent is "reconsituted" from the "first value declaration" on the symbol (which is likely different than its instantiated parent!)
-                    // They also have a `.containingType` set, which affects some services endpoints behavior
+                    // Unless that parent is "reconstituted" from the "first value declaration" on the symbol (which is likely different than its instantiated parent!)
+                    // They also have a `.containingType` set, which affects some services endpoints behavior, like `getRootSymbol`
                     const clone = createSymbolWithType(singleProp, (singleProp as TransientSymbol).type);
                     clone.parent = singleProp.valueDeclaration?.symbol?.parent;
                     clone.containingType = containingType;
