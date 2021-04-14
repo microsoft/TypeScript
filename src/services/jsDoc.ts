@@ -94,7 +94,9 @@ namespace ts.JsDoc {
         forEachUnique(declarations, declaration => {
             for (const jsdoc of getCommentHavingNodes(declaration)) {
                 if (jsdoc.comment === undefined
-                    || isJSDoc(jsdoc) && jsdoc.tags?.every(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)) {
+                    || isJSDoc(jsdoc)
+                      && declaration.kind !== SyntaxKind.JSDocTypedefTag
+                      && jsdoc.tags?.every(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)) {
                     continue;
                 }
                 const newparts = getDisplayPartsFromComment(jsdoc.comment, checker);

@@ -130,15 +130,6 @@
           ]
         },
         {
-          "name": "typedef",
-          "text": [
-            {
-              "text": "NumOrStr",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "property",
           "text": [
             {
