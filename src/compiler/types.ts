@@ -875,9 +875,25 @@ namespace ts {
         | ShorthandPropertyAssignment
         | PropertyAssignment
         | FunctionExpression
-        | LabeledStatement
-        | ExpressionStatement
+        | EmptyStatement
+        | DebuggerStatement
+        | Block
         | VariableStatement
+        | ExpressionStatement
+        | IfStatement
+        | DoStatement
+        | WhileStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | BreakStatement
+        | ContinueStatement
+        | ReturnStatement
+        | WithStatement
+        | SwitchStatement
+        | LabeledStatement
+        | ThrowStatement
+        | TryStatement
         | FunctionDeclaration
         | ConstructorDeclaration
         | MethodDeclaration
@@ -2574,7 +2590,7 @@ namespace ts {
         | JsxFragment
         ;
 
-    export interface Statement extends Node {
+    export interface Statement extends Node, JSDocContainer {
         _statementBrand: any;
     }
 
@@ -2643,13 +2659,13 @@ namespace ts {
         /*@internal*/ multiLine?: boolean;
     }
 
-    export interface VariableStatement extends Statement, JSDocContainer {
+    export interface VariableStatement extends Statement {
         /* @internal*/ decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
         readonly kind: SyntaxKind.VariableStatement;
         readonly declarationList: VariableDeclarationList;
     }
 
-    export interface ExpressionStatement extends Statement, JSDocContainer {
+    export interface ExpressionStatement extends Statement {
         readonly kind: SyntaxKind.ExpressionStatement;
         readonly expression: Expression;
     }
@@ -2769,7 +2785,7 @@ namespace ts {
         | DefaultClause
         ;
 
-    export interface LabeledStatement extends Statement, JSDocContainer {
+    export interface LabeledStatement extends Statement {
         readonly kind: SyntaxKind.LabeledStatement;
         readonly label: Identifier;
         readonly statement: Statement;
@@ -2965,7 +2981,7 @@ namespace ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends Statement, JSDocContainer {
+    export interface ImportDeclaration extends Statement {
         readonly kind: SyntaxKind.ImportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly importClause?: ImportClause;

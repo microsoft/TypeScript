@@ -342,3 +342,30 @@ const templated2: Templated = `${value2} abc` as const;
 >Templated : Symbol(Templated, Decl(templateLiteralTypes3.ts, 93, 29))
 >value2 : Symbol(value2, Decl(templateLiteralTypes3.ts, 103, 5))
 
+// Repro from #43620
+
+type Prefixes = "foo" | "bar";
+>Prefixes : Symbol(Prefixes, Decl(templateLiteralTypes3.ts, 104, 55))
+
+type AllPrefixData = "foo:baz" | "bar:baz";
+>AllPrefixData : Symbol(AllPrefixData, Decl(templateLiteralTypes3.ts, 108, 30))
+
+type PrefixData<P extends Prefixes> = `${P}:baz`;
+>PrefixData : Symbol(PrefixData, Decl(templateLiteralTypes3.ts, 110, 43))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 112, 16))
+>Prefixes : Symbol(Prefixes, Decl(templateLiteralTypes3.ts, 104, 55))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 112, 16))
+
+interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
+>ITest : Symbol(ITest, Decl(templateLiteralTypes3.ts, 112, 49))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 114, 16))
+>Prefixes : Symbol(Prefixes, Decl(templateLiteralTypes3.ts, 104, 55))
+>E : Symbol(E, Decl(templateLiteralTypes3.ts, 114, 35))
+>AllPrefixData : Symbol(AllPrefixData, Decl(templateLiteralTypes3.ts, 108, 30))
+>PrefixData : Symbol(PrefixData, Decl(templateLiteralTypes3.ts, 110, 43))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 114, 16))
+
+    blah: string;
+>blah : Symbol(ITest.blah, Decl(templateLiteralTypes3.ts, 114, 78))
+}
+

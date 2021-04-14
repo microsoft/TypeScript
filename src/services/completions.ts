@@ -498,6 +498,7 @@ namespace ts.Completions {
             sourceDisplay,
             isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
+            isImportStatementCompletion: originIsResolvedExport(origin) || undefined,
             data,
         };
     }

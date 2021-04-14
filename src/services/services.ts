@@ -1670,7 +1670,7 @@ namespace ts {
         function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return !isLabelName(node) && !isTagName(node);
+                    return !isLabelName(node) && !isTagName(node) && !isConstTypeReference(node.parent);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                     // Don't return quickInfo if inside the comment in `a/**/.b`

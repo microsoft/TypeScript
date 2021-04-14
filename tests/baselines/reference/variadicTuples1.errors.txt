@@ -11,8 +11,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(151,5): error TS2322: Typ
 tests/cases/conformance/types/tuple/variadicTuples1.ts(152,5): error TS2322: Type '[string, ...T]' is not assignable to type '[string, ...U]'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
-      Type 'string[]' is not assignable to type 'U'.
-        'U' could be instantiated with an arbitrary type which could be unrelated to 'string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(160,5): error TS2322: Type 'readonly [...T]' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'readonly [...T]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(162,5): error TS4104: The type 'readonly [...T]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
@@ -27,8 +25,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(181,5): error TS2322: Typ
 tests/cases/conformance/types/tuple/variadicTuples1.ts(182,5): error TS2322: Type '[...T]' is not assignable to type '[...U]'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
-      Type 'string[]' is not assignable to type 'U'.
-        'U' could be instantiated with an arbitrary type which could be unrelated to 'string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(188,5): error TS2322: Type 'T' is not assignable to type '[...T]'.
   The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(190,5): error TS2322: Type 'T' is not assignable to type '[...U]'.
@@ -36,8 +32,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(190,5): error TS2322: Typ
 tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Type '[...T]' is not assignable to type '[...U]'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
-      Type 'readonly string[]' is not assignable to type 'U'.
-        'U' could be instantiated with an arbitrary type which could be unrelated to 'readonly string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
   Type '"2"' is not assignable to type 'number | "0" | keyof T[] | "1"'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
@@ -220,8 +214,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
 !!! error TS2322: Type '[string, ...T]' is not assignable to type '[string, ...U]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
-!!! error TS2322:       Type 'string[]' is not assignable to type 'U'.
-!!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'string[]'.
     }
     
     // For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
@@ -273,8 +265,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
 !!! error TS2322: Type '[...T]' is not assignable to type '[...U]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
-!!! error TS2322:       Type 'string[]' is not assignable to type 'U'.
-!!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'string[]'.
     }
     
     function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
@@ -294,8 +284,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
 !!! error TS2322: Type '[...T]' is not assignable to type '[...U]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
-!!! error TS2322:       Type 'readonly string[]' is not assignable to type 'U'.
-!!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'readonly string[]'.
     }
     
     function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
