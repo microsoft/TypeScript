@@ -18219,18 +18219,18 @@ namespace ts {
                     return result;
                 }
 
-                if (isNonAugmentingArraySubtype(source) && isArrayType(target)) {
-                    let sourceBase = getBaseTypes((source as TypeReference).target as InterfaceType)[0];
-                    if (length(target.resolvedTypeArguments) === 2) {
-                        sourceBase = getTypeWithThisArgument(sourceBase, ((source as TypeReference).target as InterfaceType).thisType);
+                let sourceBase = getSingleBaseForNonAugmentingSubtype(source);
+                if (sourceBase) {
+                    if (getObjectFlags(target) & ObjectFlags.Reference && length(getTypeArguments((target as TypeReference))) > length((target as TypeReference).target.typeParameters)) {
+                        sourceBase = getTypeWithThisArgument(sourceBase, last(getTypeArguments(source as TypeReference)));
                     }
                     return isRelatedTo(sourceBase, target, reportErrors);
                 }
 
-                if (isArrayType(source) && isNonAugmentingArraySubtype(target)) {
-                    let targetBase = getBaseTypes((target as TypeReference).target as InterfaceType)[0];
-                    if (length(source.resolvedTypeArguments) === 2) {
-                        targetBase = getTypeWithThisArgument(targetBase, ((target as TypeReference).target as InterfaceType).thisType);
+                let targetBase = getSingleBaseForNonAugmentingSubtype(target);
+                if (targetBase) {
+                    if (getObjectFlags(source) & ObjectFlags.Reference && length(getTypeArguments((source as TypeReference))) > length((source as TypeReference).target.typeParameters)) {
+                        targetBase = getTypeWithThisArgument(targetBase, last(getTypeArguments(target as TypeReference)));
                     }
                     return isRelatedTo(source, targetBase, reportErrors);
                 }
@@ -19917,22 +19917,19 @@ namespace ts {
             return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
-        function isNonAugmentingArraySubtype(type: Type) {
+        function getSingleBaseForNonAugmentingSubtype(type: Type) {
             if (!(getObjectFlags(type) & ObjectFlags.Reference) || !(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)) {
-                return false;
+                return undefined;
             }
             const target = (type as TypeReference).target as InterfaceType;
             const bases = getBaseTypes(target);
             if (bases.length !== 1) {
-                return false;
-            }
-            if (!isArrayType(bases[0])) {
-                return false;
+                return undefined;
             }
             if (getMembersOfSymbol(type.symbol).size) {
-                return false; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
+                return undefined; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
             }
-            return true;
+            return !length(target.typeParameters) ? bases[0] : instantiateType(bases[0], createTypeMapper(target.typeParameters!, getTypeArguments(type as TypeReference).slice(0, target.typeParameters!.length)));
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {

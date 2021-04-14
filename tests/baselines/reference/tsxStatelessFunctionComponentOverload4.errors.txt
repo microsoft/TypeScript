@@ -64,6 +64,7 @@ tests/cases/conformance/jsx/file.tsx(35,12): error TS2769: No overload matches t
       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
     Type 'string' is not assignable to type 'Element'.
+      Type 'string' is not assignable to type 'ReactElement<any>'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches this call.
@@ -197,6 +198,7 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
 !!! error TS2769:   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'Element'.
+!!! error TS2769:       Type 'string' is not assignable to type 'ReactElement<any>'.
 !!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
