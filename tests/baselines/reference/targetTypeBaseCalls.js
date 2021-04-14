@@ -45,8 +45,7 @@ new Foo(function (s) { s = 5; }); // error, if types are applied correctly
 var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
-        var _this = _super.call(this, function (s) { s = 5; }) || this;
-        return _this;
+        return _super.call(this, function (s) { s = 5; }) || this;
     }
     return Bar;
 }(Foo)); // error, if types are applied correctly

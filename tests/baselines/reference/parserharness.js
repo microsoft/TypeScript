@@ -2481,8 +2481,7 @@ var Harness;
     var Run = /** @class */ (function (_super) {
         __extends(Run, _super);
         function Run() {
-            var _this = _super.call(this, 'Test Run', null) || this;
-            return _this;
+            return _super.call(this, 'Test Run', null) || this;
         }
         Run.prototype.run = function () {
             emitLog('start');

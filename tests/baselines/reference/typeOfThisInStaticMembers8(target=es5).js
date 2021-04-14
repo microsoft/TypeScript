@@ -19,11 +19,12 @@ class C {
 
 
 //// [typeOfThisInStaticMembers8.js]
+var _this = this;
 var C = /** @class */ (function () {
     function C() {
     }
     C.f = 1;
-    C.arrowFunctionBoundary = function () { return C.f + 1; };
+    C.arrowFunctionBoundary = function () { return _this.f + 1; };
     C.functionExprBoundary = function () { return this.f + 2; };
     C.classExprBoundary = /** @class */ (function () {
         function class_1() {

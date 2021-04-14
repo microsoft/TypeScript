@@ -70,11 +70,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var _this = this;
 var C = /** @class */ (function () {
     function C() {
     }
     C.a = 1;
-    C.b = (void 0).a + 1;
+    C.b = this.a + 1;
     C = __decorate([
         foo
     ], C);
@@ -99,9 +100,9 @@ var D = /** @class */ (function (_super) {
         configurable: true
     });
     D.c = 2;
-    D.d = (void 0).c + 1;
-    D.e = (void 0).a + (void 0).c + 1;
-    D.f = function () { return (void 0).c + 1; };
+    D.d = this.c + 1;
+    D.e = _super.a + this.c + 1;
+    D.f = function () { return _this.c + 1; };
     D.ff = function () { this.c + 1; };
     D = __decorate([
         foo
@@ -112,7 +113,7 @@ var CC = /** @class */ (function () {
     function CC() {
     }
     CC.a = 1;
-    CC.b = CC.a + 1;
+    CC.b = this.a + 1;
     return CC;
 }());
 var DD = /** @class */ (function (_super) {
@@ -134,9 +135,9 @@ var DD = /** @class */ (function (_super) {
         configurable: true
     });
     DD.c = 2;
-    DD.d = DD.c + 1;
-    DD.e = _super.a + DD.c + 1;
-    DD.f = function () { return DD.c + 1; };
+    DD.d = this.c + 1;
+    DD.e = _super.a + this.c + 1;
+    DD.f = function () { return _this.c + 1; };
     DD.ff = function () { this.c + 1; };
     return DD;
 }(CC));

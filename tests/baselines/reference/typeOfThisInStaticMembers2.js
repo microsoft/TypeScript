@@ -11,12 +11,12 @@ class C2<T> {
 var C = /** @class */ (function () {
     function C() {
     }
-    C.foo = C; // error
+    C.foo = this; // error
     return C;
 }());
 var C2 = /** @class */ (function () {
     function C2() {
     }
-    C2.foo = C2; // error
+    C2.foo = this; // error
     return C2;
 }());

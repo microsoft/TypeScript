@@ -172,8 +172,7 @@ var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2(v2) {
         if (v2 === void 0) { v2 = 6; }
-        var _this = _super.call(this, v2) || this;
-        return _this;
+        return _super.call(this, v2) || this;
     }
     return C2;
 }(C1));

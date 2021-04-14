@@ -67,7 +67,7 @@ Object.defineProperty(C, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (void 0).a + 1
+    value: this.a + 1
 });
 C = __decorate([
     foo
@@ -93,19 +93,19 @@ Object.defineProperty(D, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (void 0).c + 1
+    value: this.c + 1
 });
 Object.defineProperty(D, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: (void 0).a + (void 0).c + 1
+    value: super.a + this.c + 1
 });
 Object.defineProperty(D, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => (void 0).c + 1
+    value: () => this.c + 1
 });
 Object.defineProperty(D, "ff", {
     enumerable: true,
@@ -128,7 +128,7 @@ Object.defineProperty(CC, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: CC.a + 1
+    value: this.a + 1
 });
 class DD extends CC {
     static foo() {
@@ -151,19 +151,19 @@ Object.defineProperty(DD, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: DD.c + 1
+    value: this.c + 1
 });
 Object.defineProperty(DD, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: CC.a + DD.c + 1
+    value: super.a + this.c + 1
 });
 Object.defineProperty(DD, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => DD.c + 1
+    value: () => this.c + 1
 });
 Object.defineProperty(DD, "ff", {
     enumerable: true,

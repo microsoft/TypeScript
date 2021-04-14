@@ -199,8 +199,7 @@ var H = /** @class */ (function () {
 var I = /** @class */ (function (_super) {
     __extends(I, _super);
     function I() {
-        var _this = _super.call(this) || this;
-        return _this;
+        return _super.call(this) || this;
     } // ERROR - no super call allowed
     return I;
 }(Object));

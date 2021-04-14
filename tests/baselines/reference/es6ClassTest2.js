@@ -277,8 +277,7 @@ var SuperParent = /** @class */ (function () {
 var SuperChild = /** @class */ (function (_super) {
     __extends(SuperChild, _super);
     function SuperChild() {
-        var _this = _super.call(this, 1) || this;
-        return _this;
+        return _super.call(this, 1) || this;
     }
     SuperChild.prototype.b = function () {
         _super.prototype.b.call(this, 'str');

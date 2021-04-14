@@ -35,10 +35,8 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B(text) {
-        var _this = 
         // this is subclass constructor
-        _super.call(this, text) || this;
-        return _this;
+        return _super.call(this, text) || this;
     }
     return B;
 }(A));

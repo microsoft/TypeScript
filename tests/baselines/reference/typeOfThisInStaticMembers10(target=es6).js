@@ -58,7 +58,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 let C = class C {
 };
 C.a = 1;
-C.b = (void 0).a + 1;
+C.b = this.a + 1;
 C = __decorate([
     foo
 ], C);
@@ -74,9 +74,9 @@ let D = class D extends C {
     }
 };
 D.c = 2;
-D.d = (void 0).c + 1;
-D.e = (void 0).a + (void 0).c + 1;
-D.f = () => (void 0).c + 1;
+D.d = this.c + 1;
+D.e = super.a + this.c + 1;
+D.f = () => this.c + 1;
 D.ff = function () { this.c + 1; };
 D = __decorate([
     foo
@@ -84,7 +84,7 @@ D = __decorate([
 class CC {
 }
 CC.a = 1;
-CC.b = CC.a + 1;
+CC.b = this.a + 1;
 class DD extends CC {
     static foo() {
         return this.c + 1;
@@ -97,7 +97,7 @@ class DD extends CC {
     }
 }
 DD.c = 2;
-DD.d = DD.c + 1;
-DD.e = CC.a + DD.c + 1;
-DD.f = () => DD.c + 1;
+DD.d = this.c + 1;
+DD.e = super.a + this.c + 1;
+DD.f = () => this.c + 1;
 DD.ff = function () { this.c + 1; };

@@ -18,7 +18,7 @@ C.bar = (_c = class Inner {
             this[_b] = 123;
         }
     },
-    _a = C.c,
-    _b = C.c,
+    _a = this.c,
+    _b = this.c,
     _c[_a] = 123,
     _c);

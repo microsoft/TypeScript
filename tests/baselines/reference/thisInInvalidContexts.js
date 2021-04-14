@@ -68,7 +68,7 @@ var __extends = (this && this.__extends) || (function () {
 var ErrClass1 = /** @class */ (function () {
     function ErrClass1() {
     }
-    ErrClass1.t = ErrClass1; // Error
+    ErrClass1.t = this; // Error
     return ErrClass1;
 }());
 var BaseErrClass = /** @class */ (function () {

@@ -49,8 +49,7 @@ define("Configurable", ["require", "exports"], function (require, exports) {
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
-                var _this = _super.apply(this, args) || this;
-                return _this;
+                return _super.apply(this, args) || this;
             }
             return class_1;
         }(base));

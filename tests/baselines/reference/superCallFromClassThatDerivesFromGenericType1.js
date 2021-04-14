@@ -30,8 +30,7 @@ var __extends = (this && this.__extends) || (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.call(this) || this;
-        return _this;
+        return _super.call(this) || this;
     }
     return D;
 }(B));

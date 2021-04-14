@@ -978,8 +978,6 @@ namespace ts {
                     transformFlags = TransformFlags.ContainsTypeScript;
                     break;
                 case SyntaxKind.SuperKeyword:
-                    transformFlags = TransformFlags.ContainsLexicalThis | TransformFlags.ContainsES2015;
-                    break;
                 case SyntaxKind.StaticKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;

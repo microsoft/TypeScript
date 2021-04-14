@@ -40,8 +40,7 @@ var other_file_1 = require("other_file");
 var Y = /** @class */ (function (_super) {
     __extends(Y, _super);
     function Y() {
-        var _this = _super.call(this, file_1["default"]) || this;
-        return _this;
+        return _super.call(this, file_1["default"]) || this;
     }
     return Y;
 }(other_file_1["default"]));
@@ -50,8 +49,7 @@ var file3_1 = require("file3");
 var Q = /** @class */ (function (_super) {
     __extends(Q, _super);
     function Q() {
-        var _this = _super.call(this, file2_1["default"], file3_1["default"]) || this;
-        return _this;
+        return _super.call(this, file2_1["default"], file3_1["default"]) || this;
     }
     return Q;
 }(other_file_1["default"]));

@@ -31,7 +31,7 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.a = 1;
-    C.b = C.a + 1;
+    C.b = this.a + 1;
     return C;
 }());
 var D = /** @class */ (function (_super) {
@@ -40,7 +40,7 @@ var D = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     D.c = 2;
-    D.d = D.c + 1;
-    D.e = 1 + (_super.a) + (D.c + 1) + 1;
+    D.d = this.c + 1;
+    D.e = 1 + (_super.a) + (this.c + 1) + 1;
     return D;
 }(C));

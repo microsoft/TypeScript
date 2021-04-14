@@ -45,8 +45,7 @@ exports.Super = Super;
 var Sub = /** @class */ (function (_super) {
     __extends(Sub, _super);
     function Sub() {
-        var _this = _super.call(this, 'first', 'second') || this;
-        return _this;
+        return _super.call(this, 'first', 'second') || this;
     }
     return Sub;
 }(Super));

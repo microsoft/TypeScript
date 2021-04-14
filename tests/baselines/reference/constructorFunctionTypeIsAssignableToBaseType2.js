@@ -57,8 +57,7 @@ var Base = /** @class */ (function () {
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived(x) {
-        var _this = _super.call(this, x) || this;
-        return _this;
+        return _super.call(this, x) || this;
     }
     return Derived;
 }(Base));

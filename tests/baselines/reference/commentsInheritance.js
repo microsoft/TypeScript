@@ -236,8 +236,7 @@ var c2 = /** @class */ (function () {
 var c3 = /** @class */ (function (_super) {
     __extends(c3, _super);
     function c3() {
-        var _this = _super.call(this, 10) || this;
-        return _this;
+        return _super.call(this, 10) || this;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {

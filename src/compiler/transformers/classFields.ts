@@ -90,6 +90,12 @@ namespace ts {
         identifiers: UnderscoreEscapedMap<PrivateIdentifierInfo>
     }
 
+    interface StaticClassFieldsInitializeContext {
+        receiver: LeftHandSideExpression
+        baseClass: LeftHandSideExpression | undefined
+        classHasDecorators: boolean | undefined
+    }
+
     /**
      * Transforms ECMAScript Class Syntax.
      * TypeScript parameter property syntax is transformed in the TypeScript transformer.
@@ -134,6 +140,8 @@ namespace ts {
         const privateIdentifierEnvironmentStack: (PrivateIdentifierEnvironment | undefined)[] = [];
         let currentPrivateIdentifierEnvironment: PrivateIdentifierEnvironment | undefined;
 
+        let staticFieldInitializerContext: StaticClassFieldsInitializeContext | undefined;
+
         return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -147,7 +155,7 @@ namespace ts {
             return visited;
         }
 
-        function visitor(node: Node): VisitResult<Node> {
+        function visitor (node: Node): VisitResult<Node> {
             if (!(node.transformFlags & TransformFlags.ContainsClassFields)) return node;
 
             switch (node.kind) {
@@ -176,6 +184,77 @@ namespace ts {
                     return visitForStatement(node as ForStatement);
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                case SyntaxKind.ThisKeyword:
+                    return visitThisExpression(node as ThisExpression);
+                case SyntaxKind.SuperKeyword:
+                    return visitSuperExpression(node as SuperExpression);
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Constructor:
+                    return visitNonStaticBoundaryFunction(node as FunctionDeclaration | FunctionExpression | ConstructorDeclaration);
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                    return visitNameInStaticBoundaryFunction(node as AccessorDeclaration | MethodDeclaration);
+            }
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitNameInStaticBoundaryFunction(node: AccessorDeclaration | MethodDeclaration) {
+            function nameInContextVisitor (n: Node): Node {
+                if (node.name === n) {
+                    return visitNode(n, visitor)
+                }
+
+                const savedStaticFieldInitializerContext = staticFieldInitializerContext;
+                staticFieldInitializerContext = undefined;
+                const result = visitNode(n, visitor)
+                staticFieldInitializerContext = savedStaticFieldInitializerContext;
+                return result;
+            }
+            return visitEachChild(node, nameInContextVisitor, context);
+        }
+
+        function visitNonStaticBoundaryFunction (node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration) {
+            const savedStaticFieldInitializerContext = staticFieldInitializerContext;
+            staticFieldInitializerContext = undefined;
+            const result = visitEachChild(node, visitor, context);
+            staticFieldInitializerContext = savedStaticFieldInitializerContext;
+            return result;
+        }
+
+        function visitThisExpression(node: ThisExpression): Expression {
+            if (!staticFieldInitializerContext) {
+                return visitEachChild(node, visitor, context)
+            }
+
+            const { receiver, classHasDecorators } = staticFieldInitializerContext;
+            return setTextRange(
+                setOriginalNode(
+                    classHasDecorators ?
+                        factory.createParenthesizedExpression(factory.createVoidZero()) :
+                        factory.cloneNode(receiver),
+                    node,
+                ),
+                node
+            );
+        }
+
+        function visitSuperExpression(node: SuperExpression): Expression {
+            if (staticFieldInitializerContext) {
+                const shouldRewriteSuper = languageVersion >= ScriptTarget.ES2015;
+                const { baseClass, classHasDecorators } = staticFieldInitializerContext;
+                if (baseClass && (shouldRewriteSuper || classHasDecorators)) {
+                    return setTextRange(
+                        setOriginalNode(
+                            classHasDecorators ?
+                                factory.createParenthesizedExpression(factory.createVoidZero()) :
+                                factory.cloneNode(baseClass),
+                            node
+                        ),
+                        node
+                    );
+                }
             }
             return visitEachChild(node, visitor, context);
         }
@@ -188,51 +267,6 @@ namespace ts {
                 default:
                     return visitor(node);
             }
-        }
-
-        function visitorThisOrSuperInStaticFieldContext(root: Expression | undefined, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined): Expression | undefined {
-            const shouldRewriteSuper = baseClass && languageVersion >= ScriptTarget.ES2015;
-            const shouldAvoidThisOrSuper = hasClassDecorators;
-            const shouldCareAboutSuper = shouldRewriteSuper || shouldAvoidThisOrSuper;
-
-            function staticFieldThisOrSuperVisitor(node: Expression): Expression {
-                if (!(node.transformFlags & TransformFlags.ContainsLexicalThis)) {
-                    return node;
-                }
-
-                // `This` access in static field cannot cross function boundary.
-                if (isThisOrSuperInStaticFieldBoundary(node, node !== root ? node.parent : undefined)) {
-                    return node;
-                }
-
-                const originalNode = getOriginalNode(node);
-                if (originalNode.kind === SyntaxKind.ThisKeyword) {
-                    return setTextRange(
-                        setOriginalNode(
-                            shouldAvoidThisOrSuper ?
-                                factory.createParenthesizedExpression(factory.createVoidZero()) :
-                                factory.cloneNode(receiver),
-                            node,
-                        ),
-                        node
-                    );
-                }
-                else if (baseClass && shouldCareAboutSuper && originalNode.kind === SyntaxKind.SuperKeyword) {
-                    return setTextRange(
-                        setOriginalNode(
-                            shouldAvoidThisOrSuper ?
-                                factory.createParenthesizedExpression(factory.createVoidZero()) :
-                                factory.cloneNode(baseClass),
-                            node
-                        ),
-                        node
-                    );
-                }
-
-                return visitEachChild(node, staticFieldThisOrSuperVisitor, context);
-            };
-
-            return visitNode(root, staticFieldThisOrSuperVisitor, isExpression);
         }
 
         /**
@@ -1038,13 +1072,25 @@ namespace ts {
             return expressions;
         }
 
+        function visitPropertyDeclarationInContext (property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, classHasDecorators: boolean | undefined) {
+            const savedStaticFieldInitializerContext = staticFieldInitializerContext;
+            staticFieldInitializerContext = hasStaticModifier(property) ? {
+                receiver,
+                baseClass,
+                classHasDecorators
+            } : undefined;
+            const result = visitNode(property.initializer, visitor, isExpression)
+            staticFieldInitializerContext = savedStaticFieldInitializerContext;
+            return result;
+        }
+
         /**
          * Transforms a property initializer into an assignment statement.
          *
          * @param property The property declaration.
          * @param receiver The object receiving the property assignment.
          */
-        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, hasClassDecorators: boolean | undefined) {
+        function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, classHasDecorators: boolean | undefined) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
             const emitAssignment = !useDefineForClassFields;
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
@@ -1058,14 +1104,14 @@ namespace ts {
                         if (!privateIdentifierInfo.isStatic) {
                             return createPrivateInstanceFieldInitializer(
                                 receiver,
-                                visitNode(property.initializer, visitor, isExpression),
+                                visitPropertyDeclarationInContext(property, receiver, baseClass, classHasDecorators),
                                 privateIdentifierInfo.brandCheckIdentifier
                             );
                         }
                         else {
                             return createPrivateStaticFieldInitializer(
                                 privateIdentifierInfo.variableName,
-                                visitNode(property.initializer, visitor, isExpression)
+                                visitPropertyDeclarationInContext(property, receiver, baseClass, classHasDecorators)
                             );
                         }
                     }
@@ -1086,11 +1132,7 @@ namespace ts {
                 return undefined;
             }
 
-            const initializer = property.initializer || emitAssignment ? visitNode(
-                hasStaticModifier(property) ? visitorThisOrSuperInStaticFieldContext(property.initializer, receiver, baseClass, hasClassDecorators) : property.initializer,
-                visitor,
-                isExpression
-            ) ?? factory.createVoidZero()
+            const initializer = property.initializer || emitAssignment ? visitPropertyDeclarationInContext(property, receiver, baseClass, classHasDecorators) ?? factory.createVoidZero()
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : factory.createVoidZero();
 

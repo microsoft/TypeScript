@@ -138,7 +138,6 @@ var RegisteredUser3 = /** @class */ (function (_super) {
         return _this;
     }
     RegisteredUser3.prototype.sayHello = function () {
-        var _this = this;
         // super property in a nested lambda in a method
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
     };
@@ -154,7 +153,6 @@ var RegisteredUser4 = /** @class */ (function (_super) {
         return _this;
     }
     RegisteredUser4.prototype.sayHello = function () {
-        var _this = this;
         // super in a nested lambda in a method
         var x = function () { return function () { return _super.prototype.; }; };
     };

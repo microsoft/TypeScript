@@ -50,8 +50,7 @@ var FooBase = /** @class */ (function () {
 var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo(x, y) {
-        var _this = _super.call(this, x) || this;
-        return _this;
+        return _super.call(this, x) || this;
     }
     Foo.prototype.bar1 = function () { };
     return Foo;

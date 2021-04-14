@@ -40,7 +40,7 @@ var C = /** @class */ (function () {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: C.a + 1
+        value: this.a + 1
     });
     return C;
 }());
@@ -59,13 +59,13 @@ var D = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: D.c + 1
+        value: this.c + 1
     });
     Object.defineProperty(D, "e", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: _super.a + D.c + 1
+        value: _super.a + this.c + 1
     });
     return D;
 }(C));
