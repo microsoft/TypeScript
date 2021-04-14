@@ -59,13 +59,9 @@ verify.completions(
         // only public and protected methods of the base class are accessible through super
         marker: "4",
         exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "protectedMethod", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "protectedProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
-            { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "apply", sortText: completion.SortText.LocationPriority },
             { name: "call", sortText: completion.SortText.LocationPriority },
             { name: "bind", sortText: completion.SortText.LocationPriority },
