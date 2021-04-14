@@ -1350,6 +1350,7 @@ namespace ts {
     }
 
     function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
+        const force = !!state.options.force;
         let newestInputFileName: string = undefined!;
         let newestInputFileTime = minimumDate;
         const { host } = state;
@@ -1362,10 +1363,12 @@ namespace ts {
                 };
             }
 
-            const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
-            if (inputTime > newestInputFileTime) {
-                newestInputFileName = inputFile;
-                newestInputFileTime = inputTime;
+            if (!force) {
+                const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
+                if (inputTime > newestInputFileTime) {
+                    newestInputFileName = inputFile;
+                    newestInputFileTime = inputTime;
+                }
             }
         }
 
@@ -1387,39 +1390,41 @@ namespace ts {
         let missingOutputFileName: string | undefined;
         let newestDeclarationFileContentChangedTime = minimumDate;
         let isOutOfDateWithInputs = false;
-        for (const output of outputs) {
-            // Output is missing; can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (!host.fileExists(output)) {
-                missingOutputFileName = output;
-                break;
-            }
+        if (!force) {
+            for (const output of outputs) {
+                // Output is missing; can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (!host.fileExists(output)) {
+                    missingOutputFileName = output;
+                    break;
+                }
 
-            const outputTime = getModifiedTime(host, output);
-            if (outputTime < oldestOutputFileTime) {
-                oldestOutputFileTime = outputTime;
-                oldestOutputFileName = output;
-            }
+                const outputTime = getModifiedTime(host, output);
+                if (outputTime < oldestOutputFileTime) {
+                    oldestOutputFileTime = outputTime;
+                    oldestOutputFileName = output;
+                }
 
-            // If an output is older than the newest input, we can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (outputTime < newestInputFileTime) {
-                isOutOfDateWithInputs = true;
-                break;
-            }
+                // If an output is older than the newest input, we can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (outputTime < newestInputFileTime) {
+                    isOutOfDateWithInputs = true;
+                    break;
+                }
 
-            if (outputTime > newestOutputFileTime) {
-                newestOutputFileTime = outputTime;
-                newestOutputFileName = output;
-            }
+                if (outputTime > newestOutputFileTime) {
+                    newestOutputFileTime = outputTime;
+                    newestOutputFileName = output;
+                }
 
-            // Keep track of when the most recent time a .d.ts file was changed.
-            // In addition to file timestamps, we also keep track of when a .d.ts file
-            // had its file touched but not had its contents changed - this allows us
-            // to skip a downstream typecheck
-            if (isDeclarationFile(output)) {
-                const outputModifiedTime = getModifiedTime(host, output);
-                newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                // Keep track of when the most recent time a .d.ts file was changed.
+                // In addition to file timestamps, we also keep track of when a .d.ts file
+                // had its file touched but not had its contents changed - this allows us
+                // to skip a downstream typecheck
+                if (isDeclarationFile(output)) {
+                    const outputModifiedTime = getModifiedTime(host, output);
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                }
             }
         }
 
@@ -1511,15 +1516,17 @@ namespace ts {
 
         if (!state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
-            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
-            if (buildInfoPath) {
-                const value = state.readFileWithCache(buildInfoPath);
-                const buildInfo = value && getBuildInfo(value);
-                if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
-                    return {
-                        type: UpToDateStatusType.TsVersionOutputOfDate,
-                        version: buildInfo.version
-                    };
+            if (!force) {
+                const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
+                if (buildInfoPath) {
+                    const value = state.readFileWithCache(buildInfoPath);
+                    const buildInfo = value && getBuildInfo(value);
+                    if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
+                        return {
+                            type: UpToDateStatusType.TsVersionOutputOfDate,
+                            version: buildInfo.version
+                        };
+                    }
                 }
             }
         }
@@ -2100,7 +2107,7 @@ namespace ts {
      * Report the up-to-date status of a project if we're in verbose mode
      */
     function verboseReportProjectStatus(state: SolutionBuilderState, configFileName: string, status: UpToDateStatus) {
-        if (state.options.verbose) {
+        if (state.options.verbose && !state.options.force) {
             reportUpToDateStatus(state, configFileName, status);
         }
     }
