@@ -12929,7 +12929,7 @@ namespace ts {
                     covariant = !covariant;
                 }
                 // Always substitute on type parameters, regardless of variance, since even
-                // in contravarrying positions, they may be reliant on subtuted constraints to be valid
+                // in contravariant positions, they may rely on substituted constraints to be valid
                 if ((covariant || type.flags & TypeFlags.TypeVariable) && parent.kind === SyntaxKind.ConditionalType && node === (<ConditionalTypeNode>parent).trueType) {
                     const constraint = getImpliedConstraint(type, (<ConditionalTypeNode>parent).checkType, (<ConditionalTypeNode>parent).extendsType);
                     if (constraint) {
