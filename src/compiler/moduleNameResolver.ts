@@ -443,7 +443,12 @@ namespace ts {
      */
     export interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
-        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>;
+        clear(): void;
+        /**
+         *  Updates with the current compilerOptions the cache will operate with.
+         *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
+         */
+        update(options: CompilerOptions): void;
     }
 
     /**
@@ -452,7 +457,6 @@ namespace ts {
      */
     export interface NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
-        /*@internal*/ moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>;
     }
 
     export interface PerModuleNameCache {
@@ -528,7 +532,41 @@ namespace ts {
         currentDirectory: string,
         getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
 
-        return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName, directoryToModuleNameMap, moduleNameToDirectoryMap };
+        return {
+            getOrCreateCacheForDirectory,
+            getOrCreateCacheForModuleName,
+            clear,
+            update,
+        };
+
+        function clear() {
+            directoryToModuleNameMap.clear();
+            moduleNameToDirectoryMap.clear();
+        }
+
+        function update(options: CompilerOptions) {
+            if (!options.configFile) return;
+            if (directoryToModuleNameMap.redirectsMap.size === 0) {
+                // The own map will be for projectCompilerOptions
+                Debug.assert(moduleNameToDirectoryMap.redirectsMap.size === 0);
+                Debug.assert(directoryToModuleNameMap.ownMap.size === 0);
+                Debug.assert(moduleNameToDirectoryMap.ownMap.size === 0);
+                directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.ownMap);
+                moduleNameToDirectoryMap.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.ownMap);
+            }
+            else {
+                // Set correct own map
+                Debug.assert(moduleNameToDirectoryMap.redirectsMap.size > 0);
+                const ref: ResolvedProjectReference = {
+                    sourceFile: options.configFile,
+                    commandLine: { options } as ParsedCommandLine
+                };
+                directoryToModuleNameMap.setOwnMap(directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
+                moduleNameToDirectoryMap.setOwnMap(moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
+            }
+            directoryToModuleNameMap.setOwnOptions(options);
+            moduleNameToDirectoryMap.setOwnOptions(options);
+        }
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);

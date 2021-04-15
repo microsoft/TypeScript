@@ -284,8 +284,7 @@ namespace ts {
         }
 
         function clearPerDirectoryResolutions() {
-            perDirectoryResolvedModuleNames.clear();
-            nonRelativeModuleNameCache.clear();
+            moduleResolutionCache.clear();
             perDirectoryResolvedTypeReferenceDirectives.clear();
             nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
             nonRelativeExternalModuleResolutions.clear();

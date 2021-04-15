@@ -558,10 +558,7 @@ namespace ts {
         compilerHost.getSourceFile = cache.originalGetSourceFile;
         state.readFileWithCache = cache.originalReadFileWithCache;
         extendedConfigCache.clear();
-        if (moduleResolutionCache) {
-            moduleResolutionCache.directoryToModuleNameMap.clear();
-            moduleResolutionCache.moduleNameToDirectoryMap.clear();
-        }
+        moduleResolutionCache?.clear();
         state.cache = undefined;
     }
 
@@ -842,7 +839,7 @@ namespace ts {
             const { host, compilerHost } = state;
             state.projectCompilerOptions = config.options;
             // Update module resolution cache if needed
-            updateModuleResolutionCache(state, project, config);
+            state.moduleResolutionCache?.update(config.options);
 
             // Create program
             program = host.createProgram(
@@ -1304,37 +1301,6 @@ namespace ts {
         if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
         afterProgramDone(state, program, config);
         return { buildResult, step: BuildStep.QueueReferencingProjects };
-    }
-
-    function updateModuleResolutionCache(
-        state: SolutionBuilderState,
-        proj: ResolvedConfigFileName,
-        config: ParsedCommandLine
-    ) {
-        if (!state.moduleResolutionCache) return;
-
-        // Update module resolution cache if needed
-        const { moduleResolutionCache } = state;
-        const projPath = toPath(state, proj);
-        if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
-            // The own map will be for projectCompilerOptions
-            Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
-            moduleResolutionCache.directoryToModuleNameMap.redirectsMap.set(projPath, moduleResolutionCache.directoryToModuleNameMap.ownMap);
-            moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.set(projPath, moduleResolutionCache.moduleNameToDirectoryMap.ownMap);
-        }
-        else {
-            // Set correct own map
-            Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size > 0);
-
-            const ref: ResolvedProjectReference = {
-                sourceFile: config.options.configFile!,
-                commandLine: config
-            };
-            moduleResolutionCache.directoryToModuleNameMap.setOwnMap(moduleResolutionCache.directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
-            moduleResolutionCache.moduleNameToDirectoryMap.setOwnMap(moduleResolutionCache.moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
-        }
-        moduleResolutionCache.directoryToModuleNameMap.setOwnOptions(config.options);
-        moduleResolutionCache.moduleNameToDirectoryMap.setOwnOptions(config.options);
     }
 
     function checkConfigFileUpToDateStatus(state: SolutionBuilderState, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
