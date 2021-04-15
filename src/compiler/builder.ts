@@ -711,7 +711,7 @@ namespace ts {
     export interface ProgramBuildInfo {
         fileNames: readonly string[];
         fileInfos: readonly BuilderState.FileInfo[];
-        options: CompilerOptions;
+        options: CompilerOptions | undefined;
         fileIdsList?: readonly (readonly number[])[];
         referencedMap?: ProgramBuildInfoReferencedMap;
         exportedModulesMap?: ProgramBuildInfoReferencedMap;
@@ -787,7 +787,7 @@ namespace ts {
         return {
             fileNames,
             fileInfos,
-            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
+            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
             fileIdsList,
             referencedMap,
             exportedModulesMap,
@@ -824,19 +824,19 @@ namespace ts {
         }
     }
 
-    function convertToReusableCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
-        const result: CompilerOptions = {};
+    function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
+        let result: CompilerOptions | undefined;
         const { optionsNameMap } = getOptionsNameMap();
 
         for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
-            result[name] = convertToReusableCompilerOptionValue(
-                optionsNameMap.get(name.toLowerCase()),
-                options[name] as CompilerOptionsValue,
-                relativeToBuildInfo
-            );
-        }
-        if (result.configFilePath) {
-            result.configFilePath = relativeToBuildInfo(result.configFilePath);
+            const optionInfo = optionsNameMap.get(name.toLowerCase());
+            if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics || name === "skipLibCheck" || name === "skipDefaultLibCheck") {
+                (result ||= {})[name] = convertToReusableCompilerOptionValue(
+                    optionInfo,
+                    options[name] as CompilerOptionsValue,
+                    relativeToBuildInfo
+                );
+            }
         }
         return result;
     }
@@ -1221,7 +1221,7 @@ namespace ts {
         program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1), fileInfo));
         const state: ReusableBuilderProgramState = {
             fileInfos,
-            compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
+            compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
             referencedMap: toMapOfReferencedSet(program.referencedMap),
             exportedModulesMap: toMapOfReferencedSet(program.exportedModulesMap),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),

@@ -63,7 +63,6 @@ exitCode:: ExitStatus.Success
     },
     "options": {
       "composite": true,
-      "configFilePath": "./tsconfig.json",
       "declaration": true,
       "declarationMap": true,
       "skipDefaultLibCheck": true
@@ -78,7 +77,7 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2033
+  "size": 1998
 }
 
 //// [/src/logic/index.d.ts] file written with same contents
@@ -124,9 +123,7 @@ exitCode:: ExitStatus.Success
     },
     "options": {
       "composite": true,
-      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true,
       "sourceMap": true
     },
@@ -150,7 +147,7 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2585
+  "size": 2510
 }
 
 //// [/src/tests/index.d.ts] file written with same contents
@@ -205,9 +202,7 @@ exitCode:: ExitStatus.Success
     },
     "options": {
       "composite": true,
-      "configFilePath": "./tsconfig.json",
       "declaration": true,
-      "forceConsistentCasingInFileNames": true,
       "skipDefaultLibCheck": true
     },
     "referencedMap": {
@@ -239,6 +234,6 @@ exitCode:: ExitStatus.Success
     ]
   },
   "version": "FakeTSVersion",
-  "size": 3027
+  "size": 2952
 }
 

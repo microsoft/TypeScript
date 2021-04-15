@@ -242,7 +242,7 @@ interface Symbol {
         fileNames: readonly string[];
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<BuilderState.FileInfo>;
-        options: CompilerOptions;
+        options: CompilerOptions | undefined;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ProgramBuildInfoDiagnostic[];
