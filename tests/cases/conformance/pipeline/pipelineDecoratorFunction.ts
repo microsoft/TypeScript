@@ -18,11 +18,11 @@ function programs (favLang) {
 }
 
 function Person (name, age) {
-	return { name: name } |> greets(#) |> ages(age)(#);
+	return { name: name } |> greets |> ages(age);
 }
 function Programmer (name, age) {
 	return { name: name }
-		|> greets(#)
+		|> greets
 		|> ages(age)
-		|> programs('javascript')(#);
+		|> programs('javascript');
 }
