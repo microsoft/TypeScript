@@ -708,9 +708,22 @@ namespace ts {
     export type ProgramBuildInfoDiagnostic = number | [fileId: number, diagnostics: readonly ReusableDiagnostic[]];
     export type ProgramBuilderInfoFilePendingEmit = [fileId: number, emitKind: BuilderFileEmit];
     export type ProgramBuildInfoReferencedMap = [fileId: number, fileIdListId: number][];
+    export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
+        /**
+         * Signature is
+         * - undefined if FileInfo.version === FileInfo.signature
+         * - false if FileInfo has signature as undefined (not calculated)
+         * - string actual signature
+         */
+        signature: string | false | undefined;
+    };
+    /**
+     * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
+     */
+    export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
     export interface ProgramBuildInfo {
         fileNames: readonly string[];
-        fileInfos: readonly BuilderState.FileInfo[];
+        fileInfos: readonly ProgramBuildInfoFileInfo[];
         options: CompilerOptions | undefined;
         fileIdsList?: readonly (readonly number[])[];
         referencedMap?: ProgramBuildInfoReferencedMap;
@@ -730,12 +743,21 @@ namespace ts {
         const fileNameToFileId = new Map<string, number>();
         let fileIdsList: (readonly number[])[] | undefined;
         let fileNamesToFileIdListId: ESMap<string, number> | undefined;
-        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]) => {
+        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
             // Ensure fileId
             const fileId = toFileId(key);
             Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
-            return signature === undefined ? value : { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope };
+            const actualSignature = signature === undefined ? value.signature : signature;
+            return value.version === actualSignature ?
+                value.affectsGlobalScope ?
+                    { version: value.version, signature: undefined, affectsGlobalScope: true } :
+                    value.version :
+                actualSignature !== undefined ?
+                    signature === undefined ?
+                        value :
+                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope } :
+                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope };
         });
 
         let referencedMap: ProgramBuildInfoReferencedMap | undefined;
@@ -1211,6 +1233,14 @@ namespace ts {
         }
     }
 
+    export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): BuilderState.FileInfo {
+        return isString(fileInfo) ?
+            { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined } :
+            isString(fileInfo.signature) ?
+                fileInfo as BuilderState.FileInfo :
+                { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope };
+    }
+
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -1218,7 +1248,7 @@ namespace ts {
         const filePaths = program.fileNames.map(toPath);
         const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1), fileInfo));
+        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1), toBuilderStateFileInfo(fileInfo)));
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
