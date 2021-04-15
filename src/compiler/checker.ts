@@ -15860,8 +15860,8 @@ namespace ts {
                     outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
                 }
                 typeParameters = outerTypeParameters || emptyArray;
-                typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
-                    filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
+                typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.Method || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
+                    filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration) || !(type.objectFlags & ObjectFlags.Reference) && some(type.symbol.declarations, d => isTypeParameterPossiblyReferenced(tp, d))) :
                     typeParameters;
                 links.outerTypeParameters = typeParameters;
             }
@@ -15908,7 +15908,7 @@ namespace ts {
                         return true;
                     }
                 }
-                return !!forEachChild(node, containsReference);
+                return containsReference(node);
             }
             return true;
             function containsReference(node: Node): boolean {
@@ -15920,6 +15920,9 @@ namespace ts {
                             getTypeFromTypeNodeWorker(<TypeNode>node) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
                         return true;
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        return (!(node as FunctionLikeDeclaration).type && !!(node as FunctionLikeDeclaration).body) || !!forEachChild(node, containsReference);
                 }
                 return !!forEachChild(node, containsReference);
             }
