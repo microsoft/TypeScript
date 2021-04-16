@@ -1,0 +1,97 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(7,11): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,5): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(22,14): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(25,11): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(28,8): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,9): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,5): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS18037: Identifier 'await' cannot be used inside class static block.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (12 errors) ====
+    let await: "any";
+    class C {
+      static {
+        let await: any; // illegal, cannot declare a new binding for await
+            ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        let { await } = {} as any; // illegal, cannot declare a new binding for await
+              ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        let { await: other } = {} as any; // legal
+      }
+      static {
+        let await; // illegal, cannot declare a new binding for await
+            ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        await; // illegal
+        ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        await(1); // illegal
+        ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'String' has no call signatures.
+        ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        function await() {}; // illegal
+                 ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        class await {}; // illegal
+              ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        ({ await }); // illegal short-hand property reference
+           ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        ({ [await]: 1 }); // illegal
+            ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+      static {
+        class D {
+            await = 1; // legal
+            x = await; // legal (initializers have an implicit function boundary)
+            [await] = 1; // illegal (computed property names are evaluated outside of a class body
+          };
+      }
+      static {
+        (function await() {}); // legal, 'await' in function expression name not bound inside of static block
+      }
+      static {
+        (class await {}); // legal, 'await' in class expression name not bound inside of static block
+      }
+      static {
+        (function () { return await; }); // legal, 'await' is inside of a new function boundary
+      }
+      static {
+        (() => await); // legal, 'await' is inside of a new function boundary
+      }
+      static {
+        await: // illegal, 'await' cannot be used as a label
+        ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+            break await; // illegal, 'await' cannot be used as a label
+                  ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+      }
+    }

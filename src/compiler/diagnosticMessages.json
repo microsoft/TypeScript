@@ -6473,5 +6473,9 @@
     "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
         "category": "Error",
         "code": 18036
+    },
+    "Identifier 'await' cannot be used inside class static block.": {
+        "category": "Error",
+        "code": 18037
     }
 }
