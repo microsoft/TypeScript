@@ -64,6 +64,7 @@ namespace ts {
         EqualsEqualsEqualsToken,
         ExclamationEqualsEqualsToken,
         EqualsGreaterThanToken,
+        BarGreaterThanToken,
         PlusToken,
         MinusToken,
         AsteriskToken,
@@ -494,6 +495,7 @@ namespace ts {
         | SyntaxKind.EqualsEqualsEqualsToken
         | SyntaxKind.ExclamationEqualsEqualsToken
         | SyntaxKind.EqualsGreaterThanToken
+        | SyntaxKind.BarGreaterThanToken
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.AsteriskToken
@@ -1020,6 +1022,7 @@ namespace ts {
     export type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
     export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
     export type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
+    export type BarGreaterThanToken = PunctuationToken<SyntaxKind.BarGreaterThanToken>;
     export type QuestionDotToken = PunctuationToken<SyntaxKind.QuestionDotToken>;
 
     // Keywords
@@ -6538,6 +6541,8 @@ namespace ts {
         ContainsDynamicImport = 1 << 22,
         ContainsClassFields = 1 << 23,
         ContainsPossibleTopLevelAwait = 1 << 24,
+        // ContainsPartialApplication = 1 << 25, // Reserved.
+        ContainsPipeline = 1 << 26,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
