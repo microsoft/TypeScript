@@ -4190,7 +4190,7 @@ namespace ts {
             // binary expression here, so we pass in the 'lowest' precedence here so that it matches
             // and consumes anything.
             const pos = getNodePos();
-            const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
+            const expr = parseBinaryExpressionOrHigher(/*precedence*/ 1);
 
             // To avoid a look-ahead, we did not handle the case of an arrow function with a single un-parenthesized
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single

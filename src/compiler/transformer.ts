@@ -49,6 +49,7 @@ namespace ts {
 
         transformers.push(transformTypeScript);
         transformers.push(transformClassFields);
+        transformers.push(transformPipeline);
 
         if (getJSXTransformEnabled(compilerOptions)) {
             transformers.push(transformJsx);
