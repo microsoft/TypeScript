@@ -5,8 +5,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
   Type 'U' is not assignable to type 'T'.
     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
-      Type 'Foo' is not assignable to type 'T'.
-        'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
   Type 'V' is not assignable to type 'T'.
@@ -15,8 +13,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
-      Type 'Foo' is not assignable to type 'U'.
-        'U' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2416: Property 'foo' in type 'D9<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
   Type 'V' is not assignable to type 'U'.
@@ -92,8 +88,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2416:       Type 'Foo' is not assignable to type 'T'.
-!!! error TS2416:         'T' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
     }
     
     class D6<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -116,8 +110,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
 !!! error TS2416:   Type 'T' is not assignable to type 'U'.
 !!! error TS2416:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2416:       Type 'Foo' is not assignable to type 'U'.
-!!! error TS2416:         'U' could be instantiated with an arbitrary type which could be unrelated to 'Foo'.
     }
     
     class D8<T extends Foo, U extends Foo, V> extends B1<U> {

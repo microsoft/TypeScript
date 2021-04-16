@@ -828,14 +828,12 @@ namespace ts {
         const result: CompilerOptions = {};
         const { optionsNameMap } = getOptionsNameMap();
 
-        for (const name in options) {
-            if (hasProperty(options, name)) {
-                result[name] = convertToReusableCompilerOptionValue(
-                    optionsNameMap.get(name.toLowerCase()),
-                    options[name] as CompilerOptionsValue,
-                    relativeToBuildInfo
-                );
-            }
+        for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
+            result[name] = convertToReusableCompilerOptionValue(
+                optionsNameMap.get(name.toLowerCase()),
+                options[name] as CompilerOptionsValue,
+                relativeToBuildInfo
+            );
         }
         if (result.configFilePath) {
             result.configFilePath = relativeToBuildInfo(result.configFilePath);

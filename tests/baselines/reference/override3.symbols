@@ -1,0 +1,55 @@
+=== tests/cases/conformance/override/override3.ts ===
+declare class B {
+>B : Symbol(B, Decl(override3.ts, 0, 0))
+
+    foo(): void
+>foo : Symbol(B.foo, Decl(override3.ts, 0, 17))
+
+    bar(): void
+>bar : Symbol(B.bar, Decl(override3.ts, 1, 15))
+}
+
+declare class D extends B {
+>D : Symbol(D, Decl(override3.ts, 3, 1))
+>B : Symbol(B, Decl(override3.ts, 0, 0))
+
+    foo (): void;
+>foo : Symbol(D.foo, Decl(override3.ts, 5, 27))
+
+    override bar (): void;
+>bar : Symbol(D.bar, Decl(override3.ts, 6, 17))
+}
+
+class DB extends B {
+>DB : Symbol(DB, Decl(override3.ts, 8, 1))
+>B : Symbol(B, Decl(override3.ts, 0, 0))
+
+    override foo(): void {}
+>foo : Symbol(DB.foo, Decl(override3.ts, 10, 20))
+
+    override bar(): void {}
+>bar : Symbol(DB.bar, Decl(override3.ts, 11, 27))
+}
+
+class DD extends D {
+>DD : Symbol(DD, Decl(override3.ts, 13, 1))
+>D : Symbol(D, Decl(override3.ts, 3, 1))
+
+    override foo(): void {}
+>foo : Symbol(DD.foo, Decl(override3.ts, 15, 20))
+
+    override bar(): void {}
+>bar : Symbol(DD.bar, Decl(override3.ts, 16, 27))
+}
+
+class EB extends D {
+>EB : Symbol(EB, Decl(override3.ts, 18, 1))
+>D : Symbol(D, Decl(override3.ts, 3, 1))
+
+    foo(): void {}
+>foo : Symbol(EB.foo, Decl(override3.ts, 20, 20))
+
+    override bar(): void {}
+>bar : Symbol(EB.bar, Decl(override3.ts, 21, 18))
+}
+

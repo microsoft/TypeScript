@@ -1265,7 +1265,6 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
-            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
@@ -1278,6 +1277,8 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
+            const realpathSync = useCaseSensitiveFileNames ? (_fs.realpathSync.native ?? _fs.realpathSync) : _fs.realpathSync;
+
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({

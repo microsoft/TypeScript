@@ -187,6 +187,7 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
+        OverrideKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -385,6 +386,7 @@ namespace ts {
         JSDocPrivateTag,
         JSDocProtectedTag,
         JSDocReadonlyTag,
+        JSDocOverrideTag,
         JSDocCallbackTag,
         JSDocEnumTag,
         JSDocParameterTag,
@@ -587,6 +589,7 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
         | SyntaxKind.SetKeyword
@@ -622,6 +625,7 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OverrideKeyword
         | SyntaxKind.StaticKeyword
         ;
 
@@ -798,6 +802,7 @@ namespace ts {
         HasComputedJSDocModifiers = 1 << 12, // Indicates the computed modifier flags include modifiers from JSDoc.
 
         Deprecated =         1 << 13, // Deprecated tag.
+        Override =           1 << 14, // Override method.
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
@@ -805,9 +810,9 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override,
         ExportDefault = Export | Default,
-        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated
+        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override
     }
 
     export const enum JsxFlags {
@@ -872,9 +877,25 @@ namespace ts {
         | ShorthandPropertyAssignment
         | PropertyAssignment
         | FunctionExpression
-        | LabeledStatement
-        | ExpressionStatement
+        | EmptyStatement
+        | DebuggerStatement
+        | Block
         | VariableStatement
+        | ExpressionStatement
+        | IfStatement
+        | DoStatement
+        | WhileStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | BreakStatement
+        | ContinueStatement
+        | ReturnStatement
+        | WithStatement
+        | SwitchStatement
+        | LabeledStatement
+        | ThrowStatement
+        | TryStatement
         | FunctionDeclaration
         | ConstructorDeclaration
         | MethodDeclaration
@@ -1029,6 +1050,7 @@ namespace ts {
     export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
     export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
     export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
+    export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
 
     /** @deprecated Use `ReadonlyKeyword` instead. */
@@ -1044,6 +1066,7 @@ namespace ts {
         | PrivateKeyword
         | ProtectedKeyword
         | PublicKeyword
+        | OverrideKeyword
         | ReadonlyKeyword
         | StaticKeyword
         ;
@@ -1477,9 +1500,9 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.GetAccessor;
-        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
+        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
         /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
@@ -1487,9 +1510,9 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.SetAccessor;
-        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
+        readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
         /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
@@ -2576,7 +2599,7 @@ namespace ts {
         | JsxFragment
         ;
 
-    export interface Statement extends Node {
+    export interface Statement extends Node, JSDocContainer {
         _statementBrand: any;
     }
 
@@ -2645,13 +2668,13 @@ namespace ts {
         /*@internal*/ multiLine?: boolean;
     }
 
-    export interface VariableStatement extends Statement, JSDocContainer {
+    export interface VariableStatement extends Statement {
         /* @internal*/ decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
         readonly kind: SyntaxKind.VariableStatement;
         readonly declarationList: VariableDeclarationList;
     }
 
-    export interface ExpressionStatement extends Statement, JSDocContainer {
+    export interface ExpressionStatement extends Statement {
         readonly kind: SyntaxKind.ExpressionStatement;
         readonly expression: Expression;
     }
@@ -2771,7 +2794,7 @@ namespace ts {
         | DefaultClause
         ;
 
-    export interface LabeledStatement extends Statement, JSDocContainer {
+    export interface LabeledStatement extends Statement {
         readonly kind: SyntaxKind.LabeledStatement;
         readonly label: Identifier;
         readonly statement: Statement;
@@ -2967,7 +2990,7 @@ namespace ts {
     // import "mod"  => importClause = undefined, moduleSpecifier = "mod"
     // In rest of the cases, module specifier is string literal corresponding to module
     // ImportClause information is shown at its declaration below.
-    export interface ImportDeclaration extends Statement, JSDocContainer {
+    export interface ImportDeclaration extends Statement {
         readonly kind: SyntaxKind.ImportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly importClause?: ImportClause;
@@ -3228,6 +3251,10 @@ namespace ts {
 
     export interface JSDocReadonlyTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocReadonlyTag;
+    }
+
+    export interface JSDocOverrideTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocOverrideTag;
     }
 
     export interface JSDocEnumTag extends JSDocTag, Declaration {
@@ -3543,6 +3570,7 @@ namespace ts {
         /* @internal */ localJsxFragmentFactory?: EntityName;
 
         /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+        /* @internal */ endFlowNode?: FlowNode;
     }
 
     /* @internal */
@@ -3877,8 +3905,6 @@ namespace ts {
 
         /* @internal */ getClassifiableNames(): Set<__String>;
 
-        getTypeCatalog(): readonly Type[];
-
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
@@ -3939,9 +3965,9 @@ namespace ts {
 
     /* @internal */
     export const enum StructureIsReused {
-        Not         = 0,
-        SafeModules = 1 << 0,
-        Completely  = 1 << 1,
+        Not,
+        SafeModules,
+        Completely,
     }
 
     export type CustomTransformerFactory = (context: TransformationContext) => CustomTransformer;
@@ -4218,8 +4244,6 @@ namespace ts {
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
         /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
 
-        /* @internal */ getTypeCatalog(): readonly Type[];
-
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
@@ -4345,7 +4369,6 @@ namespace ts {
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
-        InReverseMappedType                     = 1 << 25,
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -4778,6 +4801,7 @@ namespace ts {
         immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                            // Resolved (non-alias) target of an alias
         type?: Type;                                // Type of value symbol
+        writeType?: Type;                           // Type of value symbol in write contexts
         nameType?: Type;                            // Type associated with a late-bound symbol
         uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
         declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
@@ -5940,6 +5964,7 @@ namespace ts {
         /*@internal*/ pathsBasePath?: string;
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
+        noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
@@ -6166,7 +6191,14 @@ namespace ts {
     }
 
     /* @internal */
+    export interface AlternateModeDiagnostics {
+        diagnostic: DiagnosticMessage;
+        getOptionsNameMap: () => OptionsNameMap;
+    }
+
+    /* @internal */
     export interface DidYouMeanOptionsDiagnostics {
+        alternateMode?: AlternateModeDiagnostics;
         optionDeclarations: CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,
@@ -6456,6 +6488,7 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
+        /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         createHash?(data: string): string;
@@ -7259,6 +7292,8 @@ namespace ts {
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocText | JSDocLink> | undefined): JSDocUnknownTag;
         createJSDocDeprecatedTag(tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocDeprecatedTag;
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocDeprecatedTag;
+        createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocOverrideTag;
+        updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocText | JSDocLink>): JSDocOverrideTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -8029,6 +8064,7 @@ namespace ts {
         readFile?(path: string): string | undefined;
         realpath?(path: string): string;
         getSymlinkCache?(): SymlinkCache;
+        getModuleSpecifierCache?(): ModuleSpecifierCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
         getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
@@ -8037,6 +8073,21 @@ namespace ts {
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+    }
+
+    /* @internal */
+    export interface ModulePath {
+        path: string;
+        isInNodeModules: boolean;
+        isRedirect: boolean;
+    }
+
+    /* @internal */
+    export interface ModuleSpecifierCache {
+        get(fromFileName: Path, toFileName: Path): boolean | readonly ModulePath[] | undefined;
+        set(fromFileName: Path, toFileName: Path, moduleSpecifiers: boolean | readonly ModulePath[]): void;
+        clear(): void;
+        count(): number;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -8328,6 +8379,8 @@ namespace ts {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsForImportStatements?: boolean;
+        readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";

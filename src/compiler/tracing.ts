@@ -17,6 +17,8 @@ namespace ts { // eslint-disable-line one-namespace-per-file
 
         let mode: Mode;
 
+        const typeCatalog: Type[] = []; // NB: id is index + 1
+
         let legendPath: string | undefined;
         const legend: TraceRecord[] = [];
 
@@ -39,6 +41,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
             }
 
             mode = tracingMode;
+            typeCatalog.length = 0;
 
             if (legendPath === undefined) {
                 legendPath = combinePaths(traceDir, "legend.json");
@@ -76,21 +79,27 @@ namespace ts { // eslint-disable-line one-namespace-per-file
         }
 
         /** Stops tracing for the in-progress project and dumps the type catalog. */
-        export function stopTracing(typeCatalog?: readonly Type[]) {
+        export function stopTracing() {
             Debug.assert(tracing, "Tracing is not in progress");
-            Debug.assert(!!typeCatalog === (mode !== "server")); // Have a type catalog iff not in server mode
+            Debug.assert(!!typeCatalog.length === (mode !== "server")); // Have a type catalog iff not in server mode
 
             fs.writeSync(traceFd, `\n]\n`);
             fs.closeSync(traceFd);
             tracing = undefined;
 
-            if (typeCatalog) {
+            if (typeCatalog.length) {
                 dumpTypes(typeCatalog);
             }
             else {
                 // We pre-computed this path for convenience, but clear it
                 // now that the file won't be created.
                 legend[legend.length - 1].typesPath = undefined;
+            }
+        }
+
+        export function recordType(type: Type): void {
+            if (mode !== "server") {
+                typeCatalog.push(type);
             }
         }
 

@@ -773,6 +773,10 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
+    export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined {
+        return getFirstJSDocTag(node, isJSDocOverrideTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc deprecated tag for the node if present */
     export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
         return getFirstJSDocTag(node, isJSDocDeprecatedTag);
@@ -1174,6 +1178,7 @@ namespace ts {
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.OverrideKeyword:
                 return true;
         }
         return false;
@@ -1186,7 +1191,7 @@ namespace ts {
 
     /* @internal */
     export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword || idToken === SyntaxKind.OverrideKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {

@@ -2,6 +2,7 @@
 // @lib: esnext
 // @module: commonjs
 // @declaration: true
+// @useDefineForClassFields: false
 
 declare const s: unique symbol;
 interface I { readonly readonlyType: unique symbol; }

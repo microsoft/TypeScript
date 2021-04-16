@@ -2413,6 +2413,19 @@ namespace ts {
         return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
+    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrRequire): string | undefined {
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+                return node.initializer.arguments[0].text;
+            case SyntaxKind.ImportDeclaration:
+                return tryCast(node.moduleSpecifier, isStringLiteralLike)?.text;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike)?.text;
+            default:
+                Debug.assertNever(node);
+        }
+    }
+
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
         return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
     }
@@ -2587,6 +2600,7 @@ namespace ts {
             parent.kind === SyntaxKind.ExportAssignment ||
             parent.kind === SyntaxKind.PropertyDeclaration ||
             parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
+            parent.kind === SyntaxKind.ReturnStatement ||
             getNestedModuleDeclaration(parent) ||
             isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken) {
             return parent;
@@ -4656,6 +4670,18 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Static);
     }
 
+    export function hasOverrideModifier(node: Node): boolean {
+        return hasEffectiveModifier(node, ModifierFlags.Override);
+    }
+
+    export function hasAbstractModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Abstract);
+    }
+
+    export function hasAmbientModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Ambient);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
@@ -4714,6 +4740,7 @@ namespace ts {
                 if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
                 if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+                if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
             }
             if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
@@ -4766,8 +4793,13 @@ namespace ts {
             case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
             case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+            case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
         }
         return ModifierFlags.None;
+    }
+
+    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
+        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
     }
 
     export function isLogicalOperator(token: SyntaxKind): boolean {
@@ -5276,9 +5308,10 @@ namespace ts {
         return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
     }
 
-    export function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
+    export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const flags = getCombinedModifierFlags(s.valueDeclaration);
+            const declaration = (isWrite && s.declarations && find(s.declarations, d => d.kind === SyntaxKind.SetAccessor)) || s.valueDeclaration;
+            const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
         if (getCheckFlags(s) & CheckFlags.Synthetic) {
@@ -5393,14 +5426,14 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: { forEach: ESMap<string, T>["forEach"]; clear: ESMap<string, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
+    export function clearMap<K, T>(map: { forEach: ESMap<K, T>["forEach"]; clear: ESMap<K, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: K) => void) {
         // Remove all
         map.forEach(onDeleteValue);
         map.clear();
     }
 
-    export interface MutateMapSkippingNewValuesOptions<T, U> {
-        onDeleteValue(existingValue: T, key: string): void;
+    export interface MutateMapSkippingNewValuesOptions<K, T, U> {
+        onDeleteValue(existingValue: T, key: K): void;
 
         /**
          * If present this is called with the key when there is value for that key both in new map as well as existing map provided
@@ -5408,16 +5441,16 @@ namespace ts {
          * If the key is removed, caller will get callback of createNewValue for that key.
          * If this callback is not provided, the value of such keys is not updated.
          */
-        onExistingValue?(existingValue: T, valueInNewMap: U, key: string): void;
+        onExistingValue?(existingValue: T, valueInNewMap: U, key: K): void;
     }
 
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMapSkippingNewValues<T, U>(
-        map: ESMap<string, T>,
-        newMap: ReadonlyESMap<string, U>,
-        options: MutateMapSkippingNewValuesOptions<T, U>
+    export function mutateMapSkippingNewValues<K, T, U>(
+        map: ESMap<K, T>,
+        newMap: ReadonlyESMap<K, U>,
+        options: MutateMapSkippingNewValuesOptions<K, T, U>
     ) {
         const { onDeleteValue, onExistingValue } = options;
         // Needs update
@@ -5435,14 +5468,14 @@ namespace ts {
         });
     }
 
-    export interface MutateMapOptions<T, U> extends MutateMapSkippingNewValuesOptions<T, U> {
-        createNewValue(key: string, valueInNewMap: U): T;
+    export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U> {
+        createNewValue(key: K, valueInNewMap: U): T;
     }
 
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: ESMap<string, T>, newMap: ReadonlyESMap<string, U>, options: MutateMapOptions<T, U>) {
+    export function mutateMap<K, T, U>(map: ESMap<K, T>, newMap: ReadonlyESMap<K, U>, options: MutateMapOptions<K, T, U>) {
         // Needs update
         mutateMapSkippingNewValues(map, newMap, options);
 
@@ -5629,8 +5662,8 @@ namespace ts {
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.escapedName = name;
-        this.declarations = undefined!;
-        this.valueDeclaration = undefined!;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
         this.id = undefined;
         this.mergeId = undefined;
         this.parent = undefined;
@@ -6038,6 +6071,10 @@ namespace ts {
 
     export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
         return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+    }
+
+    export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.useDefineForClassFields === undefined ? compilerOptions.target === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {

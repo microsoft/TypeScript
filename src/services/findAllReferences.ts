@@ -1180,7 +1180,9 @@ namespace ts.FindAllReferences {
             for (const indirectUser of indirectUsers) {
                 for (const node of getPossibleSymbolReferenceNodes(indirectUser, isDefaultExport ? "default" : exportName)) {
                     // Import specifiers should be handled by importSearches
-                    if (isIdentifier(node) && !isImportOrExportSpecifier(node.parent) && checker.getSymbolAtLocation(node) === exportSymbol) {
+                    const symbol = checker.getSymbolAtLocation(node);
+                    const hasExportAssignmentDeclaration = some(symbol?.declarations, d => tryCast(d, isExportAssignment) ? true : false);
+                    if (isIdentifier(node) && !isImportOrExportSpecifier(node.parent) && (symbol === exportSymbol || hasExportAssignmentDeclaration)) {
                         cb(node);
                     }
                 }
@@ -1475,7 +1477,7 @@ namespace ts.FindAllReferences {
 
             if (!hasMatchingMeaning(referenceLocation, state)) return;
 
-            const referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
+            let referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
             if (!referenceSymbol) {
                 return;
             }
@@ -1511,6 +1513,11 @@ namespace ts.FindAllReferences {
                 default:
                     Debug.assertNever(state.specialSearchKind);
             }
+
+            // Use the parent symbol if the location is commonjs require syntax on javascript files only.
+            referenceSymbol = isInJSFile(referenceLocation) && referenceLocation.parent.kind === SyntaxKind.BindingElement && isRequireVariableDeclaration(referenceLocation.parent)
+                ? referenceLocation.parent.symbol
+                : referenceSymbol;
 
             getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
         }

@@ -8,11 +8,11 @@ namespace ts.Completions.StringCompletions {
         if (isInString(sourceFile, position, contextToken)) {
             if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
             const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host, preferences);
-            return convertStringLiteralCompletions(entries, contextToken, sourceFile, checker, log, preferences);
+            return convertStringLiteralCompletions(entries, contextToken, sourceFile, checker, log, options, preferences);
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: StringLiteralLike, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: StringLiteralLike, sourceFile: SourceFile, checker: TypeChecker, log: Log, options: CompilerOptions, preferences: UserPreferences): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
@@ -33,7 +33,8 @@ namespace ts.Completions.StringCompletions {
                     ScriptTarget.ESNext,
                     log,
                     CompletionKind.String,
-                    preferences
+                    preferences,
+                    options,
                 ); // Target will not be used, so arbitrary
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
             }

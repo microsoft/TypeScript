@@ -306,10 +306,8 @@ namespace ts {
         description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
     };
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
+    const commandOptionsWithoutBuild: CommandLineOption[] = [
         // CommandLine only options
-        ...commonOptionsWithBuild,
         {
             name: "all",
             type: "boolean",
@@ -674,6 +672,14 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Include_undefined_in_index_signature_results
+        },
+        {
+            name: "noImplicitOverride",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",
@@ -1099,6 +1105,12 @@ namespace ts {
     ];
 
     /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsWithoutBuild,
+    ];
+
+    /* @internal */
     export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1118,9 +1130,7 @@ namespace ts {
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         hasProperty(option, "transpileOptionValue"));
 
-    /* @internal */
-    export const buildOpts: CommandLineOption[] = [
-        ...commonOptionsWithBuild,
+    const commandOptionsOnlyBuild: CommandLineOption[]  = [
         {
             name: "verbose",
             shortName: "v",
@@ -1148,6 +1158,12 @@ namespace ts {
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean"
         }
+    ];
+
+    /* @internal */
+    export const buildOpts: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsOnlyBuild,
     ];
 
     /* @internal */
@@ -1209,8 +1225,13 @@ namespace ts {
 
     /* @internal */
     export function getOptionsNameMap(): OptionsNameMap {
-        return optionsNameMapCache || (optionsNameMapCache = createOptionNameMap(optionDeclarations));
+        return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
     }
+
+    const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
+        getOptionsNameMap: getBuildOptionsNameMap
+    };
 
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
@@ -1291,6 +1312,10 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
+        if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
+            return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
+        }
+
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
         return possibleOption ?
             createDiagnostics(diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
@@ -1456,6 +1481,7 @@ namespace ts {
 
     /*@internal*/
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: compilerOptionsAlternateMode,
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -1497,7 +1523,13 @@ namespace ts {
         return buildOptionsNameMapCache || (buildOptionsNameMapCache = createOptionNameMap(buildOpts));
     }
 
+    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+        getOptionsNameMap
+    };
+
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: buildOptionsAlternateMode,
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
@@ -1564,7 +1596,7 @@ namespace ts {
      */
     export function getParsedCommandLineOfConfigFile(
         configFileName: string,
-        optionsToExtend: CompilerOptions,
+        optionsToExtend: CompilerOptions | undefined,
         host: ParseConfigFileHost,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions,

@@ -68,10 +68,13 @@ import { something } from "something";
                     hasAction: undefined,
                     insertText: undefined,
                     isPackageJsonImport: undefined,
+                    isImportStatementCompletion: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
                     source: undefined,
                     data: undefined,
+                    sourceDisplay: undefined,
+                    isSnippet: undefined,
                 };
             }
         });
@@ -216,7 +219,7 @@ function fooB() { }`
             assert.deepEqual(response.definitions, [{
                 file: file2.path,
                 start: { line: 1, offset: 1 },
-                end: { line: 1, offset: 1 }
+                end: { line: 1, offset: 1 },
             }]);
         });
     });
