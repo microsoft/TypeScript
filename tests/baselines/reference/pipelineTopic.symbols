@@ -1,0 +1,65 @@
+=== tests/cases/conformance/pipeline/pipelineTopic.ts ===
+const increment = (a: number) => a + 1;
+>increment : Symbol(increment, Decl(pipelineTopic.ts, 0, 5))
+>a : Symbol(a, Decl(pipelineTopic.ts, 0, 19))
+>a : Symbol(a, Decl(pipelineTopic.ts, 0, 19))
+
+const add = (a: number, b: number) => a + b;
+>add : Symbol(add, Decl(pipelineTopic.ts, 1, 5))
+>a : Symbol(a, Decl(pipelineTopic.ts, 1, 13))
+>b : Symbol(b, Decl(pipelineTopic.ts, 1, 23))
+>a : Symbol(a, Decl(pipelineTopic.ts, 1, 13))
+>b : Symbol(b, Decl(pipelineTopic.ts, 1, 23))
+ 
+const result = ['a','bb','ccc']
+>result : Symbol(result, Decl(pipelineTopic.ts, 3, 5))
+
+    |> #.map(s => s |> #.length)
+>#.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+># : Symbol(#, Decl(pipelineTopic.ts, 3, 14))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(pipelineTopic.ts, 4, 13))
+>s : Symbol(s, Decl(pipelineTopic.ts, 4, 13))
+>#.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+># : Symbol(#, Decl(pipelineTopic.ts, 4, 17))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    |> #.map(a => a * 2 )
+>#.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+># : Symbol(#, Decl(pipelineTopic.ts, 3, 14))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(pipelineTopic.ts, 5, 13))
+>a : Symbol(a, Decl(pipelineTopic.ts, 5, 13))
+
+    |> #.filter(a => a > 5)
+>#.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+># : Symbol(#, Decl(pipelineTopic.ts, 3, 14))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(pipelineTopic.ts, 6, 16))
+>a : Symbol(a, Decl(pipelineTopic.ts, 6, 16))
+
+    |> #.reduce((sum, a) => a+sum, 0)
+>#.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+># : Symbol(#, Decl(pipelineTopic.ts, 3, 14))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sum : Symbol(sum, Decl(pipelineTopic.ts, 7, 17))
+>a : Symbol(a, Decl(pipelineTopic.ts, 7, 21))
+>a : Symbol(a, Decl(pipelineTopic.ts, 7, 21))
+>sum : Symbol(sum, Decl(pipelineTopic.ts, 7, 17))
+
+    |> increment(#)
+>increment : Symbol(increment, Decl(pipelineTopic.ts, 0, 5))
+># : Symbol(#, Decl(pipelineTopic.ts, 3, 14))
+
+    |> add(#, 3)
+>add : Symbol(add, Decl(pipelineTopic.ts, 1, 5))
+># : Symbol(#, Decl(pipelineTopic.ts, 3, 14))
+
+const added = 3 |> #+#+#+#+#;
+>added : Symbol(added, Decl(pipelineTopic.ts, 11, 5))
+># : Symbol(#, Decl(pipelineTopic.ts, 11, 13))
+># : Symbol(#, Decl(pipelineTopic.ts, 11, 13))
+># : Symbol(#, Decl(pipelineTopic.ts, 11, 13))
+># : Symbol(#, Decl(pipelineTopic.ts, 11, 13))
+># : Symbol(#, Decl(pipelineTopic.ts, 11, 13))
+

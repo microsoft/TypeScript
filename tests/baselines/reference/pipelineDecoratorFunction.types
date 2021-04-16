@@ -1,0 +1,135 @@
+=== tests/cases/conformance/pipeline/pipelineDecoratorFunction.ts ===
+function greets (person) {
+>greets : (person: any) => any
+>person : any
+
+	person.greet = () => `${person.name} says hi!`;
+>person.greet = () => `${person.name} says hi!` : () => string
+>person.greet : any
+>person : any
+>greet : any
+>() => `${person.name} says hi!` : () => string
+>`${person.name} says hi!` : string
+>person.name : any
+>person : any
+>name : any
+
+	return person;
+>person : any
+}
+function ages (age) {
+>ages : (age: any) => (person: any) => any
+>age : any
+
+	return function (person) {
+>function (person) {		person.age = age;		person.birthday = function () { person.age += 1; };		return person;	} : (person: any) => any
+>person : any
+
+		person.age = age;
+>person.age = age : any
+>person.age : any
+>person : any
+>age : any
+>age : any
+
+		person.birthday = function () { person.age += 1; };
+>person.birthday = function () { person.age += 1; } : () => void
+>person.birthday : any
+>person : any
+>birthday : any
+>function () { person.age += 1; } : () => void
+>person.age += 1 : any
+>person.age : any
+>person : any
+>age : any
+>1 : 1
+
+		return person;
+>person : any
+	}
+}
+function programs (favLang) {
+>programs : (favLang: any) => (person: any) => any
+>favLang : any
+
+	return function (person) {
+>function (person) {		person.favLang = favLang;		person.program = () => `${person.name} starts to write ${person.favLang}!`;		return person;	} : (person: any) => any
+>person : any
+
+		person.favLang = favLang;
+>person.favLang = favLang : any
+>person.favLang : any
+>person : any
+>favLang : any
+>favLang : any
+
+		person.program = () => `${person.name} starts to write ${person.favLang}!`;
+>person.program = () => `${person.name} starts to write ${person.favLang}!` : () => string
+>person.program : any
+>person : any
+>program : any
+>() => `${person.name} starts to write ${person.favLang}!` : () => string
+>`${person.name} starts to write ${person.favLang}!` : string
+>person.name : any
+>person : any
+>name : any
+>person.favLang : any
+>person : any
+>favLang : any
+
+		return person;
+>person : any
+	}
+}
+
+function Person (name, age) {
+>Person : (name: any, age: any) => any
+>name : any
+>age : any
+
+	return { name: name } |> greets(#) |> ages(age)(#);
+>{ name: name } |> greets(#) |> ages(age)(#) : any
+>{ name: name } |> greets(#) : any
+>{ name: name } : { name: any; }
+>name : any
+>name : any
+>greets(#) : any
+>greets : (person: any) => any
+># : { name: any; }
+>ages(age)(#) : any
+>ages(age) : (person: any) => any
+>ages : (age: any) => (person: any) => any
+>age : any
+># : any
+}
+function Programmer (name, age) {
+>Programmer : (name: any, age: any) => any
+>name : any
+>age : any
+
+	return { name: name }
+>{ name: name }		|> greets(#)		|> ages(age)		|> programs('javascript')(#) : any
+>{ name: name }		|> greets(#)		|> ages(age) : (person: any) => any
+>{ name: name }		|> greets(#) : any
+>{ name: name } : { name: any; }
+>name : any
+>name : any
+
+		|> greets(#)
+>greets(#) : any
+>greets : (person: any) => any
+># : { name: any; }
+
+		|> ages(age)
+>ages(age) : (person: any) => any
+>ages : (age: any) => (person: any) => any
+>age : any
+
+		|> programs('javascript')(#);
+>programs('javascript')(#) : any
+>programs('javascript') : (person: any) => any
+>programs : (favLang: any) => (person: any) => any
+>'javascript' : "javascript"
+># : (person: any) => any
+}
+

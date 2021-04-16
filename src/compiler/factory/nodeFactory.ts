@@ -222,6 +222,8 @@ namespace ts {
             updateNonNullChain,
             createMetaProperty,
             updateMetaProperty,
+            createPipelineHackExpression,
+            updatePipelineHackExpression,
             createTemplateSpan,
             updateTemplateSpan,
             createSemicolonClassElement,
@@ -3141,6 +3143,32 @@ namespace ts {
         function updateMetaProperty(node: MetaProperty, name: Identifier) {
             return node.name !== name
                 ? update(createMetaProperty(node.keywordToken, name), node)
+                : node;
+        }
+
+        // @api
+        function createPipelineHackExpression(expression: Expression, argument: Expression): PipelineHackExpression {
+            const node = createBaseExpression<PipelineHackExpression>(SyntaxKind.PipelineHackExpression);
+            node.argument = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(argument);
+            node.expression = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression);
+            node.dummyDeclaration = createVariableDeclaration("#", /*exclamationToken*/ undefined, /*type*/ undefined, node.argument);
+            setParent((node.dummyDeclaration as any).name, node.dummyDeclaration);
+            setParent(node.dummyDeclaration, node);
+            setTextRange(node.dummyDeclaration, node.argument);
+            setTextRange((node.dummyDeclaration as any).name, node.argument);
+            setNodeFlags(node.dummyDeclaration, NodeFlags.Const);
+            node.transformFlags |=
+                propagateChildFlags(node.argument) |
+                propagateChildFlags(node.expression) |
+                TransformFlags.ContainsPipeline;
+            return node;
+        }
+
+        // @api
+        function updatePipelineHackExpression(node: PipelineHackExpression, expression: Expression, argument: Expression): PipelineHackExpression {
+            return node.expression !== expression
+                || node.argument !== argument
+                ? update(createPipelineHackExpression(expression, argument), node)
                 : node;
         }
 

@@ -347,10 +347,8 @@ namespace ts.GoToDefinition {
     /** Creates a DefinitionInfo directly from the name of a declaration. */
     function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, textSpan?: TextSpan): DefinitionInfo {
         const sourceFile = declaration.getSourceFile();
-        if (!textSpan) {
-            const name = getNameOfDeclaration(declaration) || declaration;
-            textSpan = createTextSpanFromNode(name, sourceFile);
-        }
+        const name = getNameOfDeclaration(declaration) || declaration;
+        textSpan ||= createTextSpanFromNode(name, sourceFile);
         return {
             fileName: sourceFile.fileName,
             textSpan,
@@ -361,7 +359,8 @@ namespace ts.GoToDefinition {
             ...FindAllReferences.toContextSpan(
                 textSpan,
                 sourceFile,
-                FindAllReferences.getContextNode(declaration)
+                FindAllReferences.getContextNode(declaration),
+                /*forceContext*/isIdentifier(name) && name.escapedText === "#"
             ),
             isLocal: !isDefinitionVisible(checker, declaration)
         };

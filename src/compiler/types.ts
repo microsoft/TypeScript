@@ -250,6 +250,7 @@ namespace ts {
         PropertyAccessExpression,
         ElementAccessExpression,
         CallExpression,
+        PipelineHackExpression,
         NewExpression,
         TaggedTemplateExpression,
         TypeAssertionExpression,
@@ -542,6 +543,7 @@ namespace ts {
         | SyntaxKind.AmpersandEqualsToken
         | SyntaxKind.BarEqualsToken
         | SyntaxKind.CaretEqualsToken
+        | SyntaxKind.HashToken
         ;
 
     export type KeywordSyntaxKind =
@@ -1040,6 +1042,7 @@ namespace ts {
     export type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
     export type BarGreaterThanToken = PunctuationToken<SyntaxKind.BarGreaterThanToken>;
     export type QuestionDotToken = PunctuationToken<SyntaxKind.QuestionDotToken>;
+    export type HashToken = PunctuationToken<SyntaxKind.HashToken>;
 
     // Keywords
     export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> {
@@ -2365,6 +2368,14 @@ namespace ts {
         readonly questionDotToken?: QuestionDotToken;
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly arguments: NodeArray<Expression>;
+    }
+
+    export interface PipelineHackExpression extends LeftHandSideExpression, Declaration {
+        readonly kind: SyntaxKind.PipelineHackExpression;
+        readonly expression: Expression;
+        readonly argument: Expression;
+        readonly barGreaterThanToken: BarGreaterThanToken;
+        readonly dummyDeclaration: Declaration;
     }
 
     export interface CallChain extends CallExpression {
@@ -5030,6 +5041,7 @@ namespace ts {
         ExportEquals = "export=", // Export assignment symbol
         Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
         This = "this",
+        HackPipelineReference = "#",
     }
 
     /**
@@ -7369,6 +7381,8 @@ namespace ts {
         updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain;
         createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty;
         updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty;
+        createPipelineHackExpression(expression: Expression, argument: Expression): PipelineHackExpression;
+        updatePipelineHackExpression(node: PipelineHackExpression, expression: Expression, argument: Expression): PipelineHackExpression;
 
         //
         // Misc

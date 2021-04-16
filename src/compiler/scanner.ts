@@ -2056,12 +2056,18 @@ namespace ts {
                         if (isIdentifierStart(codePointAt(text, pos + 1), languageVersion)) {
                             pos++;
                             scanIdentifier(codePointAt(text, pos), languageVersion);
+                            return token = SyntaxKind.PrivateIdentifier;
                         }
                         else {
                             tokenValue = String.fromCharCode(codePointAt(text, pos));
-                            error(Diagnostics.Invalid_character, pos++, charSize(ch));
+                            if (/*isInsidePipelineHack*/ false) {
+                                error(Diagnostics.Invalid_character /* Hack placeholder token outside pipeline. */);
+                            }
+                            else {
+                                pos++;
+                                return token = SyntaxKind.Identifier;
+                            }
                         }
-                        return token = SyntaxKind.PrivateIdentifier;
                     default:
                         const identifierKind = scanIdentifier(ch, languageVersion);
                         if (identifierKind) {

@@ -377,6 +377,7 @@ namespace ts {
 
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+        // const pipelinePlaceholderSymbol = createSymbol(SymbolFlags.Property, "#" as __String);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -2085,6 +2086,12 @@ namespace ts {
                             }
                         }
                         break;
+                    // case SyntaxKind.PipelineExpression:
+                    //     if (meaning & SymbolFlags.BlockScopedVariable && name === "#") {
+                    //         result = pipelinePlaceholderSymbol;
+                    //         break loop;
+                    //     }
+                    //     break;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;
@@ -8156,6 +8163,9 @@ namespace ts {
                                 return result;
                             }
                         }
+                    }
+                    if (isIdentifier(name) && name.escapedText === "#") {
+                        return name.escapedText;
                     }
                     return declarationNameToString(name);
                 }
@@ -25135,6 +25145,12 @@ namespace ts {
                 (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isSymbolAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
+
+            const checkIfPipelineHackExpressionParent = (node: Node): boolean =>
+                node.parent?.kind === SyntaxKind.PipelineHackExpression || (node.parent
+                    ? checkIfPipelineHackExpressionParent(node.parent)
+                    : false);
+
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
@@ -25143,7 +25159,8 @@ namespace ts {
                 isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
-                declaration.flags & NodeFlags.Ambient;
+                declaration.flags & NodeFlags.Ambient ||
+                (node.escapedText === "#" && checkIfPipelineHackExpressionParent(node));
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                 getOptionalType(type);
@@ -31112,6 +31129,16 @@ namespace ts {
             }
         }
 
+        /**
+         * Syntactically and semantically checks a pipeline expression.
+         * @param node The call/new expression to be checked.
+         * @returns On success, the expression's signature's return type. On failure, anyType.
+         */
+        function checkPipelineHackExpression(node: PipelineHackExpression, checkMode?: CheckMode): Type {
+            checkExpression(node.argument, checkMode);
+            return checkExpression(node.expression, checkMode);
+        }
+
         function isSymbolOrSymbolForCall(node: Node) {
             if (!isCallExpression(node)) return false;
             let left = node.expression;
@@ -34064,6 +34091,8 @@ namespace ts {
                     // falls through
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(node as CallExpression, checkMode);
+                case SyntaxKind.PipelineHackExpression:
+                    return checkPipelineHackExpression(node as PipelineHackExpression, checkMode);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.ParenthesizedExpression:
@@ -40683,6 +40712,9 @@ namespace ts {
                             if (funcName) {
                                 copySymbol(location.symbol, meaning);
                             }
+                            break;
+                        case SyntaxKind.PipelineHackExpression:
+                            // copySymbol(pipelinePlaceholderSymbol, meaning);
                             break;
                     }
 

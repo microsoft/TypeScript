@@ -163,12 +163,12 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan } | undefined {
+    export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode, forceContext = false): { contextSpan: TextSpan } | undefined {
         if (!context) return undefined;
         const contextSpan = isContextWithStartAndEndNode(context) ?
             getTextSpan(context.start, sourceFile, context.end) :
             getTextSpan(context, sourceFile);
-        return contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length ?
+        return forceContext || contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length ?
             { contextSpan } :
             undefined;
     }

@@ -1,0 +1,71 @@
+=== tests/cases/conformance/pipeline/pipeline.ts ===
+const uried = 'Foobar' |> encodeURI(#);
+>uried : Symbol(uried, Decl(pipeline.ts, 0, 5))
+>encodeURI : Symbol(encodeURI, Decl(lib.es5.d.ts, --, --))
+># : Symbol(#, Decl(pipeline.ts, 0, 13))
+
+const squared = 3 |> ((n: number) => n * n)(#);
+>squared : Symbol(squared, Decl(pipeline.ts, 2, 5))
+>n : Symbol(n, Decl(pipeline.ts, 2, 23))
+>n : Symbol(n, Decl(pipeline.ts, 2, 23))
+>n : Symbol(n, Decl(pipeline.ts, 2, 23))
+># : Symbol(#, Decl(pipeline.ts, 2, 15))
+
+const makeAdder = (addNum: number) =>
+>makeAdder : Symbol(makeAdder, Decl(pipeline.ts, 4, 5))
+>addNum : Symbol(addNum, Decl(pipeline.ts, 4, 19))
+
+	(addTo: number) => addTo + addNum;
+>addTo : Symbol(addTo, Decl(pipeline.ts, 5, 2))
+>addTo : Symbol(addTo, Decl(pipeline.ts, 5, 2))
+>addNum : Symbol(addNum, Decl(pipeline.ts, 4, 19))
+
+const added = 2 |> (1 |> makeAdder(#));
+>added : Symbol(added, Decl(pipeline.ts, 7, 5))
+>makeAdder : Symbol(makeAdder, Decl(pipeline.ts, 4, 5))
+># : Symbol(#, Decl(pipeline.ts, 7, 20))
+
+const zeroOrOne = () => (Math.floor(Math.random() * 2)) % 2;
+>zeroOrOne : Symbol(zeroOrOne, Decl(pipeline.ts, 9, 5))
+>Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+const ternaryFunctions = 11 |>
+>ternaryFunctions : Symbol(ternaryFunctions, Decl(pipeline.ts, 10, 5))
+
+	(zeroOrOne() === 0
+>zeroOrOne : Symbol(zeroOrOne, Decl(pipeline.ts, 9, 5))
+
+		? (x: number) => x - 1
+>x : Symbol(x, Decl(pipeline.ts, 12, 5))
+>x : Symbol(x, Decl(pipeline.ts, 12, 5))
+
+		: (x: number) => x + 1
+>x : Symbol(x, Decl(pipeline.ts, 13, 5))
+>x : Symbol(x, Decl(pipeline.ts, 13, 5))
+
+	)(#);
+># : Symbol(#, Decl(pipeline.ts, 10, 24))
+
+('a' as string) |> console.log(#);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+># : Symbol(#, Decl(pipeline.ts, 14, 6))
+
+'b' as string |> console.log(#);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+># : Symbol(#, Decl(pipeline.ts, 16, 34))
+
+const c = 'c' |> ((s: string) => s)(#);
+>c : Symbol(c, Decl(pipeline.ts, 18, 5))
+>s : Symbol(s, Decl(pipeline.ts, 18, 19))
+>s : Symbol(s, Decl(pipeline.ts, 18, 19))
+># : Symbol(#, Decl(pipeline.ts, 18, 9))
+

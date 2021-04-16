@@ -1,0 +1,104 @@
+=== tests/cases/conformance/pipeline/pipelineTopic.ts ===
+const increment = (a: number) => a + 1;
+>increment : (a: number) => number
+>(a: number) => a + 1 : (a: number) => number
+>a : number
+>a + 1 : number
+>a : number
+>1 : 1
+
+const add = (a: number, b: number) => a + b;
+>add : (a: number, b: number) => number
+>(a: number, b: number) => a + b : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+ 
+const result = ['a','bb','ccc']
+>result : number
+>['a','bb','ccc']    |> #.map(s => s |> #.length)    |> #.map(a => a * 2 )    |> #.filter(a => a > 5)    |> #.reduce((sum, a) => a+sum, 0)    |> increment(#)    |> add(#, 3) : number
+>['a','bb','ccc']    |> #.map(s => s |> #.length)    |> #.map(a => a * 2 )    |> #.filter(a => a > 5)    |> #.reduce((sum, a) => a+sum, 0)    |> increment(#) : number
+>['a','bb','ccc']    |> #.map(s => s |> #.length)    |> #.map(a => a * 2 )    |> #.filter(a => a > 5)    |> #.reduce((sum, a) => a+sum, 0) : number
+>['a','bb','ccc']    |> #.map(s => s |> #.length)    |> #.map(a => a * 2 )    |> #.filter(a => a > 5) : number[]
+>['a','bb','ccc']    |> #.map(s => s |> #.length)    |> #.map(a => a * 2 ) : number[]
+>['a','bb','ccc']    |> #.map(s => s |> #.length) : number[]
+>['a','bb','ccc'] : string[]
+>'a' : "a"
+>'bb' : "bb"
+>'ccc' : "ccc"
+
+    |> #.map(s => s |> #.length)
+>#.map(s => s |> #.length) : number[]
+>#.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+># : string[]
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>s => s |> #.length : (s: string) => number
+>s : string
+>s |> #.length : number
+>s : string
+>#.length : number
+># : string
+>length : number
+
+    |> #.map(a => a * 2 )
+>#.map(a => a * 2 ) : number[]
+>#.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+># : number[]
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>a => a * 2 : (a: number) => number
+>a : number
+>a * 2 : number
+>a : number
+>2 : 2
+
+    |> #.filter(a => a > 5)
+>#.filter(a => a > 5) : number[]
+>#.filter : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; }
+># : number[]
+>filter : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; }
+>a => a > 5 : (a: number) => boolean
+>a : number
+>a > 5 : boolean
+>a : number
+>5 : 5
+
+    |> #.reduce((sum, a) => a+sum, 0)
+>#.reduce((sum, a) => a+sum, 0) : number
+>#.reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+># : number[]
+>reduce : { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
+>(sum, a) => a+sum : (sum: number, a: number) => number
+>sum : number
+>a : number
+>a+sum : number
+>a : number
+>sum : number
+>0 : 0
+
+    |> increment(#)
+>increment(#) : number
+>increment : (a: number) => number
+># : number
+
+    |> add(#, 3)
+>add(#, 3) : number
+>add : (a: number, b: number) => number
+># : number
+>3 : 3
+
+const added = 3 |> #+#+#+#+#;
+>added : number
+>3 |> #+#+#+#+# : number
+>3 : 3
+>#+#+#+#+# : number
+>#+#+#+# : number
+>#+#+# : number
+>#+# : number
+># : 3
+># : 3
+># : 3
+># : 3
+># : 3
+

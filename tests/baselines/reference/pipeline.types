@@ -1,0 +1,125 @@
+=== tests/cases/conformance/pipeline/pipeline.ts ===
+const uried = 'Foobar' |> encodeURI(#);
+>uried : string
+>'Foobar' |> encodeURI(#) : string
+>'Foobar' : "Foobar"
+>encodeURI(#) : string
+>encodeURI : (uri: string) => string
+># : "Foobar"
+
+const squared = 3 |> ((n: number) => n * n)(#);
+>squared : number
+>3 |> ((n: number) => n * n)(#) : number
+>3 : 3
+>((n: number) => n * n)(#) : number
+>((n: number) => n * n) : (n: number) => number
+>(n: number) => n * n : (n: number) => number
+>n : number
+>n * n : number
+>n : number
+>n : number
+># : 3
+
+const makeAdder = (addNum: number) =>
+>makeAdder : (addNum: number) => (addTo: number) => number
+>(addNum: number) =>	(addTo: number) => addTo + addNum : (addNum: number) => (addTo: number) => number
+>addNum : number
+
+	(addTo: number) => addTo + addNum;
+>(addTo: number) => addTo + addNum : (addTo: number) => number
+>addTo : number
+>addTo + addNum : number
+>addTo : number
+>addNum : number
+
+const added = 2 |> (1 |> makeAdder(#));
+>added : (addTo: number) => number
+>2 |> (1 |> makeAdder(#)) : (addTo: number) => number
+>2 : 2
+>(1 |> makeAdder(#)) : (addTo: number) => number
+>1 |> makeAdder(#) : (addTo: number) => number
+>1 : 1
+>makeAdder(#) : (addTo: number) => number
+>makeAdder : (addNum: number) => (addTo: number) => number
+># : 1
+
+const zeroOrOne = () => (Math.floor(Math.random() * 2)) % 2;
+>zeroOrOne : () => number
+>() => (Math.floor(Math.random() * 2)) % 2 : () => number
+>(Math.floor(Math.random() * 2)) % 2 : number
+>(Math.floor(Math.random() * 2)) : number
+>Math.floor(Math.random() * 2) : number
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
+>Math.random() * 2 : number
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>2 : 2
+>2 : 2
+
+const ternaryFunctions = 11 |>
+>ternaryFunctions : number
+>11 |>	(zeroOrOne() === 0		? (x: number) => x - 1		: (x: number) => x + 1	)(#) : number
+>11 : 11
+
+	(zeroOrOne() === 0
+>(zeroOrOne() === 0		? (x: number) => x - 1		: (x: number) => x + 1	)(#) : number
+>(zeroOrOne() === 0		? (x: number) => x - 1		: (x: number) => x + 1	) : (x: number) => number
+>zeroOrOne() === 0		? (x: number) => x - 1		: (x: number) => x + 1 : (x: number) => number
+>zeroOrOne() === 0 : boolean
+>zeroOrOne() : number
+>zeroOrOne : () => number
+>0 : 0
+
+		? (x: number) => x - 1
+>(x: number) => x - 1 : (x: number) => number
+>x : number
+>x - 1 : number
+>x : number
+>1 : 1
+
+		: (x: number) => x + 1
+>(x: number) => x + 1 : (x: number) => number
+>x : number
+>x + 1 : number
+>x : number
+>1 : 1
+
+	)(#);
+># : 11
+
+('a' as string) |> console.log(#);
+>('a' as string) |> console.log(#) : void
+>('a' as string) : string
+>'a' as string : string
+>'a' : "a"
+>console.log(#) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+># : string
+
+'b' as string |> console.log(#);
+>'b' as string |> console.log(#) : void
+>'b' as string : string
+>'b' : "b"
+>console.log(#) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+># : string
+
+const c = 'c' |> ((s: string) => s)(#);
+>c : string
+>'c' |> ((s: string) => s)(#) : string
+>'c' : "c"
+>((s: string) => s)(#) : string
+>((s: string) => s) : (s: string) => string
+>(s: string) => s : (s: string) => string
+>s : string
+>s : string
+># : "c"
+

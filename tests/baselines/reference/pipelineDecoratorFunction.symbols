@@ -1,0 +1,88 @@
+=== tests/cases/conformance/pipeline/pipelineDecoratorFunction.ts ===
+function greets (person) {
+>greets : Symbol(greets, Decl(pipelineDecoratorFunction.ts, 0, 0))
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 0, 17))
+
+	person.greet = () => `${person.name} says hi!`;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 0, 17))
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 0, 17))
+
+	return person;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 0, 17))
+}
+function ages (age) {
+>ages : Symbol(ages, Decl(pipelineDecoratorFunction.ts, 3, 1))
+>age : Symbol(age, Decl(pipelineDecoratorFunction.ts, 4, 15))
+
+	return function (person) {
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 5, 18))
+
+		person.age = age;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 5, 18))
+>age : Symbol(age, Decl(pipelineDecoratorFunction.ts, 4, 15))
+
+		person.birthday = function () { person.age += 1; };
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 5, 18))
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 5, 18))
+
+		return person;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 5, 18))
+	}
+}
+function programs (favLang) {
+>programs : Symbol(programs, Decl(pipelineDecoratorFunction.ts, 10, 1))
+>favLang : Symbol(favLang, Decl(pipelineDecoratorFunction.ts, 11, 19))
+
+	return function (person) {
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 12, 18))
+
+		person.favLang = favLang;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 12, 18))
+>favLang : Symbol(favLang, Decl(pipelineDecoratorFunction.ts, 11, 19))
+
+		person.program = () => `${person.name} starts to write ${person.favLang}!`;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 12, 18))
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 12, 18))
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 12, 18))
+
+		return person;
+>person : Symbol(person, Decl(pipelineDecoratorFunction.ts, 12, 18))
+	}
+}
+
+function Person (name, age) {
+>Person : Symbol(Person, Decl(pipelineDecoratorFunction.ts, 17, 1))
+>name : Symbol(name, Decl(pipelineDecoratorFunction.ts, 19, 17))
+>age : Symbol(age, Decl(pipelineDecoratorFunction.ts, 19, 22))
+
+	return { name: name } |> greets(#) |> ages(age)(#);
+>name : Symbol(name, Decl(pipelineDecoratorFunction.ts, 20, 9))
+>name : Symbol(name, Decl(pipelineDecoratorFunction.ts, 19, 17))
+>greets : Symbol(greets, Decl(pipelineDecoratorFunction.ts, 0, 0))
+># : Symbol(#, Decl(pipelineDecoratorFunction.ts, 20, 7))
+>ages : Symbol(ages, Decl(pipelineDecoratorFunction.ts, 3, 1))
+>age : Symbol(age, Decl(pipelineDecoratorFunction.ts, 19, 22))
+># : Symbol(#, Decl(pipelineDecoratorFunction.ts, 20, 7))
+}
+function Programmer (name, age) {
+>Programmer : Symbol(Programmer, Decl(pipelineDecoratorFunction.ts, 21, 1))
+>name : Symbol(name, Decl(pipelineDecoratorFunction.ts, 22, 21))
+>age : Symbol(age, Decl(pipelineDecoratorFunction.ts, 22, 26))
+
+	return { name: name }
+>name : Symbol(name, Decl(pipelineDecoratorFunction.ts, 23, 9))
+>name : Symbol(name, Decl(pipelineDecoratorFunction.ts, 22, 21))
+
+		|> greets(#)
+>greets : Symbol(greets, Decl(pipelineDecoratorFunction.ts, 0, 0))
+># : Symbol(#, Decl(pipelineDecoratorFunction.ts, 23, 7))
+
+		|> ages(age)
+>ages : Symbol(ages, Decl(pipelineDecoratorFunction.ts, 3, 1))
+>age : Symbol(age, Decl(pipelineDecoratorFunction.ts, 22, 26))
+
+		|> programs('javascript')(#);
+>programs : Symbol(programs, Decl(pipelineDecoratorFunction.ts, 10, 1))
+># : Symbol(#, Decl(pipelineDecoratorFunction.ts, 23, 7))
+}
+
