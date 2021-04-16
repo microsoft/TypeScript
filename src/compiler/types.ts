@@ -65,6 +65,7 @@ namespace ts {
         ExclamationEqualsEqualsToken,
         EqualsGreaterThanToken,
         BarGreaterThanToken,
+        BarGreaterThanGreaterThanToken,
         PlusToken,
         MinusToken,
         AsteriskToken,
@@ -507,6 +508,7 @@ namespace ts {
         | SyntaxKind.ExclamationEqualsEqualsToken
         | SyntaxKind.EqualsGreaterThanToken
         | SyntaxKind.BarGreaterThanToken
+        | SyntaxKind.BarGreaterThanGreaterThanToken
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.AsteriskToken
@@ -1042,6 +1044,7 @@ namespace ts {
     export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
     export type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
     export type BarGreaterThanToken = PunctuationToken<SyntaxKind.BarGreaterThanToken>;
+    export type BarGreaterThanGreaterThanToken = PunctuationToken<SyntaxKind.BarGreaterThanGreaterThanToken>;
     export type QuestionDotToken = PunctuationToken<SyntaxKind.QuestionDotToken>;
     export type HashToken = PunctuationToken<SyntaxKind.HashToken>;
 
@@ -1983,6 +1986,7 @@ namespace ts {
     export type PipelineOperatorOrHigher
         = LogicalOperatorOrHigher
         | SyntaxKind.BarGreaterThanToken
+        | SyntaxKind.BarGreaterThanGreaterThanToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-AssignmentOperator

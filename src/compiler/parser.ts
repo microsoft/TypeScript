@@ -4627,11 +4627,13 @@ namespace ts {
 
         function parseConditionalExpressionRest(startLeftOperand: Expression, pos: number): Expression {
             let leftOperand = startLeftOperand;
-            while (parseOptionalToken(SyntaxKind.BarGreaterThanToken)) {
-                leftOperand = parsePipelineHackExpression(leftOperand);
-            }
-            while (false) {
-                leftOperand = parsePipelineApplicationExpression(leftOperand);
+            while (token() === SyntaxKind.BarGreaterThanToken || token() === SyntaxKind.BarGreaterThanGreaterThanToken) {
+                if (parseOptionalToken(SyntaxKind.BarGreaterThanToken)) {
+                    leftOperand = parsePipelineHackExpression(leftOperand);
+                }
+                if (parseOptionalToken(SyntaxKind.BarGreaterThanGreaterThanToken)) {
+                    leftOperand = parsePipelineApplicationExpression(leftOperand);
+                }
             }
 
             // Note: we are passed in an expression which was produced from parseBinaryExpressionOrHigher.

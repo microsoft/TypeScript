@@ -31265,7 +31265,7 @@ namespace ts {
             if (isInJSFile(node)) {
                 const jsSymbol = getSymbolOfExpando(node, /* allowDeclaration */ true);
                 if (jsSymbol && !!jsSymbol.exports?.size) {
-                    const jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, undefined, undefined);
+                    const jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, emptyArray);
                     jsAssignmentType.objectFlags |= ObjectFlags.JSLiteral;
                     return getIntersectionType([returnType, jsAssignmentType]);
                 }
