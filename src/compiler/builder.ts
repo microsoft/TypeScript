@@ -748,7 +748,7 @@ namespace ts {
             const fileId = toFileId(key);
             Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
-            const actualSignature = signature === undefined ? value.signature : signature;
+            const actualSignature = signature ?? value.signature;
             return value.version === actualSignature ?
                 value.affectsGlobalScope ?
                     { version: value.version, signature: undefined, affectsGlobalScope: true } :
