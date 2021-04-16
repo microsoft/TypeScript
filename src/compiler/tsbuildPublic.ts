@@ -1514,19 +1514,17 @@ namespace ts {
             if (extendedConfigStatus) return extendedConfigStatus;
         }
 
-        if (!state.buildInfoChecked.has(resolvedPath)) {
+        if (!force && !state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
-            if (!force) {
-                const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
-                if (buildInfoPath) {
-                    const value = state.readFileWithCache(buildInfoPath);
-                    const buildInfo = value && getBuildInfo(value);
-                    if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
-                        return {
-                            type: UpToDateStatusType.TsVersionOutputOfDate,
-                            version: buildInfo.version
-                        };
-                    }
+            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
+            if (buildInfoPath) {
+                const value = state.readFileWithCache(buildInfoPath);
+                const buildInfo = value && getBuildInfo(value);
+                if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
+                    return {
+                        type: UpToDateStatusType.TsVersionOutputOfDate,
+                        version: buildInfo.version
+                    };
                 }
             }
         }
