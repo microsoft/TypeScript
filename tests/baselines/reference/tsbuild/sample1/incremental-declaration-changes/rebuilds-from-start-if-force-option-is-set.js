@@ -8,9 +8,15 @@ Output::
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
+[[90m12:16:00 AM[0m] Project 'src/core/tsconfig.json' is being forcibly rebuilt
+
 [[90m12:16:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
+[[90m12:16:00 AM[0m] Project 'src/logic/tsconfig.json' is being forcibly rebuilt
+
 [[90m12:16:00 AM[0m] Building project '/src/logic/tsconfig.json'...
+
+[[90m12:16:00 AM[0m] Project 'src/tests/tsconfig.json' is being forcibly rebuilt
 
 [[90m12:16:00 AM[0m] Building project '/src/tests/tsconfig.json'...
 

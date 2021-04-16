@@ -2012,6 +2012,14 @@ namespace ts {
     }
 
     function reportUpToDateStatus(state: SolutionBuilderState, configFileName: string, status: UpToDateStatus) {
+        if (state.options.force && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes)) {
+            return reportStatus(
+                state,
+                Diagnostics.Project_0_is_being_forcibly_rebuilt,
+                relName(state, configFileName)
+            );
+        }
+
         switch (status.type) {
             case UpToDateStatusType.OutOfDateWithSelf:
                 return reportStatus(
@@ -2107,7 +2115,7 @@ namespace ts {
      * Report the up-to-date status of a project if we're in verbose mode
      */
     function verboseReportProjectStatus(state: SolutionBuilderState, configFileName: string, status: UpToDateStatus) {
-        if (state.options.verbose && !state.options.force) {
+        if (state.options.verbose) {
             reportUpToDateStatus(state, configFileName, status);
         }
     }
