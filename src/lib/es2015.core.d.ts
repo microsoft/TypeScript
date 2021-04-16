@@ -456,12 +456,12 @@ interface String {
      * Returns a `<b>` HTML element
      * @deprecated A legacy feature for browser compatibility
      */
-     bold(): string;
+    bold(): string;
 
     /**
      * Returns a `<tt>` HTML element
      * @deprecated A legacy feature for browser compatibility
-     * */
+     */
     fixed(): string;
 
     /**
