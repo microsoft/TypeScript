@@ -17883,7 +17883,7 @@ namespace ts {
                     }
                 }
                 for (const type of targetTypes) {
-                    const related = isRelatedTo(source, type, /*reportErrors*/ false, undefined, intersectionState);
+                    const related = isRelatedTo(source, type, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                     if (related) {
                         return related;
                     }
