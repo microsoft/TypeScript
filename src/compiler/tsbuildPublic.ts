@@ -1464,7 +1464,8 @@ namespace ts {
                 }
 
                 // Check oldest output file name only if there is no missing output file name
-                if (!missingOutputFileName) {
+                // (a check we will have skipped if this is a forced build)
+                if (!force && !missingOutputFileName) {
                     // If the upstream project's newest file is older than our oldest output, we
                     // can't be out of date because of it
                     if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
