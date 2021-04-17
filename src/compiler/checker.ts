@@ -12834,10 +12834,20 @@ namespace ts {
                         typeParameters.length);
                     return errorType;
                 }
+                // We refrain from associating a local type alias with an instantiation of a top-level type alias
+                // because the local alias may end up being referenced in an inferred return type where it is not
+                // accessible--which in turn may lead to a large structural expansion of the type when generating
+                // a .d.ts file. See #43622 for an example.
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                const newAliasSymbol = aliasSymbol && (isLocalTypeAlias(symbol) || !isLocalTypeAlias(aliasSymbol)) ? aliasSymbol : undefined;
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, getTypeArgumentsForAliasSymbol(newAliasSymbol));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
+        }
+
+        function isLocalTypeAlias(symbol: Symbol) {
+            const declaration = symbol.declarations?.find(isTypeAlias);
+            return !!(declaration && getContainingFunction(declaration));
         }
 
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
