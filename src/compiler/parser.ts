@@ -1540,41 +1540,13 @@ namespace ts {
         const viableKeywordSuggestions = Object.keys(textToKeywordObj).filter(keyword => keyword.length > 2);
 
         /**
-         * Attempts to consume the expected semicolon after an expression or property name.
+         * Provides a better error message than the generic "';' expected" if possible for
+         * known common variants of a missing semicolon, such as from a mispelled names.
          *
-         * @param parentKind Kind of block the node and its expected semicolon are within.
          * @param node Node preceding the expected semicolon location.
-         * @param initializer The preceding node's initializer, if it may exist and was able to parse.
          * @remarks
-         * Use this to get a better error message than the generic "';' expected" if possible for
-         * known common variants of invalid syntax, such as mispelled names.
          */
-        function parseSemicolonAfter(parentKind: SyntaxKind, node: Expression | PropertyName, initializer?: Node) {
-            // Consume the semicolon if it was explicitly provided.
-            if (canParseSemicolon()) {
-                if (token() === SyntaxKind.SemicolonToken) {
-                    nextToken();
-                }
-
-                return;
-            }
-
-            // If an initializer was parsed but there is still an error in finding the next semicolon,
-            // we generally know there was an error already reported in the initializer...
-            //   class Example { a = new Map([), ) }
-            //                                ~
-            if (initializer) {
-                // ...unless we've found the start of a block after a property declaration, in which
-                // case we can know that regardless of the initializer we should complain on the block.
-                //   class Example { a = 0 {} }
-                //                         ~
-                if (token() === SyntaxKind.OpenBraceToken && parentKind === SyntaxKind.PropertyDeclaration) {
-                    parseErrorAtCurrentToken(Diagnostics._0_expected, ";");
-                }
-
-                return;
-            }
-
+        function parseErrorForMissingSemicolonAfter(node: Expression | PropertyName): void {
             // Tagged template literals are sometimes used in places where only simple strings are allowed, i.e.:
             //   module `M1` {
             //   ^^^^^^^^^^^ This block is parsed as a template literal like module`M1`.
@@ -1605,7 +1577,7 @@ namespace ts {
                     return;
 
                 case "interface":
-                    parseErrorForInvalidName(SyntaxKind.OpenBraceToken, Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0);
+                    parseErrorForInvalidName(Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0, SyntaxKind.OpenBraceToken);
                     return;
 
                 case "is":
@@ -1614,11 +1586,11 @@ namespace ts {
 
                 case "module":
                 case "namespace":
-                    parseErrorForInvalidName(SyntaxKind.OpenBraceToken, Diagnostics.Namespace_must_be_given_a_name, Diagnostics.Namespace_name_cannot_be_0);
+                    parseErrorForInvalidName(Diagnostics.Namespace_must_be_given_a_name, Diagnostics.Namespace_name_cannot_be_0, SyntaxKind.OpenBraceToken);
                     return;
 
                 case "type":
-                    parseErrorForInvalidName(SyntaxKind.EqualsToken, Diagnostics.Type_alias_must_be_given_a_name, Diagnostics.Type_alias_name_cannot_be_0);
+                    parseErrorForInvalidName(Diagnostics.Type_alias_must_be_given_a_name, Diagnostics.Type_alias_name_cannot_be_0, SyntaxKind.EqualsToken);
                     return;
             }
 
@@ -1640,7 +1612,7 @@ namespace ts {
          * @param blankDiagnostic Diagnostic to report for the case of the name being blank (matched tokenIfBlankName).
          * @param nameDiagnostic Diagnostic to report for all other cases.
          */
-        function parseErrorForInvalidName(tokenIfBlankName: SyntaxKind, blankDiagnostic: DiagnosticMessage, nameDiagnostic: DiagnosticMessage) {
+        function parseErrorForInvalidName(nameDiagnostic: DiagnosticMessage, blankDiagnostic: DiagnosticMessage, tokenIfBlankName: SyntaxKind) {
             if (token() === tokenIfBlankName) {
                 parseErrorAtCurrentToken(blankDiagnostic);
             }
@@ -1681,13 +1653,31 @@ namespace ts {
                 return;
             }
 
-            return parseSemicolonAfter(SyntaxKind.PropertyDeclaration, name, initializer);
+            if (tryParseSemicolon()) {
+                return;
+            }
+
+            // If an initializer was parsed but there is still an error in finding the next semicolon,
+            // we generally know there was an error already reported in the initializer...
+            //   class Example { a = new Map([), ) }
+            //                                ~
+            if (initializer) {
+                // ...unless we've found the start of a block after a property declaration, in which
+                // case we can know that regardless of the initializer we should complain on the block.
+                //   class Example { a = 0 {} }
+                //                         ~
+                if (token() === SyntaxKind.OpenBraceToken) {
+                    parseErrorAtCurrentToken(Diagnostics._0_expected, ";");
+                }
+
+                return;
+            }
+
+            parseErrorForMissingSemicolonAfter(name);
         }
 
         function getExpressionText(expression: Expression | PropertyName) {
-            return ts.isIdentifier(expression)
-                ? idText(expression)
-                : undefined;
+            return ts.isIdentifier(expression) ? idText(expression) : undefined;
         }
 
         function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
@@ -1773,18 +1763,21 @@ namespace ts {
             return token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
         }
 
-        function parseSemicolon(): boolean {
-            if (canParseSemicolon()) {
-                if (token() === SyntaxKind.SemicolonToken) {
-                    // consume the semicolon if it was explicitly provided.
-                    nextToken();
-                }
+        function tryParseSemicolon() {
+            if (!canParseSemicolon()) {
+                return false;
+            }
 
-                return true;
+            if (token() === SyntaxKind.SemicolonToken) {
+                // consume the semicolon if it was explicitly provided.
+                nextToken();
             }
-            else {
-                return parseExpected(SyntaxKind.SemicolonToken);
-            }
+
+            return true;
+        }
+
+        function parseSemicolon(): boolean {
+            return tryParseSemicolon() || parseExpected(SyntaxKind.SemicolonToken);
         }
 
         function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number, hasTrailingComma?: boolean): NodeArray<T> {
@@ -5984,7 +5977,9 @@ namespace ts {
                 identifierCount++;
                 expression = finishNode(factory.createIdentifier(""), getNodePos());
             }
-            parseSemicolonAfter(SyntaxKind.Block, expression);
+            if (!tryParseSemicolon()) {
+                parseErrorForMissingSemicolonAfter(expression);
+            }
             return finishNode(factory.createThrowStatement(expression), pos);
         }
 
@@ -6045,7 +6040,9 @@ namespace ts {
                 node = factory.createLabeledStatement(expression, parseStatement());
             }
             else {
-                parseSemicolonAfter(SyntaxKind.Block, expression);
+                if (!tryParseSemicolon()) {
+                    parseErrorForMissingSemicolonAfter(expression);
+                }
                 node = factory.createExpressionStatement(expression);
                 if (hasParen) {
                     // do not parse the same jsdoc twice
