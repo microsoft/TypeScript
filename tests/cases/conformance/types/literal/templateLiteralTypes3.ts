@@ -106,3 +106,15 @@ const templated1: Templated = `${value1} abc` as const;
 
 const value2 = "abc";
 const templated2: Templated = `${value2} abc` as const;
+
+// Repro from #43620
+
+type Prefixes = "foo" | "bar";
+
+type AllPrefixData = "foo:baz" | "bar:baz";
+
+type PrefixData<P extends Prefixes> = `${P}:baz`;
+
+interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
+    blah: string;
+}

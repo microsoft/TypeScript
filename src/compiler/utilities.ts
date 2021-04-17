@@ -2599,6 +2599,7 @@ namespace ts {
             parent.kind === SyntaxKind.ExportAssignment ||
             parent.kind === SyntaxKind.PropertyDeclaration ||
             parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
+            parent.kind === SyntaxKind.ReturnStatement ||
             getNestedModuleDeclaration(parent) ||
             isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken) {
             return parent;
