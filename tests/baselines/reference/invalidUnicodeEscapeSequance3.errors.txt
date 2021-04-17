@@ -1,19 +1,13 @@
-tests/cases/compiler/invalidUnicodeEscapeSequance3.ts(1,1): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/invalidUnicodeEscapeSequance3.ts(1,1): error TS2304: Cannot find name 'a'.
 tests/cases/compiler/invalidUnicodeEscapeSequance3.ts(1,2): error TS1127: Invalid character.
-tests/cases/compiler/invalidUnicodeEscapeSequance3.ts(1,2): error TS1128: Declaration or statement expected.
 tests/cases/compiler/invalidUnicodeEscapeSequance3.ts(1,3): error TS2304: Cannot find name 'u'.
 
 
-==== tests/cases/compiler/invalidUnicodeEscapeSequance3.ts (5 errors) ====
+==== tests/cases/compiler/invalidUnicodeEscapeSequance3.ts (3 errors) ====
     a\u
-    ~
-!!! error TS1434: Unexpected keyword or identifier.
     ~
 !!! error TS2304: Cannot find name 'a'.
      
 !!! error TS1127: Invalid character.
-     ~
-!!! error TS1128: Declaration or statement expected.
       ~
 !!! error TS2304: Cannot find name 'u'.

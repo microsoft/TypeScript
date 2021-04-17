@@ -1577,7 +1577,7 @@ namespace ts {
                     return;
 
                 case "interface":
-                    parseErrorForInvalidName(Diagnostics.Interface_must_be_given_a_name, Diagnostics.Interface_name_cannot_be_0, SyntaxKind.OpenBraceToken);
+                    parseErrorForInvalidName(Diagnostics.Interface_name_cannot_be_0, Diagnostics.Interface_must_be_given_a_name, SyntaxKind.OpenBraceToken);
                     return;
 
                 case "is":
@@ -1586,11 +1586,11 @@ namespace ts {
 
                 case "module":
                 case "namespace":
-                    parseErrorForInvalidName(Diagnostics.Namespace_must_be_given_a_name, Diagnostics.Namespace_name_cannot_be_0, SyntaxKind.OpenBraceToken);
+                    parseErrorForInvalidName(Diagnostics.Namespace_name_cannot_be_0, Diagnostics.Namespace_must_be_given_a_name, SyntaxKind.OpenBraceToken);
                     return;
 
                 case "type":
-                    parseErrorForInvalidName(Diagnostics.Type_alias_must_be_given_a_name, Diagnostics.Type_alias_name_cannot_be_0, SyntaxKind.EqualsToken);
+                    parseErrorForInvalidName(Diagnostics.Type_alias_name_cannot_be_0, Diagnostics.Type_alias_must_be_given_a_name, SyntaxKind.EqualsToken);
                     return;
             }
 
@@ -1601,16 +1601,21 @@ namespace ts {
                 return;
             }
 
-            // We know this is a slightly more precise case than a missing expected semicolon.
+            // Unknown tokens are handled with their own errors in the scanner
+            if (token() === SyntaxKind.Unknown) {
+                return;
+            }
+
+            // Otherwise, we know this some kind of unknown word, not just a missing expected semicolon.
             parseErrorAt(pos, node.end, Diagnostics.Unexpected_keyword_or_identifier);
         }
 
         /**
          * Reports a diagnostic error for the current token being an invalid name.
          *
-         * @param tokenIfBlankName Current token if the name was invalid for being blank (not provided / skipped).
          * @param blankDiagnostic Diagnostic to report for the case of the name being blank (matched tokenIfBlankName).
          * @param nameDiagnostic Diagnostic to report for all other cases.
+         * @param tokenIfBlankName Current token if the name was invalid for being blank (not provided / skipped).
          */
         function parseErrorForInvalidName(nameDiagnostic: DiagnosticMessage, blankDiagnostic: DiagnosticMessage, tokenIfBlankName: SyntaxKind) {
             if (token() === tokenIfBlankName) {
