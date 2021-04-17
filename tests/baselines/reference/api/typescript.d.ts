@@ -5667,7 +5667,7 @@ declare namespace ts {
         fileName: string;
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
-        allowDestructiveCodeActions?: boolean;
+        skipDestructiveCodeActions?: boolean;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
     interface GetCompletionsAtPositionOptions extends UserPreferences {
