@@ -1666,7 +1666,7 @@ namespace ts {
                     return;
 
                 case SyntaxKind.OpenParenToken:
-                    parseErrorAtCurrentToken(Diagnostics.Function_call_is_not_a_type_annotation);
+                    parseErrorAtCurrentToken(Diagnostics.Cannot_start_a_function_call_in_a_type_annotation);
                     nextToken();
                     return;
             }
@@ -1685,8 +1685,8 @@ namespace ts {
         }
 
         function getExpressionText(expression: Expression | PropertyName) {
-            return expression && ts.isIdentifier(expression)
-                ? expression.escapedText.toString()
+            return ts.isIdentifier(expression)
+                ? idText(expression)
                 : undefined;
         }
 

@@ -1392,7 +1392,7 @@
         "category": "Error",
         "code": 1440
     },
-    "Function call is not a type annotation.": {
+    "Cannot start a function call in a type annotation.": {
         "category": "Error",
         "code": 1441
     },
