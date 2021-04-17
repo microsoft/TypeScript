@@ -840,7 +840,7 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
+          "kindModifiers": "deprecated,declare",
           "sortText": "5",
           "displayParts": [
             {
@@ -900,6 +900,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -921,7 +930,7 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
+          "kindModifiers": "deprecated,declare",
           "sortText": "5",
           "displayParts": [
             {
@@ -980,6 +989,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [

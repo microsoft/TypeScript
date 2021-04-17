@@ -73,13 +73,13 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
+          "kindModifiers": "deprecated,declare",
           "sortText": "5"
         },
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
+          "kindModifiers": "deprecated,declare",
           "sortText": "5"
         },
         {
