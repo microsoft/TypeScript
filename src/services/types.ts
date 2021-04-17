@@ -553,7 +553,7 @@ namespace ts {
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
     export interface OrganizeImportsArgs extends CombinedCodeFixScope {
-        allowDestructiveCodeActions?: boolean;
+        skipDestructiveCodeActions?: boolean;
     }
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";

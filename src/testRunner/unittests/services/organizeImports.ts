@@ -339,7 +339,7 @@ export const Other = 1;
             });
 
             testOrganizeImports("Renamed_used",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -350,7 +350,7 @@ EffOne();
                 libFile);
 
             testOrganizeImports("Simple",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -367,7 +367,7 @@ F2();
                 libFile);
 
             testOrganizeImports("Unused_Some",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -380,9 +380,9 @@ D();
                 },
                 libFile);
 
-                describe("allowDestructiveCodeActions=false", () => {
-                    testOrganizeImports("Syntax_Error_Body",
-                        /*allowDestructiveCodeActions*/ false,
+                describe("skipDestructiveCodeActions=true", () => {
+                    testOrganizeImports("Syntax_Error_Body_skipDestructiveCodeActions",
+                        /*skipDestructiveCodeActions*/ true,
                         {
                             path: "/test.ts",
                             content: `
@@ -397,8 +397,8 @@ D;
                         libFile);
                     });
 
-                    testOrganizeImports("Syntax_Error_Imports",
-                        /*allowDestructiveCodeActions*/ false,
+                    testOrganizeImports("Syntax_Error_Imports_skipDestructiveCodeActions",
+                        /*skipDestructiveCodeActions*/ true,
                         {
                             path: "/test.ts",
                             content: `
@@ -412,9 +412,9 @@ D;
                         },
                         libFile);
 
-                describe("allowDestructiveCodeActions=true", () => {
-                    testOrganizeImports("Syntax_Error_Body_allowDestructiveCodeActions",
-                        /*allowDestructiveCodeActions*/ true,
+                describe("skipDestructiveCodeActions=false", () => {
+                    testOrganizeImports("Syntax_Error_Body",
+                        /*skipDestructiveCodeActions*/ false,
                         {
                             path: "/test.ts",
                             content: `
@@ -428,8 +428,8 @@ D;
                         },
                         libFile);
 
-                    testOrganizeImports("Syntax_Error_Imports_allowDestructiveCodeActions",
-                        /*allowDestructiveCodeActions*/ true,
+                    testOrganizeImports("Syntax_Error_Imports",
+                        /*skipDestructiveCodeActions*/ false,
                         {
                             path: "/test.ts",
                             content: `
@@ -455,7 +455,7 @@ D;
                 });
 
             testOrganizeImports("Unused_All",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -479,7 +479,7 @@ import { } from "lib";
             });
 
             testOrganizeImports("Unused_false_positive_module_augmentation",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.d.ts",
                     content: `
@@ -495,7 +495,7 @@ declare module 'caseless' {
                 });
 
             testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -537,7 +537,7 @@ export { x };
             });
 
             testOrganizeImports("MoveToTop",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -554,7 +554,7 @@ D();
 
             /* eslint-disable no-template-curly-in-string */
             testOrganizeImports("MoveToTop_Invalid",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -573,7 +573,7 @@ D();
             /* eslint-enable no-template-curly-in-string */
 
             testOrganizeImports("TypeOnly",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -586,7 +586,7 @@ export { A, B, X, Y, Z };`
                 });
 
             testOrganizeImports("CoalesceMultipleModules",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -601,7 +601,7 @@ a + b + c + d;
                 { path: "/lib2.ts", content: "export const a = 3, c = 4;" });
 
             testOrganizeImports("CoalesceTrivia",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -615,7 +615,7 @@ F2();
                 libFile);
 
             testOrganizeImports("SortTrivia",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -627,7 +627,7 @@ F2();
                 { path: "/lib2.ts", content: "" });
 
             testOrganizeImports("UnusedTrivia1",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -637,7 +637,7 @@ F2();
                 libFile);
 
             testOrganizeImports("UnusedTrivia2",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -649,7 +649,7 @@ F1();
                 libFile);
 
             testOrganizeImports("UnusedHeaderComment",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -660,7 +660,7 @@ import { F1 } from "lib";
                 libFile);
 
             testOrganizeImports("SortHeaderComment",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -673,7 +673,7 @@ import "lib1";
                 { path: "/lib2.ts", content: "" });
 
                 testOrganizeImports("SortComments",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -690,7 +690,7 @@ import "lib1";
                 { path: "/lib3.ts", content: "" });
 
             testOrganizeImports("AmbientModule",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -706,7 +706,7 @@ declare module "mod" {
                 libFile);
 
             testOrganizeImports("TopLevelAndAmbientModule",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -729,7 +729,7 @@ D();
                 libFile);
 
             testOrganizeImports("JsxFactoryUsedJsx",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.jsx",
                     content: `
@@ -741,7 +741,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUsedJs",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.js",
                     content: `
@@ -753,7 +753,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUsedTsx",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `
@@ -767,7 +767,7 @@ import { React, Other } from "react";
             // TS files are not JSX contexts, so the parser does not treat
             // `<div/>` as a JSX element.
             testOrganizeImports("JsxFactoryUsedTs",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -779,7 +779,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUnusedJsx",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.jsx",
                     content: `
@@ -791,7 +791,7 @@ import { React, Other } from "react";
             // Note: Since the file extension does not end with "x", the jsx compiler option
             // will not be enabled.  The import should be retained regardless.
             testOrganizeImports("JsxFactoryUnusedJs",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.js",
                     content: `
@@ -801,7 +801,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUnusedTsx",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `
@@ -811,7 +811,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUnusedTs",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -821,7 +821,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxPragmaTsx",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `/** @jsx jsx */
@@ -850,7 +850,7 @@ export namespace React {
             );
 
             testOrganizeImports("JsxFragmentPragmaTsx",
-                /*allowDestructiveCodeActions*/ true,
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `/** @jsx h */
@@ -1013,17 +1013,17 @@ export * from "lib";
             });
 
             function testOrganizeExports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
-                testOrganizeImports(`${testName}.exports`, /*allowDestructiveCodeActions*/ false, testFile, ...otherFiles);
+                testOrganizeImports(`${testName}.exports`, /*skipDestructiveCodeActions*/ true, testFile, ...otherFiles);
             }
 
-            function testOrganizeImports(testName: string, allowDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
-                it(testName, () => runBaseline(`organizeImports/${testName}.ts`, allowDestructiveCodeActions, testFile, ...otherFiles));
+            function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+                it(testName, () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles));
             }
 
-            function runBaseline(baselinePath: string, allowDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+            function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
-                const changes = languageService.organizeImports({ allowDestructiveCodeActions, type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
                 assert.equal(changes.length, 1);
                 assert.equal(changes[0].fileName, testPath);
 

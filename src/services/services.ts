@@ -2023,7 +2023,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.allowDestructiveCodeActions);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
