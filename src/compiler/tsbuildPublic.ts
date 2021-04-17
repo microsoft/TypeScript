@@ -1717,7 +1717,11 @@ namespace ts {
                 continue;
             }
             const outputs = getAllProjectOutputs(parsed, !host.useCaseSensitiveFileNames());
+            if (!outputs.length) continue;
+            const inputFileNames = new Set(parsed.fileNames.map(f => toPath(state, f)));
             for (const output of outputs) {
+                // If output name is same as input file name, do not delete and ignore the error
+                if (inputFileNames.has(toPath(state, output))) continue;
                 if (host.fileExists(output)) {
                     if (filesToDelete) {
                         filesToDelete.push(output);

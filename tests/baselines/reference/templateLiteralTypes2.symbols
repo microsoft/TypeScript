@@ -361,3 +361,19 @@ function getCardTitle(title: string): `test-${string}` {
 >title : Symbol(title, Decl(templateLiteralTypes2.ts, 109, 22))
 }
 
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+>interpolatedStyle : Symbol(interpolatedStyle, Decl(templateLiteralTypes2.ts, 115, 5))
+>rotate : Symbol(rotate, Decl(templateLiteralTypes2.ts, 115, 27))
+
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+>C2 : Symbol(C2, Decl(templateLiteralTypes2.ts, 115, 41))
+>transform : Symbol(transform, Decl(templateLiteralTypes2.ts, 116, 12))
+
+C2(`rotate(${interpolatedStyle.rotate}dig)`);
+>C2 : Symbol(C2, Decl(templateLiteralTypes2.ts, 115, 41))
+>interpolatedStyle.rotate : Symbol(rotate, Decl(templateLiteralTypes2.ts, 115, 27))
+>interpolatedStyle : Symbol(interpolatedStyle, Decl(templateLiteralTypes2.ts, 115, 5))
+>rotate : Symbol(rotate, Decl(templateLiteralTypes2.ts, 115, 27))
+

@@ -1,0 +1,48 @@
+=== tests/cases/compiler/destructionAssignmentError.ts ===
+declare function fn(): { a: 1, b: 2 }
+>fn : () => {    a: 1;    b: 2;}
+>a : 1
+>b : 2
+
+let a: number;
+>a : number
+
+let b: number;
+>b : number
+
+({ a, b } = fn());
+>({ a, b } = fn()) : { a: 1; b: 2; }
+>{ a, b } = fn() : { a: 1; b: 2; }
+>{ a, b } : { a: number; b: number; }
+>a : number
+>b : number
+>fn() : { a: 1; b: 2; }
+>fn : () => { a: 1; b: 2; }
+
+{ a, b } = fn();
+>a, b : number
+>a : number
+>b : number
+>fn() : { a: 1; b: 2; }
+>fn : () => { a: 1; b: 2; }
+
+({ a, b } =
+>({ a, b } =fn()) : { a: 1; b: 2; }
+>{ a, b } =fn() : { a: 1; b: 2; }
+>{ a, b } : { a: number; b: number; }
+>a : number
+>b : number
+
+fn());
+>fn() : { a: 1; b: 2; }
+>fn : () => { a: 1; b: 2; }
+
+{ a, b }
+>a, b : number
+>a : number
+>b : number
+
+= fn();
+>fn() : { a: 1; b: 2; }
+>fn : () => { a: 1; b: 2; }
+

@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '}' to match the '{' token here.": {
+    "The parser expected to find a '{1}' to match the '{0}' token here.": {
         "category": "Error",
         "code": 1007
     },
@@ -1360,21 +1360,25 @@
         "category": "Error",
         "code": 1432
     },
-    "Declaration or iteration cannot present at end of the do expression": {
+    "Decorators may not be applied to 'this' parameters.": {
         "category": "Error",
         "code": 1433
     },
-    "A return statement cannot be used within an async do expression": {
+    "Declaration or iteration cannot present at end of the do expression": {
         "category": "Error",
         "code": 1434
     },
-    "A var declaration cannot be used within a do expression unless the target is ESNext.": {
+    "A return statement cannot be used within an async do expression": {
         "category": "Error",
         "code": 1435
     },
-    "The last if statement in the do expression must have an else branch.": {
+    "A var declaration cannot be used within a do expression unless the target is ESNext.": {
         "category": "Error",
         "code": 1436
+    },
+    "The last if statement in the do expression must have an else branch.": {
+        "category": "Error",
+        "code": 1437
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3184,7 +3188,7 @@
         "category": "Error",
         "code": 2773
     },
-    "This condition will always return true since the function is always defined. Did you mean to call it instead?": {
+    "This condition will always return true since this function is always defined. Did you mean to call it instead?": {
         "category": "Error",
         "code": 2774
     },
@@ -3292,7 +3296,7 @@
         "category": "Error",
         "code": 2800
     },
-    "This condition will always return true since the Promise is always truthy.": {
+    "This condition will always return true since this '{0}' is always defined.": {
         "category": "Error",
         "code": 2801
     },
@@ -3323,6 +3327,22 @@
     "A get accessor must be at least as accessible as the setter": {
         "category": "Error",
         "code": 2808
+    },
+    "Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.": {
+        "category": "Error",
+        "code": 2809
+    },
+    "Property '{0}' may not be used in a static property's initializer in the same class when 'target' is 'esnext' and 'useDefineForClassFields' is 'false'.": {
+        "category": "Error",
+        "code": 2810
+    },
+    "Initializer for property '{0}'": {
+        "category": "Error",
+        "code": 2811
+    },
+    "Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2812
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3933,6 +3953,14 @@
     "The root value of a '{0}' file must be an object.": {
         "category": "Error",
         "code": 5092
+    },
+    "Compiler option '--{0}' may only be used with '--build'.": {
+        "category": "Error",
+        "code": 5093
+    },
+    "Compiler option '--{0}' may not be used with '--build'.": {
+        "category": "Error",
+        "code": 5094
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

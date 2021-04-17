@@ -1,0 +1,150 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameErrorsOnNotUseDefineForClassFieldsInEsNext.ts ===
+class TestWithErrors {
+>TestWithErrors : TestWithErrors
+
+    #prop = 0 
+>#prop : number
+>0 : 0
+
+    static dd = new TestWithErrors().#prop; // Err
+>dd : number
+>new TestWithErrors().#prop : number
+>new TestWithErrors() : TestWithErrors
+>TestWithErrors : typeof TestWithErrors
+
+    static ["X_ z_ zz"] = class Inner {
+>["X_ z_ zz"] : typeof Inner
+>"X_ z_ zz" : "X_ z_ zz"
+>class Inner {        #foo  = 10           m() {            new TestWithErrors().#prop // Err        }        static C = class InnerInner {            m() {                new TestWithErrors().#prop // Err                new Inner().#foo; // Err            }        }        static M(){            return class {                m() {                    new TestWithErrors().#prop // Err                    new Inner().#foo; // OK                }            }        }     } : typeof Inner
+>Inner : typeof Inner
+
+        #foo  = 10   
+>#foo : number
+>10 : 10
+
+        m() {
+>m : () => void
+
+            new TestWithErrors().#prop // Err
+>new TestWithErrors().#prop : number
+>new TestWithErrors() : TestWithErrors
+>TestWithErrors : typeof TestWithErrors
+        }
+        static C = class InnerInner {
+>C : typeof InnerInner
+>class InnerInner {            m() {                new TestWithErrors().#prop // Err                new Inner().#foo; // Err            }        } : typeof InnerInner
+>InnerInner : typeof InnerInner
+
+            m() {
+>m : () => void
+
+                new TestWithErrors().#prop // Err
+>new TestWithErrors().#prop : number
+>new TestWithErrors() : TestWithErrors
+>TestWithErrors : typeof TestWithErrors
+
+                new Inner().#foo; // Err
+>new Inner().#foo : number
+>new Inner() : Inner
+>Inner : typeof Inner
+            }
+        }
+
+        static M(){
+>M : () => typeof (Anonymous class)
+
+            return class {
+>class {                m() {                    new TestWithErrors().#prop // Err                    new Inner().#foo; // OK                }            } : typeof (Anonymous class)
+
+                m() {
+>m : () => void
+
+                    new TestWithErrors().#prop // Err
+>new TestWithErrors().#prop : number
+>new TestWithErrors() : TestWithErrors
+>TestWithErrors : typeof TestWithErrors
+
+                    new Inner().#foo; // OK
+>new Inner().#foo : number
+>new Inner() : Inner
+>Inner : typeof Inner
+                }
+            }
+        } 
+    }
+}
+
+class TestNoErrors {
+>TestNoErrors : TestNoErrors
+
+    #prop = 0 
+>#prop : number
+>0 : 0
+
+    dd = new TestNoErrors().#prop; // OK
+>dd : number
+>new TestNoErrors().#prop : number
+>new TestNoErrors() : TestNoErrors
+>TestNoErrors : typeof TestNoErrors
+
+    ["X_ z_ zz"] = class Inner {
+>["X_ z_ zz"] : typeof Inner
+>"X_ z_ zz" : "X_ z_ zz"
+>class Inner {        #foo  = 10           m() {            new TestNoErrors().#prop // Ok        }        C = class InnerInner {            m() {                new TestNoErrors().#prop // Ok                new Inner().#foo; // Ok            }        }          static M(){            return class {                m() {                    new TestNoErrors().#prop // OK                    new Inner().#foo; // OK                }            }        }     } : typeof Inner
+>Inner : typeof Inner
+
+        #foo  = 10   
+>#foo : number
+>10 : 10
+
+        m() {
+>m : () => void
+
+            new TestNoErrors().#prop // Ok
+>new TestNoErrors().#prop : number
+>new TestNoErrors() : TestNoErrors
+>TestNoErrors : typeof TestNoErrors
+        }
+        C = class InnerInner {
+>C : typeof InnerInner
+>class InnerInner {            m() {                new TestNoErrors().#prop // Ok                new Inner().#foo; // Ok            }        } : typeof InnerInner
+>InnerInner : typeof InnerInner
+
+            m() {
+>m : () => void
+
+                new TestNoErrors().#prop // Ok
+>new TestNoErrors().#prop : number
+>new TestNoErrors() : TestNoErrors
+>TestNoErrors : typeof TestNoErrors
+
+                new Inner().#foo; // Ok
+>new Inner().#foo : number
+>new Inner() : Inner
+>Inner : typeof Inner
+            }
+        }
+  
+        static M(){
+>M : () => typeof (Anonymous class)
+
+            return class {
+>class {                m() {                    new TestNoErrors().#prop // OK                    new Inner().#foo; // OK                }            } : typeof (Anonymous class)
+
+                m() {
+>m : () => void
+
+                    new TestNoErrors().#prop // OK
+>new TestNoErrors().#prop : number
+>new TestNoErrors() : TestNoErrors
+>TestNoErrors : typeof TestNoErrors
+
+                    new Inner().#foo; // OK
+>new Inner().#foo : number
+>new Inner() : Inner
+>Inner : typeof Inner
+                }
+            }
+        } 
+    }
+  }

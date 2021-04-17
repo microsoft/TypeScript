@@ -2173,6 +2173,14 @@ namespace ts {
         return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.operator);
     }
 
+    export function parameterNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.parameterName);
+    }
+
+    export function propertyNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.propertyName);
+    }
+
     export function textOrKeywordPart(text: string) {
         const kind = stringToToken(text);
         return kind === undefined
@@ -2182,6 +2190,14 @@ namespace ts {
 
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
+    }
+
+    export function typeAliasNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.aliasName);
+    }
+
+    export function typeParameterNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.typeParameterName);
     }
 
     export function linkTextPart(text: string) {
@@ -2516,8 +2532,10 @@ namespace ts {
     }
 
     /* @internal */
-    export function needsParentheses(expression: Expression) {
-        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
+    export function needsParentheses(expression: Expression): boolean {
+        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken
+            || isObjectLiteralExpression(expression)
+            || isAsExpression(expression) && isObjectLiteralExpression(expression.expression);
     }
 
     export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
