@@ -7168,8 +7168,9 @@ declare namespace ts.server.protocol {
         arguments: OrganizeImportsRequestArgs;
     }
     type OrganizeImportsScope = GetCombinedCodeFixScope;
-    interface OrganizeImportsRequestArgs extends OrganizeImportsScope {
-        allowDestructiveCodeActions?: boolean;
+    interface OrganizeImportsRequestArgs {
+        scope: OrganizeImportsScope;
+        skipDestructiveCodeActions?: boolean;
     }
     interface OrganizeImportsResponse extends Response {
         body: readonly FileCodeEdits[];
