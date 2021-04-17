@@ -1672,7 +1672,7 @@ namespace ts {
                 //   class Example { a = 0 {} }
                 //                         ~
                 if (token() === SyntaxKind.OpenBraceToken) {
-                    parseErrorAtCurrentToken(Diagnostics._0_expected, ";");
+                    parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
                 }
 
                 return;
