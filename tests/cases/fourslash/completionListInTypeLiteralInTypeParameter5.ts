@@ -11,4 +11,4 @@
 ////
 ////var foobar: Bar<{ prop1: string } & {/**/
 
-verify.completions({ marker: "", exact: ["one", "two"] });
+verify.completions({ marker: "", exact: ["one", "two"], isNewIdentifierLocation: true });

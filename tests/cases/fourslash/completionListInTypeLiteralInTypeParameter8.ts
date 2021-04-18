@@ -26,8 +26,8 @@
 ////}>;
 
 verify.completions(
-    { marker: "4", exact: "four" },
-    { marker: "0", exact: [] },
-    { marker: "1", exact: "one" },
+    { marker: "4", exact: "four", isNewIdentifierLocation: true },
+    { marker: "0", exact: [], isNewIdentifierLocation: true },
+    { marker: "1", exact: "one", isNewIdentifierLocation: true },
 );
 

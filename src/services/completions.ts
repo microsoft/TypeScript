@@ -153,11 +153,6 @@ namespace ts.Completions {
             return stringCompletions;
         }
 
-        const objectTypeLiteralCompletions = getObjectTypeLiteralInTypeArgumentCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, log, preferences);
-        if (objectTypeLiteralCompletions) {
-            return objectTypeLiteralCompletions;
-        }
-
         if (contextToken && isBreakOrContinueStatement(contextToken.parent)
             && (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier)) {
             return getLabelCompletionAtPosition(contextToken.parent);
@@ -988,53 +983,6 @@ namespace ts.Completions {
         return !!symbol.declarations?.some(d => d.kind === SyntaxKind.SourceFile);
     }
 
-    function getObjectTypeLiteralInTypeArgumentCompletions(sourceFile: SourceFile, position: number, contextToken: Node | undefined, checker: TypeChecker, options: CompilerOptions, log: Log, preferences: UserPreferences): CompletionInfo | undefined{
-        if (!contextToken) return undefined;
-
-        const typeLiteralNode = tryGetTypeLiteralNode(contextToken);
-        if (!typeLiteralNode) return undefined;
-
-        const intersectionTypeNode = isIntersectionTypeNode(typeLiteralNode.parent) ? typeLiteralNode.parent : undefined;
-        const containerTypeNode = intersectionTypeNode || typeLiteralNode;
-
-        const containerExpectedType = tryGetTypeArgumentSubType(containerTypeNode, checker);
-        if (!containerExpectedType) return undefined;
-
-        const containerActualType = checker.getTypeFromTypeNode(containerTypeNode);
-
-        const members = getPropertiesForCompletion(containerExpectedType, checker);
-        const existingMembers = getPropertiesForCompletion(containerActualType, checker);
-
-        const existingMemberEscapedNames: Set<__String> = new Set();
-        forEach(existingMembers, s => existingMemberEscapedNames.add(s.escapedName));
-
-        const missingMembers = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
-
-        const location = getTouchingToken(sourceFile, position);
-
-        const entries: CompletionEntry[] = [];
-        getCompletionEntriesFromSymbols(
-            missingMembers,
-            entries,
-            /* contextToken */ undefined,
-            location,
-            sourceFile,
-            checker,
-            options.target!,
-            log,
-            CompletionKind.MemberLike,
-            preferences,
-            options
-        );
-
-        return {
-            isGlobalCompletion: false,
-            isMemberCompletion: true,
-            isNewIdentifierLocation: false,
-            entries
-        };
-    }
-
     function getCompletionData(
         program: Program,
         log: (message: string) => void,
@@ -1561,7 +1509,8 @@ namespace ts.Completions {
         }
 
         function tryGetGlobalSymbols(): boolean {
-            const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
+            const result: GlobalsSearch = tryGetObjectTypeLiteralInTypeArgumentCompletionSymbols()
+                || tryGetObjectLikeCompletionSymbols()
                 || tryGetImportCompletionSymbols()
                 || tryGetImportOrExportClauseCompletionSymbols()
                 || tryGetLocalNamedExportCompletionSymbols()
@@ -1961,6 +1910,32 @@ namespace ts.Completions {
             return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
                 rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
                 position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
+        }
+
+        function tryGetObjectTypeLiteralInTypeArgumentCompletionSymbols(): GlobalsSearch | undefined {
+            const typeLiteralNode = tryGetTypeLiteralNode(contextToken);
+            if (!typeLiteralNode) return GlobalsSearch.Continue;
+
+            const intersectionTypeNode = isIntersectionTypeNode(typeLiteralNode.parent) ? typeLiteralNode.parent : undefined;
+            const containerTypeNode = intersectionTypeNode || typeLiteralNode;
+
+            const containerExpectedType = getConstraintOfTypeArgumentProperty(containerTypeNode, typeChecker);
+            if (!containerExpectedType) return GlobalsSearch.Continue;
+
+            const containerActualType = typeChecker.getTypeFromTypeNode(containerTypeNode);
+
+            const members = getPropertiesForCompletion(containerExpectedType, typeChecker);
+            const existingMembers = getPropertiesForCompletion(containerActualType, typeChecker);
+
+            const existingMemberEscapedNames: Set<__String> = new Set();
+            existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
+
+            symbols = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
+
+            completionKind = CompletionKind.ObjectPropertyDeclaration;
+            isNewIdentifierLocation = true;
+
+            return GlobalsSearch.Success;
         }
 
         /**
@@ -2910,6 +2885,8 @@ namespace ts.Completions {
     }
 
     function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
+        if (!node) return undefined;
+
         const parent = node.parent;
 
         switch (node.kind) {
@@ -2930,14 +2907,14 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function tryGetTypeArgumentSubType(node: Node, checker: TypeChecker): Type | undefined {
+    function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
         if (!node) return undefined;
 
         if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
             return checker.getTypeArgumentConstraint(node);
         }
 
-        const t = tryGetTypeArgumentSubType(node.parent, checker);
+        const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
         if (!t) return undefined;
 
         switch (node.kind) {

@@ -21,5 +21,5 @@
 ////}>;
 
 verify.completions({ marker: "g", includes: ["Foo", "Bar", ...completion.globalTypes] });
-verify.completions({ marker: "4", exact: "four" });
+verify.completions({ marker: "4", exact: "four", isNewIdentifierLocation: true });
 
