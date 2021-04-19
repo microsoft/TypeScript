@@ -73,13 +73,16 @@ namespace ts.OrganizeImports {
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
-                changeTracker.replaceAndDeleteNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, oldImportDecls.slice(1), {
+                const replaceOptions = {
                     leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
-                }, {
+                };
+                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, replaceOptions);
+                const hasTrailingComment = changeTracker.nodeHasTrailingComment(sourceFile, oldImportDecls[0], replaceOptions);
+                changeTracker.deleteNodes(sourceFile, oldImportDecls.slice(1), {
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
-                });
+                }, hasTrailingComment);
             }
         }
     }

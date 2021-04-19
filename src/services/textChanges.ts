@@ -405,11 +405,8 @@ namespace ts.textChanges {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
-        public replaceAndDeleteNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: readonly Node[], deleteNodes: Node[], replaceOptions: ChangeNodeOptions = useNonAdjustedPositions, deleteOptions: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
-            this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, replaceOptions), newNodes, replaceOptions);
-
-            const hasTrailingComment = !!getEndPositionOfMultilineTrailingComment(sourceFile, oldNode, replaceOptions);
-            this.deleteNodes(sourceFile, deleteNodes, deleteOptions, hasTrailingComment);
+        public nodeHasTrailingComment(sourceFile: SourceFile, oldNode: Node, configurableEnd: ConfigurableEnd = useNonAdjustedPositions): boolean {
+            return !!getEndPositionOfMultilineTrailingComment(sourceFile, oldNode, configurableEnd);
         }
 
         private nextCommaToken(sourceFile: SourceFile, node: Node): Node | undefined {
