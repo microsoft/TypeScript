@@ -16105,7 +16105,11 @@ interface URLSearchParams {
 
 declare var URLSearchParams: {
     prototype: URLSearchParams;
-    new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
+    new(init?: 
+        | string
+        | URLSearchParams
+        | Record<string | number, string | number | boolean | string[] | number[] | boolean[]>
+        | [string | number | boolean, string | number | boolean | string[] | number[] | boolean[]][]): URLSearchParams;
     toString(): string;
 };
 
