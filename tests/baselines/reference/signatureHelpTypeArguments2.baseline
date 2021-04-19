@@ -196,7 +196,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -222,7 +222,7 @@
               "text": [
                 {
                   "text": "U, V",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -239,7 +239,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -256,7 +256,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -477,7 +477,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -503,7 +503,7 @@
               "text": [
                 {
                   "text": "U, V",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -520,7 +520,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -537,7 +537,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -758,7 +758,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -784,7 +784,7 @@
               "text": [
                 {
                   "text": "U, V",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -801,7 +801,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -818,7 +818,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1039,7 +1039,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -1065,7 +1065,7 @@
               "text": [
                 {
                   "text": "U, V",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 },
                 {
                   "text": " ",
@@ -1082,7 +1082,7 @@
               "text": [
                 {
                   "text": "a",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -1099,7 +1099,7 @@
               "text": [
                 {
                   "text": "b",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

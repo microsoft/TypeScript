@@ -108,6 +108,7 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
+        const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
 
         const shouldTransformPrivateElements = languageVersion < ScriptTarget.ESNext;
 
@@ -138,7 +139,7 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             const options = context.getCompilerOptions();
             if (node.isDeclarationFile
-                || options.useDefineForClassFields && options.target === ScriptTarget.ESNext) {
+                || useDefineForClassFields && options.target === ScriptTarget.ESNext) {
                 return node;
             }
             const visited = visitEachChild(node, visitor, context);
@@ -340,7 +341,7 @@ namespace ts {
             // Create a temporary variable to store a computed property name (if necessary).
             // If it's not inlineable, then we emit an expression after the class which assigns
             // the property name to the temporary variable.
-            const expr = getPropertyNameExpressionIfNeeded(node.name, !!node.initializer || !!context.getCompilerOptions().useDefineForClassFields);
+            const expr = getPropertyNameExpressionIfNeeded(node.name, !!node.initializer || useDefineForClassFields);
             if (expr && !isSimpleInlineableExpression(expr)) {
                 getPendingExpressions().push(expr);
             }
@@ -829,7 +830,7 @@ namespace ts {
             if (hasStaticModifier(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
                 return false;
             }
-            if (context.getCompilerOptions().useDefineForClassFields) {
+            if (useDefineForClassFields) {
                 // If we are using define semantics and targeting ESNext or higher,
                 // then we don't need to transform any class properties.
                 return languageVersion < ScriptTarget.ESNext;
@@ -865,7 +866,6 @@ namespace ts {
         }
 
         function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
-            const useDefineForClassFields = context.getCompilerOptions().useDefineForClassFields;
             let properties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
             if (!useDefineForClassFields) {
                 properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name));
@@ -1000,7 +1000,7 @@ namespace ts {
          */
         function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
             // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
-            const emitAssignment = !context.getCompilerOptions().useDefineForClassFields;
+            const emitAssignment = !useDefineForClassFields;
             const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
                 ? factory.updateComputedPropertyName(property.name, factory.getGeneratedNameForNode(property.name))
                 : property.name;

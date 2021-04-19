@@ -98,7 +98,7 @@
               "text": [
                 {
                   "text": "x",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -207,7 +207,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -224,7 +224,7 @@
               "text": [
                 {
                   "text": "radix",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -305,7 +305,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -386,7 +386,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -467,7 +467,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -548,7 +548,7 @@
               "text": [
                 {
                   "text": "encodedURI",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -629,7 +629,7 @@
               "text": [
                 {
                   "text": "encodedURIComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -710,7 +710,7 @@
               "text": [
                 {
                   "text": "uri",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -823,7 +823,7 @@
               "text": [
                 {
                   "text": "uriComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -904,7 +904,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -985,7 +985,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2903,7 +2903,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -2929,7 +2929,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3835,7 +3835,7 @@
               "text": [
                 {
                   "text": "x",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3944,7 +3944,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -3961,7 +3961,7 @@
               "text": [
                 {
                   "text": "radix",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4042,7 +4042,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4123,7 +4123,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4204,7 +4204,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4285,7 +4285,7 @@
               "text": [
                 {
                   "text": "encodedURI",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4366,7 +4366,7 @@
               "text": [
                 {
                   "text": "encodedURIComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4447,7 +4447,7 @@
               "text": [
                 {
                   "text": "uri",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4560,7 +4560,7 @@
               "text": [
                 {
                   "text": "uriComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4641,7 +4641,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -4722,7 +4722,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -7607,7 +7607,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -7633,7 +7633,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8527,7 +8527,7 @@
               "text": [
                 {
                   "text": "x",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8636,7 +8636,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8653,7 +8653,7 @@
               "text": [
                 {
                   "text": "radix",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8734,7 +8734,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8815,7 +8815,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8896,7 +8896,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -8977,7 +8977,7 @@
               "text": [
                 {
                   "text": "encodedURI",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -9058,7 +9058,7 @@
               "text": [
                 {
                   "text": "encodedURIComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -9139,7 +9139,7 @@
               "text": [
                 {
                   "text": "uri",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -9252,7 +9252,7 @@
               "text": [
                 {
                   "text": "uriComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -9333,7 +9333,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -9414,7 +9414,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -11332,7 +11332,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -11358,7 +11358,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12264,7 +12264,7 @@
               "text": [
                 {
                   "text": "x",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12373,7 +12373,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12390,7 +12390,7 @@
               "text": [
                 {
                   "text": "radix",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12471,7 +12471,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12552,7 +12552,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12633,7 +12633,7 @@
               "text": [
                 {
                   "text": "number",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12714,7 +12714,7 @@
               "text": [
                 {
                   "text": "encodedURI",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12795,7 +12795,7 @@
               "text": [
                 {
                   "text": "encodedURIComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12876,7 +12876,7 @@
               "text": [
                 {
                   "text": "uri",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -12989,7 +12989,7 @@
               "text": [
                 {
                   "text": "uriComponent",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -13070,7 +13070,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -13151,7 +13151,7 @@
               "text": [
                 {
                   "text": "string",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -16036,7 +16036,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -16062,7 +16062,7 @@
               "text": [
                 {
                   "text": "s",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

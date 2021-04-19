@@ -5588,7 +5588,7 @@
           "text": [
             {
               "text": "a",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",
@@ -5762,7 +5762,7 @@
           "text": [
             {
               "text": "a",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",
@@ -5844,7 +5844,7 @@
           "text": [
             {
               "text": "a",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",
