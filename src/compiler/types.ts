@@ -5152,6 +5152,9 @@ namespace ts {
     export interface EnumType extends Type {
     }
 
+    // Types included in TypeFlags.ObjectFlagsType have an objectFlags property. Some ObjectFlags
+    // are specific to certain types and reuse the same bit position. Those ObjectFlags require a check
+    // for a certain TypeFlags value to determine their meaning.
     export const enum ObjectFlags {
         Class            = 1 << 0,  // Class
         Interface        = 1 << 1,  // Interface
@@ -5163,22 +5166,41 @@ namespace ts {
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
-        ContainsSpread   = 1 << 10, // Object literal contains spread operation
-        ReverseMapped    = 1 << 11, // Object contains a property from a reverse-mapped type
-        JsxAttributes    = 1 << 12, // Jsx attributes type
-        MarkerType       = 1 << 13, // Marker type used for variance probing
-        JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
-        FreshLiteral     = 1 << 15, // Fresh object literal
-        ArrayLiteral     = 1 << 16, // Originates in an array literal
-        ObjectRestType   = 1 << 17, // Originates in object rest declaration
+        ReverseMapped    = 1 << 10, // Object contains a property from a reverse-mapped type
+        JsxAttributes    = 1 << 11, // Jsx attributes type
+        MarkerType       = 1 << 12, // Marker type used for variance probing
+        JSLiteral        = 1 << 13, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 14, // Fresh object literal
+        ArrayLiteral     = 1 << 15, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 18, // Union of only primitive types
+        PrimitiveUnion   = 1 << 16, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 19, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 20, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 18, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 21, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        /* @internal */
+        CouldContainTypeVariablesComputed = 1 << 20, // CouldContainTypeVariables flag has been computed
+        /* @internal */
+        CouldContainTypeVariables = 1 << 21, // Type could contain a type variable
+
+        ClassOrInterface = Class | Interface,
+        /* @internal */
+        RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
+        /* @internal */
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+        // Object flags that uniquely identify the kind of ObjectType
+        /* @internal */
+        ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
+
+        // Flags that require TypeFlags.Object
+        ContainsSpread   = 1 << 22,  // Object literal contains spread operation
+        ObjectRestType   = 1 << 23,  // Originates in object rest declaration
+        /* @internal */
+        IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
+
+        // Flags that require TypeFlags.UnionOrIntersection
         /* @internal */
         IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
         /* @internal */
@@ -5187,27 +5209,16 @@ namespace ts {
         IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
         /* @internal */
         IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
-        /* @internal */
-        CouldContainTypeVariablesComputed = 1 << 26, // CouldContainTypeVariables flag has been computed
-        /* @internal */
-        CouldContainTypeVariables = 1 << 27, // Type could contain a type variable
-        /* @internal */
-        ContainsIntersections = 1 << 28, // Union contains intersections
-        /* @internal */
-        IsNeverIntersectionComputed = 1 << 28, // IsNeverLike flag has been computed
-        /* @internal */
-        IsNeverIntersection = 1 << 29, // Intersection reduces to never
-        /* @internal */
-        IsClassInstanceClone = 1 << 30, // Type is a clone of a class instance type
-        ClassOrInterface = Class | Interface,
-        /* @internal */
-        RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
-        /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
 
-        // Object flags that uniquely identify the kind of ObjectType
+        // Flags that require TypeFlags.Union
         /* @internal */
-        ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
+        ContainsIntersections = 1 << 26, // Union contains intersections
+
+        // Flags that require TypeFlags.Intersection
+        /* @internal */
+        IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
+        /* @internal */
+        IsNeverIntersection = 1 << 27, // Intersection reduces to never
     }
 
     /* @internal */
