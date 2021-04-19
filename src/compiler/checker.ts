@@ -15870,8 +15870,9 @@ namespace ts {
                     outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
                 }
                 typeParameters = outerTypeParameters || emptyArray;
+                const allDeclarations = type.objectFlags & ObjectFlags.Reference ? [declaration] : type.symbol.declarations!;
                 typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.Method || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
-                    filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration) || !(type.objectFlags & ObjectFlags.Reference) && some(type.symbol.declarations, d => isTypeParameterPossiblyReferenced(tp, d))) :
+                    filter(typeParameters, tp => some(allDeclarations, d => isTypeParameterPossiblyReferenced(tp, d))) :
                     typeParameters;
                 links.outerTypeParameters = typeParameters;
             }
