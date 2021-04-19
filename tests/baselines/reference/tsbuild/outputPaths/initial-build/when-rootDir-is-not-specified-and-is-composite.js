@@ -46,7 +46,7 @@ exports.x = 10;
 
 
 //// [/src/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-10726455937-export const x = 10;","affectsGlobalScope":false}],"options":{"composite":true,"configFilePath":"../tsconfig.json","outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -63,13 +63,11 @@ exports.x = 10;
       },
       "../src/index.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;",
-        "affectsGlobalScope": false
+        "signature": "-10726455937-export const x = 10;"
       }
     },
     "options": {
       "composite": true,
-      "configFilePath": "../tsconfig.json",
       "outDir": "./"
     },
     "referencedMap": {},
@@ -80,7 +78,7 @@ exports.x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1318
+  "size": 742
 }
 
 

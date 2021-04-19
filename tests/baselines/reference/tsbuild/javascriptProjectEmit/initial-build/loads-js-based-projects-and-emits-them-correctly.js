@@ -133,7 +133,7 @@ module.exports = {};
 
 
 //// [/lib/common/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib.d.ts","../../src/common/nominal.js"],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","signature":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},{"version":"-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n","signature":"-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n","affectsGlobalScope":false}],"options":{"allowJs":true,"checkJs":true,"composite":true,"configFilePath":"../../src/common/tsconfig.json","declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib.d.ts","../../src/common/nominal.js"],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n"],"options":{"composite":true,"declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/lib/common/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -150,15 +150,11 @@ module.exports = {};
       },
       "../../src/common/nominal.js": {
         "version": "-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n",
-        "signature": "-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n",
-        "affectsGlobalScope": false
+        "signature": "-9003723607-/**\n * @template T, Name\n * @typedef {T & {[Symbol.species]: Name}} Nominal\n */\nmodule.exports = {};\n"
       }
     },
     "options": {
-      "allowJs": true,
-      "checkJs": true,
       "composite": true,
-      "configFilePath": "../../src/common/tsconfig.json",
       "declaration": true,
       "outDir": "..",
       "rootDir": "../../src",
@@ -172,7 +168,7 @@ module.exports = {};
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2020
+  "size": 1104
 }
 
 //// [/lib/sub-project/index.d.ts]
@@ -189,7 +185,7 @@ exports.__esModule = true;
 
 
 //// [/lib/sub-project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib.d.ts","../common/nominal.d.ts","../../src/sub-project/index.js"],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","signature":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},{"version":"-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n","signature":"-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n","affectsGlobalScope":false},{"version":"-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n","signature":"-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n","affectsGlobalScope":false}],"options":{"allowJs":true,"checkJs":true,"composite":true,"configFilePath":"../../src/sub-project/tsconfig.json","declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[2,1,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib.d.ts","../common/nominal.d.ts","../../src/sub-project/index.js"],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n","-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n"],"options":{"composite":true,"declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[2,1,3]},"version":"FakeTSVersion"}
 
 //// [/lib/sub-project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -212,20 +208,15 @@ exports.__esModule = true;
       },
       "../common/nominal.d.ts": {
         "version": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
-        "signature": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
-        "affectsGlobalScope": false
+        "signature": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n"
       },
       "../../src/sub-project/index.js": {
         "version": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n",
-        "signature": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n",
-        "affectsGlobalScope": false
+        "signature": "-23375763082-import { Nominal } from '../common/nominal';\n\n/**\n * @typedef {Nominal<string, 'MyNominal'>} MyNominal\n */\n"
       }
     },
     "options": {
-      "allowJs": true,
-      "checkJs": true,
       "composite": true,
-      "configFilePath": "../../src/sub-project/tsconfig.json",
       "declaration": true,
       "outDir": "..",
       "rootDir": "../../src",
@@ -248,7 +239,7 @@ exports.__esModule = true;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2336
+  "size": 1264
 }
 
 //// [/lib/sub-project-2/index.d.ts]
@@ -280,7 +271,7 @@ exports.getVar = getVar;
 
 
 //// [/lib/sub-project-2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../src/sub-project-2/index.js"],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","signature":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},{"version":"-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n","signature":"-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n","affectsGlobalScope":false},{"version":"-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n","signature":"-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n","affectsGlobalScope":false},{"version":"9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n","signature":"9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n","affectsGlobalScope":false}],"options":{"allowJs":true,"checkJs":true,"composite":true,"configFilePath":"../../src/sub-project-2/tsconfig.json","declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"fileIdsList":[[2],[3]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[2,1,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib.d.ts","../common/nominal.d.ts","../sub-project/index.d.ts","../../src/sub-project-2/index.js"],"fileInfos":[{"version":"-32082413277-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };\ninterface SymbolConstructor {\n    readonly species: symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\n","affectsGlobalScope":true},"-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n","-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n","9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n"],"options":{"composite":true,"declaration":true,"outDir":"..","rootDir":"../../src","skipLibCheck":true},"fileIdsList":[[2],[3]],"referencedMap":[[3,1],[4,2]],"exportedModulesMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[2,1,3,4]},"version":"FakeTSVersion"}
 
 //// [/lib/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -307,25 +298,19 @@ exports.getVar = getVar;
       },
       "../common/nominal.d.ts": {
         "version": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
-        "signature": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n",
-        "affectsGlobalScope": false
+        "signature": "-15964609857-export type Nominal<T, Name> = T & {\r\n    [Symbol.species]: Name;\r\n};\r\n"
       },
       "../sub-project/index.d.ts": {
         "version": "-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n",
-        "signature": "-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n",
-        "affectsGlobalScope": false
+        "signature": "-1163946571-export type MyNominal = Nominal<string, 'MyNominal'>;\r\nimport { Nominal } from \"../common/nominal\";\r\n"
       },
       "../../src/sub-project-2/index.js": {
         "version": "9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n",
-        "signature": "9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n",
-        "affectsGlobalScope": false
+        "signature": "9520601400-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: /** @type {MyNominal} */('value'),\n};\n\n/**\n * @return {keyof typeof variable}\n */\nexport function getVar() {\n    return 'key';\n}\n"
       }
     },
     "options": {
-      "allowJs": true,
-      "checkJs": true,
       "composite": true,
-      "configFilePath": "../../src/sub-project-2/tsconfig.json",
       "declaration": true,
       "outDir": "..",
       "rootDir": "../../src",
@@ -355,6 +340,6 @@ exports.getVar = getVar;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2893
+  "size": 1540
 }
 

@@ -167,12 +167,12 @@ namespace ts.tscWatch {
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
                         signature: system.createHash(file1.content),
-                        affectsGlobalScope: false,
+                        affectsGlobalScope: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
                         signature: system.createHash(fileModified.content),
-                        affectsGlobalScope: false,
+                        affectsGlobalScope: undefined,
                     });
 
                     assert.deepEqual(state.compilerOptions, {

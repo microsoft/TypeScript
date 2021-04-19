@@ -12834,10 +12834,20 @@ namespace ts {
                         typeParameters.length);
                     return errorType;
                 }
+                // We refrain from associating a local type alias with an instantiation of a top-level type alias
+                // because the local alias may end up being referenced in an inferred return type where it is not
+                // accessible--which in turn may lead to a large structural expansion of the type when generating
+                // a .d.ts file. See #43622 for an example.
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                const newAliasSymbol = aliasSymbol && (isLocalTypeAlias(symbol) || !isLocalTypeAlias(aliasSymbol)) ? aliasSymbol : undefined;
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, getTypeArgumentsForAliasSymbol(newAliasSymbol));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
+        }
+
+        function isLocalTypeAlias(symbol: Symbol) {
+            const declaration = symbol.declarations?.find(isTypeAlias);
+            return !!(declaration && getContainingFunction(declaration));
         }
 
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
@@ -19669,8 +19679,8 @@ namespace ts {
 
         // Return true if the given class derives from each of the declaring classes of the protected
         // constituents of the given property.
-        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol) {
-            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.Protected ?
+        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol, writing: boolean) {
+            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p, writing) & ModifierFlags.Protected ?
                 !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
         }
 
@@ -26900,7 +26910,7 @@ namespace ts {
             // of the property as base classes
             let enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
                 const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration)!);
-                return isClassDerivedFromDeclaringClasses(enclosingClass, prop) ? enclosingClass : undefined;
+                return isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing) ? enclosingClass : undefined;
             });
             // A protected property is accessible if the property is within the declaring class or classes derived from it
             if (!enclosingClass) {
@@ -40532,6 +40542,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
                         }
+                        else if (flags & ModifierFlags.Async) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "async");
+                        }
                         if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "override");
                         }
@@ -40594,6 +40607,9 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Abstract) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                        }
+                        else if (flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "override");
                         }
                         flags |= ModifierFlags.Static;
                         lastStatic = modifier;
