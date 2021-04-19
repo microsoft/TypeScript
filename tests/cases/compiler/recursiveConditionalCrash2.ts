@@ -1,4 +1,4 @@
-// @noEmit: true
+// Simplified #43529
 
 export type CanBeExpanded<T extends object> = {
   value: T

@@ -4723,15 +4723,7 @@ namespace ts {
                     return factory.createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
                 if (type.flags & TypeFlags.Conditional) {
-                    const checkTypeNode = typeToTypeNodeHelper((<ConditionalType>type).checkType, context);
-                    const saveInferTypeParameters = context.inferTypeParameters;
-                    context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
-                    const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
-                    context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(<ConditionalType>type));
-                    const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(<ConditionalType>type));
-                    context.approximateLength += 15;
-                    return factory.createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
+                    return visitAndTransformType(type, type => conditionalTypeToTypeNode(type as ConditionalType));
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).baseType, context);
@@ -4739,6 +4731,18 @@ namespace ts {
 
                 return Debug.fail("Should be unreachable.");
 
+
+                function conditionalTypeToTypeNode(type: ConditionalType) {
+                    const checkTypeNode = typeToTypeNodeHelper(type.checkType, context);
+                    const saveInferTypeParameters = context.inferTypeParameters;
+                    context.inferTypeParameters = type.root.inferTypeParameters;
+                    const extendsTypeNode = typeToTypeNodeHelper(type.extendsType, context);
+                    context.inferTypeParameters = saveInferTypeParameters;
+                    const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(type));
+                    const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(type));
+                    context.approximateLength += 15;
+                    return factory.createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
+                }
 
                 function typeToTypeNodeOrCircularityElision(type: Type) {
                     if (type.flags & TypeFlags.Union) {
@@ -4830,6 +4834,7 @@ namespace ts {
                     const typeId = type.id;
                     const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
                     const id = getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? "N" + getNodeId((<TypeReference>type).node!) :
+                        type.flags & TypeFlags.Conditional ? "N" + getNodeId((<ConditionalType>type).root.node) :
                         type.symbol ? (isConstructorObject ? "+" : "") + getSymbolId(type.symbol) :
                         undefined;
                     // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
