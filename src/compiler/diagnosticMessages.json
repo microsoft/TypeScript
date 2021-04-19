@@ -4849,6 +4849,22 @@
         "category": "Error",
         "code": 6238
     },
+    "Using cached result of 'package.json' at '{0}' that indicates it was found.": {
+        "category": "Message",
+        "code": 6239
+    },
+    "Using cached result of 'package.json' at '{0}' that indicates it was not found.": {
+        "category": "Message",
+        "code": 6240
+    },
+    "Resolution for type reference directive '{0}' was found in cache from location '{1}'.": {
+        "category": "Message",
+        "code": 6241
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}'. ========": {
+        "category": "Message",
+        "code": 6242
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5040,14 +5056,6 @@
         "category": "Suggestion",
         "code": 6387,
         "reportsDeprecated": true
-    },
-    "Using cached result of 'package.json' at '{0}' that indicates it was found.": {
-        "category": "Message",
-        "code": 6388
-    },
-    "Using cached result of 'package.json' at '{0}' that indicates it was not found.": {
-        "category": "Message",
-        "code": 6389
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

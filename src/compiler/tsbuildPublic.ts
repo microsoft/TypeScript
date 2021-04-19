@@ -238,7 +238,7 @@ namespace ts {
 
         readonly compilerHost: CompilerHost;
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
-        readonly packageJsonInfoCache: PackageJsonInfoCache | undefined;
+        readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
 
         // Mutable state
         buildOrder: AnyBuildOrder | undefined;
@@ -276,14 +276,14 @@ namespace ts {
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
         const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
-        const packageJsonInfoCache = !compilerHost.resolveTypeReferenceDirectives ? moduleResolutionCache || createPackageJsonInfoCache(currentDirectory, getCanonicalFileName) : undefined;
+        const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
         if (!compilerHost.resolveModuleNames) {
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
             compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
                 loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
         if (!compilerHost.resolveTypeReferenceDirectives) {
-            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.packageJsonInfoCache).resolvedTypeReferenceDirective!;
+            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache).resolvedTypeReferenceDirective!;
             compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference) =>
                 loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
@@ -317,7 +317,7 @@ namespace ts {
 
             compilerHost,
             moduleResolutionCache,
-            packageJsonInfoCache,
+            typeReferenceDirectiveResolutionCache,
 
             // Mutable state
             buildOrder: undefined,
@@ -556,7 +556,7 @@ namespace ts {
     function disableCache(state: SolutionBuilderState) {
         if (!state.cache) return;
 
-        const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, packageJsonInfoCache } = state;
+        const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache } = state;
 
         host.readFile = cache.originalReadFile;
         host.fileExists = cache.originalFileExists;
@@ -567,7 +567,7 @@ namespace ts {
         state.readFileWithCache = cache.originalReadFileWithCache;
         extendedConfigCache.clear();
         moduleResolutionCache?.clear();
-        packageJsonInfoCache?.clear();
+        typeReferenceDirectiveResolutionCache?.clear();
         state.cache = undefined;
     }
 
