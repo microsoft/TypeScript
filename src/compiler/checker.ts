@@ -33303,15 +33303,18 @@ namespace ts {
                     const symbol = getSymbolOfNode(node);
                     const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
                     const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
-                    if (getter && setter) {
+                    if (getter && setter && !(getNodeCheckFlags(getter) & NodeCheckFlags.TypeChecked)) {
+                        getNodeLinks(getter).flags |= NodeCheckFlags.TypeChecked;
                         const getterFlags = getEffectiveModifierFlags(getter);
                         const setterFlags = getEffectiveModifierFlags(setter);
                         if ((getterFlags & ModifierFlags.Abstract) !== (setterFlags & ModifierFlags.Abstract)) {
-                            error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
+                            error(getter.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
+                            error(setter.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
                         if (((getterFlags & ModifierFlags.Protected) && !(setterFlags & (ModifierFlags.Protected | ModifierFlags.Private))) ||
                             ((getterFlags & ModifierFlags.Private) && !(setterFlags & ModifierFlags.Private))) {
-                            error(node.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
+                            error(getter.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
+                            error(setter.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
                         }
 
                         const getterType = getAnnotatedAccessorType(getter);
