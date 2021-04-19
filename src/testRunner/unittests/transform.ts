@@ -176,6 +176,7 @@ namespace ts {
                 compilerOptions: {
                     target: ScriptTarget.ESNext,
                     newLine: NewLineKind.CarriageReturnLineFeed,
+                    useDefineForClassFields: false,
                 }
             }).outputText;
         });

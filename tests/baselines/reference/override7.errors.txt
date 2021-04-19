@@ -1,6 +1,6 @@
 tests/cases/conformance/override/override7.ts(11,14): error TS1040: 'override' modifier cannot be used in an ambient context.
 tests/cases/conformance/override/override7.ts(13,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
-tests/cases/conformance/override/override7.ts(17,14): error TS1243: 'static' modifier cannot be used with 'override' modifier.
+tests/cases/conformance/override/override7.ts(17,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
 tests/cases/conformance/override/override7.ts(19,14): error TS1030: 'override' modifier already seen.
 tests/cases/conformance/override/override7.ts(19,23): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
 tests/cases/conformance/override/override7.ts(21,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
@@ -32,9 +32,9 @@ tests/cases/conformance/override/override7.ts(42,23): error TS4112: This member 
     
         override readonly p4: number;
     
-        override static sp: number;
-                 ~~~~~~
-!!! error TS1243: 'static' modifier cannot be used with 'override' modifier.
+        static override sp: number;
+                        ~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
     
         override override oop: number;
                  ~~~~~~~~

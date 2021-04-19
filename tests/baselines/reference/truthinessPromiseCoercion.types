@@ -6,6 +6,10 @@ declare const p2: null | Promise<number>
 >p2 : Promise<number> | null
 >null : null
 
+declare const obj: { p: Promise<unknown> }
+>obj : { p: Promise<unknown>; }
+>p : Promise<unknown>
+
 async function f() {
 >f : () => Promise<void>
 
@@ -51,5 +55,80 @@ async function f() {
 >f.arguments : any
 >f : () => Promise<void>
 >arguments : any
+}
+
+// all ok
+async function g() {
+>g : () => Promise<void>
+
+    if (p) {
+>p : Promise<number>
+
+        p;
+>p : Promise<number>
+    }
+    if (p && p.then.length) {}
+>p && p.then.length : number
+>p : Promise<number>
+>p.then.length : number
+>p.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>p : Promise<number>
+>then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>length : number
+
+    if (p) {
+>p : Promise<number>
+
+        if (p) {
+>p : Promise<number>
+
+            if (p) {
+>p : Promise<number>
+
+                !!await (((((((p)))))));
+>!!await (((((((p))))))) : boolean
+>!await (((((((p))))))) : boolean
+>await (((((((p))))))) : number
+>(((((((p))))))) : Promise<number>
+>((((((p)))))) : Promise<number>
+>(((((p))))) : Promise<number>
+>((((p)))) : Promise<number>
+>(((p))) : Promise<number>
+>((p)) : Promise<number>
+>(p) : Promise<number>
+>p : Promise<number>
+            }
+        }
+    }
+}
+
+async function h() {
+>h : () => Promise<void>
+
+    if (obj.p) {} // error
+>obj.p : Promise<unknown>
+>obj : { p: Promise<unknown>; }
+>p : Promise<unknown>
+
+    if (obj.p) {  // ok
+>obj.p : Promise<unknown>
+>obj : { p: Promise<unknown>; }
+>p : Promise<unknown>
+
+        await obj.p;
+>await obj.p : unknown
+>obj.p : Promise<unknown>
+>obj : { p: Promise<unknown>; }
+>p : Promise<unknown>
+    }
+    if (obj.p && await obj.p) {} // ok
+>obj.p && await obj.p : unknown
+>obj.p : Promise<unknown>
+>obj : { p: Promise<unknown>; }
+>p : Promise<unknown>
+>await obj.p : unknown
+>obj.p : Promise<unknown>
+>obj : { p: Promise<unknown>; }
+>p : Promise<unknown>
 }
 
