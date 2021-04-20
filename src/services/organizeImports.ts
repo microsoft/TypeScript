@@ -13,12 +13,13 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program,
         preferences: UserPreferences,
+        skipDestructiveCodeActions?: boolean
     ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
-            coalesceImports(removeUnusedImports(importGroup, sourceFile, program)),
+            coalesceImports(removeUnusedImports(importGroup, sourceFile, program, skipDestructiveCodeActions)),
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
@@ -87,7 +88,12 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
+        // As a precaution, consider unused import detection to be destructive (GH #43051)
+        if (skipDestructiveCodeActions) {
+            return oldImports;
+        }
+
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
