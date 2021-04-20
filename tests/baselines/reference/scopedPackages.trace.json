@@ -24,7 +24,7 @@
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module '@be/bop/e/z' from 'node_modules' folder, target file type 'TypeScript'.",
     "Scoped package detected, looking in 'be__bop/e/z'",
-    "File '/node_modules/@types/be__bop/package.json' does not exist.",
+    "Using cached result of 'package.json' at '/node_modules/@types/be__bop/package.json' that indicates it was not found.",
     "File '/node_modules/@types/be__bop/e/z.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/be__bop/e/z.d.ts', result '/node_modules/@types/be__bop/e/z.d.ts'.",
     "======== Module name '@be/bop/e/z' was successfully resolved to '/node_modules/@types/be__bop/e/z.d.ts'. ========"

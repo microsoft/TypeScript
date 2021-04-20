@@ -18,7 +18,7 @@
     "======== Resolving module '../' from '/a/b/test.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
     "Loading module as file / folder, candidate module location '/a/', target file type 'TypeScript'.",
-    "File '/a/package.json' does not exist.",
+    "Using cached result of 'package.json' at '/a/package.json' that indicates it was not found.",
     "File '/a/index.ts' exist - use it as a name resolution result.",
     "======== Module name '../' was successfully resolved to '/a/index.ts'. ========"
 ]
