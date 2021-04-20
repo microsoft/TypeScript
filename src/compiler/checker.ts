@@ -25106,9 +25106,8 @@ namespace ts {
         }
 
         function getContextualTypeForThisPropertyAssignment(binaryExpression: BinaryExpression, kind: AssignmentDeclarationKind): Type | undefined {
-            if (kind === AssignmentDeclarationKind.ModuleExports) return undefined;
-            if (!binaryExpression.symbol) return getTypeOfExpression(binaryExpression.left);
-            if (binaryExpression.symbol.valueDeclaration) {
+            if (!binaryExpression.symbol && kind !== AssignmentDeclarationKind.ModuleExports) return getTypeOfExpression(binaryExpression.left);
+            if (binaryExpression.symbol?.valueDeclaration) {
                 const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
                 if (annotated) {
                     const type = getTypeFromTypeNode(annotated);
@@ -25117,6 +25116,7 @@ namespace ts {
                     }
                 }
             }
+            if (kind === AssignmentDeclarationKind.ModuleExports) return undefined;
             const thisAccess = cast(binaryExpression.left, isAccessExpression);
             if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
                 return undefined;
