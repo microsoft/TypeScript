@@ -9082,42 +9082,36 @@ namespace ts {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
+            const setterType = getAnnotatedAccessorType(setter);
+
             // For write operations, prioritize type annotations on the setter
-            if (writing) {
-                const setterParameterType = getAnnotatedAccessorType(setter);
-                if (setterParameterType) {
-                    const flags = getCheckFlags(symbol);
-                    if (flags & CheckFlags.Instantiated) {
-                        const links = getSymbolLinks(symbol);
-                        return instantiateType(setterParameterType, links.mapper);
-                    }
-                    return setterParameterType;
-                }
+            if (writing && setterType) {
+                return instantiateTypeIfNeeded(setterType, symbol);
             }
             // Else defer to the getter type
 
             if (getter && isInJSFile(getter)) {
                 const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
                 if (jsDocType) {
-                    return jsDocType;
+                    return instantiateTypeIfNeeded(jsDocType, symbol);
                 }
             }
 
             // Try to see if the user specified a return type on the get-accessor.
-            const getterReturnType = getAnnotatedAccessorType(getter);
-            if (getterReturnType) {
-                return getterReturnType;
+            const getterType = getAnnotatedAccessorType(getter);
+            if (getterType) {
+                return instantiateTypeIfNeeded(getterType, symbol);
             }
 
             // If the user didn't specify a return type, try to use the set-accessor's parameter type.
-            const setterParameterType = getAnnotatedAccessorType(setter);
-            if (setterParameterType) {
-                return setterParameterType;
+            if (setterType) {
+                return setterType;
             }
 
             // If there are no specified types, try to infer it from the body of the get accessor if it exists.
             if (getter && getter.body) {
-                return getReturnTypeFromBody(getter);
+                const returnTypeFromBody = getReturnTypeFromBody(getter);
+                return instantiateTypeIfNeeded(returnTypeFromBody, symbol);
             }
 
             // Otherwise, fall back to 'any'.
@@ -9135,6 +9129,15 @@ namespace ts {
                 return anyType;
             }
             return undefined;
+
+            function instantiateTypeIfNeeded(type: Type, symbol: Symbol) {
+                if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
+                    const links = getSymbolLinks(symbol);
+                    return instantiateType(type, links.mapper);
+                }
+
+                return type;
+            }
         }
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
