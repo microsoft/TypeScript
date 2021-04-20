@@ -5219,6 +5219,12 @@ namespace ts {
         IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
         /* @internal */
         IsNeverIntersection = 1 << 27, // Intersection reduces to never
+
+        // Flags that require TypeFlags.Reference
+        /* @internal */
+        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        /* @internal */
+        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
     }
 
     /* @internal */
@@ -5281,7 +5287,7 @@ namespace ts {
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
         /* @internal */
-        cachedEquivalentBaseTypeOrSelf?: Type; // Only set on references to class or interfaces with a single base type and no augmentations
+        cachedEquivalentBaseType?: Type; // Only set on references to class or interfaces with a single base type and no augmentations
     }
 
     export interface DeferredTypeReference extends TypeReference {

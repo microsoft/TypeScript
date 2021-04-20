@@ -11857,7 +11857,7 @@ namespace ts {
         }
 
         function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: Type) {
-            if (getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
+            if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
                 const neverProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
                 if (neverProp) {
                     return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
@@ -17178,12 +17178,13 @@ namespace ts {
 
         function getNormalizedType(type: Type, writing: boolean): Type {
             while (true) {
-                const t = getSingleBaseForNonAugmentingSubtypeOrType(isFreshLiteralType(type) ? (<FreshableType>type).regularType :
+                let t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
                     type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
                     type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
-                    type);
+                    type;
+                t = getSingleBaseForNonAugmentingSubtype(t) || t;
                 if (t === type) break;
                 type = t;
             }
@@ -17685,8 +17686,8 @@ namespace ts {
 
                 function reportErrorResults(source: Type, target: Type, result: Ternary, isComparingJsxAttributes: boolean) {
                     if (!result && reportErrors) {
-                        const sourceHasBase = getSingleBaseForNonAugmentingSubtypeOrType(originalSource) !== originalSource;
-                        const targetHasBase = getSingleBaseForNonAugmentingSubtypeOrType(originalTarget) !== originalTarget;
+                        const sourceHasBase = !!getSingleBaseForNonAugmentingSubtype(originalSource);
+                        const targetHasBase = !!getSingleBaseForNonAugmentingSubtype(originalTarget);
                         source = (originalSource.aliasSymbol || sourceHasBase) ? originalSource : source;
                         target = (originalTarget.aliasSymbol || targetHasBase) ? originalTarget : target;
                         let maybeSuppress = overrideNextErrorInfo > 0;
@@ -19941,26 +19942,28 @@ namespace ts {
             return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
-        function getSingleBaseForNonAugmentingSubtypeOrType(type: Type) {
+        function getSingleBaseForNonAugmentingSubtype(type: Type) {
             if (!(getObjectFlags(type) & ObjectFlags.Reference) || !(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)) {
-                return type;
+                return undefined;
             }
-            if ((type as TypeReference).cachedEquivalentBaseTypeOrSelf) {
-                return (type as TypeReference).cachedEquivalentBaseTypeOrSelf!;
+            if (getObjectFlags(type) & ObjectFlags.IdenticalBaseTypeCalculated) {
+                return getObjectFlags(type) & ObjectFlags.IdenticalBaseTypeExists ? (type as TypeReference).cachedEquivalentBaseType : undefined;
             }
+            (type as TypeReference).objectFlags |= ObjectFlags.IdenticalBaseTypeCalculated;
             const target = (type as TypeReference).target as InterfaceType;
             const bases = getBaseTypes(target);
             if (bases.length !== 1) {
-                return (type as TypeReference).cachedEquivalentBaseTypeOrSelf = type;
+                return undefined;
             }
             if (getMembersOfSymbol(type.symbol).size) {
-                return (type as TypeReference).cachedEquivalentBaseTypeOrSelf = type; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
+                return undefined; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
             }
             let instantiatedBase = !length(target.typeParameters) ? bases[0] : instantiateType(bases[0], createTypeMapper(target.typeParameters!, getTypeArguments(type as TypeReference).slice(0, target.typeParameters!.length)));
             if (length(getTypeArguments(type as TypeReference)) > length(target.typeParameters)) {
                 instantiatedBase = getTypeWithThisArgument(instantiatedBase, last(getTypeArguments(type as TypeReference)));
             }
-            return (type as TypeReference).cachedEquivalentBaseTypeOrSelf = instantiatedBase;
+            (type as TypeReference).objectFlags |= ObjectFlags.IdenticalBaseTypeExists;
+            return (type as TypeReference).cachedEquivalentBaseType = instantiatedBase;
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
