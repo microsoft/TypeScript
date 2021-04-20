@@ -4144,6 +4144,7 @@ namespace ts {
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
         /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
         /* @internal */ isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean;
+        /* @internal */ getTypeOfPropertyOfContextualType(type: Type, name: __String): Type | undefined;
 
         /**
          * returns unknownSignature in the case of an error.
