@@ -28,11 +28,11 @@ new Box(3).value = 3;
  * @template T
  */
 class Box {
+    #value;
     /** @param {T} initialValue */
     constructor(initialValue) {
         this.#value = initialValue;
     }
-    #value;
     /** @type {T} */
     get value() {
         return this.#value;
