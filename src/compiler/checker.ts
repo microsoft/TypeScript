@@ -4445,7 +4445,7 @@ namespace ts {
         }
 
         function isClassInstanceSide(type: Type) {
-            return !!type.symbol && !!(type.symbol.flags & SymbolFlags.Class) && (type === getDeclaredTypeOfClassOrInterface(type.symbol) || !!(getObjectFlags(type) & ObjectFlags.IsClassInstanceClone));
+            return !!type.symbol && !!(type.symbol.flags & SymbolFlags.Class) && (type === getDeclaredTypeOfClassOrInterface(type.symbol) || (!!(type.flags & TypeFlags.Object) && !!(getObjectFlags(type) & ObjectFlags.IsClassInstanceClone)));
         }
 
         function createNodeBuilder() {
@@ -11857,7 +11857,7 @@ namespace ts {
         }
 
         function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: Type) {
-            if (getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
+            if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
                 const neverProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
                 if (neverProp) {
                     return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
