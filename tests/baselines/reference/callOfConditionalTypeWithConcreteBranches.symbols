@@ -103,3 +103,23 @@ type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void
 >V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
+// vscode - another `Parameters` example
+export type AddFirstParameterToFunctions<Target> = {
+>AddFirstParameterToFunctions : Symbol(AddFirstParameterToFunctions, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 92))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+
+  [K in keyof Target]: Target[K] extends (...args: any[]) => void
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
+>args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 42))
+
+      ? (...args: Parameters<Target[K]>) => void
+>args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 38, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
+>K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
+
+      : void
+};

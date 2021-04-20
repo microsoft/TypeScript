@@ -5041,6 +5041,10 @@
         "code": 6387,
         "reportsDeprecated": true
     },
+    "Project '{0}' is being forcibly rebuilt": {
+        "category": "Message",
+        "code": 6388
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

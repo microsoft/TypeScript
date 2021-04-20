@@ -161,4 +161,6 @@ var _brokenTree = (0, renderer_1.dom)(component_1.MySFC, { x: 1, y: 2 },
     (0, renderer_1.dom)(component_1.MyClass, { x: 3, y: 4 }),
     (0, renderer_1.dom)(component_1.MyClass, { x: 5, y: 6 }));
 // Should fail, nondom isn't allowed as children of dom
-var _brokenTree2 = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 }, component_1.tree, component_1.tree);
+var _brokenTree2 = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 },
+    component_1.tree,
+    component_1.tree);
