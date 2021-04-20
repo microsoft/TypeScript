@@ -25106,6 +25106,7 @@ namespace ts {
         }
 
         function getContextualTypeForThisPropertyAssignment(binaryExpression: BinaryExpression, kind: AssignmentDeclarationKind): Type | undefined {
+            if (kind === AssignmentDeclarationKind.ModuleExports) return undefined;
             if (!binaryExpression.symbol) return getTypeOfExpression(binaryExpression.left);
             if (binaryExpression.symbol.valueDeclaration) {
                 const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
@@ -25116,7 +25117,6 @@ namespace ts {
                     }
                 }
             }
-            if (kind === AssignmentDeclarationKind.ModuleExports) return undefined;
             const thisAccess = cast(binaryExpression.left, isAccessExpression);
             if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
                 return undefined;
@@ -38825,10 +38825,10 @@ namespace ts {
 
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
-                            if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
+                            if (!isExternalModule(<SourceFile>location)) break;
                             // falls through
                         case SyntaxKind.ModuleDeclaration:
-                            copySymbols(getSymbolOfNode(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
+                            copyExportedSymbols(getSymbolOfNode(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
                             break;
                         case SyntaxKind.EnumDeclaration:
                             copySymbols(getSymbolOfNode(location as EnumDeclaration).exports!, meaning & SymbolFlags.EnumMember);
@@ -38894,6 +38894,17 @@ namespace ts {
                 if (meaning) {
                     source.forEach(symbol => {
                         copySymbol(symbol, meaning);
+                    });
+                }
+            }
+
+            function copyExportedSymbols(source: SymbolTable, meaning: SymbolFlags): void {
+                if (meaning) {
+                    source.forEach(symbol => {
+                        // Similar condition as in `resolveNameHelper`
+                        if (!getDeclarationOfKind(symbol, SyntaxKind.ExportSpecifier) && !getDeclarationOfKind(symbol, SyntaxKind.NamespaceExport)) {
+                            copySymbol(symbol, meaning);
+                        }
                     });
                 }
             }
