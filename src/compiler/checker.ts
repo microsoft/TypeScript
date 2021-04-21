@@ -12613,8 +12613,8 @@ namespace ts {
                         else if (grandParent.kind === SyntaxKind.TypeParameter && grandParent.parent.kind === SyntaxKind.MappedType) {
                             inferences = append(inferences, keyofConstraintType);
                         }
-                        // When an 'infer T' declaration is the template of a mapped type, and that mapped type if the extends
-                        // clause of a conditional whose check type is also a mapped type, give it the constraint of the template
+                        // When an 'infer T' declaration is the template of a mapped type, and that mapped type is the extends
+                        // clause of a conditional whose check type is also a mapped type, give it a constraint equal to the template
                         // of the check type's mapped type
                         else if (grandParent.kind === SyntaxKind.MappedType && (grandParent as MappedTypeNode).type &&
                             skipParentheses((grandParent as MappedTypeNode).type!) === declaration.parent && grandParent.parent.kind === SyntaxKind.ConditionalType &&
