@@ -547,6 +547,7 @@ namespace ts {
                 return node && getContextualTypeForJsxAttribute(node);
             },
             isContextSensitive,
+            getTypeOfPropertyOfContextualType,
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
@@ -4445,7 +4446,7 @@ namespace ts {
         }
 
         function isClassInstanceSide(type: Type) {
-            return !!type.symbol && !!(type.symbol.flags & SymbolFlags.Class) && (type === getDeclaredTypeOfClassOrInterface(type.symbol) || !!(getObjectFlags(type) & ObjectFlags.IsClassInstanceClone));
+            return !!type.symbol && !!(type.symbol.flags & SymbolFlags.Class) && (type === getDeclaredTypeOfClassOrInterface(type.symbol) || (!!(type.flags & TypeFlags.Object) && !!(getObjectFlags(type) & ObjectFlags.IsClassInstanceClone)));
         }
 
         function createNodeBuilder() {
@@ -9082,42 +9083,36 @@ namespace ts {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
+            const setterType = getAnnotatedAccessorType(setter);
+
             // For write operations, prioritize type annotations on the setter
-            if (writing) {
-                const setterParameterType = getAnnotatedAccessorType(setter);
-                if (setterParameterType) {
-                    const flags = getCheckFlags(symbol);
-                    if (flags & CheckFlags.Instantiated) {
-                        const links = getSymbolLinks(symbol);
-                        return instantiateType(setterParameterType, links.mapper);
-                    }
-                    return setterParameterType;
-                }
+            if (writing && setterType) {
+                return instantiateTypeIfNeeded(setterType, symbol);
             }
             // Else defer to the getter type
 
             if (getter && isInJSFile(getter)) {
                 const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
                 if (jsDocType) {
-                    return jsDocType;
+                    return instantiateTypeIfNeeded(jsDocType, symbol);
                 }
             }
 
             // Try to see if the user specified a return type on the get-accessor.
-            const getterReturnType = getAnnotatedAccessorType(getter);
-            if (getterReturnType) {
-                return getterReturnType;
+            const getterType = getAnnotatedAccessorType(getter);
+            if (getterType) {
+                return instantiateTypeIfNeeded(getterType, symbol);
             }
 
             // If the user didn't specify a return type, try to use the set-accessor's parameter type.
-            const setterParameterType = getAnnotatedAccessorType(setter);
-            if (setterParameterType) {
-                return setterParameterType;
+            if (setterType) {
+                return setterType;
             }
 
             // If there are no specified types, try to infer it from the body of the get accessor if it exists.
             if (getter && getter.body) {
-                return getReturnTypeFromBody(getter);
+                const returnTypeFromBody = getReturnTypeFromBody(getter);
+                return instantiateTypeIfNeeded(returnTypeFromBody, symbol);
             }
 
             // Otherwise, fall back to 'any'.
@@ -9135,6 +9130,15 @@ namespace ts {
                 return anyType;
             }
             return undefined;
+
+            function instantiateTypeIfNeeded(type: Type, symbol: Symbol) {
+                if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
+                    const links = getSymbolLinks(symbol);
+                    return instantiateType(type, links.mapper);
+                }
+
+                return type;
+            }
         }
 
         function getBaseTypeVariableOfClass(symbol: Symbol) {
@@ -11662,7 +11666,7 @@ namespace ts {
                             // If the symbols are instances of one another with identical types - consider the symbols
                             // equivalent and just use the first one, which thus allows us to avoid eliding private
                             // members when intersecting a (this-)instantiations of a class with it's raw base or another instance
-                            if (isInstantiation && isPropertyIdenticalTo(singleProp, prop)) {
+                            if (isInstantiation && compareProperties(singleProp, prop, (a, b) => a === b ? Ternary.True : Ternary.False) === Ternary.True) {
                                 // If we merged instantiations of a generic type, we replicate the symbol parent resetting behavior we used
                                 // to do when we recorded multiple distinct symbols so that we still get, eg, `Array<T>.length` printed
                                 // back and not `Array<string>.length` when we're looking at a `.length` access on a `string[] | number[]`
@@ -11857,7 +11861,7 @@ namespace ts {
         }
 
         function elaborateNeverIntersection(errorInfo: DiagnosticMessageChain | undefined, type: Type) {
-            if (getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
+            if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsNeverIntersection) {
                 const neverProp = find(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isDiscriminantWithNeverType);
                 if (neverProp) {
                     return chainDiagnosticMessages(errorInfo, Diagnostics.The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituents,
@@ -12834,10 +12838,20 @@ namespace ts {
                         typeParameters.length);
                     return errorType;
                 }
+                // We refrain from associating a local type alias with an instantiation of a top-level type alias
+                // because the local alias may end up being referenced in an inferred return type where it is not
+                // accessible--which in turn may lead to a large structural expansion of the type when generating
+                // a .d.ts file. See #43622 for an example.
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
+                const newAliasSymbol = aliasSymbol && (isLocalTypeAlias(symbol) || !isLocalTypeAlias(aliasSymbol)) ? aliasSymbol : undefined;
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, getTypeArgumentsForAliasSymbol(newAliasSymbol));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
+        }
+
+        function isLocalTypeAlias(symbol: Symbol) {
+            const declaration = symbol.declarations?.find(isTypeAlias);
+            return !!(declaration && getContainingFunction(declaration));
         }
 
         function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
@@ -15860,8 +15874,9 @@ namespace ts {
                     outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
                 }
                 typeParameters = outerTypeParameters || emptyArray;
-                typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
-                    filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
+                const allDeclarations = type.objectFlags & ObjectFlags.Reference ? [declaration] : type.symbol.declarations!;
+                typeParameters = (target.objectFlags & ObjectFlags.Reference || target.symbol.flags & SymbolFlags.Method || target.symbol.flags & SymbolFlags.TypeLiteral) && !target.aliasTypeArguments ?
+                    filter(typeParameters, tp => some(allDeclarations, d => isTypeParameterPossiblyReferenced(tp, d))) :
                     typeParameters;
                 links.outerTypeParameters = typeParameters;
             }
@@ -15908,7 +15923,7 @@ namespace ts {
                         return true;
                     }
                 }
-                return !!forEachChild(node, containsReference);
+                return containsReference(node);
             }
             return true;
             function containsReference(node: Node): boolean {
@@ -15920,6 +15935,9 @@ namespace ts {
                             getTypeFromTypeNodeWorker(<TypeNode>node) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
                         return true;
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        return (!(node as FunctionLikeDeclaration).type && !!(node as FunctionLikeDeclaration).body) || !!forEachChild(node, containsReference);
                 }
                 return !!forEachChild(node, containsReference);
             }
@@ -19666,8 +19684,8 @@ namespace ts {
 
         // Return true if the given class derives from each of the declaring classes of the protected
         // constituents of the given property.
-        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol) {
-            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.Protected ?
+        function isClassDerivedFromDeclaringClasses(checkClass: Type, prop: Symbol, writing: boolean) {
+            return forEachProperty(prop, p => getDeclarationModifierFlagsFromSymbol(p, writing) & ModifierFlags.Protected ?
                 !hasBaseType(checkClass, getDeclaringClass(p)) : false) ? undefined : checkClass;
         }
 
@@ -26907,7 +26925,7 @@ namespace ts {
             // of the property as base classes
             let enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
                 const enclosingClass = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration)!);
-                return isClassDerivedFromDeclaringClasses(enclosingClass, prop) ? enclosingClass : undefined;
+                return isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing) ? enclosingClass : undefined;
             });
             // A protected property is accessible if the property is within the declaring class or classes derived from it
             if (!enclosingClass) {
@@ -33305,15 +33323,18 @@ namespace ts {
                     const symbol = getSymbolOfNode(node);
                     const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
                     const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
-                    if (getter && setter) {
+                    if (getter && setter && !(getNodeCheckFlags(getter) & NodeCheckFlags.TypeChecked)) {
+                        getNodeLinks(getter).flags |= NodeCheckFlags.TypeChecked;
                         const getterFlags = getEffectiveModifierFlags(getter);
                         const setterFlags = getEffectiveModifierFlags(setter);
                         if ((getterFlags & ModifierFlags.Abstract) !== (setterFlags & ModifierFlags.Abstract)) {
-                            error(node.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
+                            error(getter.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
+                            error(setter.name, Diagnostics.Accessors_must_both_be_abstract_or_non_abstract);
                         }
                         if (((getterFlags & ModifierFlags.Protected) && !(setterFlags & (ModifierFlags.Protected | ModifierFlags.Private))) ||
                             ((getterFlags & ModifierFlags.Private) && !(setterFlags & ModifierFlags.Private))) {
-                            error(node.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
+                            error(getter.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
+                            error(setter.name, Diagnostics.A_get_accessor_must_be_at_least_as_accessible_as_the_setter);
                         }
 
                         const getterType = getAnnotatedAccessorType(getter);

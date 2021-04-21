@@ -1350,6 +1350,7 @@ namespace ts {
     }
 
     function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
+        const force = !!state.options.force;
         let newestInputFileName: string = undefined!;
         let newestInputFileTime = minimumDate;
         const { host } = state;
@@ -1362,10 +1363,12 @@ namespace ts {
                 };
             }
 
-            const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
-            if (inputTime > newestInputFileTime) {
-                newestInputFileName = inputFile;
-                newestInputFileTime = inputTime;
+            if (!force) {
+                const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
+                if (inputTime > newestInputFileTime) {
+                    newestInputFileName = inputFile;
+                    newestInputFileTime = inputTime;
+                }
             }
         }
 
@@ -1387,39 +1390,41 @@ namespace ts {
         let missingOutputFileName: string | undefined;
         let newestDeclarationFileContentChangedTime = minimumDate;
         let isOutOfDateWithInputs = false;
-        for (const output of outputs) {
-            // Output is missing; can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (!host.fileExists(output)) {
-                missingOutputFileName = output;
-                break;
-            }
+        if (!force) {
+            for (const output of outputs) {
+                // Output is missing; can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (!host.fileExists(output)) {
+                    missingOutputFileName = output;
+                    break;
+                }
 
-            const outputTime = getModifiedTime(host, output);
-            if (outputTime < oldestOutputFileTime) {
-                oldestOutputFileTime = outputTime;
-                oldestOutputFileName = output;
-            }
+                const outputTime = getModifiedTime(host, output);
+                if (outputTime < oldestOutputFileTime) {
+                    oldestOutputFileTime = outputTime;
+                    oldestOutputFileName = output;
+                }
 
-            // If an output is older than the newest input, we can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (outputTime < newestInputFileTime) {
-                isOutOfDateWithInputs = true;
-                break;
-            }
+                // If an output is older than the newest input, we can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (outputTime < newestInputFileTime) {
+                    isOutOfDateWithInputs = true;
+                    break;
+                }
 
-            if (outputTime > newestOutputFileTime) {
-                newestOutputFileTime = outputTime;
-                newestOutputFileName = output;
-            }
+                if (outputTime > newestOutputFileTime) {
+                    newestOutputFileTime = outputTime;
+                    newestOutputFileName = output;
+                }
 
-            // Keep track of when the most recent time a .d.ts file was changed.
-            // In addition to file timestamps, we also keep track of when a .d.ts file
-            // had its file touched but not had its contents changed - this allows us
-            // to skip a downstream typecheck
-            if (isDeclarationFile(output)) {
-                const outputModifiedTime = getModifiedTime(host, output);
-                newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                // Keep track of when the most recent time a .d.ts file was changed.
+                // In addition to file timestamps, we also keep track of when a .d.ts file
+                // had its file touched but not had its contents changed - this allows us
+                // to skip a downstream typecheck
+                if (isDeclarationFile(output)) {
+                    const outputModifiedTime = getModifiedTime(host, output);
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                }
             }
         }
 
@@ -1459,7 +1464,8 @@ namespace ts {
                 }
 
                 // Check oldest output file name only if there is no missing output file name
-                if (!missingOutputFileName) {
+                // (a check we will have skipped if this is a forced build)
+                if (!force && !missingOutputFileName) {
                     // If the upstream project's newest file is older than our oldest output, we
                     // can't be out of date because of it
                     if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
@@ -1509,7 +1515,7 @@ namespace ts {
             if (extendedConfigStatus) return extendedConfigStatus;
         }
 
-        if (!state.buildInfoChecked.has(resolvedPath)) {
+        if (!force && !state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
             const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
             if (buildInfoPath) {
@@ -2005,6 +2011,14 @@ namespace ts {
     }
 
     function reportUpToDateStatus(state: SolutionBuilderState, configFileName: string, status: UpToDateStatus) {
+        if (state.options.force && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes)) {
+            return reportStatus(
+                state,
+                Diagnostics.Project_0_is_being_forcibly_rebuilt,
+                relName(state, configFileName)
+            );
+        }
+
         switch (status.type) {
             case UpToDateStatusType.OutOfDateWithSelf:
                 return reportStatus(

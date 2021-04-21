@@ -1,0 +1,45 @@
+=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassTypeJsDoc.js ===
+/**
+ * @template T
+ */
+ class Box {
+>Box : Symbol(Box, Decl(genericSetterInClassTypeJsDoc.js, 0, 0))
+
+    #value;
+>#value : Symbol(Box.#value, Decl(genericSetterInClassTypeJsDoc.js, 3, 12))
+
+    /** @param {T} initialValue */
+    constructor(initialValue) {
+>initialValue : Symbol(initialValue, Decl(genericSetterInClassTypeJsDoc.js, 7, 16))
+
+        this.#value = initialValue;
+>this.#value : Symbol(Box.#value, Decl(genericSetterInClassTypeJsDoc.js, 3, 12))
+>this : Symbol(Box, Decl(genericSetterInClassTypeJsDoc.js, 0, 0))
+>initialValue : Symbol(initialValue, Decl(genericSetterInClassTypeJsDoc.js, 7, 16))
+    }
+    
+    /** @type {T} */
+    get value() {
+>value : Symbol(Box.value, Decl(genericSetterInClassTypeJsDoc.js, 9, 5), Decl(genericSetterInClassTypeJsDoc.js, 14, 5))
+
+        return this.#value;
+>this.#value : Symbol(Box.#value, Decl(genericSetterInClassTypeJsDoc.js, 3, 12))
+>this : Symbol(Box, Decl(genericSetterInClassTypeJsDoc.js, 0, 0))
+    }
+
+    set value(value) {
+>value : Symbol(Box.value, Decl(genericSetterInClassTypeJsDoc.js, 9, 5), Decl(genericSetterInClassTypeJsDoc.js, 14, 5))
+>value : Symbol(value, Decl(genericSetterInClassTypeJsDoc.js, 16, 14))
+
+        this.#value = value;
+>this.#value : Symbol(Box.#value, Decl(genericSetterInClassTypeJsDoc.js, 3, 12))
+>this : Symbol(Box, Decl(genericSetterInClassTypeJsDoc.js, 0, 0))
+>value : Symbol(value, Decl(genericSetterInClassTypeJsDoc.js, 16, 14))
+    }
+}
+
+new Box(3).value = 3;
+>new Box(3).value : Symbol(Box.value, Decl(genericSetterInClassTypeJsDoc.js, 9, 5), Decl(genericSetterInClassTypeJsDoc.js, 14, 5))
+>Box : Symbol(Box, Decl(genericSetterInClassTypeJsDoc.js, 0, 0))
+>value : Symbol(Box.value, Decl(genericSetterInClassTypeJsDoc.js, 9, 5), Decl(genericSetterInClassTypeJsDoc.js, 14, 5))
+
