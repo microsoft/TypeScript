@@ -3171,7 +3171,7 @@ namespace FourSlash {
             for (const markerName in map) {
                 this.goToMarker(markerName);
                 const actual = this.languageService.getJsxClosingTagAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-                assert.deepEqual(actual, map[markerName]);
+                assert.deepEqual(actual, map[markerName], markerName);
             }
         }
 
