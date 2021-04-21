@@ -22352,7 +22352,7 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
         }
 
-        function filterType(type: Type, f: (t: Type) => boolean): Type {
+        function filterType(type: Type, f: (t: Type) => boolean, checkConstraints?: boolean): Type {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
                 const filtered = filter(types, f);
@@ -22378,7 +22378,7 @@ namespace ts {
                 }
                 return getUnionTypeFromSortedList(filtered, (<UnionType>type).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
             }
-            return type.flags & TypeFlags.Never || f(type) ? type : neverType;
+            return type.flags & TypeFlags.Never || f(type) || (checkConstraints && someType(getBaseConstraintOrType(type), f)) ? type : neverType;
         }
 
         function countTypes(type: Type) {
@@ -23732,7 +23732,7 @@ namespace ts {
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
                 if (!assumeTrue) {
-                    return filterType(type, t => !isRelated(t, candidate));
+                    return filterType(type, t => !isRelated(t, candidate), /*checkConstraints*/ true);
                 }
                 // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
