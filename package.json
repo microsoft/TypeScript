@@ -30,7 +30,6 @@
     },
     "devDependencies": {
         "@octokit/rest": "latest",
-        "@octokit/types": "6.13.0",
         "@types/browserify": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
