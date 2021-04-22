@@ -11,6 +11,14 @@ namespace ts {
         return token === SyntaxKind.GreaterThanToken || tokenIsIdentifierOrKeyword(token);
     }
 
+    function djb2HashFromSubstring(str: string, start: number, end: number): number {
+        let acc = 5381;
+        for (let i = start; i < end; i++) {
+            acc = ((acc << 5) + acc) + str.charCodeAt(i);
+        }
+        return acc;
+    }
+
     export interface Scanner {
         getStartPos(): number;
         getToken(): SyntaxKind;
@@ -921,7 +929,6 @@ namespace ts {
         // Current position (end position of text of current token)
         let pos: number;
 
-
         // end of text
         let end: number;
 
@@ -930,6 +937,9 @@ namespace ts {
 
         // Start position of text of current token
         let tokenPos: number;
+
+        // A cache for simple identifiers.
+        let identifierTextCache!: MultiMap<number, string>;
 
         let token: SyntaxKind;
         let tokenValue!: string;
@@ -2082,9 +2092,25 @@ namespace ts {
             if (isIdentifierStart(ch, languageVersion)) {
                 pos += charSize(ch);
                 while (pos < end && isIdentifierPart(ch = codePointAt(text, pos), languageVersion)) pos += charSize(ch);
-                tokenValue = text.substring(tokenPos, pos);
                 if (ch === CharacterCodes.backslash) {
+                    tokenValue = text.substring(tokenPos, pos);
                     tokenValue += scanIdentifierParts();
+                }
+                else {
+                    // We've hit the abrupt end of an Identifier's text.
+                    // This is the "common" case where we're just able to slice into the existing text;
+                    // however, slicing over and over might just create a lot of garbage. We'll check our cache
+                    // to try to avoid multiple allocations.
+                    const hash = djb2HashFromSubstring(text, tokenPos, pos);
+                    const cachedTokenTexts = identifierTextCache.get(hash);
+                    const cachedTokenText = cachedTokenTexts?.find(tokenText => text.startsWith(tokenText, tokenPos));
+                    if (cachedTokenText !== undefined) {
+                        tokenValue = cachedTokenText;
+                    }
+                    else {
+                        tokenValue = text.substring(tokenPos, pos);
+                        identifierTextCache.add(hash, tokenValue);
+                    }
                 }
                 return getIdentifierToken();
             }
@@ -2525,6 +2551,7 @@ namespace ts {
             text = newText || "";
             end = length === undefined ? text.length : start! + length;
             setTextPos(start || 0);
+            identifierTextCache = createMultiMap<number, string>();
         }
 
         function setOnError(errorCallback: ErrorCallback | undefined) {
