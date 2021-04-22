@@ -5001,7 +5001,13 @@ namespace ts {
                 const child = parseJsxChild(openingTag, currentToken = scanner.reScanJsxToken());
                 if (!child) break;
                 list.push(child);
-                if (isJsxOpeningElement(openingTag) && child?.kind === SyntaxKind.JsxElement && !tagNamesAreEquivalent(child.openingElement.tagName, child.closingElement.tagName) && tagNamesAreEquivalent(openingTag.tagName, child.closingElement.tagName)) break;
+                if (isJsxOpeningElement(openingTag)
+                    && child?.kind === SyntaxKind.JsxElement
+                    && !tagNamesAreEquivalent(child.openingElement.tagName, child.closingElement.tagName)
+                    && tagNamesAreEquivalent(openingTag.tagName, child.closingElement.tagName)) {
+                    // stop after parsing a mismatched child like <div>...(<span></div>) in order to reattach the </div> higher
+                    break;
+                }
             }
 
             parsingContext = saveParsingContext;
