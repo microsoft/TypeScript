@@ -201,7 +201,7 @@ var donkey = <div>
     <diddy bananas="please"></></div>;
 function noSelfcloseTypeArgAttrs() { }
 var donkey = <div>
-    < />>
+    < />
 </div>;
 function noNameTrailingTag() { }
 var donkey = <div>
@@ -209,23 +209,28 @@ var donkey = <div>
 </div>;
 function noCloseTrailingTag() { }
 var donkey = <div>
-    <diddy />diddy/>
+    <diddy />
+    <diddy />
 </div>;
 function noCloseTypeArgTrailingTag() { }
 var donkey = <div>
-    <diddy bananas="please"/>diddy/>
+    <diddy bananas="please"/>
+    <diddy />
 </div>;
 function noCloseAttrsTrailingTag() { }
 var donkey = <div>
-    <diddy bananas="please"/>diddy/>
+    <diddy bananas="please"/>
+    <diddy />
 </div>;
 function noCloseTypeArgAttrsTrailingTag() { }
 var donkey = <div>
-    <diddy />diddy/>
+    <diddy />
+    <diddy />
 </div>;
 function noCloseBracketTrailingTag() { }
 var donkey = <div>
-    <diddy bananas="please"/>diddy/>
+    <diddy bananas="please"/>
+    <diddy />
 </div>;
 function noCloseBracketTypeArgAttrsTrailingTag() { }
 var donkey = <div>
@@ -255,11 +260,13 @@ var donkey = <div>
 </div>;
 function noCloseTypeArgAttrsTrailingText() { }
 var donkey = <div>
-    <diddy /> Wrinkly Funky
+    <diddy />
+    Cranky Wrinkly Funky
 </div>;
 function noCloseBracketTrailingText() { }
 var donkey = <div>
-    <diddy bananas="please"/> Wrinkly Funky
+    <diddy bananas="please"/>
+    Cranky Wrinkly Funky
 </div>;
 function noCloseBracketTypeArgAttrsTrailingText() { }
 var donkey = <div>

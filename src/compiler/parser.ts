@@ -4882,39 +4882,35 @@ namespace ts {
             return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
         }
 
-        function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number): JsxElement | JsxSelfClosingElement | JsxFragment {
+        function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
             const pos = getNodePos();
             const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement | JsxFragment;
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
-                const children = parseJsxChildren(opening);
+                let children = parseJsxChildren(opening);
                 const lastChild: JsxChild | undefined = children[children.length - 1];
+                let closingElement: JsxClosingElement;
                 if (isJsxOpeningElement(opening) && lastChild?.kind === SyntaxKind.JsxElement && !tagNamesAreEquivalent(lastChild.openingElement.tagName, lastChild.closingElement.tagName) && tagNamesAreEquivalent(opening.tagName, lastChild.closingElement.tagName)) {
-                    // TODO: this error is seriously bad
-                    const tag = opening.tagName;
-                    const start = skipTrivia(sourceText, tag.pos);
-                    parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, opening.tagName));
-                    // TODO: There might already be a factory function that does this conversion
                     const newPos = lastChild.openingElement.pos
                     const newEnd = lastChild.openingElement.end
                     const newLast = finishNode(factory.createJsxElement(lastChild.openingElement, createNodeArray([], newEnd, newEnd), finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), newEnd, newEnd)), newEnd, newEnd)), newPos, newEnd)
-                    const realChildren = createNodeArray([...children.slice(0, children.length - 1), newLast], children.pos, newLast.end)
-                    return finishNode(factory.createJsxElement(opening, realChildren, lastChild.closingElement), pos);
-                    // TODO: return immediately -- probably OK to skip the inExpressionContext lookahead parse, but double-check later
-                }
-                const closingElement = parseJsxClosingElement(opening, inExpressionContext);
 
-                if (!tagNamesAreEquivalent(opening.tagName, closingElement.tagName)) {
-                        // TODO: Better error message since we strongly suspect the parse is wrong wrong wrong
-                        // TODO: Ideally, fix up the parse by
-                        // (1) reparsing opening as a self-closing element (optional, it's OK to return an unfinished (hungry;no words: void? devoid? disabled? defective?) normal element
-                        // (2) returning the opening AND the closing separately, instead of packing them into a normal element
-                        // (2a) can cheat the last by creating a normal element with sentinel values set for some properties (this is bad, but would work)
-                        // (2b) or the caller could just recreate the above predicate and throw away the bogus normal element (this is easiest for now, but still confusing)
-                        //      then it could reassoc closingElement with itself and treat opening++children as its children. This is probably fine! Except for the pos/end of children.
-                    parseErrorAtRange(closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                    children = createNodeArray([...children.slice(0, children.length - 1), newLast], children.pos, newLast.end)
+                    closingElement = lastChild.closingElement;
                 }
-
+                else {
+                    closingElement = parseJsxClosingElement(opening, inExpressionContext);
+                    if (!tagNamesAreEquivalent(opening.tagName, closingElement.tagName)) {
+                        if (openingTag && isJsxOpeningElement(openingTag) && tagNamesAreEquivalent(closingElement.tagName, openingTag.tagName)) {
+                            // unclosed with already-matched close -- put error on opening
+                            parseErrorAtRange(opening.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                        }
+                        else {
+                            // unclosed with mismatched close -- put error on closing
+                            parseErrorAtRange(closingElement.tagName, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                        }
+                    }
+                }
                 result = finishNode(factory.createJsxElement(opening, children, closingElement), pos);
             }
             else if (opening.kind === SyntaxKind.JsxOpeningFragment) {
@@ -4968,7 +4964,6 @@ namespace ts {
                         // or to cover only 'Foo' in < Foo >
                         const tag = openingTag.tagName;
                         const start = skipTrivia(sourceText, tag.pos);
-                        // TODO: Maybe can get rid of this error now
                         parseErrorAt(start, tag.end, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTag.tagName));
                     }
                     return undefined;
@@ -4981,7 +4976,7 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseJsxExpression(/*inExpressionContext*/ false);
                 case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false, undefined, openingTag);
                 default:
                     return Debug.assertNever(token);
             }
@@ -5033,13 +5028,15 @@ namespace ts {
                 node = factory.createJsxOpeningElement(tagName, typeArguments, attributes);
             }
             else {
-                // TODO: Also don't re-scan text if either of these are missing (although it doesn't seem needed)
-                // TODO: Use the more complex predicate (if needed) instead of just inExpressionContext for parsing > (like in parseJsxClosing...)
                 parseExpected(SyntaxKind.SlashToken);
-                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ inExpressionContext);
-                // TODO: Document this (1) shouldn't expect multiple jsx children in expression context (2) </**/ </ (3) <Prefix/**/ </
-                if (!inExpressionContext && !nodeIsMissing(tagName) && token() !== SyntaxKind.LessThanSlashToken) {
-                    scanJsxText();
+                if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+                    // manually advance the scanner in order to look for jsx text inside jsx
+                    if (inExpressionContext) {
+                        nextToken();
+                    }
+                    else {
+                        scanJsxText();
+                    }
                 }
                 node = factory.createJsxSelfClosingElement(tagName, typeArguments, attributes);
             }
@@ -5121,13 +5118,14 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.LessThanSlashToken);
             const tagName = parseJsxElementName();
-            // don't advance the scanner here; decide
-            if (inExpressionContext || !tagNamesAreEquivalent(open.tagName, tagName)) {
-                parseExpected(SyntaxKind.GreaterThanToken);
-            }
-            else {
-                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+                // manually advance the scanner in order to look for jsx text inside jsx
+                if (inExpressionContext || !tagNamesAreEquivalent(open.tagName, tagName)) {
+                    nextToken();
+                }
+                else {
+                    scanJsxText();
+                }
             }
             return finishNode(factory.createJsxClosingElement(tagName), pos);
         }
@@ -5138,12 +5136,14 @@ namespace ts {
             if (tokenIsIdentifierOrKeyword(token())) {
                 parseErrorAtRange(parseJsxElementName(), Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
             }
-            if (inExpressionContext) {
-                parseExpected(SyntaxKind.GreaterThanToken);
-            }
-            else {
-                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+                // manually advance the scanner in order to look for jsx text inside jsx
+                if (inExpressionContext) {
+                    nextToken();
+                }
+                else {
+                    scanJsxText();
+                }
             }
             return finishNode(factory.createJsxJsxClosingFragment(), pos);
         }
