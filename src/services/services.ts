@@ -2017,13 +2017,13 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+        function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
             synchronizeHostData();
-            Debug.assert(scope.type === "file");
-            const sourceFile = getValidSourceFile(scope.fileName);
+            Debug.assert(args.type === "file");
+            const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
