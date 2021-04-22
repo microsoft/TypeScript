@@ -4888,25 +4888,35 @@ namespace ts {
             let result: JsxElement | JsxSelfClosingElement | JsxFragment;
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let children = parseJsxChildren(opening);
-                const lastChild: JsxChild | undefined = children[children.length - 1];
                 let closingElement: JsxClosingElement;
-                if (isJsxOpeningElement(opening) && lastChild?.kind === SyntaxKind.JsxElement && !tagNamesAreEquivalent(lastChild.openingElement.tagName, lastChild.closingElement.tagName) && tagNamesAreEquivalent(opening.tagName, lastChild.closingElement.tagName)) {
-                    const newPos = lastChild.openingElement.pos
-                    const newEnd = lastChild.openingElement.end
-                    const newLast = finishNode(factory.createJsxElement(lastChild.openingElement, createNodeArray([], newEnd, newEnd), finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), newEnd, newEnd)), newEnd, newEnd)), newPos, newEnd)
 
-                    children = createNodeArray([...children.slice(0, children.length - 1), newLast], children.pos, newLast.end)
+                const lastChild: JsxChild | undefined = children[children.length - 1];
+                if (lastChild?.kind === SyntaxKind.JsxElement
+                    && !tagNamesAreEquivalent(lastChild.openingElement.tagName, lastChild.closingElement.tagName)
+                    && tagNamesAreEquivalent(opening.tagName, lastChild.closingElement.tagName)) {
+                    // when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
+                    // restructure (<div>(...<span></div>)) --> (<div>(...<span></span>)</div>)
+                    // (no need to error; the parent will error)
+                    const end = lastChild.openingElement.end; // newly-created children and closing are both zero-width end/end
+                    const newLast = finishNode(factory.createJsxElement(
+                        lastChild.openingElement,
+                        createNodeArray([], end, end),
+                        finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), end, end)), end, end)),
+                    lastChild.openingElement.pos,
+                    end);
+
+                    children = createNodeArray([...children.slice(0, children.length - 1), newLast], children.pos, end);
                     closingElement = lastChild.closingElement;
                 }
                 else {
                     closingElement = parseJsxClosingElement(opening, inExpressionContext);
                     if (!tagNamesAreEquivalent(opening.tagName, closingElement.tagName)) {
                         if (openingTag && isJsxOpeningElement(openingTag) && tagNamesAreEquivalent(closingElement.tagName, openingTag.tagName)) {
-                            // unclosed with already-matched close -- put error on opening
+                            // opening incorrectly matched with its parent's closing -- put error on opening
                             parseErrorAtRange(opening.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, opening.tagName));
                         }
                         else {
-                            // unclosed with mismatched close -- put error on closing
+                            // other opening/closing mismatches -- put error on closing
                             parseErrorAtRange(closingElement.tagName, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, opening.tagName));
                         }
                     }
@@ -4914,7 +4924,6 @@ namespace ts {
                 result = finishNode(factory.createJsxElement(opening, children, closingElement), pos);
             }
             else if (opening.kind === SyntaxKind.JsxOpeningFragment) {
-                // TODO:Maybe replicate fixup here (if I can figure out how to write tests for it)
                 result = finishNode(factory.createJsxFragment(opening, parseJsxChildren(opening), parseJsxClosingFragment(inExpressionContext)), pos);
             }
             else {
@@ -4976,7 +4985,7 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseJsxExpression(/*inExpressionContext*/ false);
                 case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false, undefined, openingTag);
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false, /*topInvalidNodePosition*/ undefined, openingTag);
                 default:
                     return Debug.assertNever(token);
             }
