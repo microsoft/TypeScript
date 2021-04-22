@@ -2332,7 +2332,7 @@ namespace ts.Completions {
                     return isFunctionLike(contextToken.parent) && !isMethodDeclaration(contextToken.parent);
             }
 
-            // If the previous token is keyword correspoding to class member completion keyword
+            // If the previous token is keyword corresponding to class member completion keyword
             // there will be completion available here
             if (isClassMemberCompletionKeyword(keywordForNode(contextToken)) && isFromObjectTypeDeclaration(contextToken)) {
                 return false;
@@ -2370,13 +2370,14 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
-            // Don't block completions for these 2:
-            // `class C { prop \n constructor/**/ }`
-            // `class C { prop: number \n constructor/**/ }`
-            if ((isClassLike(contextToken.parent.parent) && isPropertyDeclaration(contextToken.parent) &&
-                (isIdentifier(contextToken) || isTypeKeyword(contextToken.kind))
-                && previousToken.kind === SyntaxKind.ConstructorKeyword)) {
-                return false;
+            // If we are inside a class declaration and typing `constructor`...
+            if (isClassLike(contextToken.parent.parent)
+               && isPropertyDeclaration(contextToken.parent)
+               && (isIdentifier(contextToken) || isTypeKeyword(contextToken.kind))
+               // And the cursor is at the token...
+               && (position <= previousToken.end || contextToken.kind === SyntaxKind.SemicolonToken)
+               ) {
+                return false; // Don't block completions then.
             }
 
             return isDeclarationName(contextToken)
@@ -2840,16 +2841,25 @@ namespace ts.Completions {
 
         if (!contextToken) return undefined;
 
+        function isPropertyBeforeConstructorInitalized(classDecl: ClassDeclaration, _constructor: ClassElement) {
+            const indexOfConstructor = classDecl.members.indexOf(_constructor);
+            if (indexOfConstructor <= 0) {
+                return true;
+            }
+            return isInitializedProperty(classDecl.members[indexOfConstructor - 1]);
+        }
+
         // class c { prop \n constructor| }
-        // class c { prop; \n constructor| }
         // class c { prop: number \n constructor| }
-        // class c { prop: number; constructor| }
+        // class c { prop = somewhat \n constructor| }
+        // and also for `;` replacing `\n`
         if (location.kind === SyntaxKind.ConstructorKeyword && (
-            isTypeKeyword(contextToken.kind) ||
             isIdentifier(contextToken) ||
+            isTypeKeyword(contextToken.kind) ||
+            isPropertyBeforeConstructorInitalized(getAncestor(location, SyntaxKind.ClassDeclaration) as ClassDeclaration, location.parent as ClassElement) ||
             contextToken.kind === SyntaxKind.SemicolonToken
         )) {
-            return contextToken.parent.parent as ObjectTypeDeclaration;
+            return getAncestor(contextToken, SyntaxKind.ClassDeclaration) as ObjectTypeDeclaration;
         }
 
         switch (contextToken.kind) {
