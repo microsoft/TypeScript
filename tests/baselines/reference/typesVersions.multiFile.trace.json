@@ -22,7 +22,7 @@
     "======== Resolving module 'ext/other' from 'tests/cases/conformance/moduleResolution/main.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module 'ext/other' from 'node_modules' folder, target file type 'TypeScript'.",
-    "Using cached result of 'package.json' at 'tests/cases/conformance/moduleResolution/node_modules/ext/package.json' that indicates it was found.",
+    "File 'tests/cases/conformance/moduleResolution/node_modules/ext/package.json' exists according to earlier cached lookups.",
     "'package.json' has a 'typesVersions' entry '>=3.1.0-0' that matches compiler version '3.1.0-dev', looking for a pattern to match module name 'other'.",
     "Module name 'other', matched pattern '*'.",
     "Trying substitution 'ts3.1/*', candidate module location: 'ts3.1/other'.",
