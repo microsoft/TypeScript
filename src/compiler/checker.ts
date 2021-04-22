@@ -23851,12 +23851,15 @@ namespace ts {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
-                if (isExpressionNode(location) && !isAssignmentTarget(location)) {
+                if (isExpressionNode(location) && (!isAssignmentTarget(location) || isWriteAccess(location))) {
                     const type = getTypeOfExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                         return type;
                     }
                 }
+            }
+            if (isDeclarationName(location) && isSetAccessor(location.parent) && getAnnotatedAccessorTypeNode(location.parent)) {
+                return resolveTypeOfAccessors(location.parent.symbol, /*writing*/ true)!;
             }
             // The location isn't a reference to the given symbol, meaning we're being asked
             // a hypothetical question of what type the symbol would have if there was a reference
