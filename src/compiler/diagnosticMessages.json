@@ -4849,11 +4849,11 @@
         "category": "Error",
         "code": 6238
     },
-    "Using cached result of 'package.json' at '{0}' that indicates it was found.": {
+    "File '{0}' exists according to earlier cached lookups.": {
         "category": "Message",
         "code": 6239
     },
-    "Using cached result of 'package.json' at '{0}' that indicates it was not found.": {
+    "File '{0}' does not exist according to earlier cached lookups.": {
         "category": "Message",
         "code": 6240
     },

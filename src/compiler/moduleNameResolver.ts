@@ -1308,11 +1308,11 @@ namespace ts {
         const existing = state.packageJsonInfoCache?.getPackageJsonInfo(packageJsonPath);
         if (existing !== undefined) {
             if (typeof existing !== "boolean") {
-                if (traceEnabled) trace(host, Diagnostics.Using_cached_result_of_package_json_at_0_that_indicates_it_was_found, packageJsonPath);
+                if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
                 return existing;
             }
             else {
-                if (existing && traceEnabled) trace(host, Diagnostics.Using_cached_result_of_package_json_at_0_that_indicates_it_was_not_found, packageJsonPath);
+                if (existing && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
                 state.failedLookupLocations.push(packageJsonPath);
                 return undefined;
             }
