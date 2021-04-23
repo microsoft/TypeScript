@@ -38832,7 +38832,7 @@ namespace ts {
                             if (!isExternalModule(<SourceFile>location)) break;
                             // falls through
                         case SyntaxKind.ModuleDeclaration:
-                            copyExportedSymbols(getSymbolOfNode(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
+                            copyLocallyVisibleExportSymbols(getSymbolOfNode(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
                             break;
                         case SyntaxKind.EnumDeclaration:
                             copySymbols(getSymbolOfNode(location as EnumDeclaration).exports!, meaning & SymbolFlags.EnumMember);
@@ -38902,7 +38902,7 @@ namespace ts {
                 }
             }
 
-            function copyExportedSymbols(source: SymbolTable, meaning: SymbolFlags): void {
+            function copyLocallyVisibleExportSymbols(source: SymbolTable, meaning: SymbolFlags): void {
                 if (meaning) {
                     source.forEach(symbol => {
                         // Similar condition as in `resolveNameHelper`
