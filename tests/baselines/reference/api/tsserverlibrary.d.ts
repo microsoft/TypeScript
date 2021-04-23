@@ -517,11 +517,12 @@ declare namespace ts {
         HasAggregatedChildData = 524288,
         JSDoc = 4194304,
         JsonFile = 33554432,
+        ClassStaticBlockContext = 268435456,
         BlockScoped = 3,
         ReachabilityCheckFlags = 768,
         ReachabilityAndEmitFlags = 2816,
-        ContextFlags = 25358336,
-        TypeExcludesFlags = 40960,
+        ContextFlags = 293793792,
+        TypeExcludesFlags = 268476416,
     }
     export enum ModifierFlags {
         None = 0,
