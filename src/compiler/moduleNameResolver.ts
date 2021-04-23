@@ -1210,14 +1210,19 @@ namespace ts {
         const onlyRecordFailuresForIndex = onlyRecordFailures || !directoryProbablyExists(candidate, state.host);
         const indexPath = combinePaths(candidate, extensions === Extensions.TSConfig ? "tsconfig" : "index");
 
-        if (versionPaths && (!packageFile || containsPath(candidate, packageFile))) {
-            const moduleName = getRelativePathFromDirectory(candidate, packageFile || indexPath, /*ignoreCase*/ false);
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
+        if (versionPaths) {
+            if (!packageFile || containsPath(candidate, packageFile)) {
+                const moduleName = getRelativePathFromDirectory(candidate, packageFile || indexPath, /*ignoreCase*/ false);
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
+                }
+                const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
+                if (result) {
+                    return removeIgnoredPackageId(result.value);
+                }
             }
-            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
-            if (result) {
-                return removeIgnoredPackageId(result.value);
+            else if (packageFile && !containsPath(candidate, packageFile) && state.traceEnabled) {
+                trace(state.host, Diagnostics.Did_not_resolve_0_for_typesVersion_because_it_was_not_in_a_subtree_from_1, candidate, packageFile);
             }
         }
 

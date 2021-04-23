@@ -4849,6 +4849,10 @@
         "category": "Error",
         "code": 6238
     },
+    "Did not resolve '{0}' for typesVersion because it was not in a subtree from '{1}'": {
+        "category": "Error",
+        "code": 6239
+    },
 
     "Projects to reference": {
         "category": "Message",
