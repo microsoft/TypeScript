@@ -12613,6 +12613,19 @@ namespace ts {
                         else if (grandParent.kind === SyntaxKind.TypeParameter && grandParent.parent.kind === SyntaxKind.MappedType) {
                             inferences = append(inferences, keyofConstraintType);
                         }
+                        // When an 'infer T' declaration is the template of a mapped type, and that mapped type is the extends
+                        // clause of a conditional whose check type is also a mapped type, give it a constraint equal to the template
+                        // of the check type's mapped type
+                        else if (grandParent.kind === SyntaxKind.MappedType && (grandParent as MappedTypeNode).type &&
+                            skipParentheses((grandParent as MappedTypeNode).type!) === declaration.parent && grandParent.parent.kind === SyntaxKind.ConditionalType &&
+                            (grandParent.parent as ConditionalTypeNode).extendsType === grandParent && (grandParent.parent as ConditionalTypeNode).checkType.kind === SyntaxKind.MappedType &&
+                            ((grandParent.parent as ConditionalTypeNode).checkType as MappedTypeNode).type) {
+                            const checkMappedType = (grandParent.parent as ConditionalTypeNode).checkType as MappedTypeNode;
+                            const nodeType = getTypeFromTypeNode(checkMappedType.type!);
+                            inferences = append(inferences, instantiateType(nodeType,
+                                makeUnaryTypeMapper(getDeclaredTypeOfTypeParameter(getSymbolOfNode(checkMappedType.typeParameter)), checkMappedType.typeParameter.constraint ? getTypeFromTypeNode(checkMappedType.typeParameter.constraint) : keyofConstraintType)
+                            ));
+                        }
                     }
                 }
             }
@@ -23838,12 +23851,15 @@ namespace ts {
                 if (isRightSideOfQualifiedNameOrPropertyAccess(location)) {
                     location = location.parent;
                 }
-                if (isExpressionNode(location) && !isAssignmentTarget(location)) {
+                if (isExpressionNode(location) && (!isAssignmentTarget(location) || isWriteAccess(location))) {
                     const type = getTypeOfExpression(<Expression>location);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(location).resolvedSymbol) === symbol) {
                         return type;
                     }
                 }
+            }
+            if (isDeclarationName(location) && isSetAccessor(location.parent) && getAnnotatedAccessorTypeNode(location.parent)) {
+                return resolveTypeOfAccessors(location.parent.symbol, /*writing*/ true)!;
             }
             // The location isn't a reference to the given symbol, meaning we're being asked
             // a hypothetical question of what type the symbol would have if there was a reference
