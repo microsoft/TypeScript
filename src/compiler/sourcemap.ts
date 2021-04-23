@@ -17,7 +17,8 @@ namespace ts {
 
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
-        let mappings: string[] = [];
+        let mappings = "";
+        let mappingSegmentsBuffer: string[] = [];
 
         // Last recorded and encoded mappings
         let lastGeneratedLine = 0;
@@ -221,7 +222,7 @@ namespace ts {
             if (lastGeneratedLine < pendingGeneratedLine) {
                 // Emit line delimiters
                 do {
-                    mappings.push(";");
+                    mappingSegmentsBuffer.push(";");
                     lastGeneratedLine++;
                     lastGeneratedCharacter = 0;
                 }
@@ -231,34 +232,37 @@ namespace ts {
                 Debug.assertEqual(lastGeneratedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
                 // Emit comma to separate the entry
                 if (hasLast) {
-                    mappings.push(",");
+                    mappingSegmentsBuffer.push(",");
                 }
             }
 
             // 1. Relative generated character
-            mappings.push(base64VLQFormatEncode(pendingGeneratedCharacter - lastGeneratedCharacter));
+            mappingSegmentsBuffer.push(base64VLQFormatEncode(pendingGeneratedCharacter - lastGeneratedCharacter));
             lastGeneratedCharacter = pendingGeneratedCharacter;
 
             if (hasPendingSource) {
                 // 2. Relative sourceIndex
-                mappings.push(base64VLQFormatEncode(pendingSourceIndex - lastSourceIndex));
+                mappingSegmentsBuffer.push(base64VLQFormatEncode(pendingSourceIndex - lastSourceIndex));
                 lastSourceIndex = pendingSourceIndex;
 
                 // 3. Relative source line
-                mappings.push(base64VLQFormatEncode(pendingSourceLine - lastSourceLine));
+                mappingSegmentsBuffer.push(base64VLQFormatEncode(pendingSourceLine - lastSourceLine));
                 lastSourceLine = pendingSourceLine;
 
                 // 4. Relative source character
-                mappings.push(base64VLQFormatEncode(pendingSourceCharacter - lastSourceCharacter));
+                mappingSegmentsBuffer.push(base64VLQFormatEncode(pendingSourceCharacter - lastSourceCharacter));
                 lastSourceCharacter = pendingSourceCharacter;
 
                 if (hasPendingName) {
                     // 5. Relative nameIndex
-                    mappings.push(base64VLQFormatEncode(pendingNameIndex - lastNameIndex));
+                    mappingSegmentsBuffer.push(base64VLQFormatEncode(pendingNameIndex - lastNameIndex));
                     lastNameIndex = pendingNameIndex;
                 }
             }
 
+            mappings = mappingSegmentsBuffer.join("");
+            mappingSegmentsBuffer.length = 1;
+            mappingSegmentsBuffer[0] = mappings;
             hasLast = true;
             exit();
         }
@@ -271,7 +275,7 @@ namespace ts {
                 sourceRoot,
                 sources,
                 names,
-                mappings: mappings.join(""),
+                mappings,
                 sourcesContent,
             };
         }
