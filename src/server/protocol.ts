@@ -681,6 +681,7 @@ namespace ts.server.protocol {
 
     export interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        skipDestructiveCodeActions?: boolean;
     }
 
     export interface OrganizeImportsResponse extends Response {

@@ -4849,9 +4849,25 @@
         "category": "Error",
         "code": 6238
     },
+    "File '{0}' exists according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6239
+    },
+    "File '{0}' does not exist according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6240
+    },
+    "Resolution for type reference directive '{0}' was found in cache from location '{1}'.": {
+        "category": "Message",
+        "code": 6241
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}'. ========": {
+        "category": "Message",
+        "code": 6242
+    },
     "Did not resolve '{0}' for typesVersion because it was not in a subtree from '{1}'": {
         "category": "Error",
-        "code": 6239
+        "code": 6243
     },
 
     "Projects to reference": {
@@ -5044,6 +5060,10 @@
         "category": "Suggestion",
         "code": 6387,
         "reportsDeprecated": true
+    },
+    "Project '{0}' is being forcibly rebuilt": {
+        "category": "Message",
+        "code": 6388
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

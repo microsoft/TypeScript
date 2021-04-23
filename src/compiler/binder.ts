@@ -2123,9 +2123,9 @@ namespace ts {
             const saveParent = parent;
             const saveCurrentFlow = currentFlow;
             for (const typeAlias of delayedTypeAliases) {
-                const host = getJSDocHost(typeAlias);
-                container = (host && findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer))) || file;
-                blockScopeContainer = (host && getEnclosingBlockScopeContainer(host)) || file;
+                const host = typeAlias.parent.parent;
+                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
+                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);

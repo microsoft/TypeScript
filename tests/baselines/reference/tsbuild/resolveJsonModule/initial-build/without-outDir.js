@@ -80,7 +80,7 @@ exports["default"] = hello_json_1["default"].hello;
 
 
 //// [/src/tsconfig_withFiles.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/hello.json","./src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6651571919-{\n  \"hello\": \"world\"\n}","signature":"6651571919-{\n  \"hello\": \"world\"\n}","affectsGlobalScope":true},{"version":"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello","signature":"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello","affectsGlobalScope":false}],"options":{"allowSyntheticDefaultImports":true,"composite":true,"configFilePath":"./tsconfig_withFiles.json","esModuleInterop":true,"module":1,"moduleResolution":2,"resolveJsonModule":true,"skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/hello.json","./src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6651571919-{\n  \"hello\": \"world\"\n}","affectsGlobalScope":true},"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig_withFiles.tsbuildinfo.readable.baseline.txt]
 {
@@ -108,18 +108,14 @@ exports["default"] = hello_json_1["default"].hello;
       },
       "./src/index.ts": {
         "version": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
-        "signature": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
-        "affectsGlobalScope": false
+        "signature": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello"
       }
     },
     "options": {
       "allowSyntheticDefaultImports": true,
       "composite": true,
-      "configFilePath": "./tsconfig_withFiles.json",
       "esModuleInterop": true,
       "module": 1,
-      "moduleResolution": 2,
-      "resolveJsonModule": true,
       "skipDefaultLibCheck": true
     },
     "referencedMap": {
@@ -139,7 +135,7 @@ exports["default"] = hello_json_1["default"].hello;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1725
+  "size": 996
 }
 
 

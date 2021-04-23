@@ -1042,9 +1042,9 @@ namespace ts {
             if (flags & ModifierFlags.Protected) { result.push(createModifier(SyntaxKind.ProtectedKeyword)); }
             if (flags & ModifierFlags.Abstract) { result.push(createModifier(SyntaxKind.AbstractKeyword)); }
             if (flags & ModifierFlags.Static) { result.push(createModifier(SyntaxKind.StaticKeyword)); }
+            if (flags & ModifierFlags.Override) { result.push(createModifier(SyntaxKind.OverrideKeyword)); }
             if (flags & ModifierFlags.Readonly) { result.push(createModifier(SyntaxKind.ReadonlyKeyword)); }
             if (flags & ModifierFlags.Async) { result.push(createModifier(SyntaxKind.AsyncKeyword)); }
-            if (flags & ModifierFlags.Override) { result.push(createModifier(SyntaxKind.OverrideKeyword)); }
             return result;
         }
 
@@ -2139,7 +2139,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name,
-                initializer
+                initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer)
             );
             node.propertyName = asName(propertyName);
             node.dotDotDotToken = dotDotDotToken;

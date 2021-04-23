@@ -166,15 +166,23 @@ namespace ts {
         const resolvedModuleNames = new Map<Path, ESMap<string, CachedResolvedModuleWithFailedLookupLocations>>();
         const perDirectoryResolvedModuleNames: CacheWithRedirects<ESMap<string, CachedResolvedModuleWithFailedLookupLocations>> = createCacheWithRedirects();
         const nonRelativeModuleNameCache: CacheWithRedirects<PerModuleNameCache> = createCacheWithRedirects();
-        const moduleResolutionCache = createModuleResolutionCacheWithMaps(
+        const moduleResolutionCache = createModuleResolutionCache(
+            getCurrentDirectory(),
+            resolutionHost.getCanonicalFileName,
+            /*options*/ undefined,
             perDirectoryResolvedModuleNames,
             nonRelativeModuleNameCache,
-            getCurrentDirectory(),
-            resolutionHost.getCanonicalFileName
         );
 
         const resolvedTypeReferenceDirectives = new Map<Path, ESMap<string, CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         const perDirectoryResolvedTypeReferenceDirectives: CacheWithRedirects<ESMap<string, CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>> = createCacheWithRedirects();
+        const typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
+            getCurrentDirectory(),
+            resolutionHost.getCanonicalFileName,
+            /*options*/ undefined,
+            moduleResolutionCache.getPackageJsonInfoCache(),
+            perDirectoryResolvedTypeReferenceDirectives
+        );
 
         /**
          * These are the extensions that failed lookup files will have by default,
@@ -284,9 +292,8 @@ namespace ts {
         }
 
         function clearPerDirectoryResolutions() {
-            perDirectoryResolvedModuleNames.clear();
-            nonRelativeModuleNameCache.clear();
-            perDirectoryResolvedTypeReferenceDirectives.clear();
+            moduleResolutionCache.clear();
+            typeReferenceDirectiveResolutionCache.clear();
             nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
             nonRelativeExternalModuleResolutions.clear();
         }
@@ -320,7 +327,9 @@ namespace ts {
                     resolutionHost.projectName,
                     compilerOptions,
                     host,
-                    globalCache);
+                    globalCache,
+                    moduleResolutionCache,
+                );
                 if (resolvedModule) {
                     // Modify existing resolution so its saved in the directory cache as well
                     (primaryResult.resolvedModule as any) = resolvedModule;
@@ -331,6 +340,10 @@ namespace ts {
 
             // Default return the result from the first pass
             return primaryResult;
+        }
+
+        function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+            return ts.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, options, host, redirectedReference, typeReferenceDirectiveResolutionCache);
         }
 
         interface ResolveNamesWithLocalCacheInput<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
