@@ -1,0 +1,406 @@
+=== tests/cases/compiler/unusedWellKnownSymbolsInClass.ts ===
+export class Polling {
+>Polling : Polling
+
+  private async *[Symbol.asyncIterator]() {}
+>[Symbol.asyncIterator] : () => AsyncGenerator<never, void, unknown>
+>Symbol.asyncIterator : unique symbol
+>Symbol : SymbolConstructor
+>asyncIterator : unique symbol
+
+  private *[Symbol.iterator]() {}
+>[Symbol.iterator] : () => Generator<never, void, unknown>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+  async loop() {
+>loop : () => Promise<void>
+
+    for await (const updates of this) {
+>updates : never
+>this : this
+
+      void updates
+>void updates : undefined
+>updates : never
+    }
+  }
+  syncLoop() {
+>syncLoop : () => void
+
+    for (const updates of this) {
+>updates : never
+>this : this
+
+      void updates
+>void updates : undefined
+>updates : never
+    }
+  }
+}
+
+export class WellknownSymbolMethods {
+>WellknownSymbolMethods : WellknownSymbolMethods
+
+  private async *[Symbol.asyncIterator]() {
+>[Symbol.asyncIterator] : () => AsyncGenerator<string, void, unknown>
+>Symbol.asyncIterator : unique symbol
+>Symbol : SymbolConstructor
+>asyncIterator : unique symbol
+
+    yield "hello";
+>yield "hello" : any
+>"hello" : "hello"
+  }
+
+  private static [Symbol.hasInstance](instance: unknown) {
+>[Symbol.hasInstance] : (instance: unknown) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>instance : unknown
+
+    return Array.isArray(instance);
+>Array.isArray(instance) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>instance : unknown
+  }
+
+  private get [Symbol.isConcatSpreadable]() {
+>[Symbol.isConcatSpreadable] : boolean
+>Symbol.isConcatSpreadable : unique symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : unique symbol
+
+    return false
+>false : false
+  }
+  
+  private *[Symbol.iterator]() {
+>[Symbol.iterator] : () => Generator<string, void, unknown>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+    yield "hello";
+>yield "hello" : any
+>"hello" : "hello"
+  }
+
+  private get [Symbol.match]() {
+>[Symbol.match] : boolean
+>Symbol.match : unique symbol
+>Symbol : SymbolConstructor
+>match : unique symbol
+
+    return false;
+>false : false
+  }
+
+  private *[Symbol.matchAll](str: string) {
+>[Symbol.matchAll] : (str: string) => Generator<string, void, unknown>
+>Symbol.matchAll : unique symbol
+>Symbol : SymbolConstructor
+>matchAll : unique symbol
+>str : string
+
+    for (const n of str.matchAll(/[0-9]+/g))
+>n : RegExpMatchArray
+>str.matchAll(/[0-9]+/g) : IterableIterator<RegExpMatchArray>
+>str.matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>str : string
+>matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>/[0-9]+/g : RegExp
+
+      yield n[0];
+>yield n[0] : any
+>n[0] : string
+>n : RegExpMatchArray
+>0 : 0
+  }
+
+  private [Symbol.replace](str: string) {
+>[Symbol.replace] : (str: string) => string
+>Symbol.replace : unique symbol
+>Symbol : SymbolConstructor
+>replace : unique symbol
+>str : string
+
+    return `s/${str}/foo/g`;
+>`s/${str}/foo/g` : string
+>str : string
+  }
+
+  private [Symbol.search](str: string) {
+>[Symbol.search] : (str: string) => number
+>Symbol.search : unique symbol
+>Symbol : SymbolConstructor
+>search : unique symbol
+>str : string
+
+    return str.indexOf('foo');
+>str.indexOf('foo') : number
+>str.indexOf : (searchString: string, position?: number) => number
+>str : string
+>indexOf : (searchString: string, position?: number) => number
+>'foo' : "foo"
+  }
+
+  private [Symbol.split](str: string) {
+>[Symbol.split] : (str: string) => string
+>Symbol.split : unique symbol
+>Symbol : SymbolConstructor
+>split : unique symbol
+>str : string
+
+    return 'foo'
+>'foo' : "foo"
+  }
+
+  private static get [Symbol.species]() { return Array; }
+>[Symbol.species] : ArrayConstructor
+>Symbol.species : unique symbol
+>Symbol : SymbolConstructor
+>species : unique symbol
+>Array : ArrayConstructor
+
+  private [Symbol.toPrimitive](hint: any) {
+>[Symbol.toPrimitive] : (hint: any) => number
+>Symbol.toPrimitive : unique symbol
+>Symbol : SymbolConstructor
+>toPrimitive : unique symbol
+>hint : any
+
+    if (hint === 'number') {
+>hint === 'number' : boolean
+>hint : any
+>'number' : "number"
+
+      return 42;
+>42 : 42
+    }
+    return null;
+>null : null
+  }
+
+  private get [Symbol.toStringTag]() {
+>[Symbol.toStringTag] : string
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+
+    return 'foo';
+>'foo' : "foo"
+  }
+
+  private get [Symbol.unscopables]() {
+>[Symbol.unscopables] : {}
+>Symbol.unscopables : unique symbol
+>Symbol : SymbolConstructor
+>unscopables : unique symbol
+
+    return {};
+>{} : {}
+  }
+}
+
+export class WellknownSymbolProperties {
+>WellknownSymbolProperties : WellknownSymbolProperties
+
+  private [Symbol.asyncIterator] = function*() {
+>[Symbol.asyncIterator] : () => Generator<string, void, unknown>
+>Symbol.asyncIterator : unique symbol
+>Symbol : SymbolConstructor
+>asyncIterator : unique symbol
+>function*() {    yield "hello";  } : () => Generator<string, void, unknown>
+
+    yield "hello";
+>yield "hello" : any
+>"hello" : "hello"
+  }
+
+  private static [Symbol.hasInstance] = (instance: unknown) => {
+>[Symbol.hasInstance] : (instance: unknown) => boolean
+>Symbol.hasInstance : unique symbol
+>Symbol : SymbolConstructor
+>hasInstance : unique symbol
+>(instance: unknown) => {    return Array.isArray(instance);  } : (instance: unknown) => boolean
+>instance : unknown
+
+    return Array.isArray(instance);
+>Array.isArray(instance) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>instance : unknown
+  }
+
+  private [Symbol.isConcatSpreadable] = false;
+>[Symbol.isConcatSpreadable] : boolean
+>Symbol.isConcatSpreadable : unique symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : unique symbol
+>false : false
+  
+  private [Symbol.iterator] = function*() {
+>[Symbol.iterator] : () => Generator<string, void, unknown>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+>function*() {    yield "hello";  } : () => Generator<string, void, unknown>
+
+    yield "hello";
+>yield "hello" : any
+>"hello" : "hello"
+  }
+
+  private [Symbol.match] = false;
+>[Symbol.match] : boolean
+>Symbol.match : unique symbol
+>Symbol : SymbolConstructor
+>match : unique symbol
+>false : false
+
+  private [Symbol.matchAll] = function*(str: string) {
+>[Symbol.matchAll] : (str: string) => Generator<string, void, unknown>
+>Symbol.matchAll : unique symbol
+>Symbol : SymbolConstructor
+>matchAll : unique symbol
+>function*(str: string) {    for (const n of str.matchAll(/[0-9]+/g))      yield n[0];  } : (str: string) => Generator<string, void, unknown>
+>str : string
+
+    for (const n of str.matchAll(/[0-9]+/g))
+>n : RegExpMatchArray
+>str.matchAll(/[0-9]+/g) : IterableIterator<RegExpMatchArray>
+>str.matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>str : string
+>matchAll : (regexp: RegExp) => IterableIterator<RegExpMatchArray>
+>/[0-9]+/g : RegExp
+
+      yield n[0];
+>yield n[0] : any
+>n[0] : string
+>n : RegExpMatchArray
+>0 : 0
+  }
+
+  private [Symbol.replace] = (str: string) => {
+>[Symbol.replace] : (str: string) => string
+>Symbol.replace : unique symbol
+>Symbol : SymbolConstructor
+>replace : unique symbol
+>(str: string) => {    return `s/${str}/foo/g`;  } : (str: string) => string
+>str : string
+
+    return `s/${str}/foo/g`;
+>`s/${str}/foo/g` : string
+>str : string
+  }
+
+  private [Symbol.search] = (str: string) => {
+>[Symbol.search] : (str: string) => number
+>Symbol.search : unique symbol
+>Symbol : SymbolConstructor
+>search : unique symbol
+>(str: string) => {    return str.indexOf('foo');  } : (str: string) => number
+>str : string
+
+    return str.indexOf('foo');
+>str.indexOf('foo') : number
+>str.indexOf : (searchString: string, position?: number) => number
+>str : string
+>indexOf : (searchString: string, position?: number) => number
+>'foo' : "foo"
+  }
+
+  private [Symbol.split] = (str: string) => {
+>[Symbol.split] : (str: string) => string
+>Symbol.split : unique symbol
+>Symbol : SymbolConstructor
+>split : unique symbol
+>(str: string) => {    return 'foo'  } : (str: string) => string
+>str : string
+
+    return 'foo'
+>'foo' : "foo"
+  }
+
+  private static [Symbol.species] = Array;
+>[Symbol.species] : ArrayConstructor
+>Symbol.species : unique symbol
+>Symbol : SymbolConstructor
+>species : unique symbol
+>Array : ArrayConstructor
+
+  private [Symbol.toPrimitive] = (hint: any) => {
+>[Symbol.toPrimitive] : (hint: any) => number
+>Symbol.toPrimitive : unique symbol
+>Symbol : SymbolConstructor
+>toPrimitive : unique symbol
+>(hint: any) => {    if (hint === 'number') {      return 42;    }    return null;  } : (hint: any) => number
+>hint : any
+
+    if (hint === 'number') {
+>hint === 'number' : boolean
+>hint : any
+>'number' : "number"
+
+      return 42;
+>42 : 42
+    }
+    return null;
+>null : null
+  }
+
+  private [Symbol.toStringTag] = 'foo';
+>[Symbol.toStringTag] : string
+>Symbol.toStringTag : unique symbol
+>Symbol : SymbolConstructor
+>toStringTag : unique symbol
+>'foo' : "foo"
+
+  private [Symbol.unscopables] = {};
+>[Symbol.unscopables] : {}
+>Symbol.unscopables : unique symbol
+>Symbol : SymbolConstructor
+>unscopables : unique symbol
+>{} : {}
+}
+
+const MyIterator = Symbol();
+>MyIterator : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+export function testLocalSymbols() {
+>testLocalSymbols : () => typeof Foo
+
+  const Symbol = {
+>Symbol : { iterator: symbol; }
+>{    iterator: MyIterator  } : { iterator: symbol; }
+
+    iterator: MyIterator
+>iterator : symbol
+>MyIterator : unique symbol
+
+  };
+
+  return class Foo{
+>class Foo{    private *[Symbol.iterator]() {      yield 1;    }  } : typeof Foo
+>Foo : typeof Foo
+
+    private *[Symbol.iterator]() {
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : { iterator: symbol; }
+>iterator : symbol
+
+      yield 1;
+>yield 1 : any
+>1 : 1
+    }
+  }
+}
