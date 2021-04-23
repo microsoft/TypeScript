@@ -33,6 +33,7 @@
 [1, 2, 3, 4, 5, 6].forEach(marker => {
   verify.completions({
     marker: `${marker}`,
-    excludes: "a"
+    excludes: "a",
+    isNewIdentifierLocation: true,
   });
 });
