@@ -271,7 +271,7 @@ namespace ts {
                 sourceRoot,
                 sources,
                 names,
-                mappings: mappings.join(),
+                mappings: mappings.join(""),
                 sourcesContent,
             };
         }
