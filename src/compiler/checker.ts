@@ -14720,6 +14720,13 @@ namespace ts {
                 }
                 return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsGenericObjectType);
             }
+            if (type.flags & TypeFlags.Substitution) {
+                if (!((<SubstitutionType>type).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
+                    (<SubstitutionType>type).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
+                        (isGenericObjectType((<SubstitutionType>type).substitute) || isGenericObjectType((<SubstitutionType>type).baseType) ? ObjectFlags.IsGenericObjectType : 0);
+                }
+                return !!((<SubstitutionType>type).objectFlags & ObjectFlags.IsGenericObjectType);
+            }
             return !!(type.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type) || isGenericTupleType(type);
         }
 
@@ -14730,6 +14737,13 @@ namespace ts {
                         (some((<UnionOrIntersectionType>type).types, isGenericIndexType) ? ObjectFlags.IsGenericIndexType : 0);
                 }
                 return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsGenericIndexType);
+            }
+            if (type.flags & TypeFlags.Substitution) {
+                if (!((<SubstitutionType>type).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
+                    (<SubstitutionType>type).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
+                        (isGenericIndexType((<SubstitutionType>type).substitute) || isGenericIndexType((<SubstitutionType>type).baseType) ? ObjectFlags.IsGenericIndexType : 0);
+                }
+                return !!((<SubstitutionType>type).objectFlags & ObjectFlags.IsGenericIndexType);
             }
             return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
         }
@@ -21127,6 +21141,13 @@ namespace ts {
                     if ((<StringMappingType>source).symbol === (<StringMappingType>target).symbol) {
                         inferFromTypes((<StringMappingType>source).type, (<StringMappingType>target).type);
                     }
+                }
+                else if (source.flags & TypeFlags.Substitution) {
+                    inferFromTypes((source as SubstitutionType).baseType, target);
+                    const oldPriority = priority;
+                    priority |= InferencePriority.SubstituteSource;
+                    inferFromTypes((source as SubstitutionType).substitute, target); // Make substitute inference at a lower priority
+                    priority = oldPriority;
                 }
                 else if (target.flags & TypeFlags.Conditional) {
                     invokeOnce(source, target, inferToConditionalType);
