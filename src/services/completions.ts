@@ -2370,14 +2370,22 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
-            // If we are inside a class declaration and typing `constructor`...
-            if (isClassLike(contextToken.parent.parent)
-               && isPropertyDeclaration(contextToken.parent)
-               && (isIdentifier(contextToken) || isTypeKeyword(contextToken.kind))
-               // And the cursor is at the token...
-               && (position <= previousToken.end || contextToken.kind === SyntaxKind.SemicolonToken)
-               ) {
-                return false; // Don't block completions then.
+            function isPreviousPropertyDeclarationTerminated(contextToken: Node, previousToken: Node) {
+                return getLinesBetweenPositions(sourceFile, contextToken.end, previousToken.end) > 0 ||
+                    contextToken.kind === SyntaxKind.SemicolonToken;
+            }
+
+            // If we are inside a class declaration and typing `constructor` after property declaration...
+            if (contextToken !== previousToken
+                && isClassLike(previousToken.parent.parent)
+                && isPropertyDeclaration(contextToken.parent)
+                // After considering different contextToken...
+                && (isIdentifier(contextToken) || isTypeKeyword(contextToken.kind))
+                // And the cursor is at the token...
+                && position <= previousToken.end) {
+                    // If the previous property declaration is terminated according to newline or semicolon, don't block completions then.
+                    // Otherwise, the completions should be blocked if we cant assert the previous property declaration is terminated.
+                    return !isPreviousPropertyDeclarationTerminated(contextToken, previousToken);
             }
 
             return isDeclarationName(contextToken)
