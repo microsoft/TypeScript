@@ -55,4 +55,38 @@ class C {
     await: // illegal, 'await' cannot be used as a label
         break await; // illegal, 'await' cannot be used as a label
   }
+  static {
+    class E {
+      constructor () { await; }
+      method () { await; }
+      get accessor () {
+        await;
+        return 1;
+      }
+      set accessor (v: any) {
+        await;
+      }
+      propLambda = () => { await; }
+      propFunc = function () { await; }
+    }
+  }
+  static {
+    class S {
+      static method () { await; }
+      static get accessor () {
+        await;
+        return 1;
+      }
+      static set accessor (v: any) {
+        await;
+      }
+      static propLambda = () => { await; }
+      static propFunc = function () { await; }
+    }
+  }
+  static {
+    function f (await) {}
+    const ff = (await) => {}
+    const fff = await => {}
+  }
 }

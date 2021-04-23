@@ -108,4 +108,92 @@ class C {
         break await; // illegal, 'await' cannot be used as a label
 >await : any
   }
+  static {
+    class E {
+>E : E
+
+      constructor () { await; }
+>await : "any"
+
+      method () { await; }
+>method : () => void
+>await : "any"
+
+      get accessor () {
+>accessor : any
+
+        await;
+>await : "any"
+
+        return 1;
+>1 : 1
+      }
+      set accessor (v: any) {
+>accessor : any
+>v : any
+
+        await;
+>await : "any"
+      }
+      propLambda = () => { await; }
+>propLambda : () => void
+>() => { await; } : () => void
+>await : "any"
+
+      propFunc = function () { await; }
+>propFunc : () => void
+>function () { await; } : () => void
+>await : "any"
+    }
+  }
+  static {
+    class S {
+>S : S
+
+      static method () { await; }
+>method : () => void
+>await : "any"
+
+      static get accessor () {
+>accessor : any
+
+        await;
+>await : "any"
+
+        return 1;
+>1 : 1
+      }
+      static set accessor (v: any) {
+>accessor : any
+>v : any
+
+        await;
+>await : "any"
+      }
+      static propLambda = () => { await; }
+>propLambda : () => void
+>() => { await; } : () => void
+>await : "any"
+
+      static propFunc = function () { await; }
+>propFunc : () => void
+>function () { await; } : () => void
+>await : "any"
+    }
+  }
+  static {
+    function f (await) {}
+>f : (await: any) => void
+>await : any
+
+    const ff = (await) => {}
+>ff : (await: any) => void
+>(await) => {} : (await: any) => void
+>await : any
+
+    const fff = await => {}
+>fff : (await: any) => void
+>await => {} : (await: any) => void
+>await : any
+  }
 }
