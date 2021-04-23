@@ -11698,7 +11698,7 @@ namespace ts {
                             checkFlags |= CheckFlags.WritePartial | (indexInfo.isReadonly ? CheckFlags.Readonly : 0);
                             indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
                         }
-                        else if (isObjectLiteralType(type)) {
+                        else if (isObjectLiteralType(type) && !(getObjectFlags(type) & ObjectFlags.ContainsSpread)) {
                             checkFlags |= CheckFlags.WritePartial;
                             indexTypes = append(indexTypes, undefinedType);
                         }
