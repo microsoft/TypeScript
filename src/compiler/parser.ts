@@ -6819,20 +6819,13 @@ namespace ts {
 
         function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
             const savedAwaitContext = inAwaitContext();
-            const savedClassStaticBlockContext = inClassStaticBlockContext();
             parseExpected(SyntaxKind.ClassKeyword);
 
-            if (kind === SyntaxKind.ClassExpression) {
-                // all class expression is not inside function boundary
-                setClassStaticBlockContext(false);
-            }
             // We don't parse the name here in await context, instead we will report a grammar error in the checker.
-            const name = parseNameOfClassDeclarationOrExpression();
-
-            if (kind === SyntaxKind.ClassDeclaration) {
-                // class declaration's name is inside function boundary
-                setClassStaticBlockContext(false);
-            }
+            const name = doOutsideOfContext(
+                kind === SyntaxKind.ClassExpression ? NodeFlags.ClassStaticBlockContext : NodeFlags.None,
+                parseNameOfClassDeclarationOrExpression
+            );
 
             const typeParameters = parseTypeParameters();
             if (some(modifiers, isExportModifier)) setAwaitContext(/*value*/ true);
@@ -6849,7 +6842,6 @@ namespace ts {
                 members = createMissingList<ClassElement>();
             }
             setAwaitContext(savedAwaitContext);
-            setClassStaticBlockContext(savedClassStaticBlockContext);
             const node = kind === SyntaxKind.ClassDeclaration
                 ? factory.createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members)
                 : factory.createClassExpression(decorators, modifiers, name, typeParameters, heritageClauses, members);

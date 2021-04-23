@@ -9,11 +9,12 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(22,14): e
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(25,11): error TS18037: Identifier 'await' cannot be used inside class static block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(28,8): error TS18037: Identifier 'await' cannot be used inside class static block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,9): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(37,10): error TS18037: Identifier 'await' cannot be used inside class static block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,5): error TS18037: Identifier 'await' cannot be used inside class static block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS18037: Identifier 'await' cannot be used inside class static block.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (12 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (13 errors) ====
     let await: "any";
     class C {
       static {
@@ -72,6 +73,8 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): e
             await = 1; // legal
             x = await; // legal (initializers have an implicit function boundary)
             [await] = 1; // illegal (computed property names are evaluated outside of a class body
+             ~~~~~
+!!! error TS18037: Identifier 'await' cannot be used inside class static block.
           };
       }
       static {
