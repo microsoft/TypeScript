@@ -173,10 +173,10 @@ namespace ts.JsDoc {
         function addComment(s: string) {
             if (comment) {
                 if (s.match(/^https?$/)) {
-                    return [textPart(s), ...getDisplayPartsFromComment(comment, checker)]
+                    return [textPart(s), ...getDisplayPartsFromComment(comment, checker)];
                 }
                 else {
-                    return [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
+                    return [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)];
                 }
             }
             else {
