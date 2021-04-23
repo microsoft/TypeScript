@@ -2370,22 +2370,19 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
-            function isPreviousPropertyDeclarationTerminated(contextToken: Node, previousToken: Node) {
-                return getLinesBetweenPositions(sourceFile, contextToken.end, previousToken.end) > 0 ||
-                    contextToken.kind === SyntaxKind.SemicolonToken;
+            // If `constructor` is not present, but we request a completion manually...
+            if (contextToken === previousToken && isPreviousPropertyDeclarationTerminated(contextToken, position)) {
+                return false; // Don't block completions.
             }
-
-            // If we are inside a class declaration and typing `constructor` after property declaration...
-            if (contextToken !== previousToken
+            // If the previous property declaration is terminated according to newline or semicolon...
+            else if (isPreviousPropertyDeclarationTerminated(contextToken, previousToken.end)
+                // And we are inside a class declaration and typing `constructor` after property declaration...
+                && contextToken !== previousToken
                 && isClassLike(previousToken.parent.parent)
                 && isPropertyDeclaration(contextToken.parent)
-                // After considering different contextToken...
-                && (isIdentifier(contextToken) || isTypeKeyword(contextToken.kind))
                 // And the cursor is at the token...
                 && position <= previousToken.end) {
-                    // If the previous property declaration is terminated according to newline or semicolon, don't block completions then.
-                    // Otherwise, the completions should be blocked if we cant assert the previous property declaration is terminated.
-                    return !isPreviousPropertyDeclarationTerminated(contextToken, previousToken);
+                    return false; // Don't block completions.
             }
 
             return isDeclarationName(contextToken)
@@ -2394,6 +2391,12 @@ namespace ts.Completions {
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
                 // If `contextToken !== previousToken`, this is `class C ex/**/`.
                 && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+        }
+
+        function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
+            return contextToken.kind !== SyntaxKind.EqualsToken &&
+                (contextToken.kind === SyntaxKind.SemicolonToken
+                || !positionsAreOnSameLine(contextToken.end, position, sourceFile));
         }
 
         function isFunctionLikeButNotConstructor(kind: SyntaxKind) {
@@ -2849,25 +2852,9 @@ namespace ts.Completions {
 
         if (!contextToken) return undefined;
 
-        function isPropertyBeforeConstructorInitalized(classDecl: ClassDeclaration, _constructor: ClassElement) {
-            const indexOfConstructor = classDecl.members.indexOf(_constructor);
-            if (indexOfConstructor <= 0) {
-                return true;
-            }
-            return isInitializedProperty(classDecl.members[indexOfConstructor - 1]);
-        }
-
-        // class c { prop \n constructor| }
-        // class c { prop: number \n constructor| }
-        // class c { prop = somewhat \n constructor| }
-        // and also for `;` replacing `\n`
-        if (location.kind === SyntaxKind.ConstructorKeyword && (
-            isIdentifier(contextToken) ||
-            isTypeKeyword(contextToken.kind) ||
-            isPropertyBeforeConstructorInitalized(getAncestor(location, SyntaxKind.ClassDeclaration) as ClassDeclaration, location.parent as ClassElement) ||
-            contextToken.kind === SyntaxKind.SemicolonToken
-        )) {
-            return getAncestor(contextToken, SyntaxKind.ClassDeclaration) as ObjectTypeDeclaration;
+        if (location.kind === SyntaxKind.ConstructorKeyword
+            || (isIdentifier(contextToken) && isPropertyDeclaration(contextToken.parent) && isClassLike(location))) {
+            return findAncestor(contextToken, isClassLike) as ObjectTypeDeclaration;
         }
 
         switch (contextToken.kind) {

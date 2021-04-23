@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+//// const GlobalWhat = 123
 //// // situations that `constructor` is partly present
 //// class A {
 ////   blah; con/*1*/
@@ -72,32 +73,36 @@
 //// }
 //// class R {
 ////   blah
-////   /*18*/ // dont complete since `blah \n = 123` is legal
+////   /*18*/
 //// }
+//// // situations that `constructor` should not be suggested
 //// class R {
 ////   blah /*19*/ 
 //// }
-//// // situations that `constructor` should not be suggested
 //// class S {
 ////   blah con/*20*/
 //// }
+//// // situations that `constructor` should not be suggested but 
 //// class T {
 ////   blah: number con/*21*/
 //// }
+//// const SomeValue = 123
+//// class U {
+////   blah = SomeValue con/*22*/  
+//// }
 
-const positiveCaseCount = 17; // 1~17
-const negativeCaseCount = 4; // 18~21
-const positiveCases = Array.from(Array(positiveCaseCount), (_, i) => String(i + 1));
-const negativeCases = Array.from(Array(negativeCaseCount), (_, i) => String(i + 1 + positiveCaseCount));
+function generateRange(l: number, r: number) {
+  return Array.from(Array(r - l + 1), (_, i) => String(i + l)); // [l, r]
+}
 
 verify.completions({
-  marker: positiveCases,
+  marker: generateRange(1, 18),
   includes: { name: "constructor", sortText: completion.SortText.GlobalsOrKeywords },
   isNewIdentifierLocation: true,
 });
 
 verify.completions({
-  marker: negativeCases,
+  marker: generateRange(19, 20),
   exact: [],
   isNewIdentifierLocation: true,
 });
