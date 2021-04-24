@@ -1,6 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-//// const GlobalWhat = 123
 //// // situations that `constructor` is partly present
 //// class A {
 ////   blah; con/*1*/
@@ -10,85 +9,76 @@
 ////   con/*2*/
 //// }
 //// class C {
-////   blah;
+////   blah: number
 ////   con/*3*/
 //// }
 //// class D {
-////   blah: number
+////   blah = 123
 ////   con/*4*/
 //// }
 //// class E {
-////   blah: number; con/*5*/
+////   blah = [123]
+////   con/*5*/
 //// }
 //// class F {
-////   blah = 123
+////   blah = {key: 123}
 ////   con/*6*/
 //// }
-//// class G {
-////   blah = 123; con/*7*/
-//// }
 //// // situations that `constructor` is fully present
+//// class G {
+////   blah; constructor/*7*/
+//// }
 //// class H {
 ////   blah
 ////   constructor/*8*/
 //// }
 //// class I {
-////   blah;
+////   blah: number
 ////   constructor/*9*/
 //// }
 //// class J {
-////   blah: number
+////   blah = 123
 ////   constructor/*10*/
 //// }
 //// class K {
-////   blah: number;
+////   blah = [123]
 ////   constructor/*11*/
 //// }
 //// class L {
-////   blah = 123
+////   blah = {key: 123}
 ////   constructor/*12*/
 //// }
+//// // situations that `constructor` isn't present, but we should offer it
 //// class M {
-////   blah = 123;
-////   constructor/*13*/
+////   blah; /*13*/ 
 //// }
 //// class N {
-////   blah = [123]
-////   constructor/*14*/
-//// }
-//// class O {
-////   blah = {key: 1}
-////   constructor/*15*/
-//// }
-//// function return1() {
-////   return 1
-//// }
-//// class P {
-////   blah = return1()
-////   constructor/*16*/
-//// }
-//// // situations that `constructor` isn't present
-//// class Q {
-////   blah; /*17*/ 
-//// }
-//// class R {
 ////   blah
-////   /*18*/
+////   /*14*/
 //// }
 //// // situations that `constructor` should not be suggested
+//// class O {
+////   blah /*15*/ 
+//// }
+//// class P {
+////   blah con/*16*/
+//// }
+//// class Q {
+////   blah: number con/*17*/
+//// }
 //// class R {
-////   blah /*19*/ 
+////   blah = 123 con/*18*/
 //// }
 //// class S {
-////   blah con/*20*/
+////   blah = {key: 123} con/*19*/
 //// }
-//// // situations that `constructor` should not be suggested but 
+//// type SomeType = number
 //// class T {
-////   blah: number con/*21*/
+////   blah: SomeType con/*20*/
 //// }
 //// const SomeValue = 123
 //// class U {
-////   blah = SomeValue con/*22*/  
+////   blah = SomeValue con/*21*/
 //// }
 
 function generateRange(l: number, r: number) {
@@ -96,13 +86,13 @@ function generateRange(l: number, r: number) {
 }
 
 verify.completions({
-  marker: generateRange(1, 18),
+  marker: generateRange(1, 14),
   includes: { name: "constructor", sortText: completion.SortText.GlobalsOrKeywords },
   isNewIdentifierLocation: true,
 });
 
 verify.completions({
-  marker: generateRange(19, 20),
+  marker: generateRange(15, 21),
   exact: [],
   isNewIdentifierLocation: true,
 });

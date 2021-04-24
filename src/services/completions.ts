@@ -2370,19 +2370,29 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
-            // If `constructor` is not present, but we request a completion manually...
+            // If `constructor` is totally not present, but we request a completion manually at a space...
             if (contextToken === previousToken && isPreviousPropertyDeclarationTerminated(contextToken, position)) {
                 return false; // Don't block completions.
             }
-            // If the previous property declaration is terminated according to newline or semicolon...
-            else if (isPreviousPropertyDeclarationTerminated(contextToken, previousToken.end)
-                // And we are inside a class declaration and typing `constructor` after property declaration...
+
+            const ancestorPropertyDeclaraion = getAncestor(contextToken.parent, SyntaxKind.PropertyDeclaration);
+            // If we are inside a class declaration and typing `constructor` after property declaration...
+            if (ancestorPropertyDeclaraion
                 && contextToken !== previousToken
                 && isClassLike(previousToken.parent.parent)
-                && isPropertyDeclaration(contextToken.parent)
                 // And the cursor is at the token...
                 && position <= previousToken.end) {
+                // If we are sure that the previous property declaration is terminated according to newline or semicolon...
+                if (isPreviousPropertyDeclarationTerminated(contextToken, previousToken.end)) {
                     return false; // Don't block completions.
+                }
+                else if (contextToken.kind !== SyntaxKind.EqualsToken
+                    // Should not block: `class C { blah = c/**/ }`
+                    // But should block: `class C { blah = somewhat c/**/ }` and `class C { blah: SomeType c/**/ }`
+                    && (isInitializedProperty(ancestorPropertyDeclaraion as PropertyDeclaration)
+                    || hasType(ancestorPropertyDeclaraion))) {
+                    return true;
+                }
             }
 
             return isDeclarationName(contextToken)
