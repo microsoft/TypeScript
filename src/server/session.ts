@@ -1844,7 +1844,10 @@ namespace ts.server {
                     // Use `hasAction || undefined` to avoid serializing `false`.
                     return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
                 }
-            }), (a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
+            }), (a, b) => {
+                // Sort @deprecated completions lower than others first
+                return a.kindModifiers === ScriptElementKindModifier.deprecatedModifier ? 1 : b.kindModifiers === ScriptElementKindModifier.deprecatedModifier ? -1 : compareStringsCaseSensitiveUI(a.name, b.name);
+            });
 
             if (kind === protocol.CommandTypes.Completions) {
                 if (completions.metadata) (entries as WithMetadata<readonly protocol.CompletionEntry[]>).metadata = completions.metadata;
