@@ -1,0 +1,31 @@
+tests/cases/conformance/override/overrideParameterProperty.ts(20,24): error TS1029: 'public' modifier must precede 'override' modifier.
+
+
+==== tests/cases/conformance/override/overrideParameterProperty.ts (1 errors) ====
+    class Base {
+      p1!: string;
+    }
+    
+    class C1 extends Base {
+      constructor(public override p1: "hello") {
+        super();
+        this.p1;
+      }
+    }
+    
+    class C2 extends Base {
+      constructor(override p1: "hello") {
+        super();
+        this.p1;
+      }
+    }
+    
+    class C3 extends Base {
+      constructor(override public p1: "hello") {
+                           ~~~~~~
+!!! error TS1029: 'public' modifier must precede 'override' modifier.
+        super();
+        this.p1;
+      }
+    }
+    
