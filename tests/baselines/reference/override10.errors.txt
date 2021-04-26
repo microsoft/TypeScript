@@ -1,0 +1,16 @@
+tests/cases/conformance/override/override10.ts(8,14): error TS1029: 'abstract' modifier must precede 'override' modifier.
+
+
+==== tests/cases/conformance/override/override10.ts (1 errors) ====
+    abstract class Base {
+        abstract foo(): unknown;
+        abstract bar(): void;
+    }
+    
+    // No errors:
+    abstract class Sub extends Base {
+        override abstract foo(): number;
+                 ~~~~~~~~
+!!! error TS1029: 'abstract' modifier must precede 'override' modifier.
+        bar() { }
+    }
