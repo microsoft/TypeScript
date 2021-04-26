@@ -40609,7 +40609,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.OverrideKeyword:
-                        // If node.kind === SyntaxKind.Parameter, checkParameter report an error if it's not a parameter property.
+                        // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
                         if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
                         }
