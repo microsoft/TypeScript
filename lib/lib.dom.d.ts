@@ -3620,12 +3620,12 @@ declare var ClientRectList: {
 
 interface Clipboard extends EventTarget {
     readText(): Promise<string>;
+    write(data: ClipboardItem[]): Promise<void>;
     writeText(data: string): Promise<void>;
 }
 
 declare var Clipboard: {
     prototype: Clipboard;
-    new(): Clipboard;
 };
 
 /** Events providing information related to modification of the clipboard, that is cut, copy, and paste events. */
@@ -3637,6 +3637,15 @@ declare var ClipboardEvent: {
     prototype: ClipboardEvent;
     new(type: string, eventInitDict?: ClipboardEventInit): ClipboardEvent;
 };
+
+interface ClipboardItem {
+    readonly types: string[]
+    getType: (type: string) => Promise<Blob>
+}
+
+declare var ClipboardItem: {
+    prototype: ClipboardItem; 
+}
 
 /** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. */
 interface CloseEvent extends Event {
