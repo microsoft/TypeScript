@@ -1477,7 +1477,7 @@ namespace ts.FindAllReferences {
 
             if (!hasMatchingMeaning(referenceLocation, state)) return;
 
-            const referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
+            let referenceSymbol = state.checker.getSymbolAtLocation(referenceLocation);
             if (!referenceSymbol) {
                 return;
             }
@@ -1513,6 +1513,11 @@ namespace ts.FindAllReferences {
                 default:
                     Debug.assertNever(state.specialSearchKind);
             }
+
+            // Use the parent symbol if the location is commonjs require syntax on javascript files only.
+            referenceSymbol = isInJSFile(referenceLocation) && referenceLocation.parent.kind === SyntaxKind.BindingElement && isRequireVariableDeclaration(referenceLocation.parent)
+                ? referenceLocation.parent.symbol
+                : referenceSymbol;
 
             getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
         }
@@ -1924,6 +1929,8 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     if (isObjectLiteralMethod(searchSpaceNode)) {
+                        staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
+                        searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning object literals
                         break;
                     }
                     // falls through
@@ -1965,7 +1972,8 @@ namespace ts.FindAllReferences {
                             return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;
                         case SyntaxKind.ClassExpression:
                         case SyntaxKind.ClassDeclaration:
-                            // Make sure the container belongs to the same class
+                        case SyntaxKind.ObjectLiteralExpression:
+                            // Make sure the container belongs to the same class/object literals
                             // and has the appropriate static modifier from the original container.
                             return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getSyntacticModifierFlags(container) & ModifierFlags.Static) === staticFlag;
                         case SyntaxKind.SourceFile:

@@ -1,24 +1,52 @@
-tests/cases/compiler/truthinessPromiseCoercion.ts(5,9): error TS2801: This condition will always return true since this 'Promise<number>' appears to always be defined.
-tests/cases/compiler/truthinessPromiseCoercion.ts(9,5): error TS2801: This condition will always return true since this 'Promise<number>' appears to always be defined.
+tests/cases/compiler/truthinessPromiseCoercion.ts(6,9): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+tests/cases/compiler/truthinessPromiseCoercion.ts(10,5): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+tests/cases/compiler/truthinessPromiseCoercion.ts(31,9): error TS2801: This condition will always return true since this 'Promise<unknown>' is always defined.
 
 
-==== tests/cases/compiler/truthinessPromiseCoercion.ts (2 errors) ====
+==== tests/cases/compiler/truthinessPromiseCoercion.ts (3 errors) ====
     declare const p: Promise<number>
     declare const p2: null | Promise<number>
+    declare const obj: { p: Promise<unknown> }
     
     async function f() {
         if (p) {} // err
             ~
-!!! error TS2801: This condition will always return true since this 'Promise<number>' appears to always be defined.
-!!! related TS2773 tests/cases/compiler/truthinessPromiseCoercion.ts:5:9: Did you forget to use 'await'?
+!!! error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+!!! related TS2773 tests/cases/compiler/truthinessPromiseCoercion.ts:6:9: Did you forget to use 'await'?
         if (!!p) {} // no err
         if (p2) {} // no err
     
         p ? f.arguments : f.arguments;
         ~
-!!! error TS2801: This condition will always return true since this 'Promise<number>' appears to always be defined.
-!!! related TS2773 tests/cases/compiler/truthinessPromiseCoercion.ts:9:5: Did you forget to use 'await'?
+!!! error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
+!!! related TS2773 tests/cases/compiler/truthinessPromiseCoercion.ts:10:5: Did you forget to use 'await'?
         !!p ? f.arguments : f.arguments;
         p2 ? f.arguments : f.arguments;
+    }
+    
+    // all ok
+    async function g() {
+        if (p) {
+            p;
+        }
+        if (p && p.then.length) {}
+        if (p) {
+            if (p) {
+                if (p) {
+                    !!await (((((((p)))))));
+                }
+            }
+        }
+    }
+    
+    async function h() {
+        if (obj.p) {} // error
+            ~~~~~
+!!! error TS2801: This condition will always return true since this 'Promise<unknown>' is always defined.
+!!! related TS2773 tests/cases/compiler/truthinessPromiseCoercion.ts:31:9: Did you forget to use 'await'?
+        if (obj.p) {  // ok
+            await obj.p;
+        }
+        if (obj.p && await obj.p) {} // ok
     }
     

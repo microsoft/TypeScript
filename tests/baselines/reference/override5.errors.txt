@@ -32,7 +32,7 @@ tests/cases/conformance/override/override5.ts(45,23): error TS4112: This member 
     
         override readonly p4: number;
     
-        override static sp: number;
+        static override sp: number;
                         ~~
 !!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
     

@@ -498,6 +498,7 @@ namespace ts.Completions {
             sourceDisplay,
             isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
+            isImportStatementCompletion: originIsResolvedExport(origin) || undefined,
             data,
         };
     }
@@ -1509,7 +1510,8 @@ namespace ts.Completions {
         }
 
         function tryGetGlobalSymbols(): boolean {
-            const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
+            const result: GlobalsSearch = tryGetObjectTypeLiteralInTypeArgumentCompletionSymbols()
+                || tryGetObjectLikeCompletionSymbols()
                 || tryGetImportCompletionSymbols()
                 || tryGetImportOrExportClauseCompletionSymbols()
                 || tryGetLocalNamedExportCompletionSymbols()
@@ -1910,6 +1912,32 @@ namespace ts.Completions {
             return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
                 rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
                 position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
+        }
+
+        function tryGetObjectTypeLiteralInTypeArgumentCompletionSymbols(): GlobalsSearch | undefined {
+            const typeLiteralNode = tryGetTypeLiteralNode(contextToken);
+            if (!typeLiteralNode) return GlobalsSearch.Continue;
+
+            const intersectionTypeNode = isIntersectionTypeNode(typeLiteralNode.parent) ? typeLiteralNode.parent : undefined;
+            const containerTypeNode = intersectionTypeNode || typeLiteralNode;
+
+            const containerExpectedType = getConstraintOfTypeArgumentProperty(containerTypeNode, typeChecker);
+            if (!containerExpectedType) return GlobalsSearch.Continue;
+
+            const containerActualType = typeChecker.getTypeFromTypeNode(containerTypeNode);
+
+            const members = getPropertiesForCompletion(containerExpectedType, typeChecker);
+            const existingMembers = getPropertiesForCompletion(containerActualType, typeChecker);
+
+            const existingMemberEscapedNames: Set<__String> = new Set();
+            existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
+
+            symbols = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
+
+            completionKind = CompletionKind.ObjectPropertyDeclaration;
+            isNewIdentifierLocation = true;
+
+            return GlobalsSearch.Success;
         }
 
         /**
@@ -2858,6 +2886,49 @@ namespace ts.Completions {
         }
     }
 
+    function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
+        if (!node) return undefined;
+
+        const parent = node.parent;
+
+        switch (node.kind) {
+            case SyntaxKind.OpenBraceToken:
+                if (isTypeLiteralNode(parent)) {
+                    return parent;
+                }
+                break;
+            case SyntaxKind.SemicolonToken:
+            case SyntaxKind.CommaToken:
+            case SyntaxKind.Identifier:
+                if (parent.kind === SyntaxKind.PropertySignature && isTypeLiteralNode(parent.parent)) {
+                    return parent.parent;
+                }
+                break;
+        }
+
+        return undefined;
+    }
+
+    function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
+        if (!node) return undefined;
+
+        if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
+            return checker.getTypeArgumentConstraint(node);
+        }
+
+        const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
+        if (!t) return undefined;
+
+        switch (node.kind) {
+            case SyntaxKind.PropertySignature:
+                return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.UnionType:
+                return t;
+        }
+    }
+
     // TODO: GH#19856 Would like to return `node is Node & { parent: (ClassElement | TypeElement) & { parent: ObjectTypeDeclaration } }` but then compilation takes > 10 minutes
     function isFromObjectTypeDeclaration(node: Node): boolean {
         return node.parent && isClassOrTypeElement(node.parent) && isObjectTypeDeclaration(node.parent.parent);
@@ -2921,7 +2992,8 @@ namespace ts.Completions {
         if (type) {
             return type;
         }
-        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node === node.parent.left) {
+            // Object literal is assignment pattern: ({ | } = x)
             return typeChecker.getTypeAtLocation(node.parent);
         }
         return undefined;

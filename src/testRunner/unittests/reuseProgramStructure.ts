@@ -474,7 +474,7 @@ namespace ts {
                         "File 'node_modules/@types/a.d.ts' does not exist.",
                         "File 'node_modules/@types/a/index.d.ts' does not exist.",
                         "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
-                        "File 'node_modules/a/package.json' does not exist.",
+                        "File 'node_modules/a/package.json' does not exist according to earlier cached lookups.",
                         "File 'node_modules/a.js' does not exist.",
                         "File 'node_modules/a.jsx' does not exist.",
                         "File 'node_modules/a/index.js' does not exist.",

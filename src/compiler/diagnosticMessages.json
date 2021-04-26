@@ -3172,7 +3172,7 @@
         "category": "Error",
         "code": 2773
     },
-    "This condition will always return true since this function appears to always be defined. Did you mean to call it instead?": {
+    "This condition will always return true since this function is always defined. Did you mean to call it instead?": {
         "category": "Error",
         "code": 2774
     },
@@ -3280,7 +3280,7 @@
         "category": "Error",
         "code": 2800
     },
-    "This condition will always return true since this '{0}' appears to always be defined.": {
+    "This condition will always return true since this '{0}' is always defined.": {
         "category": "Error",
         "code": 2801
     },
@@ -4849,6 +4849,22 @@
         "category": "Error",
         "code": 6238
     },
+    "File '{0}' exists according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6239
+    },
+    "File '{0}' does not exist according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6240
+    },
+    "Resolution for type reference directive '{0}' was found in cache from location '{1}'.": {
+        "category": "Message",
+        "code": 6241
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}'. ========": {
+        "category": "Message",
+        "code": 6242
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5040,6 +5056,10 @@
         "category": "Suggestion",
         "code": 6387,
         "reportsDeprecated": true
+    },
+    "Project '{0}' is being forcibly rebuilt": {
+        "category": "Message",
+        "code": 6388
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
