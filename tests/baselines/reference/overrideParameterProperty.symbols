@@ -28,15 +28,15 @@ class C2 extends Base {
 >Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
 
   constructor(override p1: "hello") {
->p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 12, 14))
+>p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
 
     super();
 >super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
 
     this.p1;
->this.p1 : Symbol(Base.p1, Decl(overrideParameterProperty.ts, 0, 12))
+>this.p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
 >this : Symbol(C2, Decl(overrideParameterProperty.ts, 9, 1))
->p1 : Symbol(Base.p1, Decl(overrideParameterProperty.ts, 0, 12))
+>p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
   }
 }
 
@@ -55,5 +55,9 @@ class C3 extends Base {
 >this : Symbol(C3, Decl(overrideParameterProperty.ts, 16, 1))
 >p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
   }
+
+  m(override p1: "hello") {}
+>m : Symbol(C3.m, Decl(overrideParameterProperty.ts, 22, 3))
+>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 24, 4))
 }
 

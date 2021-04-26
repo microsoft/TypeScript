@@ -22,6 +22,8 @@ class C3 extends Base {
     super();
     this.p1;
   }
+
+  m(override p1: "hello") {}
 }
 
 
@@ -60,6 +62,7 @@ var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2(p1) {
         var _this = _super.call(this) || this;
+        _this.p1 = p1;
         _this.p1;
         return _this;
     }
@@ -73,5 +76,6 @@ var C3 = /** @class */ (function (_super) {
         _this.p1;
         return _this;
     }
+    C3.prototype.m = function (p1) { };
     return C3;
 }(Base));

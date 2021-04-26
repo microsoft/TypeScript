@@ -36,9 +36,9 @@ class C2 extends Base {
 >super : typeof Base
 
     this.p1;
->this.p1 : string
+>this.p1 : "hello"
 >this : this
->p1 : string
+>p1 : "hello"
   }
 }
 
@@ -58,5 +58,9 @@ class C3 extends Base {
 >this : this
 >p1 : "hello"
   }
+
+  m(override p1: "hello") {}
+>m : (p1: "hello") => void
+>p1 : "hello"
 }
 

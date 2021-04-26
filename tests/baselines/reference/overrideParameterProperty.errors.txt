@@ -1,7 +1,8 @@
 tests/cases/conformance/override/overrideParameterProperty.ts(20,24): error TS1029: 'public' modifier must precede 'override' modifier.
+tests/cases/conformance/override/overrideParameterProperty.ts(25,5): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/conformance/override/overrideParameterProperty.ts (1 errors) ====
+==== tests/cases/conformance/override/overrideParameterProperty.ts (2 errors) ====
     class Base {
       p1!: string;
     }
@@ -27,5 +28,9 @@ tests/cases/conformance/override/overrideParameterProperty.ts(20,24): error TS10
         super();
         this.p1;
       }
+    
+      m(override p1: "hello") {}
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2369: A parameter property is only allowed in a constructor implementation.
     }
     

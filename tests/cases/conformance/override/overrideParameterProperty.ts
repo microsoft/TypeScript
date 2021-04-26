@@ -2,7 +2,6 @@
 
 class Base {
   p1!: string;
-  [key: string]: string;
 }
 
 class C1 extends Base {
