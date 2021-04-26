@@ -2,6 +2,7 @@
 
 class Base {
   p1!: string;
+  [key: string]: string;
 }
 
 class C1 extends Base {
@@ -23,4 +24,6 @@ class C3 extends Base {
     super();
     this.p1;
   }
+
+  m(override p1: "hello") {}
 }
