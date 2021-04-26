@@ -25218,6 +25218,10 @@ namespace ts {
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
+            const propertyAssignmentType = isPropertyAssignment(element) && getContextualTypeForVariableLikeDeclaration(element);
+            if (propertyAssignmentType) {
+                return propertyAssignmentType;
+            }
             const type = getApparentTypeOfContextualType(objectLiteral, contextFlags);
             if (type) {
                 if (hasBindableName(element)) {
