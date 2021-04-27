@@ -1,0 +1,57 @@
+=== tests/cases/compiler/classExtendedDiscriminatedUnionInference.ts ===
+declare class LocalController<T, U> {
+>LocalController : LocalController<T, U>
+
+    isLocal: true;
+>isLocal : true
+>true : true
+
+    getProps(a: T, b: U): void;
+>getProps : (a: T, b: U) => void
+>a : T
+>b : U
+}
+declare class GlobalController<T, U> {
+>GlobalController : GlobalController<T, U>
+
+    isLocal: false;
+>isLocal : false
+>false : false
+
+    // N.B.: Parameter type order is reversed
+    getProps(a: U, b: T): void;
+>getProps : (a: U, b: T) => void
+>a : U
+>b : T
+}
+
+class FailWithTS42 extends LocalController<{ foo: any }, { bar: any }> { }
+>FailWithTS42 : FailWithTS42
+>LocalController : LocalController<{ foo: any; }, { bar: any; }>
+>foo : any
+>bar : any
+
+const p = new FailWithTS42();
+>p : FailWithTS42
+>new FailWithTS42() : FailWithTS42
+>FailWithTS42 : typeof FailWithTS42
+
+declare function createEnhancer1<T, U>(Wrapper: GlobalController<T, U> | LocalController<T, U>): [T, U];
+>createEnhancer1 : <T, U>(Wrapper: GlobalController<T, U> | LocalController<T, U>) => [T, U]
+>Wrapper : GlobalController<T, U> | LocalController<T, U>
+
+const q1 = createEnhancer1(p);
+>q1 : [{ foo: any; }, { bar: any; }]
+>createEnhancer1(p) : [{ foo: any; }, { bar: any; }]
+>createEnhancer1 : <T, U>(Wrapper: GlobalController<T, U> | LocalController<T, U>) => [T, U]
+>p : FailWithTS42
+
+const q2 = createEnhancer1(p as LocalController<{ foo: any }, { bar: any }>); // structurally identical type to the above
+>q2 : [{ foo: any; }, { bar: any; }]
+>createEnhancer1(p as LocalController<{ foo: any }, { bar: any }>) : [{ foo: any; }, { bar: any; }]
+>createEnhancer1 : <T, U>(Wrapper: GlobalController<T, U> | LocalController<T, U>) => [T, U]
+>p as LocalController<{ foo: any }, { bar: any }> : LocalController<{ foo: any; }, { bar: any; }>
+>p : FailWithTS42
+>foo : any
+>bar : any
+

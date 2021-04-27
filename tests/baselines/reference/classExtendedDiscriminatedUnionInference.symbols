@@ -1,0 +1,70 @@
+=== tests/cases/compiler/classExtendedDiscriminatedUnionInference.ts ===
+declare class LocalController<T, U> {
+>LocalController : Symbol(LocalController, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 0))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 30))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 32))
+
+    isLocal: true;
+>isLocal : Symbol(LocalController.isLocal, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 37))
+
+    getProps(a: T, b: U): void;
+>getProps : Symbol(LocalController.getProps, Decl(classExtendedDiscriminatedUnionInference.ts, 1, 18))
+>a : Symbol(a, Decl(classExtendedDiscriminatedUnionInference.ts, 2, 13))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 30))
+>b : Symbol(b, Decl(classExtendedDiscriminatedUnionInference.ts, 2, 18))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 32))
+}
+declare class GlobalController<T, U> {
+>GlobalController : Symbol(GlobalController, Decl(classExtendedDiscriminatedUnionInference.ts, 3, 1))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 4, 31))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 4, 33))
+
+    isLocal: false;
+>isLocal : Symbol(GlobalController.isLocal, Decl(classExtendedDiscriminatedUnionInference.ts, 4, 38))
+
+    // N.B.: Parameter type order is reversed
+    getProps(a: U, b: T): void;
+>getProps : Symbol(GlobalController.getProps, Decl(classExtendedDiscriminatedUnionInference.ts, 5, 19))
+>a : Symbol(a, Decl(classExtendedDiscriminatedUnionInference.ts, 7, 13))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 4, 33))
+>b : Symbol(b, Decl(classExtendedDiscriminatedUnionInference.ts, 7, 18))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 4, 31))
+}
+
+class FailWithTS42 extends LocalController<{ foo: any }, { bar: any }> { }
+>FailWithTS42 : Symbol(FailWithTS42, Decl(classExtendedDiscriminatedUnionInference.ts, 8, 1))
+>LocalController : Symbol(LocalController, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 0))
+>foo : Symbol(foo, Decl(classExtendedDiscriminatedUnionInference.ts, 10, 44))
+>bar : Symbol(bar, Decl(classExtendedDiscriminatedUnionInference.ts, 10, 58))
+
+const p = new FailWithTS42();
+>p : Symbol(p, Decl(classExtendedDiscriminatedUnionInference.ts, 11, 5))
+>FailWithTS42 : Symbol(FailWithTS42, Decl(classExtendedDiscriminatedUnionInference.ts, 8, 1))
+
+declare function createEnhancer1<T, U>(Wrapper: GlobalController<T, U> | LocalController<T, U>): [T, U];
+>createEnhancer1 : Symbol(createEnhancer1, Decl(classExtendedDiscriminatedUnionInference.ts, 11, 29))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 33))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 35))
+>Wrapper : Symbol(Wrapper, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 39))
+>GlobalController : Symbol(GlobalController, Decl(classExtendedDiscriminatedUnionInference.ts, 3, 1))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 33))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 35))
+>LocalController : Symbol(LocalController, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 0))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 33))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 35))
+>T : Symbol(T, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 33))
+>U : Symbol(U, Decl(classExtendedDiscriminatedUnionInference.ts, 13, 35))
+
+const q1 = createEnhancer1(p);
+>q1 : Symbol(q1, Decl(classExtendedDiscriminatedUnionInference.ts, 14, 5))
+>createEnhancer1 : Symbol(createEnhancer1, Decl(classExtendedDiscriminatedUnionInference.ts, 11, 29))
+>p : Symbol(p, Decl(classExtendedDiscriminatedUnionInference.ts, 11, 5))
+
+const q2 = createEnhancer1(p as LocalController<{ foo: any }, { bar: any }>); // structurally identical type to the above
+>q2 : Symbol(q2, Decl(classExtendedDiscriminatedUnionInference.ts, 15, 5))
+>createEnhancer1 : Symbol(createEnhancer1, Decl(classExtendedDiscriminatedUnionInference.ts, 11, 29))
+>p : Symbol(p, Decl(classExtendedDiscriminatedUnionInference.ts, 11, 5))
+>LocalController : Symbol(LocalController, Decl(classExtendedDiscriminatedUnionInference.ts, 0, 0))
+>foo : Symbol(foo, Decl(classExtendedDiscriminatedUnionInference.ts, 15, 49))
+>bar : Symbol(bar, Decl(classExtendedDiscriminatedUnionInference.ts, 15, 63))
+

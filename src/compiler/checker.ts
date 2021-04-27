@@ -21039,7 +21039,7 @@ namespace ts {
                     // Next, infer between closely matching source and target constituents and remove
                     // the matching types. Types closely match when they are instantiations of the same
                     // object type or instantiations of the same type alias.
-                    const [sources, targets] = inferFromMatchingTypes(tempSources, tempTargets, isTypeCloselyMatchedBy);
+                    const [sources, targets] = inferFromDiscriminableOrCloselyMatchingTypes(tempSources, getUnionType(tempTargets));
                     if (targets.length === 0) {
                         return;
                     }
@@ -21251,6 +21251,41 @@ namespace ts {
                 expandingFlags = saveExpandingFlags;
                 visited.set(key, inferencePriority);
                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
+            }
+
+            function inferFromDiscriminableOrCloselyMatchingTypes(sources: Type[], target: Type): [Type[], Type[]] {
+                if (!(target.flags & TypeFlags.Union)) {
+                    return inferFromMatchingTypes(sources, [target], isTypeCloselyMatchedBy);
+                }
+                let matchedSources: Type[] | undefined;
+                let matchedTargets: Type[] | undefined;
+                for (const s of sources) {
+                    const discriminatedTarget = discriminateTypeByDiscriminableItems(
+                        target as UnionType,
+                        map(
+                            filter(getPropertiesOfType(s), p => isDiscriminantProperty(target, p.escapedName) && isLiteralType(getTypeOfSymbol(p))),
+                            p => ([() => getTypeOfSymbol(p), p.escapedName])
+                        ),
+                        isTypeAssignableTo
+                    );
+                    if (discriminatedTarget) {
+                        inferFromTypes(s, discriminatedTarget);
+                        matchedSources = appendIfUnique(matchedSources, s);
+                        matchedTargets = appendIfUnique(matchedTargets, discriminatedTarget);
+                        continue;
+                    }
+                    for (const t of (target as UnionType).types) {
+                        if (isTypeCloselyMatchedBy(s, t)) {
+                            inferFromTypes(s, t);
+                            matchedSources = appendIfUnique(matchedSources, s);
+                            matchedTargets = appendIfUnique(matchedTargets, t);
+                        }
+                    }
+                }
+                return [
+                    matchedSources ? filter(sources, t => !contains(matchedSources, t)) : sources,
+                    matchedTargets ? filter((target as UnionType).types, t => !contains(matchedTargets, t)) : (target as UnionType).types,
+                ];
             }
 
             function inferFromMatchingTypes(sources: Type[], targets: Type[], matches: (s: Type, t: Type) => boolean): [Type[], Type[]] {
