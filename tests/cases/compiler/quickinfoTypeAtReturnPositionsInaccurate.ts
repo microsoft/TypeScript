@@ -88,3 +88,15 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
         return item; // type is never
     }
 }
+
+// from the compiler itself
+interface BuilderProgram {
+    getProgram(): Program;
+}
+interface Program {
+    state: any;
+}
+declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
+export function listFiles<T extends BuilderProgram>(program: Program | T) {
+    const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
+}

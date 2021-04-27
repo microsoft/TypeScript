@@ -235,3 +235,46 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
     }
 }
+
+// from the compiler itself
+interface BuilderProgram {
+>BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+
+    getProgram(): Program;
+>getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+}
+interface Program {
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+
+    state: any;
+>state : Symbol(Program.state, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 95, 19))
+}
+declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
+>isBuilderProgram : Symbol(isBuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 97, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 34))
+>BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 60))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 34))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 60))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 34))
+
+export function listFiles<T extends BuilderProgram>(program: Program | T) {
+>listFiles : Symbol(listFiles, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 96))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 26))
+>BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 26))
+
+    const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
+>x : Symbol(x, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 100, 9))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+>isBuilderProgram : Symbol(isBuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 97, 1))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+>program.getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+>getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+}

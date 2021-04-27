@@ -90,7 +90,22 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
     }
 }
 
+// from the compiler itself
+interface BuilderProgram {
+    getProgram(): Program;
+}
+interface Program {
+    state: any;
+}
+declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
+export function listFiles<T extends BuilderProgram>(program: Program | T) {
+    const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
+}
+
 //// [quickinfoTypeAtReturnPositionsInaccurate.js]
+"use strict";
+exports.__esModule = true;
+exports.listFiles = void 0;
 var NumClass = /** @class */ (function () {
     function NumClass() {
     }
@@ -164,3 +179,7 @@ var ComplexStore = /** @class */ (function () {
     };
     return ComplexStore;
 }());
+function listFiles(program) {
+    var x = isBuilderProgram(program) ? program.getProgram() : program;
+}
+exports.listFiles = listFiles;

@@ -206,3 +206,33 @@ class ComplexStore<Slices extends { [index: string]: Slice }> {
 >item : Slices[SliceId][SliceKey]
     }
 }
+
+// from the compiler itself
+interface BuilderProgram {
+    getProgram(): Program;
+>getProgram : () => Program
+}
+interface Program {
+    state: any;
+>state : any
+}
+declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
+>isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
+>program : Program | T
+
+export function listFiles<T extends BuilderProgram>(program: Program | T) {
+>listFiles : <T extends BuilderProgram>(program: Program | T) => void
+>program : Program | T
+
+    const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
+>x : Program
+>isBuilderProgram(program) ? program.getProgram() : program : Program | T
+>isBuilderProgram(program) : boolean
+>isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
+>program : Program | T
+>program.getProgram() : Program
+>program.getProgram : () => Program
+>program : T
+>getProgram : () => Program
+>program : Program | T
+}
