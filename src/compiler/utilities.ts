@@ -478,7 +478,12 @@ namespace ts {
             return getTokenPosOfNode((<SyntaxList>node)._children[0], sourceFile, includeJsDoc);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+        return skipTrivia(
+            (sourceFile || getSourceFileOfNode(node)).text,
+            node.pos,
+            /*stopAfterLineBreak*/ false,
+            /*stopAtComments*/ false,
+            isInJSDoc(node));
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
