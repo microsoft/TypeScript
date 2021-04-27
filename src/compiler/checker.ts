@@ -30345,7 +30345,14 @@ namespace ts {
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature) {
-            signature.typeParameters = context.typeParameters;
+            if (context.typeParameters) {
+                if (!signature.typeParameters) {
+                    signature.typeParameters = context.typeParameters;
+                }
+                else {
+                    return; // This signature has already has a contextual inference performed and cached on it!
+                }
+            }
             if (context.thisParameter) {
                 const parameter = signature.thisParameter;
                 if (!parameter || parameter.valueDeclaration && !(<ParameterDeclaration>parameter.valueDeclaration).type) {
