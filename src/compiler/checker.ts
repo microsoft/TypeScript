@@ -28580,23 +28580,26 @@ namespace ts {
             }
 
 
-            const hasRestParameter = some(signatures, hasEffectiveRestParameter);
-            const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-            const parameterRange = hasRestParameter ? min
-                : min < max ? min + "-" + max
-                : min;
-            const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_after_1_found_a_spread_that_must_be_passed_to_a_rest_parameter
-                : hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_after_1_found_a_spread_that_must_be_passed_to_a_rest_parameter
-                : hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1
-                : parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
-                : Diagnostics.Expected_0_arguments_but_got_1;
+            const spreadIndex = getSpreadArgumentIndex(args);
+            const hasSpreadArgument = spreadIndex > -1;
             if (min < args.length && args.length < max) {
                 // between min and max, but with no matching overload
                 return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
             }
-            else if (args.length < min && !hasSpreadArgument) {
+            else if (hasSpreadArgument) {
+                return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
+            }
+
+            const hasRestParameter = some(signatures, hasEffectiveRestParameter);
+            const parameterRange = hasRestParameter ? min
+                : min < max ? min + "-" + max
+                : min;
+            const error = hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1
+                : parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
+                : Diagnostics.Expected_0_arguments_but_got_1;
+            if (args.length < min && !hasSpreadArgument) {
                 // too short: put the error span on the call expression, not any of the args
-                const diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length)
+                const diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length);
                 const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? args.length + 1 : args.length];
                 if (parameter) {
                     const parameterError = createDiagnosticForNode(
@@ -28611,20 +28614,15 @@ namespace ts {
                 return diagnostic;
             }
             else {
-                // too long/spread; error goes on spread or on the excess parameters
-                const spreadIndex = getSpreadArgumentIndex(args)
-                const hasSpreadArgument = spreadIndex > -1
-                const errorStart = hasSpreadArgument
-                    ? Math.min(max, args.length - 1, spreadIndex)
-                    : max;
-                const errorSpan = factory.createNodeArray(args.slice(errorStart));
+                // too long; error goes on the excess parameters
+                const errorSpan = factory.createNodeArray(args.slice(max));
                 const pos = first(errorSpan).pos;
                 let end = last(errorSpan).end;
                 if (end === pos) {
                     end++;
                 }
                 setTextRangePosEnd(errorSpan, pos, end);
-                return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, hasSpreadArgument ? spreadIndex : args.length);
+                return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, args.length);
             }
         }
 
