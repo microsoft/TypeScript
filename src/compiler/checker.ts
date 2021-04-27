@@ -16158,6 +16158,9 @@ namespace ts {
                         const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
                         return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                     }
+                    if (objectFlags & ObjectFlags.ReverseMapped) {
+                        return instantiateReverseMappedType(type as ReverseMappedType, mapper);
+                    }
                     return getObjectTypeInstantiation(<TypeReference | AnonymousType | MappedType>type, mapper, aliasSymbol, aliasTypeArguments);
                 }
                 return type;
@@ -16206,6 +16209,26 @@ namespace ts {
                 }
             }
             return type;
+        }
+
+        function instantiateReverseMappedType(type: ReverseMappedType, mapper: TypeMapper) {
+            const innerMappedType = instantiateType(type.mappedType, mapper);
+            if (!(getObjectFlags(innerMappedType) & ObjectFlags.Mapped)) {
+                return type;
+            }
+            const innerIndexType = instantiateType(type.constraintType, mapper);
+            if (!(innerIndexType.flags & TypeFlags.Index)) {
+                return type;
+            }
+            const instantiated = inferTypeForHomomorphicMappedType(
+                instantiateType(type.source, mapper),
+                innerMappedType as MappedType,
+                innerIndexType as IndexType
+            );
+            if (instantiated) {
+                return instantiated;
+            }
+            return type; // Nested invocation of `inferTypeForHomomorphicMappedType` or the `source` instantiated into something unmappable
         }
 
         function getPermissiveInstantiation(type: Type) {
@@ -20674,7 +20697,7 @@ namespace ts {
                 type.flags & TypeFlags.Object && !isNonGenericTopLevelType(type) && (
                     objectFlags & ObjectFlags.Reference && ((<TypeReference>type).node || forEach(getTypeArguments(<TypeReference>type), couldContainTypeVariables)) ||
                     objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
-                    objectFlags & (ObjectFlags.Mapped | ObjectFlags.ObjectRestType)) ||
+                    objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType)) ||
                 type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((<UnionOrIntersectionType>type).types, couldContainTypeVariables));
             if (type.flags & TypeFlags.ObjectFlagsType) {
                 (<ObjectFlagsType>type).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
