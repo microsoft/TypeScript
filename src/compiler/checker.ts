@@ -30402,9 +30402,6 @@ namespace ts {
                     assignBindingElementTypes(declaration.name);
                 }
             }
-            else if (type) {
-                Debug.assertEqual(links.type, type);
-            }
         }
 
         // When contextual typing assigns a type to a parameter that contains a binding pattern, we also need to push
