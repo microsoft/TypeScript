@@ -2370,8 +2370,10 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
-            // If `constructor` is totally not present, but we request a completion manually at a space...
-            if (contextToken === previousToken && isPreviousPropertyDeclarationTerminated(contextToken, position)) {
+            // If we are inside a class declaration, and `constructor` is totally not present,
+            // but we request a completion manually at a whitespace...
+            const ancestorClassLike = findAncestor(contextToken.parent, isClassLike);
+            if (ancestorClassLike && contextToken === previousToken && isPreviousPropertyDeclarationTerminated(contextToken, position)) {
                 return false; // Don't block completions.
             }
 
@@ -2862,7 +2864,9 @@ namespace ts.Completions {
 
         if (!contextToken) return undefined;
 
+        // class C { blah; constructor/**/ } and so on
         if (location.kind === SyntaxKind.ConstructorKeyword
+            // class C { blah \n constructor/**/ }
             || (isIdentifier(contextToken) && isPropertyDeclaration(contextToken.parent) && isClassLike(location))) {
             return findAncestor(contextToken, isClassLike) as ObjectTypeDeclaration;
         }
