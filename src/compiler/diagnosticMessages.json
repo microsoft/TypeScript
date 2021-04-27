@@ -526,7 +526,7 @@
     "'extends' clause already seen.": {
         "category": "Error",
         "code": 1172
-    },
+    },
     "'extends' clause must precede 'implements' clause.": {
         "category": "Error",
         "code": 1173
@@ -2386,11 +2386,11 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got {1} or more.": {
+    "Expected {0} arguments, but after {1}, found a non-tuple spread that must be passed to a rest parameter.": {
         "category": "Error",
         "code": 2556
     },
-    "Expected at least {0} arguments, but got {1} or more.": {
+    "Expected at least {0} arguments, but after {1}, found a non-tuple spread that must be passed to a rest parameter.": {
         "category": "Error",
         "code": 2557
     },
