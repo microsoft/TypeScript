@@ -28559,6 +28559,10 @@ namespace ts {
         }
 
         function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[]) {
+            const spreadIndex = getSpreadArgumentIndex(args);
+            if (spreadIndex > -1) {
+                return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
+            }
             let min = Number.POSITIVE_INFINITY; // smallest parameter count
             let max = Number.NEGATIVE_INFINITY; // larger parameter count
             let maxBelow = Number.NEGATIVE_INFINITY; // largest parameter count that is smaller than the number of arguments
@@ -28574,22 +28578,10 @@ namespace ts {
                     closestSignature = sig;
                 }
                 max = Math.max(max, maxParameter);
-                // shortest parameter count *longer than the call*/longest parametercount *shorter than the call*
+                // shortest parameter count *longer than the call*/longest parameter count *shorter than the call*
                 if (minParameter < args.length && minParameter > maxBelow) maxBelow = minParameter;
                 if (args.length < maxParameter && maxParameter < minAbove) minAbove = maxParameter;
             }
-
-
-            const spreadIndex = getSpreadArgumentIndex(args);
-            const hasSpreadArgument = spreadIndex > -1;
-            if (min < args.length && args.length < max) {
-                // between min and max, but with no matching overload
-                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
-            }
-            else if (hasSpreadArgument) {
-                return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
-            }
-
             const hasRestParameter = some(signatures, hasEffectiveRestParameter);
             const parameterRange = hasRestParameter ? min
                 : min < max ? min + "-" + max
@@ -28597,7 +28589,11 @@ namespace ts {
             const error = hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1
                 : parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
                 : Diagnostics.Expected_0_arguments_but_got_1;
-            if (args.length < min && !hasSpreadArgument) {
+            if (min < args.length && args.length < max) {
+                // between min and max, but with no matching overload
+                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
+            }
+            else if (args.length < min) {
                 // too short: put the error span on the call expression, not any of the args
                 const diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length);
                 const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? args.length + 1 : args.length];
