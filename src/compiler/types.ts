@@ -5200,6 +5200,11 @@ namespace ts {
         ObjectRestType   = 1 << 23,  // Originates in object rest declaration
         /* @internal */
         IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
+        // Flags that require TypeFlags.Object and ObjectFlags.Reference
+        /* @internal */
+        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        /* @internal */
+        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection
         /* @internal */
@@ -5220,12 +5225,6 @@ namespace ts {
         IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
         /* @internal */
         IsNeverIntersection = 1 << 27, // Intersection reduces to never
-
-        // Flags that require TypeFlags.Reference
-        /* @internal */
-        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
-        /* @internal */
-        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
     }
 
     /* @internal */
