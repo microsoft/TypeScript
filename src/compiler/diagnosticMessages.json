@@ -4849,6 +4849,22 @@
         "category": "Error",
         "code": 6238
     },
+    "File '{0}' exists according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6239
+    },
+    "File '{0}' does not exist according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6240
+    },
+    "Resolution for type reference directive '{0}' was found in cache from location '{1}'.": {
+        "category": "Message",
+        "code": 6241
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}'. ========": {
+        "category": "Message",
+        "code": 6242
+    },
 
     "Projects to reference": {
         "category": "Message",
