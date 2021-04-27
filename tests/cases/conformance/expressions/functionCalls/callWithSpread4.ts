@@ -1,4 +1,5 @@
 // @strict: true
+// @target: esnext
 type R = { a: number }
 type W = { b: number }
 type RW = { a: number, b: number }

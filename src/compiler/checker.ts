@@ -28542,9 +28542,6 @@ namespace ts {
             }
         }
 
-        // function getDiagnosticForExcessParameters() {
-        // }
-
         function isPromiseResolveArityError(node: CallLikeExpression) {
             if (!isCallExpression(node) || !isIdentifier(node.expression)) return false;
 
@@ -28567,80 +28564,68 @@ namespace ts {
             let maxBelow = Number.NEGATIVE_INFINITY; // largest parameter count that is smaller than the number of arguments
             let minAbove = Number.POSITIVE_INFINITY; // smallest parameter count that is larger than the number of arguments
 
-            let argCount = args.length;
             let closestSignature: Signature | undefined;
             for (const sig of signatures) {
                 const minParameter = getMinArgumentCount(sig);
                 const maxParameter = getParameterCount(sig);
-                // 1a. find the shortest param count (and call that the closest sig)
+                // shortest/longest parameter counts
                 if (minParameter < min) {
                     min = minParameter;
                     closestSignature = sig;
                 }
-                // 1b. find the longest param count
                 max = Math.max(max, maxParameter);
-                // 2a/b. find the shortest param count *longer than the call*
-                if (minParameter < argCount && minParameter > maxBelow) maxBelow = minParameter;
-                // find the longest param count *shorter than the call*
-                if (argCount < maxParameter && maxParameter < minAbove) minAbove = maxParameter;
+                // shortest parameter count *longer than the call*/longest parametercount *shorter than the call*
+                if (minParameter < args.length && minParameter > maxBelow) maxBelow = minParameter;
+                if (args.length < maxParameter && maxParameter < minAbove) minAbove = maxParameter;
             }
 
-            if (min < argCount && argCount < max) {
-                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, maxBelow, minAbove);
-            }
 
             const hasRestParameter = some(signatures, hasEffectiveRestParameter);
-            const paramRange = hasRestParameter ? min
+            const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+            const parameterRange = hasRestParameter ? min
                 : min < max ? min + "-" + max
                 : min;
-            // TODO: save the index too
-            // TODO: For at least some uses, need to skip spreads of tuples (or should, at least)
-            const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
-            // TODO: This is probably a mistake, so remove it later
-            if (argCount <= max && hasSpreadArgument) {
-                argCount--;
-            }
-            const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_after_1_found_a_non_tuple_spread_that_must_be_passed_to_a_rest_parameter
-                : hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_after_1_found_a_non_tuple_spread_that_must_be_passed_to_a_rest_parameter
+            const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_after_1_found_a_spread_that_must_be_passed_to_a_rest_parameter
+                : hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_after_1_found_a_spread_that_must_be_passed_to_a_rest_parameter
                 : hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1
-                : paramRange === 1 && argCount === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
+                : parameterRange === 1 && args.length === 0 && isPromiseResolveArityError(node) ? Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise
                 : Diagnostics.Expected_0_arguments_but_got_1;
-            // TODO: min === getMinArgumentCount(closestSignature); don't need to call it again
-            // TODO: This is the only region where the argCount-- shenanigans above could make a difference
-            let related: DiagnosticWithLocation | undefined;
-            if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
-                const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
-                if (paramDecl) {
-                    related = createDiagnosticForNode(
-                        paramDecl,
-                        isBindingPattern(paramDecl.name) ? Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided :
-                            isRestParameter(paramDecl) ? Diagnostics.Arguments_for_the_rest_parameter_0_were_not_provided : Diagnostics.An_argument_for_0_was_not_provided,
-                        !paramDecl.name ? argCount : !isBindingPattern(paramDecl.name) ? idText(getFirstIdentifier(paramDecl.name)) : undefined
+            if (min < args.length && args.length < max) {
+                // between min and max, but with no matching overload
+                return getDiagnosticForCallNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, args.length, maxBelow, minAbove);
+            }
+            else if (args.length < min && !hasSpreadArgument) {
+                // too short: put the error span on the call expression, not any of the args
+                const diagnostic = getDiagnosticForCallNode(node, error, parameterRange, args.length)
+                const parameter = closestSignature?.declaration?.parameters[closestSignature.thisParameter ? args.length + 1 : args.length];
+                if (parameter) {
+                    const parameterError = createDiagnosticForNode(
+                        parameter,
+                        isBindingPattern(parameter.name) ? Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided
+                            : isRestParameter(parameter) ? Diagnostics.Arguments_for_the_rest_parameter_0_were_not_provided
+                            : Diagnostics.An_argument_for_0_was_not_provided,
+                        !parameter.name ? args.length : !isBindingPattern(parameter.name) ? idText(getFirstIdentifier(parameter.name)) : undefined
                     );
+                    return addRelatedInfo(diagnostic, parameterError);
                 }
+                return diagnostic;
             }
-
-            if (!hasSpreadArgument && argCount < min) { // no spread and not enough args -- too short: put the error span on the call expression, not any of the args
-                const diagnostic = getDiagnosticForCallNode(node, error, paramRange, argCount);
-                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
+            else {
+                // too long/spread; error goes on spread or on the excess parameters
+                const spreadIndex = getSpreadArgumentIndex(args)
+                const hasSpreadArgument = spreadIndex > -1
+                const errorStart = hasSpreadArgument
+                    ? Math.min(max, args.length - 1, spreadIndex)
+                    : max;
+                const errorSpan = factory.createNodeArray(args.slice(errorStart));
+                const pos = first(errorSpan).pos;
+                let end = last(errorSpan).end;
+                if (end === pos) {
+                    end++;
+                }
+                setTextRangePosEnd(errorSpan, pos, end);
+                return createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, parameterRange, hasSpreadArgument ? spreadIndex : args.length);
             }
-            // excess parameters or a spread
-            // error goes right [after] spread, or on the excess parameters, whichever comes first
-            // TODO: refactor all this part into new function getDiagnosticForExcessParameters
-            const errorStart = hasSpreadArgument
-                ? Math.min(max, args.length - 1, getSpreadArgumentIndex(args))
-                : max;
-            Debug.assert(!hasRestParameter && !hasSpreadArgument || hasSpreadArgument, "lol 1")
-            Debug.assert(argCount !== max && (argCount > max && argCount === args.length || argCount < max && argCount === args.length - 1), "oh no 2")
-            const errorSpan = factory.createNodeArray(args.slice(errorStart));
-            const pos = first(errorSpan).pos;
-            let end = last(errorSpan).end;
-            if (end === pos) {
-                end++;
-            }
-            setTextRangePosEnd(errorSpan, pos, end);
-            const diagnostic = createDiagnosticForNodeArray(getSourceFileOfNode(node), errorSpan, error, paramRange, hasSpreadArgument ? getSpreadArgumentIndex(args) : argCount);
-            return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
         function getTypeArgumentArityError(node: Node, signatures: readonly Signature[], typeArguments: NodeArray<TypeNode>) {

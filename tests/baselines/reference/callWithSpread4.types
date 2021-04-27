@@ -25,7 +25,6 @@ declare const pli: {
     (streams: ReadonlyArray<R | W | RW>): Promise<void>;
 >streams : readonly (R | W | RW)[]
 
-    // commenting this out keeps the error the same, but provides definite ranges, which explains the weird bheaviour a little better
     (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
 >s1 : R
 >s2 : W | RW
@@ -48,7 +47,7 @@ declare var gz: RW[]
 >gz : RW[]
 
 declare var fun: (inp: any) => AsyncGenerator<string, void, unknown>
->fun : (inp: any) => any
+>fun : (inp: any) => AsyncGenerator<string, void, unknown>
 >inp : any
 
 pli(
@@ -66,7 +65,7 @@ pli(
 >tr : W
 
     fun,
->fun : (inp: any) => any
+>fun : (inp: any) => AsyncGenerator<string, void, unknown>
 
     ...gz,
 >...gz : RW

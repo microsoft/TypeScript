@@ -2386,11 +2386,11 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but after {1}, found a non-tuple spread that must be passed to a rest parameter.": {
+    "Expected {0} arguments, but after {1}, found a spread that must be passed to a rest parameter.": {
         "category": "Error",
         "code": 2556
     },
-    "Expected at least {0} arguments, but after {1}, found a non-tuple spread that must be passed to a rest parameter.": {
+    "Expected at least {0} arguments, but after {1}, found a spread that must be passed to a rest parameter.": {
         "category": "Error",
         "code": 2557
     },
