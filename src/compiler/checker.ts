@@ -27331,7 +27331,7 @@ namespace ts {
 
             let diagnosticMessage;
             const declarationName = idText(right);
-            if (isInPropertyInitializer(node)
+            if (isInPropertyInitializerOrClassStaticBlock(node)
                 && !isOptionalPropertyDeclaration(valueDeclaration)
                 && !(isAccessExpression(node) && isAccessExpression(node.expression))
                 && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
@@ -27352,7 +27352,7 @@ namespace ts {
             }
         }
 
-        function isInPropertyInitializer(node: Node): boolean {
+        function isInPropertyInitializerOrClassStaticBlock(node: Node): boolean {
             return !!findAncestor(node, node => {
                 switch (node.kind) {
                     case SyntaxKind.PropertyDeclaration:
@@ -27372,6 +27372,8 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.HeritageClause:
                         return false;
+                    case SyntaxKind.ExpressionStatement:
+                        return isBlock(node.parent) && isClassStaticBlockDeclaration(node.parent.parent) ? true : "quit";
                     default:
                         return isExpressionNode(node) ? false : "quit";
                 }
