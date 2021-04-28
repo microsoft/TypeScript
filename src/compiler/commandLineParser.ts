@@ -186,7 +186,8 @@ namespace ts {
             shortName: "w",
             type: "boolean",
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Watch_and_Build_Modes,
+            isCommandLineOnly: true,
+            category: Diagnostics.Command_line_Options,
             description: Diagnostics.Watch_input_files,
         },
         {
@@ -2281,10 +2282,10 @@ namespace ts {
             return Array(paddingLength + 1).join(" ");
         }
 
-        function isAllowedOption({ category, name }: CommandLineOption): boolean {
+        function isAllowedOptionForOutput({ category, name, isCommandLineOnly }: CommandLineOption): boolean {
             // Skip options which do not have a category or have categories which are more niche
             const categoriesToSkip = [Diagnostics.Command_line_Options, Diagnostics.Editor_Support, Diagnostics.Compiler_Diagnostics, Diagnostics.Backwards_Compatibility, Diagnostics.Watch_and_Build_Modes];
-            return category !== undefined && (!categoriesToSkip.includes(category) || compilerOptionsMap.has(name));
+            return !isCommandLineOnly && category !== undefined && (!categoriesToSkip.includes(category) || compilerOptionsMap.has(name));
         }
 
         function writeConfigurations() {
@@ -2293,7 +2294,7 @@ namespace ts {
             for (const option of optionDeclarations) {
                 const { category } = option;
 
-                if (isAllowedOption(option)) {
+                if (isAllowedOptionForOutput(option)) {
                     categorizedOptions.add(getLocaleSpecificMessage(category!), option);
                 }
             }
