@@ -150,7 +150,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
         getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined): string;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined): string;
 
         getQuickInfoAtPosition(fileName: string, position: number): string;
 
@@ -263,7 +263,7 @@ namespace ts {
         /**
          * Returns JSON-encoded value of the type TextInsertion.
          */
-        getDocCommentTemplateAtPosition(fileName: string, position: number): string;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string;
 
         /**
          * Returns JSON-encoded boolean to indicate whether we should support brace location
@@ -962,12 +962,12 @@ namespace ts {
         }
 
         /** Get a string based representation of a completion list entry details */
-        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined) {
+        public getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined, data: CompletionEntryData | undefined) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
                     const localOptions: FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
-                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences);
+                    return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences, data);
                 }
             );
         }
@@ -999,10 +999,10 @@ namespace ts {
                 });
         }
 
-        public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
+        public getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): string {
             return this.forwardJSONCall(
                 `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+                () => this.languageService.getDocCommentTemplateAtPosition(fileName, position, options)
             );
         }
 
@@ -1326,7 +1326,7 @@ namespace ts {
         public close(): void {
             // Forget all the registered shims
             clear(this._shims);
-            this.documentRegistry = undefined!;
+            this.documentRegistry = undefined;
         }
 
         public registerShim(shim: Shim): void {

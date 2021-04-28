@@ -1,0 +1,119 @@
+=== tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts ===
+class A {
+>A : Symbol(A, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 0))
+
+  get x() { return 0; }
+>x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+
+  protected set x(v: number) { }
+>x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+>v : Symbol(v, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 18))
+
+  public get y() { return 0; }
+>y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+
+  protected set y(v: number) { }
+>y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+>v : Symbol(v, Decl(publicGetterProtectedSetterFromThisParameter.ts, 5, 18))
+}
+
+class B {
+>B : Symbol(B, Decl(publicGetterProtectedSetterFromThisParameter.ts, 6, 1))
+
+  get q() { return 0; }
+>q : Symbol(B.q, Decl(publicGetterProtectedSetterFromThisParameter.ts, 8, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 9, 23))
+
+  protected set q(v: number) { }
+>q : Symbol(B.q, Decl(publicGetterProtectedSetterFromThisParameter.ts, 8, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 9, 23))
+>v : Symbol(v, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 18))
+
+  protected get u() { return 0; }
+>u : Symbol(B.u, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 12, 33))
+
+  protected set u(v: number) { }
+>u : Symbol(B.u, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 12, 33))
+>v : Symbol(v, Decl(publicGetterProtectedSetterFromThisParameter.ts, 13, 18))
+
+  foo(this: A, a: A, b: B) {
+>foo : Symbol(B.foo, Decl(publicGetterProtectedSetterFromThisParameter.ts, 13, 32))
+>this : Symbol(this, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 6))
+>A : Symbol(A, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 0))
+>a : Symbol(a, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 14))
+>A : Symbol(A, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 0))
+>b : Symbol(b, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 20))
+>B : Symbol(B, Decl(publicGetterProtectedSetterFromThisParameter.ts, 6, 1))
+
+    // Should have no errors in this block
+    this.x = 0;
+>this.x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+>this : Symbol(this, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 6))
+>x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+
+    this.y = 0;
+>this.y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+>this : Symbol(this, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 6))
+>y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+
+    a.x = 0;
+>a.x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+>a : Symbol(a, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 14))
+>x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+
+    a.y = 0;
+>a.y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+>a : Symbol(a, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 14))
+>y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+
+    b.q = 0;
+>b.q : Symbol(B.q, Decl(publicGetterProtectedSetterFromThisParameter.ts, 8, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 9, 23))
+>b : Symbol(b, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 20))
+>q : Symbol(B.q, Decl(publicGetterProtectedSetterFromThisParameter.ts, 8, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 9, 23))
+
+    b.u = 0;
+>b.u : Symbol(B.u, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 12, 33))
+>b : Symbol(b, Decl(publicGetterProtectedSetterFromThisParameter.ts, 15, 20))
+>u : Symbol(B.u, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 12, 33))
+  }
+}
+
+function bar(this: A, a: A, b: B) {
+>bar : Symbol(bar, Decl(publicGetterProtectedSetterFromThisParameter.ts, 24, 1))
+>this : Symbol(this, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 13))
+>A : Symbol(A, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 0))
+>a : Symbol(a, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 21))
+>A : Symbol(A, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 0))
+>b : Symbol(b, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 27))
+>B : Symbol(B, Decl(publicGetterProtectedSetterFromThisParameter.ts, 6, 1))
+
+    this.x = 0;
+>this.x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+>this : Symbol(this, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 13))
+>x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+
+    this.y = 0;
+>this.y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+>this : Symbol(this, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 13))
+>y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+
+    a.x = 0;
+>a.x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+>a : Symbol(a, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 21))
+>x : Symbol(A.x, Decl(publicGetterProtectedSetterFromThisParameter.ts, 0, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 1, 23))
+
+    a.y = 0;
+>a.y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+>a : Symbol(a, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 21))
+>y : Symbol(A.y, Decl(publicGetterProtectedSetterFromThisParameter.ts, 2, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 4, 30))
+
+    // These should error
+    b.q = 0;
+>b.q : Symbol(B.q, Decl(publicGetterProtectedSetterFromThisParameter.ts, 8, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 9, 23))
+>b : Symbol(b, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 27))
+>q : Symbol(B.q, Decl(publicGetterProtectedSetterFromThisParameter.ts, 8, 9), Decl(publicGetterProtectedSetterFromThisParameter.ts, 9, 23))
+
+    b.u = 0;
+>b.u : Symbol(B.u, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 12, 33))
+>b : Symbol(b, Decl(publicGetterProtectedSetterFromThisParameter.ts, 26, 27))
+>u : Symbol(B.u, Decl(publicGetterProtectedSetterFromThisParameter.ts, 10, 32), Decl(publicGetterProtectedSetterFromThisParameter.ts, 12, 33))
+}
+

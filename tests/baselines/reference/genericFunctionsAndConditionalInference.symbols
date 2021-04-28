@@ -1,0 +1,190 @@
+=== tests/cases/compiler/genericFunctionsAndConditionalInference.ts ===
+type Boxified<T> = { [P in keyof T]: { value: T[P]} };
+>Boxified : Symbol(Boxified, Decl(genericFunctionsAndConditionalInference.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 0, 14))
+>P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 0, 22))
+>T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 0, 14))
+>value : Symbol(value, Decl(genericFunctionsAndConditionalInference.ts, 0, 38))
+>T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 0, 14))
+>P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 0, 22))
+
+declare function unboxify<T>(obj: Boxified<T>): T;
+>unboxify : Symbol(unboxify, Decl(genericFunctionsAndConditionalInference.ts, 0, 54))
+>T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 2, 26))
+>obj : Symbol(obj, Decl(genericFunctionsAndConditionalInference.ts, 2, 29))
+>Boxified : Symbol(Boxified, Decl(genericFunctionsAndConditionalInference.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 2, 26))
+>T : Symbol(T, Decl(genericFunctionsAndConditionalInference.ts, 2, 26))
+
+function foo<U, V>(obj: { u: { value: U }, v: { value: V } }) {
+>foo : Symbol(foo, Decl(genericFunctionsAndConditionalInference.ts, 2, 50))
+>U : Symbol(U, Decl(genericFunctionsAndConditionalInference.ts, 4, 13))
+>V : Symbol(V, Decl(genericFunctionsAndConditionalInference.ts, 4, 15))
+>obj : Symbol(obj, Decl(genericFunctionsAndConditionalInference.ts, 4, 19))
+>u : Symbol(u, Decl(genericFunctionsAndConditionalInference.ts, 4, 25))
+>value : Symbol(value, Decl(genericFunctionsAndConditionalInference.ts, 4, 30))
+>U : Symbol(U, Decl(genericFunctionsAndConditionalInference.ts, 4, 13))
+>v : Symbol(v, Decl(genericFunctionsAndConditionalInference.ts, 4, 42))
+>value : Symbol(value, Decl(genericFunctionsAndConditionalInference.ts, 4, 47))
+>V : Symbol(V, Decl(genericFunctionsAndConditionalInference.ts, 4, 15))
+
+    return unboxify(obj);
+>unboxify : Symbol(unboxify, Decl(genericFunctionsAndConditionalInference.ts, 0, 54))
+>obj : Symbol(obj, Decl(genericFunctionsAndConditionalInference.ts, 4, 19))
+}
+
+let qq = foo({ u: { value: 10 }, v: { value: 'hello'} });  // { u: U, v: V } but should be { u: number, v: string }
+>qq : Symbol(qq, Decl(genericFunctionsAndConditionalInference.ts, 8, 3))
+>foo : Symbol(foo, Decl(genericFunctionsAndConditionalInference.ts, 2, 50))
+>u : Symbol(u, Decl(genericFunctionsAndConditionalInference.ts, 8, 14))
+>value : Symbol(value, Decl(genericFunctionsAndConditionalInference.ts, 8, 19))
+>v : Symbol(v, Decl(genericFunctionsAndConditionalInference.ts, 8, 32))
+>value : Symbol(value, Decl(genericFunctionsAndConditionalInference.ts, 8, 37))
+
+// From #42385
+interface Targets<A> {
+>Targets : Symbol(Targets, Decl(genericFunctionsAndConditionalInference.ts, 8, 57))
+>A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 11, 18))
+
+    left: A
+>left : Symbol(Targets.left, Decl(genericFunctionsAndConditionalInference.ts, 11, 22))
+>A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 11, 18))
+
+    right: A
+>right : Symbol(Targets.right, Decl(genericFunctionsAndConditionalInference.ts, 12, 11))
+>A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 11, 18))
+}
+type Target = keyof Targets<any>
+>Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+>Targets : Symbol(Targets, Decl(genericFunctionsAndConditionalInference.ts, 8, 57))
+
+type Result<F extends Target, A> = Targets<A>[F]
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 16, 12))
+>Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+>A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 16, 29))
+>Targets : Symbol(Targets, Decl(genericFunctionsAndConditionalInference.ts, 8, 57))
+>A : Symbol(A, Decl(genericFunctionsAndConditionalInference.ts, 16, 29))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 16, 12))
+
+type LR<F extends Target, L, R> = [F] extends ["left"] ? L : R
+>LR : Symbol(LR, Decl(genericFunctionsAndConditionalInference.ts, 16, 48))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 18, 8))
+>Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+>L : Symbol(L, Decl(genericFunctionsAndConditionalInference.ts, 18, 25))
+>R : Symbol(R, Decl(genericFunctionsAndConditionalInference.ts, 18, 28))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 18, 8))
+>L : Symbol(L, Decl(genericFunctionsAndConditionalInference.ts, 18, 25))
+>R : Symbol(R, Decl(genericFunctionsAndConditionalInference.ts, 18, 28))
+
+interface Ops<F extends Target> {
+>Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+
+    _f: F
+>_f : Symbol(Ops._f, Decl(genericFunctionsAndConditionalInference.ts, 20, 33))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+
+    str: Result<F, string>
+>str : Symbol(Ops.str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+
+    num: Result<F, number>
+>num : Symbol(Ops.num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+
+    lr<I, O>(a: Result<F, I>, o: Result<F, O>): Result<F, LR<F, I, O>>
+>lr : Symbol(Ops.lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
+>I : Symbol(I, Decl(genericFunctionsAndConditionalInference.ts, 24, 7))
+>O : Symbol(O, Decl(genericFunctionsAndConditionalInference.ts, 24, 9))
+>a : Symbol(a, Decl(genericFunctionsAndConditionalInference.ts, 24, 13))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>I : Symbol(I, Decl(genericFunctionsAndConditionalInference.ts, 24, 7))
+>o : Symbol(o, Decl(genericFunctionsAndConditionalInference.ts, 24, 29))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>O : Symbol(O, Decl(genericFunctionsAndConditionalInference.ts, 24, 9))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>LR : Symbol(LR, Decl(genericFunctionsAndConditionalInference.ts, 16, 48))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>I : Symbol(I, Decl(genericFunctionsAndConditionalInference.ts, 24, 7))
+>O : Symbol(O, Decl(genericFunctionsAndConditionalInference.ts, 24, 9))
+
+    dict: <P>(p: {[k in keyof P]: Result<F, P[k]>}) => Result<F, P>
+>dict : Symbol(Ops.dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
+>P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 25, 11))
+>p : Symbol(p, Decl(genericFunctionsAndConditionalInference.ts, 25, 14))
+>k : Symbol(k, Decl(genericFunctionsAndConditionalInference.ts, 25, 19))
+>P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 25, 11))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 25, 11))
+>k : Symbol(k, Decl(genericFunctionsAndConditionalInference.ts, 25, 19))
+>Result : Symbol(Result, Decl(genericFunctionsAndConditionalInference.ts, 15, 32))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 20, 14))
+>P : Symbol(P, Decl(genericFunctionsAndConditionalInference.ts, 25, 11))
+}
+const left: Ops<"left"> = {} as any
+>left : Symbol(left, Decl(genericFunctionsAndConditionalInference.ts, 27, 5))
+>Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+
+const right: Ops<"right"> = {} as any
+>right : Symbol(right, Decl(genericFunctionsAndConditionalInference.ts, 28, 5))
+>Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+
+const ok = <F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)})
+>ok : Symbol(ok, Decl(genericFunctionsAndConditionalInference.ts, 30, 5))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 30, 12))
+>Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+>Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 30, 12))
+>lr : Symbol(lr, Decl(genericFunctionsAndConditionalInference.ts, 30, 47))
+>at.lr : Symbol(Ops.lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+>lr : Symbol(Ops.lr, Decl(genericFunctionsAndConditionalInference.ts, 23, 26))
+>at.str : Symbol(Ops.str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+>str : Symbol(Ops.str, Decl(genericFunctionsAndConditionalInference.ts, 21, 9))
+>at.num : Symbol(Ops.num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 30, 30))
+>num : Symbol(Ops.num, Decl(genericFunctionsAndConditionalInference.ts, 22, 26))
+
+const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
+>orphaned : Symbol(orphaned, Decl(genericFunctionsAndConditionalInference.ts, 31, 5))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 31, 18))
+>Target : Symbol(Target, Decl(genericFunctionsAndConditionalInference.ts, 14, 1))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 31, 36))
+>Ops : Symbol(Ops, Decl(genericFunctionsAndConditionalInference.ts, 18, 62))
+>F : Symbol(F, Decl(genericFunctionsAndConditionalInference.ts, 31, 18))
+>at.dict : Symbol(Ops.dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 31, 36))
+>dict : Symbol(Ops.dict, Decl(genericFunctionsAndConditionalInference.ts, 24, 70))
+>ok : Symbol(ok, Decl(genericFunctionsAndConditionalInference.ts, 30, 5))
+>at : Symbol(at, Decl(genericFunctionsAndConditionalInference.ts, 31, 36))
+
+const leftOk = ok(left)
+>leftOk : Symbol(leftOk, Decl(genericFunctionsAndConditionalInference.ts, 33, 5))
+>ok : Symbol(ok, Decl(genericFunctionsAndConditionalInference.ts, 30, 5))
+>left : Symbol(left, Decl(genericFunctionsAndConditionalInference.ts, 27, 5))
+
+const leftOrphaned = orphaned(left)
+>leftOrphaned : Symbol(leftOrphaned, Decl(genericFunctionsAndConditionalInference.ts, 34, 5))
+>orphaned : Symbol(orphaned, Decl(genericFunctionsAndConditionalInference.ts, 31, 5))
+>left : Symbol(left, Decl(genericFunctionsAndConditionalInference.ts, 27, 5))
+
+const rightOk = ok(right)
+>rightOk : Symbol(rightOk, Decl(genericFunctionsAndConditionalInference.ts, 36, 5))
+>ok : Symbol(ok, Decl(genericFunctionsAndConditionalInference.ts, 30, 5))
+>right : Symbol(right, Decl(genericFunctionsAndConditionalInference.ts, 28, 5))
+
+const rightOrphaned = orphaned(right)
+>rightOrphaned : Symbol(rightOrphaned, Decl(genericFunctionsAndConditionalInference.ts, 37, 5))
+>orphaned : Symbol(orphaned, Decl(genericFunctionsAndConditionalInference.ts, 31, 5))
+>right : Symbol(right, Decl(genericFunctionsAndConditionalInference.ts, 28, 5))
+

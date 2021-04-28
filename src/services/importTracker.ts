@@ -62,9 +62,11 @@ namespace ts.FindAllReferences {
             }
 
             // Module augmentations may use this module's exports without importing it.
-            for (const decl of exportingModuleSymbol.declarations) {
-                if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
-                    addIndirectUser(decl);
+            if (exportingModuleSymbol.declarations) {
+                for (const decl of exportingModuleSymbol.declarations) {
+                    if (isExternalModuleAugmentation(decl) && sourceFilesSet.has(decl.getSourceFile().fileName)) {
+                        addIndirectUser(decl);
+                    }
                 }
             }
 
@@ -358,7 +360,7 @@ namespace ts.FindAllReferences {
         const checker = program.getTypeChecker();
         for (const referencingFile of sourceFiles) {
             const searchSourceFile = searchModuleSymbol.valueDeclaration;
-            if (searchSourceFile.kind === SyntaxKind.SourceFile) {
+            if (searchSourceFile?.kind === SyntaxKind.SourceFile) {
                 for (const ref of referencingFile.referencedFiles) {
                     if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
                         refs.push({ kind: "reference", referencingFile, ref });
@@ -468,7 +470,7 @@ namespace ts.FindAllReferences {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
-                    return symbol.declarations.some(d => d === parent) && isBinaryExpression(grandParent)
+                    return symbol.declarations?.some(d => d === parent) && isBinaryExpression(grandParent)
                         ? getSpecialPropertyExport(grandParent, /*useLhsSymbol*/ false)
                         : undefined;
                 }
@@ -580,7 +582,7 @@ namespace ts.FindAllReferences {
             return Debug.checkDefined(checker.getImmediateAliasedSymbol(importedSymbol));
         }
 
-        const decl = importedSymbol.valueDeclaration;
+        const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
         if (isExportAssignment(decl)) { // `export = class {}`
             return Debug.checkDefined(decl.expression.symbol);
         }
@@ -619,7 +621,7 @@ namespace ts.FindAllReferences {
                 Debug.assert((parent as ImportClause | NamespaceImport).name === node);
                 return true;
             case SyntaxKind.BindingElement:
-                return isInJSFile(node) && isRequireVariableDeclaration(parent, /*requireStringLiteralLikeArgument*/ true);
+                return isInJSFile(node) && isRequireVariableDeclaration(parent);
             default:
                 return false;
         }
@@ -642,7 +644,8 @@ namespace ts.FindAllReferences {
                     return checker.getExportSpecifierLocalTargetSymbol(declaration)!;
                 }
                 else if (isPropertyAccessExpression(declaration) && isModuleExportsAccessExpression(declaration.expression) && !isPrivateIdentifier(declaration.name)) {
-                    return checker.getExportSpecifierLocalTargetSymbol(declaration.name)!;
+                    // Export of form 'module.exports.propName = expr';
+                    return checker.getSymbolAtLocation(declaration)!;
                 }
                 else if (isShorthandPropertyAssignment(declaration)
                     && isBinaryExpression(declaration.parent.parent)

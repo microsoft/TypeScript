@@ -89,10 +89,10 @@ namespace ts {
     }
 
     /** Parses config file using System interface */
-    export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
+    export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
-        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, /*extendedConfigCache*/ undefined, watchOptionsToExtend);
+        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
         return result;
     }
@@ -414,7 +414,10 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
-        TypeRoots: "Type roots"
+        TypeRoots: "Type roots",
+        ConfigFileOfReferencedProject: "Config file of referened project",
+        ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
+        WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
     };
 
     export interface WatchTypeRegistry {
@@ -424,7 +427,10 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
-        TypeRoots: "Type roots"
+        TypeRoots: "Type roots",
+        ConfigFileOfReferencedProject: "Config file of referened project",
+        ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
+        WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
@@ -476,6 +482,7 @@ namespace ts {
             getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
             createHash: maybeBind(host, host.createHash),
             readDirectory: maybeBind(host, host.readDirectory),
+            disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
@@ -538,7 +545,8 @@ namespace ts {
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             createHash: maybeBind(system, system.createHash),
-            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
+            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
+            disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
         };
     }
 

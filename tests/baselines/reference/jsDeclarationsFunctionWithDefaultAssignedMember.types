@@ -19,7 +19,7 @@ foo.default = foo;
 module.exports = foo;
 >module.exports = foo : typeof foo
 >module.exports : typeof foo
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof foo; }
+>module : { exports: typeof foo; }
 >exports : typeof foo
 >foo : typeof foo
 

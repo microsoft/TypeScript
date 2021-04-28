@@ -1,6 +1,7 @@
 //// [privateNameWeakMapCollision.ts]
 function test() {
     let WeakMap;
+    let WeakSet;
     class C {
         #x;
     }
@@ -9,12 +10,13 @@ function test() {
 
 //// [privateNameWeakMapCollision.js]
 function test() {
-    var _x;
+    var _C_x;
     let WeakMap;
+    let WeakSet;
     class C {
         constructor() {
-            _x.set(this, void 0);
+            _C_x.set(this, void 0);
         }
     }
-    _x = new WeakMap();
+    _C_x = new WeakMap();
 }

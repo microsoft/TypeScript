@@ -38,9 +38,9 @@ class A {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -51,9 +51,9 @@ class A {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -62,9 +62,9 @@ class A {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -73,9 +73,9 @@ class A {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -125,9 +125,9 @@ void class B {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -138,9 +138,9 @@ void class B {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -149,9 +149,9 @@ void class B {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -160,9 +160,9 @@ void class B {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -211,9 +211,9 @@ class C {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -224,9 +224,9 @@ class C {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -235,9 +235,9 @@ class C {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -246,9 +246,9 @@ class C {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -304,9 +304,9 @@ void class D {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -317,9 +317,9 @@ void class D {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -328,9 +328,9 @@ void class D {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -339,9 +339,9 @@ void class D {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -396,9 +396,9 @@ class E {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -409,9 +409,9 @@ class E {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -420,9 +420,9 @@ class E {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -431,9 +431,9 @@ class E {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -489,9 +489,9 @@ void class F {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -502,9 +502,9 @@ void class F {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -513,9 +513,9 @@ void class F {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -524,9 +524,9 @@ void class F {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -581,9 +581,9 @@ class G {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -594,9 +594,9 @@ class G {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -605,9 +605,9 @@ class G {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -616,9 +616,9 @@ class G {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -680,9 +680,9 @@ void class H {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -693,9 +693,9 @@ void class H {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -704,9 +704,9 @@ void class H {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -715,9 +715,9 @@ void class H {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -778,9 +778,9 @@ class I {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -791,9 +791,9 @@ class I {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -802,9 +802,9 @@ class I {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -813,9 +813,9 @@ class I {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;
@@ -878,9 +878,9 @@ void class J {
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
@@ -891,9 +891,9 @@ void class J {
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >null : null
 
     ["property3"]: any;
@@ -902,9 +902,9 @@ void class J {
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : any
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 
     ["property4"]: any = 2;
 >["property4"] : any
@@ -913,9 +913,9 @@ void class J {
 
     [Symbol.match]: any = null;
 >[Symbol.match] : any
->Symbol.match : symbol
+>Symbol.match : unique symbol
 >Symbol : SymbolConstructor
->match : symbol
+>match : unique symbol
 >null : null
 
     [foo()]: any;

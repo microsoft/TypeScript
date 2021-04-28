@@ -16,7 +16,7 @@ function Timer(timeout) {
 module.exports = Timer;
 >module.exports = Timer : typeof Timer
 >module.exports : typeof Timer
->module : { "\"tests/cases/conformance/jsdoc/declarations/timer\"": typeof Timer; }
+>module : { exports: typeof Timer; }
 >exports : typeof Timer
 >Timer : typeof Timer
 
@@ -41,7 +41,7 @@ function Hook(handle) {
 module.exports = Hook;
 >module.exports = Hook : typeof Hook
 >module.exports : typeof Hook
->module : { "\"tests/cases/conformance/jsdoc/declarations/hook\"": typeof Hook; }
+>module : { exports: typeof Hook; }
 >exports : typeof Hook
 >Hook : typeof Hook
 
@@ -131,7 +131,7 @@ Context.prototype = {
 module.exports = Context;
 >module.exports = Context : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: import("tests/cases/conformance/jsdoc/declarations/hook").HookHandler): State; }; }
 >module.exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: import("tests/cases/conformance/jsdoc/declarations/hook").HookHandler): State; }; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/context\"": { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: import("tests/cases/conformance/jsdoc/declarations/hook").HookHandler): State; }; }; }
+>module : { exports: { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: import("tests/cases/conformance/jsdoc/declarations/hook").HookHandler): State; }; }; }
 >exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: import("tests/cases/conformance/jsdoc/declarations/hook").HookHandler): State; }; }
 >Context : typeof Context
 

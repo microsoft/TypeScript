@@ -101,9 +101,11 @@ namespace ts {
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
         resultFromCache?: ResolvedModuleWithFailedLookupLocations;
+        packageJsonInfoCache: PackageJsonInfoCache | undefined;
     }
 
     /** Just the fields that we use for module resolution. */
+    /*@internal*/
     interface PackageJsonPathFields {
         typings?: string;
         types?: string;
@@ -179,6 +181,7 @@ namespace ts {
         return typesVersions;
     }
 
+    /*@internal*/
     interface VersionPaths {
         version: string;
         paths: MapLike<string[]>;
@@ -281,13 +284,24 @@ namespace ts {
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
      * is assumed to be the same as root directory of the project.
      */
-    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+    export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(options, host);
         if (redirectedReference) {
             options = redirectedReference.commandLine.options;
         }
-        const failedLookupLocations: string[] = [];
-        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations };
+
+        const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
+        const perFolderCache = containingDirectory ? cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference) : undefined;
+        let result = perFolderCache && perFolderCache.get(typeReferenceDirectiveName);
+        if (result) {
+            if (traceEnabled) {
+                trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1, typeReferenceDirectiveName, containingFile);
+                if (redirectedReference) trace(host, Diagnostics.Using_compiler_options_of_project_reference_redirect_0, redirectedReference.sourceFile.fileName);
+                trace(host, Diagnostics.Resolution_for_type_reference_directive_0_was_found_in_cache_from_location_1, typeReferenceDirectiveName, containingDirectory);
+                traceResult(result);
+            }
+            return result;
+        }
 
         const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
@@ -312,6 +326,8 @@ namespace ts {
             }
         }
 
+        const failedLookupLocations: string[] = [];
+        const moduleResolutionState: ModuleResolutionState = { compilerOptions: options, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache };
         let resolved = primaryLookup();
         let primary = true;
         if (!resolved) {
@@ -323,18 +339,24 @@ namespace ts {
         if (resolved) {
             const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
-            if (traceEnabled) {
-                if (packageId) {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, resolvedFileName, packageIdToString(packageId), primary);
-                }
-                else {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
-                }
-            }
             resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(fileName) };
         }
+        result = { resolvedTypeReferenceDirective, failedLookupLocations };
+        perFolderCache?.set(typeReferenceDirectiveName, result);
+        if (traceEnabled) traceResult(result);
+        return result;
 
-        return { resolvedTypeReferenceDirective, failedLookupLocations };
+        function traceResult(result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+            if (!result.resolvedTypeReferenceDirective?.resolvedFileName) {
+                trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
+            }
+            else if (result.resolvedTypeReferenceDirective.packageId) {
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, packageIdToString(result.resolvedTypeReferenceDirective.packageId), result.resolvedTypeReferenceDirective.primary);
+            }
+            else {
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, result.resolvedTypeReferenceDirective.primary);
+            }
+        }
 
         function primaryLookup(): PathAndPackageId | undefined {
             // Check primary library paths
@@ -378,11 +400,7 @@ namespace ts {
                     const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
                     result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
                 }
-                const resolvedFile = resolvedTypeScriptOnly(result);
-                if (!resolvedFile && traceEnabled) {
-                    trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
-                }
-                return resolvedFile;
+                return resolvedTypeScriptOnly(result);
             }
             else {
                 if (traceEnabled) {
@@ -437,38 +455,45 @@ namespace ts {
         return result;
     }
 
+    export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
+    }
+
     /**
-     * Cached module resolutions per containing directory.
+     * Cached resolutions per containing directory.
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
-    export interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
-        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
-        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>;
+    export interface PerDirectoryResolutionCache<T> {
+        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<T>;
+        clear(): void;
+        /**
+         *  Updates with the current compilerOptions the cache will operate with.
+         *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
+         */
+        update(options: CompilerOptions): void;
+    }
+
+    export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
+        getPackageJsonInfoCache(): PackageJsonInfoCache;
     }
 
     /**
      * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
-    export interface NonRelativeModuleNameResolutionCache {
+    export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
-        /*@internal*/ moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>;
+    }
+
+    export interface PackageJsonInfoCache {
+        /*@internal*/ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
+        /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
+        clear(): void;
     }
 
     export interface PerModuleNameCache {
         get(directory: string): ResolvedModuleWithFailedLookupLocations | undefined;
         set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
     }
-
-    export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions): ModuleResolutionCache {
-        return createModuleResolutionCacheWithMaps(
-            createCacheWithRedirects(options),
-            createCacheWithRedirects(options),
-            currentDirectory,
-            getCanonicalFileName
-        );
-    }
-
 
     /*@internal*/
     export interface CacheWithRedirects<T> {
@@ -521,33 +546,125 @@ namespace ts {
         }
     }
 
-    /*@internal*/
-    export function createModuleResolutionCacheWithMaps(
-        directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>,
-        moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>,
-        currentDirectory: string,
-        getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
+    function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
+        let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
+        return { getPackageJsonInfo, setPackageJsonInfo, clear };
+        function getPackageJsonInfo(packageJsonPath: string) {
+            return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
+        }
+        function setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean) {
+            (cache ||= new Map()).set(toPath(packageJsonPath, currentDirectory, getCanonicalFileName), info);
+        }
+        function clear() {
+            cache = undefined;
+        }
+    }
 
-        return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName, directoryToModuleNameMap, moduleNameToDirectoryMap };
+    function getOrCreateCache<T>(cacheWithRedirects: CacheWithRedirects<T>, redirectedReference: ResolvedProjectReference | undefined, key: string, create: () => T): T {
+        const cache = cacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
+        let result = cache.get(key);
+        if (!result) {
+            result = create();
+            cache.set(key, result);
+        }
+        return result;
+    }
+
+    function updateRedirectsMap<T>(
+        options: CompilerOptions,
+        directoryToModuleNameMap: CacheWithRedirects<ESMap<string, T>>,
+        moduleNameToDirectoryMap?: CacheWithRedirects<PerModuleNameCache>
+    ) {
+        if (!options.configFile) return;
+        if (directoryToModuleNameMap.redirectsMap.size === 0) {
+            // The own map will be for projectCompilerOptions
+            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.redirectsMap.size === 0);
+            Debug.assert(directoryToModuleNameMap.ownMap.size === 0);
+            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.ownMap.size === 0);
+            directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.ownMap);
+            moduleNameToDirectoryMap?.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.ownMap);
+        }
+        else {
+            // Set correct own map
+            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.redirectsMap.size > 0);
+            const ref: ResolvedProjectReference = {
+                sourceFile: options.configFile,
+                commandLine: { options } as ParsedCommandLine
+            };
+            directoryToModuleNameMap.setOwnMap(directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
+            moduleNameToDirectoryMap?.setOwnMap(moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
+        }
+        directoryToModuleNameMap.setOwnOptions(options);
+        moduleNameToDirectoryMap?.setOwnOptions(options);
+    }
+
+    function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, directoryToModuleNameMap: CacheWithRedirects<ESMap<string, T>>): PerDirectoryResolutionCache<T> {
+        return {
+            getOrCreateCacheForDirectory,
+            clear,
+            update,
+        };
+
+        function clear() {
+            directoryToModuleNameMap.clear();
+        }
+
+        function update(options: CompilerOptions) {
+            updateRedirectsMap(options, directoryToModuleNameMap);
+        }
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-            return getOrCreateCache<ESMap<string, ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, () => new Map());
+            return getOrCreateCache<ESMap<string, T>>(directoryToModuleNameMap, redirectedReference, path, () => new Map());
+        }
+    }
+
+    export function createModuleResolutionCache(
+        currentDirectory: string,
+        getCanonicalFileName: (s: string) => string,
+        options?: CompilerOptions
+    ): ModuleResolutionCache;
+    /*@internal*/
+    export function createModuleResolutionCache(
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        options: undefined,
+        directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>,
+        moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>,
+    ): ModuleResolutionCache;
+    export function createModuleResolutionCache(
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        options?: CompilerOptions,
+        directoryToModuleNameMap?: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>,
+        moduleNameToDirectoryMap?: CacheWithRedirects<PerModuleNameCache>,
+    ): ModuleResolutionCache {
+        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        moduleNameToDirectoryMap ||= createCacheWithRedirects(options);
+        const packageJsonInfoCache = createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
+
+        return {
+            ...packageJsonInfoCache,
+            ...preDirectoryResolutionCache,
+            getOrCreateCacheForModuleName,
+            clear,
+            update,
+            getPackageJsonInfoCache: () => packageJsonInfoCache,
+        };
+
+        function clear() {
+            preDirectoryResolutionCache.clear();
+            moduleNameToDirectoryMap!.clear();
+            packageJsonInfoCache.clear();
+        }
+
+        function update(options: CompilerOptions) {
+            updateRedirectsMap(options, directoryToModuleNameMap!, moduleNameToDirectoryMap);
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
             Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
-            return getOrCreateCache(moduleNameToDirectoryMap, redirectedReference, nonRelativeModuleName, createPerModuleNameCache);
-        }
-
-        function getOrCreateCache<T>(cacheWithRedirects: CacheWithRedirects<T>, redirectedReference: ResolvedProjectReference | undefined, key: string, create: () => T): T {
-            const cache = cacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
-            let result = cache.get(key);
-            if (!result) {
-                result = create();
-                cache.set(key, result);
-            }
-            return result;
+            return getOrCreateCache(moduleNameToDirectoryMap!, redirectedReference, nonRelativeModuleName, createPerModuleNameCache);
         }
 
         function createPerModuleNameCache(): PerModuleNameCache {
@@ -620,6 +737,42 @@ namespace ts {
                 }
                 return directory.substr(0, Math.max(sep, rootLength));
             }
+        }
+    }
+
+    export function createTypeReferenceDirectiveResolutionCache(
+        currentDirectory: string,
+        getCanonicalFileName: (s: string) => string,
+        options?: CompilerOptions,
+        packageJsonInfoCache?: PackageJsonInfoCache,
+    ): TypeReferenceDirectiveResolutionCache;
+    /*@internal*/
+    export function createTypeReferenceDirectiveResolutionCache(
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        options: undefined,
+        packageJsonInfoCache: PackageJsonInfoCache | undefined,
+        directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
+    ): TypeReferenceDirectiveResolutionCache;
+    export function createTypeReferenceDirectiveResolutionCache(
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        options?: CompilerOptions,
+        packageJsonInfoCache?: PackageJsonInfoCache | undefined,
+        directoryToModuleNameMap?: CacheWithRedirects<ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
+    ): TypeReferenceDirectiveResolutionCache {
+        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        packageJsonInfoCache ||= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
+
+        return {
+            ...packageJsonInfoCache,
+            ...preDirectoryResolutionCache,
+            clear,
+        };
+
+        function clear() {
+            preDirectoryResolutionCache.clear();
+            packageJsonInfoCache!.clear();
         }
     }
 
@@ -931,7 +1084,7 @@ namespace ts {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache };
 
         const result = forEach(extensions, ext => tryResolve(ext));
         return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);
@@ -1137,6 +1290,7 @@ namespace ts {
         return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
     }
 
+    /*@internal*/
     interface PackageJsonInfo {
         packageDirectory: string;
         packageJsonContent: PackageJsonPathFields;
@@ -1145,21 +1299,40 @@ namespace ts {
 
     function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PackageJsonInfo | undefined {
         const { host, traceEnabled } = state;
-        const directoryExists = !onlyRecordFailures && directoryProbablyExists(packageDirectory, host);
         const packageJsonPath = combinePaths(packageDirectory, "package.json");
+        if (onlyRecordFailures) {
+            state.failedLookupLocations.push(packageJsonPath);
+            return undefined;
+        }
+
+        const existing = state.packageJsonInfoCache?.getPackageJsonInfo(packageJsonPath);
+        if (existing !== undefined) {
+            if (typeof existing !== "boolean") {
+                if (traceEnabled) trace(host, Diagnostics.File_0_exists_according_to_earlier_cached_lookups, packageJsonPath);
+                return existing;
+            }
+            else {
+                if (existing && traceEnabled) trace(host, Diagnostics.File_0_does_not_exist_according_to_earlier_cached_lookups, packageJsonPath);
+                state.failedLookupLocations.push(packageJsonPath);
+                return undefined;
+            }
+        }
+        const directoryExists = directoryProbablyExists(packageDirectory, host);
         if (directoryExists && host.fileExists(packageJsonPath)) {
             const packageJsonContent = readJson(packageJsonPath, host) as PackageJson;
             if (traceEnabled) {
                 trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
             const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
-            return { packageDirectory, packageJsonContent, versionPaths };
+            const result = { packageDirectory, packageJsonContent, versionPaths };
+            state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
+            return result;
         }
         else {
             if (directoryExists && traceEnabled) {
                 trace(host, Diagnostics.File_0_does_not_exist, packageJsonPath);
             }
-
+            state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, directoryExists);
             // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
             state.failedLookupLocations.push(packageJsonPath);
         }
@@ -1448,7 +1621,7 @@ namespace ts {
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         const failedLookupLocations: string[] = [];
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache };
         const containingDirectory = getDirectoryPath(containingFile);
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
@@ -1492,13 +1665,13 @@ namespace ts {
      * This is the minumum code needed to expose that functionality; the rest is in the host.
      */
     /* @internal */
-    export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations {
+    export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string, packageJsonInfoCache: PackageJsonInfoCache): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         if (traceEnabled) {
             trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
         }
         const failedLookupLocations: string[] = [];
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
+        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false);
         return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, state.resultFromCache);
     }

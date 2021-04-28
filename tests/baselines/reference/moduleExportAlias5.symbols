@@ -5,7 +5,7 @@ const webpack = function (){
 }
 exports = module.exports = webpack;
 >exports : Symbol("tests/cases/conformance/salsa/bug24754", Decl(bug24754.js, 0, 0))
->module.exports : Symbol("tests/cases/conformance/salsa/bug24754", Decl(bug24754.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(bug24754.js, 0, 0))
 >module : Symbol(export=, Decl(bug24754.js, 3, 9))
 >exports : Symbol(export=, Decl(bug24754.js, 3, 9))
 >webpack : Symbol(webpack, Decl(bug24754.js, 1, 5), Decl(bug24754.js, 4, 23))

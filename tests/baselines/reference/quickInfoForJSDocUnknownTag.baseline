@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
-      "position": 64
+      "position": 64,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -49,7 +50,12 @@
       "tags": [
         {
           "name": "example",
-          "text": "if (true) {\n    foo()\n}"
+          "text": [
+            {
+              "text": "if (true) {\n    foo()\n}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -57,7 +63,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
-      "position": 134
+      "position": 134,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "function",
@@ -104,7 +111,12 @@
       "tags": [
         {
           "name": "example",
-          "text": "{\n    foo()\n}"
+          "text": [
+            {
+              "text": "{\n    foo()\n}",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -112,7 +124,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
-      "position": 219
+      "position": 219,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "function",
@@ -159,7 +172,12 @@
       "tags": [
         {
           "name": "example",
-          "text": "  x y\n  12345\n     b"
+          "text": [
+            {
+              "text": "  x y\n  12345\n     b",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -167,7 +185,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
-      "position": 313
+      "position": 313,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "function",
@@ -217,7 +236,12 @@
         },
         {
           "name": "example",
-          "text": "  x y\n  12345\n     b"
+          "text": [
+            {
+              "text": "  x y\n  12345\n     b",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }
@@ -225,7 +249,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
-      "position": 426
+      "position": 426,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "function",
@@ -275,7 +300,12 @@
         },
         {
           "name": "example",
-          "text": "x y\n12345\n   b"
+          "text": [
+            {
+              "text": "x y\n12345\n   b",
+              "kind": "text"
+            }
+          ]
         }
       ]
     }

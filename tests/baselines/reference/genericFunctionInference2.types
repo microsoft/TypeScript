@@ -19,7 +19,7 @@ declare const foo: Reducer<MyState['combined']['foo']>;
 
 const myReducer1: Reducer<MyState> = combineReducers({
 >myReducer1 : Reducer<MyState>
->combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: any; }; }>
+>combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
 
@@ -33,8 +33,8 @@ const myReducer1: Reducer<MyState> = combineReducers({
 });
 
 const myReducer2 = combineReducers({
->myReducer2 : Reducer<{ combined: { foo: any; }; }>
->combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: any; }; }>
+>myReducer2 : Reducer<{ combined: { foo: number; }; }>
+>combineReducers({    combined: combineReducers({ foo }),}) : Reducer<{ combined: { foo: number; }; }>
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >{    combined: combineReducers({ foo }),} : { combined: Reducer<{ foo: number; }>; }
 
