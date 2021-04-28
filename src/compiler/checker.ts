@@ -17232,12 +17232,13 @@ namespace ts {
 
         function getNormalizedType(type: Type, writing: boolean): Type {
             while (true) {
-                const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
+                let t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
                     type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
                     type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;
+                t = getSingleBaseForNonAugmentingSubtype(t) || t;
                 if (t === type) break;
                 type = t;
             }
@@ -17739,8 +17740,10 @@ namespace ts {
 
                 function reportErrorResults(source: Type, target: Type, result: Ternary, isComparingJsxAttributes: boolean) {
                     if (!result && reportErrors) {
-                        source = originalSource.aliasSymbol ? originalSource : source;
-                        target = originalTarget.aliasSymbol ? originalTarget : target;
+                        const sourceHasBase = !!getSingleBaseForNonAugmentingSubtype(originalSource);
+                        const targetHasBase = !!getSingleBaseForNonAugmentingSubtype(originalTarget);
+                        source = (originalSource.aliasSymbol || sourceHasBase) ? originalSource : source;
+                        target = (originalTarget.aliasSymbol || targetHasBase) ? originalTarget : target;
                         let maybeSuppress = overrideNextErrorInfo > 0;
                         if (maybeSuppress) {
                             overrideNextErrorInfo--;
@@ -19991,6 +19994,30 @@ namespace ts {
             // A type is array-like if it is a reference to the global Array or global ReadonlyArray type,
             // or if it is not the undefined or null type and if it is assignable to ReadonlyArray<any>
             return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
+        }
+
+        function getSingleBaseForNonAugmentingSubtype(type: Type) {
+            if (!(getObjectFlags(type) & ObjectFlags.Reference) || !(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)) {
+                return undefined;
+            }
+            if (getObjectFlags(type) & ObjectFlags.IdenticalBaseTypeCalculated) {
+                return getObjectFlags(type) & ObjectFlags.IdenticalBaseTypeExists ? (type as TypeReference).cachedEquivalentBaseType : undefined;
+            }
+            (type as TypeReference).objectFlags |= ObjectFlags.IdenticalBaseTypeCalculated;
+            const target = (type as TypeReference).target as InterfaceType;
+            const bases = getBaseTypes(target);
+            if (bases.length !== 1) {
+                return undefined;
+            }
+            if (getMembersOfSymbol(type.symbol).size) {
+                return undefined; // If the interface has any members, they may subtype members in the base, so we should do a full structural comparison
+            }
+            let instantiatedBase = !length(target.typeParameters) ? bases[0] : instantiateType(bases[0], createTypeMapper(target.typeParameters!, getTypeArguments(type as TypeReference).slice(0, target.typeParameters!.length)));
+            if (length(getTypeArguments(type as TypeReference)) > length(target.typeParameters)) {
+                instantiatedBase = getTypeWithThisArgument(instantiatedBase, last(getTypeArguments(type as TypeReference)));
+            }
+            (type as TypeReference).objectFlags |= ObjectFlags.IdenticalBaseTypeExists;
+            return (type as TypeReference).cachedEquivalentBaseType = instantiatedBase;
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {

@@ -5200,6 +5200,11 @@ namespace ts {
         ObjectRestType   = 1 << 23,  // Originates in object rest declaration
         /* @internal */
         IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
+        // Flags that require TypeFlags.Object and ObjectFlags.Reference
+        /* @internal */
+        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        /* @internal */
+        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
@@ -5281,6 +5286,8 @@ namespace ts {
         resolvedTypeArguments?: readonly Type[];  // Resolved type reference type arguments
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
+        /* @internal */
+        cachedEquivalentBaseType?: Type; // Only set on references to class or interfaces with a single base type and no augmentations
     }
 
     export interface DeferredTypeReference extends TypeReference {
