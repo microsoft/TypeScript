@@ -41471,6 +41471,12 @@ namespace ts {
                 }
             }
 
+            if (isForOfStatement(forInOrOfStatement) && !(forInOrOfStatement.flags & NodeFlags.AwaitContext) &&
+                isIdentifier(forInOrOfStatement.initializer) && forInOrOfStatement.initializer.escapedText === "async") {
+                grammarErrorOnNode(forInOrOfStatement.initializer, Diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_async);
+                return false;
+            }
+
             if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
                 const variableList = <VariableDeclarationList>forInOrOfStatement.initializer;
                 if (!checkGrammarVariableDeclarationList(variableList)) {

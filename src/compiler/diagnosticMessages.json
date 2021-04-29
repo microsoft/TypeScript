@@ -319,6 +319,10 @@
         "category": "Error",
         "code": 1105
     },
+    "The left-hand side of a 'for...of' statement may not be 'async'.": {
+        "category": "Error",
+        "code": 1106
+    },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
         "code": 1107
