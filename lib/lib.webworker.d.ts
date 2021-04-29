@@ -1,14 +1,14 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
@@ -214,6 +214,12 @@ interface GetNotificationOptions {
     tag?: string;
 }
 
+interface HkdfParams extends Algorithm {
+    hash: HashAlgorithmIdentifier;
+    info: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    salt: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+}
+
 interface HmacImportParams extends Algorithm {
     hash: HashAlgorithmIdentifier;
     length?: number;
@@ -239,6 +245,15 @@ interface IDBVersionChangeEventInit extends EventInit {
     oldVersion?: number;
 }
 
+interface ImageBitmapOptions {
+    colorSpaceConversion?: ColorSpaceConversion;
+    imageOrientation?: ImageOrientation;
+    premultiplyAlpha?: PremultiplyAlpha;
+    resizeHeight?: number;
+    resizeQuality?: ResizeQuality;
+    resizeWidth?: number;
+}
+
 interface ImageBitmapRenderingContextSettings {
     alpha?: boolean;
 }
@@ -246,6 +261,10 @@ interface ImageBitmapRenderingContextSettings {
 interface ImageEncodeOptions {
     quality?: number;
     type?: string;
+}
+
+interface ImportMeta {
+    url: string;
 }
 
 interface JsonWebKey {
@@ -273,8 +292,8 @@ interface KeyAlgorithm {
     name: string;
 }
 
-interface MessageEventInit extends EventInit {
-    data?: any;
+interface MessageEventInit<T = any> extends EventInit {
+    data?: T;
     lastEventId?: string;
     origin?: string;
     ports?: MessagePort[];
@@ -339,13 +358,6 @@ interface PermissionDescriptor {
     name: PermissionName;
 }
 
-interface PipeOptions {
-    preventAbort?: boolean;
-    preventCancel?: boolean;
-    preventClose?: boolean;
-    signal?: AbortSignal;
-}
-
 interface PostMessageOptions {
     transfer?: any[];
 }
@@ -388,17 +400,36 @@ interface PushSubscriptionOptionsInit {
 
 interface QueuingStrategy<T = any> {
     highWaterMark?: number;
-    size?: QueuingStrategySizeCallback<T>;
+    size?: QueuingStrategySize<T>;
 }
 
-interface ReadableStreamReadDoneResult<T> {
+interface QueuingStrategyInit {
+    /**
+     * Creates a new ByteLengthQueuingStrategy with the provided high water mark.
+     * 
+     * Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
+     */
+    highWaterMark: number;
+}
+
+interface ReadableStreamDefaultReadDoneResult {
     done: true;
-    value?: T;
+    value?: undefined;
 }
 
-interface ReadableStreamReadValueResult<T> {
+interface ReadableStreamDefaultReadValueResult<T> {
     done: false;
     value: T;
+}
+
+interface ReadableWritablePair<R = any, W = any> {
+    readable: ReadableStream<R>;
+    /**
+     * Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other { writable, readable } pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
+     * 
+     * Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+     */
+    writable: WritableStream<W>;
 }
 
 interface RegistrationOptions {
@@ -500,6 +531,30 @@ interface StorageEstimate {
     usage?: number;
 }
 
+interface StreamPipeOptions {
+    preventAbort?: boolean;
+    preventCancel?: boolean;
+    /**
+     * Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
+     * 
+     * Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+     * 
+     * Errors and closures of the source and destination streams propagate as follows:
+     * 
+     * An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination.
+     * 
+     * An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source.
+     * 
+     * When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error.
+     * 
+     * If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source.
+     * 
+     * The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
+     */
+    preventClose?: boolean;
+    signal?: AbortSignal;
+}
+
 interface SyncEventInit extends ExtendableEventInit {
     lastChance?: boolean;
     tag: string;
@@ -520,33 +575,25 @@ interface TextEncoderEncodeIntoResult {
 }
 
 interface Transformer<I = any, O = any> {
-    flush?: TransformStreamDefaultControllerCallback<O>;
+    flush?: TransformerFlushCallback<O>;
     readableType?: undefined;
-    start?: TransformStreamDefaultControllerCallback<O>;
-    transform?: TransformStreamDefaultControllerTransformCallback<I, O>;
+    start?: TransformerStartCallback<O>;
+    transform?: TransformerTransformCallback<I, O>;
     writableType?: undefined;
 }
 
-interface UnderlyingByteSource {
-    autoAllocateChunkSize?: number;
-    cancel?: ReadableStreamErrorCallback;
-    pull?: ReadableByteStreamControllerCallback;
-    start?: ReadableByteStreamControllerCallback;
-    type: "bytes";
-}
-
 interface UnderlyingSink<W = any> {
-    abort?: WritableStreamErrorCallback;
-    close?: WritableStreamDefaultControllerCloseCallback;
-    start?: WritableStreamDefaultControllerStartCallback;
+    abort?: UnderlyingSinkAbortCallback;
+    close?: UnderlyingSinkCloseCallback;
+    start?: UnderlyingSinkStartCallback;
     type?: undefined;
-    write?: WritableStreamDefaultControllerWriteCallback<W>;
+    write?: UnderlyingSinkWriteCallback<W>;
 }
 
 interface UnderlyingSource<R = any> {
-    cancel?: ReadableStreamErrorCallback;
-    pull?: ReadableStreamDefaultControllerCallback<R>;
-    start?: ReadableStreamDefaultControllerCallback<R>;
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: UnderlyingSourcePullCallback<R>;
+    start?: UnderlyingSourceStartCallback<R>;
     type?: undefined;
 }
 
@@ -706,13 +753,13 @@ declare var BroadcastChannel: {
 
 /** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface ByteLengthQueuingStrategy extends QueuingStrategy<ArrayBufferView> {
-    highWaterMark: number;
-    size(chunk: ArrayBufferView): number;
+    readonly highWaterMark: number;
+    readonly size: QueuingStrategySize<ArrayBufferView>;
 }
 
 declare var ByteLengthQueuingStrategy: {
     prototype: ByteLengthQueuingStrategy;
-    new(options: { highWaterMark: number }): ByteLengthQueuingStrategy;
+    new(init: QueuingStrategyInit): ByteLengthQueuingStrategy;
 };
 
 /** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. */
@@ -774,7 +821,7 @@ interface CanvasFillStrokeStyles {
     fillStyle: string | CanvasGradient | CanvasPattern;
     strokeStyle: string | CanvasGradient | CanvasPattern;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
-    createPattern(image: CanvasImageSource, repetition: string): CanvasPattern | null;
+    createPattern(image: CanvasImageSource, repetition: string | null): CanvasPattern | null;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
 }
 
@@ -904,8 +951,8 @@ declare var Client: {
 /** Provides access to Client objects. Access it via self.clients within a service worker. */
 interface Clients {
     claim(): Promise<void>;
-    get(id: string): Promise<any>;
-    matchAll(options?: ClientQueryOptions): Promise<ReadonlyArray<Client>>;
+    get(id: string): Promise<Client | undefined>;
+    matchAll<T extends ClientQueryOptions>(options?: T): Promise<ReadonlyArray<T["type"] extends "window" ? WindowClient : Client>>;
     openWindow(url: string): Promise<WindowClient | null>;
 }
 
@@ -944,49 +991,15 @@ interface ConcatParams extends Algorithm {
     publicInfo?: Uint8Array;
 }
 
-/** Provides access to the browser's debugging console (e.g. the Web Console in Firefox). The specifics of how it works varies from browser to browser, but there is a de facto set of features that are typically provided. */
-interface Console {
-    memory: any;
-    assert(condition?: boolean, message?: string, ...data: any[]): void;
-    clear(): void;
-    count(label?: string): void;
-    debug(message?: any, ...optionalParams: any[]): void;
-    dir(value?: any, ...optionalParams: any[]): void;
-    dirxml(value: any): void;
-    error(message?: any, ...optionalParams: any[]): void;
-    exception(message?: string, ...optionalParams: any[]): void;
-    group(groupTitle?: string, ...optionalParams: any[]): void;
-    groupCollapsed(groupTitle?: string, ...optionalParams: any[]): void;
-    groupEnd(): void;
-    info(message?: any, ...optionalParams: any[]): void;
-    log(message?: any, ...optionalParams: any[]): void;
-    markTimeline(label?: string): void;
-    profile(reportName?: string): void;
-    profileEnd(reportName?: string): void;
-    table(...tabularData: any[]): void;
-    time(label?: string): void;
-    timeEnd(label?: string): void;
-    timeStamp(label?: string): void;
-    timeline(label?: string): void;
-    timelineEnd(label?: string): void;
-    trace(message?: any, ...optionalParams: any[]): void;
-    warn(message?: any, ...optionalParams: any[]): void;
-}
-
-declare var Console: {
-    prototype: Console;
-    new(): Console;
-};
-
 /** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface CountQueuingStrategy extends QueuingStrategy {
-    highWaterMark: number;
-    size(chunk: any): 1;
+    readonly highWaterMark: number;
+    readonly size: QueuingStrategySize;
 }
 
 declare var CountQueuingStrategy: {
     prototype: CountQueuingStrategy;
-    new(options: { highWaterMark: number }): CountQueuingStrategy;
+    new(init: QueuingStrategyInit): CountQueuingStrategy;
 };
 
 /** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. */
@@ -1284,12 +1297,24 @@ declare var DOMStringList: {
 
 interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 /** (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers. */
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope, AnimationFrameProvider {
+    /**
+     * Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging.
+     */
+    readonly name: string;
     onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+    onmessageerror: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+    /**
+     * Aborts dedicatedWorkerGlobal.
+     */
     close(): void;
+    /**
+     * Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+     */
     postMessage(message: any, transfer: Transferable[]): void;
     postMessage(message: any, options?: PostMessageOptions): void;
     addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1651,24 +1676,7 @@ declare var FormData: {
 };
 
 interface GenericTransformStream {
-    /**
-     * Returns a readable stream whose chunks are strings resulting from running encoding's decoder on the chunks written to writable.
-     */
     readonly readable: ReadableStream;
-    /**
-     * Returns a writable stream which accepts [AllowShared] BufferSource chunks and runs them through encoding's decoder before making them available to readable.
-     * 
-     * Typically this will be used via the pipeThrough() method on a ReadableStream source.
-     * 
-     * ```
-     * var decoder = new TextDecoderStream(encoding);
-     * byteReadable
-     *   .pipeThrough(decoder)
-     *   .pipeTo(textWritable);
-     * ```
-     * 
-     * If the error mode is "fatal" and encoding's decoder returns error, both readable and writable will be errored with a TypeError.
-     */
     readonly writable: WritableStream;
 }
 
@@ -1686,12 +1694,6 @@ declare var Headers: {
     prototype: Headers;
     new(init?: HeadersInit): Headers;
 };
-
-interface HkdfCtrParams extends Algorithm {
-    context: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
-    hash: string | Algorithm;
-    label: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
-}
 
 interface IDBArrayKey extends Array<IDBValidKey> {
 }
@@ -1794,7 +1796,7 @@ interface IDBDatabase extends EventTarget {
      * 
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
-    createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
+    createObjectStore(name: string, options?: IDBObjectStoreParameters): IDBObjectStore;
     /**
      * Deletes the object store with the given name.
      * 
@@ -2198,15 +2200,6 @@ declare var ImageBitmap: {
     new(): ImageBitmap;
 };
 
-interface ImageBitmapOptions {
-    colorSpaceConversion?: "none" | "default";
-    imageOrientation?: "none" | "flipY";
-    premultiplyAlpha?: "none" | "premultiply" | "default";
-    resizeHeight?: number;
-    resizeQuality?: "pixelated" | "low" | "medium" | "high";
-    resizeWidth?: number;
-}
-
 interface ImageBitmapRenderingContext {
     /**
      * Returns the canvas element that the context is bound to.
@@ -2241,8 +2234,8 @@ interface ImageData {
 
 declare var ImageData: {
     prototype: ImageData;
-    new(width: number, height: number): ImageData;
-    new(array: Uint8ClampedArray, width: number, height?: number): ImageData;
+    new(sw: number, sh: number): ImageData;
+    new(data: Uint8ClampedArray, sw: number, sh?: number): ImageData;
 };
 
 /** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. */
@@ -2263,11 +2256,11 @@ declare var MessageChannel: {
 };
 
 /** A message received by a target object. */
-interface MessageEvent extends Event {
+interface MessageEvent<T = any> extends Event {
     /**
      * Returns the data of the message.
      */
-    readonly data: any;
+    readonly data: T;
     /**
      * Returns the last event ID string, for server-sent events.
      */
@@ -2288,7 +2281,7 @@ interface MessageEvent extends Event {
 
 declare var MessageEvent: {
     prototype: MessageEvent;
-    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
+    new<T>(type: string, eventInitDict?: MessageEventInit<T>): MessageEvent<T>;
 };
 
 interface MessagePortEventMap {
@@ -2338,10 +2331,6 @@ declare var NavigationPreloadManager: {
     new(): NavigationPreloadManager;
 };
 
-interface NavigatorBeacon {
-    sendBeacon(url: string, data?: Blob | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | FormData | string | null): boolean;
-}
-
 interface NavigatorConcurrentHardware {
     readonly hardwareConcurrency: number;
 }
@@ -2353,6 +2342,11 @@ interface NavigatorID {
     readonly platform: string;
     readonly product: string;
     readonly userAgent: string;
+}
+
+interface NavigatorLanguage {
+    readonly language: string;
+    readonly languages: ReadonlyArray<string>;
 }
 
 interface NavigatorOnLine {
@@ -2748,68 +2742,47 @@ declare var PushSubscriptionOptions: {
     new(): PushSubscriptionOptions;
 };
 
-interface ReadableByteStreamController {
-    readonly byobRequest: ReadableStreamBYOBRequest | undefined;
-    readonly desiredSize: number | null;
-    close(): void;
-    enqueue(chunk: ArrayBufferView): void;
-    error(error?: any): void;
-}
-
 /** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. */
 interface ReadableStream<R = any> {
     readonly locked: boolean;
     cancel(reason?: any): Promise<void>;
-    getReader(options: { mode: "byob" }): ReadableStreamBYOBReader;
     getReader(): ReadableStreamDefaultReader<R>;
-    pipeThrough<T>({ writable, readable }: { writable: WritableStream<R>, readable: ReadableStream<T> }, options?: PipeOptions): ReadableStream<T>;
-    pipeTo(dest: WritableStream<R>, options?: PipeOptions): Promise<void>;
+    pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
+    pipeTo(dest: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
     tee(): [ReadableStream<R>, ReadableStream<R>];
 }
 
 declare var ReadableStream: {
     prototype: ReadableStream;
-    new(underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number, size?: undefined }): ReadableStream<Uint8Array>;
     new<R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
 };
-
-interface ReadableStreamBYOBReader {
-    readonly closed: Promise<void>;
-    cancel(reason?: any): Promise<void>;
-    read<T extends ArrayBufferView>(view: T): Promise<ReadableStreamReadResult<T>>;
-    releaseLock(): void;
-}
-
-interface ReadableStreamBYOBRequest {
-    readonly view: ArrayBufferView;
-    respond(bytesWritten: number): void;
-    respondWithNewView(view: ArrayBufferView): void;
-}
 
 interface ReadableStreamDefaultController<R = any> {
     readonly desiredSize: number | null;
     close(): void;
     enqueue(chunk: R): void;
-    error(error?: any): void;
+    error(e?: any): void;
 }
 
-interface ReadableStreamDefaultReader<R = any> {
-    readonly closed: Promise<void>;
-    cancel(reason?: any): Promise<void>;
-    read(): Promise<ReadableStreamReadResult<R>>;
-    releaseLock(): void;
-}
-
-interface ReadableStreamReader<R = any> {
-    cancel(): Promise<void>;
-    read(): Promise<ReadableStreamReadResult<R>>;
-    releaseLock(): void;
-}
-
-declare var ReadableStreamReader: {
-    prototype: ReadableStreamReader;
-    new(): ReadableStreamReader;
+declare var ReadableStreamDefaultController: {
+    prototype: ReadableStreamDefaultController;
+    new(): ReadableStreamDefaultController;
 };
+
+interface ReadableStreamDefaultReader<R = any> extends ReadableStreamGenericReader {
+    read(): Promise<ReadableStreamDefaultReadResult<R>>;
+    releaseLock(): void;
+}
+
+declare var ReadableStreamDefaultReader: {
+    prototype: ReadableStreamDefaultReader;
+    new<R = any>(stream: ReadableStream<R>): ReadableStreamDefaultReader<R>;
+};
+
+interface ReadableStreamGenericReader {
+    readonly closed: Promise<undefined>;
+    cancel(reason?: any): Promise<void>;
+}
 
 /** This Fetch API interface represents a resource request. */
 interface Request extends Body {
@@ -2938,7 +2911,7 @@ interface ServiceWorkerContainer extends EventTarget {
     readonly ready: Promise<ServiceWorkerRegistration>;
     getRegistration(clientURL?: string): Promise<ServiceWorkerRegistration | undefined>;
     getRegistrations(): Promise<ReadonlyArray<ServiceWorkerRegistration>>;
-    register(scriptURL: string, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
+    register(scriptURL: string | URL, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
     startMessages(): void;
     addEventListener<K extends keyof ServiceWorkerContainerEventMap>(type: K, listener: (this: ServiceWorkerContainer, ev: ServiceWorkerContainerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -3021,6 +2994,47 @@ declare var ServiceWorkerRegistration: {
     new(): ServiceWorkerRegistration;
 };
 
+interface SharedWorker extends EventTarget, AbstractWorker {
+    /**
+     * Returns sharedWorker's MessagePort object which can be used to communicate with the global environment.
+     */
+    readonly port: MessagePort;
+    addEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: SharedWorker, ev: AbstractWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: SharedWorker, ev: AbstractWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SharedWorker: {
+    prototype: SharedWorker;
+    new(scriptURL: string, options?: string | WorkerOptions): SharedWorker;
+};
+
+interface SharedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
+    "connect": MessageEvent;
+}
+
+interface SharedWorkerGlobalScope extends WorkerGlobalScope {
+    /**
+     * Returns sharedWorkerGlobal's name, i.e. the value given to the SharedWorker constructor. Multiple SharedWorker objects can correspond to the same shared worker (and SharedWorkerGlobalScope), by reusing the same name.
+     */
+    readonly name: string;
+    onconnect: ((this: SharedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+    /**
+     * Aborts sharedWorkerGlobal.
+     */
+    close(): void;
+    addEventListener<K extends keyof SharedWorkerGlobalScopeEventMap>(type: K, listener: (this: SharedWorkerGlobalScope, ev: SharedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof SharedWorkerGlobalScopeEventMap>(type: K, listener: (this: SharedWorkerGlobalScope, ev: SharedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var SharedWorkerGlobalScope: {
+    prototype: SharedWorkerGlobalScope;
+    new(): SharedWorkerGlobalScope;
+};
+
 interface StorageManager {
     estimate(): Promise<StorageEstimate>;
     persisted(): Promise<boolean>;
@@ -3033,24 +3047,24 @@ declare var StorageManager: {
 
 /** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
 interface SubtleCrypto {
-    decrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    deriveBits(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
-    deriveKey(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    digest(algorithm: string | Algorithm, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    encrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    exportKey(format: "jwk", key: CryptoKey): PromiseLike<JsonWebKey>;
-    exportKey(format: "raw" | "pkcs8" | "spki", key: CryptoKey): PromiseLike<ArrayBuffer>;
-    exportKey(format: string, key: CryptoKey): PromiseLike<JsonWebKey | ArrayBuffer>;
-    generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair | CryptoKey>;
-    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair>;
-    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    importKey(format: "jwk", keyData: JsonWebKey, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    importKey(format: "raw" | "pkcs8" | "spki", keyData: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    importKey(format: string, keyData: JsonWebKey | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    sign(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
-    unwrapKey(format: string, wrappedKey: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
-    verify(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<boolean>;
-    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string | Algorithm): PromiseLike<ArrayBuffer>;
+    decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
+    deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, length: number): Promise<ArrayBuffer>;
+    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    digest(algorithm: AlgorithmIdentifier, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
+    encrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
+    exportKey(format: "jwk", key: CryptoKey): Promise<JsonWebKey>;
+    exportKey(format: "raw" | "pkcs8" | "spki", key: CryptoKey): Promise<ArrayBuffer>;
+    exportKey(format: string, key: CryptoKey): Promise<JsonWebKey | ArrayBuffer>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair | CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    importKey(format: "raw" | "pkcs8" | "spki", keyData: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    importKey(format: string, keyData: JsonWebKey | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    sign(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<ArrayBuffer>;
+    unwrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, wrappedKey: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    verify(algorithm: AlgorithmIdentifier | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): Promise<boolean>;
+    wrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams): Promise<ArrayBuffer>;
 }
 
 declare var SubtleCrypto: {
@@ -3083,14 +3097,14 @@ declare var SyncManager: {
 /** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
 interface TextDecoder extends TextDecoderCommon {
     /**
-     * Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented stream. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
+     * Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented input. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
      * 
      * ```
      * var string = "", decoder = new TextDecoder(encoding), buffer;
      * while(buffer = next_chunk()) {
      *   string += decoder.decode(buffer, {stream:true});
      * }
-     * string += decoder.decode(); // end-of-stream
+     * string += decoder.decode(); // end-of-queue
      * ```
      * 
      * If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
@@ -3109,11 +3123,11 @@ interface TextDecoderCommon {
      */
     readonly encoding: string;
     /**
-     * Returns true if error mode is "fatal", and false otherwise.
+     * Returns true if error mode is "fatal", otherwise false.
      */
     readonly fatal: boolean;
     /**
-     * Returns true if ignore BOM flag is set, and false otherwise.
+     * Returns the value of ignore BOM.
      */
     readonly ignoreBOM: boolean;
 }
@@ -3135,7 +3149,7 @@ interface TextEncoder extends TextEncoderCommon {
      */
     encode(input?: string): Uint8Array;
     /**
-     * Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as a dictionary whereby read is the number of converted code units of source and written is the number of bytes modified in destination.
+     * Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as an object wherein read is the number of converted code units of source and written is the number of bytes modified in destination.
      */
     encodeInto(source: string, destination: Uint8Array): TextEncoderEncodeIntoResult;
 }
@@ -3235,6 +3249,11 @@ interface TransformStreamDefaultController<O = any> {
     error(reason?: any): void;
     terminate(): void;
 }
+
+declare var TransformStreamDefaultController: {
+    prototype: TransformStreamDefaultController;
+    new(): TransformStreamDefaultController;
+};
 
 /** The URL interface represents an object providing static methods used for creating object URLs. */
 interface URL {
@@ -5362,11 +5381,6 @@ declare var WebSocket: {
     readonly OPEN: number;
 };
 
-interface WindowBase64 {
-    atob(encodedString: string): string;
-    btoa(rawString: string): string;
-}
-
 /** This ServiceWorker API interface represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources. */
 interface WindowClient extends Client {
     readonly ancestorOrigins: ReadonlyArray<string>;
@@ -5381,22 +5395,19 @@ declare var WindowClient: {
     new(): WindowClient;
 };
 
-interface WindowConsole {
-    readonly console: Console;
-}
-
 interface WindowOrWorkerGlobalScope {
     readonly caches: CacheStorage;
     readonly crypto: Crypto;
     readonly indexedDB: IDBFactory;
+    readonly isSecureContext: boolean;
     readonly origin: string;
     readonly performance: Performance;
     atob(data: string): string;
     btoa(data: string): string;
     clearInterval(handle?: number): void;
     clearTimeout(handle?: number): void;
-    createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
-    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
     queueMicrotask(callback: VoidFunction): void;
     setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
@@ -5405,13 +5416,21 @@ interface WindowOrWorkerGlobalScope {
 
 interface WorkerEventMap extends AbstractWorkerEventMap {
     "message": MessageEvent;
+    "messageerror": MessageEvent;
 }
 
 /** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. */
 interface Worker extends EventTarget, AbstractWorker {
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
+    onmessageerror: ((this: Worker, ev: MessageEvent) => any) | null;
+    /**
+     * Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+     */
     postMessage(message: any, transfer: Transferable[]): void;
     postMessage(message: any, options?: PostMessageOptions): void;
+    /**
+     * Aborts worker's associated global environment.
+     */
     terminate(): void;
     addEventListener<K extends keyof WorkerEventMap>(type: K, listener: (this: Worker, ev: WorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -5426,17 +5445,34 @@ declare var Worker: {
 
 interface WorkerGlobalScopeEventMap {
     "error": ErrorEvent;
+    "languagechange": Event;
+    "offline": Event;
+    "online": Event;
+    "rejectionhandled": PromiseRejectionEvent;
+    "unhandledrejection": PromiseRejectionEvent;
 }
 
 /** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WindowConsole, WindowOrWorkerGlobalScope, WorkerUtils {
-    readonly caches: CacheStorage;
-    readonly isSecureContext: boolean;
+interface WorkerGlobalScope extends EventTarget, WindowOrWorkerGlobalScope {
+    /**
+     * Returns workerGlobal's WorkerLocation object.
+     */
     readonly location: WorkerLocation;
+    readonly navigator: WorkerNavigator;
     onerror: ((this: WorkerGlobalScope, ev: ErrorEvent) => any) | null;
-    readonly performance: Performance;
+    onlanguagechange: ((this: WorkerGlobalScope, ev: Event) => any) | null;
+    onoffline: ((this: WorkerGlobalScope, ev: Event) => any) | null;
+    ononline: ((this: WorkerGlobalScope, ev: Event) => any) | null;
+    onrejectionhandled: ((this: WorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+    onunhandledrejection: ((this: WorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+    /**
+     * Returns workerGlobal.
+     */
     readonly self: WorkerGlobalScope & typeof globalThis;
-    msWriteProfilerMark(profilerMarkName: string): void;
+    /**
+     * Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss).
+     */
+    importScripts(...urls: string[]): void;
     addEventListener<K extends keyof WorkerGlobalScopeEventMap>(type: K, listener: (this: WorkerGlobalScope, ev: WorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WorkerGlobalScopeEventMap>(type: K, listener: (this: WorkerGlobalScope, ev: WorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -5468,7 +5504,7 @@ declare var WorkerLocation: {
 };
 
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
-interface WorkerNavigator extends NavigatorBeacon, NavigatorConcurrentHardware, NavigatorID, NavigatorOnLine, NavigatorStorage {
+interface WorkerNavigator extends NavigatorConcurrentHardware, NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorStorage {
     readonly permissions: Permissions;
     readonly serviceWorker: ServiceWorkerContainer;
 }
@@ -5477,13 +5513,6 @@ declare var WorkerNavigator: {
     prototype: WorkerNavigator;
     new(): WorkerNavigator;
 };
-
-interface WorkerUtils extends WindowBase64 {
-    readonly indexedDB: IDBFactory;
-    readonly msIndexedDB: IDBFactory;
-    readonly navigator: WorkerNavigator;
-    importScripts(...urls: string[]): void;
-}
 
 /** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
 interface WritableStream<W = any> {
@@ -5499,19 +5528,29 @@ declare var WritableStream: {
 
 /** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
 interface WritableStreamDefaultController {
-    error(error?: any): void;
+    error(e?: any): void;
 }
+
+declare var WritableStreamDefaultController: {
+    prototype: WritableStreamDefaultController;
+    new(): WritableStreamDefaultController;
+};
 
 /** This Streams API interface is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink. */
 interface WritableStreamDefaultWriter<W = any> {
-    readonly closed: Promise<void>;
+    readonly closed: Promise<undefined>;
     readonly desiredSize: number | null;
-    readonly ready: Promise<void>;
+    readonly ready: Promise<undefined>;
     abort(reason?: any): Promise<void>;
     close(): Promise<void>;
     releaseLock(): void;
     write(chunk: W): Promise<void>;
 }
+
+declare var WritableStreamDefaultWriter: {
+    prototype: WritableStreamDefaultWriter;
+    new<W = any>(stream: WritableStream<W>): WritableStreamDefaultWriter<W>;
+};
 
 interface XMLHttpRequestEventMap extends XMLHttpRequestEventTargetEventMap {
     "readystatechange": Event;
@@ -5666,6 +5705,33 @@ declare var XMLHttpRequestUpload: {
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
+interface Console {
+    memory: any;
+    assert(condition?: boolean, ...data: any[]): void;
+    clear(): void;
+    count(label?: string): void;
+    countReset(label?: string): void;
+    debug(...data: any[]): void;
+    dir(item?: any, options?: any): void;
+    dirxml(...data: any[]): void;
+    error(...data: any[]): void;
+    exception(message?: string, ...optionalParams: any[]): void;
+    group(...data: any[]): void;
+    groupCollapsed(...data: any[]): void;
+    groupEnd(): void;
+    info(...data: any[]): void;
+    log(...data: any[]): void;
+    table(tabularData?: any, properties?: string[]): void;
+    time(label?: string): void;
+    timeEnd(label?: string): void;
+    timeLog(label?: string, ...data: any[]): void;
+    timeStamp(label?: string): void;
+    trace(...data: any[]): void;
+    warn(...data: any[]): void;
+}
+
+declare var console: Console;
+
 declare namespace WebAssembly {
     interface Global {
         value: any;
@@ -5767,99 +5833,120 @@ declare namespace WebAssembly {
     function validate(bytes: BufferSource): boolean;
 }
 
-interface EventHandlerNonNull {
-    (event: Event): any;
-}
-
 interface FrameRequestCallback {
     (time: number): void;
+}
+
+interface OnErrorEventHandlerNonNull {
+    (event: Event | string, source?: string, lineno?: number, colno?: number, error?: Error): any;
 }
 
 interface PerformanceObserverCallback {
     (entries: PerformanceObserverEntryList, observer: PerformanceObserver): void;
 }
 
-interface QueuingStrategySizeCallback<T = any> {
+interface QueuingStrategySize<T = any> {
     (chunk: T): number;
 }
 
-interface ReadableByteStreamControllerCallback {
-    (controller: ReadableByteStreamController): void | PromiseLike<void>;
-}
-
-interface ReadableStreamDefaultControllerCallback<R> {
-    (controller: ReadableStreamDefaultController<R>): void | PromiseLike<void>;
-}
-
-interface ReadableStreamErrorCallback {
-    (reason: any): void | PromiseLike<void>;
-}
-
-interface TransformStreamDefaultControllerCallback<O> {
+interface TransformerFlushCallback<O> {
     (controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
 }
 
-interface TransformStreamDefaultControllerTransformCallback<I, O> {
+interface TransformerStartCallback<O> {
+    (controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
+}
+
+interface TransformerTransformCallback<I, O> {
     (chunk: I, controller: TransformStreamDefaultController<O>): void | PromiseLike<void>;
+}
+
+interface UnderlyingSinkAbortCallback {
+    (reason: any): void | PromiseLike<void>;
+}
+
+interface UnderlyingSinkCloseCallback {
+    (): void | PromiseLike<void>;
+}
+
+interface UnderlyingSinkStartCallback {
+    (controller: WritableStreamDefaultController): void | PromiseLike<void>;
+}
+
+interface UnderlyingSinkWriteCallback<W> {
+    (chunk: W, controller: WritableStreamDefaultController): void | PromiseLike<void>;
+}
+
+interface UnderlyingSourceCancelCallback {
+    (reason: any): void | PromiseLike<void>;
+}
+
+interface UnderlyingSourcePullCallback<R> {
+    (controller: ReadableStreamController<R>): void | PromiseLike<void>;
+}
+
+interface UnderlyingSourceStartCallback<R> {
+    (controller: ReadableStreamController<R>): void | PromiseLike<void>;
 }
 
 interface VoidFunction {
     (): void;
 }
 
-interface WritableStreamDefaultControllerCloseCallback {
-    (): void | PromiseLike<void>;
-}
-
-interface WritableStreamDefaultControllerStartCallback {
-    (controller: WritableStreamDefaultController): void | PromiseLike<void>;
-}
-
-interface WritableStreamDefaultControllerWriteCallback<W> {
-    (chunk: W, controller: WritableStreamDefaultController): void | PromiseLike<void>;
-}
-
-interface WritableStreamErrorCallback {
-    (reason: any): void | PromiseLike<void>;
-}
-
+/**
+ * Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging.
+ */
+declare var name: string;
 declare var onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+declare var onmessageerror: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
+/**
+ * Aborts dedicatedWorkerGlobal.
+ */
 declare function close(): void;
+/**
+ * Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+ */
 declare function postMessage(message: any, transfer: Transferable[]): void;
 declare function postMessage(message: any, options?: PostMessageOptions): void;
 /**
  * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
  */
 declare function dispatchEvent(event: Event): boolean;
-declare var caches: CacheStorage;
-declare var isSecureContext: boolean;
+/**
+ * Returns workerGlobal's WorkerLocation object.
+ */
 declare var location: WorkerLocation;
+declare var navigator: WorkerNavigator;
 declare var onerror: ((this: DedicatedWorkerGlobalScope, ev: ErrorEvent) => any) | null;
-declare var performance: Performance;
+declare var onlanguagechange: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var onoffline: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var ononline: ((this: DedicatedWorkerGlobalScope, ev: Event) => any) | null;
+declare var onrejectionhandled: ((this: DedicatedWorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+declare var onunhandledrejection: ((this: DedicatedWorkerGlobalScope, ev: PromiseRejectionEvent) => any) | null;
+/**
+ * Returns workerGlobal.
+ */
 declare var self: WorkerGlobalScope & typeof globalThis;
-declare function msWriteProfilerMark(profilerMarkName: string): void;
+/**
+ * Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss).
+ */
+declare function importScripts(...urls: string[]): void;
 /**
  * Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
  */
 declare function dispatchEvent(event: Event): boolean;
-declare var indexedDB: IDBFactory;
-declare var msIndexedDB: IDBFactory;
-declare var navigator: WorkerNavigator;
-declare function importScripts(...urls: string[]): void;
-declare function atob(encodedString: string): string;
-declare function btoa(rawString: string): string;
-declare var console: Console;
 declare var caches: CacheStorage;
 declare var crypto: Crypto;
 declare var indexedDB: IDBFactory;
+declare var isSecureContext: boolean;
 declare var origin: string;
 declare var performance: Performance;
 declare function atob(data: string): string;
 declare function btoa(data: string): string;
 declare function clearInterval(handle?: number): void;
 declare function clearTimeout(handle?: number): void;
-declare function createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
-declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function queueMicrotask(callback: VoidFunction): void;
 declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
@@ -5879,10 +5966,12 @@ type CanvasImageSource = ImageBitmap | OffscreenCanvas;
 type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type MessageEventSource = MessagePort | ServiceWorker;
 type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
+type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
 type TimerHandler = string | Function;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
-type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
+type ReadableStreamReader<T> = ReadableStreamDefaultReader<T>;
+type ReadableStreamController<T> = ReadableStreamDefaultController<T>;
 type VibratePattern = number | number[];
 type AlgorithmIdentifier = string | Algorithm;
 type HashAlgorithmIdentifier = AlgorithmIdentifier;
@@ -5909,6 +5998,7 @@ type DOMTimeStamp = number;
 type FormDataEntryValue = File | string;
 type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap | OffscreenCanvas;
+type ReadableStreamDefaultReadResult<T> = ReadableStreamDefaultReadValueResult<T> | ReadableStreamDefaultReadDoneResult;
 type BinaryType = "arraybuffer" | "blob";
 type CanvasDirection = "inherit" | "ltr" | "rtl";
 type CanvasFillRule = "evenodd" | "nonzero";
@@ -5917,11 +6007,13 @@ type CanvasLineJoin = "bevel" | "miter" | "round";
 type CanvasTextAlign = "center" | "end" | "left" | "right" | "start";
 type CanvasTextBaseline = "alphabetic" | "bottom" | "hanging" | "ideographic" | "middle" | "top";
 type ClientTypes = "all" | "sharedworker" | "window" | "worker";
+type ColorSpaceConversion = "default" | "none";
 type EndingType = "native" | "transparent";
 type FrameType = "auxiliary" | "nested" | "none" | "top-level";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "done" | "pending";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type ImageOrientation = "flipY" | "none";
 type ImageSmoothingQuality = "high" | "low" | "medium";
 type KeyFormat = "jwk" | "pkcs8" | "raw" | "spki";
 type KeyType = "private" | "public" | "secret";
@@ -5929,8 +6021,9 @@ type KeyUsage = "decrypt" | "deriveBits" | "deriveKey" | "encrypt" | "sign" | "u
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
 type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2";
-type PermissionName = "accelerometer" | "ambient-light-sensor" | "background-sync" | "bluetooth" | "camera" | "clipboard" | "device-info" | "geolocation" | "gyroscope" | "magnetometer" | "microphone" | "midi" | "notifications" | "persistent-storage" | "push" | "speaker";
+type PermissionName = "accelerometer" | "ambient-light-sensor" | "background-fetch" | "background-sync" | "bluetooth" | "camera" | "clipboard-read" | "clipboard-write" | "device-info" | "display-capture" | "geolocation" | "gyroscope" | "magnetometer" | "microphone" | "midi" | "nfc" | "notifications" | "persistent-storage" | "push" | "speaker";
 type PermissionState = "denied" | "granted" | "prompt";
+type PremultiplyAlpha = "default" | "none" | "premultiply";
 type PushEncryptionKeyName = "auth" | "p256dh";
 type PushPermissionState = "denied" | "granted" | "prompt";
 type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url";
@@ -5939,6 +6032,7 @@ type RequestCredentials = "include" | "omit" | "same-origin";
 type RequestDestination = "" | "audio" | "audioworklet" | "document" | "embed" | "font" | "image" | "manifest" | "object" | "paintworklet" | "report" | "script" | "sharedworker" | "style" | "track" | "video" | "worker" | "xslt";
 type RequestMode = "cors" | "navigate" | "no-cors" | "same-origin";
 type RequestRedirect = "error" | "follow" | "manual";
+type ResizeQuality = "high" | "low" | "medium" | "pixelated";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
 type ServiceWorkerState = "activated" | "activating" | "installed" | "installing" | "parsed" | "redundant";
 type ServiceWorkerUpdateViaCache = "all" | "imports" | "none";

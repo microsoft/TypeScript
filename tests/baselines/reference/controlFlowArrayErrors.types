@@ -152,7 +152,7 @@ function f6() {
 >x : (string | number)[] | boolean[]
 
     x.push(99);  // Error
->x.push(99) : any
+>x.push(99) : number
 >x.push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
 >x : (string | number)[] | boolean[]
 >push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)

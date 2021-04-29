@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts ===
+class C {
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+
+    static readonly [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature2.ts, 1, 21))
+
+    static readonly [s: number]: 42
+>s : Symbol(s, Decl(staticIndexSignature2.ts, 2, 21))
+}
+
+C["foo"] = 1
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+
+C.bar = 2;
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+
+const foo = C["foo"]
+>foo : Symbol(foo, Decl(staticIndexSignature2.ts, 7, 5))
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+
+C[42] = 42
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+
+C[2] = 2;
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+
+const bar = C[42] 
+>bar : Symbol(bar, Decl(staticIndexSignature2.ts, 10, 5))
+>C : Symbol(C, Decl(staticIndexSignature2.ts, 0, 0))
+

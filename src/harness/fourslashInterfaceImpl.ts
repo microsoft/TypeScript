@@ -27,7 +27,7 @@ namespace FourSlashInterface {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }
 
-        public rangesByText(): ts.Map<FourSlash.Range[]> {
+        public rangesByText(): ts.ESMap<string, FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 
@@ -208,7 +208,31 @@ namespace FourSlashInterface {
         }
 
         public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, name, actionName);
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        }
+
+        public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+            this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
+        }
+
+        public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
+            this.state.verifyRefactorKindsAvailable(kind, expected, preferences);
+        }
+
+        public toggleLineComment(newFileContent: string) {
+            this.state.toggleLineComment(newFileContent);
+        }
+
+        public toggleMultilineComment(newFileContent: string) {
+            this.state.toggleMultilineComment(newFileContent);
+        }
+
+        public commentSelection(newFileContent: string) {
+            this.state.commentSelection(newFileContent);
+        }
+
+        public uncommentSelection(newFileContent: string) {
+            this.state.uncommentSelection(newFileContent);
         }
     }
 
@@ -312,6 +336,14 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
+        public baselineFindAllReferences(...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferences(...markerNames);
+        }
+
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
+        }
+
         public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(starts, parts);
         }
@@ -364,6 +396,14 @@ namespace FourSlashInterface {
             this.state.baselineQuickInfo();
         }
 
+        public baselineSignatureHelp() {
+            this.state.baselineSignatureHelp();
+        }
+
+        public baselineCompletions() {
+            this.state.baselineCompletions();
+        }
+
         public baselineSmartSelection() {
             this.state.baselineSmartSelection();
         }
@@ -400,9 +440,9 @@ namespace FourSlashInterface {
             this.state.verifyNoMatchingBracePosition(bracePosition);
         }
 
-        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string) {
+        public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
             this.state.goToMarker(marker);
-            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset });
+            this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
         }
 
         public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
@@ -500,8 +540,12 @@ namespace FourSlashInterface {
         /**
          * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
          */
-        public semanticClassificationsAre(...classifications: Classification[]) {
-            this.state.verifySemanticClassifications(classifications);
+        public semanticClassificationsAre(format: ts.SemanticClassificationFormat, ...classifications: Classification[]) {
+            this.state.verifySemanticClassifications(format, classifications);
+        }
+
+        public replaceWithSemanticClassifications(format: ts.SemanticClassificationFormat.TwentyTwenty) {
+            this.state.replaceWithSemanticClassifications(format);
         }
 
         public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range, options?: ts.RenameInfoOptions) {
@@ -514,6 +558,10 @@ namespace FourSlashInterface {
 
         public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
             this.state.verifyRenameLocations(startRanges, options);
+        }
+
+        public baselineRename(marker: string, options: RenameOptions) {
+            this.state.baselineRename(marker, options);
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan,
@@ -555,6 +603,10 @@ namespace FourSlashInterface {
 
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
+        }
+
+        public organizeImports(newContent: string) {
+            this.state.verifyOrganizeImports(newContent);
         }
     }
 
@@ -719,7 +771,7 @@ namespace FourSlashInterface {
         }
 
         public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
-            this.state.formatCodeSettings = { ...this.state.formatCodeSettings, [name]: value };
+            this.state.setFormatOptions({ ...this.state.formatCodeSettings, [name]: value });
         }
     }
 
@@ -736,101 +788,127 @@ namespace FourSlashInterface {
         }
     }
 
-    interface Classification {
+    interface OlderClassification {
         classificationType: ts.ClassificationTypeNames;
         text: string;
         textSpan?: FourSlash.TextSpan;
     }
-    export namespace Classification {
-        export function comment(text: string, position?: number): Classification {
+
+    // The VS Code LSP
+    interface ModernClassification {
+        classificationType: string;
+        text?: string;
+        textSpan?: FourSlash.TextSpan;
+    }
+
+    type Classification = OlderClassification | ModernClassification;
+
+    export function classification(format: ts.SemanticClassificationFormat) {
+
+        function semanticToken(identifier: string, text: string, _position: number): Classification {
+            return {
+                classificationType: identifier,
+                text
+             };
+        }
+
+        if (format === ts.SemanticClassificationFormat.TwentyTwenty) {
+            return {
+                semanticToken
+            };
+        }
+
+        // Defaults to the previous semantic classifier factory functions
+
+        function comment(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.comment, text, position);
         }
 
-        export function identifier(text: string, position?: number): Classification {
+        function identifier(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.identifier, text, position);
         }
 
-        export function keyword(text: string, position?: number): Classification {
+        function keyword(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.keyword, text, position);
         }
 
-        export function numericLiteral(text: string, position?: number): Classification {
+        function numericLiteral(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.numericLiteral, text, position);
         }
 
-        export function operator(text: string, position?: number): Classification {
+        function operator(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.operator, text, position);
         }
 
-        export function stringLiteral(text: string, position?: number): Classification {
+        function stringLiteral(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.stringLiteral, text, position);
         }
 
-        export function whiteSpace(text: string, position?: number): Classification {
+        function whiteSpace(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.whiteSpace, text, position);
         }
 
-        export function text(text: string, position?: number): Classification {
+        function text(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.text, text, position);
         }
 
-        export function punctuation(text: string, position?: number): Classification {
+        function punctuation(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.punctuation, text, position);
         }
 
-        export function docCommentTagName(text: string, position?: number): Classification {
+        function docCommentTagName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.docCommentTagName, text, position);
         }
 
-        export function className(text: string, position?: number): Classification {
+        function className(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.className, text, position);
         }
 
-        export function enumName(text: string, position?: number): Classification {
+        function enumName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.enumName, text, position);
         }
 
-        export function interfaceName(text: string, position?: number): Classification {
+        function interfaceName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.interfaceName, text, position);
         }
 
-        export function moduleName(text: string, position?: number): Classification {
+        function moduleName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.moduleName, text, position);
         }
 
-        export function typeParameterName(text: string, position?: number): Classification {
+        function typeParameterName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.typeParameterName, text, position);
         }
 
-        export function parameterName(text: string, position?: number): Classification {
+        function parameterName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.parameterName, text, position);
         }
 
-        export function typeAliasName(text: string, position?: number): Classification {
+        function typeAliasName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.typeAliasName, text, position);
         }
 
-        export function jsxOpenTagName(text: string, position?: number): Classification {
+        function jsxOpenTagName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.jsxOpenTagName, text, position);
         }
 
-        export function jsxCloseTagName(text: string, position?: number): Classification {
+        function jsxCloseTagName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.jsxCloseTagName, text, position);
         }
 
-        export function jsxSelfClosingTagName(text: string, position?: number): Classification {
+        function jsxSelfClosingTagName(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.jsxSelfClosingTagName, text, position);
         }
 
-        export function jsxAttribute(text: string, position?: number): Classification {
+        function jsxAttribute(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.jsxAttribute, text, position);
         }
 
-        export function jsxText(text: string, position?: number): Classification {
+        function jsxText(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.jsxText, text, position);
         }
 
-        export function jsxAttributeStringLiteralValue(text: string, position?: number): Classification {
+        function jsxAttributeStringLiteralValue(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.jsxAttributeStringLiteralValue, text, position);
         }
 
@@ -838,9 +916,38 @@ namespace FourSlashInterface {
             const textSpan = position === undefined ? undefined : { start: position, end: position + text.length };
             return { classificationType, text, textSpan };
         }
+
+        return {
+            comment,
+            identifier,
+            keyword,
+            numericLiteral,
+            operator,
+            stringLiteral,
+            whiteSpace,
+            text,
+            punctuation,
+            docCommentTagName,
+            className,
+            enumName,
+            interfaceName,
+            moduleName,
+            typeParameterName,
+            parameterName,
+            typeAliasName,
+            jsxOpenTagName,
+            jsxCloseTagName,
+            jsxSelfClosingTagName,
+            jsxAttribute,
+            jsxText,
+            jsxAttributeStringLiteralValue,
+            getClassification
+        };
     }
+
     export namespace Completion {
         export import SortText = ts.Completions.SortText;
+        export import CompletionSource = ts.Completions.CompletionSource;
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -893,7 +1000,7 @@ namespace FourSlashInterface {
         const res: ExpectedCompletionEntryObject[] = [];
         for (let i = ts.SyntaxKind.FirstKeyword; i <= ts.SyntaxKind.LastKeyword; i++) {
             res.push({
-                name: ts.Debug.assertDefined(ts.tokenToString(i)),
+                name: ts.Debug.checkDefined(ts.tokenToString(i)),
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
             });
@@ -902,7 +1009,7 @@ namespace FourSlashInterface {
         export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["false", "null", "true", "void", "asserts", "any", "boolean", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
+            ["false", "null", "true", "void", "asserts", "any", "boolean", "infer", "keyof", "never", "readonly", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
             interfaceEntry("Symbol"),
@@ -974,6 +1081,10 @@ namespace FourSlashInterface {
             typeEntry("ConstructorParameters"),
             typeEntry("ReturnType"),
             typeEntry("InstanceType"),
+            typeEntry("Uppercase"),
+            typeEntry("Lowercase"),
+            typeEntry("Capitalize"),
+            typeEntry("Uncapitalize"),
             interfaceEntry("ThisType"),
             varEntry("ArrayBuffer"),
             interfaceEntry("ArrayBufferTypes"),
@@ -1047,6 +1158,7 @@ namespace FourSlashInterface {
                     case "symbol":
                     case "type":
                     case "unique":
+                    case "override":
                     case "unknown":
                     case "global":
                     case "bigint":
@@ -1058,12 +1170,12 @@ namespace FourSlashInterface {
         }
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(keywordEntry);
+            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(keywordEntry);
 
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
         export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
+            ["private", "protected", "public", "readonly", "override"].map((name): ExpectedCompletionEntryObject => ({
                 name,
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
@@ -1159,6 +1271,7 @@ namespace FourSlashInterface {
             "await",
             "boolean",
             "declare",
+            "infer",
             "keyof",
             "module",
             "namespace",
@@ -1279,6 +1392,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
             "async",
             "await",
         ].map(keywordEntry);
@@ -1360,6 +1474,7 @@ namespace FourSlashInterface {
             "await",
             "boolean",
             "declare",
+            "infer",
             "keyof",
             "module",
             "namespace",
@@ -1419,6 +1534,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
             "async",
             "await",
         ].map(keywordEntry);
@@ -1470,6 +1586,7 @@ namespace FourSlashInterface {
         actionName: string;
         actionDescription: string;
         newContent: NewFileContent;
+        triggerReason?: ts.RefactorTriggerReason;
     }
 
     export type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
@@ -1480,7 +1597,10 @@ namespace FourSlashInterface {
         readonly replacementSpan?: FourSlash.Range;
         readonly hasAction?: boolean; // If not specified, will assert that this is false.
         readonly isRecommended?: boolean; // If not specified, will assert that this is false.
+        readonly isFromUncheckedFile?: boolean; // If not specified, won't assert about this
         readonly kind?: string; // If not specified, won't assert about this
+        readonly isPackageJsonImport?: boolean; // If not specified, won't assert about this
+        readonly isSnippet?: boolean;
         readonly kindModifiers?: string; // Must be paired with 'kind'
         readonly text?: string;
         readonly documentation?: string;
@@ -1493,6 +1613,7 @@ namespace FourSlashInterface {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
         readonly isNewIdentifierLocation?: boolean; // Always tested
         readonly isGlobalCompletion?: boolean; // Only tested if set
+        readonly optionalReplacementSpan?: FourSlash.Range; // Only tested if set
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
@@ -1518,6 +1639,7 @@ namespace FourSlashInterface {
         /** @default ts.emptyArray */
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
+        readonly overrideSelectedItemIndex?: number;
     }
 
     export interface VerifyNavigateToOptions {
@@ -1589,6 +1711,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
+        data?: ts.CompletionEntryData;
         description: string;
         preferences?: ts.UserPreferences;
     }
@@ -1598,6 +1721,7 @@ namespace FourSlashInterface {
         range?: FourSlash.Range;
         code: number;
         reportsUnnecessary?: true;
+        reportsDeprecated?: true;
     }
 
     export interface GetEditsForFileRenameOptions {
@@ -1622,4 +1746,9 @@ namespace FourSlashInterface {
         template: string
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
+    export interface RenameOptions {
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
 }

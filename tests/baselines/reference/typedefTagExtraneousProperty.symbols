@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/typedefTagExtraneousProperty.js ===
+/** @typedef {Object.<string,string>} Mmap
+ * @property {string} ignoreMe - should be ignored
+ */
+
+/** @type {Mmap} */
+var y = { bye: "no" };
+>y : Symbol(y, Decl(typedefTagExtraneousProperty.js, 5, 3), Decl(typedefTagExtraneousProperty.js, 6, 1), Decl(typedefTagExtraneousProperty.js, 7, 57))
+>bye : Symbol(bye, Decl(typedefTagExtraneousProperty.js, 5, 9))
+
+y
+>y : Symbol(y, Decl(typedefTagExtraneousProperty.js, 5, 3), Decl(typedefTagExtraneousProperty.js, 6, 1), Decl(typedefTagExtraneousProperty.js, 7, 57))
+
+y.ignoreMe = "ok but just because of the index signature"
+>y : Symbol(y, Decl(typedefTagExtraneousProperty.js, 5, 3), Decl(typedefTagExtraneousProperty.js, 6, 1), Decl(typedefTagExtraneousProperty.js, 7, 57))
+
+y['hi'] = "yes"
+>y : Symbol(y, Decl(typedefTagExtraneousProperty.js, 5, 3), Decl(typedefTagExtraneousProperty.js, 6, 1), Decl(typedefTagExtraneousProperty.js, 7, 57))
+

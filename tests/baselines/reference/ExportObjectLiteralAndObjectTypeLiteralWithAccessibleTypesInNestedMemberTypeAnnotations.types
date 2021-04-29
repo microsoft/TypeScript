@@ -11,7 +11,7 @@ module A {
     }
 
     export var UnitSquare : {
->UnitSquare : { top: { left: Point; right: Point; }; bottom: { left: Point; right: Point; }; }
+>UnitSquare : { top: {    left: Point;    right: Point;}; bottom: {    left: Point;    right: Point;}; }
 
         top: { left: Point, right: Point },
 >top : { left: Point; right: Point; }

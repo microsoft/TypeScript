@@ -35,7 +35,7 @@ namespace ts.codefix {
                             break;
                         }
                         else {
-                            changes.replaceNode(sourceFile, statement, createBlock(emptyArray));
+                            changes.replaceNode(sourceFile, statement, factory.createBlock(emptyArray));
                         }
                         return;
                     }
@@ -49,7 +49,7 @@ namespace ts.codefix {
 
         if (isBlock(statement.parent)) {
             const end = start + length;
-            const lastStatement = Debug.assertDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
+            const lastStatement = Debug.checkDefined(lastWhere(sliceAfter(statement.parent.statements, statement), s => s.pos < end), "Some statement should be last");
             changes.deleteNodeRange(sourceFile, statement, lastStatement);
         }
         else {

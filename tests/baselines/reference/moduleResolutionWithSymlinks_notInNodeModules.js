@@ -19,6 +19,7 @@ x + x2;
 // A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
 // See GH#10364. 
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 0;
 //// [/src/bin/shared2/abc.js]
 "use strict";
@@ -26,6 +27,7 @@ exports.x = 0;
 // A symlink file acts like the real thing. So, 2 symlinks act like 2 different files.
 // See GH#10364. 
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 0;
 //// [/src/bin/app.js]
 "use strict";

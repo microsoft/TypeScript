@@ -1,0 +1,40 @@
+=== /a.js ===
+/**
+ * @template T
+ * @template V
+ */
+class C1 {
+>C1 : Symbol(C1, Decl(a.js, 0, 0))
+
+    constructor() {
+        /** @type {T} */
+        this.p;
+>this.p : Symbol(C1.p, Decl(a.js, 5, 19))
+>this : Symbol(C1, Decl(a.js, 0, 0))
+>p : Symbol(C1.p, Decl(a.js, 5, 19))
+    }
+}
+
+/**
+ * @template T,V
+ */
+class C2 {
+>C2 : Symbol(C2, Decl(a.js, 9, 1))
+
+    constructor() { }
+}
+
+/**
+ * @template T,V,X
+ */
+class C3 {
+>C3 : Symbol(C3, Decl(a.js, 16, 1))
+
+    constructor() {
+        /** @type {T} */
+        this.p;
+>this.p : Symbol(C3.p, Decl(a.js, 22, 19))
+>this : Symbol(C3, Decl(a.js, 16, 1))
+>p : Symbol(C3.p, Decl(a.js, 22, 19))
+    }
+}

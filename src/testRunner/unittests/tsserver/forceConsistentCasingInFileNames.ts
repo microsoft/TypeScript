@@ -65,13 +65,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [
-                    { file: loggerFile.path, syntax: [], semantic: [], suggestion: [] }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [loggerFile] });
 
             const newLoggerPath = loggerFile.path.toLowerCase();
             host.renameFile(loggerFile.path, newLoggerPath);
@@ -97,14 +91,7 @@ namespace ts.projectSystem {
             });
 
             // Check errors in both files
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [
-                    { file: newLoggerPath, syntax: [], semantic: [], suggestion: [] },
-                    { file: anotherFile.path, syntax: [], semantic: [], suggestion: [] }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [newLoggerPath, anotherFile] });
         });
 
         it("when changing module name with different casing", () => {
@@ -130,13 +117,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(service, { configuredProjects: 1 });
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
-            verifyGetErrRequest({
-                host,
-                session,
-                expected: [
-                    { file: anotherFile.path, syntax: [], semantic: [], suggestion: [] }
-                ]
-            });
+            verifyGetErrRequestNoErrors({ session, host, files: [anotherFile] });
 
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,
@@ -165,8 +146,17 @@ namespace ts.projectSystem {
                     semantic: [createDiagnostic(
                         location.start,
                         location.end,
-                        Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
-                        [loggerFile.path.toLowerCase(), loggerFile.path]
+                        {
+                            message: Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
+                            args: [loggerFile.path.toLowerCase(), loggerFile.path],
+                            next: [{
+                                message: Diagnostics.The_file_is_in_the_program_because_Colon,
+                                next: [
+                                    { message: Diagnostics.Matched_by_include_pattern_0_in_1, args: ["**/*", tsconfig.path] },
+                                    { message: Diagnostics.Imported_via_0_from_file_1, args: [`"./logger"`, anotherFile.path] }
+                                ]
+                            }]
+                        }
                     )],
                     suggestion: []
                 }]

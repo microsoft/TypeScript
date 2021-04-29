@@ -31,7 +31,7 @@
                     "pos": 16,
                     "end": 22,
                     "modifierFlagsCache": 0,
-                    "transformFlags": 0
+                    "transformFlags": 1
                 }
             },
             "name": {
@@ -47,6 +47,8 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 32
+        "end": 32,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

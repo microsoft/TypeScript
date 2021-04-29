@@ -17,11 +17,11 @@ class Test<T extends A> {
         this.attrs.params!.name;
 >this.attrs.params!.name : string
 >this.attrs.params! : NonNullable<T["params"]>
->this.attrs.params : T["params"]
+>this.attrs.params : T["params"] | undefined
 >this.attrs : Readonly<T>
 >this : this
 >attrs : Readonly<T>
->params : T["params"]
+>params : T["params"] | undefined
 >name : string
     }
 }
@@ -63,10 +63,10 @@ class Test2<T extends A> {
 
         return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
 >this.attrs.params! : NonNullable<T["params"]>
->this.attrs.params : T["params"]
+>this.attrs.params : T["params"] | undefined
 >this.attrs : Readonly<T>
 >this : this
 >attrs : Readonly<T>
->params : T["params"]
+>params : T["params"] | undefined
     }
 }

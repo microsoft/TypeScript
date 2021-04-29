@@ -4,31 +4,42 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "shell",
-            "identifier": "local",
+            "type": "gulp",
             "label": "gulp: local",
-            "command": "gulp",
-            "args": ["local"],
-            "group": { "kind": "build", "isDefault": true },
-            "problemMatcher": ["$gulp-tsc"]
+            "task": "local",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
         },
         {
-            "type": "shell",
-            "identifier": "tsc",
+            "type": "gulp",
             "label": "gulp: tsc",
-            "command": "gulp",
-            "args": ["tsc"],
+            "task": "tsc",
             "group": "build",
-            "problemMatcher": ["$gulp-tsc"]
+            "problemMatcher": [
+                "$tsc"
+            ]
         },
         {
-            "type": "shell",
-            "identifier": "tests",
+            "type": "gulp",
             "label": "gulp: tests",
-            "command": "gulp",
-            "args": ["tests"],
+            "task": "tests",
             "group": "build",
-            "problemMatcher": ["$gulp-tsc"]
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "type": "gulp",
+            "task": "services",
+            "label": "gulp: services",
+            "problemMatcher": [
+                "$tsc"
+            ],
         }
     ]
 }

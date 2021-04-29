@@ -22,6 +22,7 @@ export default {
 //// [scalar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.scalar = void 0;
 function scalar(value) {
     return null;
 }
@@ -32,7 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var scalar_1 = require("../lib/operators/scalar");
 exports.default = {
     get xs() {
-        return scalar_1.scalar("14px");
+        return (0, scalar_1.scalar)("14px");
     }
 };
 

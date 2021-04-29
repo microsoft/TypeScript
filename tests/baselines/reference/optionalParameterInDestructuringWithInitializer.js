@@ -97,12 +97,12 @@ function func7(_a) {
     // no error
 }
 function performFoo(_a) {
-    var bar = (_a === void 0 ? {} : _a).bar;
+    var _b = _a === void 0 ? {} : _a, bar = _b.bar;
     useBar(bar);
 }
 performFoo();
 function performFoo2(_a) {
-    var _b = (_a === void 0 ? {} : _a).bar, bar = _b === void 0 ? null : _b;
+    var _b = _a === void 0 ? {} : _a, _c = _b.bar, bar = _c === void 0 ? null : _c;
     useBar2(bar);
 }
 performFoo2();

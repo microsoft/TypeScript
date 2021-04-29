@@ -14,4 +14,4 @@ const b = { definition: '(alias) type T = number\nimport T = require("./a")', ra
 verify.referenceGroups([r0, r2], [a, b]);
 verify.referenceGroups(r3, [b, a]);
 verify.referenceGroups(r4, [mod, a, b]);
-verify.referenceGroups(r1, [mod]);
+verify.referenceGroups(r1, [a, b]);

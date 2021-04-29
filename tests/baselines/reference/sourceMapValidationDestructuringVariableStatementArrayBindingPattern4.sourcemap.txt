@@ -11,16 +11,37 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern4
 >>>var x = [1, 2][0];
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^
-4 >                 ^
-5 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^
+4 >     ^^^
+5 >        ^
+6 >         ^
+7 >          ^^
+8 >            ^
+9 >             ^
+10>              ^^^
+11>                 ^
+12>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >var [
 2 >
 3 >    x
-4 >                 ] = [1, 2];
+4 >     ] = 
+5 >        [
+6 >         1
+7 >          , 
+8 >            2
+9 >             ]
+10>              
+11>                 ] = [1, 2];
 1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
-3 >Emitted(1, 18) Source(1, 7) + SourceIndex(0)
-4 >Emitted(1, 19) Source(1, 18) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 10) Source(1, 12) + SourceIndex(0)
+6 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
+7 >Emitted(1, 13) Source(1, 15) + SourceIndex(0)
+8 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
+9 >Emitted(1, 15) Source(1, 17) + SourceIndex(0)
+10>Emitted(1, 18) Source(1, 7) + SourceIndex(0)
+11>Emitted(1, 19) Source(1, 18) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.js.map

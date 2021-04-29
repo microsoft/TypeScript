@@ -15,6 +15,11 @@ namespace ts {
          * this callback if present would be used to write files
          */
         writeFile?: WriteFileCallback;
+        /**
+         * disable using source file version as signature for testing
+         */
+        /*@internal*/
+        disableUseFileVersionAsSignature?: boolean;
     }
 
     /**
@@ -99,6 +104,8 @@ namespace ts {
          * in that order would be used to write the files
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        /*@internal*/
+        emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /**
          * Get the current directory of the program
          */

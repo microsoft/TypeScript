@@ -33,20 +33,23 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
 exports.__esModule = true;
+exports.Serializable = void 0;
 /**
  * Plain mixin where the superclass must be Initable
  */
-exports.Serializable = function (SuperClass) {
+var Serializable = function (SuperClass) {
     var LocalMixin = function (InnerSuperClass) {
         return /** @class */ (function (_super) {
             __extends(SerializableLocal, _super);
@@ -59,6 +62,7 @@ exports.Serializable = function (SuperClass) {
     var ResultClass = LocalMixin(SuperClass);
     return ResultClass;
 };
+exports.Serializable = Serializable;
 var AMixin = function (SuperClass) {
     var SomeHowOkay = /** @class */ (function (_super) {
         __extends(A, _super);
@@ -73,5 +77,5 @@ var AMixin = function (SuperClass) {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return A;
-    }(exports.Serializable(SuperClass)));
+    }((0, exports.Serializable)(SuperClass)));
 };

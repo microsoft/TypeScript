@@ -105,7 +105,7 @@
     >multiSkillB
     >:=> (line 22, col 3) to (line 22, col 14)
 --------------------------------
-23 >[, multiSkillB] = ["roomba", ["vaccum", "mopping"]];
+23 >[, multiSkillB] = ["roomba", ["vacuum", "mopping"]];
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (783 to 835)  SpanInfo: {"start":786,"length":11}
     >multiSkillB

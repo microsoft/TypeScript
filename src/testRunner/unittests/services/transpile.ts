@@ -363,12 +363,16 @@ var x = 0;`, {
             options: { compilerOptions: { jsxFactory: "createElement" }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'jsxFragmentFactory'", "x;", {
+            options: { compilerOptions: { jsxFactory: "x", jsxFragmentFactory: "frag" }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'removeComments'", "x;", {
             options: { compilerOptions: { removeComments: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'rootDir'", "x;", {
-            options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "input.js", reportDiagnostics: true }
+            options: { compilerOptions: { rootDir: "./rootDir" }, fileName: "./rootDir/input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'rootDirs'", "x;", {

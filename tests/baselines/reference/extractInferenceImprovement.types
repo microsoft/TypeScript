@@ -65,17 +65,17 @@ prop = getProperty3(obj, 'first');
 
 // Should fail
 prop = getProperty2(obj, s);
->prop = getProperty2(obj, s) : any
+>prop = getProperty2(obj, s) : string
 >prop : string
->getProperty2(obj, s) : any
+>getProperty2(obj, s) : string
 >getProperty2 : <T, K extends keyof T>(obj: T, key: Extract<K, string>) => T[K]
 >obj : StrNum
 >s : unique symbol
 
 prop = getProperty3(obj, s);
->prop = getProperty3(obj, s) : any
+>prop = getProperty3(obj, s) : string | number
 >prop : string
->getProperty3(obj, s) : any
+>getProperty3(obj, s) : string | number
 >getProperty3 : <T, K extends Extract<keyof T, string>>(obj: T, key: K) => T[K]
 >obj : StrNum
 >s : unique symbol

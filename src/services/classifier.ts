@@ -135,7 +135,7 @@ namespace ts {
                             const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                             if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                                token = scanner.reScanTemplateToken();
+                                token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
 
                                 // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                                 if (token === SyntaxKind.TemplateTail) {
@@ -392,6 +392,9 @@ namespace ts {
             case SyntaxKind.EqualsToken:
             case SyntaxKind.CommaToken:
             case SyntaxKind.QuestionQuestionToken:
+            case SyntaxKind.BarBarEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
                 return true;
             default:
                 return false;
@@ -449,7 +452,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): ClassifiedSpan[] {
+    export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): ClassifiedSpan[] {
         return convertClassificationsToSpans(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
     }
 
@@ -469,12 +472,15 @@ namespace ts {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
                 cancellationToken.throwIfCancellationRequested();
         }
     }
 
     /* @internal */
-    export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): Classifications {
+    export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): Classifications {
         const spans: number[] = [];
         sourceFile.forEachChild(function cb(node: Node): void {
             // Only walk into nodes that intersect the requested span.
@@ -682,7 +688,7 @@ namespace ts {
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
                 if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
                     // TODO: This should be predicated on `token["kind"]` being compatible with `HasJSDoc["kind"]`
-                    docCommentAndDiagnostics.jsDoc.parent = token as HasJSDoc;
+                    setParent(docCommentAndDiagnostics.jsDoc, token as HasJSDoc);
                     classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }
@@ -716,23 +722,57 @@ namespace ts {
                     pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;
+                    let commentStart = tag.tagName.end;
 
                     switch (tag.kind) {
                         case SyntaxKind.JSDocParameterTag:
-                            processJSDocParameterTag(<JSDocParameterTag>tag);
+                            const param = tag as JSDocParameterTag;
+                            processJSDocParameterTag(param);
+                            commentStart = param.isNameFirst && param.typeExpression?.end || param.name.end;
+                            break;
+                        case SyntaxKind.JSDocPropertyTag:
+                            const prop = tag as JSDocPropertyTag;
+                            commentStart = prop.isNameFirst && prop.typeExpression?.end || prop.name.end;
                             break;
                         case SyntaxKind.JSDocTemplateTag:
                             processJSDocTemplateTag(<JSDocTemplateTag>tag);
                             pos = tag.end;
+                            commentStart = (tag as JSDocTemplateTag).typeParameters.end;
+                            break;
+                        case SyntaxKind.JSDocTypedefTag:
+                            const type = tag as JSDocTypedefTag;
+                            commentStart = type.typeExpression?.kind === SyntaxKind.JSDocTypeExpression && type.fullName?.end || type.typeExpression?.end || commentStart;
+                            break;
+                        case SyntaxKind.JSDocCallbackTag:
+                            commentStart = (tag as JSDocCallbackTag).typeExpression.end;
                             break;
                         case SyntaxKind.JSDocTypeTag:
                             processElement((<JSDocTypeTag>tag).typeExpression);
                             pos = tag.end;
+                            commentStart = (tag as JSDocTypeTag).typeExpression.end;
+                            break;
+                        case SyntaxKind.JSDocThisTag:
+                        case SyntaxKind.JSDocEnumTag:
+                            commentStart = (tag as JSDocThisTag | JSDocEnumTag).typeExpression.end;
                             break;
                         case SyntaxKind.JSDocReturnTag:
                             processElement((<JSDocReturnTag>tag).typeExpression);
                             pos = tag.end;
+                            commentStart = (tag as JSDocReturnTag).typeExpression?.end || commentStart;
                             break;
+                        case SyntaxKind.JSDocSeeTag:
+                            commentStart = (tag as JSDocSeeTag).name?.end || commentStart;
+                            break;
+                        case SyntaxKind.JSDocAugmentsTag:
+                        case SyntaxKind.JSDocImplementsTag:
+                            commentStart = (tag as JSDocImplementsTag | JSDocAugmentsTag).class.end;
+                            break;
+                    }
+                    if (typeof tag.comment === "object") {
+                        pushCommentRange(tag.comment.pos, tag.comment.end - tag.comment.pos);
+                    }
+                    else if (typeof tag.comment === "string") {
+                        pushCommentRange(commentStart, tag.end - commentStart);
                     }
                 }
             }

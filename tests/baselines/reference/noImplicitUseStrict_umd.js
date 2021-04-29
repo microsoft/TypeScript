@@ -12,5 +12,6 @@ export var x = 0;
     }
 })(function (require, exports) {
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 0;
 });

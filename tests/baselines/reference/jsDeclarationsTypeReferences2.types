@@ -1,0 +1,42 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const{ a, m } = require("./something").o;
+>a : number
+>m : number
+>require("./something").o : { a: number; m: number; }
+>require("./something") : typeof import("tests/cases/conformance/jsdoc/declarations/something")
+>require : any
+>"./something" : "./something"
+>o : { a: number; m: number; }
+
+const thing = a + m
+>thing : number
+>a + m : number
+>a : number
+>m : number
+
+module.exports = {
+>module.exports = {    thing} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    thing} : { thing: number; }
+
+    thing
+>thing : number
+
+};
+
+=== tests/cases/conformance/jsdoc/declarations/something.ts ===
+export const o = {
+>o : { a: number; m: number; }
+>{    a: 1,    m: 1} : { a: number; m: number; }
+
+    a: 1,
+>a : number
+>1 : 1
+
+    m: 1
+>m : number
+>1 : 1
+}
+

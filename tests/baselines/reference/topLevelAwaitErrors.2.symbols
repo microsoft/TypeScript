@@ -1,0 +1,7 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.2.ts ===
+export {};
+
+// reparse variable name as await should fail
+var await = 1;
+>await : Symbol(await, Decl(topLevelAwaitErrors.2.ts, 3, 3))
+

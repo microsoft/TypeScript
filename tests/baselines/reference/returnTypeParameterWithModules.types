@@ -3,7 +3,7 @@ module M1 {
 >M1 : typeof M1
 
     export function reduce<A>(ar, f, e?): Array<A> {
->reduce : <A>(ar: any, f: any, e?: any) => A[]
+>reduce : <A>(ar: any, f: any, e?: any) => Array<A>
 >ar : any
 >f : any
 >e : any

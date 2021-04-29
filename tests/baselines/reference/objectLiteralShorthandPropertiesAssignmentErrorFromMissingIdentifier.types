@@ -16,7 +16,7 @@ var person: { b: string; id: number } = { name, id };  // error
 >id : number
 
 function bar(name: string, id: number): { name: number, id: string } { return { name, id }; }  // error
->bar : (name: string, id: number) => { name: number; id: string; }
+>bar : (name: string, id: number) => {    name: number;    id: string;}
 >name : string
 >id : number
 >name : number
@@ -26,7 +26,7 @@ function bar(name: string, id: number): { name: number, id: string } { return { 
 >id : number
 
 function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
->foo : (name: string, id: number) => { name: string; id: number; }
+>foo : (name: string, id: number) => {    name: string;    id: number;}
 >name : string
 >id : number
 >name : string

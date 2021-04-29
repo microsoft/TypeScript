@@ -1,11 +1,11 @@
 === tests/cases/compiler/functionOverloads38.ts ===
 function foo(bar:{a:number;}[]):string;
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>foo : { (bar: {    a: number;}[]): string; (bar: { a: boolean; }[]): number; }
 >bar : { a: number; }[]
 >a : number
 
 function foo(bar:{a:boolean;}[]):number;
->foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
+>foo : { (bar: { a: number; }[]): string; (bar: {    a: boolean;}[]): number; }
 >bar : { a: boolean; }[]
 >a : boolean
 

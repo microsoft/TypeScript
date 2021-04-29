@@ -1,12 +1,12 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of29.ts ===
 var iterableWithOptionalIterator: {
->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string, any, undefined>; }
+>iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
 
     [Symbol.iterator]?(): Iterator<string>
->[Symbol.iterator] : () => Iterator<string, any, undefined>
->Symbol.iterator : symbol
+>[Symbol.iterator] : () => Iterator<string>
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
 };
 

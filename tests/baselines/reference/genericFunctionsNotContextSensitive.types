@@ -1,0 +1,22 @@
+=== tests/cases/compiler/genericFunctionsNotContextSensitive.ts ===
+// Repro from #37110
+
+const f = <F extends (...args: any[]) => <G>(x: G) => void>(_: F): F => _;
+>f : <F extends (...args: any[]) => <G>(x: G) => void>(_: F) => F
+><F extends (...args: any[]) => <G>(x: G) => void>(_: F): F => _ : <F extends (...args: any[]) => <G>(x: G) => void>(_: F) => F
+>args : any[]
+>x : G
+>_ : F
+>_ : F
+
+const a = f(<K extends string>(_: K) => _ => ({}));  // <K extends string>(_: K) => <G>(_: G) => {}
+>a : <K extends string>(_: K) => <G>(_: G) => {}
+>f(<K extends string>(_: K) => _ => ({})) : <K extends string>(_: K) => <G>(_: G) => {}
+>f : <F extends (...args: any[]) => <G>(x: G) => void>(_: F) => F
+><K extends string>(_: K) => _ => ({}) : <K extends string>(_: K) => <G>(_: G) => {}
+>_ : K
+>_ => ({}) : <G>(_: G) => {}
+>_ : G
+>({}) : {}
+>{} : {}
+

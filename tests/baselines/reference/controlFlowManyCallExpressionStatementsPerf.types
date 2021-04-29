@@ -1,0 +1,462 @@
+=== tests/cases/compiler/controlFlowManyCallExpressionStatementsPerf.ts ===
+function test(x: boolean): boolean { return x; }
+>test : (x: boolean) => boolean
+>x : boolean
+>x : boolean
+
+let state = true;
+>state : boolean
+>true : true
+
+if (state) {
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+
+  test(state as any && state);
+>test(state as any && state) : boolean
+>test : (x: boolean) => boolean
+>state as any && state : any
+>state as any : any
+>state : true
+>state : true
+}
+

@@ -7,8 +7,16 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
-    "include": ["node_modules/acorn"]
+    "include": [
+        "node_modules/acorn",
+        "index.ts"
+    ]
 }

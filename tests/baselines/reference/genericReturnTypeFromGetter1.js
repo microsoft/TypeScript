@@ -12,13 +12,14 @@ export class DbSet<T> {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.DbSet = void 0;
     var DbSet = /** @class */ (function () {
         function DbSet() {
         }
         Object.defineProperty(DbSet.prototype, "entityType", {
             get: function () { return this._entityType; } // used to ICE without return type annotation
             ,
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return DbSet;

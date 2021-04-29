@@ -1,0 +1,96 @@
+=== tests/cases/conformance/types/mapped/mappedTypeOverlappingStringEnumKeys.ts ===
+// #37859
+
+enum TerrestrialAnimalTypes {
+>TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+
+  CAT = "cat",
+>CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+
+  DOG = "dog"
+>DOG : Symbol(TerrestrialAnimalTypes.DOG, Decl(mappedTypeOverlappingStringEnumKeys.ts, 3, 14))
+
+};
+
+enum AlienAnimalTypes {
+>AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+
+  CAT = "cat",
+>CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+
+};
+
+type AnimalTypes = TerrestrialAnimalTypes | AlienAnimalTypes;
+>AnimalTypes : Symbol(AnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 9, 2))
+>TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+>AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+
+interface TerrestrialCat {
+>TerrestrialCat : Symbol(TerrestrialCat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 11, 61))
+
+  type: TerrestrialAnimalTypes.CAT;
+>type : Symbol(TerrestrialCat.type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 13, 26))
+>TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+>CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+
+  address: string;
+>address : Symbol(TerrestrialCat.address, Decl(mappedTypeOverlappingStringEnumKeys.ts, 14, 35))
+}
+
+interface AlienCat {
+>AlienCat : Symbol(AlienCat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 16, 1))
+
+  type: AlienAnimalTypes.CAT
+>type : Symbol(AlienCat.type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 18, 20))
+>AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+>CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+
+  planet: string;
+>planet : Symbol(AlienCat.planet, Decl(mappedTypeOverlappingStringEnumKeys.ts, 19, 28))
+}
+
+type Cats = TerrestrialCat | AlienCat;
+>Cats : Symbol(Cats, Decl(mappedTypeOverlappingStringEnumKeys.ts, 21, 1))
+>TerrestrialCat : Symbol(TerrestrialCat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 11, 61))
+>AlienCat : Symbol(AlienCat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 16, 1))
+
+type CatMap = {
+>CatMap : Symbol(CatMap, Decl(mappedTypeOverlappingStringEnumKeys.ts, 23, 38))
+
+  [V in AnimalTypes]: Extract<Cats, { type: V }>[]
+>V : Symbol(V, Decl(mappedTypeOverlappingStringEnumKeys.ts, 26, 3))
+>AnimalTypes : Symbol(AnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 9, 2))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Cats : Symbol(Cats, Decl(mappedTypeOverlappingStringEnumKeys.ts, 21, 1))
+>type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 26, 37))
+>V : Symbol(V, Decl(mappedTypeOverlappingStringEnumKeys.ts, 26, 3))
+
+};
+
+const catMap: CatMap = {
+>catMap : Symbol(catMap, Decl(mappedTypeOverlappingStringEnumKeys.ts, 29, 5))
+>CatMap : Symbol(CatMap, Decl(mappedTypeOverlappingStringEnumKeys.ts, 23, 38))
+
+  cat: [
+>cat : Symbol(cat, Decl(mappedTypeOverlappingStringEnumKeys.ts, 29, 24))
+
+    { type: TerrestrialAnimalTypes.CAT, address: "" },
+>type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 31, 5))
+>TerrestrialAnimalTypes.CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+>TerrestrialAnimalTypes : Symbol(TerrestrialAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 0, 0))
+>CAT : Symbol(TerrestrialAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 2, 29))
+>address : Symbol(address, Decl(mappedTypeOverlappingStringEnumKeys.ts, 31, 39))
+
+    { type: AlienAnimalTypes.CAT, planet: "" }
+>type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 32, 5))
+>AlienAnimalTypes.CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+>AlienAnimalTypes : Symbol(AlienAnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 5, 2))
+>CAT : Symbol(AlienAnimalTypes.CAT, Decl(mappedTypeOverlappingStringEnumKeys.ts, 7, 23))
+>planet : Symbol(planet, Decl(mappedTypeOverlappingStringEnumKeys.ts, 32, 33))
+
+  ],
+  dog: [] as never[]
+>dog : Symbol(dog, Decl(mappedTypeOverlappingStringEnumKeys.ts, 33, 4))
+
+};
+

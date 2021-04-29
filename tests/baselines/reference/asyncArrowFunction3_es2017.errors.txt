@@ -1,8 +1,8 @@
-tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction3_es2017.ts(1,20): error TS2372: Parameter 'await' cannot be referenced in its initializer.
+tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction3_es2017.ts(1,20): error TS2372: Parameter 'await' cannot reference itself.
 
 
 ==== tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction3_es2017.ts (1 errors) ====
     function f(await = await) {
                        ~~~~~
-!!! error TS2372: Parameter 'await' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'await' cannot reference itself.
     }

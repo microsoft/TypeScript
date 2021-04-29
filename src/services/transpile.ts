@@ -54,7 +54,7 @@ namespace ts {
         }
 
         if (transpileOptions.renamedDependencies) {
-            sourceFile.renamedDependencies = createMapFromTemplate(transpileOptions.renamedDependencies);
+            sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
         }
 
         const newLine = getNewLineCharacter(options);

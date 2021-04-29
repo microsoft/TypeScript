@@ -15,6 +15,7 @@ var x = 1;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 //// [b.js]
 "use strict";
 exports.__esModule = true;

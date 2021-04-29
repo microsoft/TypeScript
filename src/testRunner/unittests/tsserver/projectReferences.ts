@@ -1,16 +1,12 @@
 namespace ts.projectSystem {
+    export function createHostWithSolutionBuild(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+        const host = createServerHost(files);
+        // ts build should succeed
+        tscWatch.ensureErrorFreeBuild(host, rootNames);
+        return host;
+    }
+
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
-        function createHost(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
-            const host = createServerHost(files);
-
-            // ts build should succeed
-            const solutionBuilder = tscWatch.createSolutionBuilder(host, rootNames, {});
-            solutionBuilder.build();
-            assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
-
-            return host;
-        }
-
         describe("with container project", () => {
             function getProjectFiles(project: string): [File, File] {
                 return [
@@ -27,7 +23,7 @@ namespace ts.projectSystem {
             const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
 
             it("does not error on container only project", () => {
-                const host = createHost(files, [containerConfig.path]);
+                const host = createHostWithSolutionBuild(files, [containerConfig.path]);
 
                 // Open external project for the folder
                 const session = createSession(host);
@@ -64,7 +60,7 @@ namespace ts.projectSystem {
             });
 
             it("can successfully find references with --out options", () => {
-                const host = createHost(files, [containerConfig.path]);
+                const host = createHostWithSolutionBuild(files, [containerConfig.path]);
                 const session = createSession(host);
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
@@ -105,7 +101,7 @@ namespace ts.projectSystem {
                     path: `/user/username/projects/temp/temp.ts`,
                     content: "let x = 10"
                 };
-                const host = createHost(files.concat([tempFile]), [containerConfig.path]);
+                const host = createHostWithSolutionBuild(files.concat([tempFile]), [containerConfig.path]);
                 const session = createSession(host);
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
@@ -141,1093 +137,6 @@ namespace ts.projectSystem {
                 service.closeClientFile(tempFile.path);
                 openFilesForSession([tempFile], session);
                 checkNumberOfProjects(service, { inferredProjects: 1 });
-            });
-        });
-
-        describe("with main and depedency project", () => {
-            const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
-            const dependecyDeclsLocation = `${tscWatch.projectRoot}/decls`;
-            const mainLocation = `${tscWatch.projectRoot}/main`;
-            const dependencyTs: File = {
-                path: `${dependecyLocation}/FnS.ts`,
-                content: `export function fn1() { }
-export function fn2() { }
-export function fn3() { }
-export function fn4() { }
-export function fn5() { }
-`
-            };
-            const dependencyTsPath = dependencyTs.path.toLowerCase();
-            const dependencyConfig: File = {
-                path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } })
-            };
-
-            const mainTs: File = {
-                path: `${mainLocation}/main.ts`,
-                content: `import {
-    fn1,
-    fn2,
-    fn3,
-    fn4,
-    fn5
-} from '../decls/fns'
-
-fn1();
-fn2();
-fn3();
-fn4();
-fn5();
-`
-            };
-            const mainConfig: File = {
-                path: `${mainLocation}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: { composite: true, declarationMap: true },
-                    references: [{ path: "../dependency" }]
-                })
-            };
-
-            const randomFile: File = {
-                path: `${tscWatch.projectRoot}/random/random.ts`,
-                content: "let a = 10;"
-            };
-            const randomConfig: File = {
-                path: `${tscWatch.projectRoot}/random/tsconfig.json`,
-                content: "{}"
-            };
-            const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
-            const dtsPath = dtsLocation.toLowerCase() as Path;
-            const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
-            const dtsMapPath = dtsMapLocation.toLowerCase() as Path;
-
-            const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
-
-            function verifyScriptInfos(session: TestSession, host: TestServerHost, openInfos: readonly string[], closedInfos: readonly string[], otherWatchedFiles: readonly string[], additionalInfo: string) {
-                checkScriptInfos(session.getProjectService(), openInfos.concat(closedInfos), additionalInfo);
-                checkWatchedFiles(host, closedInfos.concat(otherWatchedFiles).map(f => f.toLowerCase()), additionalInfo);
-            }
-
-            function verifyInfosWithRandom(session: TestSession, host: TestServerHost, openInfos: readonly string[], closedInfos: readonly string[], otherWatchedFiles: readonly string[], reqName: string) {
-                verifyScriptInfos(session, host, openInfos.concat(randomFile.path), closedInfos, otherWatchedFiles.concat(randomConfig.path), reqName);
-            }
-
-            function verifyOnlyRandomInfos(session: TestSession, host: TestServerHost) {
-                verifyScriptInfos(session, host, [randomFile.path], [libFile.path], [randomConfig.path], "Random");
-            }
-
-            function declarationSpan(fn: number): protocol.TextSpanWithContext {
-                return {
-                    start: { line: fn, offset: 17 },
-                    end: { line: fn, offset: 20 },
-                    contextStart: { line: fn, offset: 1 },
-                    contextEnd: { line: fn, offset: 26 }
-                };
-            }
-            function importSpan(fn: number): protocol.TextSpanWithContext {
-                return {
-                    start: { line: fn + 1, offset: 5 },
-                    end: { line: fn + 1, offset: 8 },
-                    contextStart: { line: 1, offset: 1 },
-                    contextEnd: { line: 7, offset: 22 }
-                };
-            }
-            function usageSpan(fn: number): protocol.TextSpan {
-                return { start: { line: fn + 8, offset: 1 }, end: { line: fn + 8, offset: 4 } };
-            }
-
-            function goToDefFromMainTs(fn: number): Action<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
-                const textSpan = usageSpan(fn);
-                const definition: protocol.FileSpan = { file: dependencyTs.path, ...declarationSpan(fn) };
-                return {
-                    reqName: "goToDef",
-                    request: {
-                        command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                        arguments: { file: mainTs.path, ...textSpan.start }
-                    },
-                    expectedResponse: {
-                        // To dependency
-                        definitions: [definition],
-                        textSpan
-                    }
-                };
-            }
-
-            function goToDefFromMainTsWithNoMap(fn: number): Action<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
-                const textSpan = usageSpan(fn);
-                const definition = declarationSpan(fn);
-                const declareSpaceLength = "declare ".length;
-                return {
-                    reqName: "goToDef",
-                    request: {
-                        command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                        arguments: { file: mainTs.path, ...textSpan.start }
-                    },
-                    expectedResponse: {
-                        // To the dts
-                        definitions: [{
-                            file: dtsPath,
-                            start: { line: fn, offset: definition.start.offset + declareSpaceLength },
-                            end: { line: fn, offset: definition.end.offset + declareSpaceLength },
-                            contextStart: { line: fn, offset: 1 },
-                            contextEnd: { line: fn, offset: 37 }
-                        }],
-                        textSpan
-                    }
-                };
-            }
-
-            function goToDefFromMainTsWithNoDts(fn: number): Action<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
-                const textSpan = usageSpan(fn);
-                return {
-                    reqName: "goToDef",
-                    request: {
-                        command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                        arguments: { file: mainTs.path, ...textSpan.start }
-                    },
-                    expectedResponse: {
-                        // To import declaration
-                        definitions: [{ file: mainTs.path, ...importSpan(fn) }],
-                        textSpan
-                    }
-                };
-            }
-
-            function goToDefFromMainTsWithDependencyChange(fn: number): Action<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
-                const textSpan = usageSpan(fn);
-                return {
-                    reqName: "goToDef",
-                    request: {
-                        command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                        arguments: { file: mainTs.path, ...textSpan.start }
-                    },
-                    expectedResponse: {
-                        // Definition on fn + 1 line
-                        definitions: [{ file: dependencyTs.path, ...declarationSpan(fn + 1) }],
-                        textSpan
-                    }
-                };
-            }
-
-            function goToDefFromMainTsProjectInfoVerifier(withRefs: boolean): ProjectInfoVerifier {
-                return {
-                    openFile: mainTs,
-                    openFileLastLine: 14,
-                    configFile: mainConfig,
-                    expectedProjectActualFiles: withRefs ?
-                        [mainTs.path, libFile.path, mainConfig.path, dependencyTs.path] :
-                        [mainTs.path, libFile.path, mainConfig.path, dtsPath]
-                };
-            }
-
-            function renameFromDependencyTs(fn: number): Action<protocol.RenameRequest, protocol.RenameResponseBody> {
-                const defSpan = declarationSpan(fn);
-                const { contextStart: _, contextEnd: _1, ...triggerSpan } = defSpan;
-                return {
-                    reqName: "rename",
-                    request: {
-                        command: protocol.CommandTypes.Rename,
-                        arguments: { file: dependencyTs.path, ...triggerSpan.start }
-                    },
-                    expectedResponse: {
-                        info: {
-                            canRename: true,
-                            fileToRename: undefined,
-                            displayName: `fn${fn}`,
-                            fullDisplayName: `"${dependecyLocation}/FnS".fn${fn}`,
-                            kind: ScriptElementKind.functionElement,
-                            kindModifiers: "export",
-                            triggerSpan
-                        },
-                        locs: [
-                            { file: dependencyTs.path, locs: [defSpan] }
-                        ]
-                    }
-                };
-            }
-
-            function renameFromDependencyTsWithDependencyChange(fn: number): Action<protocol.RenameRequest, protocol.RenameResponseBody> {
-                const { expectedResponse: { info, locs }, ...rest } = renameFromDependencyTs(fn + 1);
-
-                return {
-                    ...rest,
-                    expectedResponse: {
-                        info: {
-                            ...info as protocol.RenameInfoSuccess,
-                            displayName: `fn${fn}`,
-                            fullDisplayName: `"${dependecyLocation}/FnS".fn${fn}`,
-                        },
-                        locs
-                    }
-                };
-            }
-
-            function renameFromDependencyTsProjectInfoVerifier(): ProjectInfoVerifier {
-                return {
-                    openFile: dependencyTs,
-                    openFileLastLine: 6,
-                    configFile: dependencyConfig,
-                    expectedProjectActualFiles: [dependencyTs.path, libFile.path, dependencyConfig.path]
-                };
-            }
-
-            function renameFromDependencyTsWithBothProjectsOpen(fn: number): Action<protocol.RenameRequest, protocol.RenameResponseBody> {
-                const { reqName, request, expectedResponse } = renameFromDependencyTs(fn);
-                const { info, locs } = expectedResponse;
-                return {
-                    reqName,
-                    request,
-                    expectedResponse: {
-                        info,
-                        locs: [
-                            locs[0],
-                            {
-                                file: mainTs.path,
-                                locs: [
-                                    importSpan(fn),
-                                    usageSpan(fn)
-                                ]
-                            }
-                        ]
-                    }
-                };
-            }
-
-            function renameFromDependencyTsWithBothProjectsOpenWithDependencyChange(fn: number): Action<protocol.RenameRequest, protocol.RenameResponseBody> {
-                const { reqName, request, expectedResponse, } = renameFromDependencyTsWithDependencyChange(fn);
-                const { info, locs } = expectedResponse;
-                return {
-                    reqName,
-                    request,
-                    expectedResponse: {
-                        info,
-                        locs: [
-                            locs[0],
-                            {
-                                file: mainTs.path,
-                                locs: [
-                                    importSpan(fn),
-                                    usageSpan(fn)
-                                ]
-                            }
-                        ]
-                    }
-                };
-            }
-
-            function removePath(array: readonly string[], ...delPaths: string[]) {
-                return array.filter(a => {
-                    const aLower = a.toLowerCase();
-                    return delPaths.every(dPath => dPath !== aLower);
-                });
-            }
-
-            interface Action<Req = protocol.Request, Response = {}> {
-                reqName: string;
-                request: Partial<Req>;
-                expectedResponse: Response;
-            }
-            interface ActionInfo<Req = protocol.Request, Response = {}> {
-                action: (fn: number) => Action<Req, Response>;
-                closedInfos: readonly string[];
-                otherWatchedFiles: readonly string[];
-                expectsDts: boolean;
-                expectsMap: boolean;
-                freshMapInfo?: boolean;
-                freshDocumentMapper?: boolean;
-                skipDtsMapCheck?: boolean;
-            }
-            type ActionKey = keyof ActionInfoVerifier;
-            type ActionInfoGetterFn<Req = protocol.Request, Response = {}> = () => ActionInfo<Req, Response>;
-            type ActionInfoSpreader<Req = protocol.Request, Response = {}> = [
-                ActionKey, // Key to get initial value and pass this value to spread function
-                (actionInfo: ActionInfo<Req, Response>) => Partial<ActionInfo<Req, Response>>
-            ];
-            type ActionInfoGetter<Req = protocol.Request, Response = {}> = ActionInfoGetterFn<Req, Response> | ActionKey | ActionInfoSpreader<Req, Response>;
-            interface ProjectInfoVerifier {
-                openFile: File;
-                openFileLastLine: number;
-                configFile: File;
-                expectedProjectActualFiles: readonly string[];
-            }
-            interface ActionInfoVerifier<Req = protocol.Request, Response = {}> {
-                main: ActionInfoGetter<Req, Response>;
-                change: ActionInfoGetter<Req, Response>;
-                dtsChange: ActionInfoGetter<Req, Response>;
-                mapChange: ActionInfoGetter<Req, Response>;
-                noMap: ActionInfoGetter<Req, Response>;
-                mapFileCreated: ActionInfoGetter<Req, Response>;
-                mapFileDeleted: ActionInfoGetter<Req, Response>;
-                noDts: ActionInfoGetter<Req, Response>;
-                dtsFileCreated: ActionInfoGetter<Req, Response>;
-                dtsFileDeleted: ActionInfoGetter<Req, Response>;
-                dependencyChange: ActionInfoGetter<Req, Response>;
-                noBuild: ActionInfoGetter<Req, Response>;
-            }
-            interface DocumentPositionMapperVerifier<Req = protocol.Request, Response = {}> extends ProjectInfoVerifier, ActionInfoVerifier<Req, Response> {
-            }
-
-            interface VerifierAndWithRefs {
-                withRefs: boolean;
-                disableSourceOfProjectReferenceRedirect?: true;
-                verifier: (withRefs: boolean) => readonly DocumentPositionMapperVerifier[];
-            }
-
-            function openFiles(verifiers: readonly DocumentPositionMapperVerifier[]) {
-                return verifiers.map(v => v.openFile);
-            }
-            interface OpenTsFile extends VerifierAndWithRefs {
-                onHostCreate?: (host: TestServerHost) => void;
-            }
-            function openTsFile({ withRefs, disableSourceOfProjectReferenceRedirect, verifier, onHostCreate }: OpenTsFile) {
-                const host = createHost(files, [mainConfig.path]);
-                if (!withRefs) {
-                    // Erase project reference
-                    host.writeFile(mainConfig.path, JSON.stringify({
-                        compilerOptions: { composite: true, declarationMap: true }
-                    }));
-                }
-                else if (disableSourceOfProjectReferenceRedirect) {
-                    // Erase project reference
-                    host.writeFile(mainConfig.path, JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            declarationMap: true,
-                            disableSourceOfProjectReferenceRedirect: !!disableSourceOfProjectReferenceRedirect
-                        },
-                        references: [{ path: "../dependency" }]
-                    }));
-                }
-                if (onHostCreate) {
-                    onHostCreate(host);
-                }
-                const session = createSession(host);
-                const verifiers = verifier(withRefs && !disableSourceOfProjectReferenceRedirect);
-                openFilesForSession([...openFiles(verifiers), randomFile], session);
-                return { host, session, verifiers };
-            }
-
-            function checkProject(session: TestSession, verifiers: readonly DocumentPositionMapperVerifier[], noDts?: true) {
-                const service = session.getProjectService();
-                checkNumberOfProjects(service, { configuredProjects: 1 + verifiers.length });
-                verifiers.forEach(({ configFile, expectedProjectActualFiles }) => {
-                    checkProjectActualFiles(
-                        service.configuredProjects.get(configFile.path.toLowerCase())!,
-                        noDts ?
-                            expectedProjectActualFiles.filter(f => f.toLowerCase() !== dtsPath) :
-                            expectedProjectActualFiles
-                    );
-                });
-            }
-
-            function firstAction(session: TestSession, verifiers: readonly DocumentPositionMapperVerifier[]) {
-                for (const { action } of getActionInfo(verifiers, "main")) {
-                    const { request } = action(1);
-                    session.executeCommandSeq(request);
-                }
-            }
-
-            function verifyAction(session: TestSession, { reqName, request, expectedResponse }: Action) {
-                const { response } = session.executeCommandSeq(request);
-                assert.deepEqual(response, expectedResponse, `Failed Request: ${reqName}`);
-            }
-
-            function verifyScriptInfoPresence(session: TestSession, path: string, expectedToBePresent: boolean, reqName: string) {
-                const info = session.getProjectService().filenameToScriptInfo.get(path);
-                if (expectedToBePresent) {
-                    assert.isDefined(info, `${reqName}:: ${path} expected to be present`);
-                }
-                else {
-                    assert.isUndefined(info, `${reqName}:: ${path} expected to be not present`);
-                }
-                return info;
-            }
-
-            interface VerifyDocumentPositionMapper {
-                session: TestSession;
-                dependencyMap: server.ScriptInfo | undefined;
-                documentPositionMapper: server.ScriptInfo["documentPositionMapper"];
-                equal: boolean;
-                debugInfo: string;
-            }
-            function verifyDocumentPositionMapper({ session, dependencyMap, documentPositionMapper, equal, debugInfo }: VerifyDocumentPositionMapper) {
-                assert.strictEqual(session.getProjectService().filenameToScriptInfo.get(dtsMapPath), dependencyMap, debugInfo);
-                if (dependencyMap) {
-                    if (equal) {
-                        assert.strictEqual(dependencyMap.documentPositionMapper, documentPositionMapper, debugInfo);
-                    }
-                    else {
-                        assert.notStrictEqual(dependencyMap.documentPositionMapper, documentPositionMapper, debugInfo);
-                    }
-                }
-            }
-
-            function getActionInfoOfVerfier(verifier: DocumentPositionMapperVerifier, actionKey: ActionKey): ActionInfo {
-                const actionInfoGetter = verifier[actionKey];
-                if (isString(actionInfoGetter)) {
-                    return getActionInfoOfVerfier(verifier, actionInfoGetter);
-                }
-
-                if (isArray(actionInfoGetter)) {
-                    const initialValue = getActionInfoOfVerfier(verifier, actionInfoGetter[0]);
-                    return {
-                        ...initialValue,
-                        ...actionInfoGetter[1](initialValue)
-                    };
-                }
-
-                return actionInfoGetter();
-            }
-
-            function getActionInfo(verifiers: readonly DocumentPositionMapperVerifier[], actionKey: ActionKey): ActionInfo[] {
-                return verifiers.map(v => getActionInfoOfVerfier(v, actionKey));
-            }
-
-            interface VerifyAllFnAction {
-                session: TestSession;
-                host: TestServerHost;
-                verifiers: readonly DocumentPositionMapperVerifier[];
-                actionKey: ActionKey;
-                sourceMapPath?: server.ScriptInfo["sourceMapFilePath"];
-                dependencyMap?: server.ScriptInfo | undefined;
-                documentPositionMapper?: server.ScriptInfo["documentPositionMapper"];
-            }
-            interface VerifyAllFnActionResult {
-                actionInfos: readonly ActionInfo[];
-                actionKey: ActionKey;
-                dependencyMap: server.ScriptInfo | undefined;
-                documentPositionMapper: server.ScriptInfo["documentPositionMapper"] | undefined;
-            }
-            function verifyAllFnAction({
-                session,
-                host,
-                verifiers,
-                actionKey,
-                dependencyMap,
-                documentPositionMapper,
-            }: VerifyAllFnAction): VerifyAllFnActionResult {
-                const actionInfos = getActionInfo(verifiers, actionKey);
-                let sourceMapPath: server.ScriptInfo["sourceMapFilePath"] | undefined;
-                // action
-                let first = true;
-                for (const {
-                    action,
-                    closedInfos,
-                    otherWatchedFiles,
-                    expectsDts,
-                    expectsMap,
-                    freshMapInfo,
-                    freshDocumentMapper,
-                    skipDtsMapCheck
-                } of actionInfos) {
-                    for (let fn = 1; fn <= 5; fn++) {
-                        const fnAction = action(fn);
-                        verifyAction(session, fnAction);
-                        const debugInfo = `${actionKey}:: ${fnAction.reqName}:: ${fn}`;
-                        const dtsInfo = verifyScriptInfoPresence(session, dtsPath, expectsDts, debugInfo);
-                        const dtsMapInfo = verifyScriptInfoPresence(session, dtsMapPath, expectsMap, debugInfo);
-                        verifyInfosWithRandom(
-                            session,
-                            host,
-                            openFiles(verifiers).map(f => f.path),
-                            closedInfos,
-                            otherWatchedFiles,
-                            debugInfo
-                        );
-
-                        if (dtsInfo) {
-                            if (first || (fn === 1 && freshMapInfo)) {
-                                if (!skipDtsMapCheck) {
-                                    if (dtsMapInfo) {
-                                        assert.equal(dtsInfo.sourceMapFilePath, dtsMapPath, debugInfo);
-                                    }
-                                    else {
-                                        assert.isNotString(dtsInfo.sourceMapFilePath, debugInfo);
-                                        assert.isNotFalse(dtsInfo.sourceMapFilePath, debugInfo);
-                                        assert.isDefined(dtsInfo.sourceMapFilePath, debugInfo);
-                                    }
-                                }
-                            }
-                            else {
-                                assert.equal(dtsInfo.sourceMapFilePath, sourceMapPath, debugInfo);
-                            }
-                        }
-
-                        if (!first && (fn !== 1 || !freshMapInfo)) {
-                            verifyDocumentPositionMapper({
-                                session,
-                                dependencyMap,
-                                documentPositionMapper,
-                                equal: fn !== 1 || !freshDocumentMapper,
-                                debugInfo
-                            });
-                        }
-                        sourceMapPath = dtsInfo && dtsInfo.sourceMapFilePath;
-                        dependencyMap = dtsMapInfo;
-                        documentPositionMapper = dependencyMap && dependencyMap.documentPositionMapper;
-                        first = false;
-                    }
-                }
-
-                return { actionInfos, actionKey, dependencyMap, documentPositionMapper };
-            }
-
-            function verifyScriptInfoCollection(
-                session: TestSession,
-                host: TestServerHost,
-                verifiers: readonly DocumentPositionMapperVerifier[],
-                { dependencyMap, documentPositionMapper, actionInfos, actionKey }: VerifyAllFnActionResult
-            ) {
-                // Collecting at this point retains dependency.d.ts and map
-                closeFilesForSession([randomFile], session);
-                openFilesForSession([randomFile], session);
-
-                const { closedInfos, otherWatchedFiles } = last(actionInfos);
-                const debugInfo = `${actionKey} Collection`;
-                verifyInfosWithRandom(
-                    session,
-                    host,
-                    openFiles(verifiers).map(f => f.path),
-                    closedInfos,
-                    otherWatchedFiles,
-                    debugInfo
-                );
-                verifyDocumentPositionMapper({
-                    session,
-                    dependencyMap,
-                    documentPositionMapper,
-                    equal: true,
-                    debugInfo
-                });
-
-                // Closing open file, removes dependencies too
-                closeFilesForSession([...openFiles(verifiers), randomFile], session);
-                openFilesForSession([randomFile], session);
-                verifyOnlyRandomInfos(session, host);
-            }
-
-            function verifyScenarioAndScriptInfoCollection(
-                session: TestSession,
-                host: TestServerHost,
-                verifiers: readonly DocumentPositionMapperVerifier[],
-                actionKey: ActionKey,
-                noDts?: true
-            ) {
-                // Main scenario action
-                const result = verifyAllFnAction({ session, host, verifiers, actionKey });
-                checkProject(session, verifiers, noDts);
-                verifyScriptInfoCollection(session, host, verifiers, result);
-            }
-
-            function verifyScenarioWithChangesWorker(
-                {
-                    scenarioName,
-                    verifier,
-                    withRefs,
-                    change,
-                    afterChangeActionKey
-                }: VerifyScenarioWithChanges,
-                timeoutBeforeAction: boolean,
-            ) {
-                it(scenarioName, () => {
-                    const { host, session, verifiers } = openTsFile({ verifier, withRefs });
-
-                    // Create DocumentPositionMapper
-                    firstAction(session, verifiers);
-                    const dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath);
-                    const documentPositionMapper = dependencyMap && dependencyMap.documentPositionMapper;
-
-                    // change
-                    change(host, session, verifiers);
-                    if (timeoutBeforeAction) {
-                        host.runQueuedTimeoutCallbacks();
-                        checkProject(session, verifiers);
-                        verifyDocumentPositionMapper({
-                            session,
-                            dependencyMap,
-                            documentPositionMapper,
-                            equal: true,
-                            debugInfo: "After change timeout"
-                        });
-                    }
-
-                    // action
-                    verifyAllFnAction({
-                        session,
-                        host,
-                        verifiers,
-                        actionKey: afterChangeActionKey,
-                        dependencyMap,
-                        documentPositionMapper
-                    });
-                });
-            }
-
-            interface VerifyScenarioWithChanges extends VerifierAndWithRefs {
-                scenarioName: string;
-                change: (host: TestServerHost, session: TestSession, verifiers: readonly DocumentPositionMapperVerifier[]) => void;
-                afterChangeActionKey: ActionKey;
-            }
-            function verifyScenarioWithChanges(verify: VerifyScenarioWithChanges) {
-                describe("when timeout occurs before request", () => {
-                    verifyScenarioWithChangesWorker(verify, /*timeoutBeforeAction*/ true);
-                });
-
-                describe("when timeout does not occur before request", () => {
-                    verifyScenarioWithChangesWorker(verify, /*timeoutBeforeAction*/ false);
-                });
-            }
-
-            interface VerifyScenarioWhenFileNotPresent extends VerifierAndWithRefs {
-                scenarioName: string;
-                fileLocation: string;
-                fileNotPresentKey: ActionKey;
-                fileCreatedKey: ActionKey;
-                fileDeletedKey: ActionKey;
-                noDts?: true;
-            }
-            function verifyScenarioWhenFileNotPresent({
-                scenarioName,
-                verifier,
-                withRefs,
-                fileLocation,
-                fileNotPresentKey,
-                fileCreatedKey,
-                fileDeletedKey,
-                noDts
-            }: VerifyScenarioWhenFileNotPresent) {
-                describe(scenarioName, () => {
-                    it("when file is not present", () => {
-                        const { host, session, verifiers } = openTsFile({
-                            verifier,
-                            withRefs,
-                            onHostCreate: host => host.deleteFile(fileLocation)
-                        });
-                        checkProject(session, verifiers, noDts);
-
-                        verifyScenarioAndScriptInfoCollection(session, host, verifiers, fileNotPresentKey, noDts);
-                    });
-
-                    it("when file is created after actions on projects", () => {
-                        let fileContents: string | undefined;
-                        const { host, session, verifiers } = openTsFile({
-                            verifier,
-                            withRefs,
-                            onHostCreate: host => {
-                                fileContents = host.readFile(fileLocation);
-                                host.deleteFile(fileLocation);
-                            }
-                        });
-                        firstAction(session, verifiers);
-
-                        host.writeFile(fileLocation, fileContents!);
-                        verifyScenarioAndScriptInfoCollection(session, host, verifiers, fileCreatedKey);
-                    });
-
-                    it("when file is deleted after actions on the projects", () => {
-                        const { host, session, verifiers } = openTsFile({ verifier, withRefs });
-                        firstAction(session, verifiers);
-
-                        // The dependency file is deleted when orphan files are collected
-                        host.deleteFile(fileLocation);
-                        // Verify with deleted action key
-                        verifyAllFnAction({ session, host, verifiers, actionKey: fileDeletedKey });
-                        checkProject(session, verifiers, noDts);
-
-                        // Script info collection should behave as fileNotPresentKey
-                        verifyScriptInfoCollection(
-                            session,
-                            host,
-                            verifiers,
-                            {
-                                actionInfos: getActionInfo(verifiers, fileNotPresentKey),
-                                actionKey: fileNotPresentKey,
-                                dependencyMap: undefined,
-                                documentPositionMapper: undefined
-                            }
-                        );
-                    });
-                });
-            }
-
-            function verifyScenarioWorker({ mainScenario, verifier }: VerifyScenario, withRefs: boolean, disableSourceOfProjectReferenceRedirect?: true) {
-                it(mainScenario, () => {
-                    const { host, session, verifiers } = openTsFile({ withRefs, disableSourceOfProjectReferenceRedirect, verifier });
-                    checkProject(session, verifiers);
-                    verifyScenarioAndScriptInfoCollection(session, host, verifiers, "main");
-                });
-
-                // Edit
-                verifyScenarioWithChanges({
-                    scenarioName: "when usage file changes, document position mapper doesnt change",
-                    verifier,
-                    withRefs,
-                    disableSourceOfProjectReferenceRedirect,
-                    change: (_host, session, verifiers) => verifiers.forEach(
-                        verifier => session.executeCommandSeq<protocol.ChangeRequest>({
-                            command: protocol.CommandTypes.Change,
-                            arguments: {
-                                file: verifier.openFile.path,
-                                line: verifier.openFileLastLine,
-                                offset: 1,
-                                endLine: verifier.openFileLastLine,
-                                endOffset: 1,
-                                insertString: "const x = 10;"
-                            }
-                        })
-                    ),
-                    afterChangeActionKey: "change"
-                });
-
-                // Edit dts to add new fn
-                verifyScenarioWithChanges({
-                    scenarioName: "when dependency .d.ts changes, document position mapper doesnt change",
-                    verifier,
-                    withRefs,
-                    disableSourceOfProjectReferenceRedirect,
-                    change: host => host.writeFile(
-                        dtsLocation,
-                        host.readFile(dtsLocation)!.replace(
-                            "//# sourceMappingURL=FnS.d.ts.map",
-                            `export declare function fn6(): void;
-//# sourceMappingURL=FnS.d.ts.map`
-                        )
-                    ),
-                    afterChangeActionKey: "dtsChange"
-                });
-
-                // Edit map file to represent added new line
-                verifyScenarioWithChanges({
-                    scenarioName: "when dependency file's map changes",
-                    verifier,
-                    withRefs,
-                    disableSourceOfProjectReferenceRedirect,
-                    change: host => host.writeFile(
-                        dtsMapLocation,
-                        `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`
-                    ),
-                    afterChangeActionKey: "mapChange"
-                });
-
-                verifyScenarioWhenFileNotPresent({
-                    scenarioName: "with depedency files map file",
-                    verifier,
-                    withRefs,
-                    disableSourceOfProjectReferenceRedirect,
-                    fileLocation: dtsMapLocation,
-                    fileNotPresentKey: "noMap",
-                    fileCreatedKey: "mapFileCreated",
-                    fileDeletedKey: "mapFileDeleted"
-                });
-
-                verifyScenarioWhenFileNotPresent({
-                    scenarioName: "with depedency .d.ts file",
-                    verifier,
-                    withRefs,
-                    disableSourceOfProjectReferenceRedirect,
-                    fileLocation: dtsLocation,
-                    fileNotPresentKey: "noDts",
-                    fileCreatedKey: "dtsFileCreated",
-                    fileDeletedKey: "dtsFileDeleted",
-                    noDts: true
-                });
-
-                if (withRefs && !disableSourceOfProjectReferenceRedirect) {
-                    verifyScenarioWithChanges({
-                        scenarioName: "when defining project source changes",
-                        verifier,
-                        withRefs,
-                        change: (host, session, verifiers) => {
-                            // Make change, without rebuild of solution
-                            if (contains(openFiles(verifiers), dependencyTs)) {
-                                session.executeCommandSeq<protocol.ChangeRequest>({
-                                    command: protocol.CommandTypes.Change,
-                                    arguments: {
-                                        file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
-                                });
-                            }
-                            else {
-                                host.writeFile(dependencyTs.path, `function fooBar() { }
-${dependencyTs.content}`);
-                            }
-                        },
-                        afterChangeActionKey: "dependencyChange"
-                    });
-
-                    it("when projects are not built", () => {
-                        const host = createServerHost(files);
-                        const session = createSession(host);
-                        const verifiers = verifier(withRefs);
-                        openFilesForSession([...openFiles(verifiers), randomFile], session);
-                        verifyScenarioAndScriptInfoCollection(session, host, verifiers, "noBuild");
-                    });
-                }
-            }
-
-            interface VerifyScenario {
-                mainScenario: string;
-                verifier: (withRefs: boolean) => readonly DocumentPositionMapperVerifier[];
-            }
-            function verifyScenario(scenario: VerifyScenario) {
-                describe("when main tsconfig doesnt have project reference", () => {
-                    verifyScenarioWorker(scenario, /*withRefs*/ false);
-                });
-                describe("when main tsconfig has project reference", () => {
-                    verifyScenarioWorker(scenario, /*withRefs*/ true);
-                });
-                describe("when main tsconfig has but has disableSourceOfProjectReferenceRedirect", () => {
-                    verifyScenarioWorker(scenario, /*withRefs*/ true);
-                });
-            }
-
-            describe("from project that uses dependency", () => {
-                verifyScenario({
-                    mainScenario: "can go to definition correctly",
-                    verifier: withRefs => [
-                        {
-                            ...goToDefFromMainTsProjectInfoVerifier(withRefs),
-                            main: () => ({
-                                action: goToDefFromMainTs,
-                                closedInfos: withRefs ?
-                                    [dependencyTs.path, dependencyConfig.path, libFile.path] :
-                                    [dependencyTs.path, libFile.path, dtsPath, dtsMapLocation],
-                                otherWatchedFiles: [mainConfig.path],
-                                expectsDts: !withRefs, // Dts script info present only if no project reference
-                                expectsMap: !withRefs // Map script info present only if no project reference
-                            }),
-                            change: "main",
-                            dtsChange: "main",
-                            mapChange: ["main", () => ({
-                                freshDocumentMapper: true
-                            })],
-                            noMap: withRefs ?
-                                "main" :
-                                ["main", main => ({
-                                    action: goToDefFromMainTsWithNoMap,
-                                    // Because map is deleted, dts and dependency are released
-                                    closedInfos: removePath(main.closedInfos, dtsMapPath, dependencyTsPath),
-                                    // Watches deleted file
-                                    otherWatchedFiles: main.otherWatchedFiles.concat(dtsMapLocation),
-                                    expectsMap: false
-                                })],
-                            mapFileCreated: "main",
-                            mapFileDeleted: withRefs ?
-                                "main" :
-                                ["noMap", noMap => ({
-                                    // The script info for depedency is collected only after file open
-                                    closedInfos: noMap.closedInfos.concat(dependencyTs.path)
-                                })],
-                            noDts: withRefs ?
-                                "main" :
-                                ["main", main => ({
-                                    action: goToDefFromMainTsWithNoDts,
-                                    // No dts, no map, no dependency
-                                    closedInfos: removePath(main.closedInfos, dtsPath, dtsMapPath, dependencyTsPath),
-                                    expectsDts: false,
-                                    expectsMap: false
-                                })],
-                            dtsFileCreated: "main",
-                            dtsFileDeleted: withRefs ?
-                                "main" :
-                                ["noDts", noDts => ({
-                                    // The script info for map is collected only after file open
-                                    closedInfos: noDts.closedInfos.concat(dependencyTs.path, dtsMapLocation),
-                                    expectsMap: true
-                                })],
-                            dependencyChange: ["main", () => ({
-                                action: goToDefFromMainTsWithDependencyChange,
-                            })],
-                            noBuild: "noDts"
-                        }
-                    ]
-                });
-            });
-
-            describe("from defining project", () => {
-                verifyScenario({
-                    mainScenario: "rename locations from dependency",
-                    verifier: () => [
-                        {
-                            ...renameFromDependencyTsProjectInfoVerifier(),
-                            main: () => ({
-                                action: renameFromDependencyTs,
-                                closedInfos: [libFile.path, dtsLocation, dtsMapLocation],
-                                otherWatchedFiles: [dependencyConfig.path],
-                                expectsDts: true,
-                                expectsMap: true
-                            }),
-                            change: "main",
-                            dtsChange: "main",
-                            mapChange: ["main", () => ({
-                                freshDocumentMapper: true
-                            })],
-                            noMap: ["main", main => ({
-                                // No map
-                                closedInfos: removePath(main.closedInfos, dtsMapPath),
-                                // watch map
-                                otherWatchedFiles: [...main.otherWatchedFiles, dtsMapLocation],
-                                expectsMap: false
-                            })],
-                            mapFileCreated: "main",
-                            mapFileDeleted: "noMap",
-                            noDts: ["main", main => ({
-                                // no dts or map since dts itself doesnt exist
-                                closedInfos: removePath(main.closedInfos, dtsMapPath, dtsPath),
-                                // watch deleted file
-                                otherWatchedFiles: [...main.otherWatchedFiles, dtsLocation],
-                                expectsDts: false,
-                                expectsMap: false
-                            })],
-                            dtsFileCreated: "main",
-                            dtsFileDeleted: ["noDts", noDts => ({
-                                // Map is collected after file open
-                                closedInfos: noDts.closedInfos.concat(dtsMapLocation),
-                                expectsMap: true
-                            })],
-                            dependencyChange: ["main", () => ({
-                                action: renameFromDependencyTsWithDependencyChange
-                            })],
-                            noBuild: "noDts"
-                        }
-                    ]
-                });
-            });
-
-            describe("when opening depedency and usage project", () => {
-                verifyScenario({
-                    mainScenario: "goto Definition in usage and rename locations from defining project",
-                    verifier: withRefs => [
-                        {
-                            ...goToDefFromMainTsProjectInfoVerifier(withRefs),
-                            main: () => ({
-                                action: goToDefFromMainTs,
-                                // DependencyTs is open, so omit it from closed infos
-                                closedInfos: withRefs ?
-                                    [dependencyConfig.path, libFile.path] :
-                                    [libFile.path, dtsPath, dtsMapLocation],
-                                otherWatchedFiles: withRefs ?
-                                    [mainConfig.path] : // Its in closed info
-                                    [mainConfig.path, dependencyConfig.path],
-                                expectsDts: !withRefs, // Dts script info present only if no project reference
-                                expectsMap: !withRefs // Map script info present only if no project reference
-                            }),
-                            change: withRefs ?
-                                ["main", main => ({
-                                    // Because before this rename is done the closed info remains same as rename's main operation
-                                    closedInfos: main.closedInfos.concat(dtsLocation, dtsMapLocation),
-                                    expectsDts: true,
-                                    expectsMap: true
-                                })] :
-                                "main",
-                            dtsChange: "change",
-                            mapChange: "change",
-                            noMap: withRefs ?
-                                "main" :
-                                ["main", main => ({
-                                    action: goToDefFromMainTsWithNoMap,
-                                    closedInfos: removePath(main.closedInfos, dtsMapPath),
-                                    otherWatchedFiles: main.otherWatchedFiles.concat(dtsMapLocation),
-                                    expectsMap: false
-                                })],
-                            mapFileCreated: withRefs ?
-                                ["main", main => ({
-                                    // Because before this rename is done the closed info remains same as rename's main
-                                    closedInfos: main.closedInfos.concat(dtsLocation),
-                                    expectsDts: true,
-                                    // This operation doesnt need map so the map info path in dts is not refreshed
-                                    skipDtsMapCheck: withRefs
-                                })] :
-                                "main",
-                            mapFileDeleted: withRefs ?
-                                ["noMap", noMap => ({
-                                    // Because before this rename is done the closed info remains same as rename's noMap operation
-                                    closedInfos: noMap.closedInfos.concat(dtsLocation),
-                                    expectsDts: true,
-                                    // This operation doesnt need map so the map info path in dts is not refreshed
-                                    skipDtsMapCheck: true
-                                })] :
-                                "noMap",
-                            noDts: withRefs ?
-                                "main" :
-                                ["main", main => ({
-                                    action: goToDefFromMainTsWithNoDts,
-                                    closedInfos: removePath(main.closedInfos, dtsMapPath, dtsPath),
-                                    expectsDts: false,
-                                    expectsMap: false
-                                })],
-                            dtsFileCreated: withRefs ?
-                                ["main", main => ({
-                                    // Since the project for dependency is not updated, the watcher from rename for dts still there
-                                    otherWatchedFiles: main.otherWatchedFiles.concat(dtsLocation)
-                                })] :
-                                "main",
-                            dtsFileDeleted: ["noDts", noDts => ({
-                                // Map collection after file open
-                                closedInfos: noDts.closedInfos.concat(dtsMapLocation),
-                                expectsMap: true
-                            })],
-                            dependencyChange: ["change", () => ({
-                                action: goToDefFromMainTsWithDependencyChange,
-                            })],
-                            noBuild: "noDts"
-                        },
-                        {
-                            ...renameFromDependencyTsProjectInfoVerifier(),
-                            main: () => ({
-                                action: renameFromDependencyTsWithBothProjectsOpen,
-                                // DependencyTs is open, so omit it from closed infos
-                                closedInfos: withRefs ?
-                                    [dependencyConfig.path, libFile.path, dtsLocation, dtsMapLocation] :
-                                    [libFile.path, dtsPath, dtsMapLocation],
-                                otherWatchedFiles: withRefs ?
-                                    [mainConfig.path] : // Its in closed info
-                                    [mainConfig.path, dependencyConfig.path],
-                                expectsDts: true,
-                                expectsMap: true,
-                                freshMapInfo: withRefs
-                            }),
-                            change: ["main", () => ({
-                                freshMapInfo: false
-                            })],
-                            dtsChange: "change",
-                            mapChange: ["main", () => ({
-                                freshMapInfo: false,
-                                freshDocumentMapper: withRefs
-                            })],
-                            noMap: ["main", main => ({
-                                action: withRefs ?
-                                    renameFromDependencyTsWithBothProjectsOpen :
-                                    renameFromDependencyTs,
-                                closedInfos: removePath(main.closedInfos, dtsMapPath),
-                                otherWatchedFiles: main.otherWatchedFiles.concat(dtsMapLocation),
-                                expectsMap: false,
-                                freshDocumentMapper: withRefs
-                            })],
-                            mapFileCreated: "main",
-                            mapFileDeleted: "noMap",
-                            noDts: ["change", change => ({
-                                action: withRefs ?
-                                    renameFromDependencyTsWithBothProjectsOpen :
-                                    renameFromDependencyTs,
-                                closedInfos: removePath(change.closedInfos, dtsPath, dtsMapPath),
-                                otherWatchedFiles: change.otherWatchedFiles.concat(dtsLocation),
-                                expectsDts: false,
-                                expectsMap: false
-                            })],
-                            dtsFileCreated: "main",
-                            dtsFileDeleted: ["noDts", noDts => ({
-                                // Map collection after file open
-                                closedInfos: noDts.closedInfos.concat(dtsMapLocation),
-                                expectsMap: true
-                            })],
-                            dependencyChange: ["change", () => ({
-                                action: renameFromDependencyTsWithBothProjectsOpenWithDependencyChange
-                            })],
-                            noBuild: "noDts"
-                        }
-                    ]
-                });
             });
         });
 
@@ -1288,7 +197,7 @@ function foo() {
 }
 `
                 };
-                const host = createHost(
+                const host = createHostWithSolutionBuild(
                     [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
                     [srcConfig.path]
                 );
@@ -1462,7 +371,7 @@ function foo() {
                 const bConfig = config("B", extraOptions);
                 const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
                 const host = alreadyBuilt ?
-                    createHost(files, [aConfig.path]) :
+                    createHostWithSolutionBuild(files, [aConfig.path]) :
                     createServerHost(files);
 
                 // Create symlink in node module
@@ -1475,13 +384,7 @@ function foo() {
                     project,
                     [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
                 );
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
                 session.executeCommandSeq<protocol.UpdateOpenRequest>({
                     command: protocol.CommandTypes.UpdateOpen,
                     arguments: {
@@ -1495,13 +398,7 @@ function foo() {
                         }]
                     }
                 });
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
             }
 
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
@@ -1826,6 +723,1030 @@ bar();
 
             // No new solutions/projects loaded
             checkNumberOfProjects(service, { configuredProjects: 1 });
+        });
+
+        describe("when default project is solution project", () => {
+            interface Setup {
+                solutionOptions?: CompilerOptions;
+                solutionFiles?: string[];
+                configRefs: string[];
+                additionalFiles: readonly File[];
+                expectedOpenEvents: protocol.Event[];
+            }
+            interface VerifySolutionScenario extends Setup {
+                solutionProject?: readonly string[];
+                additionalProjects: readonly { projectName: string, files: readonly string[] }[];
+                expectedReloadEvents: protocol.Event[];
+                expectedReferences: protocol.ReferencesResponseBody;
+                expectedReferencesFromDtsProject: protocol.ReferencesResponseBody;
+            }
+            const main: File = {
+                path: `${tscWatch.projectRoot}/src/main.ts`,
+                content: `import { foo } from 'helpers/functions';
+export { foo };`
+            };
+            const helper: File = {
+                path: `${tscWatch.projectRoot}/src/helpers/functions.ts`,
+                content: `export const foo = 1;`
+            };
+            const mainDts: File = {
+                path: `${tscWatch.projectRoot}/target/src/main.d.ts`,
+                content: `import { foo } from 'helpers/functions';
+export { foo };
+//# sourceMappingURL=main.d.ts.map`
+            };
+            const mainDtsMap: File = {
+                path: `${tscWatch.projectRoot}/target/src/main.d.ts.map`,
+                content: `{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}`
+            };
+            const helperDts: File = {
+                path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts`,
+                content: `export declare const foo = 1;
+//# sourceMappingURL=functions.d.ts.map`
+            };
+            const helperDtsMap: File = {
+                path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts.map`,
+                content: `{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}`
+            };
+            const tsconfigIndirect3: File = {
+                path: `${tscWatch.projectRoot}/indirect3/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        baseUrl: "../target/src/"
+                    },
+                })
+            };
+            const fileResolvingToMainDts: File = {
+                path: `${tscWatch.projectRoot}/indirect3/main.ts`,
+                content: `import { foo } from 'main';
+foo;
+export function bar() {}`
+            };
+            const tsconfigSrcPath = `${tscWatch.projectRoot}/tsconfig-src.json`;
+            const tsconfigPath = `${tscWatch.projectRoot}/tsconfig.json`;
+            const dummyFilePath = "/dummy/dummy.ts";
+            function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles, expectedOpenEvents }: Setup) {
+                const tsconfigSrc: File = {
+                    path: tsconfigSrcPath,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "./target/",
+                            baseUrl: "./src/"
+                        },
+                        include: ["./src/**/*"]
+                    })
+                };
+                const tsconfig: File = {
+                    path: tsconfigPath,
+                    content: JSON.stringify({
+                        ... (solutionOptions ? { compilerOptions: solutionOptions } : {}),
+                        references: configRefs.map(path => ({ path })),
+                        files: solutionFiles || []
+                    })
+                };
+                const dummyFile: File = {
+                    path: dummyFilePath,
+                    content: "let a = 10;"
+                };
+                const host = createServerHost([
+                    tsconfigSrc, tsconfig, main, helper,
+                    libFile, dummyFile,
+                    mainDts, mainDtsMap, helperDts, helperDtsMap,
+                    tsconfigIndirect3, fileResolvingToMainDts,
+                    ...additionalFiles]);
+                const session = createSession(host, { canUseEvents: true });
+                const service = session.getProjectService();
+                service.openClientFile(main.path);
+                checkEvents(session, expectedOpenEvents);
+                return { session, service, host, tsconfigSrc, tsconfig };
+            }
+
+            function verifySolutionScenario(input: VerifySolutionScenario) {
+                const { session, service, host, tsconfigSrc, tsconfig } = setup(input);
+                const {
+                    solutionProject, additionalProjects, expectedReloadEvents,
+                    expectedReferences, expectedReferencesFromDtsProject
+                } = input;
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
+                const info = service.getScriptInfoForPath(main.path as Path)!;
+                const project = service.configuredProjects.get(tsconfigSrc.path)!;
+                assert.equal(info.getDefaultProject(), project);
+                assert.equal(service.findDefaultConfiguredProject(info), project);
+
+                // Verify errors
+                verifyGetErrRequestNoErrors({ session, host, files: [main] });
+
+                // Verify collection of script infos
+                service.openClientFile(dummyFilePath);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+
+                service.closeClientFile(main.path);
+                service.closeClientFile(dummyFilePath);
+                service.openClientFile(dummyFilePath);
+                verifyProjects(/*includeConfigured*/ false, /*includeDummy*/ true);
+
+                service.openClientFile(main.path);
+                service.closeClientFile(dummyFilePath);
+                service.openClientFile(dummyFilePath);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+
+                // Verify Reload projects
+                session.clearMessages();
+                service.reloadProjects();
+                checkEvents(session, expectedReloadEvents);
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
+
+                // Find all refs
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 })
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, expectedReferences);
+
+                service.closeClientFile(main.path);
+                service.closeClientFile(dummyFilePath);
+
+                // Verify when declaration map references the file
+                service.openClientFile(fileResolvingToMainDts.path);
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkProjectActualFiles(service.configuredProjects.get(tsconfigIndirect3.path)!, [tsconfigIndirect3.path, fileResolvingToMainDts.path, mainDts.path, helperDts.path, libFile.path]);
+
+                // Find all refs from dts include
+                const response2 = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response2, expectedReferencesFromDtsProject);
+
+                function verifyProjects(includeConfigured: boolean, includeDummy: boolean) {
+                    const inferredProjects = includeDummy ? 1 : 0;
+                    const configuredProjects = includeConfigured ? additionalProjects.length + 2 : 0;
+                    checkNumberOfProjects(service, { configuredProjects, inferredProjects });
+                    if (includeConfigured) {
+                        checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
+                        checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, solutionProject || [tsconfig.path]);
+                        additionalProjects.forEach(({ projectName, files }) =>
+                            checkProjectActualFiles(service.configuredProjects.get(projectName)!, files));
+                    }
+                    if (includeDummy) {
+                        checkProjectActualFiles(service.inferredProjects[0], [dummyFilePath, libFile.path]);
+                    }
+                }
+            }
+
+            function expectedProjectLoadAndTelemetry(config: string, reason: string) {
+                return [
+                    projectLoadingStartEvent(config, reason),
+                    projectLoadingFinishEvent(config),
+                    projectInfoTelemetryEvent(),
+                ];
+            }
+
+            function expectedSolutionLoadAndTelemetry() {
+                return expectedProjectLoadAndTelemetry(tsconfigPath, `Creating possible configured project for ${main.path} to open`);
+            }
+
+            function expectedProjectReferenceLoadAndTelemetry(config: string) {
+                return expectedProjectLoadAndTelemetry(config, `Creating project referenced in solution ${tsconfigPath} to find possible configured project for ${main.path} to open`);
+            }
+
+            function expectedReloadEvent(config: string) {
+                return [
+                    projectLoadingStartEvent(config, `User requested reload projects`),
+                    projectLoadingFinishEvent(config),
+                    configFileDiagEvent(config, config, [])
+                ];
+            }
+
+            function expectedReferencesResponse(): protocol.ReferencesResponseBody {
+                return {
+                    refs: [
+                        makeReferenceItem({
+                            file: main,
+                            text: "foo",
+                            contextText: `import { foo } from 'helpers/functions';`,
+                            isDefinition: true,
+                            isWriteAccess: true,
+                            lineText: `import { foo } from 'helpers/functions';`,
+                        }),
+                        makeReferenceItem({
+                            file: main,
+                            text: "foo",
+                            options: { index: 1 },
+                            contextText: `export { foo };`,
+                            isDefinition: true,
+                            isWriteAccess: true,
+                            lineText: `export { foo };`,
+                        }),
+                        makeReferenceItem({
+                            file: helper,
+                            text: "foo",
+                            contextText: `export const foo = 1;`,
+                            isDefinition: true,
+                            isWriteAccess: true,
+                            lineText: `export const foo = 1;`,
+                        }),
+                    ],
+                    symbolName: "foo",
+                    symbolStartOffset: protocolLocationFromSubstring(main.content, "foo").offset,
+                    symbolDisplayString: "(alias) const foo: 1\nexport foo"
+                };
+            }
+
+            function expectedIndirectRefs(indirect: File) {
+                return [
+                    makeReferenceItem({
+                        file: indirect,
+                        text: "foo",
+                        contextText: `import { foo } from 'main';`,
+                        isDefinition: true,
+                        isWriteAccess: true,
+                        lineText: `import { foo } from 'main';`,
+                    }),
+                    makeReferenceItem({
+                        file: indirect,
+                        text: "foo",
+                        options: { index: 1 },
+                        isDefinition: false,
+                        isWriteAccess: false,
+                        lineText: `foo;`,
+                    }),
+                ];
+            }
+
+            function getIndirectProject(postfix: string, optionsToExtend?: CompilerOptions) {
+                const tsconfigIndirect: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig-indirect${postfix}.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "./target/",
+                            baseUrl: "./src/",
+                            ...optionsToExtend
+                        },
+                        files: [`./indirect${postfix}/main.ts`],
+                        references: [{ path: "./tsconfig-src.json" }]
+                    })
+                };
+                const indirect: File = {
+                    path: `${tscWatch.projectRoot}/indirect${postfix}/main.ts`,
+                    content: fileResolvingToMainDts.content
+                };
+                return { tsconfigIndirect, indirect };
+            }
+
+            interface VerifyProjects {
+                configuredProjects: readonly { projectName: string, files: readonly string[] }[];
+                inferredProjects: readonly (readonly string[])[];
+            }
+
+            interface VerifyDisableReferencedProjectLoad extends Setup {
+                expectedProjectsOnOpen: VerifyProjects;
+                expectedProjectsOnDummyOpen?: VerifyProjects;
+                expectedProjectsOnReload?: VerifyProjects;
+                expectedDefaultProject: (service: server.ProjectService) => server.Project;
+                expectedDefaultConfiguredProject: (service: server.ProjectService) => server.ConfiguredProject | undefined;
+                expectedReloadEvents: protocol.Event[];
+            }
+
+            function verifyDisableReferencedProjectLoad(input: VerifyDisableReferencedProjectLoad) {
+                const { session, service } = setup(input);
+                const { expectedProjectsOnOpen, expectedDefaultProject, expectedDefaultConfiguredProject, expectedReloadEvents } = input;
+                const expectedProjectsOnOnlyDummy: VerifyProjects = {
+                    configuredProjects: emptyArray,
+                    inferredProjects: [
+                        [dummyFilePath, libFile.path],
+                    ]
+                };
+                const expectedProjectsOnDummyOpen = input.expectedProjectsOnDummyOpen || {
+                    configuredProjects: expectedProjectsOnOpen.configuredProjects,
+                    inferredProjects: expectedProjectsOnOnlyDummy.inferredProjects,
+                };
+                const expectedProjectsOnReload = input.expectedProjectsOnReload || expectedProjectsOnDummyOpen;
+
+                verifyProjects(expectedProjectsOnOpen);
+                const info = service.getScriptInfoForPath(main.path as Path)!;
+                assert.equal(info.getDefaultProject(), expectedDefaultProject(service));
+                assert.equal(service.findDefaultConfiguredProject(info), expectedDefaultConfiguredProject(service));
+
+                // Verify collection of script infos
+                service.openClientFile(dummyFilePath);
+                verifyProjects(expectedProjectsOnDummyOpen);
+
+                service.closeClientFile(main.path);
+                service.closeClientFile(dummyFilePath);
+                service.openClientFile(dummyFilePath);
+                verifyProjects(expectedProjectsOnOnlyDummy);
+
+                service.openClientFile(main.path);
+
+                // Verify Reload projects
+                session.clearMessages();
+                service.reloadProjects();
+                checkEvents(session, expectedReloadEvents);
+                verifyProjects(expectedProjectsOnReload);
+
+                function verifyProjects(expected: VerifyProjects) {
+                    checkNumberOfProjects(service, { configuredProjects: expected.configuredProjects.length, inferredProjects: expected.inferredProjects.length });
+                    expected.configuredProjects.forEach(({ projectName, files }) =>
+                        checkProjectActualFiles(service.configuredProjects.get(projectName)!, files));
+                    expected.inferredProjects.forEach((files, index) =>
+                        checkProjectActualFiles(service.inferredProjects[index], files));
+                }
+            }
+
+            it("when project is directly referenced by solution", () => {
+                const expectedReferences = expectedReferencesResponse();
+                verifySolutionScenario({
+                    configRefs: ["./tsconfig-src.json"],
+                    additionalFiles: emptyArray,
+                    additionalProjects: emptyArray,
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                        configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                    ],
+                    expectedReloadEvents: [
+                        ...expectedReloadEvent(tsconfigPath),
+                        ...expectedReloadEvent(tsconfigSrcPath),
+                    ],
+                    expectedReferences,
+                    expectedReferencesFromDtsProject: {
+                        ...expectedReferences,
+                        refs: [
+                            ...expectedIndirectRefs(fileResolvingToMainDts),
+                            ...expectedReferences.refs
+                        ],
+                        symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                    }
+                });
+            });
+
+            it("when project is indirectly referenced by solution", () => {
+                const { tsconfigIndirect, indirect } = getIndirectProject("1");
+                const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                const { refs, ...rest } = expectedReferencesResponse();
+                verifySolutionScenario({
+                    configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                    additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
+                    additionalProjects: emptyArray,
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                        configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                    ],
+                    expectedReloadEvents: [
+                        ...expectedReloadEvent(tsconfigPath),
+                        ...expectedReloadEvent(tsconfigSrcPath),
+                    ],
+                    expectedReferences: {
+                        refs: [
+                            ...refs,
+                            ...expectedIndirectRefs(indirect),
+                            ...expectedIndirectRefs(indirect2),
+                        ],
+                        ...rest
+                    },
+                    expectedReferencesFromDtsProject: {
+                        ...rest,
+                        refs: [
+                            ...expectedIndirectRefs(fileResolvingToMainDts),
+                            ...refs,
+                            ...expectedIndirectRefs(indirect),
+                            ...expectedIndirectRefs(indirect2),
+                        ],
+                        symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                    }
+                });
+            });
+
+            it("disables looking into the child project if disableReferencedProjectLoad is set", () => {
+                const expectedProjectsOnOpen: VerifyProjects = {
+                    configuredProjects: [
+                        { projectName: tsconfigPath, files: [tsconfigPath] },
+                    ],
+                    inferredProjects: [
+                        [main.path, libFile.path],
+                    ]
+                };
+                verifyDisableReferencedProjectLoad({
+                    solutionOptions: { disableReferencedProjectLoad: true },
+                    configRefs: ["./tsconfig-src.json"],
+                    additionalFiles: emptyArray,
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        configFileDiagEvent(main.path, tsconfigPath, [])
+                    ],
+                    expectedDefaultProject: service => service.inferredProjects[0],
+                    expectedDefaultConfiguredProject: returnUndefined,
+                    expectedProjectsOnOpen,
+                    expectedProjectsOnDummyOpen: {
+                        configuredProjects: emptyArray,
+                        inferredProjects: [
+                            ...expectedProjectsOnOpen.inferredProjects,
+                            [dummyFilePath, libFile.path],
+                        ]
+                    },
+                    expectedProjectsOnReload: {
+                        configuredProjects: expectedProjectsOnOpen.configuredProjects,
+                        inferredProjects: [
+                            [dummyFilePath, libFile.path],
+                            ...expectedProjectsOnOpen.inferredProjects,
+                        ]
+                    },
+                    expectedReloadEvents: expectedReloadEvent(tsconfigPath)
+                });
+            });
+
+            it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
+                const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                const expectedProjectsOnOpen: VerifyProjects = {
+                    configuredProjects: [
+                        { projectName: tsconfigPath, files: [tsconfigPath] },
+                        { projectName: tsconfigIndirect.path, files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path] },
+                    ],
+                    inferredProjects: emptyArray
+                };
+                verifyDisableReferencedProjectLoad({
+                    configRefs: ["./tsconfig-indirect1.json"],
+                    additionalFiles: [tsconfigIndirect, indirect],
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
+                        configFileDiagEvent(main.path, tsconfigIndirect.path, [])
+                    ],
+                    expectedDefaultProject: service => service.configuredProjects.get(tsconfigIndirect.path)!,
+                    expectedDefaultConfiguredProject: returnUndefined,
+                    expectedProjectsOnOpen,
+                    expectedReloadEvents: [
+                        ...expectedReloadEvent(tsconfigPath),
+                        ...expectedReloadEvent(tsconfigIndirect.path),
+                    ]
+                });
+            });
+
+            it("disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one", () => {
+                const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                const expectedProjectsOnOpen: VerifyProjects = {
+                    configuredProjects: [
+                        { projectName: tsconfigPath, files: [tsconfigPath] },
+                        { projectName: tsconfigSrcPath, files: [tsconfigSrcPath, main.path, helper.path, libFile.path] },
+                    ],
+                    inferredProjects: emptyArray
+                };
+                verifyDisableReferencedProjectLoad({
+                    configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                    additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                        configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                    ],
+                    expectedDefaultProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                    expectedDefaultConfiguredProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                    expectedProjectsOnOpen,
+                    expectedReloadEvents: [
+                        ...expectedReloadEvent(tsconfigPath),
+                        ...expectedReloadEvent(tsconfigSrcPath),
+                    ]
+                });
+            });
+
+            describe("when solution is project that contains its own files", () => {
+                it("when the project found is not solution but references open file through project reference", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: fileResolvingToMainDts.content
+                    };
+                    const { refs, ...rest } = expectedReferencesResponse();
+                    verifySolutionScenario({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./src/"
+                        },
+                        solutionProject: [tsconfigPath, ownMain.path, main.path, libFile.path, helper.path],
+                        configRefs: ["./tsconfig-src.json"],
+                        additionalFiles: [ownMain],
+                        additionalProjects: emptyArray,
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                            configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                        ],
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigSrcPath),
+                        ],
+                        expectedReferences: {
+                            refs: [
+                                ...refs,
+                                ...expectedIndirectRefs(ownMain),
+                            ],
+                            ...rest
+                        },
+                        expectedReferencesFromDtsProject: {
+                            ...rest,
+                            refs: [
+                                ...expectedIndirectRefs(fileResolvingToMainDts),
+                                ...refs,
+                                ...expectedIndirectRefs(ownMain),
+                            ],
+                            symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                        },
+                    });
+                });
+
+                it("when project is indirectly referenced by solution", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: `import { bar } from 'main';
+bar;`
+                    };
+                    const { tsconfigIndirect, indirect } = getIndirectProject("1");
+                    const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                    const { refs, ...rest } = expectedReferencesResponse();
+                    verifySolutionScenario({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./indirect1/"
+                        },
+                        solutionProject: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path],
+                        configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                        additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2, ownMain],
+                        additionalProjects: emptyArray,
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                            configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                        ],
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigSrcPath),
+                        ],
+                        expectedReferences: {
+                            refs: [
+                                ...refs,
+                                ...expectedIndirectRefs(indirect),
+                                ...expectedIndirectRefs(indirect2),
+                            ],
+                            ...rest
+                        },
+                        expectedReferencesFromDtsProject: {
+                            ...rest,
+                            refs: [
+                                ...expectedIndirectRefs(fileResolvingToMainDts),
+                                ...refs,
+                                ...expectedIndirectRefs(indirect),
+                                ...expectedIndirectRefs(indirect2),
+                            ],
+                            symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                        }
+                    });
+                });
+
+                it("disables looking into the child project if disableReferencedProjectLoad is set", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: fileResolvingToMainDts.content
+                    };
+                    const expectedProjectsOnOpen: VerifyProjects = {
+                        configuredProjects: [
+                            { projectName: tsconfigPath, files: [tsconfigPath, ownMain.path, main.path, libFile.path, helper.path] },
+                        ],
+                        inferredProjects: emptyArray
+                    };
+                    verifyDisableReferencedProjectLoad({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./src/",
+                            disableReferencedProjectLoad: true
+                        },
+                        configRefs: ["./tsconfig-src.json"],
+                        additionalFiles: [ownMain],
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            configFileDiagEvent(main.path, tsconfigPath, [])
+                        ],
+                        expectedDefaultProject: service => service.configuredProjects.get(tsconfigPath)!,
+                        expectedDefaultConfiguredProject: returnUndefined,
+                        expectedProjectsOnOpen,
+                        expectedReloadEvents: expectedReloadEvent(tsconfigPath)
+                    });
+                });
+
+                it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: `import { bar } from 'main';
+bar;`
+                    };
+                    const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                    const expectedProjectsOnOpen: VerifyProjects = {
+                        configuredProjects: [
+                            { projectName: tsconfigPath, files: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path] },
+                            { projectName: tsconfigIndirect.path, files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path] },
+                        ],
+                        inferredProjects: emptyArray
+                    };
+                    verifyDisableReferencedProjectLoad({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./indirect1/",
+                        },
+                        configRefs: ["./tsconfig-indirect1.json"],
+                        additionalFiles: [tsconfigIndirect, indirect, ownMain],
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
+                            configFileDiagEvent(main.path, tsconfigPath, [])
+                        ],
+                        expectedDefaultProject: service => service.configuredProjects.get(tsconfigPath)!,
+                        expectedDefaultConfiguredProject: returnUndefined,
+                        expectedProjectsOnOpen,
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigIndirect.path),
+                        ]
+                    });
+                });
+
+                it("disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: `import { bar } from 'main';
+bar;`
+                    };
+                    const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                    const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                    const expectedProjectsOnOpen: VerifyProjects = {
+                        configuredProjects: [
+                            { projectName: tsconfigPath, files: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path] },
+                            { projectName: tsconfigSrcPath, files: [tsconfigSrcPath, main.path, helper.path, libFile.path] },
+                        ],
+                        inferredProjects: emptyArray
+                    };
+                    verifyDisableReferencedProjectLoad({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./indirect1/",
+                        },
+                        configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                        additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2, ownMain],
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                            configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                        ],
+                        expectedDefaultProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                        expectedDefaultConfiguredProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                        expectedProjectsOnOpen,
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigSrcPath),
+                        ]
+                    });
+                });
+            });
+        });
+
+        describe("when new file is added to the referenced project", () => {
+            function setup(extendOptionsProject2?: CompilerOptions) {
+                const config1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        },
+                        exclude: ["temp"]
+                    })
+                };
+                const class1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
+                    content: `class class1 {}`
+                };
+                const class1Dts: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.d.ts`,
+                    content: `declare class class1 {}`
+                };
+                const config2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true,
+                            ...(extendOptionsProject2 || {})
+                        },
+                        references: [
+                            { path: "../project1" }
+                        ]
+                    })
+                };
+                const class2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
+                    content: `class class2 {}`
+                };
+                const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+                const session = createSession(host);
+                openFilesForSession([class2], session);
+                const service = session.getProjectService();
+                return { host, session, service, class1, class1Dts, class2, config1, config2 };
+            }
+
+            it("when referenced project is not open", () => {
+                const { host, service, class1, class2, config2 } = setup();
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Add output from new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+
+            it("when referenced project is open", () => {
+                const { host, session, service, class1, class2, config1, config2 } = setup();
+                openFilesForSession([class1], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(3);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Add output from new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+
+            it("when referenced project is not open with disableSourceOfProjectReferenceRedirect", () => {
+                const { host, service, class1Dts, class2, config2 } = setup({ disableSourceOfProjectReferenceRedirect: true });
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Add output of new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Delete output from new class to referenced project
+                host.deleteFile(class3Dts);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Write back output of new class to referenced project
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+            });
+
+            it("when referenced project is open with disableSourceOfProjectReferenceRedirect", () => {
+                const { host, session, service, class1, class1Dts, class2, config1, config2 } = setup({ disableSourceOfProjectReferenceRedirect: true });
+                openFilesForSession([class1], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(3);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Add output of new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Delete output from new class to referenced project
+                host.deleteFile(class3Dts);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Write back output of new class to referenced project
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+            });
+        });
+
+        describe("auto import with referenced project", () => {
+            function verifyAutoImport(built: boolean, disableSourceOfProjectReferenceRedirect?: boolean) {
+                const solnConfig: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: [],
+                        references: [
+                            { path: "shared/src/library" },
+                            { path: "app/src/program" }
+                        ]
+                    })
+                };
+                const sharedConfig: File = {
+                    path: `${tscWatch.projectRoot}/shared/src/library/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "../../bld/library"
+                        }
+                    })
+                };
+                const sharedIndex: File = {
+                    path: `${tscWatch.projectRoot}/shared/src/library/index.ts`,
+                    content: `export function foo() {}`
+                };
+                const sharedPackage: File = {
+                    path: `${tscWatch.projectRoot}/shared/package.json`,
+                    content: JSON.stringify({
+                        name: "shared",
+                        version: "1.0.0",
+                        main: "bld/library/index.js",
+                        types: "bld/library/index.d.ts"
+                    })
+                };
+                const appConfig: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "../../bld/program",
+                            disableSourceOfProjectReferenceRedirect
+                        },
+                        references: [
+                            { path: "../../../shared/src/library" }
+                        ]
+                    })
+                };
+                const appBar: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/bar.ts`,
+                    content: `import {foo} from "shared";`
+                };
+                const appIndex: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/index.ts`,
+                    content: `foo`
+                };
+                const sharedSymlink: SymLink = {
+                    path: `${tscWatch.projectRoot}/node_modules/shared`,
+                    symLink: `${tscWatch.projectRoot}/shared`
+                };
+                const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
+                const host = createServerHost(files);
+                if (built) {
+                    const solutionBuilder = tscWatch.createSolutionBuilder(host, [solnConfig.path], {});
+                    solutionBuilder.build();
+                    host.clearOutput();
+                }
+                const session = createSession(host);
+                openFilesForSession([appIndex], session);
+                const response = session.executeCommandSeq<protocol.CodeFixRequest>({
+                    command: protocol.CommandTypes.GetCodeFixes,
+                    arguments: {
+                        file: appIndex.path,
+                        startLine: 1,
+                        startOffset: 1,
+                        endLine: 1,
+                        endOffset: 4,
+                        errorCodes: [Diagnostics.Cannot_find_name_0.code],
+                    }
+                }).response as protocol.CodeFixAction[];
+                assert.deepEqual(response, [
+                    {
+                        fixName: "import",
+                        description: `Import 'foo' from module "shared"`,
+                        changes: [{
+                            fileName: appIndex.path,
+                            textChanges: [{
+                                start: { line: 1, offset: 1 },
+                                end: { line: 1, offset: 1 },
+                                newText: 'import { foo } from "shared";\n\n',
+                            }],
+                        }],
+                        commands: undefined,
+                        fixAllDescription: undefined,
+                        fixId: undefined
+                    }
+                ]);
+            }
+
+            it("when project is built", () => {
+                verifyAutoImport(/*built*/ true);
+            });
+            it("when project is not built", () => {
+                verifyAutoImport(/*built*/ false);
+            });
+            it("when disableSourceOfProjectReferenceRedirect is true", () => {
+                verifyAutoImport(/*built*/ true, /*disableSourceOfProjectReferenceRedirect*/ true);
+            });
+        });
+
+        it("when files from two projects are open and one project references", () => {
+            function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: CompilerOptions): [file: File, config: File] {
+                const file: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/src/file1.ts`,
+                    content: `export const ${packageName}Const = 10;`
+                };
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: { composite: true, ...optionsToExtend || {} },
+                        references: references?.map(path => ({ path: `../${path}` }))
+                    })
+                };
+                return [file, config];
+            }
+            const [mainFile, mainConfig] = getPackageAndFile("main", ["core", "indirect", "noCoreRef1", "indirectDisabledChildLoad1", "indirectDisabledChildLoad2", "refToCoreRef3", "indirectNoCoreRef"]);
+            const [coreFile, coreConfig] = getPackageAndFile("core");
+            const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
+            const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
+            const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
+            const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], { disableReferencedProjectLoad: true });
+            const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
+            const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], { disableReferencedProjectLoad: true });
+            const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);
+            const [refToCoreRef3File, refToCoreRef3Config] = getPackageAndFile("refToCoreRef3", ["coreRef3"]);
+            const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
+            const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
+
+            const host = createServerHost([
+                libFile, mainFile, mainConfig, coreFile, coreConfig, noCoreRef1File, noCoreRef1Config,
+                indirectFile, indirectConfig, coreRef1File, coreRef1Config,
+                indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config, coreRef2File, coreRef2Config,
+                indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config, coreRef3File, coreRef3Config,
+                refToCoreRef3File, refToCoreRef3Config,
+                indirectNoCoreRefFile, indirectNoCoreRefConfig, noCoreRef2File, noCoreRef2Config
+            ], { useCaseSensitiveFileNames: true });
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFilesForSession([mainFile, coreFile], session);
+
+            verifyProject(mainConfig);
+            verifyProject(coreConfig);
+
+            // Find all refs in coreFile
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`)
+            });
+            verifyProject(mainConfig);
+            verifyProject(coreConfig);
+            verifyNoProject(noCoreRef1Config); // Should not be loaded
+            verifyProject(indirectConfig);
+            verifyProject(coreRef1Config);
+            verifyProject(indirectDisabledChildLoad1Config);
+            verifyNoProject(coreRef2Config); // Should not be loaded
+            verifyProject(indirectDisabledChildLoad2Config);
+            verifyProject(coreRef3Config);
+            verifyProject(refToCoreRef3Config);
+            verifyNoProject(indirectNoCoreRefConfig); // Should not be loaded
+            verifyNoProject(noCoreRef2Config); // Should not be loaded
+
+            function verifyProject(config: File) {
+                assert.isDefined(service.configuredProjects.get(config.path), `Expected to find ${config.path}`);
+            }
+
+            function verifyNoProject(config: File) {
+                assert.isUndefined(service.configuredProjects.get(config.path), `Expected to not find ${config.path}`);
+            }
         });
     });
 }

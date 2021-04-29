@@ -4,7 +4,7 @@
     "end": 27,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "members": {
         "0": {
             "kind": "PropertySignature",
@@ -12,7 +12,7 @@
             "end": 14,
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
-            "transformFlags": 0,
+            "transformFlags": 1,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
@@ -28,7 +28,7 @@
                 "end": 13,
                 "flags": "JSDoc",
                 "modifierFlagsCache": 0,
-                "transformFlags": 0
+                "transformFlags": 1
             }
         },
         "1": {
@@ -37,7 +37,7 @@
             "end": 26,
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
-            "transformFlags": 0,
+            "transformFlags": 1,
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
@@ -53,11 +53,13 @@
                 "end": 26,
                 "flags": "JSDoc",
                 "modifierFlagsCache": 0,
-                "transformFlags": 0
+                "transformFlags": 1
             }
         },
         "length": 2,
         "pos": 2,
-        "end": 26
+        "end": 26,
+        "hasTrailingComma": false,
+        "transformFlags": 1
     }
 }

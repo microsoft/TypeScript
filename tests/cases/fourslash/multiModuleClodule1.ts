@@ -21,7 +21,16 @@
 
 verify.completions(
     { marker: "1", includes: "C" },
-    { marker: ["2", "4"], exact: ["prototype", "boo", "x", "foo", ...completion.functionMembers] },
+    {
+        marker: ["2", "4"],
+        exact: [
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "boo", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "x", sortText: completion.SortText.LocationPriority },
+            { name: "foo", sortText: completion.SortText.LocationPriority },
+            ...completion.functionMembers
+        ]
+    },
     { marker: "3", exact: ["foo", "bar"] },
 );
 verify.noErrors();

@@ -49,6 +49,7 @@ export declare function __makeTemplateObject(cooked: string[], raw: string[]): T
 //// [external.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.result = exports.B = exports.A = void 0;
 var tslib_1 = require("tslib");
 var A = /** @class */ (function () {
     function A() {
@@ -57,7 +58,7 @@ var A = /** @class */ (function () {
 }());
 exports.A = A;
 var B = /** @class */ (function (_super) {
-    tslib_1.__extends(B, _super);
+    (0, tslib_1.__extends)(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -69,13 +70,13 @@ var C = /** @class */ (function () {
     }
     C.prototype.method = function (x) {
     };
-    tslib_1.__decorate([
-        tslib_1.__param(0, dec),
-        tslib_1.__metadata("design:type", Function),
-        tslib_1.__metadata("design:paramtypes", [Number]),
-        tslib_1.__metadata("design:returntype", void 0)
+    (0, tslib_1.__decorate)([
+        (0, tslib_1.__param)(0, dec),
+        (0, tslib_1.__metadata)("design:type", Function),
+        (0, tslib_1.__metadata)("design:paramtypes", [Number]),
+        (0, tslib_1.__metadata)("design:returntype", void 0)
     ], C.prototype, "method", null);
-    C = tslib_1.__decorate([
+    C = (0, tslib_1.__decorate)([
         dec
     ], C);
     return C;
@@ -83,17 +84,19 @@ var C = /** @class */ (function () {
 function id(x) {
     return x;
 }
-exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
+exports.result = id(templateObject_1 || (templateObject_1 = (0, tslib_1.__makeTemplateObject)(["hello world"], ["hello world"])));
 var templateObject_1;
 //// [script.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());

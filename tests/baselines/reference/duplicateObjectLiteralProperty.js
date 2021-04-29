@@ -26,7 +26,7 @@ var x = {
     \u0061: "ss",
     a: {
         c: 1,
-        "c": 56,
+        "c": 56, // Duplicate
     }
 };
 var y = {

@@ -40,7 +40,7 @@ var C = /** @class */ (function () {
             var r = this; // C
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "y", {
@@ -48,7 +48,7 @@ var C = /** @class */ (function () {
             var r2 = this; // typeof C
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -61,7 +61,7 @@ var D = /** @class */ (function () {
             var r = this; // D<T>
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(D, "y", {
@@ -69,7 +69,7 @@ var D = /** @class */ (function () {
             var r2 = this; // typeof D
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;

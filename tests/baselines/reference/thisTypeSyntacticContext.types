@@ -1,14 +1,14 @@
 === tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts ===
 function f(this: { n: number }) {
->f : (this: { n: number; }) => void
+>f : (this: {    n: number;}) => void
 >this : { n: number; }
 >n : number
 }
 
 const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
->o : { n: number; test?: (this: { n: number; }) => void; }
+>o : { n: number; test?: (this: {    n: number;}) => void; }
 >n : number
->test : (this: { n: number; }) => void
+>test : (this: {    n: number;}) => void
 >this : { n: number; }
 >n : number
 >{ n: 1 } : { n: number; }

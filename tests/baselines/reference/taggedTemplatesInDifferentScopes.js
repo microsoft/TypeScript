@@ -23,6 +23,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 exports.__esModule = true;
+exports.tag = void 0;
 function tag(parts) {
     var values = [];
     for (var _i = 1; _i < arguments.length; _i++) {

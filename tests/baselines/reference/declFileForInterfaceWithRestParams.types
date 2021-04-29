@@ -1,18 +1,18 @@
 === tests/cases/compiler/declFileForInterfaceWithRestParams.ts ===
 interface I {
     foo(...x): typeof x;
->foo : (...x: any[]) => any[]
+>foo : (...x: any[]) => typeof x
 >x : any[]
 >x : any[]
 
     foo2(a: number, ...x): typeof x;
->foo2 : (a: number, ...x: any[]) => any[]
+>foo2 : (a: number, ...x: any[]) => typeof x
 >a : number
 >x : any[]
 >x : any[]
 
     foo3(b: string, ...x: string[]): typeof x;
->foo3 : (b: string, ...x: string[]) => string[]
+>foo3 : (b: string, ...x: string[]) => typeof x
 >b : string
 >x : string[]
 >x : string[]

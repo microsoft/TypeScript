@@ -22,13 +22,15 @@ export var a = vextend({
 //// [func.js]
 "use strict";
 exports.__esModule = true;
+exports.vextend = void 0;
 exports.vextend = extend;
 //// [app.js]
 "use strict";
 exports.__esModule = true;
+exports.a = void 0;
 var func_1 = require("./func");
 // hover on vextend
-exports.a = func_1.vextend({
+exports.a = (0, func_1.vextend)({
     watch: {
         data1: function (val) {
             this.data2 = 1;

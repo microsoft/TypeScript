@@ -50,6 +50,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
             const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }); // ONE
@@ -79,7 +80,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         }
     }
     exports.cl2 = cl2;
-    exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
+    const l = () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });
+    exports.l = l;
 });

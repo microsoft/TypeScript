@@ -12,6 +12,7 @@ export type { AA } from './a';
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.AA = void 0;
 var A = {};
 exports.AA = {};
 //// [b.js]

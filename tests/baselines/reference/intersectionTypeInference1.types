@@ -6,8 +6,8 @@ function alert(s: string) {}
 >s : string
 
 const parameterFn = (props:{store:string}) => alert(props.store)
->parameterFn : (props: { store: string; }) => void
->(props:{store:string}) => alert(props.store) : (props: { store: string; }) => void
+>parameterFn : (props: {    store: string;}) => void
+>(props:{store:string}) => alert(props.store) : (props: {    store: string;}) => void
 >props : { store: string; }
 >store : string
 >alert(props.store) : void
@@ -19,7 +19,7 @@ const parameterFn = (props:{store:string}) => alert(props.store)
 const brokenFunction = <OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o
 >brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
 ><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
->f : (p: { dispatch: number; } & OwnProps) => void
+>f : (p: {    dispatch: number;} & OwnProps) => void
 >p : { dispatch: number; } & OwnProps
 >dispatch : number
 >(o: OwnProps) => o : (o: OwnProps) => OwnProps

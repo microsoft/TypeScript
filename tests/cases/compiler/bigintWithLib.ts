@@ -11,6 +11,9 @@ bigintVal = bigintVal.valueOf();
 let stringVal: string = bigintVal.toString();
 stringVal = bigintVal.toString(2);
 stringVal = bigintVal.toLocaleString();
+stringVal = bigintVal.toLocaleString('de-DE');
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
 
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
@@ -54,3 +57,7 @@ const w = 12n; // should emit as const w = 12n
 const x = -12n; // should emit as const x = -12n
 const y: 12n = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
+
+// Test Intl methods with new parameter type
+new Intl.NumberFormat("fr").format(3000n);
+new Intl.NumberFormat("fr").format(bigintVal);

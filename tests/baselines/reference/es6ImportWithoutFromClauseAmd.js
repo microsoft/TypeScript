@@ -16,12 +16,14 @@ var _b = 10;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.a = void 0;
     exports.a = 10;
 });
 //// [es6ImportWithoutFromClauseAmd_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.b = void 0;
     exports.b = 10;
 });
 //// [es6ImportWithoutFromClauseAmd_2.js]

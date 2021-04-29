@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.formatting {
-    export function getFormatContext(options: FormatCodeSettings): FormatContext {
-        return { options, getRules: getRulesMap() };
+    export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
+        return { options, getRules: getRulesMap(), host };
     }
 
     let rulesMapCache: RulesMap | undefined;

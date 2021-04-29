@@ -108,7 +108,7 @@ var C = /** @class */ (function () {
         },
         set: function (v) { } // ok
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.foo = function () {
@@ -119,7 +119,7 @@ var C = /** @class */ (function () {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

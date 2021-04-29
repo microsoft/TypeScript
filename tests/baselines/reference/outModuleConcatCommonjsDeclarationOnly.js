@@ -9,6 +9,7 @@ export class B extends A { }
 
 
 
+
 //// [all.d.ts]
 declare module "ref/a" {
     export class A {

@@ -312,14 +312,65 @@ namespace ts {
 */`);
                 parsesCorrectly("@link tags",
                     `/**
- * {@link first link}
+ * {@link first }
  * Inside {@link link text} thing
- * @see {@link second link text} and {@link Foo|a foo} as well.
+ * @param foo See also {@link A.Reference}
+ * @param bar Or see {@link http://www.zombocom.com }
+ * {@link Standalone.Complex }
+ * This empty one: {@link} is OK.
+ * This double-space one: {@link  doubled  } is OK too.
+ * This should work, despite being badly formatted: {@link
+oh.no
+}
+ * Forgot to close this one {@link https://typescriptlang.org
+ * But it's still OK.
+ * Although it skips the newline so parses the asterisks in the wrong state.
+ * This shouldn't work: {@link
+ * nope
+ * }, because of the intermediate asterisks.
+ * @author Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}
  */`);
                 parsesCorrectly("authorTag",
                     `/**
  * @author John Doe <john.doe@example.com>
  * @author John Doe <john.doe@example.com> unexpected comment
+ * @author 108 <108@actionbutton.net> Video Games Forever
+ * @author Multiple Ats <email@quoting@how@does@it@work>
+ * @author Multiple Open Carets <hi<there@<>
+ * @author Multiple Close Carets <probably>invalid>but>who>cares>
+ * @author Unclosed Carets <joe@sloppy.gov
+ * @author Multiple @author On One <one@two.three> @author Line
+ * @author @author @author Empty authors
+ * @author
+ * @author
+ *   Comments
+ * @author Early Close Caret > <a@b>
+ * @author No Line Breaks:
+ *   <the email @address> must be on the same line to parse
+ * @author Long Comment <long@comment.org> I
+ *  want to keep commenting down here, I dunno.
+ */`);
+
+                parsesCorrectly("consecutive newline tokens",
+                    `/**
+ * @example
+ * Some\n\n * text\r\n * with newlines.
+ */`);
+                parsesCorrectly("Chained tags, no leading whitespace", `/**@a @b @c@d*/`);
+                parsesCorrectly("Initial star is not a tag", `/***@a*/`);
+                parsesCorrectly("Initial star space is not a tag", `/*** @a*/`);
+                parsesCorrectly("Initial email address is not a tag", `/**bill@example.com*/`);
+                parsesCorrectly("no space before @ is not a new tag",
+                    `/**
+ * @param this (@is@)
+ * @param fine its@fine
+@zerowidth
+*@singlestar
+**@doublestar
+ */`);
+                parsesCorrectly("@@ does not start a new tag",
+                    `/**
+ * @param this is (@@fine@@and) is one comment
  */`);
             });
         });
@@ -341,6 +392,14 @@ namespace ts {
                 assert.isDefined(last);
                 assert.equal(last!.kind, SyntaxKind.EndOfFileToken);
             });
+        });
+        describe("getStart of node with JSDoc but no parent pointers", () => {
+            const root = createSourceFile("foo.ts", "/** */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ false);
+            root.statements[0].getStart(root, /*includeJsdocComment*/ true);
+        });
+        describe("missing type parameter in jsDoc doesn't create a 1-element array", () => {
+            const doc = parseIsolatedJSDocComment("/**\n    @template\n*/");
+            assert.equal((doc?.jsDoc.tags?.[0] as JSDocTemplateTag).typeParameters.length, 0);
         });
     });
 }

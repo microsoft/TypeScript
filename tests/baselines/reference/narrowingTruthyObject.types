@@ -1,0 +1,141 @@
+=== tests/cases/compiler/narrowingTruthyObject.ts ===
+function foo(x: unknown, b: boolean) {
+>foo : (x: unknown, b: boolean) => void
+>x : unknown
+>b : boolean
+
+    if (typeof x === 'object') {
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object | null
+>toString : () => string
+    }
+    if (typeof x === 'object' && x) {
+>typeof x === 'object' && x : false | object | null
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+>x : object | null
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object
+>toString : () => string
+    }
+    if (x && typeof x === 'object') {
+>x && typeof x === 'object' : unknown
+>x : unknown
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object
+>toString : () => string
+    }
+    if (b && x && typeof x === 'object') {
+>b && x && typeof x === 'object' : unknown
+>b && x : unknown
+>b : boolean
+>x : unknown
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object
+>toString : () => string
+    }
+    if (x && b && typeof x === 'object') {
+>x && b && typeof x === 'object' : unknown
+>x && b : unknown
+>x : unknown
+>b : boolean
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object
+>toString : () => string
+    }
+    if (x && b && b && typeof x === 'object') {
+>x && b && b && typeof x === 'object' : unknown
+>x && b && b : unknown
+>x && b : unknown
+>x : unknown
+>b : boolean
+>b : true
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object
+>toString : () => string
+    }
+    if (b && b && x && b && b && typeof x === 'object') {
+>b && b && x && b && b && typeof x === 'object' : unknown
+>b && b && x && b && b : unknown
+>b && b && x && b : unknown
+>b && b && x : unknown
+>b && b : boolean
+>b : boolean
+>b : true
+>x : unknown
+>b : true
+>b : true
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+
+        x.toString();
+>x.toString() : string
+>x.toString : () => string
+>x : object
+>toString : () => string
+    }
+}
+
+// Repro from #36870
+
+function f1(x: unknown): any {
+>f1 : (x: unknown) => any
+>x : unknown
+
+    return x && typeof x === 'object' && x.hasOwnProperty('x');
+>x && typeof x === 'object' && x.hasOwnProperty('x') : unknown
+>x && typeof x === 'object' : unknown
+>x : unknown
+>typeof x === 'object' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'object' : "object"
+>x.hasOwnProperty('x') : boolean
+>x.hasOwnProperty : (v: PropertyKey) => boolean
+>x : object
+>hasOwnProperty : (v: PropertyKey) => boolean
+>'x' : "x"
+}
+

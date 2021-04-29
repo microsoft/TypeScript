@@ -6,7 +6,7 @@ namespace ts {
      * we expect the host to correctly handle paths in our specified format.
      */
     export const directorySeparator = "/";
-    const altDirectorySeparator = "\\";
+    export const altDirectorySeparator = "\\";
     const urlSchemeSeparator = "://";
     const backslashRegExp = /\\/g;
 
@@ -66,6 +66,14 @@ namespace ts {
      */
     export function pathIsRelative(path: string): boolean {
         return /^\.\.?($|[\\/])/.test(path);
+    }
+
+    /**
+     * Determines whether a path is neither relative nor absolute, e.g. "path/to/file".
+     * Also known misleadingly as "non-relative".
+     */
+    export function pathIsBareSpecifier(path: string): boolean {
+        return !pathIsAbsolute(path) && !pathIsRelative(path);
     }
 
     export function hasExtension(fileName: string): boolean {
@@ -527,6 +535,7 @@ namespace ts {
      *
      * ```ts
      * getNormalizedPathComponents("to/dir/../file.ext", "/path/") === ["/", "path", "to", "file.ext"]
+     * ```
      */
     export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined) {
         return reducePathComponents(getPathComponents(path, currentDirectory));
@@ -753,7 +762,7 @@ namespace ts {
      * Determines whether `fileName` starts with the specified `directoryName` using the provided path canonicalization callback.
      * Comparison is case-sensitive between the canonical paths.
      *
-     * @deprecated Use `containsPath` if possible.
+     * Use `containsPath` if file names are not already reduced and absolute.
      */
     export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
         const canonicalFileName = getCanonicalFileName(fileName);
@@ -851,5 +860,9 @@ namespace ts {
 
             directory = parentPath;
         }
+    }
+
+    export function isNodeModulesDirectory(dirPath: Path) {
+        return endsWith(dirPath, "/node_modules");
     }
 }

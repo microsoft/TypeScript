@@ -168,6 +168,30 @@ namespace ts {
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
+
+            it("Combine type-only imports separately from other imports", () => {
+                const sortedImports = parseImports(
+                    `import type { x } from "lib";`,
+                    `import type { y } from "lib";`,
+                    `import { z } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(
+                    `import { z } from "lib";`,
+                    `import type { x, y } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
+            it("Do not combine type-only default, namespace, or named imports with each other", () => {
+                const sortedImports = parseImports(
+                    `import type { x } from "lib";`,
+                    `import type * as y from "lib";`,
+                    `import type z from "lib";`);
+                // Default import could be rewritten as a named import to combine with `x`,
+                // but seems of debatable merit.
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = actualCoalescedImports;
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
         });
 
         describe("Coalesce exports", () => {
@@ -240,7 +264,27 @@ namespace ts {
                     `export { x as a, y, z as b } from "lib";`);
                 assertListEqual(actualCoalescedExports, expectedCoalescedExports);
             });
+
+            it("Keep type-only exports separate", () => {
+                const sortedExports = parseExports(
+                    `export { x };`,
+                    `export type { y };`);
+                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+                const expectedCoalescedExports = sortedExports;
+                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
+            });
+
+            it("Combine type-only exports", () => {
+                const sortedExports = parseExports(
+                    `export type { x };`,
+                    `export type { y };`);
+                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+                const expectedCoalescedExports = parseExports(
+                    `export type { x, y };`);
+                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
+            });
         });
+
 
         describe("Baselines", () => {
 
@@ -284,7 +328,18 @@ export const Other = 1;
                 assert.isEmpty(changes);
             });
 
+            it("doesn't return any changes when the text would be identical", () => {
+                const testFile = {
+                    path: "/a.ts",
+                    content: `import { f } from 'foo';\nf();`
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
+
             testOrganizeImports("Renamed_used",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -295,6 +350,7 @@ EffOne();
                 libFile);
 
             testOrganizeImports("Simple",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -311,6 +367,7 @@ F2();
                 libFile);
 
             testOrganizeImports("Unused_Some",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -323,7 +380,82 @@ D();
                 },
                 libFile);
 
+                describe("skipDestructiveCodeActions=true", () => {
+                    testOrganizeImports("Syntax_Error_Body_skipDestructiveCodeActions",
+                        /*skipDestructiveCodeActions*/ true,
+                        {
+                            path: "/test.ts",
+                            content: `
+import { F1, F2 } from "lib";
+import * as NS from "lib";
+import D from "lib";
+
+class class class;
+D;
+`,
+                        },
+                        libFile);
+                    });
+
+                    testOrganizeImports("Syntax_Error_Imports_skipDestructiveCodeActions",
+                        /*skipDestructiveCodeActions*/ true,
+                        {
+                            path: "/test.ts",
+                            content: `
+import { F1, F2 class class class; } from "lib";
+import * as NS from "lib";
+class class class;
+import D from "lib";
+
+D;
+`,
+                        },
+                        libFile);
+
+                describe("skipDestructiveCodeActions=false", () => {
+                    testOrganizeImports("Syntax_Error_Body",
+                        /*skipDestructiveCodeActions*/ false,
+                        {
+                            path: "/test.ts",
+                            content: `
+import { F1, F2 } from "lib";
+import * as NS from "lib";
+import D from "lib";
+
+class class class;
+D;
+`,
+                        },
+                        libFile);
+
+                    testOrganizeImports("Syntax_Error_Imports",
+                        /*skipDestructiveCodeActions*/ false,
+                        {
+                            path: "/test.ts",
+                            content: `
+import { F1, F2 class class class; } from "lib";
+import * as NS from "lib";
+class class class;
+import D from "lib";
+
+D;
+`,
+                        },
+                        libFile);
+                    });
+
+                it("doesn't return any changes when the text would be identical", () => {
+                    const testFile = {
+                        path: "/a.ts",
+                        content: `import { f } from 'foo';\nf();`
+                    };
+                    const languageService = makeLanguageService(testFile);
+                    const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                    assert.isEmpty(changes);
+                });
+
             testOrganizeImports("Unused_All",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -334,16 +466,20 @@ import D from "lib";
                 },
                 libFile);
 
-            testOrganizeImports("Unused_Empty",
-                {
+            it("Unused_Empty", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { } from "lib";
 `,
-                },
-                libFile);
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("Unused_false_positive_module_augmentation",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.d.ts",
                     content: `
@@ -359,6 +495,7 @@ declare module 'caseless' {
                 });
 
             testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -371,27 +508,36 @@ declare module 'caseless' {
         test(name: KeyType): boolean;
     }
 }`
-                });
+            });
 
-            testOrganizeImports("Unused_false_positive_shorthand_assignment",
-                {
+            it("Unused_false_positive_shorthand_assignment", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
 const o = { x };
 `
-                });
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
-            testOrganizeImports("Unused_false_positive_export_shorthand",
-                {
+            it("Unused_false_positive_export_shorthand", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
 export { x };
 `
-                });
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("MoveToTop",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -408,6 +554,7 @@ D();
 
             /* eslint-disable no-template-curly-in-string */
             testOrganizeImports("MoveToTop_Invalid",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -425,7 +572,21 @@ D();
                 libFile);
             /* eslint-enable no-template-curly-in-string */
 
+            testOrganizeImports("TypeOnly",
+                /*skipDestructiveCodeActions*/ false,
+                {
+                    path: "/test.ts",
+                    content: `
+import { X } from "lib";
+import type Y from "lib";
+import { Z } from "lib";
+import type { A, B } from "lib";
+
+export { A, B, X, Y, Z };`
+                });
+
             testOrganizeImports("CoalesceMultipleModules",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -440,6 +601,7 @@ a + b + c + d;
                 { path: "/lib2.ts", content: "export const a = 3, c = 4;" });
 
             testOrganizeImports("CoalesceTrivia",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -453,6 +615,7 @@ F2();
                 libFile);
 
             testOrganizeImports("SortTrivia",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -464,6 +627,7 @@ F2();
                 { path: "/lib2.ts", content: "" });
 
             testOrganizeImports("UnusedTrivia1",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -473,6 +637,7 @@ F2();
                 libFile);
 
             testOrganizeImports("UnusedTrivia2",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -484,6 +649,7 @@ F1();
                 libFile);
 
             testOrganizeImports("UnusedHeaderComment",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -494,6 +660,7 @@ import { F1 } from "lib";
                 libFile);
 
             testOrganizeImports("SortHeaderComment",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -505,7 +672,25 @@ import "lib1";
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
 
+                testOrganizeImports("SortComments",
+                /*skipDestructiveCodeActions*/ false,
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib3";
+// Comment2
+import "lib2";
+// Comment1
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" },
+                { path: "/lib3.ts", content: "" });
+
             testOrganizeImports("AmbientModule",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -521,6 +706,7 @@ declare module "mod" {
                 libFile);
 
             testOrganizeImports("TopLevelAndAmbientModule",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -543,6 +729,7 @@ D();
                 libFile);
 
             testOrganizeImports("JsxFactoryUsedJsx",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.jsx",
                     content: `
@@ -554,6 +741,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUsedJs",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.js",
                     content: `
@@ -565,6 +753,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUsedTsx",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `
@@ -578,6 +767,7 @@ import { React, Other } from "react";
             // TS files are not JSX contexts, so the parser does not treat
             // `<div/>` as a JSX element.
             testOrganizeImports("JsxFactoryUsedTs",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -589,6 +779,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUnusedJsx",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.jsx",
                     content: `
@@ -600,6 +791,7 @@ import { React, Other } from "react";
             // Note: Since the file extension does not end with "x", the jsx compiler option
             // will not be enabled.  The import should be retained regardless.
             testOrganizeImports("JsxFactoryUnusedJs",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.js",
                     content: `
@@ -609,6 +801,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUnusedTsx",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `
@@ -618,6 +811,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxFactoryUnusedTs",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.ts",
                     content: `
@@ -627,6 +821,7 @@ import { React, Other } from "react";
                 reactLibFile);
 
             testOrganizeImports("JsxPragmaTsx",
+                /*skipDestructiveCodeActions*/ false,
                 {
                     path: "/test.tsx",
                     content: `/** @jsx jsx */
@@ -650,6 +845,25 @@ export namespace React {
     interface FunctionComponent {
     }
 }
+`
+                }
+            );
+
+            testOrganizeImports("JsxFragmentPragmaTsx",
+                /*skipDestructiveCodeActions*/ false,
+                {
+                    path: "/test.tsx",
+                    content: `/** @jsx h */
+/** @jsxFrag frag */
+import { h, frag } from "@foo/core";
+
+const elem = <><div>Foo</div></>;
+`,
+                },
+                {
+                    path: "/@foo/core/index.d.ts",
+                    content: `export function h(): void;
+export function frag(): void;
 `
                 }
             );
@@ -799,17 +1013,17 @@ export * from "lib";
             });
 
             function testOrganizeExports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
-                testOrganizeImports(`${testName}.exports`, testFile, ...otherFiles);
+                testOrganizeImports(`${testName}.exports`, /*skipDestructiveCodeActions*/ true, testFile, ...otherFiles);
             }
 
-            function testOrganizeImports(testName: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
-                it(testName, () => runBaseline(`organizeImports/${testName}.ts`, testFile, ...otherFiles));
+            function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+                it(testName, () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles));
             }
 
-            function runBaseline(baselinePath: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
+            function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
-                const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
+                const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
                 assert.equal(changes.length, 1);
                 assert.equal(changes[0].fileName, testPath);
 

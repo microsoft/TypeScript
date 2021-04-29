@@ -26,6 +26,7 @@ export module Foo {
 //// [recursiveMods.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 var Foo;
 (function (Foo) {
     var C = /** @class */ (function () {

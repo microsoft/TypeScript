@@ -3,7 +3,7 @@ namespace ts.codefix {
     const fixName = "fixCannotFindModule";
     const fixIdInstallTypesPackage = "installTypesPackage";
 
-    const errorCodeCannotFindModule = Diagnostics.Cannot_find_module_0.code;
+    const errorCodeCannotFindModule = Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code;
     const errorCodes = [
         errorCodeCannotFindModule,
         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code,
@@ -44,7 +44,9 @@ namespace ts.codefix {
     }
 
     function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string | undefined {
-        const moduleName = cast(getTokenAtPosition(sourceFile, pos), isStringLiteral).text;
+        const moduleSpecifierText = tryCast(getTokenAtPosition(sourceFile, pos), isStringLiteral);
+        if (!moduleSpecifierText) return undefined;
+        const moduleName = moduleSpecifierText.text;
         const { packageName } = parsePackageName(moduleName);
         return isExternalModuleNameRelative(packageName) ? undefined : packageName;
     }
@@ -52,6 +54,6 @@ namespace ts.codefix {
     function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
         return diagCode === errorCodeCannotFindModule
             ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
-            : (host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined); // TODO: GH#18217
+            : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
     }
 }

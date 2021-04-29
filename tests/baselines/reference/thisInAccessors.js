@@ -43,7 +43,7 @@ var GetterOnly = /** @class */ (function () {
         },
         set: function (val) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return GetterOnly;
@@ -60,7 +60,7 @@ var SetterOnly = /** @class */ (function () {
             var _this = this;
             var fn = function () { return _this; };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SetterOnly;
@@ -79,7 +79,7 @@ var GetterAndSetter = /** @class */ (function () {
             var _this = this;
             var fn = function () { return _this; };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return GetterAndSetter;

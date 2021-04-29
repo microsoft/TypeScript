@@ -4,6 +4,12 @@ class Test {
     p2 = this.p1;
     p3 = this.p4;
     p4 = 0;
+    p5?: number;
+
+    p6?: string;
+    p7 = {
+        hello: (this.p6 = "string"),
+    };
 
     directlyAssigned: any = this.directlyAssigned;
 
@@ -29,6 +35,8 @@ class Test {
 
     withinClassDeclarationExtension: any = (class extends this.withinClassDeclarationExtension { });
 
+    fromOptional = this.p5;
+
     // These error cases are ignored (not checked by control flow analysis)
 
     assignedByArrowFunction: any = (() => this.assignedByFunction)();
@@ -44,10 +52,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -61,6 +71,9 @@ var Test = /** @class */ (function () {
         this.p2 = this.p1;
         this.p3 = this.p4;
         this.p4 = 0;
+        this.p7 = {
+            hello: (this.p6 = "string"),
+        };
         this.directlyAssigned = this.directlyAssigned;
         this.withinArrowFunction = function () { return _this.withinArrowFunction; };
         this.withinFunction = function () {
@@ -74,14 +87,14 @@ var Test = /** @class */ (function () {
                 get: function () {
                     return true;
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             }),
             _b);
         this.withinObjectLiteralSetterName = (_c = {},
             Object.defineProperty(_c, this.withinObjectLiteralSetterName, {
                 set: function (_) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             }),
             _c);
@@ -92,6 +105,7 @@ var Test = /** @class */ (function () {
             }
             return class_1;
         }(this.withinClassDeclarationExtension)));
+        this.fromOptional = this.p5;
         // These error cases are ignored (not checked by control flow analysis)
         this.assignedByArrowFunction = (function () { return _this.assignedByFunction; })();
         this.assignedByFunction = (function () {

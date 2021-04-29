@@ -78,7 +78,7 @@ namespace ts.CallHierarchy {
         if (isSourceFile(node)) return node;
         if (isNamedDeclaration(node)) return node.name;
         if (isConstNamedExpression(node)) return node.parent.name;
-        return Debug.assertDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
+        return Debug.checkDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
     }
 
     function isDefaultModifier(node: Node) {
@@ -105,7 +105,7 @@ namespace ts.CallHierarchy {
         }
 
         const declName = isConstNamedExpression(node) ? node.parent.name :
-            Debug.assertDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
+            Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
         let text =
             isIdentifier(declName) ? idText(declName) :
@@ -127,6 +127,31 @@ namespace ts.CallHierarchy {
             text = usingSingleLineStringWriter(writer => printer.writeNode(EmitHint.Unspecified, node, node.getSourceFile(), writer));
         }
         return { text, pos: declName.getStart(), end: declName.getEnd() };
+    }
+
+    function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): string | undefined {
+        if (isConstNamedExpression(node)) {
+            if (isModuleBlock(node.parent.parent.parent.parent) && isIdentifier(node.parent.parent.parent.parent.parent.name)) {
+                return node.parent.parent.parent.parent.parent.name.getText();
+            }
+            return;
+        }
+
+        switch (node.kind) {
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                    return getAssignedName(node.parent)?.getText();
+                }
+                return getNameOfDeclaration(node.parent)?.getText();
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+                if (isModuleBlock(node.parent) && isIdentifier(node.parent.parent.name)) {
+                    return node.parent.parent.name.getText();
+                }
+        }
     }
 
     /** Finds the implementation of a function-like declaration, if one exists. */
@@ -156,7 +181,7 @@ namespace ts.CallHierarchy {
             const indices = indicesOf(symbol.declarations);
             const keys = map(symbol.declarations, decl => ({ file: decl.getSourceFile().fileName, pos: decl.pos }));
             indices.sort((a, b) => compareStringsCaseSensitive(keys[a].file, keys[b].file) || keys[a].pos - keys[b].pos);
-            const sortedDeclarations = map(indices, i => symbol.declarations[i]);
+            const sortedDeclarations = map(indices, i => symbol.declarations![i]);
             let lastDecl: CallHierarchyDeclaration | undefined;
             for (const decl of sortedDeclarations) {
                 if (isValidCallHierarchyDeclaration(decl)) {
@@ -224,6 +249,10 @@ namespace ts.CallHierarchy {
                 }
                 return undefined;
             }
+            // #39453
+            if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                return location.initializer;
+            }
             if (!followingSymbol) {
                 let symbol = typeChecker.getSymbolAtLocation(location);
                 if (symbol) {
@@ -245,10 +274,12 @@ namespace ts.CallHierarchy {
     export function createCallHierarchyItem(program: Program, node: CallHierarchyDeclaration): CallHierarchyItem {
         const sourceFile = node.getSourceFile();
         const name = getCallHierarchyItemName(program, node);
+        const containerName = getCallHierarchItemContainerName(node);
         const kind = getNodeKind(node);
+        const kindModifiers = getNodeModifiers(node);
         const span = createTextSpanFromBounds(skipTrivia(sourceFile.text, node.getFullStart(), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true), node.getEnd());
         const selectionSpan = createTextSpanFromBounds(name.pos, name.end);
-        return { file: sourceFile.fileName, kind, name: name.text, span, selectionSpan };
+        return { file: sourceFile.fileName, kind, kindModifiers, name: name.text, containerName, span, selectionSpan };
     }
 
     function isDefined<T>(x: T): x is NonNullable<T> {
@@ -260,22 +291,24 @@ namespace ts.CallHierarchy {
         range: TextRange;
     }
 
-    function convertEntryToCallSite(entry: FindAllReferences.Entry, _originalNode: Node, typeChecker: TypeChecker): CallSite | undefined {
+    function convertEntryToCallSite(entry: FindAllReferences.Entry): CallSite | undefined {
         if (entry.kind === FindAllReferences.EntryKind.Node) {
-            if (isCallOrNewExpressionTarget(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isTaggedTemplateTag(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isDecoratorTarget(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isJsxOpeningLikeElementTagName(entry.node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
-                || isRightSideOfPropertyAccess(entry.node)
-                || isArgumentExpressionOfElementAccess(entry.node)) {
-                const ancestor = findAncestor(entry.node, isValidCallHierarchyDeclaration) || entry.node.getSourceFile();
-                return { declaration: firstOrOnly(findImplementationOrAllInitialDeclarations(typeChecker, ancestor)), range: createTextRangeFromNode(entry.node, entry.node.getSourceFile()) };
+            const { node } = entry;
+            if (isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isTaggedTemplateTag(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isDecoratorTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isJsxOpeningLikeElementTagName(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+                || isRightSideOfPropertyAccess(node)
+                || isArgumentExpressionOfElementAccess(node)) {
+                const sourceFile = node.getSourceFile();
+                const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) || sourceFile;
+                return { declaration: ancestor, range: createTextRangeFromNode(node, sourceFile) };
             }
         }
     }
 
     function getCallSiteGroupKey(entry: CallSite) {
-        return "" + getNodeId(entry.declaration);
+        return getNodeId(entry.declaration);
     }
 
     function createCallHierarchyIncomingCall(from: CallHierarchyItem, fromSpans: TextSpan[]): CallHierarchyIncomingCall {
@@ -293,7 +326,7 @@ namespace ts.CallHierarchy {
             return [];
         }
         const location = getCallHierarchyDeclarationReferenceNode(declaration);
-        const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, /*options*/ undefined, convertEntryToCallSite), isDefined);
+        const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, convertEntryToCallSite), isDefined);
         return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries)) : [];
     }
 
@@ -408,7 +441,7 @@ namespace ts.CallHierarchy {
     }
 
     function collectCallSitesOfModuleDeclaration(node: ModuleDeclaration, collect: (node: Node | undefined) => void) {
-        if (!hasModifier(node, ModifierFlags.Ambient) && node.body && isModuleBlock(node.body)) {
+        if (!hasSyntacticModifier(node, ModifierFlags.Ambient) && node.body && isModuleBlock(node.body)) {
             forEach(node.body.statements, collect);
         }
     }

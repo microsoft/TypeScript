@@ -1,4 +1,4 @@
-/a.ts(1,21): error TS2307: Cannot find module 'foo'.
+/a.ts(1,21): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 
 
 ==== /tsconfig.json (0 errors) ====
@@ -14,5 +14,5 @@
 ==== /a.ts (1 errors) ====
     import { foo } from "foo";
                         ~~~~~
-!!! error TS2307: Cannot find module 'foo'.
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
     

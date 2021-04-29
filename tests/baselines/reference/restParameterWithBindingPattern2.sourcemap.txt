@@ -61,22 +61,28 @@ sourceFile:restParameterWithBindingPattern2.ts
 >>>    var a = _a[0], b = _a[1];
 1 >^^^^
 2 >    ^^^^
-3 >        ^^^^^^^^^
-4 >                 ^^
-5 >                   ^^^^^^^^^
-6 >                            ^
+3 >        ^
+4 >         ^^^^^^^^
+5 >                 ^^
+6 >                   ^
+7 >                    ^^^^^^^^
+8 >                            ^
 1 >
 2 >    ...[
 3 >        a
-4 >                 , 
-5 >                   b
-6 >                            ]
+4 >         
+5 >                 , 
+6 >                   b
+7 >                    
+8 >                            ]
 1 >Emitted(6, 5) Source(1, 12) + SourceIndex(0)
 2 >Emitted(6, 9) Source(1, 16) + SourceIndex(0)
-3 >Emitted(6, 18) Source(1, 17) + SourceIndex(0)
-4 >Emitted(6, 20) Source(1, 19) + SourceIndex(0)
-5 >Emitted(6, 29) Source(1, 20) + SourceIndex(0)
-6 >Emitted(6, 30) Source(1, 21) + SourceIndex(0)
+3 >Emitted(6, 10) Source(1, 17) + SourceIndex(0)
+4 >Emitted(6, 18) Source(1, 17) + SourceIndex(0)
+5 >Emitted(6, 20) Source(1, 19) + SourceIndex(0)
+6 >Emitted(6, 21) Source(1, 20) + SourceIndex(0)
+7 >Emitted(6, 29) Source(1, 20) + SourceIndex(0)
+8 >Emitted(6, 30) Source(1, 21) + SourceIndex(0)
 ---
 >>>}
 1 >

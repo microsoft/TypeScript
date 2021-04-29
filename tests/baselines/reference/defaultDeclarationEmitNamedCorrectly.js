@@ -18,6 +18,7 @@ export default class MyComponent {
 //// [defaultDeclarationEmitNamedCorrectly.js]
 "use strict";
 exports.__esModule = true;
+exports.make = void 0;
 function make(x) {
     return null;
 }

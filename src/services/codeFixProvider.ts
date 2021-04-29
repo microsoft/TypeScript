@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
-    const fixIdToRegistration = createMap<CodeFixRegistration>();
+    const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
     export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
     function diagnosticToString(diag: DiagnosticAndArguments): string {
@@ -16,6 +16,10 @@ namespace ts.codefix {
 
     export function createCodeFixAction(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId: {}, fixAllDescription: DiagnosticAndArguments, command?: CodeActionCommand): CodeFixAction {
         return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, diagnosticToString(fixAllDescription), command);
+    }
+
+    export function createCodeFixActionMaybeFixAll(fixName: string, changes: FileTextChanges[], description: DiagnosticAndArguments, fixId?: {}, fixAllDescription?: DiagnosticAndArguments, command?: CodeActionCommand) {
+        return createCodeFixActionWorker(fixName, diagnosticToString(description), changes, fixId, fixAllDescription && diagnosticToString(fixAllDescription), command);
     }
 
     function createCodeFixActionWorker(fixName: string, description: string, changes: FileTextChanges[], fixId?: {}, fixAllDescription?: string, command?: CodeActionCommand): CodeFixAction {
@@ -90,6 +94,10 @@ namespace ts.codefix {
     }
 
     function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixContextBase) {
-        return program.getSemanticDiagnostics(sourceFile, cancellationToken).concat(computeSuggestionDiagnostics(sourceFile, program, cancellationToken));
+        return [
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
+            ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
+        ];
     }
 }

@@ -1,0 +1,48 @@
+=== tests/cases/compiler/typeGuardConstructorNarrowAny.ts ===
+// Narrowing any to primitives
+let var1: any;
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+
+if (var1.constructor === String) {
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 5 more)
+
+    var1; // String
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+}
+if (var1.constructor === Number) {
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var1; // Number
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+}
+if (var1.constructor === Boolean) {
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var1; // Boolean
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+}
+if (var1.constructor === Array) {
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+    var1; // any[]
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+}
+if (var1.constructor === Symbol) {
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    var1; // Symbol
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+}
+if (var1.constructor === BigInt) {
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+    var1; // BigInt
+>var1 : Symbol(var1, Decl(typeGuardConstructorNarrowAny.ts, 1, 3))
+}
+

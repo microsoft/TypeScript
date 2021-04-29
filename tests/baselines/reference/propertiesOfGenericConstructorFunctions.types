@@ -13,16 +13,16 @@ function Multimap(ik, iv) {
     /** @type {{ [s: string]: V }} */
     this._map = {};
 >this._map = {} : {}
->this._map : any
->this : any
->_map : any
+>this._map : { [s: string]: V; }
+>this : this
+>_map : { [s: string]: V; }
 >{} : {}
 
     // without type annotation
     this._map2 = { [ik]: iv };
 >this._map2 = { [ik]: iv } : { [x: string]: V; }
 >this._map2 : any
->this : any
+>this : this
 >_map2 : any
 >{ [ik]: iv } : { [x: string]: V; }
 >[ik] : V
@@ -94,16 +94,16 @@ function Cp(t) {
 
     this.x = 1
 >this.x = 1 : 1
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >1 : 1
 
     this.y = t
 >this.y = t : T
->this.y : T
+>this.y : any
 >this : this
->y : T
+>y : any
 >t : T
 }
 Cp.prototype = {

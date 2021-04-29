@@ -13,9 +13,9 @@
 
         this._map = {};
 >this._map = {} : {}
->this._map : {}
+>this._map : any
 >this : this
->_map : {}
+>_map : any
 >{} : {}
 
         this._map

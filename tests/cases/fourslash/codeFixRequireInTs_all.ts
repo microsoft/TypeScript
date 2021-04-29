@@ -3,11 +3,15 @@
 // @Filename: /a.ts
 ////const a = [|require("a")|];
 ////const b = [|require("b")|];
+////const { c } = [|require("c")|];
+////const { d } = [|require("d")|];
 
 verify.codeFixAll({
     fixId: "requireInTs",
-    fixAllDescription: "Convert all 'require' to 'import'",
+    fixAllDescription: ts.Diagnostics.Convert_all_require_to_import.message,
     newFileContent:
 `import a = require("a");
-import b = require("b");`,
+import b = require("b");
+import { c } from "c";
+import { d } from "d";`,
 });

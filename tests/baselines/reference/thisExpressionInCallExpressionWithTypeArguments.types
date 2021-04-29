@@ -4,15 +4,15 @@ class C {
 
     public foo() { [1,2,3].map<any,any>((x) => { return this; })}
 >foo : () => void
->[1,2,3].map<any,any>((x) => { return this; }) : any
+>[1,2,3].map<any,any>((x) => { return this; }) : any[]
 >[1,2,3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >[1,2,3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->(x) => { return this; } : (x: any) => this
->x : any
+>(x) => { return this; } : (x: number) => this
+>x : number
 >this : this
 }
 

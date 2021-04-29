@@ -31,9 +31,9 @@ class Animal {
 
         console.log(this._sound)
 >console.log(this._sound) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this._sound : string
 >this : this
 >_sound : string

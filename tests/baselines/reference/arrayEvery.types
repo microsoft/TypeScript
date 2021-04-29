@@ -1,0 +1,32 @@
+=== tests/cases/compiler/arrayEvery.ts ===
+const foo: (number | string)[] = ['aaa'];
+>foo : (string | number)[]
+>['aaa'] : string[]
+>'aaa' : "aaa"
+
+const isString = (x: unknown): x is string => typeof x === 'string';
+>isString : (x: unknown) => x is string
+>(x: unknown): x is string => typeof x === 'string' : (x: unknown) => x is string
+>x : unknown
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>'string' : "string"
+
+if (foo.every(isString)) {
+>foo.every(isString) : boolean
+>foo.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+>foo : (string | number)[]
+>every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+>isString : (x: unknown) => x is string
+
+  foo[0].slice(0);
+>foo[0].slice(0) : string
+>foo[0].slice : (start?: number, end?: number) => string
+>foo[0] : string
+>foo : string[]
+>0 : 0
+>slice : (start?: number, end?: number) => string
+>0 : 0
+}
+

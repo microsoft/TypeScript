@@ -1,0 +1,61 @@
+=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+export = React;
+>React : any
+
+declare namespace React {
+    export type Component<T = any, U = {}, V = {}> = { x: T, y: U, z: V };
+>Component : Component<T, U, V>
+>x : T
+>y : U
+>z : V
+
+    export interface DOMAttributes<T> { }
+}
+=== tests/cases/compiler/node_modules/@emotion/core/index.d.ts ===
+import {
+    Component
+>Component : any
+
+} from 'react'
+export {};
+
+declare module 'react' {
+>'react' : error
+
+    interface DOMAttributes<T> {
+        css?: any
+>css : any
+    }
+}
+
+=== tests/cases/compiler/src/get-comp.ts ===
+import {Component} from 'react';
+>Component : any
+
+export function getComp(): Component {
+>getComp : () => Component
+
+    return {} as any as Component
+>{} as any as Component : Component<any, {}, {}>
+>{} as any : any
+>{} : {}
+}
+=== tests/cases/compiler/src/inferred-comp-export.ts ===
+import { getComp } from "./get-comp";
+>getComp : () => import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>
+
+// this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
+// This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
+export const obj = {
+>obj : { comp: import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>; }
+>{    comp: getComp()} : { comp: import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>; }
+
+    comp: getComp()
+>comp : import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>
+>getComp() : import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>
+>getComp : () => import("tests/cases/compiler/node_modules/@types/react/index").Component<any, {}, {}>
+}
+=== tests/cases/compiler/src/some-other-file.ts ===
+export * from '@emotion/core';
+No type information for this code.
+No type information for this code.

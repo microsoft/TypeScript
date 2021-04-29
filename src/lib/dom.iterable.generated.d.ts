@@ -9,10 +9,6 @@ interface AudioParam {
 interface AudioParamMap extends ReadonlyMap<string, AudioParam> {
 }
 
-interface AudioTrackList {
-    [Symbol.iterator](): IterableIterator<AudioTrack>;
-}
-
 interface BaseAudioContext {
     createIIRFilter(feedforward: Iterable<number>, feedback: Iterable<number>): IIRFilterNode;
     createPeriodicWave(real: Iterable<number>, imag: Iterable<number>, constraints?: PeriodicWaveConstraints): PeriodicWave;
@@ -113,10 +109,17 @@ interface Headers {
     values(): IterableIterator<string>;
 }
 
+interface IDBDatabase {
+    /**
+     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
+     */
+    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
+}
+
 interface IDBObjectStore {
     /**
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-     * 
+     *
      * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createIndex(name: string, keyPath: string | Iterable<string>, options?: IDBIndexParameters): IDBIndex;
@@ -225,7 +228,7 @@ interface SpeechRecognitionResultList {
 }
 
 interface StyleSheetList {
-    [Symbol.iterator](): IterableIterator<StyleSheet>;
+    [Symbol.iterator](): IterableIterator<CSSStyleSheet>;
 }
 
 interface TextTrackCueList {
@@ -260,16 +263,8 @@ interface VRDisplay {
     requestPresent(layers: Iterable<VRLayer>): Promise<void>;
 }
 
-interface VideoTrackList {
-    [Symbol.iterator](): IterableIterator<VideoTrack>;
-}
-
 interface WEBGL_draw_buffers {
     drawBuffersWEBGL(buffers: Iterable<GLenum>): void;
-}
-
-interface WebAuthentication {
-    makeCredential(accountInformation: Account, cryptoParameters: Iterable<ScopedCredentialParameters>, attestationChallenge: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null, options?: ScopedCredentialOptions): Promise<ScopedCredentialInfo>;
 }
 
 interface WebGL2RenderingContextBase {

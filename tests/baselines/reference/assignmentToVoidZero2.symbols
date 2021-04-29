@@ -1,0 +1,56 @@
+=== tests/cases/conformance/salsa/assignmentToVoidZero2.js ===
+exports.j = 1;
+>exports.j : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
+>exports : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
+>j : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
+
+exports.k = void 0;
+>exports : Symbol("tests/cases/conformance/salsa/assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
+
+var o = {}
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))
+
+o.x = 1
+>o.x : Symbol(o.x, Decl(assignmentToVoidZero2.js, 2, 10))
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))
+>x : Symbol(o.x, Decl(assignmentToVoidZero2.js, 2, 10))
+
+o.y = void 0
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))
+
+o.x + o.y
+>o.x : Symbol(o.x, Decl(assignmentToVoidZero2.js, 2, 10))
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))
+>x : Symbol(o.x, Decl(assignmentToVoidZero2.js, 2, 10))
+>o : Symbol(o, Decl(assignmentToVoidZero2.js, 2, 3), Decl(assignmentToVoidZero2.js, 2, 10))
+
+function C() {
+>C : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
+
+    this.p = 1
+>this.p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
+>this : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
+>p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
+
+    this.q = void 0
+>this : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
+}
+var c = new C()
+>c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
+>C : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
+
+c.p + c.q
+>c.p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
+>c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
+>p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
+>c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))
+
+=== tests/cases/conformance/salsa/importer.js ===
+import { j, k } from './assignmentToVoidZero2'
+>j : Symbol(j, Decl(importer.js, 0, 8))
+>k : Symbol(k, Decl(importer.js, 0, 11))
+
+j + k
+>j : Symbol(j, Decl(importer.js, 0, 8))
+>k : Symbol(k, Decl(importer.js, 0, 11))
+

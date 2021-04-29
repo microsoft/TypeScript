@@ -14,22 +14,21 @@ class Derived extends Base {
 
 
 //// [privateNameFieldDerivedClasses.js]
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _prop;
+var _Base_prop;
 class Base {
     constructor() {
-        _prop.set(this, 123);
+        _Base_prop.set(this, 123);
     }
     static method(x) {
-        console.log(__classPrivateFieldGet(x, _prop));
+        console.log(__classPrivateFieldGet(x, _Base_prop, "f"));
     }
 }
-_prop = new WeakMap();
+_Base_prop = new WeakMap();
 class Derived extends Base {
     static method(x) {
         console.log(x.);

@@ -13,8 +13,14 @@ namespace ts.SmartSelectionRange {
                 const prevNode: Node | undefined = children[i - 1];
                 const node: Node = children[i];
                 const nextNode: Node | undefined = children[i + 1];
-                if (node.getStart(sourceFile) > pos) {
+
+                if (getTokenPosOfNode(node, sourceFile, /*includeJsDoc*/ true) > pos) {
                     break outer;
+                }
+
+                const comment = singleOrUndefined(getTrailingCommentRanges(sourceFile.text, node.end));
+                if (comment && comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                    pushSelectionCommentRange(comment.pos, comment.end);
                 }
 
                 if (positionShouldSnapToNode(sourceFile, pos, node)) {
@@ -23,14 +29,14 @@ namespace ts.SmartSelectionRange {
                     //    of things that should be considered independently.
                     // 3. A VariableStatement’s children are just a VaraiableDeclarationList and a semicolon.
                     // 4. A lone VariableDeclaration in a VaraibleDeclaration feels redundant with the VariableStatement.
-                    //
                     // Dive in without pushing a selection range.
                     if (isBlock(node)
                         || isTemplateSpan(node) || isTemplateHead(node) || isTemplateTail(node)
                         || prevNode && isTemplateHead(prevNode)
                         || isVariableDeclarationList(node) && isVariableStatement(parentNode)
                         || isSyntaxList(node) && isVariableDeclarationList(parentNode)
-                        || isVariableDeclaration(node) && isSyntaxList(parentNode) && children.length === 1) {
+                        || isVariableDeclaration(node) && isSyntaxList(parentNode) && children.length === 1
+                        || isJSDocTypeExpression(node) || isJSDocSignature(node) || isJSDocTypeLiteral(node)) {
                         parentNode = node;
                         break;
                     }
@@ -44,16 +50,15 @@ namespace ts.SmartSelectionRange {
 
                     // Blocks with braces, brackets, parens, or JSX tags on separate lines should be
                     // selected from open to close, including whitespace but not including the braces/etc. themselves.
-                    const isBetweenMultiLineBookends = isSyntaxList(node)
-                        && isListOpener(prevNode)
-                        && isListCloser(nextNode)
+                    const isBetweenMultiLineBookends = isSyntaxList(node) && isListOpener(prevNode) && isListCloser(nextNode)
                         && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
-                    const jsDocCommentStart = hasJSDocNodes(node) && node.jsDoc![0].getStart();
                     const start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
-                    const end = isBetweenMultiLineBookends ? nextNode.getStart() : node.getEnd();
-                    if (isNumber(jsDocCommentStart)) {
-                        pushSelectionRange(jsDocCommentStart, end);
+                    const end = isBetweenMultiLineBookends ? nextNode.getStart() : getEndPos(sourceFile, node);
+
+                    if (hasJSDocNodes(node) && node.jsDoc?.length) {
+                        pushSelectionRange(first(node.jsDoc).getStart(), end);
                     }
+
                     pushSelectionRange(start, end);
 
                     // String literals should have a stop both inside and outside their quotes.
@@ -89,6 +94,16 @@ namespace ts.SmartSelectionRange {
                     selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
                 }
             }
+        }
+
+        function pushSelectionCommentRange(start: number, end: number): void {
+            pushSelectionRange(start, end);
+
+            let pos = start;
+            while (sourceFile.text.charCodeAt(pos) === CharacterCodes.slash) {
+                pos++;
+            }
+            pushSelectionRange(pos, end);
         }
     }
 
@@ -144,7 +159,7 @@ namespace ts.SmartSelectionRange {
         // few keystrokes.
         if (isMappedTypeNode(node)) {
             const [openBraceToken, ...children] = node.getChildren();
-            const closeBraceToken = Debug.assertDefined(children.pop());
+            const closeBraceToken = Debug.checkDefined(children.pop());
             Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
             Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
             // Group `-/+readonly` and `-/+?`
@@ -252,9 +267,7 @@ namespace ts.SmartSelectionRange {
 
     function createSyntaxList(children: Node[]): SyntaxList {
         Debug.assertGreaterThanOrEqual(children.length, 1);
-        const syntaxList = createNode(SyntaxKind.SyntaxList, children[0].pos, last(children).end) as SyntaxList;
-        syntaxList._children = children;
-        return syntaxList;
+        return setTextRangePosEnd(parseNodeFactory.createSyntaxList(children), children[0].pos, last(children).end);
     }
 
     function isListOpener(token: Node | undefined): token is Node {
@@ -271,5 +284,18 @@ namespace ts.SmartSelectionRange {
             || kind === SyntaxKind.CloseBracketToken
             || kind === SyntaxKind.CloseParenToken
             || kind === SyntaxKind.JsxClosingElement;
+    }
+
+    function getEndPos(sourceFile: SourceFile, node: Node): number {
+        switch (node.kind) {
+            case SyntaxKind.JSDocParameterTag:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocThisTag:
+                return sourceFile.getLineEndOfPosition(node.getStart());
+            default:
+                return node.getEnd();
+        }
     }
 }

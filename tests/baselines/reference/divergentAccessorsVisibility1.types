@@ -1,0 +1,818 @@
+=== tests/cases/compiler/divergentAccessorsVisibility1.ts ===
+class Base {
+>Base : Base
+
+    get PublicPublic() { return 0; }
+>PublicPublic : number
+>0 : 0
+
+    set PublicPublic(v) { return; }
+>PublicPublic : number
+>v : number
+
+    get PublicProtected() { return 0; }
+>PublicProtected : number
+>0 : 0
+
+    protected set PublicProtected(v) { return; }
+>PublicProtected : number
+>v : number
+
+    get PublicPrivate() { return 0; }
+>PublicPrivate : number
+>0 : 0
+
+    private set PublicPrivate(v) { return; }
+>PublicPrivate : number
+>v : number
+
+    protected get ProtectedPublic() { return 0; }
+>ProtectedPublic : number
+>0 : 0
+
+    set ProtectedPublic(v) { return; }
+>ProtectedPublic : number
+>v : number
+
+    protected get ProtectedProtected() { return 0; }
+>ProtectedProtected : number
+>0 : 0
+
+    protected set ProtectedProtected(v) { return; }
+>ProtectedProtected : number
+>v : number
+
+    protected get ProtectedPrivate() { return 0; }
+>ProtectedPrivate : number
+>0 : 0
+
+    private set ProtectedPrivate(v) { return; }
+>ProtectedPrivate : number
+>v : number
+
+    private get PrivatePublic() { return 0; }
+>PrivatePublic : number
+>0 : 0
+
+    set PrivatePublic(v) { return; }
+>PrivatePublic : number
+>v : number
+
+    private get PrivateProtected() { return 0; }
+>PrivateProtected : number
+>0 : 0
+
+    protected set PrivateProtected(v) { return; }
+>PrivateProtected : number
+>v : number
+
+    private get PrivatePrivate() { return 0; }
+>PrivatePrivate : number
+>0 : 0
+
+    private set PrivatePrivate(v) { return; }
+>PrivatePrivate : number
+>v : number
+
+    test() {
+>test : () => void
+
+        this.PublicPublic = 0;
+>this.PublicPublic = 0 : 0
+>this.PublicPublic : number
+>this : this
+>PublicPublic : number
+>0 : 0
+
+        this.PublicProtected = 0;
+>this.PublicProtected = 0 : 0
+>this.PublicProtected : number
+>this : this
+>PublicProtected : number
+>0 : 0
+
+        this.PublicPrivate = 0;
+>this.PublicPrivate = 0 : 0
+>this.PublicPrivate : number
+>this : this
+>PublicPrivate : number
+>0 : 0
+
+        this.ProtectedPublic = 0;
+>this.ProtectedPublic = 0 : 0
+>this.ProtectedPublic : number
+>this : this
+>ProtectedPublic : number
+>0 : 0
+
+        this.ProtectedProtected = 0;
+>this.ProtectedProtected = 0 : 0
+>this.ProtectedProtected : number
+>this : this
+>ProtectedProtected : number
+>0 : 0
+
+        this.ProtectedPrivate = 0;
+>this.ProtectedPrivate = 0 : 0
+>this.ProtectedPrivate : number
+>this : this
+>ProtectedPrivate : number
+>0 : 0
+
+        this.PrivatePublic = 0;
+>this.PrivatePublic = 0 : 0
+>this.PrivatePublic : number
+>this : this
+>PrivatePublic : number
+>0 : 0
+
+        this.PrivateProtected = 0;
+>this.PrivateProtected = 0 : 0
+>this.PrivateProtected : number
+>this : this
+>PrivateProtected : number
+>0 : 0
+
+        this.PrivatePrivate = 0;
+>this.PrivatePrivate = 0 : 0
+>this.PrivatePrivate : number
+>this : this
+>PrivatePrivate : number
+>0 : 0
+
+        void this.PublicPublic;
+>void this.PublicPublic : undefined
+>this.PublicPublic : number
+>this : this
+>PublicPublic : number
+
+        void this.PublicProtected;
+>void this.PublicProtected : undefined
+>this.PublicProtected : number
+>this : this
+>PublicProtected : number
+
+        void this.PublicPrivate;
+>void this.PublicPrivate : undefined
+>this.PublicPrivate : number
+>this : this
+>PublicPrivate : number
+
+        void this.ProtectedPublic;
+>void this.ProtectedPublic : undefined
+>this.ProtectedPublic : number
+>this : this
+>ProtectedPublic : number
+
+        void this.ProtectedProtected;
+>void this.ProtectedProtected : undefined
+>this.ProtectedProtected : number
+>this : this
+>ProtectedProtected : number
+
+        void this.ProtectedPrivate;
+>void this.ProtectedPrivate : undefined
+>this.ProtectedPrivate : number
+>this : this
+>ProtectedPrivate : number
+
+        void this.PrivatePublic;
+>void this.PrivatePublic : undefined
+>this.PrivatePublic : number
+>this : this
+>PrivatePublic : number
+
+        void this.PrivateProtected;
+>void this.PrivateProtected : undefined
+>this.PrivateProtected : number
+>this : this
+>PrivateProtected : number
+
+        void this.PrivatePrivate;
+>void this.PrivatePrivate : undefined
+>this.PrivatePrivate : number
+>this : this
+>PrivatePrivate : number
+
+        this.PublicPublic += 0;
+>this.PublicPublic += 0 : number
+>this.PublicPublic : number
+>this : this
+>PublicPublic : number
+>0 : 0
+
+        this.PublicProtected += 0;
+>this.PublicProtected += 0 : number
+>this.PublicProtected : number
+>this : this
+>PublicProtected : number
+>0 : 0
+
+        this.PublicPrivate += 0;
+>this.PublicPrivate += 0 : number
+>this.PublicPrivate : number
+>this : this
+>PublicPrivate : number
+>0 : 0
+
+        this.ProtectedPublic += 0;
+>this.ProtectedPublic += 0 : number
+>this.ProtectedPublic : number
+>this : this
+>ProtectedPublic : number
+>0 : 0
+
+        this.ProtectedProtected += 0;
+>this.ProtectedProtected += 0 : number
+>this.ProtectedProtected : number
+>this : this
+>ProtectedProtected : number
+>0 : 0
+
+        this.ProtectedPrivate += 0;
+>this.ProtectedPrivate += 0 : number
+>this.ProtectedPrivate : number
+>this : this
+>ProtectedPrivate : number
+>0 : 0
+
+        this.PrivatePublic += 0;
+>this.PrivatePublic += 0 : number
+>this.PrivatePublic : number
+>this : this
+>PrivatePublic : number
+>0 : 0
+
+        this.PrivateProtected += 0;
+>this.PrivateProtected += 0 : number
+>this.PrivateProtected : number
+>this : this
+>PrivateProtected : number
+>0 : 0
+
+        this.PrivatePrivate += 0;
+>this.PrivatePrivate += 0 : number
+>this.PrivatePrivate : number
+>this : this
+>PrivatePrivate : number
+>0 : 0
+    }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    test2() {
+>test2 : () => void
+
+        this.PublicPublic = 0;
+>this.PublicPublic = 0 : 0
+>this.PublicPublic : number
+>this : this
+>PublicPublic : number
+>0 : 0
+
+        this.PublicProtected = 0;
+>this.PublicProtected = 0 : 0
+>this.PublicProtected : number
+>this : this
+>PublicProtected : number
+>0 : 0
+
+        this.PublicPrivate = 0;
+>this.PublicPrivate = 0 : 0
+>this.PublicPrivate : number
+>this : this
+>PublicPrivate : number
+>0 : 0
+
+        this.ProtectedPublic = 0;
+>this.ProtectedPublic = 0 : 0
+>this.ProtectedPublic : number
+>this : this
+>ProtectedPublic : number
+>0 : 0
+
+        this.ProtectedProtected = 0;
+>this.ProtectedProtected = 0 : 0
+>this.ProtectedProtected : number
+>this : this
+>ProtectedProtected : number
+>0 : 0
+
+        this.ProtectedPrivate = 0;
+>this.ProtectedPrivate = 0 : 0
+>this.ProtectedPrivate : number
+>this : this
+>ProtectedPrivate : number
+>0 : 0
+
+        this.PrivatePublic = 0;
+>this.PrivatePublic = 0 : 0
+>this.PrivatePublic : number
+>this : this
+>PrivatePublic : number
+>0 : 0
+
+        this.PrivateProtected = 0;
+>this.PrivateProtected = 0 : 0
+>this.PrivateProtected : number
+>this : this
+>PrivateProtected : number
+>0 : 0
+
+        this.PrivatePrivate = 0;
+>this.PrivatePrivate = 0 : 0
+>this.PrivatePrivate : number
+>this : this
+>PrivatePrivate : number
+>0 : 0
+
+        void this.PublicPublic;
+>void this.PublicPublic : undefined
+>this.PublicPublic : number
+>this : this
+>PublicPublic : number
+
+        void this.PublicProtected;
+>void this.PublicProtected : undefined
+>this.PublicProtected : number
+>this : this
+>PublicProtected : number
+
+        void this.PublicPrivate;
+>void this.PublicPrivate : undefined
+>this.PublicPrivate : number
+>this : this
+>PublicPrivate : number
+
+        void this.ProtectedPublic;
+>void this.ProtectedPublic : undefined
+>this.ProtectedPublic : number
+>this : this
+>ProtectedPublic : number
+
+        void this.ProtectedProtected;
+>void this.ProtectedProtected : undefined
+>this.ProtectedProtected : number
+>this : this
+>ProtectedProtected : number
+
+        void this.ProtectedPrivate;
+>void this.ProtectedPrivate : undefined
+>this.ProtectedPrivate : number
+>this : this
+>ProtectedPrivate : number
+
+        void this.PrivatePublic;
+>void this.PrivatePublic : undefined
+>this.PrivatePublic : number
+>this : this
+>PrivatePublic : number
+
+        void this.PrivateProtected;
+>void this.PrivateProtected : undefined
+>this.PrivateProtected : number
+>this : this
+>PrivateProtected : number
+
+        void this.PrivatePrivate;
+>void this.PrivatePrivate : undefined
+>this.PrivatePrivate : number
+>this : this
+>PrivatePrivate : number
+
+        this.PublicPublic += 0;
+>this.PublicPublic += 0 : number
+>this.PublicPublic : number
+>this : this
+>PublicPublic : number
+>0 : 0
+
+        this.PublicProtected += 0;
+>this.PublicProtected += 0 : number
+>this.PublicProtected : number
+>this : this
+>PublicProtected : number
+>0 : 0
+
+        this.PublicPrivate += 0;
+>this.PublicPrivate += 0 : number
+>this.PublicPrivate : number
+>this : this
+>PublicPrivate : number
+>0 : 0
+
+        this.ProtectedPublic += 0;
+>this.ProtectedPublic += 0 : number
+>this.ProtectedPublic : number
+>this : this
+>ProtectedPublic : number
+>0 : 0
+
+        this.ProtectedProtected += 0;
+>this.ProtectedProtected += 0 : number
+>this.ProtectedProtected : number
+>this : this
+>ProtectedProtected : number
+>0 : 0
+
+        this.ProtectedPrivate += 0;
+>this.ProtectedPrivate += 0 : number
+>this.ProtectedPrivate : number
+>this : this
+>ProtectedPrivate : number
+>0 : 0
+
+        this.PrivatePublic += 0;
+>this.PrivatePublic += 0 : number
+>this.PrivatePublic : number
+>this : this
+>PrivatePublic : number
+>0 : 0
+
+        this.PrivateProtected += 0;
+>this.PrivateProtected += 0 : number
+>this.PrivateProtected : number
+>this : this
+>PrivateProtected : number
+>0 : 0
+
+        this.PrivatePrivate += 0;
+>this.PrivatePrivate += 0 : number
+>this.PrivatePrivate : number
+>this : this
+>PrivatePrivate : number
+>0 : 0
+    }
+}
+
+declare const base: Base, deriv: Derived;
+>base : Base
+>deriv : Derived
+
+function fn() {
+>fn : () => void
+
+    base.PublicPublic = 0;
+>base.PublicPublic = 0 : 0
+>base.PublicPublic : number
+>base : Base
+>PublicPublic : number
+>0 : 0
+
+    base.PublicProtected = 0;
+>base.PublicProtected = 0 : 0
+>base.PublicProtected : number
+>base : Base
+>PublicProtected : number
+>0 : 0
+
+    base.PublicPrivate = 0;
+>base.PublicPrivate = 0 : 0
+>base.PublicPrivate : number
+>base : Base
+>PublicPrivate : number
+>0 : 0
+
+    base.ProtectedPublic = 0;
+>base.ProtectedPublic = 0 : 0
+>base.ProtectedPublic : number
+>base : Base
+>ProtectedPublic : number
+>0 : 0
+
+    base.ProtectedProtected = 0;
+>base.ProtectedProtected = 0 : 0
+>base.ProtectedProtected : number
+>base : Base
+>ProtectedProtected : number
+>0 : 0
+
+    base.ProtectedPrivate = 0;
+>base.ProtectedPrivate = 0 : 0
+>base.ProtectedPrivate : number
+>base : Base
+>ProtectedPrivate : number
+>0 : 0
+
+    base.PrivatePublic = 0;
+>base.PrivatePublic = 0 : 0
+>base.PrivatePublic : number
+>base : Base
+>PrivatePublic : number
+>0 : 0
+
+    base.PrivateProtected = 0;
+>base.PrivateProtected = 0 : 0
+>base.PrivateProtected : number
+>base : Base
+>PrivateProtected : number
+>0 : 0
+
+    base.PrivatePrivate = 0;
+>base.PrivatePrivate = 0 : 0
+>base.PrivatePrivate : number
+>base : Base
+>PrivatePrivate : number
+>0 : 0
+
+    void base.PublicPublic;
+>void base.PublicPublic : undefined
+>base.PublicPublic : number
+>base : Base
+>PublicPublic : number
+
+    void base.PublicProtected;
+>void base.PublicProtected : undefined
+>base.PublicProtected : number
+>base : Base
+>PublicProtected : number
+
+    void base.PublicPrivate;
+>void base.PublicPrivate : undefined
+>base.PublicPrivate : number
+>base : Base
+>PublicPrivate : number
+
+    void base.ProtectedPublic;
+>void base.ProtectedPublic : undefined
+>base.ProtectedPublic : number
+>base : Base
+>ProtectedPublic : number
+
+    void base.ProtectedProtected;
+>void base.ProtectedProtected : undefined
+>base.ProtectedProtected : number
+>base : Base
+>ProtectedProtected : number
+
+    void base.ProtectedPrivate;
+>void base.ProtectedPrivate : undefined
+>base.ProtectedPrivate : number
+>base : Base
+>ProtectedPrivate : number
+
+    void base.PrivatePublic;
+>void base.PrivatePublic : undefined
+>base.PrivatePublic : number
+>base : Base
+>PrivatePublic : number
+
+    void base.PrivateProtected;
+>void base.PrivateProtected : undefined
+>base.PrivateProtected : number
+>base : Base
+>PrivateProtected : number
+
+    void base.PrivatePrivate;
+>void base.PrivatePrivate : undefined
+>base.PrivatePrivate : number
+>base : Base
+>PrivatePrivate : number
+
+    base.PublicPublic += 0;
+>base.PublicPublic += 0 : number
+>base.PublicPublic : number
+>base : Base
+>PublicPublic : number
+>0 : 0
+
+    base.PublicProtected += 0;
+>base.PublicProtected += 0 : number
+>base.PublicProtected : number
+>base : Base
+>PublicProtected : number
+>0 : 0
+
+    base.PublicPrivate += 0;
+>base.PublicPrivate += 0 : number
+>base.PublicPrivate : number
+>base : Base
+>PublicPrivate : number
+>0 : 0
+
+    base.ProtectedPublic += 0;
+>base.ProtectedPublic += 0 : number
+>base.ProtectedPublic : number
+>base : Base
+>ProtectedPublic : number
+>0 : 0
+
+    base.ProtectedProtected += 0;
+>base.ProtectedProtected += 0 : number
+>base.ProtectedProtected : number
+>base : Base
+>ProtectedProtected : number
+>0 : 0
+
+    base.ProtectedPrivate += 0;
+>base.ProtectedPrivate += 0 : number
+>base.ProtectedPrivate : number
+>base : Base
+>ProtectedPrivate : number
+>0 : 0
+
+    base.PrivatePublic += 0;
+>base.PrivatePublic += 0 : number
+>base.PrivatePublic : number
+>base : Base
+>PrivatePublic : number
+>0 : 0
+
+    base.PrivateProtected += 0;
+>base.PrivateProtected += 0 : number
+>base.PrivateProtected : number
+>base : Base
+>PrivateProtected : number
+>0 : 0
+
+    base.PrivatePrivate += 0;
+>base.PrivatePrivate += 0 : number
+>base.PrivatePrivate : number
+>base : Base
+>PrivatePrivate : number
+>0 : 0
+
+    deriv.PublicPublic = 0;
+>deriv.PublicPublic = 0 : 0
+>deriv.PublicPublic : number
+>deriv : Derived
+>PublicPublic : number
+>0 : 0
+
+    deriv.PublicProtected = 0;
+>deriv.PublicProtected = 0 : 0
+>deriv.PublicProtected : number
+>deriv : Derived
+>PublicProtected : number
+>0 : 0
+
+    deriv.PublicPrivate = 0;
+>deriv.PublicPrivate = 0 : 0
+>deriv.PublicPrivate : number
+>deriv : Derived
+>PublicPrivate : number
+>0 : 0
+
+    deriv.ProtectedPublic = 0;
+>deriv.ProtectedPublic = 0 : 0
+>deriv.ProtectedPublic : number
+>deriv : Derived
+>ProtectedPublic : number
+>0 : 0
+
+    deriv.ProtectedProtected = 0;
+>deriv.ProtectedProtected = 0 : 0
+>deriv.ProtectedProtected : number
+>deriv : Derived
+>ProtectedProtected : number
+>0 : 0
+
+    deriv.ProtectedPrivate = 0;
+>deriv.ProtectedPrivate = 0 : 0
+>deriv.ProtectedPrivate : number
+>deriv : Derived
+>ProtectedPrivate : number
+>0 : 0
+
+    deriv.PrivatePublic = 0;
+>deriv.PrivatePublic = 0 : 0
+>deriv.PrivatePublic : number
+>deriv : Derived
+>PrivatePublic : number
+>0 : 0
+
+    deriv.PrivateProtected = 0;
+>deriv.PrivateProtected = 0 : 0
+>deriv.PrivateProtected : number
+>deriv : Derived
+>PrivateProtected : number
+>0 : 0
+
+    deriv.PrivatePrivate = 0;
+>deriv.PrivatePrivate = 0 : 0
+>deriv.PrivatePrivate : number
+>deriv : Derived
+>PrivatePrivate : number
+>0 : 0
+
+    void deriv.PublicPublic;
+>void deriv.PublicPublic : undefined
+>deriv.PublicPublic : number
+>deriv : Derived
+>PublicPublic : number
+
+    void deriv.PublicProtected;
+>void deriv.PublicProtected : undefined
+>deriv.PublicProtected : number
+>deriv : Derived
+>PublicProtected : number
+
+    void deriv.PublicPrivate;
+>void deriv.PublicPrivate : undefined
+>deriv.PublicPrivate : number
+>deriv : Derived
+>PublicPrivate : number
+
+    void deriv.ProtectedPublic;
+>void deriv.ProtectedPublic : undefined
+>deriv.ProtectedPublic : number
+>deriv : Derived
+>ProtectedPublic : number
+
+    void deriv.ProtectedProtected;
+>void deriv.ProtectedProtected : undefined
+>deriv.ProtectedProtected : number
+>deriv : Derived
+>ProtectedProtected : number
+
+    void deriv.ProtectedPrivate;
+>void deriv.ProtectedPrivate : undefined
+>deriv.ProtectedPrivate : number
+>deriv : Derived
+>ProtectedPrivate : number
+
+    void deriv.PrivatePublic;
+>void deriv.PrivatePublic : undefined
+>deriv.PrivatePublic : number
+>deriv : Derived
+>PrivatePublic : number
+
+    void deriv.PrivateProtected;
+>void deriv.PrivateProtected : undefined
+>deriv.PrivateProtected : number
+>deriv : Derived
+>PrivateProtected : number
+
+    void deriv.PrivatePrivate;
+>void deriv.PrivatePrivate : undefined
+>deriv.PrivatePrivate : number
+>deriv : Derived
+>PrivatePrivate : number
+
+    deriv.PublicPublic += 0;
+>deriv.PublicPublic += 0 : number
+>deriv.PublicPublic : number
+>deriv : Derived
+>PublicPublic : number
+>0 : 0
+
+    deriv.PublicProtected += 0;
+>deriv.PublicProtected += 0 : number
+>deriv.PublicProtected : number
+>deriv : Derived
+>PublicProtected : number
+>0 : 0
+
+    deriv.PublicPrivate += 0;
+>deriv.PublicPrivate += 0 : number
+>deriv.PublicPrivate : number
+>deriv : Derived
+>PublicPrivate : number
+>0 : 0
+
+    deriv.ProtectedPublic += 0;
+>deriv.ProtectedPublic += 0 : number
+>deriv.ProtectedPublic : number
+>deriv : Derived
+>ProtectedPublic : number
+>0 : 0
+
+    deriv.ProtectedProtected += 0;
+>deriv.ProtectedProtected += 0 : number
+>deriv.ProtectedProtected : number
+>deriv : Derived
+>ProtectedProtected : number
+>0 : 0
+
+    deriv.ProtectedPrivate += 0;
+>deriv.ProtectedPrivate += 0 : number
+>deriv.ProtectedPrivate : number
+>deriv : Derived
+>ProtectedPrivate : number
+>0 : 0
+
+    deriv.PrivatePublic += 0;
+>deriv.PrivatePublic += 0 : number
+>deriv.PrivatePublic : number
+>deriv : Derived
+>PrivatePublic : number
+>0 : 0
+
+    deriv.PrivateProtected += 0;
+>deriv.PrivateProtected += 0 : number
+>deriv.PrivateProtected : number
+>deriv : Derived
+>PrivateProtected : number
+>0 : 0
+
+    deriv.PrivatePrivate += 0;
+>deriv.PrivatePrivate += 0 : number
+>deriv.PrivatePrivate : number
+>deriv : Derived
+>PrivatePrivate : number
+>0 : 0
+}
+

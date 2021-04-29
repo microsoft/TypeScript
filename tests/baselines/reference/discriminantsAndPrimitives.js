@@ -47,6 +47,39 @@ function f4(x: Foo | Bar | string | number | null) {
     }
 }
 
+// Repro from #31319
+
+const enum EnumTypeNode {
+    Pattern = "Pattern",
+    Disjunction = "Disjunction",
+}
+
+type NodeA = Disjunction | Pattern;
+
+interface NodeBase {
+    type: NodeA["type"]
+}
+
+interface Disjunction extends NodeBase {
+    type: EnumTypeNode.Disjunction
+    alternatives: string[]
+}
+
+interface Pattern extends NodeBase {
+    type: EnumTypeNode.Pattern
+    elements: string[]
+}
+
+let n!: NodeA
+
+if (n.type === "Disjunction") {
+    n.alternatives.slice()
+}
+else {
+    n.elements.slice() // n should be narrowed to Pattern
+}
+
+
 //// [discriminantsAndPrimitives.js]
 // Repro from #10257 plus other tests
 function f1(x) {
@@ -80,4 +113,11 @@ function f4(x) {
                 x.name;
         }
     }
+}
+var n;
+if (n.type === "Disjunction") {
+    n.alternatives.slice();
+}
+else {
+    n.elements.slice(); // n should be narrowed to Pattern
 }

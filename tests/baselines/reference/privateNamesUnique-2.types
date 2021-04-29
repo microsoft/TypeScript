@@ -6,7 +6,7 @@ export class Foo {
 >#x : any
 
     copy(other: import("./b").Foo) {
->copy : (other: import("tests/cases/conformance/classes/members/privateNames/b").Foo) => void
+>copy : (other: import("./b").Foo) => void
 >other : import("tests/cases/conformance/classes/members/privateNames/b").Foo
 
         other.#x; // error

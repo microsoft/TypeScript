@@ -1,6 +1,6 @@
 === tests/cases/compiler/assignmentCompatBug5.ts ===
 function foo1(x: { a: number; }) { }
->foo1 : (x: { a: number; }) => void
+>foo1 : (x: {    a: number;}) => void
 >x : { a: number; }
 >a : number
 

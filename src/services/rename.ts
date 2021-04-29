@@ -1,27 +1,44 @@
 /* @internal */
 namespace ts.Rename {
     export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
-        const node = getTouchingPropertyName(sourceFile, position);
-        const renameInfo = node && nodeIsEligibleForRename(node)
-            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options)
-            : undefined;
-        return renameInfo || getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
+        const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
+        if (nodeIsEligibleForRename(node)) {
+            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, program, options);
+            if (renameInfo) {
+                return renameInfo;
+            }
+        }
+        return getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
     }
 
-    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
+    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, program: Program, options?: RenameInfoOptions): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
-        if (!symbol) return;
+        if (!symbol) {
+            if (isStringLiteralLike(node)) {
+                const type = getContextualTypeOrAncestorTypeNodeType(node, typeChecker);
+                if (type && ((type.flags & TypeFlags.StringLiteral) || (
+                    (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
+                ))) {
+                    return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.string, "", node, sourceFile);
+                }
+            }
+            else if (isLabelName(node)) {
+                const name = getTextOfNode(node);
+                return getRenameInfoSuccess(name, name, ScriptElementKind.label, ScriptElementKindModifier.none, node, sourceFile);
+            }
+            return undefined;
+        }
         // Only allow a symbol to be renamed if it actually has at least one declaration.
         const { declarations } = symbol;
         if (!declarations || declarations.length === 0) return;
 
         // Disallow rename for elements that are defined in the standard TypeScript library.
-        if (declarations.some(isDefinedInLibraryFile)) {
+        if (declarations.some(declaration => isDefinedInLibraryFile(program, declaration))) {
             return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
         }
 
         // Cannot rename `default` as in `import { default as foo } from "./someModule";
-        if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent!.flags & SymbolFlags.Module) {
+        if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
             return undefined;
         }
 
@@ -35,7 +52,12 @@ namespace ts.Rename {
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);
         const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
+        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker,symbol), node, sourceFile);
+    }
+
+    function isDefinedInLibraryFile(program: Program, declaration: Node) {
+        const sourceFile = declaration.getSourceFile();
+        return program.isSourceFileDefaultLibrary(sourceFile) && fileExtensionIs(sourceFile.fileName, Extension.Dts);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
@@ -43,7 +65,7 @@ namespace ts.Rename {
             return getRenameInfoError(Diagnostics.You_cannot_rename_a_module_via_a_global_import);
         }
 
-        const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
+        const moduleSourceFile = moduleSymbol.declarations && find(moduleSymbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
         const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
@@ -92,6 +114,7 @@ namespace ts.Rename {
     function nodeIsEligibleForRename(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:

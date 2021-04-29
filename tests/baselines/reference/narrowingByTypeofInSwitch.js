@@ -250,6 +250,20 @@ function narrowingNarrows(x: {} | undefined) {
     }
 }
 
+function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertNever(x); return;
+        case 'symbol': assertNever(x); return;
+        case 'object': const _: {} = assertNever(x); return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+        case 'number': assertNever(x); return;
+        default: const _y: {} = assertNever(x); return;
+    }
+}
+
 /* Template literals */
 
 function testUnionWithTempalte(x: Basic) {
@@ -300,7 +314,9 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
     }
 }
 
+
 //// [narrowingByTypeofInSwitch.js]
+"use strict";
 function assertNever(x) {
     return x;
 }
@@ -631,6 +647,37 @@ function narrowingNarrows(x) {
             return;
         default:
             var _y = x;
+            return;
+    }
+}
+function narrowingNarrows2(x) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x);
+            return;
+        case 'boolean':
+            assertBoolean(x);
+            return;
+        case 'function':
+            assertNever(x);
+            return;
+        case 'symbol':
+            assertNever(x);
+            return;
+        case 'object':
+            var _ = assertNever(x);
+            return;
+        case 'string':
+            assertString(x);
+            return;
+        case 'undefined':
+            assertUndefined(x);
+            return;
+        case 'number':
+            assertNever(x);
+            return;
+        default:
+            var _y = assertNever(x);
             return;
     }
 }

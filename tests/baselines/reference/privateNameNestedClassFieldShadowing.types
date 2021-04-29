@@ -18,9 +18,9 @@ class Base {
 
                 console.log(x.#x);
 >console.log(x.#x) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x.#x : any
 >x : Base
             }
@@ -30,9 +30,9 @@ class Base {
 
                 console.log(x.#x);
 >console.log(x.#x) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x.#x : any
 >x : Derived
             }

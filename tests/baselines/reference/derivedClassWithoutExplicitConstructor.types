@@ -29,8 +29,8 @@ class Derived extends Base {
 }
 
 var r = new Derived(); // error
->r : any
->new Derived() : any
+>r : Derived
+>new Derived() : Derived
 >Derived : typeof Derived
 
 var r2 = new Derived(1); 
@@ -68,8 +68,8 @@ class D<T extends Date> extends Base2<T> {
 }
 
 var d = new D(); // error
->d : any
->new D() : any
+>d : D<Date>
+>new D() : D<Date>
 >D : typeof D
 
 var d2 = new D(new Date()); // ok

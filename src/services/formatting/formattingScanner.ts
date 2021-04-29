@@ -12,6 +12,7 @@ namespace ts.formatting {
         getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
+        skipToStartOf(node: Node): void;
     }
 
     const enum ScanAction {
@@ -47,6 +48,7 @@ namespace ts.formatting {
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
+            skipToStartOf,
         });
 
         lastTokenInfo = undefined;
@@ -122,7 +124,7 @@ namespace ts.formatting {
         }
 
         function shouldRescanJsxText(node: Node): boolean {
-            return node.kind === SyntaxKind.JsxText;
+            return isJsxText(node);
         }
 
         function shouldRescanSlashToken(container: Node): boolean {
@@ -236,7 +238,7 @@ namespace ts.formatting {
                 case ScanAction.RescanTemplateToken:
                     if (token === SyntaxKind.CloseBraceToken) {
                         lastScanAction = ScanAction.RescanTemplateToken;
-                        return scanner.reScanTemplateToken();
+                        return scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
                     }
                     break;
                 case ScanAction.RescanJsxIdentifier:
@@ -244,7 +246,7 @@ namespace ts.formatting {
                     return scanner.scanJsxIdentifier();
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
-                    return scanner.reScanJsxToken();
+                    return scanner.reScanJsxToken(/* allowMultilineJsxText */ false);
                 case ScanAction.RescanJsxAttributeValue:
                     lastScanAction = ScanAction.RescanJsxAttributeValue;
                     return scanner.reScanJsxAttributeValue();
@@ -285,6 +287,16 @@ namespace ts.formatting {
 
         function skipToEndOf(node: Node): void {
             scanner.setTextPos(node.end);
+            savedPos = scanner.getStartPos();
+            lastScanAction = undefined;
+            lastTokenInfo = undefined;
+            wasNewLine = false;
+            leadingTrivia = undefined;
+            trailingTrivia = undefined;
+        }
+
+        function skipToStartOf(node: Node): void {
+            scanner.setTextPos(node.pos);
             savedPos = scanner.getStartPos();
             lastScanAction = undefined;
             lastTokenInfo = undefined;

@@ -109,14 +109,14 @@ sourceFile:properties.ts
 >>>        },
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >        }
 1 >Emitted(10, 9) Source(11, 5) + SourceIndex(0)
 2 >Emitted(10, 10) Source(11, 6) + SourceIndex(0)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1->^^^^^^^

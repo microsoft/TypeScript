@@ -57,3 +57,10 @@ u = {}
 u = 'ok'
 
 l.push('ok')
+
+/** @type {(v: unknown) => v is undefined} */
+const isUndef = v => v === undefined;
+const e = [1, undefined];
+
+// should be  undefined[]
+const g = e.filter(isUndef);

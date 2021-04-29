@@ -34,5 +34,7 @@ var c2 = new C2();
 var r2: (x: number) => void = c2.constructor;
 >r2 : Symbol(r2, Decl(typesWithPublicConstructor.ts, 15, 3))
 >x : Symbol(x, Decl(typesWithPublicConstructor.ts, 15, 9))
+>c2.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 >c2 : Symbol(c2, Decl(typesWithPublicConstructor.ts, 14, 3))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 

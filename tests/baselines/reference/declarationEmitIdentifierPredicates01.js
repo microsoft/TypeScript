@@ -6,6 +6,7 @@ export function f(x: any): x is number {
 //// [declarationEmitIdentifierPredicates01.js]
 "use strict";
 exports.__esModule = true;
+exports.f = void 0;
 function f(x) {
     return typeof x === "number";
 }

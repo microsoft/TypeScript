@@ -1,11 +1,10 @@
 tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property '2' is missing in type '[number, string]' but required in type '[number, string, boolean]'.
+  Source has 2 element(s) but target requires 3.
 tests/cases/conformance/types/tuple/castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Types of property 'length' are incompatible.
-    Type '3' is not comparable to type '2'.
+  Source has 3 element(s) but target allows only 2.
 tests/cases/conformance/types/tuple/castingTuple.ts(15,14): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 tests/cases/conformance/types/tuple/castingTuple.ts(18,21): error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property '2' is missing in type '[C, D]' but required in type '[C, D, A]'.
+  Source has 2 element(s) but target requires 3.
 tests/cases/conformance/types/tuple/castingTuple.ts(20,33): error TS2493: Tuple type '[C, D, A]' of length '3' has no element at index '5'.
 tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Conversion of type '[number, string]' to type '[number, number]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'string' is not comparable to type 'number'.
@@ -31,12 +30,11 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property '2' is missing in type '[number, string]' but required in type '[number, string, boolean]'.
+!!! error TS2352:   Source has 2 element(s) but target requires 3.
     var shorter = numStrBoolTuple as [number, string]
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Types of property 'length' are incompatible.
-!!! error TS2352:     Type '3' is not comparable to type '2'.
+!!! error TS2352:   Source has 3 element(s) but target allows only 2.
     var longer = numStrTuple as [number, string, boolean]
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -45,7 +43,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var classCDATuple = <[C, D, A]>classCDTuple;
                         ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property '2' is missing in type '[C, D]' but required in type '[C, D, A]'.
+!!! error TS2352:   Source has 2 element(s) but target requires 3.
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // C | D | A
                                     ~

@@ -19,6 +19,7 @@ foo.ns.b;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
 });
@@ -26,6 +27,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./0"], function (require, exports, ns) {
     "use strict";
     exports.__esModule = true;
+    exports.ns = void 0;
     exports.ns = ns;
     ns.a;
     ns.b;

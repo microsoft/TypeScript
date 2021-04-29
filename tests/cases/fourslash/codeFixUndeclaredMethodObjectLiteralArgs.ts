@@ -1,11 +1,12 @@
 /// <reference path='fourslash.ts' />
 
-//// class A {[|
-////     |]constructor() {
+//// class A {
+////     constructor() {
 ////         this.foo1(null, {}, { a: 1, b: "2"});
 ////         const bar = this.foo2(null, {}, { a: 1, b: "2"});
 ////         const baz: number = this.foo3(null, {}, { a: 1, b: "2"});
-////     }
+////     }[|
+////     |]
 //// }
 
 verify.codeFix({

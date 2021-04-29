@@ -1,0 +1,62 @@
+=== tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts ===
+type AnyFunction = (...args: any[]) => any;
+>AnyFunction : Symbol(AnyFunction, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 0))
+>args : Symbol(args, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 20))
+
+type Params<T> = Parameters<Extract<T, AnyFunction>>;
+>Params : Symbol(Params, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 43))
+>T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 12))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 12))
+>AnyFunction : Symbol(AnyFunction, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 0))
+
+interface Wrapper<T> {
+>Wrapper : Symbol(Wrapper, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 53))
+>T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 18))
+
+	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
+>call : Symbol(Wrapper.call, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 22))
+>K : Symbol(K, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 6))
+>T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 18))
+>event : Symbol(event, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 25))
+>K : Symbol(K, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 6))
+>args : Symbol(args, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 34))
+>Params : Symbol(Params, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 0, 43))
+>T : Symbol(T, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 3, 18))
+>K : Symbol(K, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 4, 6))
+}
+
+interface AWrapped {
+>AWrapped : Symbol(AWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 5, 1))
+
+	foo(): void;
+>foo : Symbol(AWrapped.foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 7, 20))
+}
+
+class A {
+>A : Symbol(A, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 9, 1))
+
+	foo: Wrapper<AWrapped>;
+>foo : Symbol(A.foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 11, 9))
+>Wrapper : Symbol(Wrapper, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 53))
+>AWrapped : Symbol(AWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 5, 1))
+}
+
+interface BWrapped extends AWrapped {
+>BWrapped : Symbol(BWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 13, 1))
+>AWrapped : Symbol(AWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 5, 1))
+
+	bar(): void;
+>bar : Symbol(BWrapped.bar, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 15, 37))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 17, 1))
+>A : Symbol(A, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 9, 1))
+
+	foo: Wrapper<BWrapped>;
+>foo : Symbol(B.foo, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 19, 19))
+>Wrapper : Symbol(Wrapper, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 1, 53))
+>BWrapped : Symbol(BWrapped, Decl(indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts, 13, 1))
+}

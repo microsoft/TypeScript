@@ -20,6 +20,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 exports.__esModule = true;
+exports.C = void 0;
 // Unused, but could collide with the named type argument below.
 var TypeVariable = /** @class */ (function () {
     function TypeVariable() {

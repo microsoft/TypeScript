@@ -831,5 +831,163 @@ module m3 { }\
             const index = source.indexOf("enum ") + "enum ".length;
             insertCode(source, index, "Fo");
         });
+
+        for (const tsIgnoreComment of [
+            "// @ts-ignore",
+            "/* @ts-ignore */",
+            "/*\n  @ts-ignore */"
+        ]) {
+            describe(`${tsIgnoreComment} comment directives`, () => {
+                const textWithIgnoreComment = `const x = 10;
+    function foo() {
+        ${tsIgnoreComment}
+        let y: string = x;
+        return y;
+    }
+    function bar() {
+        ${tsIgnoreComment}
+        let z : string = x;
+        return z;
+    }
+    function bar3() {
+        ${tsIgnoreComment}
+        let z : string = x;
+        return z;
+    }
+    foo();
+    bar();
+    bar3();`;
+                verifyScenario("when deleting ts-ignore comment", verifyDelete);
+                verifyScenario("when inserting ts-ignore comment", verifyInsert);
+                verifyScenario("when changing ts-ignore comment to blah", verifyChangeToBlah);
+                verifyScenario("when changing blah comment to ts-ignore", verifyChangeBackToDirective);
+                verifyScenario("when deleting blah comment", verifyDeletingBlah);
+                verifyScenario("when changing text that adds another comment", verifyChangeDirectiveType);
+                verifyScenario("when changing text that keeps the comment but adds more nodes", verifyReuseChange);
+
+                function verifyCommentDirectives(oldText: IScriptSnapshot, newTextAndChange: { text: IScriptSnapshot; textChangeRange: TextChangeRange; }) {
+                    const { incrementalNewTree, newTree } = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+                    assert.deepEqual(incrementalNewTree.commentDirectives, newTree.commentDirectives);
+                }
+
+                function verifyScenario(scenario: string, verifyChange: (atIndex: number, singleIgnore?: true) => void) {
+                    it(`${scenario} - 0`, () => {
+                        verifyChange(0);
+                    });
+                    it(`${scenario} - 1`, () => {
+                        verifyChange(1);
+                    });
+                    it(`${scenario} - 2`, () => {
+                        verifyChange(2);
+                    });
+                    it(`${scenario} - with single ts-ignore`, () => {
+                        verifyChange(0, /*singleIgnore*/ true);
+                    });
+                }
+
+                function getIndexOfTsIgnoreComment(atIndex: number) {
+                    let index = 0;
+                    for (let i = 0; i <= atIndex; i++) {
+                        index = textWithIgnoreComment.indexOf(tsIgnoreComment, index);
+                    }
+                    return index;
+                }
+
+                function textWithIgnoreCommentFrom(text: string, singleIgnore: true | undefined) {
+                    if (!singleIgnore) return text;
+                    const splits = text.split(tsIgnoreComment);
+                    if (splits.length > 2) {
+                        const tail = splits[splits.length - 2] + splits[splits.length - 1];
+                        splits.length = splits.length - 2;
+                        return splits.join(tsIgnoreComment) + tail;
+                    }
+                    else {
+                        return splits.join(tsIgnoreComment);
+                    }
+                }
+
+                function verifyDelete(atIndex: number, singleIgnore?: true) {
+                    const index = getIndexOfTsIgnoreComment(atIndex);
+                    const oldText = ScriptSnapshot.fromString(textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore));
+                    const newTextAndChange = withDelete(oldText, index, tsIgnoreComment.length);
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+
+                function verifyInsert(atIndex: number, singleIgnore?: true) {
+                    const index = getIndexOfTsIgnoreComment(atIndex);
+                    const source = textWithIgnoreCommentFrom(textWithIgnoreComment.slice(0, index) + textWithIgnoreComment.slice(index + tsIgnoreComment.length), singleIgnore);
+                    const oldText = ScriptSnapshot.fromString(source);
+                    const newTextAndChange = withInsert(oldText, index, tsIgnoreComment);
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+
+                function verifyChangeToBlah(atIndex: number, singleIgnore?: true) {
+                    const index = getIndexOfTsIgnoreComment(atIndex) + tsIgnoreComment.indexOf("@");
+                    const oldText = ScriptSnapshot.fromString(textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore));
+                    const newTextAndChange = withChange(oldText, index, 1, "blah ");
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+
+                function verifyChangeBackToDirective(atIndex: number, singleIgnore?: true) {
+                    const index = getIndexOfTsIgnoreComment(atIndex) + tsIgnoreComment.indexOf("@");
+                    const source = textWithIgnoreCommentFrom(textWithIgnoreComment.slice(0, index) + "blah " + textWithIgnoreComment.slice(index + 1), singleIgnore);
+                    const oldText = ScriptSnapshot.fromString(source);
+                    const newTextAndChange = withChange(oldText, index, "blah ".length, "@");
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+
+                function verifyDeletingBlah(atIndex: number, singleIgnore?: true) {
+                    const tsIgnoreIndex = getIndexOfTsIgnoreComment(atIndex);
+                    const index = tsIgnoreIndex + tsIgnoreComment.indexOf("@");
+                    const source = textWithIgnoreCommentFrom(textWithIgnoreComment.slice(0, index) + "blah " + textWithIgnoreComment.slice(index + 1), singleIgnore);
+                    const oldText = ScriptSnapshot.fromString(source);
+                    const newTextAndChange = withDelete(oldText, tsIgnoreIndex, tsIgnoreComment.length + "blah".length);
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+
+                function verifyChangeDirectiveType(atIndex: number, singleIgnore?: true) {
+                    const index = getIndexOfTsIgnoreComment(atIndex) + tsIgnoreComment.indexOf("ignore");
+                    const oldText = ScriptSnapshot.fromString(textWithIgnoreCommentFrom(textWithIgnoreComment, singleIgnore));
+                    const newTextAndChange = withChange(oldText, index, "ignore".length, "expect-error");
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+
+                function verifyReuseChange(atIndex: number, singleIgnore?: true) {
+                    const source = `const x = 10;
+    function foo1() {
+        const x1 = 10;
+        ${tsIgnoreComment}
+        let y0: string = x;
+        let y1: string = x;
+        return y1;
+    }
+    function foo2() {
+        const x2 = 10;
+        ${tsIgnoreComment}
+        let y0: string = x;
+        let y2: string = x;
+        return y2;
+    }
+    function foo3() {
+        const x3 = 10;
+        ${tsIgnoreComment}
+        let y0: string = x;
+        let y3: string = x;
+        return y3;
+    }
+    foo1();
+    foo2();
+    foo3();`;
+                    const oldText = ScriptSnapshot.fromString(textWithIgnoreCommentFrom(source, singleIgnore));
+                    const start = source.indexOf(`const x${atIndex + 1}`);
+                    const letStr = `let y${atIndex + 1}: string = x;`;
+                    const end = source.indexOf(letStr) + letStr.length;
+                    const oldSubStr = source.slice(start, end);
+                    const newText = oldSubStr.replace(letStr, `let yn : string = x;`);
+                    const newTextAndChange = withChange(oldText, start, end - start, newText);
+                    verifyCommentDirectives(oldText, newTextAndChange);
+                }
+            });
+        }
     });
 }

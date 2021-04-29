@@ -22,7 +22,7 @@ var C = /** @class */ (function () {
             var y /*2*/ = this;
             return y;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

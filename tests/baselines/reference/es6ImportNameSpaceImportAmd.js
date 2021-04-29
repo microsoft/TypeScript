@@ -13,6 +13,7 @@ import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0"; // elide thi
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.a = void 0;
     exports.a = 10;
 });
 //// [es6ImportNameSpaceImportAmd_1.js]
