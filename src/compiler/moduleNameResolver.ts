@@ -339,7 +339,13 @@ namespace ts {
         if (resolved) {
             const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
-            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(fileName) };
+            resolvedTypeReferenceDirective = {
+                primary,
+                resolvedFileName,
+                originalFileName: fileName === resolvedFileName ? undefined : fileName,
+                packageId,
+                isExternalLibraryImport: pathContainsNodeModules(fileName),
+            };
         }
         result = { resolvedTypeReferenceDirective, failedLookupLocations };
         perFolderCache?.set(typeReferenceDirectiveName, result);

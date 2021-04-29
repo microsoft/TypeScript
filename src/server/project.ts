@@ -1901,15 +1901,19 @@ namespace ts.server {
                     compilerOptions,
                     moduleResolutionHost));
 
+                const program = hostProject.getCurrentProgram()!;
+                const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
-                    const { resolvedFileName } = resolution.resolvedTypeReferenceDirective;
-                    const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName;
-                    if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
-                        rootNames = append(rootNames, fileName);
+                    const { resolvedFileName, originalFileName } = resolution.resolvedTypeReferenceDirective;
+                    if ((!originalFileName || !program.getSourceFile(originalFileName)) && !program.getSourceFile(resolvedFileName)) {
+                        rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
                         if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
                             return ts.emptyArray;
+                        }
+                        if (originalFileName) {
+                            symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalFileName, resolvedFileName);
                         }
                     }
                 }

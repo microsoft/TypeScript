@@ -6145,6 +6145,8 @@ namespace ts {
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
         setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
         setSymlinkedFile(symlinkPath: Path, real: string): void;
+        /*@internal*/
+        setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
@@ -6168,7 +6170,16 @@ namespace ts {
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
                 }
-            }
+            },
+            setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
+                const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
+                if (commonResolved && commonOriginal) {
+                    this.setSymlinkedDirectory(commonOriginal, {
+                        real: commonResolved,
+                        realPath: toPath(commonResolved, cwd, getCanonicalFileName),
+                    });
+                }
+            },
         };
     }
 
