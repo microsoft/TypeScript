@@ -37,5 +37,5 @@ exports["default"] = (0, utils_1.createSvgIcon)("Hello", "ArrowLeft");
 
 
 //// [index.d.ts]
-declare const _default: import("../../core/src/SvgIcon").SomeInterface;
+declare const _default: import("@ts-bug/core/SvgIcon").SomeInterface;
 export default _default;
