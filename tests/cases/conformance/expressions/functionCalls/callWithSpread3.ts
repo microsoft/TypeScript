@@ -21,7 +21,7 @@ fs2_(...s_); // error on ...s_
 fs2_(...s2n_); // error on ...s2n_
 fs2_(...s_, ...s_); // error         FIXME: bad error message
 fs2_(...s_, ...s_, ...s_); // error  FIXME: worse error message
-// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_(...s2, ...s_); //           FIXME: should be a type error
 fs2n_(...s2_); // error on ...s2_
 
 // ok
@@ -31,5 +31,5 @@ fs2_(...s2_, ...s2_);
 fs2_(...s_, ...s2_);
 fs2n_(...s2n_);
 fs2n_(...s2);
-// fs2n_(...s2, ...n_); // FIXME: should compile
+fs2n_(...s2, ...n_); // FIXME: should compile
 fs5(...s2, "foo", ...s2);

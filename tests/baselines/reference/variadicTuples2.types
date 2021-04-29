@@ -394,26 +394,26 @@ pipe(1, ...sa, 2, (...x) => {
 >...sa : string
 >sa : string[]
 >2 : 2
->(...x) => {    x;  // [number, ...string[], number]    let qq = x[x.length - 1];    let ww = x[0]} : (...x: [number, ...string[], number]) => void
->x : [number, ...string[], number]
+>(...x) => {    x;  // [number, ...string[], number]    let qq = x[x.length - 1];    let ww = x[0]} : (x_0: number, x_1: string, x_2: number) => void
+>x : [number, string, number]
 
     x;  // [number, ...string[], number]
->x : [number, ...string[], number]
+>x : [number, string, number]
 
     let qq = x[x.length - 1];
 >qq : string | number
 >x[x.length - 1] : string | number
->x : [number, ...string[], number]
+>x : [number, string, number]
 >x.length - 1 : number
->x.length : number
->x : [number, ...string[], number]
->length : number
+>x.length : 3
+>x : [number, string, number]
+>length : 3
 >1 : 1
 
     let ww = x[0]
 >ww : number
 >x[0] : number
->x : [number, ...string[], number]
+>x : [number, string, number]
 >0 : 0
 
 });

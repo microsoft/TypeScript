@@ -86,7 +86,11 @@ fs2_(...s_, ...s_, ...s_); // error  FIXME: worse error message
 >s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))
 >s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))
 
-// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_(...s2, ...s_); //           FIXME: should be a type error
+>fs2n_ : Symbol(fs2n_, Decl(callWithSpread3.ts, 8, 66))
+>s2 : Symbol(s2, Decl(callWithSpread3.ts, 0, 13))
+>s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))
+
 fs2n_(...s2_); // error on ...s2_
 >fs2n_ : Symbol(fs2n_, Decl(callWithSpread3.ts, 8, 66))
 >s2_ : Symbol(s2_, Decl(callWithSpread3.ts, 2, 13))
@@ -119,7 +123,11 @@ fs2n_(...s2);
 >fs2n_ : Symbol(fs2n_, Decl(callWithSpread3.ts, 8, 66))
 >s2 : Symbol(s2, Decl(callWithSpread3.ts, 0, 13))
 
-// fs2n_(...s2, ...n_); // FIXME: should compile
+fs2n_(...s2, ...n_); // FIXME: should compile
+>fs2n_ : Symbol(fs2n_, Decl(callWithSpread3.ts, 8, 66))
+>s2 : Symbol(s2, Decl(callWithSpread3.ts, 0, 13))
+>n_ : Symbol(n_, Decl(callWithSpread3.ts, 4, 13))
+
 fs5(...s2, "foo", ...s2);
 >fs5 : Symbol(fs5, Decl(callWithSpread3.ts, 9, 67))
 >s2 : Symbol(s2, Decl(callWithSpread3.ts, 0, 13))

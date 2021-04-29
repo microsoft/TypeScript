@@ -28411,7 +28411,7 @@ namespace ts {
         /**
          * Returns the effective arguments for an expression that works like a function invocation.
          */
-        function getEffectiveCallArguments(node: CallLikeExpression): readonly Expression[] {
+        function getEffectiveCallArguments(node: CallLikeExpression, signatures?: readonly Signature[]): readonly Expression[] {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 const template = node.template;
                 const args: Expression[] = [createSyntheticExpression(template, getGlobalTemplateStringsArrayType())];
@@ -28436,14 +28436,62 @@ namespace ts {
                 for (let i = spreadIndex; i < args.length; i++) {
                     const arg = args[i];
                     // We can call checkExpressionCached because spread expressions never have a contextual type.
-                    const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression));
-                    if (spreadType && isTupleType(spreadType)) {
-                        forEach(getTypeArguments(spreadType), (t, i) => {
-                            const flags = spreadType.target.elementFlags[i];
-                            const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
-                                !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
-                            effectiveArgs.push(syntheticArg);
-                        });
+                    const spreadType = arg.kind === SyntaxKind.SpreadElement &&
+                        (flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression));
+                    if (spreadType && everyType(spreadType, isTupleType)) {
+                        if (spreadType.flags & TypeFlags.Union) {
+                            // TODO: Don't do this if there's a matching rest parameter that also has a tuple-union type
+                            let tmp = []
+                            const types = (spreadType as UnionType).types
+                            const typess = types.map(getTypeArguments)
+                            const longest = Math.max(...typess.map(ts => ts.length))
+                            for (let j = 0; j < longest; j++) {
+                                // TODO: Having undefined in the type now includes optionality (but maybe should *only* be optional) (and maybe shouldn't be???)
+                                const t = getUnionType(typess.map(ts => ts[j] || undefinedType))
+                                const flags: ElementFlags = types.map(t => (t as TupleTypeReference).target.elementFlags[j] || ElementFlags.Optional).reduce((total,f) => f | total, 0)
+                                // TODO: bail if flags aren't ElementFlags.Fixed (it might be OK to allow a rest at the end, but calculating the 'end' is a draaaaaaaag)
+                                if (flags & ~ElementFlags.Fixed) {
+                                    tmp = [arg]
+                                    break
+
+                                }
+                                // TODO: Not sure at all what to do with labels, but there might be some utilities for this already
+                                const syntheticArg = createSyntheticExpression(arg, t);
+                                tmp.push(syntheticArg)
+                            }
+                            effectiveArgs.push(...tmp)
+                        }
+                        else {
+                            forEach(getTypeArguments(spreadType as TupleTypeReference), (t, i) => {
+                                const flags = (spreadType as TupleTypeReference).target.elementFlags[i];
+                                const syntheticArg = createSyntheticExpression(
+                                    arg,
+                                    flags & ElementFlags.Rest ? createArrayType(t) : t,
+                                    !!(flags & ElementFlags.Variable),
+                                    (spreadType as TupleTypeReference).target.labeledElementDeclarations?.[i]);
+                                effectiveArgs.push(syntheticArg);
+                            });
+                        }
+                    }
+                    else if (spreadType && signatures?.length === 1 && signatures[0].declaration && isArrayType(spreadType)) {
+                        // convert T[] into [T?, T?, T?, T], for as many as there are parameters after this spread
+                        // TODO: Don't do this if there's a matching rest parameter (checking all signatures[effectiveArgs.length] might do the trick?)
+                        const params = signatures[0].parameters
+                        const last = lastOrUndefined<ParameterDeclaration | JSDocParameterTag>(signatures[0].declaration.parameters);
+                        if (!!last && isRestParameter(last) && i !== params.length - 1) {
+                            const t = getElementTypeOfArrayType(spreadType)!
+                            for (let j = 0; j < params.length - i - 1; j++) {
+                                // TODO: This loosens checking of spreads dramatically without strict null checks
+                                // It assumes that a spread is always long enough
+                                // Test the prototype without strict null checks, but only ship under that flag.
+                                effectiveArgs.push(createSyntheticExpression(arg, getUnionType([t, undefinedType])))
+                            }
+                            // TODO: The -1 doesn't check that an overlong array is still assignable, so push a non-undefined type on the end
+                            effectiveArgs.push(createSyntheticExpression(arg, t))
+                        }
+                        else {
+                            effectiveArgs.push(arg);
+                        }
                     }
                     else {
                         effectiveArgs.push(arg);
@@ -28677,7 +28725,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            const args = getEffectiveCallArguments(node);
+            const args = getEffectiveCallArguments(node, signatures);
 
             // The excludeArgument array contains true for each context sensitive argument (an argument
             // is context sensitive it is susceptible to a one-time permanent contextual typing).

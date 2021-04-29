@@ -1,31 +1,92 @@
 === tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts ===
-declare const x: number
->x : number
+declare const n: number
+>n : number
 
 declare const nnnu: [number, number, number?]
->nnnu : [number, number, number?]
+>nnnu : [number, number, (number | undefined)?]
 
 declare const nntnnnt: [number, number] | [number, number, number]
 >nntnnnt : [number, number] | [number, number, number]
 
-declare function fn(a: number, b: number, bb: number, ...c: number[]): number
->fn : (a: number, b: number, bb: number, ...c: number[]) => number
+declare const ns: number[]
+>ns : number[]
+
+declare const nununu: [number?, number?, number?]
+>nununu : [(number | undefined)?, (number | undefined)?, (number | undefined)?]
+
+declare const nu: [number?]
+>nu : [(number | undefined)?]
+
+declare function setHours(a: number, b?: number, c?: number, d?: number): number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>a : number
+>b : number | undefined
+>c : number | undefined
+>d : number | undefined
+
+declare function f(a: number, b: number, ...c: number[]): number
+>f : (a: number, b: number, ...c: number[]) => number
 >a : number
 >b : number
->bb : number
 >c : number[]
 
-fn(...nnnu, x)
->fn(...nnnu, x) : number
->fn : (a: number, b: number, bb: number, ...c: number[]) => number
->...nnnu : number
->nnnu : [number, number, number?]
->x : number
+declare function g(a: number, b?: number, ...c: number[]): number
+>g : (a: number, b?: number | undefined, ...c: number[]) => number
+>a : number
+>b : number | undefined
+>c : number[]
 
-fn(...nntnnnt, x)
->fn(...nntnnnt, x) : number
->fn : (a: number, b: number, bb: number, ...c: number[]) => number
+setHours(...nnnu, n)
+>setHours(...nnnu, n) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
+>...nnnu : number | undefined
+>nnnu : [number, number, (number | undefined)?]
+>n : number
+
+setHours(...nntnnnt, n)
+>setHours(...nntnnnt, n) : number
+>setHours : (a: number, b?: number | undefined, c?: number | undefined, d?: number | undefined) => number
 >...nntnnnt : number
 >nntnnnt : [number, number] | [number, number, number]
->x : number
+>n : number
+
+// TODO: Handle labels too
+
+f(...nnnu, n) // maybe add special rules for trailing undefineds in spread tuples -> rests
+>f(...nnnu, n) : number
+>f : (a: number, b: number, ...c: number[]) => number
+>...nnnu : number | undefined
+>nnnu : [number, number, (number | undefined)?]
+>n : number
+
+f(...nntnnnt, n)
+>f(...nntnnnt, n) : number
+>f : (a: number, b: number, ...c: number[]) => number
+>...nntnnnt : number
+>nntnnnt : [number, number] | [number, number, number]
+>n : number
+
+g(n, ...ns, n)
+>g(n, ...ns, n) : number
+>g : (a: number, b?: number | undefined, ...c: number[]) => number
+>n : number
+>...ns : number
+>ns : number[]
+>n : number
+
+g(n, ...nununu, n)
+>g(n, ...nununu, n) : number
+>g : (a: number, b?: number | undefined, ...c: number[]) => number
+>n : number
+>...nununu : number | undefined
+>nununu : [(number | undefined)?, (number | undefined)?, (number | undefined)?]
+>n : number
+
+g(n, ...nu, n)
+>g(n, ...nu, n) : number
+>g : (a: number, b?: number | undefined, ...c: number[]) => number
+>n : number
+>...nu : number | undefined
+>nu : [(number | undefined)?]
+>n : number
 

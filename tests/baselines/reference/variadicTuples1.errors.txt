@@ -1,3 +1,5 @@
+tests/cases/conformance/types/tuple/variadicTuples1.ts(51,24): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(52,5): error TS2555: Expected at least 3 arguments, but got 2.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(53,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(62,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], number]'.
@@ -40,7 +42,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
     Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/tuple/variadicTuples1.ts (20 errors) ====
+==== tests/cases/conformance/types/tuple/variadicTuples1.ts (21 errors) ====
     // Variadics in tuple types
     
     type TV0<T extends unknown[]> = [string, ...T];
@@ -92,6 +94,9 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
         foo1(...t1, true, 42, 43, 44);
         foo1(...t1, ...t2, 42, 43, 44);
         foo1(...t1, ...t2, ...a1);
+                           ~~~~~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
         foo1(...t1);  // Error
         ~~~~~~~~~~~
 !!! error TS2555: Expected at least 3 arguments, but got 2.

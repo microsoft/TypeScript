@@ -1,14 +1,40 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(7,4): error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(16,3): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(17,3): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(20,6): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts (1 errors) ====
-    declare const x: number
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts (3 errors) ====
+    declare const n: number
     declare const nnnu: [number, number, number?]
     declare const nntnnnt: [number, number] | [number, number, number]
-    declare function fn(a: number, b: number, bb: number, ...c: number[]): number
+    declare const ns: number[]
+    declare const nununu: [number?, number?, number?]
+    declare const nu: [number?]
+    declare function setHours(a: number, b?: number, c?: number, d?: number): number
+    declare function f(a: number, b: number, ...c: number[]): number
+    declare function g(a: number, b?: number, ...c: number[]): number
     
-    fn(...nnnu, x)
-    fn(...nntnnnt, x)
-       ~~~~~~~~~~
-!!! error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+    setHours(...nnnu, n)
+    setHours(...nntnnnt, n)
+    
+    // TODO: Handle labels too
+    
+    f(...nnnu, n) // maybe add special rules for trailing undefineds in spread tuples -> rests
+      ~~~~~~~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
+    f(...nntnnnt, n)
+      ~~~~~~~~~~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
+    
+    g(n, ...ns, n)
+    g(n, ...nununu, n)
+         ~~~~~~~~~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
+    g(n, ...nu, n)
     

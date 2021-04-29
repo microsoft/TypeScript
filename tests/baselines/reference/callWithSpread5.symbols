@@ -1,6 +1,6 @@
 === tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts ===
-declare const x: number
->x : Symbol(x, Decl(callWithSpread5.ts, 0, 13))
+declare const n: number
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
 
 declare const nnnu: [number, number, number?]
 >nnnu : Symbol(nnnu, Decl(callWithSpread5.ts, 1, 13))
@@ -8,20 +8,71 @@ declare const nnnu: [number, number, number?]
 declare const nntnnnt: [number, number] | [number, number, number]
 >nntnnnt : Symbol(nntnnnt, Decl(callWithSpread5.ts, 2, 13))
 
-declare function fn(a: number, b: number, bb: number, ...c: number[]): number
->fn : Symbol(fn, Decl(callWithSpread5.ts, 2, 66))
->a : Symbol(a, Decl(callWithSpread5.ts, 3, 20))
->b : Symbol(b, Decl(callWithSpread5.ts, 3, 30))
->bb : Symbol(bb, Decl(callWithSpread5.ts, 3, 41))
->c : Symbol(c, Decl(callWithSpread5.ts, 3, 53))
+declare const ns: number[]
+>ns : Symbol(ns, Decl(callWithSpread5.ts, 3, 13))
 
-fn(...nnnu, x)
->fn : Symbol(fn, Decl(callWithSpread5.ts, 2, 66))
+declare const nununu: [number?, number?, number?]
+>nununu : Symbol(nununu, Decl(callWithSpread5.ts, 4, 13))
+
+declare const nu: [number?]
+>nu : Symbol(nu, Decl(callWithSpread5.ts, 5, 13))
+
+declare function setHours(a: number, b?: number, c?: number, d?: number): number
+>setHours : Symbol(setHours, Decl(callWithSpread5.ts, 5, 27))
+>a : Symbol(a, Decl(callWithSpread5.ts, 6, 26))
+>b : Symbol(b, Decl(callWithSpread5.ts, 6, 36))
+>c : Symbol(c, Decl(callWithSpread5.ts, 6, 48))
+>d : Symbol(d, Decl(callWithSpread5.ts, 6, 60))
+
+declare function f(a: number, b: number, ...c: number[]): number
+>f : Symbol(f, Decl(callWithSpread5.ts, 6, 80))
+>a : Symbol(a, Decl(callWithSpread5.ts, 7, 19))
+>b : Symbol(b, Decl(callWithSpread5.ts, 7, 29))
+>c : Symbol(c, Decl(callWithSpread5.ts, 7, 40))
+
+declare function g(a: number, b?: number, ...c: number[]): number
+>g : Symbol(g, Decl(callWithSpread5.ts, 7, 64))
+>a : Symbol(a, Decl(callWithSpread5.ts, 8, 19))
+>b : Symbol(b, Decl(callWithSpread5.ts, 8, 29))
+>c : Symbol(c, Decl(callWithSpread5.ts, 8, 41))
+
+setHours(...nnnu, n)
+>setHours : Symbol(setHours, Decl(callWithSpread5.ts, 5, 27))
 >nnnu : Symbol(nnnu, Decl(callWithSpread5.ts, 1, 13))
->x : Symbol(x, Decl(callWithSpread5.ts, 0, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
 
-fn(...nntnnnt, x)
->fn : Symbol(fn, Decl(callWithSpread5.ts, 2, 66))
+setHours(...nntnnnt, n)
+>setHours : Symbol(setHours, Decl(callWithSpread5.ts, 5, 27))
 >nntnnnt : Symbol(nntnnnt, Decl(callWithSpread5.ts, 2, 13))
->x : Symbol(x, Decl(callWithSpread5.ts, 0, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+
+// TODO: Handle labels too
+
+f(...nnnu, n) // maybe add special rules for trailing undefineds in spread tuples -> rests
+>f : Symbol(f, Decl(callWithSpread5.ts, 6, 80))
+>nnnu : Symbol(nnnu, Decl(callWithSpread5.ts, 1, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+
+f(...nntnnnt, n)
+>f : Symbol(f, Decl(callWithSpread5.ts, 6, 80))
+>nntnnnt : Symbol(nntnnnt, Decl(callWithSpread5.ts, 2, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+
+g(n, ...ns, n)
+>g : Symbol(g, Decl(callWithSpread5.ts, 7, 64))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+>ns : Symbol(ns, Decl(callWithSpread5.ts, 3, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+
+g(n, ...nununu, n)
+>g : Symbol(g, Decl(callWithSpread5.ts, 7, 64))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+>nununu : Symbol(nununu, Decl(callWithSpread5.ts, 4, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+
+g(n, ...nu, n)
+>g : Symbol(g, Decl(callWithSpread5.ts, 7, 64))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
+>nu : Symbol(nu, Decl(callWithSpread5.ts, 5, 13))
+>n : Symbol(n, Decl(callWithSpread5.ts, 0, 13))
 
