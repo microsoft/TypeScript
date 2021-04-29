@@ -15022,7 +15022,7 @@ namespace ts {
             // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
-                const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.checkType), mapper);
+                const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
                 const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
