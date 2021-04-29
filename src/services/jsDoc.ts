@@ -159,7 +159,9 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
+                return name ? withNode(name)
+                    : comment === undefined ? undefined
+                    : getDisplayPartsFromComment(comment, checker);
             default:
                 return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
@@ -169,9 +171,17 @@ namespace ts.JsDoc {
         }
 
         function addComment(s: string) {
-            return comment
-                ? [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)]
-                : [textPart(s)];
+            if (comment) {
+                if (s.match(/^https?$/)) {
+                    return [textPart(s), ...getDisplayPartsFromComment(comment, checker)];
+                }
+                else {
+                    return [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)];
+                }
+            }
+            else {
+                return [textPart(s)];
+            }
         }
     }
 

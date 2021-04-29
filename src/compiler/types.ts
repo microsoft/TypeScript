@@ -806,7 +806,7 @@ namespace ts {
 
         AccessibilityModifier = Public | Private | Protected,
         // Accessibility modifiers and 'readonly' can be attached to a parameter in a constructor to make it a property.
-        ParameterPropertyModifier = AccessibilityModifier | Readonly,
+        ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
         NonPublicAccessibilityModifier = Private | Protected,
 
         TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override,
@@ -5200,8 +5200,13 @@ namespace ts {
         ObjectRestType   = 1 << 23,  // Originates in object rest declaration
         /* @internal */
         IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
+        // Flags that require TypeFlags.Object and ObjectFlags.Reference
+        /* @internal */
+        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        /* @internal */
+        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-        // Flags that require TypeFlags.UnionOrIntersection
+        // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
         IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
         /* @internal */
@@ -5281,6 +5286,8 @@ namespace ts {
         resolvedTypeArguments?: readonly Type[];  // Resolved type reference type arguments
         /* @internal */
         literalType?: TypeReference;  // Clone of type with ObjectFlags.ArrayLiteral set
+        /* @internal */
+        cachedEquivalentBaseType?: Type; // Only set on references to class or interfaces with a single base type and no augmentations
     }
 
     export interface DeferredTypeReference extends TypeReference {
@@ -5553,6 +5560,7 @@ namespace ts {
     // Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution
     // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
+        objectFlags: ObjectFlags;
         baseType: Type;     // Target type
         substitute: Type;   // Type to substitute for type parameter
     }
@@ -5663,15 +5671,16 @@ namespace ts {
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
         SpeculativeTuple             = 1 << 1,  // Speculative tuple inference
-        HomomorphicMappedType        = 1 << 2,  // Reverse inference for homomorphic mapped type
-        PartialHomomorphicMappedType = 1 << 3,  // Partial reverse inference for homomorphic mapped type
-        MappedTypeConstraint         = 1 << 4,  // Reverse inference for mapped type
-        ContravariantConditional     = 1 << 5,  // Conditional type in contravariant position
-        ReturnType                   = 1 << 6,  // Inference made from return type of generic function
-        LiteralKeyof                 = 1 << 7,  // Inference made from a string literal to a keyof T
-        NoConstraints                = 1 << 8,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 9,  // Always use strict rules for contravariant inferences
-        MaxValue                     = 1 << 10, // Seed for inference priority tracking
+        SubstituteSource             = 1 << 2,  // Source of inference originated within a substitution type's substitute
+        HomomorphicMappedType        = 1 << 3,  // Reverse inference for homomorphic mapped type
+        PartialHomomorphicMappedType = 1 << 4,  // Partial reverse inference for homomorphic mapped type
+        MappedTypeConstraint         = 1 << 5,  // Reverse inference for mapped type
+        ContravariantConditional     = 1 << 6,  // Conditional type in contravariant position
+        ReturnType                   = 1 << 7,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 10,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 11, // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
