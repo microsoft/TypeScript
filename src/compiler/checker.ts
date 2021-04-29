@@ -18547,7 +18547,7 @@ namespace ts {
                         // and Y1 is related to Y2.
 
                         const sourceParams = (source as ConditionalType).root.inferTypeParameters;
-                        let sourceExtends = instantiateType((<ConditionalType>source).extendsType, reportUnmeasurableMarkers);
+                        let sourceExtends = instantiateType((<ConditionalType>source).extendsType, makeFunctionTypeMapper(reportUnmeasurableMarkers));
                         let mapper: TypeMapper | undefined;
                         if (sourceParams) {
                             // If the source has infer type parameters, we instantiate them in the context of the target
