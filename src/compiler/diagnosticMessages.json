@@ -2386,13 +2386,9 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got {1} or more.": {
+    "A spread argument must either have a tuple type or be passed to a rest parameter.": {
         "category": "Error",
         "code": 2556
-    },
-    "Expected at least {0} arguments, but got {1} or more.": {
-        "category": "Error",
-        "code": 2557
     },
     "Expected {0} type arguments, but got {1}.": {
         "category": "Error",
