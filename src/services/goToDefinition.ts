@@ -334,7 +334,7 @@ namespace ts.GoToDefinition {
         if (checker.isDeclarationVisible(declaration)) return true;
         if (!declaration.parent) return false;
 
-        // Assignments to variable are visible if variable is visible
+        // Variable initializers are visible if variable is visible
         if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) return isDefinitionVisible(checker, declaration.parent as Declaration);
 
         // Handle some exceptions here like arrow function, members of class and object literal expression which are technically not visible but we want the definition to be determined by its parent
