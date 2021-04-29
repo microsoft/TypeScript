@@ -60,3 +60,107 @@ class Bar<T extends string> {
   }
 }
 
+// from #31277
+interface Set<T> {
+>Set : Symbol(Set, Decl(variance.ts, 24, 1), Decl(variance.ts, 31, 13))
+>T : Symbol(T, Decl(variance.ts, 27, 14))
+
+  add(value: T): this;
+>add : Symbol(Set.add, Decl(variance.ts, 27, 18))
+>value : Symbol(value, Decl(variance.ts, 28, 6))
+>T : Symbol(T, Decl(variance.ts, 27, 14))
+}
+
+declare const Set: new <T>() => Set<T>;
+>Set : Symbol(Set, Decl(variance.ts, 24, 1), Decl(variance.ts, 31, 13))
+>T : Symbol(T, Decl(variance.ts, 31, 24))
+>Set : Symbol(Set, Decl(variance.ts, 24, 1), Decl(variance.ts, 31, 13))
+>T : Symbol(T, Decl(variance.ts, 31, 24))
+
+// Repro from #31251 (removed getter)
+
+export abstract class Supervisor<N extends string, P = unknown, R = unknown> {
+>Supervisor : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>N : Symbol(N, Decl(variance.ts, 35, 33))
+>P : Symbol(P, Decl(variance.ts, 35, 50))
+>R : Symbol(R, Decl(variance.ts, 35, 63))
+
+  private static instances_: Set<Supervisor<string, unknown, unknown>>;
+>instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+>Set : Symbol(Set, Decl(variance.ts, 24, 1), Decl(variance.ts, 31, 13))
+>Supervisor : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+
+  private static instances(): typeof Supervisor.instances_ {
+>instances : Symbol(Supervisor.instances, Decl(variance.ts, 36, 71))
+>Supervisor.instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+>Supervisor : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+
+      return this.hasOwnProperty('instances_')
+>this.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+          ? this.instances_
+>this.instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+>this : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+
+          : this.instances_ = new Set();
+>this.instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+>this : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>instances_ : Symbol(Supervisor.instances_, Decl(variance.ts, 35, 78))
+>Set : Symbol(Set, Decl(variance.ts, 24, 1), Decl(variance.ts, 31, 13))
+  }
+  constructor() {
+      void (this.constructor as typeof Supervisor).instances().add(this);
+>(this.constructor as typeof Supervisor).instances().add : Symbol(Set.add, Decl(variance.ts, 27, 18))
+>(this.constructor as typeof Supervisor).instances : Symbol(Supervisor.instances, Decl(variance.ts, 36, 71))
+>this.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>Supervisor : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+>instances : Symbol(Supervisor.instances, Decl(variance.ts, 36, 71))
+>add : Symbol(Set.add, Decl(variance.ts, 27, 18))
+>this : Symbol(Supervisor, Decl(variance.ts, 31, 39))
+  }
+  public abstract call(name: N | ('' extends N ? undefined : never), param: P, timeout?: number): Promise<R>;
+>call : Symbol(Supervisor.call, Decl(variance.ts, 44, 3))
+>name : Symbol(name, Decl(variance.ts, 45, 23))
+>N : Symbol(N, Decl(variance.ts, 35, 33))
+>N : Symbol(N, Decl(variance.ts, 35, 33))
+>param : Symbol(param, Decl(variance.ts, 45, 68))
+>P : Symbol(P, Decl(variance.ts, 35, 50))
+>timeout : Symbol(timeout, Decl(variance.ts, 45, 78))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>R : Symbol(R, Decl(variance.ts, 35, 63))
+}
+
+
+// Minimal repro for catching variance probing in then extends type.
+
+interface A<T> {
+>A : Symbol(A, Decl(variance.ts, 46, 1))
+>T : Symbol(T, Decl(variance.ts, 51, 12))
+
+  x: number extends T ? 1 : 1;
+>x : Symbol(A.x, Decl(variance.ts, 51, 16))
+>T : Symbol(T, Decl(variance.ts, 51, 12))
+}
+
+declare let a: A<number>;
+>a : Symbol(a, Decl(variance.ts, 55, 11))
+>A : Symbol(A, Decl(variance.ts, 46, 1))
+
+declare let b: A<3>;
+>b : Symbol(b, Decl(variance.ts, 56, 11))
+>A : Symbol(A, Decl(variance.ts, 46, 1))
+
+a = b; // error
+>a : Symbol(a, Decl(variance.ts, 55, 11))
+>b : Symbol(b, Decl(variance.ts, 56, 11))
+
+b = a; // error
+>b : Symbol(b, Decl(variance.ts, 56, 11))
+>a : Symbol(a, Decl(variance.ts, 55, 11))
+

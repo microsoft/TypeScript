@@ -56,3 +56,96 @@ class Bar<T extends string> {
   }
 }
 
+// from #31277
+interface Set<T> {
+  add(value: T): this;
+>add : (value: T) => this
+>value : T
+}
+
+declare const Set: new <T>() => Set<T>;
+>Set : new <T>() => Set<T>
+
+// Repro from #31251 (removed getter)
+
+export abstract class Supervisor<N extends string, P = unknown, R = unknown> {
+>Supervisor : Supervisor<N, P, R>
+
+  private static instances_: Set<Supervisor<string, unknown, unknown>>;
+>instances_ : Set<Supervisor<string, unknown, unknown>>
+
+  private static instances(): typeof Supervisor.instances_ {
+>instances : () => typeof Supervisor.instances_
+>Supervisor.instances_ : Set<Supervisor<string, unknown, unknown>>
+>Supervisor : typeof Supervisor
+>instances_ : Set<Supervisor<string, unknown, unknown>>
+
+      return this.hasOwnProperty('instances_')
+>this.hasOwnProperty('instances_')          ? this.instances_          : this.instances_ = new Set() : Set<Supervisor<string, unknown, unknown>>
+>this.hasOwnProperty('instances_') : boolean
+>this.hasOwnProperty : (v: PropertyKey) => boolean
+>this : typeof Supervisor
+>hasOwnProperty : (v: PropertyKey) => boolean
+>'instances_' : "instances_"
+
+          ? this.instances_
+>this.instances_ : Set<Supervisor<string, unknown, unknown>>
+>this : typeof Supervisor
+>instances_ : Set<Supervisor<string, unknown, unknown>>
+
+          : this.instances_ = new Set();
+>this.instances_ = new Set() : Set<Supervisor<string, unknown, unknown>>
+>this.instances_ : Set<Supervisor<string, unknown, unknown>>
+>this : typeof Supervisor
+>instances_ : Set<Supervisor<string, unknown, unknown>>
+>new Set() : Set<Supervisor<string, unknown, unknown>>
+>Set : new <T>() => Set<T>
+  }
+  constructor() {
+      void (this.constructor as typeof Supervisor).instances().add(this);
+>void (this.constructor as typeof Supervisor).instances().add(this) : undefined
+>(this.constructor as typeof Supervisor).instances().add(this) : Set<Supervisor<string, unknown, unknown>>
+>(this.constructor as typeof Supervisor).instances().add : (value: Supervisor<string, unknown, unknown>) => Set<Supervisor<string, unknown, unknown>>
+>(this.constructor as typeof Supervisor).instances() : Set<Supervisor<string, unknown, unknown>>
+>(this.constructor as typeof Supervisor).instances : () => Set<Supervisor<string, unknown, unknown>>
+>(this.constructor as typeof Supervisor) : typeof Supervisor
+>this.constructor as typeof Supervisor : typeof Supervisor
+>this.constructor : Function
+>this : this
+>constructor : Function
+>Supervisor : typeof Supervisor
+>instances : () => Set<Supervisor<string, unknown, unknown>>
+>add : (value: Supervisor<string, unknown, unknown>) => Set<Supervisor<string, unknown, unknown>>
+>this : this
+  }
+  public abstract call(name: N | ('' extends N ? undefined : never), param: P, timeout?: number): Promise<R>;
+>call : (name: N | ('' extends N ? undefined : never), param: P, timeout?: number | undefined) => Promise<R>
+>name : N | ("" extends N ? undefined : never)
+>param : P
+>timeout : number | undefined
+}
+
+
+// Minimal repro for catching variance probing in then extends type.
+
+interface A<T> {
+  x: number extends T ? 1 : 1;
+>x : number extends T ? 1 : 1
+}
+
+declare let a: A<number>;
+>a : A<number>
+
+declare let b: A<3>;
+>b : A<3>
+
+a = b; // error
+>a = b : A<3>
+>a : A<number>
+>b : A<3>
+
+b = a; // error
+>b = a : A<number>
+>b : A<3>
+>a : A<number>
+

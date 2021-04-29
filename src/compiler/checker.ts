@@ -735,9 +735,12 @@ namespace ts {
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
 
+        // note: wildcards must be first types constructed due to an assumption made during union construction
+        // if you reorder these, you must adjust that, too!
+        const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
+        const opaqueWildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
-        const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
         const nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
         const intrinsicMarkerType = createIntrinsicType(TypeFlags.Any, "intrinsic");
@@ -13629,7 +13632,7 @@ namespace ts {
             if (!(flags & TypeFlags.Never)) {
                 includes |= flags & TypeFlags.IncludesMask;
                 if (flags & TypeFlags.StructuredOrInstantiable) includes |= TypeFlags.IncludesStructuredOrInstantiable;
-                if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
+                if (type === wildcardType || type === opaqueWildcardType) includes |= TypeFlags.IncludesWildcard;
                 if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
                 }
@@ -13788,7 +13791,10 @@ namespace ts {
             const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
-                    return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
+                    // A wildcard has the _lowest_ type id, as it's first types created, and it's made in priority order
+                    // - a normal `wildcardType` should take priority over an `opaqueWildcardType` if both somehoe end up
+                    // in the same construct. (And, likewise, both should have priority over a normal `any`)
+                    return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? typeSet[0] : anyType : unknownType;
                 }
                 if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                     removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
@@ -13927,7 +13933,8 @@ namespace ts {
             }
             else {
                 if (flags & TypeFlags.AnyOrUnknown) {
-                    if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
+                    if (type === wildcardType || type === opaqueWildcardType) includes |= TypeFlags.IncludesWildcard;
+                    if (type === opaqueWildcardType) includes |= TypeFlags.IncludesOpaqueWildcard;
                 }
                 else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !typeSet.has(type.id.toString())) {
                     if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
@@ -14111,7 +14118,7 @@ namespace ts {
                 return neverType;
             }
             if (includes & TypeFlags.Any) {
-                return includes & TypeFlags.IncludesWildcard ? wildcardType : anyType;
+                return includes & TypeFlags.IncludesWildcard ? includes & TypeFlags.IncludesOpaqueWildcard ? opaqueWildcardType : wildcardType : anyType;
             }
             if (!strictNullChecks && includes & TypeFlags.Nullable) {
                 return includes & TypeFlags.Undefined ? undefinedType : nullType;
@@ -14313,6 +14320,7 @@ namespace ts {
                 type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && maybeNonDistributiveNameType(getNameTypeFromMappedType(type)) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(<MappedType>type, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
+                type === opaqueWildcardType ? opaqueWildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
                 type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
                 stringsOnly ? !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral, includeOrigin) :
@@ -14372,6 +14380,9 @@ namespace ts {
                 return checkCrossProductUnion(types) ?
                     mapType(types[unionIndex], t => getTemplateLiteralType(texts, replaceElement(types, unionIndex, t))) :
                     errorType;
+            }
+            if (contains(types, opaqueWildcardType)) {
+                return opaqueWildcardType;
             }
             if (contains(types, wildcardType)) {
                 return wildcardType;
@@ -14890,6 +14901,9 @@ namespace ts {
         }
 
         function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, noUncheckedIndexedAccessCandidate?: boolean, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
+            if (objectType === opaqueWildcardType || indexType === opaqueWildcardType) {
+                return wildcardType;
+            }
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -15023,7 +15037,7 @@ namespace ts {
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.checkType), mapper);
-                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
+                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType) || checkType === opaqueWildcardType;
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
                     return wildcardType;
@@ -15045,7 +15059,7 @@ namespace ts {
                 // Instantiate the extends type including inferences for 'infer T' type parameters
                 const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
                 // We attempt to resolve the conditional type only when the check and extends types are non-generic
-                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
+                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType) && inferredExtendsType !== opaqueWildcardType) {
                     // Return falseType for a definitely false extends check. We check an instantiations of the two
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -15782,7 +15796,7 @@ namespace ts {
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
-            return createTypeMapper(sources, /*targets*/ undefined);
+            return createTypeMapper(sources, map(sources, () => opaqueWildcardType));
         }
 
         /**
@@ -15997,7 +16011,7 @@ namespace ts {
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
                     return mapTypeWithAlias(getReducedType(mappedTypeVariable), t => {
-                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
+                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== opaqueWildcardType && t !== errorType) {
                             if (!type.declaration.nameType) {
                                 if (isArrayType(t)) {
                                     return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
@@ -16016,7 +16030,8 @@ namespace ts {
                 }
             }
             // If the constraint type of the instantiation is the wildcard type, return the wildcard type.
-            return instantiateType(getConstraintTypeFromMappedType(type), mapper) === wildcardType ? wildcardType : instantiateAnonymousType(type, mapper, aliasSymbol, aliasTypeArguments);
+            const instantiatedConstraint = instantiateType(getConstraintTypeFromMappedType(type), mapper);
+            return instantiatedConstraint === opaqueWildcardType ? opaqueWildcardType : instantiatedConstraint === wildcardType ? wildcardType : instantiateAnonymousType(type, mapper, aliasSymbol, aliasTypeArguments);
         }
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
@@ -17161,7 +17176,7 @@ namespace ts {
         function isSimpleTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
             const s = source.flags;
             const t = target.flags;
-            if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
+            if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType || source === opaqueWildcardType) return true;
             if (t & TypeFlags.Never) return false;
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
@@ -18546,7 +18561,7 @@ namespace ts {
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
                         const sourceParams = (source as ConditionalType).root.inferTypeParameters;
-                        let sourceExtends = (<ConditionalType>source).extendsType;
+                        let sourceExtends = instantiateType((<ConditionalType>source).extendsType, makeFunctionTypeMapper(reportUnmeasurableMarkers));
                         let mapper: TypeMapper | undefined;
                         if (sourceParams) {
                             // If the source has infer type parameters, we instantiate them in the context of the target
@@ -21035,7 +21050,7 @@ namespace ts {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
-                if (source === wildcardType) {
+                if (source === wildcardType || source === opaqueWildcardType) {
                     // We are inferring from an 'any' type. We want to infer this type for every type parameter
                     // referenced in the target type, so we record it as the propagation type and infer from the
                     // target to itself. Then, as we find candidates we substitute the propagation type.

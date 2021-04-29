@@ -5074,6 +5074,8 @@ namespace ts {
         IncludesWildcard = IndexedAccess,
         /* @internal */
         IncludesEmptyObject = Conditional,
+        /* @internal */
+        IncludesOpaqueWildcard = StringMapping,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;

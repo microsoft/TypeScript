@@ -762,8 +762,8 @@ var r15arg1 = <T>(x: T) => <T[]>null
 >null : null
 
 var r15 = foo15(r15arg1); // any
->r15 : any
->foo15(r15arg1) : any
+>r15 : { (x: number): number[]; (x: string): string[]; }
+>foo15(r15arg1) : { (x: number): number[]; (x: string): string[]; }
 >foo15 : { (a: { (x: number): number[]; (x: string): string[]; }): { (x: number): number[]; (x: string): string[]; }; (a: any): any; }
 >r15arg1 : <T>(x: T) => T[]
 
@@ -789,8 +789,8 @@ var r17arg1 = <T>(x: (a: T) => T) => <T[]>null;
 >null : null
 
 var r17 = foo17(r17arg1); // any
->r17 : any
->foo17(r17arg1) : any
+>r17 : { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }
+>foo17(r17arg1) : { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }
 >foo17 : { (a: { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }): { (x: (a: number) => number): number[]; (x: (a: string) => string): string[]; }; (a: any): any; }
 >r17arg1 : <T>(x: (a: T) => T) => T[]
 

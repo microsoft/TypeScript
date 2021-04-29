@@ -1,0 +1,78 @@
+tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts(5,7): error TS2322: Type 'EqualsTest<string>' is not assignable to type 'EqualsTest<number>'.
+  Type 'any extends string ? 1 : 0' is not assignable to type 'any extends number ? 1 : 0'.
+    Type '0 | 1' is not assignable to type 'any extends number ? 1 : 0'.
+      Type '0' is not assignable to type 'any extends number ? 1 : 0'.
+tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts(6,7): error TS2322: Type 'EqualsTest1<string>' is not assignable to type 'EqualsTest<number>'.
+  Type 'A extends string ? 1 : 0' is not assignable to type 'A extends number ? 1 : 0'.
+    Type '0 | 1' is not assignable to type 'A extends number ? 1 : 0'.
+      Type '0' is not assignable to type 'A extends number ? 1 : 0'.
+tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts(12,27): error TS2344: Type 'this' does not satisfy the constraint 'Model<typeof Model>'.
+  Type 'Model<MClass>' is not assignable to type 'Model<typeof Model>'.
+    Types of property 'set' are incompatible.
+      Type '<K>(value: K extends MClass ? number : string) => void' is not assignable to type '<K>(value: K extends typeof Model ? number : string) => void'.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'K extends typeof Model ? number : string' is not assignable to type 'K extends MClass ? number : string'.
+            Type 'string | number' is not assignable to type 'K extends MClass ? number : string'.
+              Type 'string' is not assignable to type 'K extends MClass ? number : string'.
+tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts(20,28): error TS2344: Type 'this' does not satisfy the constraint 'ModelSub'.
+  Type 'Model2<MClass>' is not assignable to type 'Model2<typeof ModelSub>'.
+    Types of property 'set' are incompatible.
+      Type '<K>(value: K extends MClass ? number : string) => void' is not assignable to type '<K>(value: K extends typeof ModelSub ? number : string) => void'.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'K extends typeof ModelSub ? number : string' is not assignable to type 'K extends MClass ? number : string'.
+            Type 'string | number' is not assignable to type 'K extends MClass ? number : string'.
+              Type 'string' is not assignable to type 'K extends MClass ? number : string'.
+
+
+==== tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts (4 errors) ====
+    // quick distillation of conditionals which were previously erased by signature relating
+    type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
+    type EqualsTest1<T> = <A>() => A extends T ? 1 : 0;
+    
+    const x: EqualsTest<number> = undefined as any as EqualsTest<string>; // should error, obviously wrong
+          ~
+!!! error TS2322: Type 'EqualsTest<string>' is not assignable to type 'EqualsTest<number>'.
+!!! error TS2322:   Type 'any extends string ? 1 : 0' is not assignable to type 'any extends number ? 1 : 0'.
+!!! error TS2322:     Type '0 | 1' is not assignable to type 'any extends number ? 1 : 0'.
+!!! error TS2322:       Type '0' is not assignable to type 'any extends number ? 1 : 0'.
+    const y: EqualsTest<number> = undefined as any as EqualsTest1<string>; // same as the above, but seperate type aliases
+          ~
+!!! error TS2322: Type 'EqualsTest1<string>' is not assignable to type 'EqualsTest<number>'.
+!!! error TS2322:   Type 'A extends string ? 1 : 0' is not assignable to type 'A extends number ? 1 : 0'.
+!!! error TS2322:     Type '0 | 1' is not assignable to type 'A extends number ? 1 : 0'.
+!!! error TS2322:       Type '0' is not assignable to type 'A extends number ? 1 : 0'.
+    
+    // Slightly extended example using class inheritance
+    type ModelId<M extends Model> = M; // just validates the input matches the `Model` type to issue an error
+    export declare class Model<MClass extends typeof Model = typeof Model> {
+        class: MClass;
+        readonly ref: ModelId<this>;
+                              ~~~~
+!!! error TS2344: Type 'this' does not satisfy the constraint 'Model<typeof Model>'.
+!!! error TS2344:   Type 'Model<MClass>' is not assignable to type 'Model<typeof Model>'.
+!!! error TS2344:     Types of property 'set' are incompatible.
+!!! error TS2344:       Type '<K>(value: K extends MClass ? number : string) => void' is not assignable to type '<K>(value: K extends typeof Model ? number : string) => void'.
+!!! error TS2344:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2344:           Type 'K extends typeof Model ? number : string' is not assignable to type 'K extends MClass ? number : string'.
+!!! error TS2344:             Type 'string | number' is not assignable to type 'K extends MClass ? number : string'.
+!!! error TS2344:               Type 'string' is not assignable to type 'K extends MClass ? number : string'.
+        set<K>(value: K extends MClass ? number : string): void;
+    }
+    
+    // identical to the above, but with a no-op subclass
+    type ModelId2<M extends ModelSub> = M;
+    export declare class Model2<MClass extends typeof ModelSub = typeof ModelSub> {
+        class: MClass;
+        readonly ref: ModelId2<this>;
+                               ~~~~
+!!! error TS2344: Type 'this' does not satisfy the constraint 'ModelSub'.
+!!! error TS2344:   Type 'Model2<MClass>' is not assignable to type 'Model2<typeof ModelSub>'.
+!!! error TS2344:     Types of property 'set' are incompatible.
+!!! error TS2344:       Type '<K>(value: K extends MClass ? number : string) => void' is not assignable to type '<K>(value: K extends typeof ModelSub ? number : string) => void'.
+!!! error TS2344:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2344:           Type 'K extends typeof ModelSub ? number : string' is not assignable to type 'K extends MClass ? number : string'.
+!!! error TS2344:             Type 'string | number' is not assignable to type 'K extends MClass ? number : string'.
+!!! error TS2344:               Type 'string' is not assignable to type 'K extends MClass ? number : string'.
+        set<K>(value: K extends MClass ? number : string): void;
+    }
+    export declare class ModelSub extends Model2 {}

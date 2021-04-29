@@ -1,0 +1,63 @@
+=== tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts ===
+// quick distillation of conditionals which were previously erased by signature relating
+type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
+>EqualsTest : EqualsTest<T>
+
+type EqualsTest1<T> = <A>() => A extends T ? 1 : 0;
+>EqualsTest1 : EqualsTest1<T>
+
+const x: EqualsTest<number> = undefined as any as EqualsTest<string>; // should error, obviously wrong
+>x : EqualsTest<number>
+>undefined as any as EqualsTest<string> : EqualsTest<string>
+>undefined as any : any
+>undefined : undefined
+
+const y: EqualsTest<number> = undefined as any as EqualsTest1<string>; // same as the above, but seperate type aliases
+>y : EqualsTest<number>
+>undefined as any as EqualsTest1<string> : EqualsTest1<string>
+>undefined as any : any
+>undefined : undefined
+
+// Slightly extended example using class inheritance
+type ModelId<M extends Model> = M; // just validates the input matches the `Model` type to issue an error
+>ModelId : M
+
+export declare class Model<MClass extends typeof Model = typeof Model> {
+>Model : Model<MClass>
+>Model : typeof Model
+>Model : typeof Model
+
+    class: MClass;
+>class : MClass
+
+    readonly ref: ModelId<this>;
+>ref : this
+
+    set<K>(value: K extends MClass ? number : string): void;
+>set : <K>(value: K extends MClass ? number : string) => void
+>value : K extends MClass ? number : string
+}
+
+// identical to the above, but with a no-op subclass
+type ModelId2<M extends ModelSub> = M;
+>ModelId2 : M
+
+export declare class Model2<MClass extends typeof ModelSub = typeof ModelSub> {
+>Model2 : Model2<MClass>
+>ModelSub : typeof ModelSub
+>ModelSub : typeof ModelSub
+
+    class: MClass;
+>class : MClass
+
+    readonly ref: ModelId2<this>;
+>ref : this
+
+    set<K>(value: K extends MClass ? number : string): void;
+>set : <K>(value: K extends MClass ? number : string) => void
+>value : K extends MClass ? number : string
+}
+export declare class ModelSub extends Model2 {}
+>ModelSub : ModelSub
+>Model2 : Model2<typeof ModelSub>
+

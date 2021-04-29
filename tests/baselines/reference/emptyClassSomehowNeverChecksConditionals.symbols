@@ -1,0 +1,89 @@
+=== tests/cases/compiler/emptyClassSomehowNeverChecksConditionals.ts ===
+// quick distillation of conditionals which were previously erased by signature relating
+type EqualsTest<T> = <A>() => A extends T ? 1 : 0;
+>EqualsTest : Symbol(EqualsTest, Decl(emptyClassSomehowNeverChecksConditionals.ts, 0, 0))
+>T : Symbol(T, Decl(emptyClassSomehowNeverChecksConditionals.ts, 1, 16))
+>A : Symbol(A, Decl(emptyClassSomehowNeverChecksConditionals.ts, 1, 22))
+>A : Symbol(A, Decl(emptyClassSomehowNeverChecksConditionals.ts, 1, 22))
+>T : Symbol(T, Decl(emptyClassSomehowNeverChecksConditionals.ts, 1, 16))
+
+type EqualsTest1<T> = <A>() => A extends T ? 1 : 0;
+>EqualsTest1 : Symbol(EqualsTest1, Decl(emptyClassSomehowNeverChecksConditionals.ts, 1, 50))
+>T : Symbol(T, Decl(emptyClassSomehowNeverChecksConditionals.ts, 2, 17))
+>A : Symbol(A, Decl(emptyClassSomehowNeverChecksConditionals.ts, 2, 23))
+>A : Symbol(A, Decl(emptyClassSomehowNeverChecksConditionals.ts, 2, 23))
+>T : Symbol(T, Decl(emptyClassSomehowNeverChecksConditionals.ts, 2, 17))
+
+const x: EqualsTest<number> = undefined as any as EqualsTest<string>; // should error, obviously wrong
+>x : Symbol(x, Decl(emptyClassSomehowNeverChecksConditionals.ts, 4, 5))
+>EqualsTest : Symbol(EqualsTest, Decl(emptyClassSomehowNeverChecksConditionals.ts, 0, 0))
+>undefined : Symbol(undefined)
+>EqualsTest : Symbol(EqualsTest, Decl(emptyClassSomehowNeverChecksConditionals.ts, 0, 0))
+
+const y: EqualsTest<number> = undefined as any as EqualsTest1<string>; // same as the above, but seperate type aliases
+>y : Symbol(y, Decl(emptyClassSomehowNeverChecksConditionals.ts, 5, 5))
+>EqualsTest : Symbol(EqualsTest, Decl(emptyClassSomehowNeverChecksConditionals.ts, 0, 0))
+>undefined : Symbol(undefined)
+>EqualsTest1 : Symbol(EqualsTest1, Decl(emptyClassSomehowNeverChecksConditionals.ts, 1, 50))
+
+// Slightly extended example using class inheritance
+type ModelId<M extends Model> = M; // just validates the input matches the `Model` type to issue an error
+>ModelId : Symbol(ModelId, Decl(emptyClassSomehowNeverChecksConditionals.ts, 5, 70))
+>M : Symbol(M, Decl(emptyClassSomehowNeverChecksConditionals.ts, 8, 13))
+>Model : Symbol(Model, Decl(emptyClassSomehowNeverChecksConditionals.ts, 8, 34))
+>M : Symbol(M, Decl(emptyClassSomehowNeverChecksConditionals.ts, 8, 13))
+
+export declare class Model<MClass extends typeof Model = typeof Model> {
+>Model : Symbol(Model, Decl(emptyClassSomehowNeverChecksConditionals.ts, 8, 34))
+>MClass : Symbol(MClass, Decl(emptyClassSomehowNeverChecksConditionals.ts, 9, 27))
+>Model : Symbol(Model, Decl(emptyClassSomehowNeverChecksConditionals.ts, 8, 34))
+>Model : Symbol(Model, Decl(emptyClassSomehowNeverChecksConditionals.ts, 8, 34))
+
+    class: MClass;
+>class : Symbol(Model.class, Decl(emptyClassSomehowNeverChecksConditionals.ts, 9, 72))
+>MClass : Symbol(MClass, Decl(emptyClassSomehowNeverChecksConditionals.ts, 9, 27))
+
+    readonly ref: ModelId<this>;
+>ref : Symbol(Model.ref, Decl(emptyClassSomehowNeverChecksConditionals.ts, 10, 18))
+>ModelId : Symbol(ModelId, Decl(emptyClassSomehowNeverChecksConditionals.ts, 5, 70))
+
+    set<K>(value: K extends MClass ? number : string): void;
+>set : Symbol(Model.set, Decl(emptyClassSomehowNeverChecksConditionals.ts, 11, 32))
+>K : Symbol(K, Decl(emptyClassSomehowNeverChecksConditionals.ts, 12, 8))
+>value : Symbol(value, Decl(emptyClassSomehowNeverChecksConditionals.ts, 12, 11))
+>K : Symbol(K, Decl(emptyClassSomehowNeverChecksConditionals.ts, 12, 8))
+>MClass : Symbol(MClass, Decl(emptyClassSomehowNeverChecksConditionals.ts, 9, 27))
+}
+
+// identical to the above, but with a no-op subclass
+type ModelId2<M extends ModelSub> = M;
+>ModelId2 : Symbol(ModelId2, Decl(emptyClassSomehowNeverChecksConditionals.ts, 13, 1))
+>M : Symbol(M, Decl(emptyClassSomehowNeverChecksConditionals.ts, 16, 14))
+>ModelSub : Symbol(ModelSub, Decl(emptyClassSomehowNeverChecksConditionals.ts, 21, 1))
+>M : Symbol(M, Decl(emptyClassSomehowNeverChecksConditionals.ts, 16, 14))
+
+export declare class Model2<MClass extends typeof ModelSub = typeof ModelSub> {
+>Model2 : Symbol(Model2, Decl(emptyClassSomehowNeverChecksConditionals.ts, 16, 38))
+>MClass : Symbol(MClass, Decl(emptyClassSomehowNeverChecksConditionals.ts, 17, 28))
+>ModelSub : Symbol(ModelSub, Decl(emptyClassSomehowNeverChecksConditionals.ts, 21, 1))
+>ModelSub : Symbol(ModelSub, Decl(emptyClassSomehowNeverChecksConditionals.ts, 21, 1))
+
+    class: MClass;
+>class : Symbol(Model2.class, Decl(emptyClassSomehowNeverChecksConditionals.ts, 17, 79))
+>MClass : Symbol(MClass, Decl(emptyClassSomehowNeverChecksConditionals.ts, 17, 28))
+
+    readonly ref: ModelId2<this>;
+>ref : Symbol(Model2.ref, Decl(emptyClassSomehowNeverChecksConditionals.ts, 18, 18))
+>ModelId2 : Symbol(ModelId2, Decl(emptyClassSomehowNeverChecksConditionals.ts, 13, 1))
+
+    set<K>(value: K extends MClass ? number : string): void;
+>set : Symbol(Model2.set, Decl(emptyClassSomehowNeverChecksConditionals.ts, 19, 33))
+>K : Symbol(K, Decl(emptyClassSomehowNeverChecksConditionals.ts, 20, 8))
+>value : Symbol(value, Decl(emptyClassSomehowNeverChecksConditionals.ts, 20, 11))
+>K : Symbol(K, Decl(emptyClassSomehowNeverChecksConditionals.ts, 20, 8))
+>MClass : Symbol(MClass, Decl(emptyClassSomehowNeverChecksConditionals.ts, 17, 28))
+}
+export declare class ModelSub extends Model2 {}
+>ModelSub : Symbol(ModelSub, Decl(emptyClassSomehowNeverChecksConditionals.ts, 21, 1))
+>Model2 : Symbol(Model2, Decl(emptyClassSomehowNeverChecksConditionals.ts, 16, 38))
+
