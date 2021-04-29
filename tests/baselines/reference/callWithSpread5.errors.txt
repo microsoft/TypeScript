@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(7,4): error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(7,4): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts (1 errors) ====
@@ -10,5 +10,5 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread5.ts(7,4): error
     fn(...nnnu, x)
     fn(...nntnnnt, x)
        ~~~~~~~~~~
-!!! error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
     

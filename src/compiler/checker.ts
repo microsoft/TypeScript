@@ -28561,10 +28561,10 @@ namespace ts {
         function getArgumentArityError(node: CallLikeExpression, signatures: readonly Signature[], args: readonly Expression[]) {
             const spreadIndex = getSpreadArgumentIndex(args);
             if (spreadIndex > -1) {
-                return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
+                return createDiagnosticForNode(args[spreadIndex], Diagnostics.A_spread_argument_must_either_have_a_tuple_type_or_be_passed_to_a_rest_parameter);
             }
             let min = Number.POSITIVE_INFINITY; // smallest parameter count
-            let max = Number.NEGATIVE_INFINITY; // larger parameter count
+            let max = Number.NEGATIVE_INFINITY; // largest parameter count
             let maxBelow = Number.NEGATIVE_INFINITY; // largest parameter count that is smaller than the number of arguments
             let minAbove = Number.POSITIVE_INFINITY; // smallest parameter count that is larger than the number of arguments
 
@@ -28572,7 +28572,7 @@ namespace ts {
             for (const sig of signatures) {
                 const minParameter = getMinArgumentCount(sig);
                 const maxParameter = getParameterCount(sig);
-                // shortest/longest parameter counts
+                // smallest/largest parameter counts
                 if (minParameter < min) {
                     min = minParameter;
                     closestSignature = sig;

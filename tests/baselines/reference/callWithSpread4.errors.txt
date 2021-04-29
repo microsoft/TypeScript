@@ -1,5 +1,5 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(18,5): error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(18,5): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts (2 errors) ====
@@ -22,7 +22,7 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): erro
         reads,
         ...gun,
         ~~~~~~
-!!! error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
         tr,
         fun,
         ...gz,
@@ -33,7 +33,7 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts(27,6): erro
     declare var anys: any[]
     test(...anys)
          ~~~~~~~
-!!! error TS2556: A spread must either have a tuple type or be passed to a rest parameter.
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
     
     pli(...[reads, writes, writes] as const)
     

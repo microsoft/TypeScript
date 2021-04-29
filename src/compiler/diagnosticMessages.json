@@ -526,7 +526,7 @@
     "'extends' clause already seen.": {
         "category": "Error",
         "code": 1172
-    },
+    },
     "'extends' clause must precede 'implements' clause.": {
         "category": "Error",
         "code": 1173
@@ -2386,7 +2386,7 @@
         "category": "Error",
         "code": 2555
     },
-    "A spread must either have a tuple type or be passed to a rest parameter.": {
+    "A spread argument must either have a tuple type or be passed to a rest parameter.": {
         "category": "Error",
         "code": 2556
     },
