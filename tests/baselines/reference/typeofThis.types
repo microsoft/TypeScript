@@ -1,0 +1,61 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts ===
+class Test {
+>Test : Test
+
+    data = {};
+>data : {}
+>{} : {}
+
+    constructor() {
+        var copy: typeof this.data = {};
+>copy : {}
+>this.data : {}
+>this : any
+>data : {}
+>{} : {}
+    }
+}
+
+class Test1 {
+>Test1 : Test1
+
+    data = { foo: '' };
+>data : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+    ['this'] = '';
+>['this'] : string
+>'this' : "this"
+>'' : ""
+
+    constructor() {
+        var copy: typeof this.data = { foo: '' };
+>copy : { foo: string; }
+>this.data : { foo: string; }
+>this : any
+>data : { foo: string; }
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        var self: typeof this = this;
+>self : this
+>this : error
+>this : this
+
+        self.data;
+>self.data : { foo: string; }
+>self : this
+>data : { foo: string; }
+
+        var str: typeof this.this = '';
+>str : string
+>this.this : string
+>this : any
+>this : string
+>'' : ""
+    }
+}
+
