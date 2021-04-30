@@ -1906,7 +1906,7 @@ namespace ts.server {
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
                     const { resolvedFileName, originalFileName } = resolution.resolvedTypeReferenceDirective;
-                    if ((!originalFileName || !program.getSourceFile(originalFileName)) && !program.getSourceFile(resolvedFileName)) {
+                    if (!program.getSourceFile(resolvedFileName) && (!originalFileName || !program.getSourceFile(originalFileName))) {
                         rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
                         if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {

@@ -6459,7 +6459,7 @@ namespace ts {
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName: string | undefined;
         /** The location of the symlink to the .d.ts file we found, if `resolvedFileName` was the realpath. */
-        originalFileName: string | undefined;
+        originalFileName?: string;
         packageId?: PackageId;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;

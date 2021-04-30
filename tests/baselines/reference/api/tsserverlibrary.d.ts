@@ -3086,6 +3086,8 @@ declare namespace ts {
     export interface ResolvedTypeReferenceDirective {
         primary: boolean;
         resolvedFileName: string | undefined;
+        /** The location of the symlink to the .d.ts file we found, if `resolvedFileName` was the realpath. */
+        originalFileName?: string;
         packageId?: PackageId;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
