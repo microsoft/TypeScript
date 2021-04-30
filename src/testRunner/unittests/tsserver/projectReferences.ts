@@ -621,6 +621,305 @@ bar();
             checkProjectActualFiles(service.configuredProjects.get(servicesConfig.path)!, [servicesFile.path, servicesConfig.path, libFile.path, typesFile.path, programFile.path]);
         });
 
+        describe("special handling of localness of the definitions for findAllRefs", () => {
+            function setup(definition: string, usage: string) {
+                const solutionLocation = "/user/username/projects/solution";
+                const solution: File = {
+                    path: `${solutionLocation}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: [],
+                        references: [
+                            { path: "./api" },
+                            { path: "./app" },
+                        ]
+                    })
+                };
+                const apiConfig: File = {
+                    path: `${solutionLocation}/api/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "dist",
+                            rootDir: "src",
+                        },
+                        include: ["src"],
+                        references: [{ path: "../shared" }]
+                    })
+                };
+                const apiFile: File = {
+                    path: `${solutionLocation}/api/src/server.ts`,
+                    content: `import * as shared from "../../shared/dist";
+${usage}`
+                };
+                const appConfig: File = {
+                    path: `${solutionLocation}/app/tsconfig.json`,
+                    content: apiConfig.content
+                };
+                const appFile: File = {
+                    path: `${solutionLocation}/app/src/app.ts`,
+                    content: apiFile.content
+                };
+                const sharedConfig: File = {
+                    path: `${solutionLocation}/shared/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "dist",
+                            rootDir: "src",
+                        },
+                        include: ["src"]
+                    })
+                };
+                const sharedFile: File = {
+                    path: `${solutionLocation}/shared/src/index.ts`,
+                    content: definition
+                };
+                const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const session = createSession(host);
+                const service = session.getProjectService();
+                service.openClientFile(apiFile.path);
+                verifyApiProjectLoadAndSolutionPending();
+                return { session, verifySolutionTreeLoaded, verifyApiAndSharedProjectLoadAndSolutionPending, apiFile, appFile, sharedFile };
+
+                function checkApiProject() {
+                    const apiProject = service.configuredProjects.get(apiConfig.path)!;
+                    checkProjectActualFiles(apiProject, [libFile.path, apiConfig.path, apiFile.path, sharedFile.path]);
+                }
+                function checkAppProject() {
+                    const appProject = service.configuredProjects.get(appConfig.path)!;
+                    checkProjectActualFiles(appProject, [libFile.path, appConfig.path, appFile.path, sharedFile.path]);
+                }
+                function checkSharedProject() {
+                    const sharedProject = service.configuredProjects.get(sharedConfig.path)!;
+                    checkProjectActualFiles(sharedProject, [libFile.path, sharedConfig.path, sharedFile.path]);
+                }
+                function checkSolutionLoadPending() {
+                    const solutionProject = service.configuredProjects.get(solution.path)!;
+                    assert.isFalse(solutionProject.isInitialLoadPending());
+                }
+                function checkSolutionLoadComplete() {
+                    const solutionProject = service.configuredProjects.get(solution.path)!;
+                    assert.isTrue(solutionProject.isInitialLoadPending());
+                }
+                function verifySolutionTreeLoaded() {
+                    checkNumberOfProjects(service, { configuredProjects: 4 });
+                    checkApiProject();
+                    checkAppProject();
+                    checkSharedProject();
+                    checkSolutionLoadPending();
+                }
+
+                function verifyApiProjectLoadAndSolutionPending() {
+                    checkNumberOfProjects(service, { configuredProjects: 2 });
+                    checkApiProject();
+                    checkSolutionLoadComplete();
+                }
+
+                function verifyApiAndSharedProjectLoadAndSolutionPending() {
+                    checkNumberOfProjects(service, { configuredProjects: 3 });
+                    checkApiProject();
+                    checkSharedProject();
+                    checkSolutionLoadComplete();
+                }
+            }
+
+            it("when using arrow function assignment", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const dog = () => { };`,
+                    `shared.dog();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "dog")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "dog",
+                            contextText: sharedFile.content,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "dog",
+                            isDefinition: false,
+                            lineText: "shared.dog();",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "dog",
+                            isDefinition: false,
+                            lineText: "shared.dog();",
+                        })
+                    ],
+                    symbolName: "dog",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "dog").offset,
+                    symbolDisplayString: "const dog: () => void"
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using arrow function as object literal property", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const foo = { bar: () => { } };`,
+                    `shared.foo.bar();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "bar")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "bar",
+                            contextText: `bar: () => { }`,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "bar",
+                            isDefinition: false,
+                            lineText: "shared.foo.bar();",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "bar",
+                            isDefinition: false,
+                            lineText: "shared.foo.bar();",
+                        })
+                    ],
+                    symbolName: "bar",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "bar").offset,
+                    symbolDisplayString: "(property) bar: () => void"
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using object literal property", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const foo = {  baz: "BAZ" };`,
+                    `shared.foo.baz;`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "baz")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "baz",
+                            contextText: `baz: "BAZ"`,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "baz",
+                            isDefinition: false,
+                            lineText: "shared.foo.baz;",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "baz",
+                            isDefinition: false,
+                            lineText: "shared.foo.baz;",
+                        })
+                    ],
+                    symbolName: "baz",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "baz").offset,
+                    symbolDisplayString: `(property) baz: string`
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using method of class expression", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const foo = class { fly() {} };`,
+                    `const instance = new shared.foo();
+instance.fly();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "fly")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "fly",
+                            contextText: `fly() {}`,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "fly",
+                            isDefinition: false,
+                            lineText: "instance.fly();",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "fly",
+                            isDefinition: false,
+                            lineText: "instance.fly();",
+                        })
+                    ],
+                    symbolName: "fly",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "fly").offset,
+                    symbolDisplayString: `(method) foo.fly(): void`
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using arrow function as object literal property is loaded through indirect assignment with original declaration local to project is treated as local", () => {
+                const { session, apiFile, sharedFile, verifyApiAndSharedProjectLoadAndSolutionPending } = setup(
+                    `const local = { bar: () => { } };
+export const foo = local;`,
+                    `shared.foo.bar();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "bar")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "bar",
+                            contextText: `bar: () => { }`,
+                            isDefinition: true,
+                            lineText: `const local = { bar: () => { } };`,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "bar",
+                            isDefinition: false,
+                            lineText: "shared.foo.bar();",
+                        }),
+                    ],
+                    symbolName: "bar",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "bar").offset,
+                    symbolDisplayString: "(property) bar: () => void"
+                });
+                verifyApiAndSharedProjectLoadAndSolutionPending();
+            });
+        });
+
         it("when disableSolutionSearching is true, solution and siblings are not loaded", () => {
             const solutionLocation = "/user/username/projects/solution";
             const solution: File = {
