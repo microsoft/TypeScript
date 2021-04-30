@@ -6172,6 +6172,7 @@ namespace ts {
                 }
             },
             setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
+                this.setSymlinkedFile(toPath(symlink, cwd, getCanonicalFileName), real);
                 const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
                 if (commonResolved && commonOriginal) {
                     this.setSymlinkedDirectory(commonOriginal, {
@@ -6189,6 +6190,7 @@ namespace ts {
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
         for (const [resolvedPath, originalPath] of symlinks) {
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
