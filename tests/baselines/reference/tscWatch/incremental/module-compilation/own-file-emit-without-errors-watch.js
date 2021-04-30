@@ -83,7 +83,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-10726455937-export const x = 10;","affectsGlobalScope":false},{"version":"-13729954175-export const y = 20;","signature":"-13729954175-export const y = 20;","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","incremental":true,"module":2,"watch":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;","-13729954175-export const y = 20;"],"options":{"module":2},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -101,20 +101,15 @@ define(["require", "exports"], function (require, exports) {
       },
       "./file1.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;",
-        "affectsGlobalScope": false
+        "signature": "-10726455937-export const x = 10;"
       },
       "./file2.ts": {
         "version": "-13729954175-export const y = 20;",
-        "signature": "-13729954175-export const y = 20;",
-        "affectsGlobalScope": false
+        "signature": "-13729954175-export const y = 20;"
       }
     },
     "options": {
-      "configFilePath": "./tsconfig.json",
-      "incremental": true,
-      "module": 2,
-      "watch": true
+      "module": 2
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -125,7 +120,7 @@ define(["require", "exports"], function (require, exports) {
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1310
+  "size": 696
 }
 
 
@@ -185,7 +180,7 @@ define(["require", "exports"], function (require, exports) {
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-10726455937-export const x = 10;","affectsGlobalScope":false},{"version":"-12438487295-export const z = 10;","signature":"-7483702853-export declare const z = 10;\n","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","incremental":true,"module":2,"watch":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;",{"version":"-12438487295-export const z = 10;","signature":"-7483702853-export declare const z = 10;\n"}],"options":{"module":2},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -203,20 +198,15 @@ define(["require", "exports"], function (require, exports) {
       },
       "./file1.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-10726455937-export const x = 10;",
-        "affectsGlobalScope": false
+        "signature": "-10726455937-export const x = 10;"
       },
       "./file2.ts": {
         "version": "-12438487295-export const z = 10;",
-        "signature": "-7483702853-export declare const z = 10;\n",
-        "affectsGlobalScope": false
+        "signature": "-7483702853-export declare const z = 10;\n"
       }
     },
     "options": {
-      "configFilePath": "./tsconfig.json",
-      "incremental": true,
-      "module": 2,
-      "watch": true
+      "module": 2
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -227,6 +217,6 @@ define(["require", "exports"], function (require, exports) {
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1319
+  "size": 765
 }
 

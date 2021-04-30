@@ -2139,7 +2139,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name,
-                initializer
+                initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer)
             );
             node.propertyName = asName(propertyName);
             node.dotDotDotToken = dotDotDotToken;

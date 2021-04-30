@@ -238,6 +238,7 @@ namespace ts {
 
         readonly compilerHost: CompilerHost;
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
+        readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
 
         // Mutable state
         buildOrder: AnyBuildOrder | undefined;
@@ -275,10 +276,16 @@ namespace ts {
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
         const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
+        const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
         if (!compilerHost.resolveModuleNames) {
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
             compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
                 loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
+        }
+        if (!compilerHost.resolveTypeReferenceDirectives) {
+            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache).resolvedTypeReferenceDirective!;
+            compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference) =>
+                loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
 
         const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
@@ -310,6 +317,7 @@ namespace ts {
 
             compilerHost,
             moduleResolutionCache,
+            typeReferenceDirectiveResolutionCache,
 
             // Mutable state
             buildOrder: undefined,
@@ -548,7 +556,7 @@ namespace ts {
     function disableCache(state: SolutionBuilderState) {
         if (!state.cache) return;
 
-        const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache } = state;
+        const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache } = state;
 
         host.readFile = cache.originalReadFile;
         host.fileExists = cache.originalFileExists;
@@ -558,10 +566,8 @@ namespace ts {
         compilerHost.getSourceFile = cache.originalGetSourceFile;
         state.readFileWithCache = cache.originalReadFileWithCache;
         extendedConfigCache.clear();
-        if (moduleResolutionCache) {
-            moduleResolutionCache.directoryToModuleNameMap.clear();
-            moduleResolutionCache.moduleNameToDirectoryMap.clear();
-        }
+        moduleResolutionCache?.clear();
+        typeReferenceDirectiveResolutionCache?.clear();
         state.cache = undefined;
     }
 
@@ -842,7 +848,7 @@ namespace ts {
             const { host, compilerHost } = state;
             state.projectCompilerOptions = config.options;
             // Update module resolution cache if needed
-            updateModuleResolutionCache(state, project, config);
+            state.moduleResolutionCache?.update(config.options);
 
             // Create program
             program = host.createProgram(
@@ -1306,37 +1312,6 @@ namespace ts {
         return { buildResult, step: BuildStep.QueueReferencingProjects };
     }
 
-    function updateModuleResolutionCache(
-        state: SolutionBuilderState,
-        proj: ResolvedConfigFileName,
-        config: ParsedCommandLine
-    ) {
-        if (!state.moduleResolutionCache) return;
-
-        // Update module resolution cache if needed
-        const { moduleResolutionCache } = state;
-        const projPath = toPath(state, proj);
-        if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
-            // The own map will be for projectCompilerOptions
-            Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
-            moduleResolutionCache.directoryToModuleNameMap.redirectsMap.set(projPath, moduleResolutionCache.directoryToModuleNameMap.ownMap);
-            moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.set(projPath, moduleResolutionCache.moduleNameToDirectoryMap.ownMap);
-        }
-        else {
-            // Set correct own map
-            Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size > 0);
-
-            const ref: ResolvedProjectReference = {
-                sourceFile: config.options.configFile!,
-                commandLine: config
-            };
-            moduleResolutionCache.directoryToModuleNameMap.setOwnMap(moduleResolutionCache.directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
-            moduleResolutionCache.moduleNameToDirectoryMap.setOwnMap(moduleResolutionCache.moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
-        }
-        moduleResolutionCache.directoryToModuleNameMap.setOwnOptions(config.options);
-        moduleResolutionCache.moduleNameToDirectoryMap.setOwnOptions(config.options);
-    }
-
     function checkConfigFileUpToDateStatus(state: SolutionBuilderState, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
         // Check tsconfig time
         const tsconfigTime = getModifiedTime(state.host, configFile);
@@ -1350,6 +1325,7 @@ namespace ts {
     }
 
     function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
+        const force = !!state.options.force;
         let newestInputFileName: string = undefined!;
         let newestInputFileTime = minimumDate;
         const { host } = state;
@@ -1362,10 +1338,12 @@ namespace ts {
                 };
             }
 
-            const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
-            if (inputTime > newestInputFileTime) {
-                newestInputFileName = inputFile;
-                newestInputFileTime = inputTime;
+            if (!force) {
+                const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
+                if (inputTime > newestInputFileTime) {
+                    newestInputFileName = inputFile;
+                    newestInputFileTime = inputTime;
+                }
             }
         }
 
@@ -1387,39 +1365,41 @@ namespace ts {
         let missingOutputFileName: string | undefined;
         let newestDeclarationFileContentChangedTime = minimumDate;
         let isOutOfDateWithInputs = false;
-        for (const output of outputs) {
-            // Output is missing; can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (!host.fileExists(output)) {
-                missingOutputFileName = output;
-                break;
-            }
+        if (!force) {
+            for (const output of outputs) {
+                // Output is missing; can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (!host.fileExists(output)) {
+                    missingOutputFileName = output;
+                    break;
+                }
 
-            const outputTime = getModifiedTime(host, output);
-            if (outputTime < oldestOutputFileTime) {
-                oldestOutputFileTime = outputTime;
-                oldestOutputFileName = output;
-            }
+                const outputTime = getModifiedTime(host, output);
+                if (outputTime < oldestOutputFileTime) {
+                    oldestOutputFileTime = outputTime;
+                    oldestOutputFileName = output;
+                }
 
-            // If an output is older than the newest input, we can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (outputTime < newestInputFileTime) {
-                isOutOfDateWithInputs = true;
-                break;
-            }
+                // If an output is older than the newest input, we can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (outputTime < newestInputFileTime) {
+                    isOutOfDateWithInputs = true;
+                    break;
+                }
 
-            if (outputTime > newestOutputFileTime) {
-                newestOutputFileTime = outputTime;
-                newestOutputFileName = output;
-            }
+                if (outputTime > newestOutputFileTime) {
+                    newestOutputFileTime = outputTime;
+                    newestOutputFileName = output;
+                }
 
-            // Keep track of when the most recent time a .d.ts file was changed.
-            // In addition to file timestamps, we also keep track of when a .d.ts file
-            // had its file touched but not had its contents changed - this allows us
-            // to skip a downstream typecheck
-            if (isDeclarationFile(output)) {
-                const outputModifiedTime = getModifiedTime(host, output);
-                newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                // Keep track of when the most recent time a .d.ts file was changed.
+                // In addition to file timestamps, we also keep track of when a .d.ts file
+                // had its file touched but not had its contents changed - this allows us
+                // to skip a downstream typecheck
+                if (isDeclarationFile(output)) {
+                    const outputModifiedTime = getModifiedTime(host, output);
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
+                }
             }
         }
 
@@ -1459,7 +1439,8 @@ namespace ts {
                 }
 
                 // Check oldest output file name only if there is no missing output file name
-                if (!missingOutputFileName) {
+                // (a check we will have skipped if this is a forced build)
+                if (!force && !missingOutputFileName) {
                     // If the upstream project's newest file is older than our oldest output, we
                     // can't be out of date because of it
                     if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
@@ -1509,7 +1490,7 @@ namespace ts {
             if (extendedConfigStatus) return extendedConfigStatus;
         }
 
-        if (!state.buildInfoChecked.has(resolvedPath)) {
+        if (!force && !state.buildInfoChecked.has(resolvedPath)) {
             state.buildInfoChecked.set(resolvedPath, true);
             const buildInfoPath = getTsBuildInfoEmitOutputFilePath(project.options);
             if (buildInfoPath) {
@@ -2005,6 +1986,14 @@ namespace ts {
     }
 
     function reportUpToDateStatus(state: SolutionBuilderState, configFileName: string, status: UpToDateStatus) {
+        if (state.options.force && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes)) {
+            return reportStatus(
+                state,
+                Diagnostics.Project_0_is_being_forcibly_rebuilt,
+                relName(state, configFileName)
+            );
+        }
+
         switch (status.type) {
             case UpToDateStatusType.OutOfDateWithSelf:
                 return reportStatus(

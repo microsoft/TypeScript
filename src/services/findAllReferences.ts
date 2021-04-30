@@ -1929,6 +1929,8 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     if (isObjectLiteralMethod(searchSpaceNode)) {
+                        staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
+                        searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning object literals
                         break;
                     }
                     // falls through
@@ -1970,7 +1972,8 @@ namespace ts.FindAllReferences {
                             return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;
                         case SyntaxKind.ClassExpression:
                         case SyntaxKind.ClassDeclaration:
-                            // Make sure the container belongs to the same class
+                        case SyntaxKind.ObjectLiteralExpression:
+                            // Make sure the container belongs to the same class/object literals
                             // and has the appropriate static modifier from the original container.
                             return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getSyntacticModifierFlags(container) & ModifierFlags.Static) === staticFlag;
                         case SyntaxKind.SourceFile:

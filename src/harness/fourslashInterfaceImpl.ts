@@ -1175,7 +1175,7 @@ namespace FourSlashInterface {
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
         export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
+            ["private", "protected", "public", "readonly", "override"].map((name): ExpectedCompletionEntryObject => ({
                 name,
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
