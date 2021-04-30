@@ -2240,8 +2240,9 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
-            if (symbol?.valueDeclaration) {
-                parts.push(linkNamePart(link.name, symbol.valueDeclaration));
+            const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+            if (decl) {
+                parts.push(linkNamePart(link.name, decl));
                 if (link.text) {parts.push(linkTextPart(link.text));}
             }
             else {
