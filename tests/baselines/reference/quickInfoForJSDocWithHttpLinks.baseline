@@ -286,7 +286,18 @@
               "kind": "link"
             },
             {
-              "text": "https://hva",
+              "text": "https",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+                "textSpan": {
+                  "start": 4,
+                  "length": 30
+                }
+              }
+            },
+            {
+              "text": "://hva",
               "kind": "linkText"
             },
             {
@@ -347,7 +358,18 @@
           "kind": "link"
         },
         {
-          "text": "https://hvaD",
+          "text": "https",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/tests/cases/fourslash/quickInfoForJSDocWithHttpLinks.js",
+            "textSpan": {
+              "start": 4,
+              "length": 30
+            }
+          }
+        },
+        {
+          "text": "://hvaD",
           "kind": "linkText"
         },
         {
