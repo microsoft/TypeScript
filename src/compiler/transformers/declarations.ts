@@ -372,9 +372,7 @@ namespace ts {
 
                     if (declFileName) {
                         const specifier = moduleSpecifiers.getModuleSpecifier(
-                            // We pathify the baseUrl since we pathify the other paths here, so we can still easily check if the other paths are within the baseUrl
-                            // TODO: Should we _always_ be pathifying the baseUrl as we read it in?
-                            { ...options, baseUrl: options.baseUrl && toPath(options.baseUrl, host.getCurrentDirectory(), host.getCanonicalFileName) },
+                            options,
                             currentSourceFile,
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
