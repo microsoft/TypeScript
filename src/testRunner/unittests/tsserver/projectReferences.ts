@@ -541,9 +541,9 @@ testCompositeFunction('why hello there', 42);`
             checkNumberOfProjects(service, { configuredProjects: 1 });
             checkProjectActualFiles(
                 service.configuredProjects.get(consumerConfig.path)!,
-                [consumerIndex.path, libFile.path, consumerConfig.path, compositeIndex.path]
+                [consumerIndex.path, libFile.path, consumerConfig.path, compositeIndex.path, compositeTestModule.path]
             );
-            const namedImport = protocolTextSpanFromSubstring(consumerIndex.content, "testCompositeFunction");
+            const secondArg = protocolTextSpanFromSubstring(consumerIndex.content, "42");
             verifyGetErrRequest({
                 host,
                 session,
@@ -551,7 +551,7 @@ testCompositeFunction('why hello there', 42);`
                     file: consumerIndex,
                     syntax: [],
                     semantic: [
-                        createDiagnostic(namedImport.start, namedImport.end, Diagnostics.Module_0_has_no_exported_member_1, [`"emit-composite"`, "testCompositeFunction"]),
+                        createDiagnostic(secondArg.start, secondArg.end, Diagnostics.Expected_0_arguments_but_got_1, ["1", "2"]),
                     ],
                     suggestion: []
                 }]
