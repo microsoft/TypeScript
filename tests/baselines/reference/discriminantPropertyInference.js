@@ -11,7 +11,9 @@ type DiscriminatorFalse = {
     cb: (x: number) => void;
 }
 
-type Props = DiscriminatorTrue | DiscriminatorFalse;
+type Unrelated = {
+    val: number;
+}
 
 declare function f(options: DiscriminatorTrue | DiscriminatorFalse): any;
 
@@ -39,6 +41,14 @@ f({
 });
 
 
+declare function g(options: DiscriminatorTrue | DiscriminatorFalse | Unrelated): any;
+
+// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
+g({
+    cb: n => n.toFixed()
+});
+
+
 //// [discriminantPropertyInference.js]
 // Repro from #41759
 // simple inference
@@ -58,5 +68,9 @@ f({
 });
 // requires checking type information since discriminator is missing from object
 f({
+    cb: function (n) { return n.toFixed(); }
+});
+// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
+g({
     cb: function (n) { return n.toFixed(); }
 });

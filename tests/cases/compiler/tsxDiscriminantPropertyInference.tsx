@@ -17,9 +17,15 @@ type DiscriminatorFalse = {
     cb: (x: number) => void;
 }
 
+type Unrelated = {
+    val: number;
+}
+
 type Props = DiscriminatorTrue | DiscriminatorFalse;
 
-declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
+type UnrelatedProps = Props | Unrelated;
+
+declare function Comp(props: Props): JSX.Element;
 
 // simple inference
 void (<Comp disc cb={s => parseInt(s)} />);
@@ -31,4 +37,9 @@ void (<Comp disc={false} cb={n => n.toFixed()} />);
 void (<Comp disc={undefined} cb={n => n.toFixed()} />);
 
 // requires checking type information since discriminator is missing from object
+void (<Comp cb={n => n.toFixed()} />);
+
+declare function UnrelatedComp(props: UnrelatedProps): JSX.Element;
+
+// requires checking properties of all types, rather than properties of just the union type (e.g. only intersection)
 void (<Comp cb={n => n.toFixed()} />);
