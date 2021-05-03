@@ -2,11 +2,6 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
-    /* Output Formatting */
-    // "preserveWatchOutput": true,                      /* Whether to keep outdated console output in watch mode instead of clearing the screen. */
-    // "pretty": true,                                   /* Stylize errors and messages using color and context (experimental). */
-    // "noErrorTruncation": true,                        /* Do not truncate error messages. */
-
     /* Projects */
     // "incremental": true,                              /* Enable incremental compilation */
     // "composite": true,                                /* Enable project compilation */
