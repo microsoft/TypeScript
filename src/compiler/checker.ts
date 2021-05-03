@@ -20020,9 +20020,13 @@ namespace ts {
             return (type as TypeReference).cachedEquivalentBaseType = instantiatedBase;
         }
 
+        function isEmptyLiteralType(type: Type): boolean {
+            return strictNullChecks ? type === implicitNeverType : type === undefinedWideningType;
+        }
+
         function isEmptyArrayLiteralType(type: Type): boolean {
             const elementType = getElementTypeOfArrayType(type);
-            return strictNullChecks ? elementType === implicitNeverType : elementType === undefinedWideningType;
+            return !!elementType && isEmptyLiteralType(elementType);
         }
 
         function isTupleLikeType(type: Type): boolean {
@@ -32341,7 +32345,7 @@ namespace ts {
         function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
-                if (widened.flags & TypeFlags.Nullable) {
+                if (isEmptyLiteralType(widened)) {
                     reportImplicitAny(declaration, anyType);
                     return anyType;
                 }
