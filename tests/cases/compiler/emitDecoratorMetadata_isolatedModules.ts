@@ -1,6 +1,7 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 // @isolatedModules: true
+// @module: commonjs,esnext
 
 // @Filename: type1.ts
 interface T1 {}
