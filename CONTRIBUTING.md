@@ -58,32 +58,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Get Started
 
-1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
-2. Open a terminal.
-3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
-4. Install the gulp command line tool: `npm install -g gulp-cli`
-5. Change to the TypeScript folder you made: `cd TypeScript`
-6. Install dependencies: `npm ci`
-7. Make sure everything builds and tests pass: `gulp runtests-parallel`
-8. Open the Typescript folder in your editor.
-9. Follow the directions below to add and debug a test.
-
-## Tips
-
-### Using a development container
-
-This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
-
-- Clone the TypeScript repository locally and use the `Open Folder in Container` command.
-- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
-
-### Faster clones
-
-The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
-
-### Using local builds
-
-Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
+You can find a guide for how the compiler works, and how to debug some common issues in [./CONTRIBUTING_CODE.md](./CONTRIBUTING_CODE.md) and then [./CONTRIBUTING_TESTS.md](./CONTRIBUTING_TESTS.md) to understand how testing works in the compiler.
 
 ## Contributing bug fixes
 
@@ -130,99 +105,7 @@ The files in `lib/` are used to bootstrap compilation and usually **should not**
 
 ### Modifying generated library files
 
-The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
-
-## Running the Tests
-
-To run all tests, invoke the `runtests-parallel` target using gulp:
-
-```Shell
-gulp runtests-parallel
-```
-
-This will run all tests; to run only a specific subset of tests, use:
-
-```Shell
-gulp runtests --tests=<regex>
-```
-
-e.g. to run all compiler baseline tests:
-
-```Shell
-gulp runtests --tests=compiler
-```
-
-or to run a specific test: `tests\cases\compiler\2dArrays.ts`
-
-```Shell
-gulp runtests --tests=2dArrays
-```
-
-## Debugging the tests
-
-You can debug with VS Code or Node instead with `gulp runtests -i`:
-
-```Shell
-gulp runtests --tests=2dArrays -i
-```
-
-You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
-
-## Adding a Test
-
-To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the bug is now fixed, or your new feature now works.
-
-These files support metadata tags in the format  `// @metaDataName: value`.
-The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
-`fileName` tags delimit sections of a file to be used as separate compilation units.
-They are useful for testing modules.
-See below for examples.
-
-**Note** that if you have a test corresponding to a specific area of spec compliance, you can put it in the appropriate subfolder of `tests\cases\conformance`.
-**Note** that test filenames must be distinct from all other test names, so you may have to work a bit to find a unique name if it's something common.
-
-### Tests for multiple files
-
-When you need to mimic having multiple files in a single test to test features such as "import", use the `filename` tag:
-
-```ts
-// @filename: file1.ts
-export function f() {
-}
-
-// @filename: file2.ts
-import { f as g } from "file1";
-
-var x = g();
-```
-
-## Managing the baselines
-
-Most tests generate "baselines" to find differences in output.
-As an example, compiler tests usually emit one file each for
-
-- the `.js` and `.d.ts` output (all in the same `.js` output file),
-- the errors produced by the compiler (in an `.errors.txt` file),
-- the types of each expression (in a `.types` file),
-- the symbols for each identifier (in a `.symbols` file), and
-- the source map outputs for files if a test opts into them (in a `.js.map` file).
-
-When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
-
-```Shell
-git diff --diff-filter=AM --no-index ./tests/baselines/reference ./tests/baselines/local
-```
-
-Alternatively, you can set the `DIFF` environment variable and run `gulp diff`, or manually run your favorite folder diffing tool between `tests/baselines/reference` and `tests/baselines/local`. Our team largely uses Beyond Compare and WinMerge.
-
-After verifying that the changes in the baselines are correct, run
-
-```Shell
-gulp baseline-accept
-```
-
-This will change the files in `tests\baselines\reference`, which should be included as part of your commit.
-Be sure to validate the changes carefully -- apparently unrelated changes to baselines can be clues about something you didn't think of.
+The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/microsoft/TypeScript-DOM-lib-generator
 
 ## Localization
 

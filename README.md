@@ -8,8 +8,6 @@
 
 [TypeScript](https://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](https://www.typescriptlang.org/play/), and stay up to date via [our blog](https://blogs.msdn.microsoft.com/typescript) and [Twitter account](https://twitter.com/typescript).
 
-Find others who are using TypeScript at [our community page](https://www.typescriptlang.org/community/).
-
 ## Installing
 
 For the latest stable version:
@@ -24,9 +22,17 @@ For our nightly builds:
 npm install -g typescript@next
 ```
 
+## Language Documentation
+
+*  [Homepage](https://www.typescriptlang.org/)
+*  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+*  [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+*  [TypeScript Playground](https://www.typescriptlang.org/play)
+
 ## Contribute
 
-There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/master/CONTRIBUTING.md) to TypeScript.
+There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/master/CONTRIBUTING.md) to TypeScript:
+
 * [Submit bugs](https://github.com/microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
 * Review the [source code changes](https://github.com/microsoft/TypeScript/pulls).
 * Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript).
@@ -40,65 +46,13 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com)
 with any additional questions or comments.
 
-## Documentation
 
-*  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
-*  [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
-*  [Homepage](https://www.typescriptlang.org/)
+## Contributing to the TypeScript compiler
 
-## Building
-
-In order to build the TypeScript compiler, ensure that you have [Git](https://git-scm.com/downloads) and [Node.js](https://nodejs.org/) installed.
-
-Clone a copy of the repo:
-
-```bash
-git clone https://github.com/microsoft/TypeScript.git
-```
-
-Change to the TypeScript directory:
-
-```bash
-cd TypeScript
-```
-
-Install [Gulp](https://gulpjs.com/) tools and dev dependencies:
-
-```bash
-npm install -g gulp
-npm ci
-```
-
-Use one of the following to build and test:
-
-```
-gulp local             # Build the compiler into built/local.
-gulp clean             # Delete the built compiler.
-gulp LKG               # Replace the last known good with the built one.
-                       # Bootstrapping step to be executed when the built compiler reaches a stable state.
-gulp tests             # Build the test infrastructure using the built compiler.
-gulp runtests          # Run tests using the built compiler and test infrastructure.
-                       # You can override the specific suite runner used or specify a test for this command.
-                       # Use --tests=<testPath> for a specific test and/or --runner=<runnerName> for a specific suite.
-                       # Valid runners include conformance, compiler, fourslash, project, user, and docker
-                       # The user and docker runners are extended test suite runners - the user runner
-                       # works on disk in the tests/cases/user directory, while the docker runner works in containers.
-                       # You'll need to have the docker executable in your system path for the docker runner to work.
-gulp runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
-                       # core count by default. Use --workers=<number> to adjust this.
-gulp baseline-accept   # This replaces the baseline test results with the results obtained from gulp runtests.
-gulp lint              # Runs eslint on the TypeScript source.
-gulp help              # List the above commands.
-```
-
-
-## Usage
-
-```bash
-node built/local/tsc.js hello.ts
-```
-
+- [The overview for contributing](./CONTRIBUTING.md)
+- [An architectural overview for contributing code](./CONTRIBUTING_CODE.md)
+- [How the TypeScript test suite works](./CONTRIBUTING_TESTS.md)
 
 ## Roadmap
 
-For details on our planned features and future direction please refer to our [roadmap](https://github.com/microsoft/TypeScript/wiki/Roadmap).
+For details on our planned features and future direction please refer to our [roadmap](https://github.com/microsoft/TypeScript/wiki/Roadmap). You can see the timeline for the [next release cycle](https://www.typescriptlang.org/upcoming/).
