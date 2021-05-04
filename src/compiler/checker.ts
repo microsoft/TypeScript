@@ -352,6 +352,7 @@ namespace ts {
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
+        const strictOptionalProperties = getStrictOptionValue(compilerOptions, "strictOptionalProperties");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
@@ -745,6 +746,7 @@ namespace ts {
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
         const optionalType = createIntrinsicType(TypeFlags.Undefined, "undefined");
+        const missingType = strictOptionalProperties ? createIntrinsicType(TypeFlags.Undefined, "undefined") : undefinedType;
         const nullType = createIntrinsicType(TypeFlags.Null, "null");
         const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null, "null", ObjectFlags.ContainsWideningType);
         const stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -8289,8 +8291,8 @@ namespace ts {
             return expr.kind === SyntaxKind.ArrayLiteralExpression && (<ArrayLiteralExpression>expr).elements.length === 0;
         }
 
-        function addOptionality(type: Type, optional = true): Type {
-            return strictNullChecks && optional ? getOptionalType(type) : type;
+        function addOptionality(type: Type, isProperty = false, isOptional = true): Type {
+            return strictNullChecks && isOptional ? getOptionalType(type, isProperty) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -8315,15 +8317,16 @@ namespace ts {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
 
+            const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
             const isOptional = includeOptionality && (
-                isParameter(declaration) && isJSDocOptionalParameter(declaration)
-                || isOptionalJSDocPropertyLikeTag(declaration)
-                || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
+                isProperty && !!(<PropertyDeclaration | PropertySignature>declaration).questionToken ||
+                isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
+                isOptionalJSDocPropertyLikeTag(declaration));
 
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
             if (declaredType) {
-                return addOptionality(declaredType, isOptional);
+                return addOptionality(declaredType, isProperty, isOptional);
             }
 
             if ((noImplicitAny || isInJSFile(declaration)) &&
@@ -8369,7 +8372,7 @@ namespace ts {
                 // Use contextual parameter type if one is available
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
-                    return addOptionality(type, isOptional);
+                    return addOptionality(type, /*isProperty*/ false, isOptional);
                 }
             }
 
@@ -8383,7 +8386,7 @@ namespace ts {
                     }
                 }
                 const type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration));
-                return addOptionality(type, isOptional);
+                return addOptionality(type, isProperty, isOptional);
             }
 
             if (isPropertyDeclaration(declaration) && !hasStaticModifier(declaration) && (noImplicitAny || isInJSFile(declaration))) {
@@ -8393,7 +8396,7 @@ namespace ts {
                 const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
                     getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
                     undefined;
-                return type && addOptionality(type, isOptional);
+                return type && addOptionality(type, /*isProperty*/ true, isOptional);
             }
 
             if (isJsxAttribute(declaration)) {
@@ -8560,7 +8563,7 @@ namespace ts {
                     type = getUnionType(sourceTypes!, UnionReduction.Subtype);
                 }
             }
-            const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
+            const widened = getWidenedType(addOptionality(type, /*isProperty*/ false, definedInMethod && !definedInConstructor));
             if (symbol.valueDeclaration && filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
                 reportImplicitAny(symbol.valueDeclaration, anyType);
                 return anyType;
@@ -8603,7 +8606,10 @@ namespace ts {
             if (symbol.parent?.valueDeclaration) {
                 const typeNode = getEffectiveTypeAnnotationNode(symbol.parent.valueDeclaration);
                 if (typeNode) {
-                    return getTypeOfPropertyOfType(getTypeFromTypeNode(typeNode), symbol.escapedName);
+                    const annotationSymbol = getPropertyOfType(getTypeFromTypeNode(typeNode), symbol.escapedName);
+                    if (annotationSymbol) {
+                        return removeMissingType(getTypeOfSymbol(annotationSymbol), annotationSymbol);
+                    }
                 }
             }
 
@@ -11092,7 +11098,7 @@ namespace ts {
                 // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
                 // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
                 // mode, if the underlying property is optional we remove 'undefined' from the type.
-                let type = strictNullChecks && symbol.flags & SymbolFlags.Optional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType) :
+                let type = strictNullChecks && symbol.flags & SymbolFlags.Optional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, /*isProperty*/ true) :
                     symbol.checkFlags & CheckFlags.StripOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                     propType;
                 if (!popTypeResolution()) {
@@ -11123,7 +11129,7 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), /*isProperty*/ true, !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper) :
                     errorType);
         }
 
@@ -13599,8 +13605,7 @@ namespace ts {
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
-            const type = getTypeFromTypeNode(node.type);
-            return strictNullChecks ? getOptionalType(type) : type;
+            return addOptionality(getTypeFromTypeNode(node.type), /*isProperty*/ true);
         }
 
         function getTypeId(type: Type): TypeId {
@@ -13789,6 +13794,12 @@ namespace ts {
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
+                }
+                if (strictOptionalProperties && includes & TypeFlags.Undefined) {
+                    const missingIndex = binarySearch(typeSet, missingType, getTypeId, compareValues);
+                    if (missingIndex >= 0 && containsType(typeSet, undefinedType)) {
+                        orderedRemoveItemAt(typeSet, missingIndex);
+                    }
                 }
                 if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                     removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
@@ -15301,7 +15312,7 @@ namespace ts {
                         const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                         const flags = SymbolFlags.Property | SymbolFlags.Optional;
                         const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
-                        result.type = isSetonlyAccessor ? undefinedType : getUnionType([getTypeOfSymbol(prop), undefinedType]);
+                        result.type = isSetonlyAccessor ? undefinedType : addOptionality(getTypeOfSymbol(prop), /*isProperty*/ true);
                         result.declarations = prop.declarations;
                         result.nameType = getSymbolLinks(prop).nameType;
                         result.syntheticOrigin = prop;
@@ -15599,8 +15610,7 @@ namespace ts {
             const links = getNodeLinks(node);
             return links.resolvedType || (links.resolvedType =
                     node.dotDotDotToken ? getTypeFromRestTypeNode(node) :
-                    node.questionToken && strictNullChecks ? getOptionalType(getTypeFromTypeNode(node.type)) :
-                    getTypeFromTypeNode(node.type));
+                    addOptionality(getTypeFromTypeNode(node.type), /*isProperty*/ true, !!node.questionToken));
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
@@ -16063,7 +16073,7 @@ namespace ts {
             const templateMapper = appendTypeMapping(mapper, getTypeParameterFromMappedType(type), key);
             const propType = instantiateType(getTemplateTypeFromMappedType(<MappedType>type.target || type), templateMapper);
             const modifiers = getMappedTypeModifiers(type);
-            return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType) :
+            return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, /*isProperty*/ true) :
                 strictNullChecks && modifiers & MappedTypeModifiers.ExcludeOptional && isOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                 propType;
         }
@@ -18882,45 +18892,9 @@ namespace ts {
 
             function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
-                const source = getTypeOfSourceProperty(sourceProp);
-                if (getCheckFlags(targetProp) & CheckFlags.DeferredType && !getSymbolLinks(targetProp).type) {
-                    // Rather than resolving (and normalizing) the type, relate constituent-by-constituent without performing normalization or seconadary passes
-                    const links = getSymbolLinks(targetProp);
-                    Debug.assertIsDefined(links.deferralParent);
-                    Debug.assertIsDefined(links.deferralConstituents);
-                    const unionParent = !!(links.deferralParent.flags & TypeFlags.Union);
-                    let result = unionParent ? Ternary.False : Ternary.True;
-                    const targetTypes = links.deferralConstituents;
-                    for (const targetType of targetTypes) {
-                        const related = isRelatedTo(source, targetType, /*reportErrors*/ false, /*headMessage*/ undefined, unionParent ? 0 : IntersectionState.Target);
-                        if (!unionParent) {
-                            if (!related) {
-                                // Can't assign to a target individually - have to fallback to assigning to the _whole_ intersection (which forces normalization)
-                                return isRelatedTo(source, addOptionality(getTypeOfSymbol(targetProp), targetIsOptional), reportErrors);
-                            }
-                            result &= related;
-                        }
-                        else {
-                            if (related) {
-                                return related;
-                            }
-                        }
-                    }
-                    if (unionParent && !result && targetIsOptional) {
-                        result = isRelatedTo(source, undefinedType);
-                    }
-                    if (unionParent && !result && reportErrors) {
-                        // The easiest way to get the right errors here is to un-defer (which may be costly)
-                        // If it turns out this is too costly too often, we can replicate the error handling logic within
-                        // typeRelatedToSomeType without the discriminatable type branch (as that requires a manifest union
-                        // type on which to hand discriminable properties, which we are expressly trying to avoid here)
-                        return isRelatedTo(source, addOptionality(getTypeOfSymbol(targetProp), targetIsOptional), reportErrors);
-                    }
-                    return result;
-                }
-                else {
-                    return isRelatedTo(source, addOptionality(getTypeOfSymbol(targetProp), targetIsOptional), reportErrors, /*headMessage*/ undefined, intersectionState);
-                }
+                const effectiveTarget = removeMissingType(addOptionality(getTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional), targetProp);
+                const effectiveSource = removeMissingType(getTypeOfSourceProperty(sourceProp), sourceProp);
+                return isRelatedTo(effectiveSource, effectiveTarget, reportErrors, /*headMessage*/ undefined, intersectionState);
             }
 
             function propertyRelatedTo(source: Type, target: Type, sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState, skipOptional: boolean): Ternary {
@@ -19145,7 +19119,7 @@ namespace ts {
                     for (const sourceProp of excludeProperties(getPropertiesOfType(source), excludedProperties)) {
                         if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
                             const sourceType = getTypeOfSymbol(sourceProp);
-                            if (!(sourceType === undefinedType || sourceType === undefinedWideningType || sourceType === optionalType)) {
+                            if (!(sourceType.flags & TypeFlags.Undefined)) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(sourceProp), typeToString(target));
                                 }
@@ -20223,9 +20197,9 @@ namespace ts {
                 getUnionType([type, undefinedType, nullType]);
         }
 
-        function getOptionalType(type: Type): Type {
+        function getOptionalType(type: Type, isProperty = false): Type {
             Debug.assert(strictNullChecks);
-            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
+            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, isProperty ? missingType : undefinedType]);
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
@@ -20263,6 +20237,14 @@ namespace ts {
             return isExpressionOfOptionalChainRoot(expression) ? getNonNullableType(exprType) :
                 isOptionalChain(expression) ? removeOptionalTypeMarker(exprType) :
                 exprType;
+        }
+
+        function removeMissingType(type: Type, prop: Symbol) {
+            return strictOptionalProperties && prop.flags & SymbolFlags.Optional ? filterType(type, t => t !== missingType) : type;
+        }
+
+        function containsMissingType(type: Type) {
+            return strictOptionalProperties && (type === missingType || type.flags & TypeFlags.Union && containsType((<UnionType>type).types, missingType));
         }
 
         /**
@@ -20408,7 +20390,7 @@ namespace ts {
             if (cached) {
                 return cached;
             }
-            const result = createSymbolWithType(prop, undefinedType);
+            const result = createSymbolWithType(prop, missingType);
             result.flags |= SymbolFlags.Optional;
             undefinedProperties.set(prop.escapedName, result);
             return result;
@@ -23468,8 +23450,14 @@ namespace ts {
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
                         const target = getReferenceCandidate(expr.right);
-                        if (isStringLiteralLike(expr.left) && isMatchingReference(reference, target)) {
-                            return narrowByInKeyword(type, expr.left, assumeTrue);
+                        if (isStringLiteralLike(expr.left)) {
+                            if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
+                                getAccessedPropertyName(reference) === escapeLeadingUnderscores(expr.left.text)) {
+                                return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
+                            }
+                            if (isMatchingReference(reference, target)) {
+                                return narrowByInKeyword(type, expr.left, assumeTrue);
+                            }
                         }
                         break;
                     case SyntaxKind.CommaToken:
@@ -23844,6 +23832,16 @@ namespace ts {
                     const predicate = signature && getTypePredicateOfSignature(signature);
                     if (predicate && (predicate.kind === TypePredicateKind.This || predicate.kind === TypePredicateKind.Identifier)) {
                         return narrowTypeByTypePredicate(type, predicate, callExpression, assumeTrue);
+                    }
+                }
+                if (containsMissingType(type) && isAccessExpression(reference) && isPropertyAccessExpression(callExpression.expression)) {
+                    const callAccess = <PropertyAccessExpression>callExpression.expression;
+                    if (isMatchingReference(reference.expression, getReferenceCandidate(callAccess.expression)) &&
+                        isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwnProperty" && callExpression.arguments.length === 1) {
+                        const argument = callExpression.arguments[0];
+                        if (isStringLiteralLike(argument) && getAccessedPropertyName(reference) === escapeLeadingUnderscores(argument.text)) {
+                            return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
+                        }
                     }
                 }
                 return type;
@@ -27364,8 +27362,10 @@ namespace ts {
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
-            if (assignmentKind === AssignmentKind.Definite ||
-                prop &&
+            if (assignmentKind === AssignmentKind.Definite) {
+                return prop ? removeMissingType(propType, prop) : propType;
+            }
+            if (prop &&
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
                 && !(prop.flags & SymbolFlags.Method && propType.flags & TypeFlags.Union)
                 && !isDuplicatedCommonJSExport(prop.declarations)) {

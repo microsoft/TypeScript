@@ -3040,6 +3040,9 @@ namespace ts {
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
+            if (options.strictOptionalProperties && !getStrictOptionValue(options, "strictNullChecks")) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictOptionalProperties", "strictNullChecks");
+            }
 
             if (options.isolatedModules) {
                 if (options.out) {
