@@ -23942,7 +23942,7 @@ namespace ts {
             // to it at the given location. Since we have no control flow information for the
             // hypothetical reference (control flow information is created and attached by the
             // binder), we simply return the declared type of the symbol.
-            return getTypeOfSymbol(symbol);
+            return getNonMissingTypeOfSymbol(symbol);
         }
 
         function getControlFlowContainer(node: Node): Node {
