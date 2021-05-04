@@ -4773,7 +4773,8 @@ namespace ts {
                     }
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const nameTypeNode = type.declaration.nameType ? typeToTypeNodeHelper(getNameTypeFromMappedType(type)!, context) : undefined;
-                    const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
+                    const templateType = getTemplateTypeFromMappedType(type);
+                    const templateTypeNode = typeToTypeNodeHelper(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional ? removeMissingType(templateType) : templateType, context);
                     const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode);
                     context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
@@ -4923,7 +4924,7 @@ namespace ts {
                 }
 
                 function typeReferenceToTypeNode(type: TypeReference) {
-                    const typeArguments: readonly Type[] = getTypeArguments(type);
+                    let typeArguments: readonly Type[] = getTypeArguments(type);
                     if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
@@ -4934,6 +4935,7 @@ namespace ts {
                         return type.target === globalArrayType ? arrayType : factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
+                        typeArguments = sameMap(typeArguments, (t, i) => (type.target as TupleType).elementFlags[i] & ElementFlags.Optional ? removeMissingType(t) : t);
                         if (typeArguments.length > 0) {
                             const arity = getTypeReferenceArity(type);
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
@@ -5166,7 +5168,7 @@ namespace ts {
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
                 const propertyIsReverseMapped = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
                 const propertyType = shouldUsePlaceholderForProperty(propertySymbol, context) ?
-                    anyType : getTypeOfSymbol(propertySymbol);
+                    anyType : getNonMissingTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late && isLateBoundName(propertySymbol.escapedName)) {
@@ -8608,7 +8610,7 @@ namespace ts {
                 if (typeNode) {
                     const annotationSymbol = getPropertyOfType(getTypeFromTypeNode(typeNode), symbol.escapedName);
                     if (annotationSymbol) {
-                        return removeMissingType(getTypeOfSymbol(annotationSymbol), annotationSymbol);
+                        return getNonMissingTypeOfSymbol(annotationSymbol);
                     }
                 }
             }
@@ -9312,6 +9314,11 @@ namespace ts {
                 return getTypeOfAlias(symbol);
             }
             return errorType;
+        }
+
+        function getNonMissingTypeOfSymbol(symbol: Symbol) {
+            const type = getTypeOfSymbol(symbol);
+            return symbol.flags & SymbolFlags.Optional ? removeMissingType(type) : type;
         }
 
         function isReferenceToType(type: Type, target: Type) {
@@ -18798,7 +18805,7 @@ namespace ts {
                 // fixed limit before incurring the cost of any allocations:
                 let numCombinations = 1;
                 for (const sourceProperty of sourcePropertiesFiltered) {
-                    numCombinations *= countTypes(getTypeOfSymbol(sourceProperty));
+                    numCombinations *= countTypes(getNonMissingTypeOfSymbol(sourceProperty));
                     if (numCombinations > 25) {
                         // We've reached the complexity limit.
                         tracing?.instant(tracing.Phase.CheckTypes, "typeRelatedToDiscriminatedType_DepthLimit", { sourceId: source.id, targetId: target.id, numCombinations });
@@ -18811,7 +18818,7 @@ namespace ts {
                 const excludedProperties = new Set<__String>();
                 for (let i = 0; i < sourcePropertiesFiltered.length; i++) {
                     const sourceProperty = sourcePropertiesFiltered[i];
-                    const sourcePropertyType = getTypeOfSymbol(sourceProperty);
+                    const sourcePropertyType = getNonMissingTypeOfSymbol(sourceProperty);
                     sourceDiscriminantTypes[i] = sourcePropertyType.flags & TypeFlags.Union
                         ? (sourcePropertyType as UnionType).types
                         : [sourcePropertyType];
@@ -18892,8 +18899,8 @@ namespace ts {
 
             function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
-                const effectiveTarget = removeMissingType(addOptionality(getTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional), targetProp);
-                const effectiveSource = removeMissingType(getTypeOfSourceProperty(sourceProp), sourceProp);
+                const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional);
+                const effectiveSource = getTypeOfSourceProperty(sourceProp);
                 return isRelatedTo(effectiveSource, effectiveTarget, reportErrors, /*headMessage*/ undefined, intersectionState);
             }
 
@@ -19137,7 +19144,7 @@ namespace ts {
                     if (!(targetProp.flags & SymbolFlags.Prototype) && (!numericNamesOnly || isNumericLiteralName(name) || name === "length")) {
                         const sourceProp = getPropertyOfType(source, name);
                         if (sourceProp && sourceProp !== targetProp) {
-                            const related = propertyRelatedTo(source, target, sourceProp, targetProp, getTypeOfSymbol, reportErrors, intersectionState, relation === comparableRelation);
+                            const related = propertyRelatedTo(source, target, sourceProp, targetProp, getNonMissingTypeOfSymbol, reportErrors, intersectionState, relation === comparableRelation);
                             if (!related) {
                                 return Ternary.False;
                             }
@@ -20239,8 +20246,8 @@ namespace ts {
                 exprType;
         }
 
-        function removeMissingType(type: Type, prop: Symbol) {
-            return strictOptionalProperties && prop.flags & SymbolFlags.Optional ? filterType(type, t => t !== missingType) : type;
+        function removeMissingType(type: Type) {
+            return strictOptionalProperties ? filterType(type, t => t !== missingType) : type;
         }
 
         function containsMissingType(type: Type) {
@@ -27363,7 +27370,7 @@ namespace ts {
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
             if (assignmentKind === AssignmentKind.Definite) {
-                return prop ? removeMissingType(propType, prop) : propType;
+                return prop && prop.flags & SymbolFlags.Optional ? removeMissingType(propType) : propType;
             }
             if (prop &&
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
