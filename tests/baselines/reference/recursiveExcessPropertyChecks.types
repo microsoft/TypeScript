@@ -52,15 +52,15 @@ type Dandy = Diddy & {
 >Dandy : Dandy
 
     children: (Diddy & { funky?: string })[];
->children : (Diddy & { funky?: string | undefined; })[]
+>children : (Diddy & { funky?: string; })[]
 >funky : string | undefined
 
 };
 type X = Dandy["children"]
->X : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string | undefined; })[]
+>X : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string; })[]
 
 var x: X
->x : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string | undefined; })[]
+>x : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string; })[]
 
 const mainView: Dandy = {
 >mainView : Dandy
@@ -90,10 +90,10 @@ const mainView: Dandy = {
 const p = mainView.children[0].funky
 >p : string | undefined
 >mainView.children[0].funky : string | undefined
->mainView.children[0] : Diddy & { funky?: string | undefined; }
->mainView.children : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string | undefined; })[]
+>mainView.children[0] : Diddy & { funky?: string; }
+>mainView.children : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string; })[]
 >mainView : Dandy
->children : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string | undefined; })[]
+>children : (Donkey | Diddy[] | undefined) & (Diddy & { funky?: string; })[]
 >0 : 0
 >funky : string | undefined
 
