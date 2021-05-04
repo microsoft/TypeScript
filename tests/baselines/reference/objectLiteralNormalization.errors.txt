@@ -6,7 +6,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(17,1): error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Type '{ a: string; b: number; }' is not assignable to type '{ a?: undefined; b?: undefined; }'.
     Types of property 'a' are incompatible.
-      Type 'string' is not assignable to type 'undefined'.
+      Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(18,1): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(48,20): error TS2322: Type '2' is not assignable to type '1'.
@@ -44,7 +44,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
 !!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
 !!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type '{ a?: undefined; b?: undefined; }'.
 !!! error TS2322:     Types of property 'a' are incompatible.
-!!! error TS2322:       Type 'string' is not assignable to type 'undefined'.
+!!! error TS2322:       Type 'string' is not assignable to type 'never'.
     a2 = { a: 1 };  // Error
     ~~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
