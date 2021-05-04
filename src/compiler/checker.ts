@@ -23842,7 +23842,7 @@ namespace ts {
                     }
                 }
                 if (containsMissingType(type) && isAccessExpression(reference) && isPropertyAccessExpression(callExpression.expression)) {
-                    const callAccess = <PropertyAccessExpression>callExpression.expression;
+                    const callAccess = callExpression.expression;
                     if (isMatchingReference(reference.expression, getReferenceCandidate(callAccess.expression)) &&
                         isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwnProperty" && callExpression.arguments.length === 1) {
                         const argument = callExpression.arguments[0];
