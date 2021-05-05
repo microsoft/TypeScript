@@ -23819,7 +23819,16 @@ namespace ts {
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
                 if (!assumeTrue) {
-                    return filterType(type, t => !isRelated(t, candidate));
+                    return filterType(type, t => {
+                        if (!isRelated(t, candidate)) {
+                            return true;
+                        }
+                        const constraint = getBaseConstraintOfType(t);
+                        if (constraint && constraint !== t) {
+                            return !isRelated(constraint, candidate);
+                        }
+                        return false;
+                    });
                 }
                 // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
