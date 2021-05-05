@@ -205,7 +205,9 @@ namespace ts {
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
+        return oldResolution.resolvedFileName === newResolution.resolvedFileName
+            && oldResolution.primary === newResolution.primary
+            && oldResolution.originalFileName === newResolution.originalFileName;
     }
 
     export function hasChangesInResolutions<T>(
