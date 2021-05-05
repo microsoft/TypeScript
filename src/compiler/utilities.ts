@@ -6067,6 +6067,7 @@ namespace ts {
         | "strictBindCallApply"
         | "strictPropertyInitialization"
         | "alwaysStrict"
+        | "useUnknownInCatchVariables"
         ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
