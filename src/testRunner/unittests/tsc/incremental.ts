@@ -293,6 +293,37 @@ const a: string = 10;`, "utf-8"),
             baselinePrograms: true,
         });
 
+        verifyTscSerializedIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "assumeChangesAffectShape",
+            fs: () => loadProjectFromFiles({
+                "/src/project/main.ts": `import { foo } from "./module";foo();`,
+                "/src/project/module.ts": `export function foo(): string { return "hello"; }`,
+                "/src/project/extraFile.ts": "export const extra = 10;",
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: { assumeChangesAffectShape: true }
+                })
+            }),
+            commandLineArgs: ["--incremental", "--p", "src/project"],
+            incrementalScenarios: [
+                {
+                    subScenario: "Local edit to module",
+                    modifyFs: fs => replaceText(fs, "/src/project/module.ts", "hello", "hello world"),
+                    buildKind: BuildKind.IncrementalDtsUnchanged
+                },
+                {
+                    subScenario: "Local edit to module again",
+                    modifyFs: fs => replaceText(fs, "/src/project/module.ts", "hello", "hello world"),
+                    buildKind: BuildKind.IncrementalDtsUnchanged
+                },
+                {
+                    subScenario: "Api change edit to module",
+                    modifyFs: fs => prependText(fs, "/src/project/module.ts", "export const x = 10;"),
+                    buildKind: BuildKind.IncrementalDtsUnchanged
+                },
+            ]
+        });
+
         describe("when synthesized imports are added to files", () => {
             function getJsxLibraryContent() {
                 return `

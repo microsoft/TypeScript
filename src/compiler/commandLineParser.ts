@@ -273,6 +273,12 @@ namespace ts {
             description: Diagnostics.Have_recompiles_in_incremental_and_watch_assume_that_changes_within_a_file_will_only_affect_files_directly_depending_on_it
         },
         {
+            name: "assumeChangesAffectShape",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Have_recompiles_in_incremental_and_watch_assume_that_any_change_to_file_can_affect_its_shape_resulting_in_affecting_it_s_dependecies
+        },
+        {
             name: "locale",
             type: "string",
             category: Diagnostics.Advanced_Options,

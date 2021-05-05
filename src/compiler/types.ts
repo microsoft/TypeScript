@@ -5965,6 +5965,7 @@ namespace ts {
         noImplicitUseStrict?: boolean;
         noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
+        assumeChangesAffectShape?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
