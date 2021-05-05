@@ -8929,7 +8929,7 @@ namespace ts {
             if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode === undefined) {
-                    return anyType;
+                    return compilerOptions.useUnknownInCatchVariables ? unknownType : anyType;
                 }
                 const type = getTypeOfNode(typeNode);
                 // an errorType will make `checkTryStatement` issue an error
