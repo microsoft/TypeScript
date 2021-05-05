@@ -6188,9 +6188,13 @@ namespace ts {
 
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
         const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
-            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
-                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
+        const symlinks = flatMap(files, sf => {
+            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
+                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
+            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
+                res?.originalFileName && res.resolvedFileName ? [res.resolvedFileName, res.originalFileName] as const : undefined)));
+        });
+
         for (const [resolvedPath, originalPath] of symlinks) {
             cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
