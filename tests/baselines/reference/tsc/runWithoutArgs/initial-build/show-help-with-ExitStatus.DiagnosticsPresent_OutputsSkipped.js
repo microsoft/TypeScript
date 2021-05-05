@@ -48,6 +48,7 @@ Options:
  --noUnusedParameters                               Report errors on unused parameters.
  --noImplicitReturns                                Report error when not all code paths in function return a value.
  --noFallthroughCasesInSwitch                       Report errors for fallthrough cases in switch statement.
+ --useUnknownInCatchVariables                       Type catch clause variables as 'unknown' instead of 'any'.
  --types                                            Type declaration files to be included in compilation.
  --esModuleInterop                                  Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.
  @<file>                                            Insert command line options and files from a file.
