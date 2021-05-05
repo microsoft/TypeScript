@@ -81,10 +81,13 @@ namespace ts.codefix {
 
     function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const classElement = findContainerClassElement(sourceFile, pos);
-        const accessibilityModifier = find(classElement.modifiers || emptyArray, m => isAccessibilityModifier(m.kind));
-        const modifierPos = accessibilityModifier ? accessibilityModifier.end :
+        const modifiers = classElement.modifiers || emptyArray;
+        const staticModifier = find(modifiers, isStaticModifier);
+        const accessibilityModifier = find(modifiers, m => isAccessibilityModifier(m.kind));
+        const modifierPos = staticModifier ? staticModifier.end :
+            accessibilityModifier ? accessibilityModifier.end :
             classElement.decorators ? skipTrivia(sourceFile.text, classElement.decorators.end) : classElement.getStart(sourceFile);
-        const options = accessibilityModifier ? { prefix: " " } : { suffix: " " };
+        const options = accessibilityModifier || staticModifier ? { prefix: " " } : { suffix: " " };
         changeTracker.insertModifierAt(sourceFile, modifierPos, SyntaxKind.OverrideKeyword, options);
     }
 
