@@ -798,6 +798,10 @@ namespace ts {
                     }
                     // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
                     failedLookupChecks.push(fileOrDirectoryPath);
+
+                    // If this is file from package, invalidate package itself since we might not get notification for all files from the package
+                    const packagePath = parseNodeModuleFromPath(fileOrDirectoryPath);
+                    if (packagePath) startsWithPathChecks.push(packagePath as Path);
                 }
             }
             resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();

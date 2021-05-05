@@ -520,7 +520,10 @@ declare namespace NodeJS {
                             sys.ensureFileOrFolder(nodeAtTypes36Base, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
                             sys.ensureFileOrFolder(nodeAtTypesGlobals, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
                         },
-                        timeouts: runQueuedTimeoutCallbacks
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // update failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual program update
+                        },
                     },
                 ]
             });

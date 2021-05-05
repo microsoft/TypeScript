@@ -1150,7 +1150,7 @@ namespace ts {
             }
             const resolvedFromFile = loadModuleFromFile(extensions, candidate, onlyRecordFailures, state);
             if (resolvedFromFile) {
-                const packageDirectory = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile) : undefined;
+                const packageDirectory = considerPackageJson ? parseNodeModuleFromPath(resolvedFromFile.path) : undefined;
                 const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, state) : undefined;
                 return withPackageId(packageInfo, resolvedFromFile);
             }
@@ -1184,8 +1184,9 @@ namespace ts {
      *   For `/node_modules/@types/foo/bar/index.d.ts` this is packageDirectory: "@types/foo"
      *   For `/node_modules/foo/bar/index.d.ts` this is packageDirectory: "foo"
      */
-    function parseNodeModuleFromPath(resolved: PathAndExtension): string | undefined {
-        const path = normalizePath(resolved.path);
+    /* @internal */
+    export function parseNodeModuleFromPath(resolved: string): string | undefined {
+        const path = normalizePath(resolved);
         const idx = path.lastIndexOf(nodeModulesPathPart);
         if (idx === -1) {
             return undefined;
