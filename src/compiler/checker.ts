@@ -19954,6 +19954,9 @@ namespace ts {
         // of those literal types. Otherwise, return the leftmost type for which no type to the
         // right is a supertype.
         function getSupertypeOrUnion(types: Type[]): Type {
+            if (types.length === 1) {
+                return types[0];
+            }
             return literalTypesWithSameBaseType(types) ?
                 getUnionType(types) :
                 reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
