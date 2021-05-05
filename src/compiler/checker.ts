@@ -3935,12 +3935,12 @@ namespace ts {
             return typeCopy;
         }
 
-        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable) => T): T {
+        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable, ignoreQualification?: boolean, scopeNode?: Node) => T): T {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = callback(location.locals)) {
+                    if (result = callback(location.locals, /*ignoreQualification*/ undefined, location)) {
                         return result;
                     }
                 }
@@ -3955,7 +3955,7 @@ namespace ts {
                         // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
                         // into a namespace - in such cases, it's best to just let the namespace appear empty (the const members couldn't have referred
                         // to one another anyway)
-                        if (result = callback(sym?.exports || emptySymbols)) {
+                        if (result = callback(sym?.exports || emptySymbols, /*ignoreQualification*/ undefined, location)) {
                             return result;
                         }
                         break;
@@ -3976,7 +3976,7 @@ namespace ts {
                                 (table || (table = createSymbolTable())).set(key, memberSymbol);
                             }
                         });
-                        if (table && (result = callback(table))) {
+                        if (table && (result = callback(table, /*ignoreQualification*/ undefined, location))) {
                             return result;
                         }
                         break;
@@ -3995,13 +3995,23 @@ namespace ts {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
             }
+            const links = getSymbolLinks(symbol);
+            const cache = (links.accessibleChainCache ||= new Map());
+            // Go from enclosingDeclaration to the first scope we check, so the cache is keyed off the scope and thus shared more
+            const firstRelevantLocation = forEachSymbolTableInScope(enclosingDeclaration, (_, __, node) => node);
+            const key = `${useOnlyExternalAliasing ? 0 : 1}|${firstRelevantLocation && getNodeId(firstRelevantLocation)}|${meaning}`;
+            if (cache.has(key)) {
+                return cache.get(key);
+            }
 
             const id = getSymbolId(symbol);
             let visitedSymbolTables = visitedSymbolTablesMap.get(id);
             if (!visitedSymbolTables) {
                 visitedSymbolTablesMap.set(id, visitedSymbolTables = []);
             }
-            return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+            const result = forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+            cache.set(key, result);
+            return result;
 
             /**
              * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
@@ -5814,7 +5824,7 @@ namespace ts {
                 }
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                     const rawtext = result.escapedText as string;
-                    let i = 0;
+                    let i = context.typeParameterNamesByTextNextNameCount?.get(rawtext) || 0;
                     let text = rawtext;
                     while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsNameInScope(text as __String, context, type)) {
                         i++;
@@ -5823,8 +5833,11 @@ namespace ts {
                     if (text !== rawtext) {
                         result = factory.createIdentifier(text, result.typeArguments);
                     }
-                    (context.typeParameterNames || (context.typeParameterNames = new Map())).set(getTypeId(type), result);
-                    (context.typeParameterNamesByText || (context.typeParameterNamesByText = new Set())).add(result.escapedText as string);
+                    // avoiding iterations of the above loop turns out to be worth it when `i` starts to get large, so we cache the max
+                    // `i` we've used thus far, to save work later
+                    (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
+                    (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
+                    (context.typeParameterNamesByText ||= new Set()).add(result.escapedText as string);
                 }
                 return result;
             }
@@ -7737,6 +7750,7 @@ namespace ts {
             typeParameterSymbolList?: Set<number>;
             typeParameterNames?: ESMap<TypeId, Identifier>;
             typeParameterNamesByText?: Set<string>;
+            typeParameterNamesByTextNextNameCount?: ESMap<string, number>;
             usedSymbolNames?: Set<string>;
             remappedSymbolNames?: ESMap<SymbolId, string>;
             reverseMappedStack?: ReverseMappedSymbol[];
