@@ -4773,8 +4773,7 @@ namespace ts {
                     }
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
                     const nameTypeNode = type.declaration.nameType ? typeToTypeNodeHelper(getNameTypeFromMappedType(type)!, context) : undefined;
-                    const templateType = getTemplateTypeFromMappedType(type);
-                    const templateTypeNode = typeToTypeNodeHelper(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional ? removeMissingType(templateType) : templateType, context);
+                    const templateTypeNode = typeToTypeNodeHelper(removeMissingType(getTemplateTypeFromMappedType(type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
                     const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode);
                     context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
@@ -4935,7 +4934,7 @@ namespace ts {
                         return type.target === globalArrayType ? arrayType : factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
-                        typeArguments = sameMap(typeArguments, (t, i) => (type.target as TupleType).elementFlags[i] & ElementFlags.Optional ? removeMissingType(t) : t);
+                        typeArguments = sameMap(typeArguments, (t, i) => removeMissingType(t, !!((type.target as TupleType).elementFlags[i] & ElementFlags.Optional)));
                         if (typeArguments.length > 0) {
                             const arity = getTypeReferenceArity(type);
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
@@ -9317,8 +9316,7 @@ namespace ts {
         }
 
         function getNonMissingTypeOfSymbol(symbol: Symbol) {
-            const type = getTypeOfSymbol(symbol);
-            return symbol.flags & SymbolFlags.Optional ? removeMissingType(type) : type;
+            return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
         }
 
         function isReferenceToType(type: Type, target: Type) {
@@ -16626,10 +16624,16 @@ namespace ts {
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
-                const targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
+                let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
                 if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
-                const sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
-                if (sourcePropType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
+                let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
+                if (!sourcePropType) continue;
+                const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
+                const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                targetPropType = removeMissingType(targetPropType, targetIsOptional);
+                sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
+                if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                     if (elaborated) {
                         reportedError = true;
@@ -20246,8 +20250,8 @@ namespace ts {
                 exprType;
         }
 
-        function removeMissingType(type: Type) {
-            return strictOptionalProperties ? filterType(type, t => t !== missingType) : type;
+        function removeMissingType(type: Type, isOptional: boolean) {
+            return strictOptionalProperties && isOptional ? filterType(type, t => t !== missingType) : type;
         }
 
         function containsMissingType(type: Type) {
@@ -27370,7 +27374,7 @@ namespace ts {
             // accessor, or optional method.
             const assignmentKind = getAssignmentTargetKind(node);
             if (assignmentKind === AssignmentKind.Definite) {
-                return prop && prop.flags & SymbolFlags.Optional ? removeMissingType(propType) : propType;
+                return removeMissingType(propType, !!(prop && prop.flags & SymbolFlags.Optional));
             }
             if (prop &&
                 !(prop.flags & (SymbolFlags.Variable | SymbolFlags.Property | SymbolFlags.Accessor))
