@@ -3935,12 +3935,12 @@ namespace ts {
             return typeCopy;
         }
 
-        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable) => T): T {
+        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean) => T): T {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = callback(location.locals)) {
+                    if (result = callback(location.locals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true)) {
                         return result;
                     }
                 }
@@ -3955,7 +3955,7 @@ namespace ts {
                         // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
                         // into a namespace - in such cases, it's best to just let the namespace appear empty (the const members couldn't have referred
                         // to one another anyway)
-                        if (result = callback(sym?.exports || emptySymbols)) {
+                        if (result = callback(sym?.exports || emptySymbols, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true)) {
                             return result;
                         }
                         break;
@@ -3983,7 +3983,7 @@ namespace ts {
                 }
             }
 
-            return callback(globals);
+            return callback(globals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true);
         }
 
         function getQualifiedLeftMeaning(rightMeaning: SymbolFlags) {
@@ -4006,12 +4006,12 @@ namespace ts {
             /**
              * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
              */
-            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean): Symbol[] | undefined {
+            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean): Symbol[] | undefined {
                 if (!pushIfUnique(visitedSymbolTables!, symbols)) {
                     return undefined;
                 }
 
-                const result = trySymbolTable(symbols, ignoreQualification);
+                const result = trySymbolTable(symbols, ignoreQualification, isLocalNameLookup);
                 visitedSymbolTables!.pop();
                 return result;
             }
@@ -4032,7 +4032,7 @@ namespace ts {
                     (ignoreQualification || canQualifySymbol(getMergedSymbol(symbolFromSymbolTable), meaning));
             }
 
-            function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined): Symbol[] | undefined {
+            function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined, isLocalNameLookup: boolean | undefined): Symbol[] | undefined {
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(symbols.get(symbol!.escapedName)!, /*resolvedAliasSymbol*/ undefined, ignoreQualification)) {
                     return [symbol!];
@@ -4046,6 +4046,8 @@ namespace ts {
                         && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))
+                        // If we're looking up a local name to reference directly, omit namespace reexports, otherwise when we're trawling through an export list to make a dotted name, we can keep it
+                        && (isLocalNameLookup ? !some(symbolFromSymbolTable.declarations, isNamespaceReexportDeclaration) : true)
                         // While exports are generally considered to be in scope, export-specifier declared symbols are _not_
                         // See similar comment in `resolveName` for details
                         && (ignoreQualification || !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier))
@@ -4160,7 +4162,7 @@ namespace ts {
                         return hasAccessibleDeclarations;
                     }
                 }
-                else if (allowModules) {
+                if (allowModules) {
                     if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                         if (shouldComputeAliasesToMakeVisible) {
                             earlyModuleBail = true;

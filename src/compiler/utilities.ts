@@ -1971,6 +1971,10 @@ namespace ts {
         return node.kind === SyntaxKind.TypeQuery;
     }
 
+    export function isNamespaceReexportDeclaration(node: Node): boolean {
+        return isNamespaceExport(node) && !!node.parent.moduleSpecifier;
+    }
+
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference;
     }
