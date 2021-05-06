@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts.Completions {
+    export type Log = (message: string) => void;
+
     export enum SortText {
         LocalDeclarationPriority = "0",
         LocationPriority = "1",
@@ -8,9 +10,27 @@ namespace ts.Completions {
         SuggestedClassMembers = "4",
         GlobalsOrKeywords = "5",
         AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7"
+        JavascriptIdentifiers = "7",
+        DeprecatedLocalDeclarationPriority = "8",
+        DeprecatedLocationPriority = "9",
+        DeprecatedOptionalMember = "10",
+        DeprecatedMemberDeclaredBySpreadAssignment = "11",
+        DeprecatedSuggestedClassMembers = "12",
+        DeprecatedGlobalsOrKeywords = "13",
+        DeprecatedAutoImportSuggestions = "14"
     }
-    export type Log = (message: string) => void;
+
+    enum SortTextId {
+        LocalDeclarationPriority,
+        LocationPriority,
+        OptionalMember,
+        MemberDeclaredBySpreadAssignment,
+        SuggestedClassMembers,
+        GlobalsOrKeywords,
+        AutoImportSuggestions
+    }
+
+    const DeprecatedSortTextStart = SortTextId.AutoImportSuggestions + 2; // for Javascript identifiers since with this change they are preferred over deprecated symbols
 
     /**
      * Special values for `CompletionInfo['source']` used to disambiguate
@@ -105,8 +125,8 @@ namespace ts.Completions {
      */
     type SymbolOriginInfoMap = Record<number, SymbolOriginInfo>;
 
-    /** Map from symbol id -> SortText. */
-    type SymbolSortTextMap = (SortText | undefined)[];
+    /** Map from symbol id -> SortTextId. */
+    type SymbolSortTextIdMap = (SortTextId | undefined)[];
 
     const enum KeywordCompletionFilters {
         None,                           // No keywords
@@ -205,7 +225,7 @@ namespace ts.Completions {
             isJsxIdentifierExpected,
             importCompletionNode,
             insideJsDocTagTypeExpression,
-            symbolToSortTextMap,
+            symbolToSortTextIdMap,
         } = completionData;
 
         // Verify if the file is JSX language variant
@@ -238,7 +258,7 @@ namespace ts.Completions {
                 importCompletionNode,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
-                symbolToSortTextMap
+                symbolToSortTextIdMap
             );
             getJSCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
         }
@@ -266,7 +286,7 @@ namespace ts.Completions {
                 importCompletionNode,
                 recommendedCompletion,
                 symbolToOriginInfoMap,
-                symbolToSortTextMap
+                symbolToSortTextIdMap
             );
         }
 
@@ -566,7 +586,7 @@ namespace ts.Completions {
         importCompletionNode?: Node,
         recommendedCompletion?: Symbol,
         symbolToOriginInfoMap?: SymbolOriginInfoMap,
-        symbolToSortTextMap?: SymbolSortTextMap,
+        symbolToSortTextIdMap?: SymbolSortTextIdMap,
     ): UniqueNameSet {
         const start = timestamp();
         const variableDeclaration = getVariableDeclaration(location);
@@ -580,14 +600,16 @@ namespace ts.Completions {
             const symbol = symbols[i];
             const origin = symbolToOriginInfoMap?.[i];
             const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
-            if (!info || uniques.get(info.name) || kind === CompletionKind.Global && symbolToSortTextMap && !shouldIncludeSymbol(symbol, symbolToSortTextMap)) {
+            if (!info || uniques.get(info.name) || kind === CompletionKind.Global && symbolToSortTextIdMap && !shouldIncludeSymbol(symbol, symbolToSortTextIdMap)) {
                 continue;
             }
 
             const { name, needsConvertPropertyAccess } = info;
+            const sortTextId = symbolToSortTextIdMap?.[getSymbolId(symbol)] ?? SortTextId.LocationPriority;
+            const sortText = (isDeprecated(symbol, typeChecker) ? DeprecatedSortTextStart + sortTextId : sortTextId).toString() as SortText;
             const entry = createCompletionEntry(
                 symbol,
-                symbolToSortTextMap && symbolToSortTextMap[getSymbolId(symbol)] || SortText.LocationPriority,
+                sortText,
                 contextToken,
                 location,
                 sourceFile,
@@ -623,7 +645,7 @@ namespace ts.Completions {
             add: name => uniques.set(name, true),
         };
 
-        function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextMap: SymbolSortTextMap): boolean {
+        function shouldIncludeSymbol(symbol: Symbol, symbolToSortTextIdMap: SymbolSortTextIdMap): boolean {
             if (!isSourceFile(location)) {
                 // export = /**/ here we want to get all meanings, so any symbol is ok
                 if (isExportAssignment(location.parent)) {
@@ -645,9 +667,9 @@ namespace ts.Completions {
                 // Auto Imports are not available for scripts so this conditional is always false
                 if (!!sourceFile.externalModuleIndicator
                     && !compilerOptions.allowUmdGlobalAccess
-                    && symbolToSortTextMap[getSymbolId(symbol)] === SortText.GlobalsOrKeywords
-                    && (symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.AutoImportSuggestions
-                        || symbolToSortTextMap[getSymbolId(symbolOrigin)] === SortText.LocationPriority)) {
+                    && symbolToSortTextIdMap[getSymbolId(symbol)] === SortTextId.GlobalsOrKeywords
+                    && (symbolToSortTextIdMap[getSymbolId(symbolOrigin)] === SortTextId.AutoImportSuggestions
+                        || symbolToSortTextIdMap[getSymbolId(symbolOrigin)] === SortTextId.LocationPriority)) {
                     return false;
                 }
                 // Continue with origin symbol
@@ -668,8 +690,6 @@ namespace ts.Completions {
             return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
         }
     }
-
-
 
     function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
         const entries = getLabelStatementCompletions(node);
@@ -912,7 +932,7 @@ namespace ts.Completions {
         readonly previousToken: Node | undefined;
         readonly isJsxInitializer: IsJsxInitializer;
         readonly insideJsDocTagTypeExpression: boolean;
-        readonly symbolToSortTextMap: SymbolSortTextMap;
+        readonly symbolToSortTextIdMap: SymbolSortTextIdMap;
         readonly isTypeOnlyLocation: boolean;
         /** In JSX tag name and attribute names, identifiers like "my-tag" or "aria-name" is valid identifier. */
         readonly isJsxIdentifierExpected: boolean;
@@ -1239,7 +1259,7 @@ namespace ts.Completions {
         // This also gets mutated in nested-functions after the return
         let symbols: Symbol[] = [];
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
-        const symbolToSortTextMap: SymbolSortTextMap = [];
+        const symbolToSortTextIdMap: SymbolSortTextIdMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
         const isTypeOnly = isTypeOnlyCompletion();
         const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
@@ -1295,7 +1315,7 @@ namespace ts.Completions {
             previousToken,
             isJsxInitializer,
             insideJsDocTagTypeExpression,
-            symbolToSortTextMap,
+            symbolToSortTextIdMap,
             isTypeOnlyLocation: isTypeOnly,
             isJsxIdentifierExpected,
             importCompletionNode,
@@ -1484,7 +1504,7 @@ namespace ts.Completions {
 
             function addSymbolSortInfo(symbol: Symbol) {
                 if (isStaticProperty(symbol)) {
-                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.LocalDeclarationPriority;
+                    symbolToSortTextIdMap[getSymbolId(symbol)] = SortTextId.LocalDeclarationPriority;
                 }
             }
 
@@ -1601,7 +1621,7 @@ namespace ts.Completions {
             for (const symbol of symbols) {
                 if (!typeChecker.isArgumentsSymbol(symbol) &&
                     !some(symbol.declarations, d => d.getSourceFile() === sourceFile)) {
-                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.GlobalsOrKeywords;
+                    symbolToSortTextIdMap[getSymbolId(symbol)] = SortTextId.GlobalsOrKeywords;
                 }
             }
 
@@ -1612,7 +1632,7 @@ namespace ts.Completions {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                         symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
                         symbols.push(symbol);
-                        symbolToSortTextMap[getSymbolId(symbol)] = SortText.SuggestedClassMembers;
+                        symbolToSortTextIdMap[getSymbolId(symbol)] = SortTextId.SuggestedClassMembers;
                     }
                 }
             }
@@ -1694,7 +1714,7 @@ namespace ts.Completions {
             return false;
         }
 
-        /** Mutates `symbols`, `symbolToOriginInfoMap`, and `symbolToSortTextMap` */
+        /** Mutates `symbols`, `symbolToOriginInfoMap`, and `symbolToSortTextIdMap` */
         function collectAutoImports(resolveModuleSpecifiers: boolean) {
             if (!shouldOfferImportCompletions()) return;
             Debug.assert(!detailsEntryId?.data);
@@ -1765,12 +1785,12 @@ namespace ts.Completions {
 
         function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {
             const symbolId = getSymbolId(symbol);
-            if (symbolToSortTextMap[symbolId] === SortText.GlobalsOrKeywords) {
+            if (symbolToSortTextIdMap[symbolId] === SortTextId.GlobalsOrKeywords) {
                 // If an auto-importable symbol is available as a global, don't add the auto import
                 return;
             }
             symbolToOriginInfoMap[symbols.length] = origin;
-            symbolToSortTextMap[symbolId] = importCompletionNode ? SortText.LocationPriority : SortText.AutoImportSuggestions;
+            symbolToSortTextIdMap[symbolId] = importCompletionNode ? SortTextId.LocationPriority : SortTextId.AutoImportSuggestions;
             symbols.push(symbol);
         }
 
@@ -2085,7 +2105,7 @@ namespace ts.Completions {
             localsContainer.locals?.forEach((symbol, name) => {
                 symbols.push(symbol);
                 if (localsContainer.symbol?.exports?.has(name)) {
-                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.OptionalMember;
+                    symbolToSortTextIdMap[getSymbolId(symbol)] = SortTextId.OptionalMember;
                 }
             });
             return GlobalsSearch.Success;
@@ -2533,7 +2553,8 @@ namespace ts.Completions {
         function setSortTextToOptionalMember() {
             symbols.forEach(m => {
                 if (m.flags & SymbolFlags.Optional) {
-                    symbolToSortTextMap[getSymbolId(m)] = symbolToSortTextMap[getSymbolId(m)] || SortText.OptionalMember;
+                    const symbolId = getSymbolId(m);
+                    symbolToSortTextIdMap[symbolId] = symbolToSortTextIdMap[symbolId] ?? SortTextId.OptionalMember;
                 }
             });
         }
@@ -2545,7 +2566,7 @@ namespace ts.Completions {
             }
             for (const contextualMemberSymbol of contextualMemberSymbols) {
                 if (membersDeclaredBySpreadAssignment.has(contextualMemberSymbol.name)) {
-                    symbolToSortTextMap[getSymbolId(contextualMemberSymbol)] = SortText.MemberDeclaredBySpreadAssignment;
+                    symbolToSortTextIdMap[getSymbolId(contextualMemberSymbol)] = SortTextId.MemberDeclaredBySpreadAssignment;
                 }
             }
         }
@@ -3090,5 +3111,10 @@ namespace ts.Completions {
             !!(sym.flags & SymbolFlags.Module) &&
             addToSeen(seenModules, getSymbolId(sym)) &&
             checker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
+    }
+
+    function isDeprecated(symbol: Symbol, checker: TypeChecker) {
+        const declarations = skipAlias(symbol, checker).declarations;
+        return !!length(declarations) && every(declarations, isDeprecatedDeclaration);
     }
 }
