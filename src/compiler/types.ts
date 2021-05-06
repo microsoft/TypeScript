@@ -6407,7 +6407,10 @@ namespace ts {
      * If changing this, remember to change `moduleResolutionIsEqualTo`.
      */
     export interface ResolvedModuleFull extends ResolvedModule {
-        /* @internal */
+        /**
+         * @internal
+         * This is a file name with preserved original casing, not a normalized `Path`.
+         */
         readonly originalPath?: string;
         /**
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
@@ -6458,6 +6461,12 @@ namespace ts {
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName: string | undefined;
+        /**
+         * @internal
+         * The location of the symlink to the .d.ts file we found, if `resolvedFileName` was the realpath.
+         * This is a file name with preserved original casing, not a normalized `Path`.
+         */
+        originalPath?: string;
         packageId?: PackageId;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
