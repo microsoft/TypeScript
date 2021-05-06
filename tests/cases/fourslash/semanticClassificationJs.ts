@@ -6,6 +6,8 @@
 //// let x = 1;
 
 // no semantic classification in js file
-verify.semanticClassificationsAre("original", );
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+);
 
 
