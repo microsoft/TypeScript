@@ -207,7 +207,7 @@ namespace ts {
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
         return oldResolution.resolvedFileName === newResolution.resolvedFileName
             && oldResolution.primary === newResolution.primary
-            && oldResolution.originalFileName === newResolution.originalFileName;
+            && oldResolution.originalPath === newResolution.originalPath;
     }
 
     export function hasChangesInResolutions<T>(
@@ -6192,7 +6192,7 @@ namespace ts {
             const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
                 res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
             return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
-                res?.originalFileName && res.resolvedFileName ? [res.resolvedFileName, res.originalFileName] as const : undefined)));
+                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
         });
 
         for (const [resolvedPath, originalPath] of symlinks) {

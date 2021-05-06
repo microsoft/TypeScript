@@ -1905,15 +1905,15 @@ namespace ts.server {
                 const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
-                    const { resolvedFileName, originalFileName } = resolution.resolvedTypeReferenceDirective;
-                    if (!program.getSourceFile(resolvedFileName) && (!originalFileName || !program.getSourceFile(originalFileName))) {
+                    const { resolvedFileName, originalPath } = resolution.resolvedTypeReferenceDirective;
+                    if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
                         rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
                         if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
                             return ts.emptyArray;
                         }
-                        if (originalFileName) {
-                            symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalFileName, resolvedFileName);
+                        if (originalPath) {
+                            symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalPath, resolvedFileName);
                         }
                     }
                 }
