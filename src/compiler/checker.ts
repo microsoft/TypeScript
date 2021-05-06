@@ -19094,10 +19094,11 @@ namespace ts {
                                 }
                             }
                             const sourceType = !isTupleType(source) ? sourceTypeArguments[0] :
-                                i < startCount || i >= targetArity - endCount ? sourceTypeArguments[sourceIndex] :
+                                i < startCount || i >= targetArity - endCount ? removeMissingType(sourceTypeArguments[sourceIndex], !!(sourceFlags & targetFlags & ElementFlags.Optional)) :
                                 getElementTypeOfSliceOfTupleType(source, startCount, endCount) || neverType;
                             const targetType = targetTypeArguments[i];
-                            const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) : targetType;
+                            const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) :
+                                removeMissingType(targetType, !!(targetFlags & ElementFlags.Optional));
                             const related = isRelatedTo(sourceType, targetCheckType, reportErrors, /*headMessage*/ undefined, intersectionState);
                             if (!related) {
                                 if (reportErrors) {
@@ -25909,6 +25910,7 @@ namespace ts {
             const contextualType = getApparentTypeOfContextualType(node);
             const inDestructuringPattern = isAssignmentTarget(node);
             const inConstContext = isConstContext(node);
+            let hasOmittedExpression = false;
             for (let i = 0; i < elementCount; i++) {
                 const e = elements[i];
                 if (e.kind === SyntaxKind.SpreadElement) {
@@ -25944,11 +25946,16 @@ namespace ts {
                         elementFlags.push(ElementFlags.Rest);
                     }
                 }
+                else if (strictOptionalProperties && e.kind === SyntaxKind.OmittedExpression) {
+                    hasOmittedExpression = true;
+                    elementTypes.push(missingType);
+                    elementFlags.push(ElementFlags.Optional);
+                }
                 else {
                     const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
-                    elementTypes.push(type);
-                    elementFlags.push(ElementFlags.Required);
+                    elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
+                    elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
                 }
             }
             if (inDestructuringPattern) {
