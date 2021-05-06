@@ -16,9 +16,9 @@ let items = [{ name: "A" }, { name: "C" }, { name: "B" }];
 for (var item of items.sort((a, b) => a.name.localeCompare(b.name))) {
 >item : { name: string; }
 >items.sort((a, b) => a.name.localeCompare(b.name)) : { name: string; }[]
->items.sort : (compareFn?: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
+>items.sort : (compareFn: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
 >items : { name: string; }[]
->sort : (compareFn?: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
+>sort : (compareFn: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
 >(a, b) => a.name.localeCompare(b.name) : (a: { name: string; }, b: { name: string; }) => number
 >a : { name: string; }
 >b : { name: string; }

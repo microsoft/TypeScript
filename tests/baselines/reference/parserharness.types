@@ -7384,11 +7384,11 @@ module Harness {
             var temp = mapEdits(edits).sort(function (a, b) {
 >temp : { edit: any; index: number; }[]
 >mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: any; index: number; }[]
->mapEdits(edits).sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
+>mapEdits(edits).sort : (compareFn: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
 >mapEdits(edits) : { edit: any; index: number; }[]
 >mapEdits : (edits: any[]) => { edit: any; index: number; }[]
 >edits : any[]
->sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
+>sort : (compareFn: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
 >function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number
 >a : { edit: any; index: number; }
 >b : { edit: any; index: number; }

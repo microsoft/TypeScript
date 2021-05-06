@@ -103,18 +103,18 @@ module M {
 >x=x.sort(CompareYeux) : IEye[]
 >x : IEye[]
 >x.sort(CompareYeux) : IEye[]
->x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>x.sort : (compareFn: (a: IEye, b: IEye) => number) => IEye[]
 >x : IEye[]
->sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>sort : (compareFn: (a: IEye, b: IEye) => number) => IEye[]
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
 
         // type of z inferred from specialized array type
         var z=x.sort(CompareEyes); // ok
 >z : IEye[]
 >x.sort(CompareEyes) : IEye[]
->x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>x.sort : (compareFn: (a: IEye, b: IEye) => number) => IEye[]
 >x : IEye[]
->sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
+>sort : (compareFn: (a: IEye, b: IEye) => number) => IEye[]
 >CompareEyes : (a: IEye, b: IEye) => number
 
         for (var i=0,len=z.length;i<len;i++) {
