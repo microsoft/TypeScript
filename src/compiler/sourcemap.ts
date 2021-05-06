@@ -4,7 +4,10 @@ namespace ts {
         extendedDiagnostics?: boolean;
     }
 
-    export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
+    declare var TextDecoder: new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string };
+    const decoder = new TextDecoder();
+
+    export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
         const { enter, exit } = generatorOptions.extendedDiagnostics
             ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
             : performance.nullTimer;
@@ -17,7 +20,44 @@ namespace ts {
 
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
-        let mappings = "";
+        let mappingsBuffer = new Uint8Array(guessedInputLength + 1 >> 1);
+        let lastMappings: string | undefined;
+        let mappingsPos = 0;
+        function setMapping(charCode: number) {
+            // resize to 1.5 length
+            if (mappingsPos >= mappingsBuffer.length) {
+                const oldLength = mappingsBuffer.length + 1;
+                let replacementBuffer = new Uint8Array(oldLength + ((oldLength + 1) >> 1));
+                replacementBuffer.set(mappingsBuffer);
+                mappingsBuffer = replacementBuffer;
+            }
+            mappingsBuffer[mappingsPos++] = charCode;
+        }
+        
+        function base64VLQFormatEncode(inValue: number) {
+            // Add a new least significant bit that has the sign of the value.
+            // if negative number the least significant bit that gets added to the number has value 1
+            // else least significant bit value that gets added is 0
+            // eg. -1 changes to binary : 01 [1] => 3
+            //     +1 changes to binary : 01 [0] => 2
+            if (inValue < 0) {
+                inValue = ((-inValue) << 1) + 1;
+            }
+            else {
+                inValue = inValue << 1;
+            }
+
+            // Encode 5 bits at a time starting from least significant bits
+            do {
+                let currentDigit = inValue & 31; // 11111
+                inValue = inValue >> 5;
+                if (inValue > 0) {
+                    // There are still more digits to decode, set the msb (6th bit)
+                    currentDigit = currentDigit | 32;
+                }
+                setMapping(base64FormatEncode(currentDigit));
+            } while (inValue > 0);
+        }
 
         // Last recorded and encoded mappings
         let lastGeneratedLine = 0;
@@ -221,7 +261,7 @@ namespace ts {
             if (lastGeneratedLine < pendingGeneratedLine) {
                 // Emit line delimiters
                 do {
-                    mappings += ";";
+                    setMapping(CharacterCodes.semicolon);
                     lastGeneratedLine++;
                     lastGeneratedCharacter = 0;
                 }
@@ -231,30 +271,30 @@ namespace ts {
                 Debug.assertEqual(lastGeneratedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
                 // Emit comma to separate the entry
                 if (hasLast) {
-                    mappings += ",";
+                    setMapping(CharacterCodes.comma);
                 }
             }
 
             // 1. Relative generated character
-            mappings += base64VLQFormatEncode(pendingGeneratedCharacter - lastGeneratedCharacter);
+            base64VLQFormatEncode(pendingGeneratedCharacter - lastGeneratedCharacter);
             lastGeneratedCharacter = pendingGeneratedCharacter;
 
             if (hasPendingSource) {
                 // 2. Relative sourceIndex
-                mappings += base64VLQFormatEncode(pendingSourceIndex - lastSourceIndex);
+                base64VLQFormatEncode(pendingSourceIndex - lastSourceIndex);
                 lastSourceIndex = pendingSourceIndex;
 
                 // 3. Relative source line
-                mappings += base64VLQFormatEncode(pendingSourceLine - lastSourceLine);
+                base64VLQFormatEncode(pendingSourceLine - lastSourceLine);
                 lastSourceLine = pendingSourceLine;
 
                 // 4. Relative source character
-                mappings += base64VLQFormatEncode(pendingSourceCharacter - lastSourceCharacter);
+                base64VLQFormatEncode(pendingSourceCharacter - lastSourceCharacter);
                 lastSourceCharacter = pendingSourceCharacter;
 
                 if (hasPendingName) {
                     // 5. Relative nameIndex
-                    mappings += base64VLQFormatEncode(pendingNameIndex - lastNameIndex);
+                    base64VLQFormatEncode(pendingNameIndex - lastNameIndex);
                     lastNameIndex = pendingNameIndex;
                 }
             }
@@ -265,6 +305,7 @@ namespace ts {
 
         function toJSON(): RawSourceMap {
             commitPendingMapping();
+            const mappings = (lastMappings ??= decoder.decode(mappingsBuffer.slice(0, mappingsPos)));
             return {
                 version: 3,
                 file,
@@ -542,34 +583,6 @@ namespace ts {
             ch === CharacterCodes.plus ? 62 :
             ch === CharacterCodes.slash ? 63 :
             -1;
-    }
-
-    function base64VLQFormatEncode(inValue: number) {
-        // Add a new least significant bit that has the sign of the value.
-        // if negative number the least significant bit that gets added to the number has value 1
-        // else least significant bit value that gets added is 0
-        // eg. -1 changes to binary : 01 [1] => 3
-        //     +1 changes to binary : 01 [0] => 2
-        if (inValue < 0) {
-            inValue = ((-inValue) << 1) + 1;
-        }
-        else {
-            inValue = inValue << 1;
-        }
-
-        // Encode 5 bits at a time starting from least significant bits
-        let encodedStr = "";
-        do {
-            let currentDigit = inValue & 31; // 11111
-            inValue = inValue >> 5;
-            if (inValue > 0) {
-                // There are still more digits to decode, set the msb (6th bit)
-                currentDigit = currentDigit | 32;
-            }
-            encodedStr = encodedStr + String.fromCharCode(base64FormatEncode(currentDigit));
-        } while (inValue > 0);
-
-        return encodedStr;
     }
 
     interface MappedPosition {
