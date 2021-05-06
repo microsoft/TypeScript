@@ -799,7 +799,9 @@ namespace ts {
                     // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
                     (failedLookupChecks ||= []).push(fileOrDirectoryPath);
 
-                    // If this is file from package, invalidate package itself since we might not get notification for all files from the package
+                    // If the invalidated file is from a node_modules package, invalidate everything else
+                    // in the package since we might not get notifications for other files in the package.
+                    // This hardens our logic against unreliable file watchers.
                     const packagePath = parseNodeModuleFromPath(fileOrDirectoryPath);
                     if (packagePath) (startsWithPathChecks ||= new Set()).add(packagePath as Path);
                 }
