@@ -1884,12 +1884,12 @@ namespace ts {
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
+            synchronizeHostData();
             const sourceFile = program && program.getSourceFile(fileName);
             if (!sourceFile) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
             }
-            synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
             if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
@@ -1901,12 +1901,12 @@ namespace ts {
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
+            synchronizeHostData();
             const sourceFile = program && program.getSourceFile(fileName);
             if (!sourceFile) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return { spans: [], endOfLineState: EndOfLineState.None };
             }
-            synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
             if (responseFormat === SemanticClassificationFormat.Original) {
