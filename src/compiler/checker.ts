@@ -5354,6 +5354,7 @@ namespace ts {
             function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
                 const suppressAny = context.flags & NodeBuilderFlags.SuppressAnyReturnType;
                 if (suppressAny) context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // suppress only toplevel `any`s
+                context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -5397,7 +5398,6 @@ namespace ts {
                     const flags = modifiersToFlags(modifiers);
                     modifiers = factory.createModifiersFromModifierFlags(flags | ModifierFlags.Abstract);
                 }
-                context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
 
                 const node =
                     kind === SyntaxKind.CallSignature ? factory.createCallSignature(typeParameters, parameters, returnTypeNode) :
