@@ -263,7 +263,7 @@ namespace ts.InlineHints {
                 return undefined;
             }
 
-            const signatureParamType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration);
+            const signatureParamType = checker.getTypeOfSymbolAtLocation(symbol, valueDeclaration);
             return printTypeInSingleLine(signatureParamType);
         }
 
