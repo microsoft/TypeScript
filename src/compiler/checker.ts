@@ -4487,7 +4487,7 @@ namespace ts {
                     enclosingDeclaration,
                     flags: flags || NodeBuilderFlags.None,
                     // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
-                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
+                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: () => false, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: () => host.getCurrentDirectory(),
@@ -4500,16 +4500,48 @@ namespace ts {
                         getFileIncludeReasons: () => host.getFileIncludeReasons(),
                     } : undefined },
                     encounteredError: false,
+                    reportedDiagnostic: false,
                     visitedTypes: undefined,
                     symbolDepth: undefined,
                     inferTypeParameters: undefined,
                     approximateLength: 0
                 };
+                context.tracker = wrapSymbolTrackerToReportForContext(context, context.tracker);
                 const resultingNode = cb(context);
                 if (context.truncating && context.flags & NodeBuilderFlags.NoTruncation) {
                     context.tracker?.reportTruncationError?.();
                 }
                 return context.encounteredError ? undefined : resultingNode;
+            }
+
+            function wrapSymbolTrackerToReportForContext(context: NodeBuilderContext, tracker: SymbolTracker): SymbolTracker {
+                const oldTrackSymbol = tracker.trackSymbol;
+                return {
+                    ...tracker,
+                    reportCyclicStructureError: wrapReportedDiagnostic(tracker.reportCyclicStructureError),
+                    reportInaccessibleThisError: wrapReportedDiagnostic(tracker.reportInaccessibleThisError),
+                    reportInaccessibleUniqueSymbolError: wrapReportedDiagnostic(tracker.reportInaccessibleUniqueSymbolError),
+                    reportLikelyUnsafeImportRequiredError: wrapReportedDiagnostic(tracker.reportLikelyUnsafeImportRequiredError),
+                    reportNonlocalAugmentation: wrapReportedDiagnostic(tracker.reportNonlocalAugmentation),
+                    reportPrivateInBaseOfClassExpression: wrapReportedDiagnostic(tracker.reportPrivateInBaseOfClassExpression),
+                    trackSymbol: oldTrackSymbol && ((...args) => {
+                        const result = oldTrackSymbol(...args);
+                        if (result) {
+                            context.reportedDiagnostic = true;
+                        }
+                        return result;
+                    }),
+                };
+
+                function wrapReportedDiagnostic<T extends (...args: any[]) => any>(method: T | undefined): T | undefined {
+                    if (!method) {
+                        return method;
+                    }
+                    return (((...args) => {
+                        context.reportedDiagnostic = true;
+                        return method(...args);
+                    }) as T);
+                }
             }
 
             function checkTruncationLength(context: NodeBuilderContext): boolean {
@@ -4838,7 +4870,7 @@ namespace ts {
                     }
                 }
 
-                function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
+                function visitAndTransformType<T extends TypeNode>(type: Type, transform: (type: Type) => T) {
                     const typeId = type.id;
                     const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
                     const id = getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? "N" + getNodeId((<TypeReference>type).node!) :
@@ -4853,6 +4885,20 @@ namespace ts {
                         context.symbolDepth = new Map();
                     }
 
+                    const links = context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
+                    const key = `${getTypeId(type)}|${context.flags}`;
+                    if (links) {
+                        links.serializedTypes ||= new Map();
+                    }
+                    const cachedResult = links?.serializedTypes?.get(key);
+                    if (cachedResult) {
+                        if (cachedResult.truncating) {
+                            context.truncating = true;
+                        }
+                        context.approximateLength += cachedResult.addedLength;
+                        return deepCloneOrReuseNode(cachedResult) as TypeNode as T;
+                    }
+
                     let depth: number | undefined;
                     if (id) {
                         depth = context.symbolDepth!.get(id) || 0;
@@ -4862,12 +4908,28 @@ namespace ts {
                         context.symbolDepth!.set(id, depth + 1);
                     }
                     context.visitedTypes.add(typeId);
+                    const startLength = context.approximateLength;
                     const result = transform(type);
+                    const addedLength = context.approximateLength - startLength;
+                    if (!context.reportedDiagnostic && !context.encounteredError) {
+                        if (context.truncating) {
+                            (result as any).truncating = true;
+                        }
+                        (result as any).addedLength = addedLength;
+                        links?.serializedTypes?.set(key, result as TypeNode as TypeNode & {truncating?: boolean, addedLength: number});
+                    }
                     context.visitedTypes.delete(typeId);
                     if (id) {
                         context.symbolDepth!.set(id, depth!);
                     }
                     return result;
+
+                    function deepCloneOrReuseNode(node: Node): Node {
+                        if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
+                            return node;
+                        }
+                        return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext)), node);
+                    }
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -5998,6 +6060,7 @@ namespace ts {
                 if (initial.typeParameterSymbolList) {
                     initial.typeParameterSymbolList = new Set(initial.typeParameterSymbolList);
                 }
+                initial.tracker = wrapSymbolTrackerToReportForContext(initial, initial.tracker);
                 return initial;
             }
 
@@ -6289,11 +6352,13 @@ namespace ts {
                                 }
                             }
                             else if (oldcontext.tracker && oldcontext.tracker.trackSymbol) {
-                                oldcontext.tracker.trackSymbol(sym, decl, meaning);
+                                return oldcontext.tracker.trackSymbol(sym, decl, meaning);
                             }
-                        }
-                    }
+                            return false;
+                        },
+                    },
                 };
+                context.tracker = wrapSymbolTrackerToReportForContext(context, context.tracker);
                 forEachEntry(symbolTable, (symbol, name) => {
                     const baseName = unescapeLeadingUnderscores(name);
                     void getInternalSymbolName(symbol, baseName); // Called to cache values into `usedSymbolNames` and `remappedSymbolNames`
@@ -6513,6 +6578,9 @@ namespace ts {
                         const oldContext = context;
                         context = cloneNodeBuilderContext(context);
                         const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                        if (context.reportedDiagnostic) {
+                            oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
+                        }
                         context = oldContext;
                         return result;
                     }
@@ -7286,7 +7354,7 @@ namespace ts {
                         // a visibility error here (as they're not visible within any scope), but we want to hoist them
                         // into the containing scope anyway, so we want to skip the visibility checks.
                         const oldTrack = context.tracker.trackSymbol;
-                        context.tracker.trackSymbol = noop;
+                        context.tracker.trackSymbol = () => false;
                         if (isExportAssignmentCompatibleSymbolName) {
                             results.push(factory.createExportAssignment(
                                 /*decorators*/ undefined,
@@ -7742,6 +7810,7 @@ namespace ts {
 
             // State
             encounteredError: boolean;
+            reportedDiagnostic: boolean;
             visitedTypes: Set<number> | undefined;
             symbolDepth: ESMap<string, number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
