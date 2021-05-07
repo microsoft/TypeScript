@@ -1885,35 +1885,25 @@ namespace ts {
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
             synchronizeHostData();
-            const sourceFile = program && program.getSourceFile(fileName);
-            if (!sourceFile) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return [];
-            }
 
             const responseFormat = format || SemanticClassificationFormat.Original;
             if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
-                return classifier.v2020.getSemanticClassifications(program, cancellationToken, sourceFile, span);
+                return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
             else {
-                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, sourceFile, program.getClassifiableNames(), span);
+                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
             synchronizeHostData();
-            const sourceFile = program && program.getSourceFile(fileName);
-            if (!sourceFile) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return { spans: [], endOfLineState: EndOfLineState.None };
-            }
 
             const responseFormat = format || SemanticClassificationFormat.Original;
             if (responseFormat === SemanticClassificationFormat.Original) {
-                return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, sourceFile, program.getClassifiableNames(), span);
+                return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
             else {
-                return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
+                return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
         }
 
