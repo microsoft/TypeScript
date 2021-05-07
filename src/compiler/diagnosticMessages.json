@@ -743,7 +743,7 @@
         "category": "Error",
         "code": 1230
     },
-    "An export assignment can only be used in a module.": {
+    "An export assignment must be at the top level of a file or module declaration.": {
         "category": "Error",
         "code": 1231
     },
@@ -846,6 +846,10 @@
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257
+    },
+    "A default export must be at the top level of a file or module declaration.": {
+        "category": "Error",
+        "code": 1258
     },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",

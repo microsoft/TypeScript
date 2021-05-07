@@ -2907,6 +2907,7 @@ namespace ts {
                 const moduleNames = getModuleNames(file);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
+                const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
                 for (let index = 0; index < moduleNames.length; index++) {
                     const resolution = resolutions[index];
                     setResolvedModule(file, moduleNames[index], resolution);
@@ -2933,11 +2934,11 @@ namespace ts {
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
                     const shouldAddFile = resolvedFileName
-                        && !getResolutionDiagnostic(options, resolution)
-                        && !options.noResolve
+                        && !getResolutionDiagnostic(optionsForFile, resolution)
+                        && !optionsForFile.noResolve
                         && index < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !getAllowJSCompilerOption(options))
+                        && !(isJsFile && !getAllowJSCompilerOption(optionsForFile))
                         && (isInJSFile(file.imports[index]) || !(file.imports[index].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {

@@ -3937,12 +3937,12 @@ namespace ts {
             return typeCopy;
         }
 
-        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable) => T): T {
+        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean) => T): T {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = callback(location.locals)) {
+                    if (result = callback(location.locals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true)) {
                         return result;
                     }
                 }
@@ -3957,7 +3957,7 @@ namespace ts {
                         // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
                         // into a namespace - in such cases, it's best to just let the namespace appear empty (the const members couldn't have referred
                         // to one another anyway)
-                        if (result = callback(sym?.exports || emptySymbols)) {
+                        if (result = callback(sym?.exports || emptySymbols, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true)) {
                             return result;
                         }
                         break;
@@ -3985,7 +3985,7 @@ namespace ts {
                 }
             }
 
-            return callback(globals);
+            return callback(globals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true);
         }
 
         function getQualifiedLeftMeaning(rightMeaning: SymbolFlags) {
@@ -4008,12 +4008,12 @@ namespace ts {
             /**
              * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
              */
-            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean): Symbol[] | undefined {
+            function getAccessibleSymbolChainFromSymbolTable(symbols: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean): Symbol[] | undefined {
                 if (!pushIfUnique(visitedSymbolTables!, symbols)) {
                     return undefined;
                 }
 
-                const result = trySymbolTable(symbols, ignoreQualification);
+                const result = trySymbolTable(symbols, ignoreQualification, isLocalNameLookup);
                 visitedSymbolTables!.pop();
                 return result;
             }
@@ -4034,7 +4034,7 @@ namespace ts {
                     (ignoreQualification || canQualifySymbol(getMergedSymbol(symbolFromSymbolTable), meaning));
             }
 
-            function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined): Symbol[] | undefined {
+            function trySymbolTable(symbols: SymbolTable, ignoreQualification: boolean | undefined, isLocalNameLookup: boolean | undefined): Symbol[] | undefined {
                 // If symbol is directly available by its name in the symbol table
                 if (isAccessible(symbols.get(symbol!.escapedName)!, /*resolvedAliasSymbol*/ undefined, ignoreQualification)) {
                     return [symbol!];
@@ -4048,6 +4048,8 @@ namespace ts {
                         && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
                         && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))
+                        // If we're looking up a local name to reference directly, omit namespace reexports, otherwise when we're trawling through an export list to make a dotted name, we can keep it
+                        && (isLocalNameLookup ? !some(symbolFromSymbolTable.declarations, isNamespaceReexportDeclaration) : true)
                         // While exports are generally considered to be in scope, export-specifier declared symbols are _not_
                         // See similar comment in `resolveName` for details
                         && (ignoreQualification || !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier))
@@ -4162,7 +4164,7 @@ namespace ts {
                         return hasAccessibleDeclarations;
                     }
                 }
-                else if (allowModules) {
+                if (allowModules) {
                     if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                         if (shouldComputeAliasesToMakeVisible) {
                             earlyModuleBail = true;
@@ -15038,7 +15040,7 @@ namespace ts {
             // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
-                const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.checkType), mapper);
+                const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
                 const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
@@ -17950,7 +17952,7 @@ namespace ts {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
-                    const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false, IntersectionState.None);
+                    const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -17959,7 +17961,7 @@ namespace ts {
                 return result;
             }
 
-            function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+            function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
                 const targetTypes = target.types;
                 if (target.flags & TypeFlags.Union) {
                     if (containsType(targetTypes, source)) {
@@ -17967,21 +17969,21 @@ namespace ts {
                     }
                     const match = getMatchingUnionConstituentForType(<UnionType>target, source);
                     if (match) {
-                        const related = isRelatedTo(source, match, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                        const related = isRelatedTo(source, match, /*reportErrors*/ false);
                         if (related) {
                             return related;
                         }
                     }
                 }
                 for (const type of targetTypes) {
-                    const related = isRelatedTo(source, type, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(source, type, /*reportErrors*/ false);
                     if (related) {
                         return related;
                     }
                 }
                 if (reportErrors) {
                     const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
-                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true, /*headMessage*/ undefined, intersectionState);
+                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
                 return Ternary.False;
             }
@@ -18241,7 +18243,7 @@ namespace ts {
                             eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & ~IntersectionState.UnionIntersectionCheck);
                     }
                     if (target.flags & TypeFlags.Union) {
-                        return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive), intersectionState & ~IntersectionState.UnionIntersectionCheck);
+                        return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
                     }
                     if (target.flags & TypeFlags.Intersection) {
                         return typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
@@ -19940,6 +19942,9 @@ namespace ts {
         // of those literal types. Otherwise, return the leftmost type for which no type to the
         // right is a supertype.
         function getSupertypeOrUnion(types: Type[]): Type {
+            if (types.length === 1) {
+                return types[0];
+            }
             return literalTypesWithSameBaseType(types) ?
                 getUnionType(types) :
                 reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
@@ -22017,7 +22022,7 @@ namespace ts {
                 // The candidate key property name is the name of the first property with a unit type in one of the
                 // constituent types.
                 const keyPropertyName = forEach(types, t =>
-                    t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive) ?
+                    t.flags & (TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ?
                         forEach(getPropertiesOfType(t), p => isUnitType(getTypeOfSymbol(p)) ? p.escapedName : undefined) :
                         undefined);
                 const mapByKeyProperty = keyPropertyName && mapTypesByKeyProperty(types, keyPropertyName);
@@ -23816,7 +23821,16 @@ namespace ts {
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
                 if (!assumeTrue) {
-                    return filterType(type, t => !isRelated(t, candidate));
+                    return filterType(type, t => {
+                        if (!isRelated(t, candidate)) {
+                            return true;
+                        }
+                        const constraint = getBaseConstraintOfType(t);
+                        if (constraint && constraint !== t) {
+                            return !isRelated(constraint, candidate);
+                        }
+                        return false;
+                    });
                 }
                 // If the current type is a union type, remove all constituents that couldn't be instances of
                 // the candidate type. If one or more constituents remain, return a union of those.
@@ -38319,7 +38333,10 @@ namespace ts {
         }
 
         function checkExportAssignment(node: ExportAssignment) {
-            if (checkGrammarModuleElementContext(node, Diagnostics.An_export_assignment_can_only_be_used_in_a_module)) {
+            const illegalContextMessage = node.isExportEquals
+                ? Diagnostics.An_export_assignment_must_be_at_the_top_level_of_a_file_or_module_declaration
+                : Diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration;
+            if (checkGrammarModuleElementContext(node, illegalContextMessage)) {
                 // If we hit an export assignment in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
