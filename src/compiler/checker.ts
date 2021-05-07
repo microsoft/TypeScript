@@ -22028,7 +22028,7 @@ namespace ts {
                 // The candidate key property name is the name of the first property with a unit type in one of the
                 // constituent types.
                 const keyPropertyName = forEach(types, t =>
-                    t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive) ?
+                    t.flags & (TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ?
                         forEach(getPropertiesOfType(t), p => isUnitType(getTypeOfSymbol(p)) ? p.escapedName : undefined) :
                         undefined);
                 const mapByKeyProperty = keyPropertyName && mapTypesByKeyProperty(types, keyPropertyName);
