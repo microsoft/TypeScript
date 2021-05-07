@@ -1,0 +1,38 @@
+=== tests/cases/compiler/a.ts ===
+export default { a: 1 };
+>a : Symbol(a, Decl(a.ts, 0, 16))
+
+=== tests/cases/compiler/b1.ts ===
+import a from "./a";
+>a : Symbol(a, Decl(b1.ts, 0, 6))
+
+const b1 = {} as unknown;
+>b1 : Symbol(b1, Decl(b1.ts, 2, 5))
+
+({
+    // @ts-ignore
+    ...b1,
+>b1 : Symbol(b1, Decl(b1.ts, 2, 5))
+
+    a
+>a : Symbol(a, Decl(b1.ts, 5, 10))
+
+})
+
+=== tests/cases/compiler/b2.ts ===
+import a from "./a";
+>a : Symbol(a, Decl(b2.ts, 0, 6))
+
+const b2 = {} as never;
+>b2 : Symbol(b2, Decl(b2.ts, 2, 5))
+
+({
+    // @ts-ignore
+    ...b2,
+>b2 : Symbol(b2, Decl(b2.ts, 2, 5))
+
+    a
+>a : Symbol(a, Decl(b2.ts, 5, 10))
+
+})
+

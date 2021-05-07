@@ -4,18 +4,18 @@ class C {
 
     [Symbol.iterator]: { x; y };
 >[Symbol.iterator] : { x: any; y: any; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >x : any
 >y : any
 }
 interface I {
     [Symbol.iterator]?: { x };
 >[Symbol.iterator] : { x: any; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >x : any
 }
 

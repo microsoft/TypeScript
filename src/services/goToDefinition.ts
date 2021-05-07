@@ -2,8 +2,10 @@
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
-        if (resolvedRef) {
-            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.file.fileName)];
+        const fileReferenceDefinition = resolvedRef && [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.fileName, resolvedRef.unverified)] || emptyArray;
+        if (resolvedRef?.file) {
+            // If `file` is missing, do a symbol-based lookup as well
+            return fileReferenceDefinition;
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -25,7 +27,7 @@ namespace ts.GoToDefinition {
         // Could not find a symbol e.g. node is string or number keyword,
         // or the symbol was an internal symbol and does not have a declaration e.g. undefined symbol
         if (!symbol) {
-            return getDefinitionInfoForIndexSignatures(node, typeChecker);
+            return concatenate(fileReferenceDefinition, getDefinitionInfoForIndexSignatures(node, typeChecker));
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
@@ -51,7 +53,8 @@ namespace ts.GoToDefinition {
         // assignment. This case and others are handled by the following code.
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
-            return shorthandSymbol ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : [];
+            const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node)) : emptyArray;
+            return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || emptyArray);
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -75,25 +78,7 @@ namespace ts.GoToDefinition {
             });
         }
 
-        // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
-        // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
-        // For example
-        //      interface Props{
-        //          /*first*/prop1: number
-        //          prop2: boolean
-        //      }
-        //      function Foo(arg: Props) {}
-        //      Foo( { pr/*1*/op1: 10, prop2: true })
-        const element = getContainingObjectLiteralElement(node);
-        if (element) {
-            const contextualType = element && typeChecker.getContextualType(element.parent);
-            if (contextualType) {
-                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
-                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
-            }
-        }
-
-        return getDefinitionFromSymbol(typeChecker, symbol, node);
+        return concatenate(fileReferenceDefinition, getDefinitionFromObjectLiteralElement(typeChecker, node) || getDefinitionFromSymbol(typeChecker, symbol, node));
     }
 
     /**
@@ -108,24 +93,62 @@ namespace ts.GoToDefinition {
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, file: SourceFile } | undefined {
+    // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
+    // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
+    // For example
+    //      interface Props{
+    //          /*first*/prop1: number
+    //          prop2: boolean
+    //      }
+    //      function Foo(arg: Props) {}
+    //      Foo( { pr/*1*/op1: 10, prop2: true })
+    function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: Node) {
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            const contextualType = element && typeChecker.getContextualType(element.parent);
+            if (contextualType) {
+                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
+                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            }
+        }
+    }
+
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, unverified: boolean, file?: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { reference: referencePath, file };
+            return file && { reference: referencePath, fileName: file.fileName, file, unverified: false };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { reference: typeReferenceDirective, file };
+            return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { reference: libReferenceDirective, file };
+            return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
+        }
+
+        if (sourceFile.resolvedModules?.size) {
+            const node = getTokenAtPosition(sourceFile, position);
+            if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text)) {
+                const verifiedFileName = sourceFile.resolvedModules.get(node.text)?.resolvedFileName;
+                const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
+                return {
+                    file: program.getSourceFile(fileName),
+                    fileName,
+                    reference: {
+                        pos: node.getStart(),
+                        end: node.getEnd(),
+                        fileName: node.text
+                    },
+                    unverified: !verifiedFileName,
+                };
+            }
         }
 
         return undefined;
@@ -203,7 +226,7 @@ namespace ts.GoToDefinition {
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        if (symbol && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+        if (symbol?.declarations && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
             const aliased = checker.getAliasedSymbol(symbol);
             if (aliased.declarations) {
                 return aliased;
@@ -232,7 +255,7 @@ namespace ts.GoToDefinition {
                 return declaration.parent.kind === SyntaxKind.NamedImports;
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration, /*requireStringLiteralLikeArgument*/ true);
+                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration);
             default:
                 return false;
         }
@@ -251,7 +274,7 @@ namespace ts.GoToDefinition {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-                const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+                const cls = find(filteredDeclarations!, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
         }
@@ -303,8 +326,39 @@ namespace ts.GoToDefinition {
                 sourceFile,
                 FindAllReferences.getContextNode(declaration)
             ),
-            isLocal: !checker.isDeclarationVisible(declaration)
+            isLocal: !isDefinitionVisible(checker, declaration)
         };
+    }
+
+    function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): boolean {
+        if (checker.isDeclarationVisible(declaration)) return true;
+        if (!declaration.parent) return false;
+
+        // Variable initializers are visible if variable is visible
+        if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) return isDefinitionVisible(checker, declaration.parent as Declaration);
+
+        // Handle some exceptions here like arrow function, members of class and object literal expression which are technically not visible but we want the definition to be determined by its parent
+        switch (declaration.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                // Private/protected properties/methods are not visible
+                if (hasEffectiveModifier(declaration, ModifierFlags.Private)) return false;
+            // Public properties/methods are visible if its parents are visible, so:
+            // falls through
+
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+                return isDefinitionVisible(checker, declaration.parent as Declaration);
+            default:
+                return false;
+        }
     }
 
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration): DefinitionInfo {
@@ -315,7 +369,7 @@ namespace ts.GoToDefinition {
         return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
-    function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {
+    function getDefinitionInfoForFileReference(name: string, targetFileName: string, unverified: boolean): DefinitionInfo {
         return {
             fileName: targetFileName,
             textSpan: createTextSpanFromBounds(0, 0),
@@ -323,6 +377,7 @@ namespace ts.GoToDefinition {
             name,
             containerName: undefined!,
             containerKind: undefined!, // TODO: GH#18217
+            unverified,
         };
     }
 

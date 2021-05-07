@@ -1,0 +1,37 @@
+=== tests/cases/compiler/voidUndefinedReduction.ts ===
+// Repro from #42786
+
+function isDefined<T>(value: T | undefined | null | void): value is T {
+>isDefined : <T>(value: T | undefined | null | void) => value is T
+>value : void | T | null | undefined
+>null : null
+
+  return value !== undefined && value !== null;
+>value !== undefined && value !== null : boolean
+>value !== undefined : boolean
+>value : void | T | null | undefined
+>undefined : undefined
+>value !== null : boolean
+>value : T | null
+>null : null
+}
+
+declare const foo: string | undefined;
+>foo : string | undefined
+
+if (isDefined(foo)) {
+>isDefined(foo) : boolean
+>isDefined : <T>(value: void | T | null | undefined) => value is T
+>foo : string | undefined
+
+  console.log(foo.toUpperCase()); 
+>console.log(foo.toUpperCase()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>foo.toUpperCase() : string
+>foo.toUpperCase : () => string
+>foo : string
+>toUpperCase : () => string
+}
+

@@ -292,26 +292,38 @@ namespace ts {
                 // When there are no attributes, React wants "null"
             }
             else {
-                // Map spans of JsxAttribute nodes into object literals and spans
-                // of JsxSpreadAttribute nodes into expressions.
-                const segments = flatten<Expression | ObjectLiteralExpression>(
-                    spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                        ? map(attrs, transformJsxSpreadAttributeToExpression)
-                        : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                    )
-                );
-
-                if (isJsxSpreadAttribute(attrs[0])) {
-                    // We must always emit at least one object literal before a spread
-                    // argument.factory.createObjectLiteral
-                    segments.unshift(factory.createObjectLiteralExpression());
+                const target = compilerOptions.target;
+                if (target && target >= ScriptTarget.ES2018) {
+                    objectProperties = factory.createObjectLiteralExpression(
+                        flatten<SpreadAssignment | PropertyAssignment>(
+                            spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
+                                isSpread ? map(attrs, transformJsxSpreadAttributeToSpreadAssignment) : map(attrs, transformJsxAttributeToObjectLiteralElement)
+                            )
+                        )
+                    );
                 }
+                else {
+                    // Map spans of JsxAttribute nodes into object literals and spans
+                    // of JsxSpreadAttribute nodes into expressions.
+                    const segments = flatten<Expression | ObjectLiteralExpression>(
+                        spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
+                            ? map(attrs, transformJsxSpreadAttributeToExpression)
+                            : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                        )
+                    );
 
-                // Either emit one big object literal (no spread attribs), or
-                // a call to the __assign helper.
-                objectProperties = singleOrUndefined(segments);
-                if (!objectProperties) {
-                    objectProperties = emitHelpers().createAssignHelper(segments);
+                    if (isJsxSpreadAttribute(attrs[0])) {
+                        // We must always emit at least one object literal before a spread
+                        // argument.factory.createObjectLiteral
+                        segments.unshift(factory.createObjectLiteralExpression());
+                    }
+
+                    // Either emit one big object literal (no spread attribs), or
+                    // a call to the __assign helper.
+                    objectProperties = singleOrUndefined(segments);
+                    if (!objectProperties) {
+                        objectProperties = emitHelpers().createAssignHelper(segments);
+                    }
                 }
             }
 
@@ -374,6 +386,10 @@ namespace ts {
             }
 
             return element;
+        }
+
+        function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
+            return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
         }
 
         function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {

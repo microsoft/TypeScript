@@ -4,7 +4,7 @@ var x: {
 
     [Symbol.toPrimitive](): string
 >[Symbol.toPrimitive] : () => string
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 }

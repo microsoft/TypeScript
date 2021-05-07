@@ -6,7 +6,7 @@ var wat = require('./bug24024')
 >'./bug24024' : Symbol("tests/cases/conformance/salsa/bug24024", Decl(bug24024.js, 0, 0))
 
 module.exports = class C {}
->module.exports : Symbol("tests/cases/conformance/salsa/bug24024", Decl(bug24024.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(bug24024.js, 0, 0))
 >module : Symbol(export=, Decl(bug24024.js, 1, 31))
 >exports : Symbol(export=, Decl(bug24024.js, 1, 31))
 >C : Symbol(wat, Decl(bug24024.js, 2, 16))
@@ -15,7 +15,7 @@ module.exports.D = class D { }
 >module.exports.D : Symbol(wat.D, Decl(bug24024.js, 2, 27))
 >module.exports : Symbol(wat.D, Decl(bug24024.js, 2, 27))
 >module : Symbol(module, Decl(bug24024.js, 1, 31))
->exports : Symbol("tests/cases/conformance/salsa/bug24024", Decl(bug24024.js, 0, 0))
+>exports : Symbol(module.exports, Decl(bug24024.js, 0, 0))
 >D : Symbol(wat.D, Decl(bug24024.js, 2, 27))
 >D : Symbol(wat.D, Decl(bug24024.js, 3, 18))
 

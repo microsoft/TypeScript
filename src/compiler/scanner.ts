@@ -40,7 +40,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
-        reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanJsxToken(allowMultilineJsxText?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
         reScanInvalidIdentifier(): SyntaxKind;
@@ -127,6 +127,7 @@ namespace ts {
         private: SyntaxKind.PrivateKeyword,
         protected: SyntaxKind.ProtectedKeyword,
         public: SyntaxKind.PublicKeyword,
+        override: SyntaxKind.OverrideKeyword,
         readonly: SyntaxKind.ReadonlyKeyword,
         require: SyntaxKind.RequireKeyword,
         global: SyntaxKind.GlobalKeyword,
@@ -553,11 +554,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments = false): number {
+    export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments?: boolean, inJSDoc?: boolean): number {
         if (positionIsSynthesized(pos)) {
             return pos;
         }
 
+        let canConsumeStar = false;
         // Keep in sync with couldStartTrivia
         while (true) {
             const ch = text.charCodeAt(pos);
@@ -572,6 +574,7 @@ namespace ts {
                     if (stopAfterLineBreak) {
                         return pos;
                     }
+                    canConsumeStar = !!inJSDoc;
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -591,6 +594,7 @@ namespace ts {
                             }
                             pos++;
                         }
+                        canConsumeStar = false;
                         continue;
                     }
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
@@ -602,6 +606,7 @@ namespace ts {
                             }
                             pos++;
                         }
+                        canConsumeStar = false;
                         continue;
                     }
                     break;
@@ -612,6 +617,7 @@ namespace ts {
                 case CharacterCodes.greaterThan:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos);
+                        canConsumeStar = false;
                         continue;
                     }
                     break;
@@ -619,6 +625,15 @@ namespace ts {
                 case CharacterCodes.hash:
                     if (pos === 0 && isShebangTrivia(text, pos)) {
                         pos = scanShebangTrivia(text, pos);
+                        canConsumeStar = false;
+                        continue;
+                    }
+                    break;
+
+                case CharacterCodes.asterisk:
+                    if (canConsumeStar) {
+                        pos++;
+                        canConsumeStar = false;
                         continue;
                     }
                     break;
@@ -2223,9 +2238,9 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
         }
 
-        function reScanJsxToken(): JsxTokenSyntaxKind {
+        function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
-            return token = scanJsxToken();
+            return token = scanJsxToken(allowMultilineJsxText);
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2242,7 +2257,7 @@ namespace ts {
             return token = SyntaxKind.QuestionToken;
         }
 
-        function scanJsxToken(): JsxTokenSyntaxKind {
+        function scanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
             if (pos >= end) {
@@ -2266,19 +2281,11 @@ namespace ts {
 
             // First non-whitespace character on this line.
             let firstNonWhitespace = 0;
-            let lastNonWhitespace = -1;
 
             // These initial values are special because the first line is:
             // firstNonWhitespace = 0 to indicate that we want leading whitespace,
 
             while (pos < end) {
-
-                // We want to keep track of the last non-whitespace (but including
-                // newlines character for hitting the end of the JSX Text region)
-                if (!isWhiteSpaceSingleLine(char)) {
-                    lastNonWhitespace = pos;
-                }
-
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -2297,8 +2304,6 @@ namespace ts {
                     error(Diagnostics.Unexpected_token_Did_you_mean_or_rbrace, pos, 1);
                 }
 
-                if (lastNonWhitespace > 0) lastNonWhitespace++;
-
                 // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
                 // i.e (- : whitespace)
                 //      <div>----
@@ -2308,6 +2313,11 @@ namespace ts {
                 if (isLineBreak(char) && firstNonWhitespace === 0) {
                     firstNonWhitespace = -1;
                 }
+                else if (!allowMultilineJsxText && isLineBreak(char) && firstNonWhitespace > 0) {
+                    // Stop JsxText on each line during formatting. This allows the formatter to
+                    // indent each line correctly.
+                    break;
+                }
                 else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
                 }
@@ -2315,8 +2325,7 @@ namespace ts {
                 pos++;
             }
 
-            const endPosition = lastNonWhitespace === -1 ? pos : lastNonWhitespace;
-            tokenValue = text.substring(startPos, endPosition);
+            tokenValue = text.substring(startPos, pos);
 
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
@@ -2341,6 +2350,7 @@ namespace ts {
                         tokenValue += ":";
                         pos++;
                         namespaceSeparator = true;
+                        token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
                         continue;
                     }
                     const oldPos = pos;

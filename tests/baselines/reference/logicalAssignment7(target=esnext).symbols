@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment7.ts ===
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts ===
 function foo1(results: number[] | undefined, results1: number[] | undefined) {
 >foo1 : Symbol(foo1, Decl(logicalAssignment7.ts, 0, 0))
 >results : Symbol(results, Decl(logicalAssignment7.ts, 0, 14))
@@ -34,3 +34,4 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 >results1 : Symbol(results1, Decl(logicalAssignment7.ts, 8, 44))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
+

@@ -4,7 +4,7 @@
  * @return {any} I don't even know what this should return
  */
 module.exports = C
->module.exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 0, 0))
 >exports : Symbol(export=, Decl(mod1.js, 0, 0))
 >C : Symbol(C, Decl(mod1.js, 4, 18))

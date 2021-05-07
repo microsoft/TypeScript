@@ -1229,7 +1229,7 @@ namespace ts {
 
     /** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. */
     export const createJSDocParamTag = Debug.deprecate(function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
-        return factory.createJSDocParameterTag(/*tagName*/ undefined, name, isBracketed, typeExpression, /*isNameFirst*/ false, comment);
+        return factory.createJSDocParameterTag(/*tagName*/ undefined, name, isBracketed, typeExpression, /*isNameFirst*/ false, comment ? factory.createNodeArray([factory.createJSDocText(comment)]) : undefined);
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createComma` or the factory supplied by your transformation context instead. */
@@ -1354,4 +1354,24 @@ namespace ts {
     export interface Map<T> extends ESMap<string, T> { }
 
     // #endregion
+
+    // DEPRECATION: Renamed node tests
+    // DEPRECATION PLAN:
+    //     - soft: 4.2
+    //     - warn: 4.3
+    //     - error: TBD
+    // #region Renamed node Tests
+
+    /**
+     * @deprecated Use `isMemberName` instead.
+     */
+    export const isIdentifierOrPrivateIdentifier = Debug.deprecate(function isIdentifierOrPrivateIdentifier(node: Node): node is MemberName {
+        return isMemberName(node);
+    }, {
+        since: "4.2",
+        warnAfter: "4.3",
+        message: "Use `isMemberName` instead."
+    });
+
+    // #endregion Renamed node Tests
 }

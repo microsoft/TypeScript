@@ -15,4 +15,4 @@ exports.__esModule = true;
 exports.__esModule = true;
 exports.ns = void 0;
 var tslib_1 = require("tslib");
-exports.ns = tslib_1.__importStar(require("./a")); // Error
+exports.ns = (0, tslib_1.__importStar)(require("./a")); // Error

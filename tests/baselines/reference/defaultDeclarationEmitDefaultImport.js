@@ -25,7 +25,7 @@ exports["default"] = Something;
 exports.__esModule = true;
 exports.instance = void 0;
 var root_1 = require("./root");
-exports.instance = root_1.getSomething();
+exports.instance = (0, root_1.getSomething)();
 
 
 //// [root.d.ts]

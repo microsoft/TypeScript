@@ -299,6 +299,7 @@ namespace ts.tscWatch {
     }
     export interface TscWatchCheckOptions {
         baselineSourceMap?: boolean;
+        baselineDependencies?: boolean;
     }
     export interface TscWatchCompileBase extends TscWatchCheckOptions {
         scenario: string;
@@ -323,7 +324,7 @@ namespace ts.tscWatch {
             const {
                 scenario, subScenario,
                 commandLineArgs, changes,
-                baselineSourceMap
+                baselineSourceMap, baselineDependencies
             } = input;
 
             if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
@@ -342,6 +343,7 @@ namespace ts.tscWatch {
                 oldSnap,
                 getPrograms,
                 baselineSourceMap,
+                baselineDependencies,
                 changes,
                 watchOrSolution
             });
@@ -381,16 +383,18 @@ namespace ts.tscWatch {
     export function runWatchBaseline({
         scenario, subScenario, commandLineArgs,
         getPrograms, sys, baseline, oldSnap,
-        baselineSourceMap,
+        baselineSourceMap, baselineDependencies,
         changes, watchOrSolution
     }: RunWatchBaseline) {
         baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
         let programs = watchBaseline({
             baseline,
             getPrograms,
+            oldPrograms: emptyArray,
             sys,
             oldSnap,
-            baselineSourceMap
+            baselineSourceMap,
+            baselineDependencies,
         });
 
         for (const { caption, change, timeouts } of changes) {
@@ -399,9 +403,11 @@ namespace ts.tscWatch {
             programs = watchBaseline({
                 baseline,
                 getPrograms,
+                oldPrograms: programs,
                 sys,
                 oldSnap,
-                baselineSourceMap
+                baselineSourceMap,
+                baselineDependencies,
             });
         }
         Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ?
@@ -418,12 +424,13 @@ namespace ts.tscWatch {
     }
 
     export interface WatchBaseline extends Baseline, TscWatchCheckOptions {
+        oldPrograms: readonly (CommandLineProgram | undefined)[];
         getPrograms: () => readonly CommandLineProgram[];
     }
-    export function watchBaseline({ baseline, getPrograms, sys, oldSnap, baselineSourceMap }: WatchBaseline) {
+    export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         sys.serializeOutput(baseline);
-        const programs = baselinePrograms(baseline, getPrograms);
+        const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
         sys.serializeWatches(baseline);
         baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
         sys.diff(baseline, oldSnap);
@@ -434,36 +441,56 @@ namespace ts.tscWatch {
         return programs;
     }
 
-    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[]) {
+    export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
         const programs = getPrograms();
-        for (const program of programs) {
-            baselineProgram(baseline, program);
+        for (let i = 0; i < programs.length; i++) {
+            baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
         }
         return programs;
     }
 
-    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram) {
-        const options = program.getCompilerOptions();
-        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
-        baseline.push(`Program options: ${JSON.stringify(options)}`);
-        baseline.push(`Program structureReused: ${(<any>ts).StructureIsReused[program.structureIsReused]}`);
-        baseline.push("Program files::");
-        for (const file of program.getSourceFiles()) {
-            baseline.push(file.fileName);
+    function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
+        if (program !== oldProgram?.[0]) {
+            const options = program.getCompilerOptions();
+            baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
+            baseline.push(`Program options: ${JSON.stringify(options)}`);
+            baseline.push(`Program structureReused: ${(<any>ts).StructureIsReused[program.structureIsReused]}`);
+            baseline.push("Program files::");
+            for (const file of program.getSourceFiles()) {
+                baseline.push(file.fileName);
+            }
+        }
+        else {
+            baseline.push(`Program: Same as old program`);
         }
         baseline.push("");
+
         if (!builderProgram) return;
-        const state = builderProgram.getState();
-        if (state.semanticDiagnosticsPerFile?.size) {
-            baseline.push("Semantic diagnostics in builder refreshed for::");
-            for (const file of program.getSourceFiles()) {
-                if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
-                    baseline.push(file.fileName);
+        if (builderProgram !== oldProgram?.[1]) {
+            const state = builderProgram.getState();
+            if (state.semanticDiagnosticsPerFile?.size) {
+                baseline.push("Semantic diagnostics in builder refreshed for::");
+                for (const file of program.getSourceFiles()) {
+                    if (!state.semanticDiagnosticsFromOldState || !state.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
+                        baseline.push(file.fileName);
+                    }
+                }
+            }
+            else {
+                baseline.push("No cached semantic diagnostics in the builder::");
+            }
+            baseline.push("");
+            if (!baselineDependencies) return;
+            baseline.push("Dependencies for::");
+            for (const file of builderProgram.getSourceFiles()) {
+                baseline.push(`${file.fileName}:`);
+                for (const depenedency of builderProgram.getAllDependencies(file)) {
+                    baseline.push(`  ${depenedency}`);
                 }
             }
         }
         else {
-            baseline.push("No cached semantic diagnostics in the builder::");
+            baseline.push(`BuilderProgram: Same as old builder program`);
         }
         baseline.push("");
     }
@@ -491,5 +518,32 @@ namespace ts.tscWatch {
     export function replaceFileText(sys: WatchedSystem, file: string, searchValue: string | RegExp, replaceValue: string) {
         const content = Debug.checkDefined(sys.readFile(file));
         sys.writeFile(file, content.replace(searchValue, replaceValue));
+    }
+
+    export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
+        const host = createSolutionBuilderHost(system);
+        return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
+    }
+
+    export function ensureErrorFreeBuild(host: WatchedSystem, rootNames: readonly string[]) {
+        // ts build should succeed
+        const solutionBuilder = createSolutionBuilder(host, rootNames, {});
+        solutionBuilder.build();
+        assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
+    }
+
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+        const sys = createWatchedSystem(files, params);
+        const originalReadFile = sys.readFile;
+        const originalWrite = sys.write;
+        const originalWriteFile = sys.writeFile;
+        const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
+            fakes.patchHostForBuildInfoReadWrite(sys)
+        ), solutionRoots, {});
+        solutionBuilder.build();
+        sys.readFile = originalReadFile;
+        sys.write = originalWrite;
+        sys.writeFile = originalWriteFile;
+        return sys;
     }
 }

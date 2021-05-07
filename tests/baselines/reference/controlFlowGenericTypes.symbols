@@ -1,0 +1,369 @@
+=== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts ===
+function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
+>f1 : Symbol(f1, Decl(controlFlowGenericTypes.ts, 0, 0))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 0, 12))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 0, 12))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 0, 47))
+>a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 0, 12))
+>z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 0, 12))
+
+    if (x) {
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
+
+        x;
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        return x;
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
+    }
+    if (y.a) {
+>y.a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 0, 47))
+>a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+
+        y.a.length;
+>y.a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y.a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 0, 47))
+>a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        return y.a;
+>y.a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 0, 47))
+>a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
+    }
+    if (z[0]) {
+>z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
+>0 : Symbol(0)
+
+        z[0].length;
+>z[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
+>0 : Symbol(0)
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        return z[0];
+>z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
+>0 : Symbol(0)
+    }
+    return "hello";
+}
+
+function f2<T>(x: Extract<T, string | undefined> | null): string {
+>f2 : Symbol(f2, Decl(controlFlowGenericTypes.ts, 15, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 17, 12))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 17, 12))
+
+    if (x) {
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
+
+        x;
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        return x;
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
+    }
+    return "hello";
+}
+
+interface Box<T> {
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 26, 14))
+
+    item: T;
+>item : Symbol(Box.item, Decl(controlFlowGenericTypes.ts, 26, 18))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 26, 14))
+}
+
+declare function isBox(x: any): x is Box<unknown>;
+>isBox : Symbol(isBox, Decl(controlFlowGenericTypes.ts, 28, 1))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 30, 23))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 30, 23))
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+
+declare function isUndefined(x: unknown): x is undefined;
+>isUndefined : Symbol(isUndefined, Decl(controlFlowGenericTypes.ts, 30, 50))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 31, 29))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 31, 29))
+
+declare function unbox<T>(x: Box<T>): T;
+>unbox : Symbol(unbox, Decl(controlFlowGenericTypes.ts, 31, 57))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 32, 23))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 32, 26))
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 32, 23))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 32, 23))
+
+function g1<T extends Box<T> | undefined>(x: T) {
+>g1 : Symbol(g1, Decl(controlFlowGenericTypes.ts, 32, 40))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 34, 12))
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 34, 12))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 34, 42))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 34, 12))
+
+    if (isBox(x)) {
+>isBox : Symbol(isBox, Decl(controlFlowGenericTypes.ts, 28, 1))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 34, 42))
+
+        unbox(x);
+>unbox : Symbol(unbox, Decl(controlFlowGenericTypes.ts, 31, 57))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 34, 42))
+    }
+}
+
+function g2<T extends Box<T> | undefined>(x: T) {
+>g2 : Symbol(g2, Decl(controlFlowGenericTypes.ts, 38, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 40, 12))
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 40, 12))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 40, 42))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 40, 12))
+
+    if (!isUndefined(x)) {
+>isUndefined : Symbol(isUndefined, Decl(controlFlowGenericTypes.ts, 30, 50))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 40, 42))
+
+        unbox(x);
+>unbox : Symbol(unbox, Decl(controlFlowGenericTypes.ts, 31, 57))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 40, 42))
+    }
+}
+
+function g3<T extends Box<T> | undefined>(x: T) {
+>g3 : Symbol(g3, Decl(controlFlowGenericTypes.ts, 44, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 46, 12))
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 46, 12))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 46, 42))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 46, 12))
+
+    if (!isBox(x)) {
+>isBox : Symbol(isBox, Decl(controlFlowGenericTypes.ts, 28, 1))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 46, 42))
+
+        unbox(x);  // Error
+>unbox : Symbol(unbox, Decl(controlFlowGenericTypes.ts, 31, 57))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 46, 42))
+    }
+}
+
+function g4<T extends Box<T> | undefined>(x: T) {
+>g4 : Symbol(g4, Decl(controlFlowGenericTypes.ts, 50, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 52, 12))
+>Box : Symbol(Box, Decl(controlFlowGenericTypes.ts, 24, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 52, 12))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 52, 42))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 52, 12))
+
+    if (isUndefined(x)) {
+>isUndefined : Symbol(isUndefined, Decl(controlFlowGenericTypes.ts, 30, 50))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 52, 42))
+
+        unbox(x);  // Error
+>unbox : Symbol(unbox, Decl(controlFlowGenericTypes.ts, 31, 57))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 52, 42))
+    }
+}
+
+// Repro from #13995
+
+declare function takeA(val: 'A'): void;
+>takeA : Symbol(takeA, Decl(controlFlowGenericTypes.ts, 56, 1))
+>val : Symbol(val, Decl(controlFlowGenericTypes.ts, 60, 23))
+
+export function bounceAndTakeIfA<AB extends 'A' | 'B'>(value: AB): AB {
+>bounceAndTakeIfA : Symbol(bounceAndTakeIfA, Decl(controlFlowGenericTypes.ts, 60, 39))
+>AB : Symbol(AB, Decl(controlFlowGenericTypes.ts, 61, 33))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 61, 55))
+>AB : Symbol(AB, Decl(controlFlowGenericTypes.ts, 61, 33))
+>AB : Symbol(AB, Decl(controlFlowGenericTypes.ts, 61, 33))
+
+    if (value === 'A') {
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 61, 55))
+
+        takeA(value);
+>takeA : Symbol(takeA, Decl(controlFlowGenericTypes.ts, 56, 1))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 61, 55))
+
+        return value;
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 61, 55))
+    }
+    else {
+        return value;
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 61, 55))
+    }
+}
+
+// Repro from #13995
+
+type Common = { id: number };
+>Common : Symbol(Common, Decl(controlFlowGenericTypes.ts, 69, 1))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 73, 15))
+
+type AA = { tag: 'A', id: number };
+>AA : Symbol(AA, Decl(controlFlowGenericTypes.ts, 73, 29))
+>tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 74, 21))
+
+type BB = { tag: 'B', id: number, foo: number };
+>BB : Symbol(BB, Decl(controlFlowGenericTypes.ts, 74, 35))
+>tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 75, 11))
+>id : Symbol(id, Decl(controlFlowGenericTypes.ts, 75, 21))
+>foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+
+type MyUnion = AA | BB;
+>MyUnion : Symbol(MyUnion, Decl(controlFlowGenericTypes.ts, 75, 48))
+>AA : Symbol(AA, Decl(controlFlowGenericTypes.ts, 73, 29))
+>BB : Symbol(BB, Decl(controlFlowGenericTypes.ts, 74, 35))
+
+const fn = (value: MyUnion) => {
+>fn : Symbol(fn, Decl(controlFlowGenericTypes.ts, 79, 5))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
+>MyUnion : Symbol(MyUnion, Decl(controlFlowGenericTypes.ts, 75, 48))
+
+    value.foo;  // Error
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
+
+    if ('foo' in value) {
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
+
+        value.foo;
+>value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
+>foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+    }
+    if (value.tag === 'B') {
+>value.tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
+>tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
+
+        value.foo;
+>value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 79, 12))
+>foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+    }
+};
+
+const fn2 = <T extends MyUnion>(value: T): MyUnion => {
+>fn2 : Symbol(fn2, Decl(controlFlowGenericTypes.ts, 89, 5))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 89, 13))
+>MyUnion : Symbol(MyUnion, Decl(controlFlowGenericTypes.ts, 75, 48))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 89, 13))
+>MyUnion : Symbol(MyUnion, Decl(controlFlowGenericTypes.ts, 75, 48))
+
+    value.foo;  // Error
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
+
+    if ('foo' in value) {
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
+
+        value.foo;
+>value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
+>foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+    }
+    if (value.tag === 'B') {
+>value.tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
+>tag : Symbol(tag, Decl(controlFlowGenericTypes.ts, 74, 11), Decl(controlFlowGenericTypes.ts, 75, 11))
+
+        value.foo;
+>value.foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 89, 32))
+>foo : Symbol(foo, Decl(controlFlowGenericTypes.ts, 75, 33))
+    }
+};
+
+// Repro from #13995
+
+type A1 = {
+>A1 : Symbol(A1, Decl(controlFlowGenericTypes.ts, 97, 2))
+
+    testable: true
+>testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 101, 11))
+
+    doTest: () => void
+>doTest : Symbol(doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
+}
+type B1 = {
+>B1 : Symbol(B1, Decl(controlFlowGenericTypes.ts, 104, 1))
+
+    testable: false
+>testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 105, 11))
+
+};
+
+type Union = A1 | B1
+>Union : Symbol(Union, Decl(controlFlowGenericTypes.ts, 107, 2))
+>A1 : Symbol(A1, Decl(controlFlowGenericTypes.ts, 97, 2))
+>B1 : Symbol(B1, Decl(controlFlowGenericTypes.ts, 104, 1))
+
+function notWorking<T extends Union>(object: T) {
+>notWorking : Symbol(notWorking, Decl(controlFlowGenericTypes.ts, 109, 20))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 111, 20))
+>Union : Symbol(Union, Decl(controlFlowGenericTypes.ts, 107, 2))
+>object : Symbol(object, Decl(controlFlowGenericTypes.ts, 111, 37))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 111, 20))
+
+    if (!object.testable) return;
+>object.testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 101, 11), Decl(controlFlowGenericTypes.ts, 105, 11))
+>object : Symbol(object, Decl(controlFlowGenericTypes.ts, 111, 37))
+>testable : Symbol(testable, Decl(controlFlowGenericTypes.ts, 101, 11), Decl(controlFlowGenericTypes.ts, 105, 11))
+
+    object.doTest();
+>object.doTest : Symbol(doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
+>object : Symbol(object, Decl(controlFlowGenericTypes.ts, 111, 37))
+>doTest : Symbol(doTest, Decl(controlFlowGenericTypes.ts, 102, 18))
+}
+
+// Repro from #42939
+
+interface A {
+>A : Symbol(A, Decl(controlFlowGenericTypes.ts, 114, 1))
+
+    a: number | null;
+>a : Symbol(A.a, Decl(controlFlowGenericTypes.ts, 118, 13))
+
+};
+
+function get<K extends keyof A>(key: K, obj: A): number {
+>get : Symbol(get, Decl(controlFlowGenericTypes.ts, 120, 2))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 122, 13))
+>A : Symbol(A, Decl(controlFlowGenericTypes.ts, 114, 1))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 122, 32))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 122, 13))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 122, 39))
+>A : Symbol(A, Decl(controlFlowGenericTypes.ts, 114, 1))
+
+    const value = obj[key];
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 123, 9))
+>obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 122, 39))
+>key : Symbol(key, Decl(controlFlowGenericTypes.ts, 122, 32))
+
+    if (value !== null) {
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 123, 9))
+
+        return value;
+>value : Symbol(value, Decl(controlFlowGenericTypes.ts, 123, 9))
+    }
+    return 0;
+};
+

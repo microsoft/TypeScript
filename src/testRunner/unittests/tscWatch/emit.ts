@@ -26,6 +26,11 @@ namespace ts.tscWatch {
                         caption: "Make change in the file",
                         change: sys => sys.writeFile("/a/a.ts", "let x = 11"),
                         timeouts: runQueuedTimeoutCallbacks
+                    },
+                    {
+                        caption: "Make change in the file again",
+                        change: sys => sys.writeFile("/a/a.ts", "let xy = 11"),
+                        timeouts: runQueuedTimeoutCallbacks
                     }
                 ]
             });
@@ -409,6 +414,11 @@ export var x = Foo();`
                 {
                     caption: "Append content to f1",
                     change: sys => sys.appendFile("/a/b/f1.ts", "export function foo2() { return 2; }"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Again Append content to f1",
+                    change: sys => sys.appendFile("/a/b/f1.ts", "export function fooN() { return 2; }"),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ],

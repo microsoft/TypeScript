@@ -32,6 +32,7 @@ namespace ts.tscWatch {
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
             const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
+            let oldPrograms: readonly CommandLineProgram[] = emptyArray;
             const { cb, getPrograms } = commandLineCallbacks(sys);
             build(oldSnap);
 
@@ -48,9 +49,10 @@ namespace ts.tscWatch {
                     cb,
                     argsToPass,
                 );
-                watchBaseline({
+                oldPrograms = watchBaseline({
                     baseline,
                     getPrograms,
+                    oldPrograms,
                     sys,
                     oldSnap
                 });
@@ -134,7 +136,7 @@ namespace ts.tscWatch {
                 it("verify that state is read correctly", () => {
                     const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
                     const reportDiagnostic = createDiagnosticReporter(system);
-                    const parsedConfig = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
+                    const parsedConfig = parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
                     performIncrementalCompilation({
                         rootNames: parsedConfig.fileNames,
                         options: parsedConfig.options,
@@ -144,7 +146,7 @@ namespace ts.tscWatch {
                         system
                     });
 
-                    const command = parseConfigFileWithSystem("tsconfig.json", {}, /*watchOptionsToExtend*/ undefined, system, noop)!;
+                    const command = parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, noop)!;
                     const builderProgram = createIncrementalProgram({
                         rootNames: command.fileNames,
                         options: command.options,
@@ -164,13 +166,13 @@ namespace ts.tscWatch {
                     });
                     assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
-                        signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`),
-                        affectsGlobalScope: false,
+                        signature: system.createHash(file1.content),
+                        affectsGlobalScope: undefined,
                     });
                     assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
-                        signature: system.createHash("export declare const y: string;\n"),
-                        affectsGlobalScope: false,
+                        signature: system.createHash(fileModified.content),
+                        affectsGlobalScope: undefined,
                     });
 
                     assert.deepEqual(state.compilerOptions, {
