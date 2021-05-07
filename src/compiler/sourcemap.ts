@@ -305,7 +305,7 @@ namespace ts {
 
         function toJSON(): RawSourceMap {
             commitPendingMapping();
-            const mappings = (lastMappings ??= decoder.decode(mappingsBuffer.slice(0, mappingsPos)));
+            const mappings = (lastMappings ??= decoder.decode(mappingsBuffer.subarray(0, mappingsPos)));
             return {
                 version: 3,
                 file,
