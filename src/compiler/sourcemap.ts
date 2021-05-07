@@ -6,6 +6,7 @@ namespace ts {
 
     declare let TextDecoder: undefined | (new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string });
     const decoder = new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)();
+    let mappingsBuffer: Uint8Array;
 
     export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
         const { enter, exit } = generatorOptions.extendedDiagnostics
@@ -20,7 +21,7 @@ namespace ts {
 
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
-        let mappingsBuffer = new Uint8Array(guessedInputLength + 1 >> 1);
+        mappingsBuffer ||= new Uint8Array(guessedInputLength + 1 >> 1);
         let lastMappings: string | undefined;
         let mappingsPos = 0;
         function setMapping(charCode: number) {
