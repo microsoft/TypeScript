@@ -504,7 +504,7 @@ namespace ts {
 
     /*@internal*/
     export interface CacheWithRedirects<T> {
-        ownMap: ESMap<string, T>;
+        getOwnMap: () => ESMap<string, T>;
         redirectsMap: ESMap<Path, ESMap<string, T>>;
         getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): ESMap<string, T>;
         clear(): void;
@@ -517,13 +517,17 @@ namespace ts {
         let ownMap: ESMap<string, T> = new Map();
         const redirectsMap = new Map<Path, ESMap<string, T>>();
         return {
-            ownMap,
+            getOwnMap,
             redirectsMap,
             getOrCreateMapOfCacheRedirects,
             clear,
             setOwnOptions,
             setOwnMap
         };
+
+        function getOwnMap() {
+            return ownMap;
+        }
 
         function setOwnOptions(newOptions: CompilerOptions) {
             options = newOptions;
@@ -586,10 +590,10 @@ namespace ts {
         if (directoryToModuleNameMap.redirectsMap.size === 0) {
             // The own map will be for projectCompilerOptions
             Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.redirectsMap.size === 0);
-            Debug.assert(directoryToModuleNameMap.ownMap.size === 0);
-            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.ownMap.size === 0);
-            directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.ownMap);
-            moduleNameToDirectoryMap?.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.ownMap);
+            Debug.assert(directoryToModuleNameMap.getOwnMap().size === 0);
+            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.getOwnMap().size === 0);
+            directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.getOwnMap());
+            moduleNameToDirectoryMap?.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.getOwnMap());
         }
         else {
             // Set correct own map
