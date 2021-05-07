@@ -5,7 +5,7 @@ namespace ts {
     }
 
     declare let TextDecoder: undefined | (new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string });
-    const decoder = new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)()
+    const decoder = new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)();
 
     export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
         const { enter, exit } = generatorOptions.extendedDiagnostics
