@@ -36786,7 +36786,7 @@ namespace ts {
 
             if (stringIndexType || numberIndexType) {
                 forEach(getPropertiesOfObjectType(type), prop => {
-                    const propType = getTypeOfSymbol(prop);
+                    const propType = getNonMissingTypeOfSymbol(prop);
                     checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
                     checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
                 });
@@ -36799,7 +36799,7 @@ namespace ts {
                         // and properties with literal names were already checked.
                         if (!hasSyntacticModifier(member, ModifierFlags.Static) && !hasBindableName(member)) {
                             const symbol = getSymbolOfNode(member);
-                            const propType = getTypeOfSymbol(symbol);
+                            const propType = getNonMissingTypeOfSymbol(symbol);
                             checkIndexConstraintForProperty(symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
                             checkIndexConstraintForProperty(symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
                         }
