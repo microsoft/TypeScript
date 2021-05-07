@@ -19046,7 +19046,7 @@ namespace ts {
                             }
                             return Ternary.False;
                         }
-                        if (!targetRestFlag && sourceRestFlag) {
+                        if (!targetRestFlag && (sourceRestFlag || targetArity < sourceArity)) {
                             if (reportErrors) {
                                 if (sourceMinLength < targetMinLength) {
                                     reportError(Diagnostics.Target_requires_0_element_s_but_source_may_have_fewer, targetMinLength);
