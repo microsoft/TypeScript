@@ -27,5 +27,5 @@ define("a", ["require", "exports", "b"], function (require, exports, b_1) {
     class Foo {
     }
     exports.default = Foo;
-    (0, b_1.default)();
+    b_1.default();
 });

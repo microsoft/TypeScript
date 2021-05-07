@@ -24,9 +24,9 @@ import { p } from "./renderer";
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
-(0, renderer_1.dom)("h", null);
+renderer_1.dom("h", null);
 //// [index.js]
 "use strict";
 exports.__esModule = true;
 var renderer_1 = require("./renderer");
-(0, renderer_1.p)("h", null);
+renderer_1.p("h", null);
