@@ -1882,17 +1882,8 @@ namespace ts {
             return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
-        function isTsOrTsxFile(fileName: string): boolean {
-            const kind = getScriptKind(fileName, host);
-            return kind === ScriptKind.TS || kind === ScriptKind.TSX;
-        }
-
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return [];
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -1905,10 +1896,6 @@ namespace ts {
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return { spans: [], endOfLineState: EndOfLineState.None };
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
