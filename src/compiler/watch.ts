@@ -113,8 +113,8 @@ namespace ts {
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
-    export function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-        return !!(program as T).getState;
+    export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
+        return !!(program as BuilderProgram).getState;
     }
 
     export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {

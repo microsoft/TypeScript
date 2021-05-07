@@ -2768,8 +2768,8 @@ namespace ts {
 
         function bindExportAssignment(node: ExportAssignment) {
             if (!container.symbol || !container.symbol.exports) {
-                // Export assignment in some sort of block construct
-                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node)!);
+                // Incorrect export assignment in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.Value, getDeclarationName(node)!);
             }
             else {
                 const flags = exportAssignmentIsAlias(node)
