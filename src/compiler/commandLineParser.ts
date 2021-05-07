@@ -536,9 +536,10 @@ namespace ts {
         {
             name: "importsNotUsedAsValues",
             type: new Map(getEntries({
-                remove: ImportsNotUsedAsValues.Remove,
-                preserve: ImportsNotUsedAsValues.Preserve,
-                error: ImportsNotUsedAsValues.Error
+                "remove": ImportsNotUsedAsValues.Remove,
+                "preserve": ImportsNotUsedAsValues.Preserve,
+                "error": ImportsNotUsedAsValues.Error,
+                "preserve-exact": ImportsNotUsedAsValues.PreserveExact,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
