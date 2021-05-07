@@ -38301,9 +38301,10 @@ namespace ts {
         }
 
         function checkExportAssignment(node: ExportAssignment) {
-            if (checkGrammarModuleElementContext(node, node.isExportEquals
+            const illegalContextMessage = node.isExportEquals
                 ? Diagnostics.An_export_assignment_must_be_at_the_top_level_of_a_file_or_module_declaration
-                : Diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration)) {
+                : Diagnostics.A_default_export_must_be_at_the_top_level_of_a_file_or_module_declaration;
+            if (checkGrammarModuleElementContext(node, illegalContextMessage)) {
                 // If we hit an export assignment in an illegal context, just bail out to avoid cascading errors.
                 return;
             }

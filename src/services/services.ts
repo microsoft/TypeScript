@@ -1725,7 +1725,7 @@ namespace ts {
 
         function getDocumentHighlights(fileName: string, position: number, filesToSearch: readonly string[]): DocumentHighlights[] | undefined {
             const normalizedFileName = normalizePath(fileName);
-            Debug.assert(filesToSearch.some(f => normalizePath(f) === normalizedFileName), `Could not find ${normalizedFileName} in ${filesToSearch}`);
+            Debug.assert(filesToSearch.some(f => normalizePath(f) === normalizedFileName));
             synchronizeHostData();
             const sourceFilesToSearch = mapDefined(filesToSearch, fileName => program.getSourceFile(fileName));
             const sourceFile = getValidSourceFile(fileName);
