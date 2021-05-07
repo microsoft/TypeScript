@@ -4327,7 +4327,7 @@ namespace ts {
                 //          2
                 //          /* end of element 2 */
                 //       ];
-                if (previousSibling && (parentNode ? parentNode.end : -1) !== previousSibling.end && (format & ListFormat.DelimitersMask) && !skipTrailingComments) {
+                if (previousSibling && (parentNode ? parentNode.end : -1) !== previousSibling.end && (format & ListFormat.DelimitersMask) && !skipTrailingComments && !((parentNode?.flags ?? NodeFlags.None) & NodeFlags.Synthesized)) {
                     emitLeadingCommentsOfPosition(hasTrailingComma && children?.end ? children.end : previousSibling.end);
                 }
 
