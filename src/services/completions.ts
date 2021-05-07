@@ -30,7 +30,8 @@ namespace ts.Completions {
         AutoImportSuggestions
     }
 
-    const DeprecatedSortTextStart = SortTextId.AutoImportSuggestions + 2; // for Javascript identifiers since with this change they are preferred over deprecated symbols
+    // for JavaScript identifiers since they are preferred over deprecated symbols
+    const DeprecatedSortTextStart = SortTextId.AutoImportSuggestions + 2;
 
     /**
      * Special values for `CompletionInfo['source']` used to disambiguate
