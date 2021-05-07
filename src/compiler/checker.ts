@@ -5899,7 +5899,7 @@ namespace ts {
                     // `i` we've used thus far, to save work later
                     (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
                     (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
-                    (context.typeParameterNamesByText ||= new Set()).add(result.escapedText as string);
+                    (context.typeParameterNamesByText ||= new Set()).add(rawtext);
                 }
                 return result;
             }
