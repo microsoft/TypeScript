@@ -205,7 +205,9 @@ namespace ts {
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
+        return oldResolution.resolvedFileName === newResolution.resolvedFileName
+            && oldResolution.primary === newResolution.primary
+            && oldResolution.originalPath === newResolution.originalPath;
     }
 
     export function hasChangesInResolutions<T>(
@@ -1969,6 +1971,10 @@ namespace ts {
             node = node.parent;
         }
         return node.kind === SyntaxKind.TypeQuery;
+    }
+
+    export function isNamespaceReexportDeclaration(node: Node): boolean {
+        return isNamespaceExport(node) && !!node.parent.moduleSpecifier;
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
@@ -6145,6 +6151,8 @@ namespace ts {
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
         setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
         setSymlinkedFile(symlinkPath: Path, real: string): void;
+        /*@internal*/
+        setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
@@ -6168,16 +6176,31 @@ namespace ts {
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
                 }
-            }
+            },
+            setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
+                this.setSymlinkedFile(toPath(symlink, cwd, getCanonicalFileName), real);
+                const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
+                if (commonResolved && commonOriginal) {
+                    this.setSymlinkedDirectory(commonOriginal, {
+                        real: commonResolved,
+                        realPath: toPath(commonResolved, cwd, getCanonicalFileName),
+                    });
+                }
+            },
         };
     }
 
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
         const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
-            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
-                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
+        const symlinks = flatMap(files, sf => {
+            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
+                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
+            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
+                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
+        });
+
         for (const [resolvedPath, originalPath] of symlinks) {
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(

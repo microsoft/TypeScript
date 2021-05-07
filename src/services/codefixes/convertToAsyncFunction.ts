@@ -54,7 +54,7 @@ namespace ts.codefix {
             functionToConvert = tokenAtPosition.parent.initializer;
         }
         else {
-            functionToConvert = tryCast(getContainingFunction(getTokenAtPosition(sourceFile, position)), isFunctionLikeDeclaration);
+            functionToConvert = tryCast(getContainingFunction(getTokenAtPosition(sourceFile, position)), canBeConvertedToAsync);
         }
 
         if (!functionToConvert) {

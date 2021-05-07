@@ -174,7 +174,7 @@ namespace ts.SymbolDisplay {
             }
 
             let signature: Signature | undefined;
-            type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
+            type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
             if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 const right = (<PropertyAccessExpression>location.parent).name;
