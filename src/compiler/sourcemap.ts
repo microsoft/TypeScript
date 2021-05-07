@@ -4,7 +4,8 @@ namespace ts {
         extendedDiagnostics?: boolean;
     }
 
-    declare var TextDecoder: new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string };
+    declare let TextDecoder: new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string };
+    TextDecoder ||= require("util").TextDecoder
     const decoder = new TextDecoder();
 
     export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
@@ -24,16 +25,16 @@ namespace ts {
         let lastMappings: string | undefined;
         let mappingsPos = 0;
         function setMapping(charCode: number) {
-            // resize to 1.5 length
+            // resize to 1.5 * length
             if (mappingsPos >= mappingsBuffer.length) {
                 const oldLength = mappingsBuffer.length + 1;
-                let replacementBuffer = new Uint8Array(oldLength + ((oldLength + 1) >> 1));
+                const replacementBuffer = new Uint8Array(oldLength + ((oldLength + 1) >> 1));
                 replacementBuffer.set(mappingsBuffer);
                 mappingsBuffer = replacementBuffer;
             }
             mappingsBuffer[mappingsPos++] = charCode;
         }
-        
+
         function base64VLQFormatEncode(inValue: number) {
             // Add a new least significant bit that has the sign of the value.
             // if negative number the least significant bit that gets added to the number has value 1
