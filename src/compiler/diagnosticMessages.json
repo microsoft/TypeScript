@@ -3942,6 +3942,10 @@
         "category": "Error",
         "code": 5094
     },
+    "Option 'importsNotUsedAsValues' may only be set to 'preserve-exact' when 'module' is set to 'es2015' or later.": {
+        "category": "Error",
+        "code": 5095
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
