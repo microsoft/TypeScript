@@ -46,6 +46,7 @@ namespace ts {
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const { importsNotUsedAsValues } = compilerOptions;
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
@@ -2802,7 +2803,7 @@ namespace ts {
         }
 
         /**
-         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve'.
+         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve' or 'preserve-exact'.
          *
          * @param node The import declaration node.
          */
@@ -2820,8 +2821,9 @@ namespace ts {
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
             return importClause ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
+                importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
+                importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact ||
+                importsNotUsedAsValues === ImportsNotUsedAsValues.Error
                 ? factory.updateImportDeclaration(
                     node,
                     /*decorators*/ undefined,
@@ -2832,13 +2834,14 @@ namespace ts {
         }
 
         /**
-         * Visits an import clause, eliding it if it is not referenced.
+         * Visits an import clause, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve-exact'.
          *
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
-            if (node.isTypeOnly) {
-                return undefined;
+            Debug.assert(!node.isTypeOnly);
+            if (importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact) {
+                return node;
             }
             // Elide the import clause if we elide both its name and its named bindings.
             const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
@@ -2888,7 +2891,7 @@ namespace ts {
 
         /**
          * Visits an export declaration, eliding it if it does not contain a clause that resolves
-         * to a value.
+         * to a value and if `importsNotUsedAsValues` is not 'preserve-exact'.
          *
          * @param node The export declaration node.
          */
@@ -2897,7 +2900,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (!node.exportClause || isNamespaceExport(node.exportClause)) {
+            if (!node.exportClause || isNamespaceExport(node.exportClause) || importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact) {
                 // never elide `export <whatever> from <whereever>` declarations -
                 // they should be kept for sideffects/untyped exports, even when the
                 // type checker doesn't know about any exports
@@ -2980,7 +2983,7 @@ namespace ts {
             if (isExternalModuleImportEqualsDeclaration(node)) {
                 const isReferenced = resolver.isReferencedAliasDeclaration(node);
                 // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-                if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
+                if (!isReferenced && importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
                     return setOriginalNode(
                         setTextRange(
                             factory.createImportDeclaration(
