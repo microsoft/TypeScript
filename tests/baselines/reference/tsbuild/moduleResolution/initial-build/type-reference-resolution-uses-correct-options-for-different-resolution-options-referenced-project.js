@@ -30,7 +30,7 @@ export const theNum: TheNum2 = "type2";
 declare type TheNum = "type1";
 
 //// [/src/packages/typeroot2/sometype/index.d.ts]
-
+declare type TheNum2 = "type2";
 
 
 
@@ -54,18 +54,13 @@ Resolving real path for '/src/packages/typeroot1/sometype/index.d.ts', result '/
 
 [[90m12:00:00 AM[0m] Building project '/src/packages/pkg2.tsconfig.json'...
 
-======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts'. ========
-Resolution for type reference directive 'sometype' was found in cache from location '/src/packages'.
-======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot1/sometype/index.d.ts', primary: true. ========
-[96msrc/packages/pkg2_index.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'TheNum2'.
-
-[7m1[0m export const theNum: TheNum2 = "type2";
-[7m [0m [91m                     ~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+======== Resolving type reference directive 'sometype', containing file '/src/packages/__inferred type names__.ts', root directory '/src/packages/typeroot2'. ========
+Resolving with primary search path '/src/packages/typeroot2'.
+File '/src/packages/typeroot2/sometype/package.json' does not exist.
+File '/src/packages/typeroot2/sometype/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/src/packages/typeroot2/sometype/index.d.ts', result '/src/packages/typeroot2/sometype/index.d.ts'.
+======== Type reference directive 'sometype' was successfully resolved to '/src/packages/typeroot2/sometype/index.d.ts', primary: true. ========
+exitCode:: ExitStatus.Success
 
 
 //// [/src/packages/pkg1.tsconfig.tsbuildinfo]
@@ -123,7 +118,7 @@ exports.theNum = "type1";
 
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12823281204-export const theNum: TheNum2 = \"type2\";",{"version":"-4557394441-declare type TheNum = \"type1\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./pkg2_index.ts","start":21,"length":7,"messageText":"Cannot find name 'TheNum2'.","category":1,"code":2304}]],3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./pkg2_index.ts","./typeroot2/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12823281204-export const theNum: TheNum2 = \"type2\";",{"version":"-980425686-declare type TheNum2 = \"type2\";","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/packages/pkg2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -131,7 +126,7 @@ exports.theNum = "type1";
     "fileNames": [
       "../../lib/lib.d.ts",
       "./pkg2_index.ts",
-      "./typeroot1/sometype/index.d.ts"
+      "./typeroot2/sometype/index.d.ts"
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
@@ -143,9 +138,9 @@ exports.theNum = "type1";
         "version": "-12823281204-export const theNum: TheNum2 = \"type2\";",
         "signature": "-12823281204-export const theNum: TheNum2 = \"type2\";"
       },
-      "./typeroot1/sometype/index.d.ts": {
-        "version": "-4557394441-declare type TheNum = \"type1\";",
-        "signature": "-4557394441-declare type TheNum = \"type1\";",
+      "./typeroot2/sometype/index.d.ts": {
+        "version": "-980425686-declare type TheNum2 = \"type2\";",
+        "signature": "-980425686-declare type TheNum2 = \"type2\";",
         "affectsGlobalScope": true
       }
     },
@@ -156,33 +151,23 @@ exports.theNum = "type1";
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
-      [
-        "./pkg2_index.ts",
-        [
-          {
-            "file": "./pkg2_index.ts",
-            "start": 21,
-            "length": 7,
-            "messageText": "Cannot find name 'TheNum2'.",
-            "category": 1,
-            "code": 2304
-          }
-        ]
-      ],
-      "./typeroot1/sometype/index.d.ts"
-    ],
-    "affectedFilesPendingEmit": [
-      [
-        "./pkg2_index.ts",
-        "Full"
-      ],
-      [
-        "./typeroot1/sometype/index.d.ts",
-        "Full"
-      ]
+      "./pkg2_index.ts",
+      "./typeroot2/sometype/index.d.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1033
+  "size": 870
 }
+
+//// [/src/packages/pkg2_index.d.ts]
+/// <reference types="sometype" />
+export declare const theNum: TheNum2;
+
+
+//// [/src/packages/pkg2_index.js]
+"use strict";
+exports.__esModule = true;
+exports.theNum = void 0;
+exports.theNum = "type2";
+
 
