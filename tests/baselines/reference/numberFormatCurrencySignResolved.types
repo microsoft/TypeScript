@@ -1,0 +1,25 @@
+=== tests/cases/compiler/numberFormatCurrencySignResolved.ts ===
+const options = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions();
+>options : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>'en-NZ' : "en-NZ"
+>{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: string; currency: string; currencySign: string; }
+>style : string
+>'currency' : "currency"
+>currency : string
+>'NZD' : "NZD"
+>currencySign : string
+>'accounting' : "accounting"
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+
+const currencySign = options.currencySign;
+>currencySign : string
+>options.currencySign : string
+>options : Intl.ResolvedNumberFormatOptions
+>currencySign : string
+

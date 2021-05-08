@@ -4311,6 +4311,7 @@ declare namespace Intl {
         style: string;
         currency?: string;
         currencyDisplay?: string;
+        currencySign?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
