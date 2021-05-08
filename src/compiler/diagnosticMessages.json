@@ -3717,7 +3717,7 @@
         "category": "Error",
         "code": 4114
     },
-    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+    "This parameter property must have an 'override' modifier because it overrides a member in base class '{0}'.": {
         "category": "Error",
         "code": 4115
     },
