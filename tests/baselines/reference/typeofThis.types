@@ -42,7 +42,7 @@ class Test1 {
 
         var self: typeof this = this;
 >self : this
->this : error
+>this : any
 >this : this
 
         self.data;
@@ -57,5 +57,112 @@ class Test1 {
 >this : string
 >'' : ""
     }
+}
+
+
+function Test2() {
+>Test2 : () => void
+
+    let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+}
+
+function Test3(this: { no: number }) {
+>Test3 : (this: {    no: number;}) => void
+>this : { no: number; }
+>no : number
+
+    let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : { no: number; }
+>no : any
+>1 : 1
+}
+
+function Test4(this: { no: number } | undefined) {
+>Test4 : (this: {    no: number;} | undefined) => void
+>this : { no: number; }
+>no : number
+
+    let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : { no: number; }
+>no : any
+>1 : 1
+}
+
+class Test5 {
+>Test5 : Test5
+
+    no = 1;
+>no : number
+>1 : 1
+
+    f = () => {
+>f : () => void
+>() => {        let x: typeof this.no = 1;        let self: typeof this = this;    } : () => void
+
+        let x: typeof this.no = 1;
+>x : number
+>this.no : number
+>this : any
+>no : number
+>1 : 1
+
+        let self: typeof this = this;
+>self : this
+>this : any
+>this : this
+    }
+}
+
+namespace Test6 {
+>Test6 : typeof Test6
+
+    export let f = () => {
+>f : () => void
+>() => {        let x: typeof this.no = 1;    } : () => void
+
+        let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+    }
+}
+
+module Test7 {
+>Test7 : typeof Test7
+
+    export let f = () => {
+>f : () => void
+>() => {        let x: typeof this.no = 1;    } : () => void
+
+        let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
+    }
+}
+
+const Test8 = () => {
+>Test8 : () => void
+>() => {    let x: typeof this.no = 1;} : () => void
+
+    let x: typeof this.no = 1;
+>x : any
+>this.no : any
+>this : any
+>no : any
+>1 : 1
 }
 

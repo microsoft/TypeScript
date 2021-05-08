@@ -47,3 +47,80 @@ class Test1 {
     }
 }
 
+
+function Test2() {
+>Test2 : Symbol(Test2, Decl(typeofThis.ts, 18, 1))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 22, 7))
+}
+
+function Test3(this: { no: number }) {
+>Test3 : Symbol(Test3, Decl(typeofThis.ts, 23, 1))
+>this : Symbol(this, Decl(typeofThis.ts, 25, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 25, 22))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 26, 7))
+>this : Symbol(this, Decl(typeofThis.ts, 25, 15))
+}
+
+function Test4(this: { no: number } | undefined) {
+>Test4 : Symbol(Test4, Decl(typeofThis.ts, 27, 1))
+>this : Symbol(this, Decl(typeofThis.ts, 29, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 29, 22))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 30, 7))
+>this : Symbol(this, Decl(typeofThis.ts, 29, 15))
+}
+
+class Test5 {
+>Test5 : Symbol(Test5, Decl(typeofThis.ts, 31, 1))
+
+    no = 1;
+>no : Symbol(Test5.no, Decl(typeofThis.ts, 33, 13))
+
+    f = () => {
+>f : Symbol(Test5.f, Decl(typeofThis.ts, 34, 11))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 37, 11))
+>this.no : Symbol(Test5.no, Decl(typeofThis.ts, 33, 13))
+>no : Symbol(Test5.no, Decl(typeofThis.ts, 33, 13))
+
+        let self: typeof this = this;
+>self : Symbol(self, Decl(typeofThis.ts, 38, 11))
+>this : Symbol(Test5, Decl(typeofThis.ts, 31, 1))
+    }
+}
+
+namespace Test6 {
+>Test6 : Symbol(Test6, Decl(typeofThis.ts, 40, 1))
+
+    export let f = () => {
+>f : Symbol(f, Decl(typeofThis.ts, 43, 14))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 44, 11))
+    }
+}
+
+module Test7 {
+>Test7 : Symbol(Test7, Decl(typeofThis.ts, 46, 1))
+
+    export let f = () => {
+>f : Symbol(f, Decl(typeofThis.ts, 49, 14))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 50, 11))
+    }
+}
+
+const Test8 = () => {
+>Test8 : Symbol(Test8, Decl(typeofThis.ts, 54, 5))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 55, 7))
+}
+

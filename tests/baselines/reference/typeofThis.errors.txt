@@ -1,0 +1,79 @@
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(23,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(27,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(31,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(45,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(51,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+
+
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts (6 errors) ====
+    class Test {
+        data = {};
+        constructor() {
+            var copy: typeof this.data = {};
+        }
+    }
+    
+    class Test1 {
+        data = { foo: '' };
+        ['this'] = '';
+        constructor() {
+            var copy: typeof this.data = { foo: '' };
+    
+            var self: typeof this = this;
+            self.data;
+    
+            var str: typeof this.this = '';
+        }
+    }
+    
+    
+    function Test2() {
+        let x: typeof this.no = 1;
+                      ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+    }
+    
+    function Test3(this: { no: number }) {
+        let x: typeof this.no = 1;
+                      ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+    }
+    
+    function Test4(this: { no: number } | undefined) {
+        let x: typeof this.no = 1;
+                      ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+    }
+    
+    class Test5 {
+        no = 1;
+    
+        f = () => {
+            let x: typeof this.no = 1;
+            let self: typeof this = this;
+        }
+    }
+    
+    namespace Test6 {
+        export let f = () => {
+            let x: typeof this.no = 1;
+                          ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        }
+    }
+    
+    module Test7 {
+        export let f = () => {
+            let x: typeof this.no = 1;
+                          ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+        }
+    }
+    
+    const Test8 = () => {
+        let x: typeof this.no = 1;
+                      ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+    }
+    
