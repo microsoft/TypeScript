@@ -849,7 +849,7 @@ namespace ts {
             state.projectCompilerOptions = config.options;
             // Update module resolution cache if needed
             state.moduleResolutionCache?.update(config.options);
-            state.typeReferenceDirectiveResolutionCache?.update(config.options);
+            // state.typeReferenceDirectiveResolutionCache?.update(config.options);
 
             // Create program
             program = host.createProgram(

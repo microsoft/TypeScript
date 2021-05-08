@@ -65,5 +65,25 @@ namespace ts.tscWatch {
             commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
             changes: emptyArray
         });
+
+        verifyTsc({
+            scenario: "moduleResolution",
+            subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
+            fs: () => loadProjectFromFiles({
+                "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
+                "/src/packages/pkg1.tsconfig.json": JSON.stringify({
+                    compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
+                    files: ["./pkg1_index.ts"]
+                }),
+                "/src/packages/typeroot1/sometype/index.d.ts": Utils.dedent`declare type TheNum = "type1";`,
+                "/src/packages/pkg2_index.ts": `export const theNum: TheNum2 = "type2";`,
+                "/src/packages/pkg2.tsconfig.json": JSON.stringify({
+                    compilerOptions: { composite: true, typeRoots: ["./typeroot2"] },
+                    files: ["./pkg2_index.ts"]
+                }),
+                "/src/packages/typeroot2/sometype/index.d.ts": Utils.dedent`declare type TheNum2 = "type2";`,
+            }),
+            commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
+        });
     });
 }
