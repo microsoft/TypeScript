@@ -501,6 +501,7 @@ declare namespace ts.server.protocol {
     type OrganizeImportsScope = GetCombinedCodeFixScope;
     interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        skipDestructiveCodeActions?: boolean;
     }
     interface OrganizeImportsResponse extends Response {
         body: readonly FileCodeEdits[];
@@ -736,7 +737,7 @@ declare namespace ts.server.protocol {
      * Definition response message.  Gives text range for definition.
      */
     interface DefinitionResponse extends Response {
-        body?: FileSpanWithContext[];
+        body?: DefinitionInfo[];
     }
     interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
@@ -1725,9 +1726,14 @@ declare namespace ts.server.protocol {
         isFromUncheckedFile?: true;
         /**
          * If true, this completion was for an auto-import of a module not yet in the program, but listed
-         * in the project package.json.
+         * in the project package.json. Used for telemetry reporting.
          */
         isPackageJsonImport?: true;
+        /**
+         * If true, this completion was an auto-import-style completion of an import statement (i.e., the
+         * module specifier was inserted along with the imported identifier). Used for telemetry reporting.
+         */
+        isImportStatementCompletion?: true;
         /**
          * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
          * that allows TS Server to look up the symbol represented by the completion item, disambiguating
